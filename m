@@ -1,610 +1,219 @@
-Return-Path: <linux-rtc+bounces-4061-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4062-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24BFDAAF1A3
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 05:27:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C39AAF2CB
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 07:21:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 983171BC1D8B
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 03:27:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07CB54E1D8F
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 May 2025 05:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2ED1FF7B4;
-	Thu,  8 May 2025 03:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3636821018F;
+	Thu,  8 May 2025 05:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hVoAb1fc"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="hlsh8SJL"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2050.outbound.protection.outlook.com [40.107.247.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57D91E32BE;
-	Thu,  8 May 2025 03:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746674784; cv=none; b=qKWw90PRVl6VqXhHifZZIHi5eVovfn96GwAkK6cFcMhdNXdWb9qfv1UhsacE0aGgtf/NGog0RD9RugFIkSDrdkOmHA7lDYlWnAjvoUY/vg+xhtNtLPpJNoPw0mjZ9IekZGmtSL/3JKuv+VSFg8VYzRqAk7xu1yJprHRGmKWbvkw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746674784; c=relaxed/simple;
-	bh=sgMGxSIPEB3TiLNN/LyxLmdGzWzWazFsYiB+n3IGauE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sYxU6XDI4dLN1MthyblmLbsesw6/Cvfk99XNgXDpxjJeTX6bMkdkn9tGsBYs0Ytx2ZrbPrenrVpbbmfU5Mk7UARRSK+x4lL9/BQUfIniAf3Vqko4+PndS0J2JMp/1sDqU0zWRS8/0YEtz6mBq/qvLysZhrBcFaO989Hx0mvvWVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hVoAb1fc; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-70a35432c21so169877b3.0;
-        Wed, 07 May 2025 20:26:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746674781; x=1747279581; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SQXpXy9kvwFz/LNWQbKVfO2XYo1pOkSXCQtCYhWplNI=;
-        b=hVoAb1fcAgeOY+8UjjCJOsKIwZJhV0W0Iy9g8TZabzlNYXa4k8a+r7hDQgNJVIPvvs
-         shGIHaCkuaAJPs9V5bq1cYgyR/AYKCYQ7Ipzrn+V1jc+0Zx1jn5BAZ6JbDpxPFn3KrDA
-         N4xy2JoKoQwL1ah0BQy7Ja4Q+0SxOxq/rjXpQ0Ak0XxaEU2yR5EyH2g6w8kCrH5XvsFz
-         4MOVNJRfEL5VAYg9OBB31DzcSlvJziMQCVtA/0gc5Vr2lqrQiVijcsgxF+YxP/6Vjv/b
-         LPMNC3R1Yi5GWxmuaBUcx0hPBlltJ2yzf8rxKXbKb8/RIwXsl0dC0XqMouhiFI+i64rn
-         oAGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746674781; x=1747279581;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SQXpXy9kvwFz/LNWQbKVfO2XYo1pOkSXCQtCYhWplNI=;
-        b=MTI1JwyrgEqR9DA653BfVtahtLxRxgtRzj/Eme1df2l3ujSpKUL+Qv9D5F8ZuPHJg7
-         eL34Gw8TJhu5GfwwW8bpeWQNSEmVXjO7f8AUn1He0R/vjQ9JKDyBtzrB4IdFFokDaz5t
-         AfD3uGD4u7P3GyXMnk1vCQqOyuv/pv5vFg9Iockv7F0CD4Fb3vKmYTFYIibdzz6NoAFq
-         Du729xitjxfz+zaAM8SE8qtb3aU87qlteoCSCPUcL0+RHWAqMmxUUsfFH1wswoPcY7aF
-         t7mFNCQoYuYWsj9pP8HneBByKwAJgmuRJmjSJoZHsXp5xs/T535uzJA2AnTuGQFry1xh
-         hphA==
-X-Forwarded-Encrypted: i=1; AJvYcCU1zLWzKCQJftUFxjlv8G6UPLTwGvUjjReMkf2UNbIte2mQf157EIcuEVcznQNC/1JBUHhvQd6E8x+pEZtZPGo=@vger.kernel.org, AJvYcCVpjUjUD+zCASP/7OSejT9jCr2ofEHdJiGdipZL7pFbDWw5IjXWgWY7YLTjIn/oDIJ5e4+3kfwgEkAONwk=@vger.kernel.org, AJvYcCWB7lJwu5gJDZOp1Kh2UOIdaB9v8ZwXPu1uNmpmTjLJT3uwMs8yXeb7zgwf8lfj2HCGy54gvOEac3I=@vger.kernel.org, AJvYcCWK6n7O58VyYHKhSmY3luzEAq3dvIKOg3alvnSPMO801FJRHjBPGMZeSuZbluj+j1x8FTnUeY8z@vger.kernel.org, AJvYcCWR79hRbs+P3fKQOzHXQkZlMu81guAWRLij/JU16u1ooR4ZpUx9SudbLQrhbcSud/a/65PN1HMmsa5Q5JtO@vger.kernel.org, AJvYcCWi7BSzaIu5MP2Mv2cyaaOv+gzIcJF7QaYbLPKhx0tzoi2dJOYpgxVrInfh32zxZxJ/PVtrrPcH2bBx@vger.kernel.org, AJvYcCWvjt2mY9sgfhLNbDql5UC1xYoqOZqQIDW90jcn55PXmoF5HU3MX3tTzXoni9av8Dxui/2VHWVeAzyuNg==@vger.kernel.org, AJvYcCWypr1tsCU9gIhtBqdXY5FPc654e6qzTaixxaSVNUwJjXI9oYPwH+JxOjm7ODHe9SKXr5bjGRLAB0Yg@vger.kernel.org, AJvYcCXEH6qm/smUEDJ6NkvHQQBWRfqSqPdbhdI9N/KLZ4cE/+V2g/x6u0lfco8GCUEKUAIanjjXP/DroveE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0CikslRkxEtmueoDvtvOsk/ZkimkhVzPsypEN+CSAe61VOu89
-	yUOlRQdJBsubUZRn1kvYCjAIPQryCaTeFlbiyyO77aZgG08yGbufsPsJE4eAGgurh593kl+Y6em
-	fPs+wz4liJpm6iyJXp3LyFjsab+Y=
-X-Gm-Gg: ASbGncuEf34dHw8KNbq0ieuh8kCw+Gbo9Ytl91OLkbcARZ2GVJS0e9qQVbh/RH4Kk6H
-	Eb1R+10hgfqUMMiEsiFZodj71cZuRRFYhQUDK1uHczQmLzv06RKobzLYN+p1WkGKZUQuZ6Vvx7k
-	I0mzYX5HshQU8kdtVg0TKE0Q6JlF3nS5xrlW5AKk1g8XObG5TxKJAm09dn
-X-Google-Smtp-Source: AGHT+IHo2Dnh2TuiUkEaDlxF/MceVyFC/xMnqNp7oGWDOa1fZjnFFojZOFIfnLlkXimaCOBxvK9y2PySrS0yBZ4zOwk=
-X-Received: by 2002:a05:690c:620c:b0:6f9:97f7:a5c4 with SMTP id
- 00721157ae682-70a1db166d9mr80859697b3.29.1746674781289; Wed, 07 May 2025
- 20:26:21 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FCA62A1D8;
+	Thu,  8 May 2025 05:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.247.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746681713; cv=fail; b=bOLgT/IkK1uikb8gAORS1r8zf+xoASM8M48YNSn8pzzy3tflWPD1MSi2rElnTXJrVSkEqdbTlpw6VCwwQUSgKBW7BFhoGa7uB9tDBT2Vp1QiffsKIm+Kpw9O1G4HWH6wayJ9WOcc4LbdqPgCpNobEFXJiJ/0uM3buwUZISoS9zw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746681713; c=relaxed/simple;
+	bh=JQDfNX8OjtHnqpma4hl7+v/4cPDxCqdGfxuT2qoTRcA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=r1LR7YVtz9Qk8YOLC+jrewJoasmiZLMQqKcvN48E8RxxhLnIDzwXP6dRgstMEnpB0ZdiZoVaOafdui+KSgac9XnCIDUB8ill3MrhzITzhZJNtjGO0mraWrdlAlt8rJ3Tf2Z0X7/5yHXVD4fCCRCw7EiB9SOQLQHFOT1BeebBbXM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=hlsh8SJL; arc=fail smtp.client-ip=40.107.247.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xJrwPzk0xNa59tDA7u39VOPjYh1p5IY/4ShcjgfIJ2GdYYZHALmUeOslj+PGtuFbZYKbInNW9v+OEB9pfYYVjRNv6y4/AmEQw2H9mIGzW3TNOcZ0nqDwIkUIbIjGt5tgogrS5QCRJg197DYzot1weCvpFurNy5RSZ/RTB02m/nAAOfsjZYEYyGmOhjI6aSb6aPYOfBcymzXveIGqW6zp0PzIwydgeWqHcXfpqKA1jKfUAddR+s4VXi1bc8os/p7EERZra6jhBdweVTdXTiWAZkBeliIgl8j5gVEtECusPEW3kgS0Ru+WbehTikEPxZ/S18ygzevWb7md/A5pi1lWig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UltI0DEYBO44PagaeNfXHPPWtrE1XjJ51zxhhVOcLF8=;
+ b=C9G4/TmHxYB189TlntzVnJgGpzDK7A1HZvpLFXwkjkDEIHffTA5yk5Md/7dOiHIr7iuZa5cHXwMqRgvEpoKZDicxcOeD0/lgqwljuw3gKFhsCqGTxnJCh6Wrp1Y8YMyQba3Qy9tZrlwY2RmpV10qTqxjtbb/ICt0APOy/Ki3qu6weiqfdzMwwgST3ZzfmCoZvv/lEW5Qjk1GhtD1YIpqmPXN/SPLDNU23dK7hhx1moQtTo3f6acdmapj7BWrYzO6inl9N3HDFWKnBQ2EXw/Ssjb7JiSduH2NZLnIbiuQxXhhRX36TJG63gyqvitMLNy2EE/nSLGH0bv/FO/NqsrCDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UltI0DEYBO44PagaeNfXHPPWtrE1XjJ51zxhhVOcLF8=;
+ b=hlsh8SJLQuHmkGPQriFrwuV789FZA1jSTzb71wo1F66y0jRLH5bfa9fIjyT8aXpYM+qRdrhT4pfPhIzsiT+aOqjKPhyW+WTIJokwOgFX09Z0mxJ9BAVbmsA7n7W2RVC+4Q13KI1PzVUSKZX4gVWfQIyoc0oVRfuQRFQJtuxmysMZr+urg1C+XbMimTSjNcJCD/qjxWgw/s4maHnr6fYAGZ3e0u0pd4i0hahDY7TP2Yqrf1HuqPRzAq+ZarH9SBcMfFGZiF8DPuxa4qGn/o+pPwgHMfGyTB3zRAuHPcfVHnGqEjpYtixR74f3joeOmR7w0gjq/OTqReA7mgxbNWCsUg==
+Received: from AM0PR04MB6515.eurprd04.prod.outlook.com (2603:10a6:208:16f::10)
+ by AS4PR04MB9241.eurprd04.prod.outlook.com (2603:10a6:20b:4e0::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.26; Thu, 8 May
+ 2025 05:21:48 +0000
+Received: from AM0PR04MB6515.eurprd04.prod.outlook.com
+ ([fe80::ca11:63b8:aeea:8043]) by AM0PR04MB6515.eurprd04.prod.outlook.com
+ ([fe80::ca11:63b8:aeea:8043%5]) with mapi id 15.20.8699.024; Thu, 8 May 2025
+ 05:21:47 +0000
+From: Pankit Garg <pankit.garg@nxp.com>
+To: Conor Dooley <conor@kernel.org>
+CC: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "robh@kernel.org"
+	<robh@kernel.org>, "alexandre.belloni@bootlin.com"
+	<alexandre.belloni@bootlin.com>, Vikash Bansal <vikash.bansal@nxp.com>,
+	Priyanka Jain <priyanka.jain@nxp.com>, Daniel Aguirre
+	<daniel.aguirre@nxp.com>, Shashank Rebbapragada
+	<shashank.rebbapragada@nxp.com>, Aman Kumar Pandey <aman.kumarpandey@nxp.com>
+Subject: RE: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a support
+Thread-Topic: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a support
+Thread-Index: AQHbvyFWcjUresCpX0SM58nE89m7ErPHOM0AgAD6hsA=
+Date: Thu, 8 May 2025 05:21:47 +0000
+Message-ID:
+ <AM0PR04MB6515B27367279C935A295379E78BA@AM0PR04MB6515.eurprd04.prod.outlook.com>
+References: <20250507072618.153960-1-pankit.garg@nxp.com>
+ <20250507-zap-dyslexia-924cfd1b6ec9@spud>
+In-Reply-To: <20250507-zap-dyslexia-924cfd1b6ec9@spud>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6515:EE_|AS4PR04MB9241:EE_
+x-ms-office365-filtering-correlation-id: d2c5203a-db0f-467f-94ff-08dd8df03b07
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?PfmvX+XRQioaj766zfSnLnFisFVYEBjbOFqYxCsZMHCrHVmtZPCmIli699DQ?=
+ =?us-ascii?Q?lafk5iULnQY+ZVCH8YvlzfjryvhUUtEmIQL+4gZPbBqaPleQ5cXRQXIot9Im?=
+ =?us-ascii?Q?s7BqwBqA4tge7SxGwVGQ4Ylc49K3xaEOjo0TuPlcBb25SUv6lNl2qe1KObYo?=
+ =?us-ascii?Q?LBRA7lqLrUQnbO5/GGSoSbLREzwkoQISkIwoK/mCtDPeujOeLd8PmOY0C8sI?=
+ =?us-ascii?Q?jjZZM7n3rNfFglR0b+9tS1LOkbgJkwxJa/oDRJyw8yv+lp7gYRwiK4WJ/w+0?=
+ =?us-ascii?Q?FEO+6s/kEM/XD+24pyI+EQMgCQSrKoxq9cmchcd3xTzcNrpECMb0QsrD+SPy?=
+ =?us-ascii?Q?HVouIbPUGTtMH46oWruBU4LxA+T+8Rzc4FeNuXTubWd8BeNkoZy+H9VEmcpo?=
+ =?us-ascii?Q?J19D9Mpr8cP+fU527I99FpbkSn5u2W1q/3pIP8HguI/TiEHTeOhbvzMILWhX?=
+ =?us-ascii?Q?36/0oLtE3tmxiBnH8Iiu7F+7r0AJoCUmQbl0ucPBXRHpaiIdI5hA19QRnHkr?=
+ =?us-ascii?Q?PXMDRX4/Pe0FKOxjEIm0w/TchQr/SC6psfA83uFwYtXLSZJRuJJplsYVDz+h?=
+ =?us-ascii?Q?IIpFFojnS8cyOHX0uMvz4ofDdSHDsv0siXMxNx/qTH+Zxx8/X+8gu+NqAtil?=
+ =?us-ascii?Q?9vRpleopM+7esL+FLHJINaus7881idD0MMPyYd4BJ/4p5YJ+JVZjo7QOEJQI?=
+ =?us-ascii?Q?aQUuJM20zrOGQz+SMTlQ8oPzv3w3X6tC7cxmEtR/HGkVSjRABVbENdEdtj8v?=
+ =?us-ascii?Q?rqVhqP22o8U/HWynqJF+6MTNAsGBgmMZT94Wghf/roOSEnvfiD1BlK5PW6My?=
+ =?us-ascii?Q?jdtDTYAuPDrpzha+HUXSrB+Bs+kovaU+hOn5XjLaNqPK2O8TAD8gV9fY1d5k?=
+ =?us-ascii?Q?AFDp4URAQSlAoc3LS3lhcKeEn3Val2S9Fqws8RjHJvsyEo/NrdHZuSXbZhOa?=
+ =?us-ascii?Q?vsIDRXueApBZ/WS5h7jJpOX3dOaZy0ZyrNKzIiOh1khjPajvgYbrWBafX08N?=
+ =?us-ascii?Q?eEps64E6TxSVtS8gZ0QhCToT3LSn9TU1Jx1kraD5qrSbOr37S3Z5yjMKtwQA?=
+ =?us-ascii?Q?BImHdLEpW9j1wzirBvTddWl2i9mldwTGrNtvOKmSTSoSTu3sY1cDIxabn0Xi?=
+ =?us-ascii?Q?qyxi4n9QPMhreFtChPWxuX/9nyRCjUGJO/IxVVQRvdmSlXBpe3Xbu45h1Q9F?=
+ =?us-ascii?Q?XRjxLv3TA7IMy4qBx3L1/Qng8RsqgsgfOASEeI3VOo2g+3q8IvgEodR/9i5S?=
+ =?us-ascii?Q?iHZxDR8Zd1u7dsU2XIvBGHAFx956rNJ65re6bc0jYazi5fHIXg0LEIvb6km1?=
+ =?us-ascii?Q?IijPD7xgKyLPApneoEWsn3J235LiZUy+lkuE3XmOxuY8aHf6QVK0JttDz6CW?=
+ =?us-ascii?Q?qB+Tct/YLR1BCUrecu+j5r7n4ozXNJ2imBWRglQ3GEBchjT/WiwOlZCBw6Z3?=
+ =?us-ascii?Q?ounq9xU6PLFmLKv6CPy7gYPqHF9I6fobv0HqNX0rMyDP1LTNTyKo7cDxxWxX?=
+ =?us-ascii?Q?BtLNYUz7ZscX1/g=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6515.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?0LMahcssltZqQlOOtY/6hFI1qAvugEz+PUPCLQZTcbCHIbYs3G6C4u632hxx?=
+ =?us-ascii?Q?lI+0COlsrh5D8AqlBcWh0RgufFS8/v45IlMuotW2VV5jVejxUd7EbjJRex9s?=
+ =?us-ascii?Q?YVSdqohCVz+f6QZY71IRb+KKArpBxccUDGcpyl37OoOgWafBqD+4IqsvNYCb?=
+ =?us-ascii?Q?CtyHeqA6VfoDEMQN6LTPVTTFeMITMbutoBQ2s2SjN9KS+nwZrhAIaPkZLOeg?=
+ =?us-ascii?Q?VYgq5eAfhgEA+bc7WcXAgZVK/kOVHGEzt50ERSFl7qUsmHtqScZpS635v2un?=
+ =?us-ascii?Q?pg/iK27czoEQrIC7SQacs+LLYkDMAOTFnLeBYlOAOkEl4nfkqBRWEPGI0gbj?=
+ =?us-ascii?Q?1XiJbRTsodWlrx29jPpmvFR6bEfhYGOtWgvgiACFJaA+Hnm2a2ZOBkPolNWu?=
+ =?us-ascii?Q?uHthUbTi+1ISolNEsIQY778wBTdk+dl1gRX/URzn4NBqdZVrly4EWqq28CYK?=
+ =?us-ascii?Q?DuQZsp4uk2OU3qX/tO+nVDHSS9y1np4TifMnZ2QaEBu5HVFFbhWqIizOGU1Z?=
+ =?us-ascii?Q?Cscz5/0aufYztVHObYJ5CDnr3selVe7BCfeDfuzjt8oJcccjQn4WklHaZ9da?=
+ =?us-ascii?Q?zANhTp014KApDGKiCmd2zMn9QCLTMrbDo6DhmebS4RFfBEieoXGAj/RScCK+?=
+ =?us-ascii?Q?63wXt7E9zruegOzQiEZtxAvtuMbB5HMikZTaD+YkQn5edJokJ1elhLi232Lq?=
+ =?us-ascii?Q?zRdKdXbkMekS0bwjHRg+5tGKjKZO7MqsglCEmEdMgS+FDdK8uhp61a/UBhQ6?=
+ =?us-ascii?Q?3up38h8X/7GlOgcVkiMoxrrjtDSZOzN18B+VhP+yzCYtNXJJVmYBhL4K/TZ5?=
+ =?us-ascii?Q?Y4O57l/wzVI3nu6ctdZtdEjqoHS74GQxw3522L6pEz0ROJ6AV9k9DWbGs6SQ?=
+ =?us-ascii?Q?BDmI7sOkqhDQnQ2wzdSvJzSTZiL/BJG0diYTFAMNEHL2tAy03ThnGau3/Gjl?=
+ =?us-ascii?Q?IeB/vLyKwuJW9dlHK2ndj5dGf1HMY/jVWrB6NK745UHzELqpRrMQTg93oMlZ?=
+ =?us-ascii?Q?YbFV1Rq0zAak/voV8STNoeEEDgNMem871fFFbVrBbPctOMVC5qrcrRoidBFr?=
+ =?us-ascii?Q?dykKv1Ch4b5yflfXmglpBI/epzWL741rM7E9QlFBKQUlGRdxlkfqAPqvwEos?=
+ =?us-ascii?Q?ChUxz8F5OthU3Ats9en1ZdGA87+2OyP2JAs6bQLdKuqOh3yrj6WG2AshePIp?=
+ =?us-ascii?Q?6oVYeqh0OORvmtuSlq8F3wbUOG5B3qGqND6kZxEkwywgBHwqFdDK38bYIuUc?=
+ =?us-ascii?Q?1OT56yuMqvGMhadLkM5VTXRo9ZdBoxnmkT0Zs9EcVdzNKWlz0cEzgUoPEwB8?=
+ =?us-ascii?Q?HGAqWXDkymDpKWnuTO3O+BO7TonwB1Awwr9gcbHyFI1Xg75mqAlrZXBbUNeU?=
+ =?us-ascii?Q?WMY6cW5kGGMvvPyxDoJt8l7Bg8Kf2tyuPBK1g0IhhZLB29WyZvTFnkVYteYM?=
+ =?us-ascii?Q?MDv+NHUyPRFh7ZqIeOh6r1lI/9t575O+XeJyhXOilOlpIm7zkT+4p3qzyGjQ?=
+ =?us-ascii?Q?Wkyf81sA9rgtp+eHptjMkqjfSrI2RU+VZNeY3PPEAJsB1f1ZUaJfwpTwvl35?=
+ =?us-ascii?Q?NIHZycwliPA2cpthAxAcSaUmgpLdc6o6hEZ+M+Ul?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250423094058.1656204-1-tmyu0@nuvoton.com> <20250423094058.1656204-5-tmyu0@nuvoton.com>
- <20250503-fulmar-of-sexy-upgrade-1184a7-mkl@pengutronix.de>
-In-Reply-To: <20250503-fulmar-of-sexy-upgrade-1184a7-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 8 May 2025 11:26:09 +0800
-X-Gm-Features: ATxdqUGTZzo2tvN_GyqRwnemDb0_weO_pv8-aCyrEUlG0IXDKCVeV7FIjSxksDk
-Message-ID: <CAOoeyxWbr6jfZjPvYFD+vHKMZ9CpM6SLt+2xo-4E-NnhGinfvg@mail.gmail.com>
-Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6515.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2c5203a-db0f-467f-94ff-08dd8df03b07
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2025 05:21:47.8008
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gg3sPVXxh4pko2AFwib4RLD0kbhpn3poKp3OP0X/hHbZ04ceRAlxZMKblBJRzT4aHokOkxHRB4hwWYVEIE49uw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9241
 
-Dear Marc,
 
-Thank you for reviewing.
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B45=E6=9C=883=
-=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=889:57=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-
-> > This driver supports Socket CANFD functionality for NCT6694 MFD
-> > device based on USB interface.
+> -----Original Message-----
+> From: Conor Dooley <conor@kernel.org>
+> Sent: Wednesday, May 7, 2025 7:53 PM
+> To: Pankit Garg <pankit.garg@nxp.com>
+> Cc: linux-rtc@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; conor+dt@kernel.org; robh@kernel.org;
+> alexandre.belloni@bootlin.com; Vikash Bansal <vikash.bansal@nxp.com>;
+> Priyanka Jain <priyanka.jain@nxp.com>; Daniel Aguirre
+> <daniel.aguirre@nxp.com>; Shashank Rebbapragada
+> <shashank.rebbapragada@nxp.com>; Aman Kumar Pandey
+> <aman.kumarpandey@nxp.com>
+> Subject: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a support
+>=20
+> On Wed, May 07, 2025 at 12:56:17PM +0530, Pankit Garg wrote:
+> > Add device tree bindings for NXP PCF85053a RTC chip.
 > >
-> > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
->
-> The destroy functions nct6694_canfd_close() and nct6694_canfd_remove()
-> are not the exact inverse of their init functions. Se comments inline.
->
-> Please fix and add:
->
-> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
->
-> Feel free to mainline this patch as part of the series outside of the
-> linux-can-next tree. Better ask the netdev maintainers for their OK, too.
->
-> What about transceiver delay compensation for higher CAN-FD bitrates?
-> How does you device handle these?
->
-
-In the CAN CMD0's DBTP field, bit 23 is the TDC flag, I will add
-support for enabling tdc, and firmware will automatically configure
-tdco. Do you think this approach is appropriate?
-
+> > Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
 > > ---
-> >  MAINTAINERS                         |   1 +
-> >  drivers/net/can/usb/Kconfig         |  11 +
-> >  drivers/net/can/usb/Makefile        |   1 +
-> >  drivers/net/can/usb/nct6694_canfd.c | 814 ++++++++++++++++++++++++++++
-> >  4 files changed, 827 insertions(+)
-> >  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+> > V2 -> V3: Moved MAINTAINERS file changes to the driver patch
+> > V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
+>=20
+> You forgot to add my ack.
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Yes, I forgot. I will add it in v4. Let me wait for more review/comments fo=
+r couple of days.
+
+>=20
 > >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 751b9108524a..ee8583edc2d2 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -17364,6 +17364,7 @@ S:    Supported
-> >  F:   drivers/gpio/gpio-nct6694.c
-> >  F:   drivers/i2c/busses/i2c-nct6694.c
-> >  F:   drivers/mfd/nct6694.c
-> > +F:   drivers/net/can/usb/nct6694_canfd.c
-> >  F:   include/linux/mfd/nct6694.h
+> > ---
+> >  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
 > >
-> >  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
-> > diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-> > index 9dae0c71a2e1..759e724a67cf 100644
-> > --- a/drivers/net/can/usb/Kconfig
-> > +++ b/drivers/net/can/usb/Kconfig
-> > @@ -133,6 +133,17 @@ config CAN_MCBA_USB
-> >         This driver supports the CAN BUS Analyzer interface
-> >         from Microchip (http://www.microchip.com/development-tools/).
+> > diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> > index 7330a7200831..47be7bbbfedd 100644
+> > --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> > +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> > @@ -65,6 +65,8 @@ properties:
+> >        - microcrystal,rv8523
+> >        # NXP LPC32xx SoC Real-time Clock
+> >        - nxp,lpc3220-rtc
+> > +      # NXP PCF85053A Real Time Clock Module with I2C-Bus
+> > +      - nxp,pcf85053a
+> >        # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
+> >        - ricoh,r2025sd
+> >        # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
+> > --
+> > 2.25.1
 > >
-> > +config CAN_NCT6694
-> > +     tristate "Nuvoton NCT6694 Socket CANfd support"
-> > +     depends on MFD_NCT6694
-> > +     select CAN_RX_OFFLOAD
-> > +     help
-> > +       If you say yes to this option, support will be included for Nuv=
-oton
-> > +       NCT6694, a USB device to socket CANfd controller.
-> > +
-> > +       This driver can also be built as a module. If so, the module wi=
-ll
-> > +       be called nct6694_canfd.
-> > +
-> >  config CAN_PEAK_USB
-> >       tristate "PEAK PCAN-USB/USB Pro interfaces for CAN 2.0b/CAN-FD"
-> >       help
-> > diff --git a/drivers/net/can/usb/Makefile b/drivers/net/can/usb/Makefil=
-e
-> > index 8b11088e9a59..fcafb1ac262e 100644
-> > --- a/drivers/net/can/usb/Makefile
-> > +++ b/drivers/net/can/usb/Makefile
-> > @@ -11,5 +11,6 @@ obj-$(CONFIG_CAN_F81604) +=3D f81604.o
-> >  obj-$(CONFIG_CAN_GS_USB) +=3D gs_usb.o
-> >  obj-$(CONFIG_CAN_KVASER_USB) +=3D kvaser_usb/
-> >  obj-$(CONFIG_CAN_MCBA_USB) +=3D mcba_usb.o
-> > +obj-$(CONFIG_CAN_NCT6694) +=3D nct6694_canfd.o
-> >  obj-$(CONFIG_CAN_PEAK_USB) +=3D peak_usb/
-> >  obj-$(CONFIG_CAN_UCAN) +=3D ucan.o
-> > diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/=
-nct6694_canfd.c
-> > new file mode 100644
-> > index 000000000000..9cf6230ffb7d
-> > --- /dev/null
-> > +++ b/drivers/net/can/usb/nct6694_canfd.c
-> > @@ -0,0 +1,814 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Nuvoton NCT6694 Socket CANfd driver based on USB interface.
-> > + *
-> > + * Copyright (C) 2024 Nuvoton Technology Corp.
-> > + */
-> > +
-> > +#include <linux/can/dev.h>
-> > +#include <linux/can/rx-offload.h>
-> > +#include <linux/ethtool.h>
-> > +#include <linux/irqdomain.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/mfd/nct6694.h>
-> > +#include <linux/module.h>
-> > +#include <linux/netdevice.h>
-> > +#include <linux/platform_device.h>
-> > +
-> > +#define DEVICE_NAME "nct6694-canfd"
-> > +
-> > +/* USB command module type for NCT6694 CANfd controller.
-> > + * This defines the module type used for communication with the NCT669=
-4
-> > + * CANfd controller over the USB interface.
-> > + */
-> > +#define NCT6694_CANFD_MOD                    0x05
-> > +
-> > +/* Command 00h - CAN Setting and Initialization */
-> > +#define NCT6694_CANFD_SETTING                        0x00
-> > +#define NCT6694_CANFD_SETTING_ACTIVE_CTRL1   BIT(0)
-> > +#define NCT6694_CANFD_SETTING_ACTIVE_CTRL2   BIT(1)
-> > +#define NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP       BIT(2)
-> > +#define NCT6694_CANFD_SETTING_CTRL1_MON              BIT(0)
-> > +#define NCT6694_CANFD_SETTING_CTRL1_NISO     BIT(1)
-> > +#define NCT6694_CANFD_SETTING_CTRL1_LBCK     BIT(2)
-> > +#define NCT6694_CANFD_SETTING_NBTP_NTSEG2    GENMASK(6, 0)
-> > +#define NCT6694_CANFD_SETTING_NBTP_NTSEG1    GENMASK(15, 8)
-> > +#define NCT6694_CANFD_SETTING_NBTP_NBRP              GENMASK(24, 16)
-> > +#define NCT6694_CANFD_SETTING_NBTP_NSJW              GENMASK(31, 25)
-> > +#define NCT6694_CANFD_SETTING_DBTP_DSJW              GENMASK(3, 0)
-> > +#define NCT6694_CANFD_SETTING_DBTP_DTSEG2    GENMASK(7, 4)
-> > +#define NCT6694_CANFD_SETTING_DBTP_DTSEG1    GENMASK(12, 8)
-> > +#define NCT6694_CANFD_SETTING_DBTP_DBRP              GENMASK(20, 16)
-
-I will add the macro in v11: #define NCT6694_CANFD_SETTING_DBTP_TDC
-
-> > +
-> > +/* Command 01h - CAN Information */
-> > +#define NCT6694_CANFD_INFORMATION            0x01
-> > +#define NCT6694_CANFD_INFORMATION_SEL                0x00
-> > +
-> > +/* Command 02h - CAN Event */
-> > +#define NCT6694_CANFD_EVENT                  0x02
-> > +#define NCT6694_CANFD_EVENT_SEL(idx, mask)   \
-> > +     ((idx ? 0x80 : 0x00) | ((mask) & 0x7F))
-> > +
-> > +#define NCT6694_CANFD_EVENT_MASK             GENMASK(5, 0)
-> > +#define NCT6694_CANFD_EVT_TX_FIFO_EMPTY              BIT(7)  /* Read-c=
-lear */
-> > +#define NCT6694_CANFD_EVT_RX_DATA_LOST               BIT(5)  /* Read-c=
-lear */
-> > +#define NCT6694_CANFD_EVT_RX_DATA_IN         BIT(7)  /* Read-clear*/
->                                                                     ^^
-> add a space
->
-> > +
-...
-> > +static int nct6694_canfd_start(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > +     const struct can_bittiming *d_bt =3D &priv->can.data_bittiming;
-> > +     const struct can_bittiming *n_bt =3D &priv->can.bittiming;
-> > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
-> > +     const struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_CANFD_MOD,
-> > +             .cmd =3D NCT6694_CANFD_SETTING,
-> > +             .sel =3D ndev->dev_port,
-> > +             .len =3D cpu_to_le16(sizeof(*setting))
-> > +     };
-> > +     int ret;
-> > +
-> > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> > +     if (!setting)
-> > +             return -ENOMEM;
-> > +
-> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
-L1_MON);
-> > +
-> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
-L1_NISO);
-> > +
-> > +     if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> > +             setting->ctrl1 |=3D cpu_to_le16(NCT6694_CANFD_SETTING_CTR=
-L1_LBCK);
-> > +
-> > +     /* Disable clock divider */
-> > +     setting->ctrl2 =3D 0;
-> > +
-> > +     setting->nbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_NB=
-TP_NSJW,
-> > +                                            n_bt->sjw - 1) |
-> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
-_NBRP,
-> > +                                            n_bt->brp - 1) |
-> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
-_NTSEG2,
-> > +                                            n_bt->phase_seg2 - 1) |
-> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_NBTP=
-_NTSEG1,
-> > +                                            n_bt->prop_seg + n_bt->pha=
-se_seg1 - 1));
-> > +
-> > +     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DB=
-TP_DSJW,
-> > +                                            d_bt->sjw - 1) |
-> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
-_DBRP,
-> > +                                            d_bt->brp - 1) |
-> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
-_DTSEG2,
-> > +                                            d_bt->phase_seg2 - 1) |
-> > +                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP=
-_DTSEG1,
-> > +                                            d_bt->prop_seg + d_bt->pha=
-se_seg1 - 1));
-
-I'll update the code to:
-     setting->dbtp =3D cpu_to_le32(FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DS=
-JW,
-                                            d_bt->sjw - 1) |
-                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DBRP=
-,
-                                            d_bt->brp - 1) |
-                                 FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSE=
-G2,
-                                            d_bt->phase_seg2 - 1) |
-                                FIELD_PREP(NCT6694_CANFD_SETTING_DBTP_DTSEG=
-1,
-                                           d_bt->prop_seg +
-d_bt->phase_seg1 - 1) |
-                                NCT6694_CANFD_SETTING_DBTP_TDC);
-
-> > +
-> > +     setting->active =3D NCT6694_CANFD_SETTING_ACTIVE_CTRL1 |
-> > +                       NCT6694_CANFD_SETTING_ACTIVE_CTRL2 |
-> > +                       NCT6694_CANFD_SETTING_ACTIVE_NBTP_DBTP;
-> > +
-> > +     ret =3D nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void nct6694_canfd_stop(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > +     struct nct6694_canfd_setting *setting __free(kfree) =3D NULL;
-> > +     const struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_CANFD_MOD,
-> > +             .cmd =3D NCT6694_CANFD_SETTING,
-> > +             .sel =3D ndev->dev_port,
-> > +             .len =3D cpu_to_le16(sizeof(*setting))
-> > +     };
-> > +
-> > +     /* The NCT6694 cannot be stopped. To ensure safe operation and av=
-oid
-> > +      * interference, the control mode is set to Listen-Only mode. Thi=
-s
-> > +      * mode allows the device to monitor bus activity without activel=
-y
-> > +      * participating in communication.
-> > +      */
-> > +     setting =3D kzalloc(sizeof(*setting), GFP_KERNEL);
-> > +     if (!setting)
-> > +             return;
-> > +
-> > +     nct6694_read_msg(priv->nct6694, &cmd_hd, setting);
-> > +     setting->ctrl1 =3D cpu_to_le16(NCT6694_CANFD_SETTING_CTRL1_MON);
-> > +     setting->active =3D NCT6694_CANFD_SETTING_ACTIVE_CTRL1;
-> > +     nct6694_write_msg(priv->nct6694, &cmd_hd, setting);
-> > +
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
-> > +}
-> > +
-> > +static int nct6694_canfd_close(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > +
->
-> make this inverse to nct6694_canfd_open()
->
-
-Fix it in v11.
-
-> > +     netif_stop_queue(ndev);
-> > +     can_rx_offload_disable(&priv->offload);
-> > +     nct6694_canfd_stop(ndev);
-> > +     free_irq(ndev->irq, ndev);
-> > +     destroy_workqueue(priv->wq);
-> > +     close_candev(ndev);
-> > +     return 0;
-> > +}
-> > +
-> > +static int nct6694_canfd_set_mode(struct net_device *ndev, enum can_mo=
-de mode)
-> > +{
-> > +     int ret;
-> > +
-> > +     switch (mode) {
-> > +     case CAN_MODE_START:
-> > +             ret =3D nct6694_canfd_start(ndev);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             netif_wake_queue(ndev);
-> > +             break;
-> > +
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int nct6694_canfd_open(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_canfd_priv *priv =3D netdev_priv(ndev);
-> > +     int ret;
-> > +
-> > +     ret =3D open_candev(ndev);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     can_rx_offload_enable(&priv->offload);
-> > +
-> > +     ret =3D request_threaded_irq(ndev->irq, NULL,
-> > +                                nct6694_canfd_irq, IRQF_ONESHOT,
-> > +                                "nct6694_canfd", ndev);
-> > +     if (ret) {
-> > +             netdev_err(ndev, "Failed to request IRQ\n");
-> > +             goto close_candev;
->
-> nitpick: rename to can_rx_offload_disable
->
-
-Fix it in v11.
-
-> > +     }
-> > +
-> > +     priv->wq =3D alloc_ordered_workqueue("%s-nct6694_wq",
-> > +                                        WQ_FREEZABLE | WQ_MEM_RECLAIM,
-> > +                                        ndev->name);
-> > +     if (!priv->wq) {
-> > +             ret =3D -ENOMEM;
-> > +             goto free_irq;
-> > +     }
-> > +
-> > +     ret =3D nct6694_canfd_start(ndev);
-> > +     if (ret)
-> > +             goto destroy_wq;
-> > +
-> > +     netif_start_queue(ndev);
-> > +
-> > +     return 0;
-> > +
-> > +destroy_wq:
-> > +     destroy_workqueue(priv->wq);
-> > +free_irq:
-> > +     free_irq(ndev->irq, ndev);
-> > +close_candev:
-> > +     can_rx_offload_disable(&priv->offload);
-> > +     close_candev(ndev);
-> > +     return ret;
-> > +}
-> > +
-> > +static const struct net_device_ops nct6694_canfd_netdev_ops =3D {
-> > +     .ndo_open =3D nct6694_canfd_open,
-> > +     .ndo_stop =3D nct6694_canfd_close,
-> > +     .ndo_start_xmit =3D nct6694_canfd_start_xmit,
-> > +     .ndo_change_mtu =3D can_change_mtu,
-> > +};
-> > +
-> > +static const struct ethtool_ops nct6694_canfd_ethtool_ops =3D {
-> > +     .get_ts_info =3D ethtool_op_get_ts_info,
-> > +};
-> > +
-> > +static int nct6694_canfd_get_clock(struct nct6694_canfd_priv *priv)
-> > +{
-> > +     struct nct6694_canfd_information *info __free(kfree) =3D NULL;
-> > +     static const struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_CANFD_MOD,
-> > +             .cmd =3D NCT6694_CANFD_INFORMATION,
-> > +             .sel =3D NCT6694_CANFD_INFORMATION_SEL,
-> > +             .len =3D cpu_to_le16(sizeof(*info))
-> > +     };
-> > +     int ret, can_clk;
-> > +
-> > +     info =3D kzalloc(sizeof(*info), GFP_KERNEL);
-> > +     if (!info)
-> > +             return -ENOMEM;
-> > +
-> > +     ret =3D nct6694_read_msg(priv->nct6694, &cmd_hd, info);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     can_clk =3D le32_to_cpu(info->can_clk);
->
-> return le32_to_cpu(info->can_clk);
->
-
-Fix it in v11.
-
-> > +
-> > +     return can_clk;
-> > +}
-> > +
-> > +static int nct6694_canfd_probe(struct platform_device *pdev)
-> > +{
-> > +     const struct mfd_cell *cell =3D mfd_get_cell(pdev);
-> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> > +     struct nct6694_canfd_priv *priv;
-> > +     struct net_device *ndev;
-> > +     int ret, irq, can_clk;
-> > +
-> > +     irq =3D irq_create_mapping(nct6694->domain,
-> > +                              NCT6694_IRQ_CAN0 + cell->id);
-> > +     if (!irq)
-> > +             return irq;
-> > +
-> > +     ndev =3D alloc_candev(sizeof(struct nct6694_canfd_priv), 1);
-> > +     if (!ndev) {
-> > +             ret =3D -ENOMEM;
-> > +             goto dispose_irq;
-> > +     }
-> > +
-> > +     ndev->irq =3D irq;
-> > +     ndev->flags |=3D IFF_ECHO;
-> > +     ndev->dev_port =3D cell->id;
-> > +     ndev->netdev_ops =3D &nct6694_canfd_netdev_ops;
-> > +     ndev->ethtool_ops =3D &nct6694_canfd_ethtool_ops;
-> > +
-> > +     priv =3D netdev_priv(ndev);
-> > +     priv->nct6694 =3D nct6694;
-> > +     priv->ndev =3D ndev;
-> > +
-> > +     can_clk =3D nct6694_canfd_get_clock(priv);
-> > +     if (can_clk < 0) {
-> > +             ret =3D dev_err_probe(&pdev->dev, can_clk,
-> > +                                 "Failed to get clock\n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     INIT_WORK(&priv->tx_work, nct6694_canfd_tx_work);
-> > +
-> > +     priv->can.clock.freq =3D can_clk;
-> > +     priv->can.bittiming_const =3D &nct6694_canfd_bittiming_nominal_co=
-nst;
-> > +     priv->can.data_bittiming_const =3D &nct6694_canfd_bittiming_data_=
-const;
-> > +     priv->can.do_set_mode =3D nct6694_canfd_set_mode;
-> > +     priv->can.do_get_berr_counter =3D nct6694_canfd_get_berr_counter;
-> > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> > +             CAN_CTRLMODE_FD_NON_ISO;
-> > +
-> > +     ret =3D can_set_static_ctrlmode(ndev, CAN_CTRLMODE_FD);
-> > +     if (ret)
-> > +             goto free_candev;
-> > +
-> > +     ret =3D can_rx_offload_add_manual(ndev, &priv->offload,
-> > +                                     NCT6694_NAPI_WEIGHT);
-> > +     if (ret) {
-> > +             dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\=
-n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     platform_set_drvdata(pdev, priv);
-> > +     SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-> > +
-> > +     ret =3D register_candev(priv->ndev);
-> > +     if (ret)
-> > +             goto rx_offload_del;
-> > +
-> > +     return 0;
-> > +
-> > +rx_offload_del:
-> > +     can_rx_offload_del(&priv->offload);
-> > +free_candev:
-> > +     free_candev(ndev);
-> > +dispose_irq:
-> > +     irq_dispose_mapping(irq);
-> > +     return ret;
-> > +}
-> > +
-> > +static void nct6694_canfd_remove(struct platform_device *pdev)
-> > +{
-> > +     struct nct6694_canfd_priv *priv =3D platform_get_drvdata(pdev);
-> > +     struct net_device *ndev =3D priv->ndev;
-> > +
-> > +     unregister_candev(ndev);
-> > +     irq_dispose_mapping(ndev->irq);
-> > +     can_rx_offload_del(&priv->offload);
-> > +     free_candev(ndev);
->
-> Make the order inverse to the nct6694_canfd_probe() function.
->
-
-Fix it in v11.
-
-
-Best regards,
-Ming
 
