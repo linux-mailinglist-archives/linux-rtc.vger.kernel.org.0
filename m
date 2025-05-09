@@ -1,120 +1,152 @@
-Return-Path: <linux-rtc+bounces-4069-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4070-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB9F6AB0783
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 May 2025 03:41:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7663EAB09C8
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 May 2025 07:39:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F166C1898D2F
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 May 2025 01:42:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BA397B7F8B
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 May 2025 05:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F28126F0A;
-	Fri,  9 May 2025 01:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E106269832;
+	Fri,  9 May 2025 05:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dj/KbpJq"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from bg5.exmail.qq.com (bg5.exmail.qq.com [43.154.197.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458A9946C;
-	Fri,  9 May 2025 01:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.154.197.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B668D2686B1;
+	Fri,  9 May 2025 05:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746754908; cv=none; b=T7K8RyeOF3XToDSNOjdBeIlCjIBTEw+XlNmYBaB7qzYAChOM0/0tbEYka+/FUgG/tyc+CCmAIFlaHUgFhHZ2QB7RSAlQRkAT0E8MrJhCxbyhSJ4eAuuizNTbs3U4muMS0BxZxrBA3agg3xTzDxKg/U+mbKt+6hY/M1Q2drU2bL4=
+	t=1746769164; cv=none; b=ASR0L6Nk6HTbE9RvRVbq7CftF1NnQTNBov4EEvr3gQ9lhBsmtnNfmRYsIczt4ltQ8jk6v/3zN7tCesfdAOUukdB/MplPhhHh2gRStRwe5n40w0l/j7pg9qLQ6UJqNwIVHc/2u08i8CZ6CFkxmXK6wSglhps0pnUV0qjQgFxApNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746754908; c=relaxed/simple;
-	bh=QPSI/nDUyiW2FjAADn1tIo0LfEblwaUPPvLyUjoQ+YI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uDXpDq2LDhWXMS6f+PN1qsRIG6WdmZsU0t7QKp2gbG3GNV+BlW43kDshuhHgbEYoRViL6ev/MU460PZIsV1qYdq7lvl2nfSMFUNFiz0KUWlM0nGX92aK26mUuDrtY2ADqMiyjmDPlTjxhW8xNntVm1Nezs+s9TRHKu7ZCu0ul5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinsec.com.cn; spf=none smtp.mailfrom=kylinsec.com.cn; arc=none smtp.client-ip=43.154.197.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinsec.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kylinsec.com.cn
-X-QQ-mid: zesmtpsz7t1746754851t03ce554a
-X-QQ-Originating-IP: HsWACdo/6p+2+Xlv0CaWzUOgRr9FlLvbn1+uFwpn1/U=
-Received: from localhost.localdomain ( [118.249.225.48])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 09 May 2025 09:40:49 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3901934880426052766
-From: Liu Dalin <liudalin@kylinsec.com.cn>
-To: alexandre.belloni@bootlin.com,
-	zhoubinbin@loongson.cn,
-	wangming01@loongson.cn
-Cc: chenhuacai@kernel.org,
-	gaojuxin@loongson.cn,
-	git@xen0n.name,
-	jiaxun.yang@flygoat.com,
-	keguang.zhang@gmail.com,
-	lixuefeng@loongson.cn,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH V1] rtc: loongson: Add missing alarm notifications for ACPI RTC events
-Date: Fri,  9 May 2025 09:40:46 +0800
-Message-Id: <20250509014046.7399-1-liudalin@kylinsec.com.cn>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250429062736.982039-1-liudalin@kylinsec.com.cn>
-References: <20250429062736.982039-1-liudalin@kylinsec.com.cn>
+	s=arc-20240116; t=1746769164; c=relaxed/simple;
+	bh=Wt6qmQ7sZcDANvo0BmQAwd3idypT0K8m5njPmRPNL7A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pCLtOW02hISDHknPWLWNqF7xzTTtnfi+MMi5rALRgCfExOvW5aaiuti2zPpZdNRZn8TDtrB16jirZdaLcdXlfFEsbJx2vh9w0cpXjMwnHRo4t85yM0iMTcKwBhQBT7RSpn6W9UC3D5NSNPEoFJCR11BqhKI4/Ft1sg4WekP6WIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dj/KbpJq; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6ff4faf858cso12491067b3.2;
+        Thu, 08 May 2025 22:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746769161; x=1747373961; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wt6qmQ7sZcDANvo0BmQAwd3idypT0K8m5njPmRPNL7A=;
+        b=Dj/KbpJq4XJSW8XL5syhdB8Tx0o6SSEWchYnDow660MmAku+CJoDsB3EfXUgmiIKrw
+         GAgqywluCwCRoat1sQwsUfJ0JxIj0R5V8IVPK+nUDDoTsq2o1h5f4i5v6kqMWO2F/kPH
+         r9gET+kRZ+mza7bE/1tHhoVQiJDr0LCZ9uiV+oA/Fig4M2qfwPpdtwnI+5n3JdyrMgC/
+         o7Fy14HrPXcx9PHAr5b2YKy7lcuhY5SdYr0MQ8SEMvuDz4imcJgmt9sCZkdwQlVpFIdU
+         on9BnIKNs7y6ppmQFq9W1lShkekMzyt7L+UnCd+YzdDQJAPZBNrnxK+ZMuBUm/M0oyyj
+         llPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746769161; x=1747373961;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wt6qmQ7sZcDANvo0BmQAwd3idypT0K8m5njPmRPNL7A=;
+        b=GZ4O1VK42wybB0a9+1sCrZb4fWB4pSQ0gkpbQBJVl4OVqU8zgtupAACXQKa2FWGVHo
+         EurS3owNtXEjvLrPFiB/WnuaM+R7JoJNgjKxrtlOG4pxoojvddAm6QmdvdaSkY6a5vmL
+         glYahook0AgbrMIWlZMeObVVopYViXbu8Eq8dyiqcbcmmAU2ny7OdBmkVmn/Cz/vGJfB
+         gQElygMFYFXqcCMBIq/wD+n95WqzbM155Tgcs4UNeSe87is22C2wor5nRXgeb+y3EHOR
+         VUBQoZSSGYYkSyFCBVmRgBf6zVvmMyggGhRRMuvE298tZvnMGZokYfUbkeFF2Yylv28v
+         iGfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYyYc94fDGmZGwjKG/Q6GwMF+yZnCwPPQFWdJPCCK/oyFI+5UkIZT5ZiGtdvIfB4U8YsTopbRA@vger.kernel.org, AJvYcCVD1erA0h8+/NRj3AGq2WxlQ+AwKhrBl0Beq3BwA/VoWvssIu06lB05Q7SJqb3SYwhMX54Z5oYHE+qZg0A5UfE=@vger.kernel.org, AJvYcCWGZMRGecWsz3Hgi6sKo9VdFlCEuwnBfBP2mGCMIIHkKl1lOGZG9flo0sbh3iDucOo/OLVzbn7IoY+e0A==@vger.kernel.org, AJvYcCWTzRYXjFZNQSHn5J8r/3hV3qXxT1PivWBYWLPPt/n71O9YFrq1csEI0IAiNctSNQ+T1bCn8WbhKujhEJ0B@vger.kernel.org, AJvYcCWYl3l6ZOJXpUH9H8KnLa0b6OHJwKN/6sHzUGL53c5k2l50vMQz8WiQc7e6Vw0DJ/ku8bY/kuXW05AK@vger.kernel.org, AJvYcCWhQMp+jsrdRQL8xW8D6UKGOBYKQjtrHj9kx2EjyajnUTSRnl8vsqXANPhjO8qpjb9QMVpKCLyg5Zw=@vger.kernel.org, AJvYcCWqS74aICIgZYC5Un43hf0RqlBW7hbYHRKOsUnfIiW6t9FiOes/uDYzrg8IwyVe9UUCZOrE4RfaADJKEdg=@vger.kernel.org, AJvYcCXD28b2VU5/dXuaajsz6A9f4fBd3zTnb85EPGVwqnxG11b0BKxfW46WDO2erbJAhQKJDOmknxePY3Yl@vger.kernel.org, AJvYcCXmxNoAWYQnuzMbwMndeLLPEqWaDoyZd9/HNfD7GZxNCZzp1RuB0hE7/qx5pAyWObFlIshPnmBtyUyc@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB34ibkp1AnH6q9+CrlF2BpYYUI5wzE6A79O9OaEB1+c4GtQa3
+	mdhw/C2Uqp9ycL6fTYa6dS/haiWN6bW4Rfi9wR2QEhvrCI9kjIipZNgi7kUob6UgD+u7/R21rlz
+	BiR/jL1adrYaShe/57U1b3paKXgw=
+X-Gm-Gg: ASbGncvmF63es7mY//qPXv8Qdzsa2nIbV9sayYMrB6bafWBrNNdtvDQIkEvMuoHbSn3
+	k8Cj/Tys45/JXCB/n0kuaFChjCTylhMp/rUXev6NhDNXTs1WAQZHtf85cTISfrPwCGpy6o4aQeq
+	9MVnB8XM+3b6be10TfFHE/7/zIYDjvHnDeLwKDN7HCIjmSXWCqwaEWK8A=
+X-Google-Smtp-Source: AGHT+IFk5bB/kSQCQvPokaz/k9WbjeiZWx0KoBAXjKrwliCu6xp8xGoktdaerVMzGTy2Apz2buaGKEb4MTQ0qSgkw5M=
+X-Received: by 2002:a05:690c:368e:b0:702:627d:c86 with SMTP id
+ 00721157ae682-70a3f9ec80amr26501877b3.5.1746769161576; Thu, 08 May 2025
+ 22:39:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:kylinsec.com.cn:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: M4K5nIxZYv59t91TMkjmmNWmR+c21lQggGOkJLlnptcVQ/mtq1sTHrlX
-	kJb9NqeQK9c0kAs2RGNWGeafEQLRTDVPE1MstE4KhZYQo/uB1j34Mz758Xg3jF6PLUTe/jK
-	D1iH3D0thCIsap37ZYmGxCI0RP2isYgqNhsN11wM4oX3DwX8qHYf3lHuAWmH7B9qId8m+EO
-	tZhiav44UxafTEXKs3pexKiKppTVkr6ffV0d9S+P7CqDJimgz4HKwF6Dy6vXKnEnAgnnTOP
-	lnQ6oWlVGGHfL3MudqVzWMy2pF+PDcv39m1INUA/rrS9xUxISsiiHIJJwm9Nn3l7Y31yl6I
-	dLuaUcksQoMSME1bd0F3/OJUnkGW7LHKmTjJS7O3zMx9fTVqtLlKza6+Av+hEmq14+Sl/WT
-	Dj65ecBTYi8WTu76VuPq2QXAVEkMMTkqRVMcBkUdGWxtG+PO0FFCNEcESSd0y3MbT8oS6dE
-	/eg0kt2Qn7z2ME1pPMEwXx+PentRUy4kWVCv1tsCg4+2SxMxnnVnAUvbnKYIZgdaboZREy2
-	FygPPNTj9ZKqOKsZQXXNR43Y9/EwWSgaO2cIUWLyGX7sH6YVB1l5bQZhTRdQrGLucLXYmdd
-	WlGej3vu0F/6qfgR51SFapH7rQ5Vkd6umkwYps1NXFeQGPM9fX+/kJQ81PlMAGQMKRE9FTP
-	YhZaBF8RS8NLFLk8lkFBUHpK3Yoc2R3HDP7+eXx76KGGA9GlIdt3PiQvaHJurOMEn0d46PK
-	ILM+oAPnp/IQPi7/MoNga4Pkwzu288OsZGBqR3NmqL+fhrVTiPDa4ehXwvyH4Uj18vfkY7X
-	/7EiLFMO7yj4Fy70sNljMLwU4gTP2Sa8pyQF5vCfmQA0K9YwGx0TWYHHio9vAaP8iYjRiyE
-	rRTzS8FBLZlY8hp27CFb/oGamlVJ6iakxMReWf9TY9pin8PKXrBrHJj2NlD6/pQOj0fcnlr
-	FWg0yKQVOqr5QcEXF3uc1DBq03wRr1zng43afs0AZENiaz2FiKH8JdVAa1qn0f40TeAk=
-X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
-X-QQ-RECHKSPAM: 0
+References: <20250423094058.1656204-1-tmyu0@nuvoton.com> <20250423094058.1656204-5-tmyu0@nuvoton.com>
+ <20250503-fulmar-of-sexy-upgrade-1184a7-mkl@pengutronix.de>
+ <CAOoeyxWbr6jfZjPvYFD+vHKMZ9CpM6SLt+2xo-4E-NnhGinfvg@mail.gmail.com> <20250508-prudent-festive-puffin-83f666-mkl@pengutronix.de>
+In-Reply-To: <20250508-prudent-festive-puffin-83f666-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 9 May 2025 13:39:10 +0800
+X-Gm-Features: AX0GCFt636wiv16YtC2YyaNfP9KFULTYiEBXmwaP8u-ShxBEnE2ClP4UKWJVyys
+Message-ID: <CAOoeyxWTsrR+boq_afxVTnouq=A7LMTp=9ihDOHUUONaPnVUcA@mail.gmail.com>
+Subject: Re: [PATCH v10 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Ming Yu <tmyu0@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When an application sets and enables an alarm on Loongson RTC devices,
-the alarm notification fails to propagate to userspace because the
-ACPI event handler omits calling rtc_update_irq().
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B45=E6=9C=888=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:08=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > > > This driver supports Socket CANFD functionality for NCT6694 MFD
+> > > > device based on USB interface.
+> > > >
+> > > > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> > >
+> > > The destroy functions nct6694_canfd_close() and nct6694_canfd_remove(=
+)
+> > > are not the exact inverse of their init functions. Se comments inline=
+.
+> > >
+> > > Please fix and add:
+> > >
+> > > Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > >
+> > > Feel free to mainline this patch as part of the series outside of the
+> > > linux-can-next tree. Better ask the netdev maintainers for their OK, =
+too.
+> > >
+> > > What about transceiver delay compensation for higher CAN-FD bitrates?
+> > > How does you device handle these?
+> > >
+> >
+> > In the CAN CMD0's DBTP field, bit 23 is the TDC flag, I will add
+> > support for enabling tdc, and firmware will automatically configure
+> > tdco. Do you think this approach is appropriate?
+>
+> Can you configure the TDC manually via USB?
+>
 
-As a result, processes waiting via select() or poll() on RTC device
-files fail to receive alarm notifications.
+Currently, it only supports enabling or disabling TDC.
 
-Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips")
-Signed-off-by: Liu Dalin <liudalin@kylinsec.com.cn>
----
- drivers/rtc/rtc-loongson.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> If the firmware does automatic TDCO configuration, does it take care of
+> not enabling TCDO if the Data-BRP is > 2?
+>
 
-diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
-index 97e5625c064c..2ca7ffd5d7a9 100644
---- a/drivers/rtc/rtc-loongson.c
-+++ b/drivers/rtc/rtc-loongson.c
-@@ -129,6 +129,14 @@ static u32 loongson_rtc_handler(void *id)
- {
- 	struct loongson_rtc_priv *priv = (struct loongson_rtc_priv *)id;
- 
-+	rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
-+
-+	/*
-+	 * The TOY_MATCH0_REG should be cleared 0 here,
-+	 * otherwise the interrupt cannot be cleared.
-+	 */
-+	regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
-+
- 	spin_lock(&priv->lock);
- 	/* Disable RTC alarm wakeup and interrupt */
- 	writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
--- 
-2.33.0
+No, the firmware does not handle it. Do you think it would be
+appropriate for the driver to handle the case where DBRP is > 2, for
+example by disabling TDC?
+(The firmware sets TDCO to (Total bit TQs / 2) when configuring DBTP.)
 
+> BTW: What's the CAN clock of the device? I want to add it to the
+> can-utils' bitrate calculation tool.
+>
+
+The CAN clock is running at 96Mhz.
+
+
+Thanks,
+Ming
 
