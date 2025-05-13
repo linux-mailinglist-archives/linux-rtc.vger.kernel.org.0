@@ -1,120 +1,204 @@
-Return-Path: <linux-rtc+bounces-4088-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4089-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 619EBAB4CCC
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 May 2025 09:33:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABD41AB5993
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 May 2025 18:19:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 036CF1B419C5
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 May 2025 07:33:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1CF5861413
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 May 2025 16:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484911C84B9;
-	Tue, 13 May 2025 07:32:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C962B2BE7D5;
+	Tue, 13 May 2025 16:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="aWYgRt+p"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8027A1F03EB;
-	Tue, 13 May 2025 07:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747121571; cv=none; b=eVucg1aZwvNy1zLd8jLLH+nGz+TZwsd9NK2zZW4OJkjhW0c9Q2tlRLR5XBD7QctuCCkJWWUsqz2jAVJA99hnoQwjDnPaArY4zNe069R6VzHuIohmcUIwCediZ3GZqlB5WVeDUWb2G9J0POiJIHrphgX+6ZNt17LNX9HVUWIG4+8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747121571; c=relaxed/simple;
-	bh=WAJxgDOvWdcx9erm9qegXnyQi7Djc/seW2uy6WNttuE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YLmBhVLi8VT0w6koO19bEr2rBUvWAuDS9JenPkgxNXscVcVUUcOb+q541siOXhUQLV08yJaDGkCoH25u2KbIIi1XbFE4JI83HYlM7MPnpaxqMS/s53qLKnIOb39Jc2bfcWy48BgVdB8SXNPF4hbiiBVmPcESLG4Q9akWSU+/BH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.68.186])
-	by gateway (Coremail) with SMTP id _____8AxmnGc9SJonYzjAA--.42933S3;
-	Tue, 13 May 2025 15:32:44 +0800 (CST)
-Received: from [127.0.0.1] (unknown [223.64.68.186])
-	by front1 (Coremail) with SMTP id qMiowMBxHBua9SJoBV3NAA--.17956S2;
-	Tue, 13 May 2025 15:32:42 +0800 (CST)
-Message-ID: <6f47e397-8877-4412-bebd-0314a6b46908@loongson.cn>
-Date: Tue, 13 May 2025 15:32:41 +0800
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2067.outbound.protection.outlook.com [40.107.105.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05681E487;
+	Tue, 13 May 2025 16:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747153182; cv=fail; b=OWIhlhC+jj8vGGKPNDd1ZEoOBajt6EvOFxFaQ0NC83h/Xx4MEMGcKJL184O6sDmcDIRYi7e7srWUy40fTwJBuveP0to5l4pwMFBHLnngyU350GBbNQX5xFHz0xucQoz6jkZ4npGJhLzGHrWF+z7JcS2zmmso5FsWbOLuSQFnVSo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747153182; c=relaxed/simple;
+	bh=nnVMxqb8D++ELDyzRQ4cDsmvhoe08gOSrBMk9n2UO1w=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=W6IouTU/GkO7JGmc0UdJfQqEbZ7fIY7DCt4BreA6w8QOBvy3wsFBupuAaFirNgvV/o4oBFm4peLnzSzMmdJMAoekqSxHHYXUL3lUHQF2yvscGJBrGv1IyVbT1jeZAUzaDKnHaBbIGyzk9mYToKScuQOE5I9DSPlU6kujkrYtBcs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=fail smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=aWYgRt+p; arc=fail smtp.client-ip=40.107.105.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=mt.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fLnqG2Y2fVFXI4f4Bk5AGSx5x4VtbeGwxOEUxj0yrocpH2Rso7yYmQqtjlAqP/CUEBPaHc2qJF8lDMMScb+x+LKY0ukPhf5UbWafwnO6AZLTn0f3BphR4soY+agthj9ryCSQBVb+99wcmyu7vd1G4Jql06/BB4LSXdnLSJ2TYOZok81JGt7AMMhoPnz/N2mEulizMpknIgYQGrllZd0ytXRIaRXAp7Tmyxy/h7d1zIG07X56T7/BvxrFqH1DSPANdM88q3ARdYKmR0FZ2ca0hRmA8M36gqpa9Bh0sSowtzTW7JLm3QplIlXREuT20r09C8SbAyYT4KLQ41kDmMLmlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a8zh07OxUgB6xxNtpC++58q2PQ0SioNs8Ep7Fn5GZ58=;
+ b=yTLHxT9q76b55413VfcgKMYOAfDdRvixfBWkSciYrcgQpRzrRHcRecKysrTYhtCcWJbrFuG04H8Z9LWURHndalCn71SB3AdarLkPDTJfB1wIYvQR1dq8d/O3nPPqyquKjDyWxBHaQ+/n8Uw2SYayrbmBeYFk67I/KMsZ2HyBi4HkHcRk/UfYITizyiIKW7R3sDhUNt8LxVU7t7WgIxy/EJ29Z6oa/Ysnro7dYtHRdIrWKFyE6zDAwHZSVHIfSg5w9H83iDrsN2JA8EX5JgHaQhDytsyIyPk2lnXU+aImkEXyx6reRHonzUyfgPRfHls2JHf+BfPQw0vXb/AKiIG7Dw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
+ header.d=mt.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a8zh07OxUgB6xxNtpC++58q2PQ0SioNs8Ep7Fn5GZ58=;
+ b=aWYgRt+pBVtM6JVjOBzIRhyZQr3R7pmYZjB3i5EZdTlABbrA1a1vlH7DtgEB8rn+CBzySDK0h/TJ+DoevUx1gA4pcGAZEFXuSnaBU12uYcSUhMXVKVUwZHvV3qQMKNYeZxNjHRhLzQYQbbCzkxEOeOJnE/et7m6o6dLH4JmVaMq9RxGdwSaVU8FJR/bT1JvCILvPzJ4VWI1N0p4U4B3BMapNEVgGrjRYhwpKRjPCN60+CD9Wwg/2RiWDK2LArObTNJMlieFEl0vJ2YL2loEo569SVRKoVDiLhni7cwV3eVubB+Ft4POpmkv2n38gsf95kIV5r89rL0bUvpkYXOQdMg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mt.com;
+Received: from DB6PR03MB3062.eurprd03.prod.outlook.com (2603:10a6:6:36::19) by
+ AM9PR03MB6724.eurprd03.prod.outlook.com (2603:10a6:20b:280::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.29; Tue, 13 May
+ 2025 16:19:36 +0000
+Received: from DB6PR03MB3062.eurprd03.prod.outlook.com
+ ([fe80::b201:e423:f29:53b]) by DB6PR03MB3062.eurprd03.prod.outlook.com
+ ([fe80::b201:e423:f29:53b%4]) with mapi id 15.20.8678.033; Tue, 13 May 2025
+ 16:19:36 +0000
+From: Markus Burri <markus.burri@mt.com>
+To: linux-kernel@vger.kernel.org
+Cc: Markus Burri <markus.burri@mt.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manuel Traut <manuel.traut@mt.com>,
+	Marek Vasut <marex@denx.de>,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Markus Burri <markus.burri@bbv.ch>
+Subject: [PATCH v3 0/7] rtc-rv8803: Implement timestamp trigger over event pins
+Date: Tue, 13 May 2025 18:19:15 +0200
+Message-Id: <20250513161922.4064-1-markus.burri@mt.com>
+X-Mailer: git-send-email 2.39.5
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MI1P293CA0027.ITAP293.PROD.OUTLOOK.COM (2603:10a6:290:3::7)
+ To DB6PR03MB3062.eurprd03.prod.outlook.com (2603:10a6:6:36::19)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] rtc: loongson: Add missing alarm notifications for
- ACPI RTC events
-To: Liu Dalin <liudalin@kylinsec.com.cn>, alexandre.belloni@bootlin.com,
- wangming01@loongson.cn
-Cc: chenhuacai@kernel.org, gaojuxin@loongson.cn, git@xen0n.name,
- jiaxun.yang@flygoat.com, keguang.zhang@gmail.com, lixuefeng@loongson.cn,
- linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250429062736.982039-1-liudalin@kylinsec.com.cn>
- <20250509084416.7979-1-liudalin@kylinsec.com.cn>
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-In-Reply-To: <20250509084416.7979-1-liudalin@kylinsec.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowMBxHBua9SJoBV3NAA--.17956S2
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Aw4kZr4Dur1fKrW3Xw45twc_yoW8Wr4DpF
-	ZxC3Wq9rsYqr4Uua4DA34UurW3u3yfGrWDWFsrtasY9F9Fy3WDXr4rtFy8Jrs7ury5Xa1a
-	q3Wv9FW5GF1qkagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvlb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17
-	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42
-	xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1l
-	x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-	v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-	x2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-	Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZF
-	pf9x07jepB-UUUUU=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB6PR03MB3062:EE_|AM9PR03MB6724:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd5df19d-591d-421d-e95d-08dd9239f42f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?cIzaJ7aEIf1Bcy9HZi+Wqb0z2XI289q+GG+FW6XIK6v533eVq9Zz4USS9ClF?=
+ =?us-ascii?Q?4nN8zDUgL43SiJZldsXXxohn3qIoBX40vjk5/KSD+KBzV9jOHfJLXy4dcaJ3?=
+ =?us-ascii?Q?1Kjt6doaBhXvZMCYBGkp5wXQNjTqlim1sIxqc6f510TFzsf/P3PxJynWGKUq?=
+ =?us-ascii?Q?p//pY3iVZ7+FXfKkCYCBu63/qUKSm7hEjTShbt+byNaFze+M0U5k4Begf77P?=
+ =?us-ascii?Q?Nc2flq5hwtzEeet0GI8loup+m374F9lVxANHbIkf/Z9Dul7nbJap3eUvCOjH?=
+ =?us-ascii?Q?CKdVJpejxjuL4jE2kOwwjUj1niG/udMWNerBObpTpsbQdQ2jCxDG8GmfM+h3?=
+ =?us-ascii?Q?O7hR+tTLndEmrmWFh3BEihueKtMt+y/KKPf9LN0MNpUJ3J+/nQ+DdWSCAzPJ?=
+ =?us-ascii?Q?9wx+Xgc3r4RqYSe+0vAUefd4ARJWsUajInaWNUkYH2f57dQHnW48H3dHk2Vw?=
+ =?us-ascii?Q?k0E4N3IWu0FGeVRQnzQE3spnP5YSnqRoJZw5ORrkVqV/EYjzrZPWt7YxG6L6?=
+ =?us-ascii?Q?vhrlD7PrHfWb1rNosdgfX2c+sh6xxH4Q2H3NCZf5zYjFc68U54mVdYz8n6ab?=
+ =?us-ascii?Q?ETssvDG1b1DoJAWOzqse0vqAZRR/Gf8GC7JVQTCGRJFei8ohkAhcQ6sgftzN?=
+ =?us-ascii?Q?TLGvU5j9UxTWjeat7YCfCDQFUIJCaUVZhp0/U5yhwuAnKjFF3lGtJja1hBDj?=
+ =?us-ascii?Q?sacNHx6fkcpvzd9tVFYs8u2C3WrKeUV4UyjMCXUO8LQuUlkySftzBGTF6oZs?=
+ =?us-ascii?Q?66ls6FPeWQ47spiutHytZvYjSpVsSF6msuaQculgBIJPn7xcxIdOU1JDWfug?=
+ =?us-ascii?Q?SjHJ+qjR/dJeF4qMUKzxHtkE24Z8EmHWdgVO/ZaytBD5mJGuLcxxY313qKVh?=
+ =?us-ascii?Q?3ynQdGDwvW74pMq9JU20LjLKg14BRiB1yaGDWeRQJRbB+tprwXu6wZmyJqqu?=
+ =?us-ascii?Q?TLJQVFnBDigRtLElvBriHuPs2mdlF7wy7JsbLVhX1gHEq6ez81Fx679Af6fh?=
+ =?us-ascii?Q?5YpyWDP3a5/A+Qpj7D5HqAFOGbEH+sYp/W+myO9J/yV5YbK26sOXZ1KN+m+/?=
+ =?us-ascii?Q?phzeP9nlNVO0R/SCiyijebaAMOe4QSR4paEQtGL7ItyqqaGmuHmlCJmt/dhx?=
+ =?us-ascii?Q?xZ0PhxY1ghhhibBvr/y997Anzh8YmZBAYPpiP5mTiNQnEhcXyLZgKsHr85e4?=
+ =?us-ascii?Q?xIkd/i7YyxEsgMgU5evwQ2bUP6HIf8to7Cr34rMvwA8a0keHhwBA9jNJAf1e?=
+ =?us-ascii?Q?B25rM9Umio4VldXqZTPRVBMJY9sCMlazlidr8g4rmq/aJmJrsOWJG28DT8c/?=
+ =?us-ascii?Q?3+uLfI0fj8HgbZKO5l9pxpzPnYWOpcn+GV7N4LBYA5oEXQzBWohzUmzXSsNW?=
+ =?us-ascii?Q?oCsI6tUtZhUxoZ+HR5tvcaP5xSu8xCJRVzp40g7PBgbSngH0asSeEzzGAyoD?=
+ =?us-ascii?Q?g/luP8OxRsU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR03MB3062.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?7qdjueYWbVrEQGbLpxwyFMOtNSGzCa7Va7/QhbELGBRo7tk5/2y6nZHHklUR?=
+ =?us-ascii?Q?VmMoQwcprEeCVct4Gzaivi2XaPd2hdTbJ8T13dG7vRoNqYSDfkTnInUk8SVK?=
+ =?us-ascii?Q?nJ6ejuJ8JejxhaIQ8JDSeMc6/Z84JjEhQ5a3p23LJKiUBKV5koqIfGlrQhGq?=
+ =?us-ascii?Q?7Y8V4msMRHlN33oR9o58/1Eje3kjAApmM2lc5VWpKj9Epw/74vHQgewki4EV?=
+ =?us-ascii?Q?MPe7dyMCYNWF6V9IfXaRLMKQGC3OPknJ+56mkDc8/6OVeDgKhAj4A4ghKlIv?=
+ =?us-ascii?Q?VqZqqDPYDMbcSl1UMOlSqb4afj5IF3HC92VPplrVnPVUyxdAx3uoYjbIn3PJ?=
+ =?us-ascii?Q?TCr2cgR8y/imeNbOdER1KwgMyWlO7zbkY7f/3S0w9ji+0qRJI0GfFMMARkeC?=
+ =?us-ascii?Q?ZjJpariws6rz9LVLLR3Q6AtzJ74p/m960or8tnlSo7HBb/9AAPAjkUpL3MCO?=
+ =?us-ascii?Q?UsQYWIaLCCAfzp00optZiELAQy47CQJGFYD2k9QJK7fDevI+eSjkMFDktB9h?=
+ =?us-ascii?Q?rOxGmsGWgCmS8OZi8DoQK0oVXedpnq7vW2yjGtJqiH3zbQvMMxfCu68LOa/D?=
+ =?us-ascii?Q?grQHE+RdAXXp5gXU6VTQ7XJsVJt2udnvsPBpOpk2V6yD21eTxazJq3rSKA/5?=
+ =?us-ascii?Q?ARUKsvCfU6MYCRcNlRghaT+HMB1v9pzJyc5UIb1ikBCUB5IgUbZ6SGnioDJ5?=
+ =?us-ascii?Q?qdfIJvZo/5pSMJhPHYIvehTa++N8Vpe6Vs/cwU0I0T9GL+nJVCzjK95X9mOB?=
+ =?us-ascii?Q?+wN3LxwntjLU9ouBV+l2GAhA/lmCDV7WVPk5mgNdBFSq0Bw3mS/FlLIsrnkj?=
+ =?us-ascii?Q?cIWUgbLoM6O8pAgX4x58QUmhJba3uu7cTHHdjfukqPDv/pVI9kVe5rxNxRwh?=
+ =?us-ascii?Q?l7Cctf5r1oLBY/esCh6uvwArib0CWmZEaonHGeTbe+c9kFDxLjlu5lOiztgK?=
+ =?us-ascii?Q?Tn5cSW/FQ0AIreZFEC4no9vOcH5uoxqLknOu03NX4eehTXXas2GM6y+ujR8J?=
+ =?us-ascii?Q?pURjT9wMOP2dD7mc7S44NwWdlekjchpfxHr6nkDlDBx8r+hdeiEWVVs4Mhpj?=
+ =?us-ascii?Q?oIMwOmdrT+iTau6ZZk7V1RUiC0cAMhrWUO6OSiUw2SfJjA0IZ8DLQbmKEST2?=
+ =?us-ascii?Q?mnE5MON/Dj62d7tLEJi1phin+NSuy1UH5de1mDPj6r3EQB8F/Pn20YYCD/cz?=
+ =?us-ascii?Q?04iiZWTnoeTyGOoKSFNCtE4bBBtscx2g5q5g8hZrS1CngtJqy/fogWtHvU7w?=
+ =?us-ascii?Q?CR1ZA43ao9Rr5WNZa61vgEK6FDKn8iwGIr1K4zyH0bnOMyMntd0JDdyg920f?=
+ =?us-ascii?Q?4McPb4ld5iERp3ezhojn5u4/3X0O07rrMHICbFRz1hTFjWAuamzhby2eepCU?=
+ =?us-ascii?Q?IqgniJBzLBJrsgEg5GS5x2q2PUddqbuGaH45sAbrExn3W7gN98J9zvYzPaAy?=
+ =?us-ascii?Q?TReoJ9acpG5lp4K1Q6msORF/QXAUNUinNCnaLJ0ExEpPatOisFmuenmV/yfI?=
+ =?us-ascii?Q?y7C5fGn33trqOK8mpL8og4v0SSU7M6WYwIRlpJOXMxszrAlwfVTYLrF/DoAB?=
+ =?us-ascii?Q?/Ol0xICS41WC1XyLs9WV1LAnvRFxObybPlHwSq5a?=
+X-OriginatorOrg: mt.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd5df19d-591d-421d-e95d-08dd9239f42f
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR03MB3062.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2025 16:19:36.5176
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nMWOEOMWbse1hR61YriFbeKa2lef/1ezjFldm5+OmntGR2HyYkEeQQ0nexlL7vhLfDrv5Ts/GSTq14GgJsth5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB6724
+
+The RV8901 RTC chip provides a function to store timestamp events.
+There are three input pins (EVIN1-3) available for triggering.
+The timestamp can be read to detect tamper alerts, for example.
+
+This patch series extends the sysfs interface to enable and read the 
+timestamp events.
+
+The data-sheet can be found here:
+https://download.epsondevice.com/td/pdf/brief/RX8901CE_en.pdf
+
+This series applies on 'linux-6.13~rc7'
+
+Changes in V3:
+* change permission for sysfs read to admin
+* add device-tree bindings for event pin and buffer mode configuration
+
+Changes in V2:
+* remove separate patch for register definitions
+* remove pin configuration over sysfs (use default settings)
+* add sysfs documentation
+* rework enable to simplify and remove big mutext scope
+---
+[V1] https://lore.kernel.org/lkml/20250110061401.358371-1-markus.burri@mt.com/
+[V2] https://lore.kernel.org/lkml/20250116131532.471040-1-markus.burri@mt.com/
+
+Markus Burri (7):
+  dt-bindings: rtc: add new type for epson,rx8901
+  rtc-rv8803: add new type for rv8901
+  rtc-rv8803: add tamper function to sysfs for rv8901
+  rtc-rv8803: extend sysfs to trigger internal ts-event
+  rtc-rv8803: extend sysfs to read status
+  dt-bindings: rtc-rv8803: add tamper detection property node
+  rtc-rv8803: make tamper function configurable via dt
+
+ .../ABI/testing/sysfs-class-rtc-tamper        |  36 ++
+ .../devicetree/bindings/rtc/epson,rx8900.yaml |  42 +-
+ drivers/rtc/rtc-rv8803.c                      | 599 +++++++++++++++++-
+ 3 files changed, 672 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-rtc-tamper
 
 
-On 2025/5/9 16:44, Liu Dalin wrote:
-> When an application sets and enables an alarm on Loongson RTC devices,
-> the alarm notification fails to propagate to userspace because the
-> ACPI event handler omits calling rtc_update_irq().
->
-> As a result, processes waiting via select() or poll() on RTC device
-> files fail to receive alarm notifications.
->
-> The ACPI interrupt is also triggered multiple times. In loongson_rtc_handler,
-> we need to clear TOY_MATCH0_REG to resolve this issue.
->
-> Fixes: 09471d8f5b39 ("rtc: loongson: clear TOY_MATCH0_REG in loongson_rtc_isr()")
-> Fixes: 1b733a9ebc3d ("rtc: Add rtc driver for the Loongson family chips")
-> Signed-off-by: Liu Dalin <liudalin@kylinsec.com.cn>
-Reviewed-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> ---
->   drivers/rtc/rtc-loongson.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
-> index 97e5625c064c..2ca7ffd5d7a9 100644
-> --- a/drivers/rtc/rtc-loongson.c
-> +++ b/drivers/rtc/rtc-loongson.c
-> @@ -129,6 +129,14 @@ static u32 loongson_rtc_handler(void *id)
->   {
->   	struct loongson_rtc_priv *priv = (struct loongson_rtc_priv *)id;
->   
-> +	rtc_update_irq(priv->rtcdev, 1, RTC_AF | RTC_IRQF);
-> +
-> +	/*
-> +	 * The TOY_MATCH0_REG should be cleared 0 here,
-> +	 * otherwise the interrupt cannot be cleared.
-> +	 */
-> +	regmap_write(priv->regmap, TOY_MATCH0_REG, 0);
-> +
->   	spin_lock(&priv->lock);
->   	/* Disable RTC alarm wakeup and interrupt */
->   	writel(readl(priv->pm_base + PM1_EN_REG) & ~RTC_EN,
-Thanks.
-Binbin
-
+base-commit: 92a09c47464d040866cf2b4cd052bc60555185fb
+-- 
+2.39.5
 
