@@ -1,219 +1,141 @@
-Return-Path: <linux-rtc+bounces-4108-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4109-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23DF6AB97FA
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 May 2025 10:45:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0AADABC117
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 May 2025 16:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E95B3A3F4A
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 May 2025 08:44:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEC331B625A0
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 May 2025 14:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EDB422DFA4;
-	Fri, 16 May 2025 08:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F10284693;
+	Mon, 19 May 2025 14:41:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/sbU/0K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y/HVMwht"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4599F21FF5D;
-	Fri, 16 May 2025 08:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DA0284669
+	for <linux-rtc@vger.kernel.org>; Mon, 19 May 2025 14:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747385087; cv=none; b=bxRLcztGLHBwPQlRkxa2T1xBytDCUCvPvlBVDF7sDEMZTJtE15aR8toZqkbwFgtQ3MTHJ9X8DYH4SlMKZ60x7xKNAKRre6I+yj0YYsPwMnh1ZJ33b5bT3tfjcde2AlUkxgbHZmqsBFwRSIIBoghMCcVATqLo5218sjSXjx7n1MU=
+	t=1747665675; cv=none; b=ddBC54QGlpCS8gpfYC1q3z/YekY8C/rzB1l3pdAahY1k5BXbhL3XPgwGZh37z3sI63YmfT8AeWk0F6b7QT2nhbIYwH4Vs0UtEtJz8PJ/Rgzr7f/CTQDCBGv5MIQgcM2FxeQSvmAL/srHLo3UPsvRZUu/4cQV/W6nm8jZky96nqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747385087; c=relaxed/simple;
-	bh=7e/OXKN0NStJdf9sdGtozg9da3NAhB97YtAKvSLueYY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xlt3FAW2Wuif38nVK56XzCI0cys5ahKgXdujxkcwD+QHxfa56IMjI0r0YxR3Yp4taWA+CHXHlc888QsHy6EK8SaXg/NFlIDVkB/vH7gq7f/BfJDRbczI9cZ7boKzsATGXTwRlk7Ik9HeNWqD7eCRuSbqOlC+XrGsJs1Uh/j5a/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/sbU/0K; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54c0fa6d455so2150667e87.1;
-        Fri, 16 May 2025 01:44:44 -0700 (PDT)
+	s=arc-20240116; t=1747665675; c=relaxed/simple;
+	bh=PXgngoiMruUqQcJAJ36RBgxyhu0aqtovmZVT2JgqK6o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XbDhHSCvjL1x+WPIRiDMlmrTJuEhsU47OtkIFVP2BxeT8M3rVrjjEHAQQ/hn2NNhEaTh3ToImdKFFHfhesQvRIa5a0te4KTur9u/ZNrocBXXOt7riTtsKUrNV6av4I3JmK6FNCr9WwDN/9yqODtoJScWOwQgbA6YPEiTvgP/Dnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y/HVMwht; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a3758b122cso420768f8f.1
+        for <linux-rtc@vger.kernel.org>; Mon, 19 May 2025 07:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747385083; x=1747989883; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BjJUr9oGlf0d4GJbWfHcRPedGVrnjrqGO+ZV1su5URQ=;
-        b=W/sbU/0KYWFqkeroEVB0c4MnoBR9tGTR6pxbwvu+KUZeGk6/YrOlDtntLLr3EY3ORj
-         ewGevl/EUVjstrozQQq4aLiPVDMIIUuR85ieiXtiKVD2wrQnhqfOKvwInA2EU4ka5RZ2
-         7G3/LefKwIuYtPMnHBa9h04hX106Y3f7Ql8i5Zb+a9MkY3nwvQiIFFqa/RJ09C/1k+tR
-         ztQQglO+fLVg4cgsafqdYbrcuIhrnXJAq5isbvIaZReTgTYvyZhKQXE3r+PnRsL37f6+
-         wQMzfIz9wMT5ld1kOiwQRI0VFXGNWO8FCCN77yNqkR/V2TpwqB3sm65Pl+t7aM86GKL2
-         y8Rg==
+        d=linaro.org; s=google; t=1747665672; x=1748270472; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PXgngoiMruUqQcJAJ36RBgxyhu0aqtovmZVT2JgqK6o=;
+        b=Y/HVMwht+P6ClZ6FRCjrCwoCe3I3xlb9Pc1ENe3eyrnxucAZrgfMzpAAJqIRdjCKwa
+         VwD3RrLBnDlXlCPI4lamDQqm/tQIVASPf3npaxyNguxlUFCsx1SPd65TALcTxiGHNDQe
+         ejVCQJJAn3l+QMhlLGwtj5yV8Mrnv7TLzYuU7oMFEDAOAyX6Cn5PPFDDLtbgJbwh0Zd5
+         AceMZQFp0slKw0XGl9hLLp4cLObt9nvcSMJ6HAuFE/SzD2ZxTbXtzVh9htMjlH78hcOS
+         iAygszZQG/42m0EE99WBLZKBXiXD0hHG+b6GHi/uNEzps06NFtFLBBwj5RMnb6OhkiV9
+         ztog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747385083; x=1747989883;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BjJUr9oGlf0d4GJbWfHcRPedGVrnjrqGO+ZV1su5URQ=;
-        b=pvQs0ZQts27l7E4UxfQ75BFySax1P4yDmitTXT62oHmrQFnSnQo8dd1vk24gLS6k0Q
-         JCTY77jKCf6J6SrkIKBnA8YxpFzTzccRMuSqowJR5XuaxCxZ/I4QsHOeguRG9S5238Gu
-         oLHxc2m4AarehJMjf+T+MqmI4Oq7Uh3MBM4HIlckSJVoiRdV3/8PuePI0AfP0SJhHHS2
-         LtOWZQeOot/Yyq8cDcs3AWcblbXregv89BbXCoQri0L9qEWeUBgnyXrj09Rs0PrdJOmK
-         kffiscYZhrmznDDSkN+oWKSvTOOWjk6XUYYsJ/XisHDd0/i4/cUvuQiTNwGFp1VMUTY6
-         1EcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVeEsFhbKrQ4oFHd7ywPLjDOlw+tUHvNCqs+PzyVuoDTCRq0zd2o5aTvsQ7b3fvFCW/uTVAb4r1XI8Zspk=@vger.kernel.org, AJvYcCVs9Amh6Tm4EB9KN9aGavS4HrrKZnXMedd+Z2MKqWYptGA3QIFEVtlBC7+lGqVh/jeedsHzszCi+DuX@vger.kernel.org, AJvYcCXmL9ruG8WBjHMvpz0S/VDIGO7sQnxQI5nlySgyX7Ve25qvhJrxV8vtCdwv0rQZCH1Q9CxI+iwDmDd8S76Bu5Ms@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJwBEP5gq4EEIi0txF2k8Y6jnT2U+quAJgo2BZfy64qOnu6JkF
-	btWjzxvz1EZiAaM06bd5n7wKctzDr0I4gSCLN+1OTmMdtJl5IH+E/gBo
-X-Gm-Gg: ASbGncu0BzNHi4Ng60muKIbUq5WWQ1WPu4iRxl4DHnAwDE4QTiYKqYXctd6Hp1RpujT
-	OpwU4iDZmEIVku+GEdtJqp/QkHOhz/CvbuGxTdQu9+mLaFve0RtoLe6Zaw9a+rikuqaI70+q8QP
-	3yYC2MZ8KxS4XH4XbgiFJxUuCk8rb6NinIo/H/nPIR1Aq7n2IKJpaFSQ2V8e34CpeTDinYgIiFZ
-	BYbLPDhKBCbgt3/h7PQfUHWpZ8ZzK9WvA8qTY2rmJ1P/3koHu3Q5Awed8xfumf50RYkD/ZaMRqK
-	dT8az47kNXPy2J1e1fb1KKIogE6hAZXf4nH5xx6f4B6P99oeP/ZOuHwmnGw/7kRvyakKYyocYHs
-	CgRetm2m7mjo+PY838Us00Hz9+c+2k9Lw4YzbR4WHhn73i25YU3Mwqrx1kFtYQkygoGOFd761iU
-	IFWIRPf7f0p0uD
-X-Google-Smtp-Source: AGHT+IGzetvgHg8oZtCko1ljUWov76mE1LJ2yWfIXfTog79PcffiRirbLk3BUeMemY7tVa3DIm1Eiw==
-X-Received: by 2002:a05:6512:6614:b0:550:e608:410b with SMTP id 2adb3069b0e04-550e71e9968mr605074e87.33.1747385083071;
-        Fri, 16 May 2025 01:44:43 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:53:1500:af87:7c77:739c:7417? (2001-14ba-53-1500-af87-7c77-739c-7417.rev.dnainternet.fi. [2001:14ba:53:1500:af87:7c77:739c:7417])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-550e702da4dsm325902e87.202.2025.05.16.01.44.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 May 2025 01:44:41 -0700 (PDT)
-Message-ID: <b1ac8546-b385-4ed9-b15e-da147c35ade3@gmail.com>
-Date: Fri, 16 May 2025 11:44:39 +0300
+        d=1e100.net; s=20230601; t=1747665672; x=1748270472;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PXgngoiMruUqQcJAJ36RBgxyhu0aqtovmZVT2JgqK6o=;
+        b=RKNITzbuYWw996/fP0lJ7O2BL9kiy1OZHk/pqWHeZaCxcfyPtDA9a2fCB1OMfPV//D
+         sX9WR9vvZxuEwbu4d6FVGLhPk/RJcdVmOKI9lkI+EFbNindLRXI+mWhyGsZSwD8IaXMS
+         reL9pJj/3fZTbi6927kDQjLVMVZxJwXy8Y93viaOGSs2EY3ICEEm1+LUkwltwYpMBdZh
+         Yvk5P8lOe7KwglWf+nva+GxHP6knxxh3RnRlU4eH7BRNbfEe/5bIhpwP5v0Z8E64ZYeV
+         tpQGOE0nDeTCvzyoAlIi+iCqQ+4xxtppFf4ItSA4TPw7Oi/uN4+9exQQrNXxkd+6e/RW
+         yzyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPFrTlc7s0d2bQLgTyBm2NTcLI1z2oze64aLxIYTwOK4Bvd1TSkFwcCHhzz1XL+Cm3jadDnQGAmdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjtTvo5UaKPhsMtDzBNO0zSTC8oLPD/nGJazVakbHAgGMvoe9q
+	6FquVAZKM+WcF7O3rR6XzV1IeJv/sYYUQaeh/zhLT+nZioaDzG2zPwMqIPJEOfbYfiY=
+X-Gm-Gg: ASbGncsx8AD37WU3YHrR64vOggrR2plXAGZMiwnIMuT3BDuuGs6Uys4M3AQvcgxwq3u
+	4C83jZiI015lEq4XeWVHSOzZTRhWgaY9X9piBTktmV6JE3GFQ7ifWSyJfLHVV+qipr84zGt/2O/
+	FFY4HNgkpgV47K1QBdZeYE/D6VrCmSYW4tovQQbziJGp783ClSIb62JH69D9P+OGLaJ3/nSe7f+
+	4RzNuSPeN7ugTO0PUepxzhS89mQ/RRXioQ+mAVvdXlCp4fuoZ19F3Hl+aOGC6vGXLxqNvrT3uNP
+	Z4vO+EwkZyEfcvnkI4LXa79M1jm/GxxupEjUlD1PFpCNkWKn7VmgbEo=
+X-Google-Smtp-Source: AGHT+IHEhMCIc1i5zg2NHcyMONsLyjwexSaW7YUlCJbZ3CdVo6leSerVam5BZph5FKXtCrhVs3o4xg==
+X-Received: by 2002:a05:6000:310a:b0:3a3:6a77:3350 with SMTP id ffacd0b85a97d-3a36a77371amr5540633f8f.8.1747665672038;
+        Mon, 19 May 2025 07:41:12 -0700 (PDT)
+Received: from draszik.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442fd583f20sm140139625e9.28.2025.05.19.07.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 May 2025 07:41:11 -0700 (PDT)
+Message-ID: <905e6cab9932c814a578826329f5e3f944418ef9.camel@linaro.org>
+Subject: Re: [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based drivers
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Lee Jones
+	 <lee@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sylwester Nawrocki
+ <s.nawrocki@samsung.com>, Chanwoo Choi	 <cw00.choi@samsung.com>, Alim
+ Akhtar <alim.akhtar@samsung.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Russell King	
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon	 <will@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, Tudor
+ Ambarus	 <tudor.ambarus@linaro.org>, Will McVicker
+ <willmcvicker@google.com>, 	kernel-team@android.com,
+ linux-kernel@vger.kernel.org, 	linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, 	linux-clk@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, 	linux-rtc@vger.kernel.org, Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Mon, 19 May 2025 15:41:09 +0100
+In-Reply-To: <24314441936d97a1892474eacdbbd690612de265.camel@linaro.org>
+References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
+		 <20250415160212.GA372032@google.com> <2025041715425693974c6d@mail.local>
+	 <24314441936d97a1892474eacdbbd690612de265.camel@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.55.2-1 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Improve test output grammar, code style
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: skhan@linuxfoundation.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <20250515162249.29510-1-hannelotta@gmail.com>
- <20250515165629d521d4a2@mail.local>
-Content-Language: en-US
-From: =?UTF-8?B?SGFubmUtTG90dGEgTcOkZW5ww6TDpA==?= <hannelotta@gmail.com>
-In-Reply-To: <20250515165629d521d4a2@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-Hello,
-
-On 5/15/25 19:56, Alexandre Belloni wrote:
-> Hello,
-> 
-> On 15/05/2025 19:22:49+0300, Hanne-Lotta Mäenpää wrote:
->> Add small grammar fixes in perf events and Real Time Clock tests'
->> output messages.
->>
->> Include braces around a single if statement, when there are multiple
->> statements in the else branch, to align with the kernel coding style.
->>
->> Signed-off-by: Hanne-Lotta Mäenpää <hannelotta@gmail.com>
->> ---
->>   tools/testing/selftests/perf_events/watermark_signal.c |  7 ++++---
->>   tools/testing/selftests/rtc/rtctest.c                  | 10 +++++-----
->>   2 files changed, 9 insertions(+), 8 deletions(-)
->>
->> diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
->> index 49dc1e831174..6176afd4950b 100644
->> --- a/tools/testing/selftests/perf_events/watermark_signal.c
->> +++ b/tools/testing/selftests/perf_events/watermark_signal.c
->> @@ -65,8 +65,9 @@ TEST(watermark_signal)
->>   
->>   	child = fork();
->>   	EXPECT_GE(child, 0);
->> -	if (child == 0)
->> +	if (child == 0) {
->>   		do_child();
->> +	}
-> 
-> This change seems unrelated.
-
-It is related as a code style fix. I noticed it while reviewing the 
-tests, and decided not to make a separate commit of it. Inspiration is 
-from the kernel coding style docs, see the second last example in: 
-https://www.kernel.org/doc/html/latest/process/coding-style.html#placing-braces-and-spaces
-
-> 
->>   	else if (child < 0) {
->>   		perror("fork()");
->>   		goto cleanup;
->> @@ -75,7 +76,7 @@ TEST(watermark_signal)
->>   	if (waitpid(child, &child_status, WSTOPPED) != child ||
->>   	    !(WIFSTOPPED(child_status) && WSTOPSIG(child_status) == SIGSTOP)) {
->>   		fprintf(stderr,
->> -			"failed to sycnhronize with child errno=%d status=%x\n",
->> +			"failed to synchronize with child errno=%d status=%x\n",
->>   			errno,
->>   			child_status);
->>   		goto cleanup;
->> @@ -84,7 +85,7 @@ TEST(watermark_signal)
->>   	fd = syscall(__NR_perf_event_open, &attr, child, -1, -1,
->>   		     PERF_FLAG_FD_CLOEXEC);
->>   	if (fd < 0) {
->> -		fprintf(stderr, "failed opening event %llx\n", attr.config);
->> +		fprintf(stderr, "failed to setup performance monitoring %llx\n", attr.config);
->>   		goto cleanup;
->>   	}
->>   
->> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
->> index be175c0e6ae3..8fd4d5d3b527 100644
->> --- a/tools/testing/selftests/rtc/rtctest.c
->> +++ b/tools/testing/selftests/rtc/rtctest.c
->> @@ -138,10 +138,10 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
->>   		rtc_read = rtc_time_to_timestamp(&rtc_tm);
->>   		/* Time should not go backwards */
->>   		ASSERT_LE(prev_rtc_read, rtc_read);
->> -		/* Time should not increase more then 1s at a time */
->> +		/* Time should not increase more than 1s per read */
->>   		ASSERT_GE(prev_rtc_read + 1, rtc_read);
->>   
->> -		/* Sleep 11ms to avoid killing / overheating the RTC */
->> +		/* Sleep 11ms to avoid overheating the RTC */
->>   		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
->>   
->>   		prev_rtc_read = rtc_read;
->> @@ -236,7 +236,7 @@ TEST_F(rtc, alarm_alm_set) {
->>   	if (alarm_state == RTC_ALARM_DISABLED)
->>   		SKIP(return, "Skipping test since alarms are not supported.");
->>   	if (alarm_state == RTC_ALARM_RES_MINUTE)
->> -		SKIP(return, "Skipping test since alarms has only minute granularity.");
->> +		SKIP(return, "Skipping test since alarms have only minute granularity.");
-> 
-> I guess the proper fix is to remove the s in alarms as there is only one
-> alarm.
-
-You are right. I sent patch v2 in another email, with the proposed change.
-
-> 
->>   
->>   	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
->>   	ASSERT_NE(-1, rc);
->> @@ -306,7 +306,7 @@ TEST_F(rtc, alarm_wkalm_set) {
->>   	if (alarm_state == RTC_ALARM_DISABLED)
->>   		SKIP(return, "Skipping test since alarms are not supported.");
->>   	if (alarm_state == RTC_ALARM_RES_MINUTE)
->> -		SKIP(return, "Skipping test since alarms has only minute granularity.");
->> +		SKIP(return, "Skipping test since alarms have only minute granularity.");
->>   
->>   	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
->>   	ASSERT_NE(-1, rc);
->> @@ -502,7 +502,7 @@ int main(int argc, char **argv)
->>   	if (access(rtc_file, R_OK) == 0)
->>   		ret = test_harness_run(argc, argv);
->>   	else
->> -		ksft_exit_skip("[SKIP]: Cannot access rtc file %s - Exiting\n",
->> +		ksft_exit_skip("Cannot access RTC file %s - exiting\n",
->>   						rtc_file);
->>   
->>   	return ret;
->> -- 
->> 2.39.5
->>
-> 
-
-Best regards,
-
-Hanne-Lotta Mäenpää
+SGkgQWxleGFuZHJlLAoKT24gTW9uLCAyMDI1LTA0LTI4IGF0IDE5OjE3ICswMTAwLCBBbmRyw6kg
+RHJhc3ppayB3cm90ZToKPiBIaSBBbGV4YW5kcmUsCj4gCj4gT24gVGh1LCAyMDI1LTA0LTE3IGF0
+IDE3OjQyICswMjAwLCBBbGV4YW5kcmUgQmVsbG9uaSB3cm90ZToKPiA+IE9uIDE1LzA0LzIwMjUg
+MTc6MDI6MTIrMDEwMCwgTGVlIEpvbmVzIHdyb3RlOgo+ID4gPiA+IMKgZHJpdmVycy9tZmQvS2Nv
+bmZpZ8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHzCoCAzNSArLQo+ID4gPiA+IMKgZHJpdmVycy9tZmQvTWFrZWZpbGXCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKg
+wqAgNSArLQo+ID4gPiA+IMKgZHJpdmVycy9tZmQvc2VjLWFjcG0uY8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgNDQyICsrKysrKysrKysr
+KysrKysrKysKPiA+ID4gPiDCoGRyaXZlcnMvbWZkL3NlYy1jb21tb24uY8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzMDEgKysrKysrKysrKysr
+Kwo+ID4gPiA+IMKgZHJpdmVycy9tZmQvc2VjLWNvcmUuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgNDgxIC0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQo+ID4gPiA+IMKgZHJpdmVycy9tZmQvc2VjLWNvcmUuaMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAyMyArCj4gPiA+ID4gwqBk
+cml2ZXJzL21mZC9zZWMtaTJjLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMjM5ICsrKysrKysrKysKPiA+ID4gPiDCoGRyaXZlcnMv
+bWZkL3NlYy1pcnEuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgfCA0NjAgKysrKysrKy0tLS0tLS0tLS0tLS0KPiA+ID4gCj4gPiA+ID4g
+wqBkcml2ZXJzL3J0Yy9ydGMtczVtLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTk3ICsrKysrKy0tLQo+ID4gPiAKPiA+ID4gTUZE
+IHBhcnRzIGxvb2sgb2theSB0byBtZSBub3cuCj4gPiA+IAo+ID4gPiBXaXRoIEFja3MgZnJvbSB0
+aGUgQ2xrIGFuZCBSVEMgbWFpbnRhaW5lcnMsIEkgY2FuIG1lcmdlIGFsbCBvZiB0aGUKPiA+ID4g
+ZHJpdmVyIHN0dWZmIHRvZ2V0aGVyIGFuZCBzdWJtaXQgYSBQUiBmb3Igb3RoZXJzIHRvIHB1bGwg
+ZnJvbS4KPiA+ID4gCj4gPiAKPiA+IEkgZG9uJ3QgdGhpbmsgdGhlIFJUQyBwYXJ0IGRlcGVuZHMg
+b24gdGhlIE1GRCBvbmUgc28gSSB3YXMgZ29pbmcgdG8KPiA+IGFwcGx5IHRoZSBwYXRjaGVzIGlu
+IG15IHRyZWUgaWYgdGhpcyBpcyBmaW5lIGZvciBldmVyeW9uZS4KPiAKPiBSVEMgcGF0Y2ggMjcg
+ZG9lcyBkZXBlbmQgb24gdGhlIHMybXBnMTAgbWZkIGNvcmUgZHJpdmVyIChkdWUgdG8KPiB1c2lu
+ZyBlbnVtcyBhbmQgbWFjcm9zIGludHJvZHVjZWQgdGhlcmUpLgoKTGVlIGhhcyBraW5kbHkgbWVy
+Z2VkIGFsbCB0aGUgY29yZSBkcml2ZXIgcGF0Y2hlcy4KCkFueSBjaGFuY2UgdGhlIHJ0YyBjaGFu
+Z2VzIHdpbGwgbWFrZSBpdCBpbnRvIHRoZSBzYW1lIGtlcm5lbCByZWxlYXNlPwoKQ2hlZXJzLApB
+bmRyZScKCg==
 
 
