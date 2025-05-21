@@ -1,61 +1,61 @@
-Return-Path: <linux-rtc+bounces-4126-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4127-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8255ABEF22
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 May 2025 11:07:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24173ABEF24
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 May 2025 11:07:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A25C1BC0490
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 May 2025 09:07:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4EE47B09FD
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 May 2025 09:06:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001EB239E7E;
-	Wed, 21 May 2025 09:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7632E238D57;
+	Wed, 21 May 2025 09:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="SeLNvf1S"
+	dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b="QFwvKt9p"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2068.outbound.protection.outlook.com [40.107.20.68])
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2046.outbound.protection.outlook.com [40.107.104.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D131239E60;
-	Wed, 21 May 2025 09:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7B0231A23;
+	Wed, 21 May 2025 09:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747818412; cv=fail; b=eLgoEvBlKqEJ5vItgzoS25k8AB/mzjZX7aUhi+IwfD6aqL8E/XaAlQXL5ndk0bz+6lXkOLv7GaWWCIWGbEZmPCLdhoAtAT2DsIFABMRsJHpMuJJFJJPG9EO3oQq91oh1FcoHRtQ9ByGqnWn5ykmGy5MGs9r3XZV7uoUKRlkHtwc=
+	t=1747818423; cv=fail; b=NUb1VWDISR3QtZOtHtmfsx4QpQsKLNFNxuyU1pzljNPPQ9wvpE/wYCPr8OpZvI2TY/WY2aBBGpjSlg0qEWPQRUQBllKuH8RoJ4rbZjroGHTBrmZjWBnsFUHSiU0uMi3YPELJTsTMLmSrFp3u2HTWAU62GPsMlFwfvKeXsfiWnLI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747818412; c=relaxed/simple;
-	bh=h54Fsqfttc+J57kI6GX5XNnQLqbG9n8coKBMBpxrP8k=;
+	s=arc-20240116; t=1747818423; c=relaxed/simple;
+	bh=HSkdFXYU1Cv3a6briY2MOuLGWeZ3MtWgh2s6K7PmE4I=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cT1f4d2Tl3EZUcTnP1G3oo8UJJ6xrM9IHnA8HDI6GJC6zDDIAM4C6RfE94LAtTCOlR1MJEGqZwZ+BzhgCnRshBd6PUeZTlidaSxg/RXm8bib+mzJ63YNhMnaZoOk5llOGBaCkAE6ZEDckbGOrlGDRihISCPlHGz0HuN+qtTUKsM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=fail smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=SeLNvf1S; arc=fail smtp.client-ip=40.107.20.68
+	 Content-Type:MIME-Version; b=o51h70mar25sj0gfFKfgahCnNJmf813G8GVhMik53DRpY98K25WxvKB/IdeN00YihVroL/UUkf7VGVDH3KG1DFN3nq6niPDUA1YPGugcgFu9wvsPkeCEgMsYsWybQesyPzdx4FKYEeq5c/qLeZfRc0ElRVms3kTAbrDgtaCe9eQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com; spf=fail smtp.mailfrom=mt.com; dkim=pass (2048-bit key) header.d=mt.com header.i=@mt.com header.b=QFwvKt9p; arc=fail smtp.client-ip=40.107.104.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mt.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=mt.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=srKEpYfl+OkP2I71T7hg6uScUcbX459/piiPFX2b5lZe1jX3iCbxOehwzVHq3oC/Vbpzl6HnOdat2r1maerIY5b4fEqnmyyapIhDZ+ADmXDKYz96/hha0//Rz+r4Y5eFMA5lbfvbTQlnba977lI2bjjfC3SVAZyl+vfR6fNeBL9pIrnabdJe4YKxCLUxtpl5eab9KIDdNO/KR4fMAgMrYzop6HY5u+qKUML0hhbI2IBfbR10+1nh+s8uAI1CkdI49Fr2pTslWzC7W7M7VrPJJe8OkhyaSM9fCzCf8Zic8sxX0UxxJlkJzMMp9v5LC9B70W+tztkoTuMrTeyVFjAuVQ==
+ b=TQNlDxar6L5r2G39+z8HPn0wvieE09hjZLVXogAmbM+dGBLMTC3p4jCoZlH78oSrUmiovnI4/YlUo71rKGy9lVw3P37lmmy/SzwPNNXWsg5x6z0lOFVU2HbMnHartmRBnDmmb7MzOoB0Evo/ftNR2iGXggtmTunF0mzLvZbUmSTkFtQEh0jOfXygPmA4fW0WrwWmHqhAZwkWrWuas2/2REo5GZTvfIaoSTQnqLPS7z6IB+y73fnyjtszghhLPLGTwVTWr3omJFJMe4Lr4m9l0mL42PIqSF/PdOqJZZJW4ryu64aQJez3VjWjpy/IWy5Jmctagk+PWbGCFUaYerg7oQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WfhywwyPhH2+EQXtnNQ0SnYyoNLpb46m+gjnJJEG6Yw=;
- b=o39OGJkI1EMrsiMSi/pQJV472DqaGKSn3WJrVVtNIngHQDVDqoR3vGme1jcgQlXw36xAMWTyFMYBfp7CIO4nmlTwgyFQoNuFAPib876EvvaFids7FN6pAIyoqBR0/ang9outCPUd4ZYrohfAshu1fifPMWYnvGw/kb8soKxDWimUqjNcW6JTHmoWWGg+6BBkc+dIprmRKqR/4YKZCSor6FPMIvUbxN8S3IiZmX0PdH95F8U+EC5De8Hk18uO1eVmf0aFiYuS64ojaPke+h/GqTZoiYbAU1C6vaOW1fbdafv700FXT58D2RFJ84VrqsWaegewJDVTSFKNGFGvcWh7ZA==
+ bh=HUoCDfR6fjnkqi8JnVtCYXzif94KGec9zo0HtoVnq9E=;
+ b=IbHhUPDnWw+Ofqqk58Ae18bqXvh6yiaMu/C7S5gOd3NsStYExaUikR2dr4ulCIvBS5tTvi06JdJ+gbtkVSL7zCYEPqMvt2q6hzlmJCsbDuxrlmzdQNlux/lcKWIcgnWN0N0GUJsrsbsy3oWWpF1PQss+drsUJD+nIYrQlD28hXrfLWjzUabdQGYHEMDLKCWoIizr5bMf1SjUSvY/NMXPGzufnRwE7jlPgCJ6l85Ao8t3ophxG1cMXHBX0566YRsSzG9/29cD69v9vX/g7TRGL8DarxiQSljg8J3AVUzIv9nWR3qCUPTPZjTQtK/hAzaqFxTOTTLoMGviezyT7a/J1g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=mt.com; dmarc=pass action=none header.from=mt.com; dkim=pass
  header.d=mt.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mt.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WfhywwyPhH2+EQXtnNQ0SnYyoNLpb46m+gjnJJEG6Yw=;
- b=SeLNvf1SjgGUmrEGTPskY/1pqOiS8YE+rndASARMjG8dNu/f52wNgwSkpnccUGHpONf2ygDS/W6R8wyEkXBTqgb8z1FDivMNf3VlGUdLOPCaulqbijDNUyIIppBjLnlooIiQcVdggF21uSInIbnu3jyW8S1TLxgsPH0LSHUOR4X7x6uQwSm9RVJNYREs73IP3368OKEuYkVT04wMcEl4N+ebZzvUmkIcTgj4Axnc7jR3XXSHpWDI/vIai67Y0xWYJIoNznUiV1Nk++yoJ0miDceFjDlsSU++5rV0jXhYMROje5R928cpJ7V/Rzo/3xfrkPzDtwEzDe9PDvciN6hzHg==
+ bh=HUoCDfR6fjnkqi8JnVtCYXzif94KGec9zo0HtoVnq9E=;
+ b=QFwvKt9pfBrMNT8aLI7n/wJKd5BRJrC8tJS3HzPkn9Tp6Y2WwZsTGRY8sspjFQkT9Aumu8nYf5Z7ZSPT9fgPkUM3mdpU10gSefvTaLdj6Mtwlw4T5MuwVmw1WeAX5hUeEFNA7FN+yGyxKCVmy1k98pQP1jaS7GsEnF7Le2TOjAu3ZfwvnurFwU47+kK1eO76sTwnM5aV0WOExNz+imQ2p5nKM3Gwri/vH+M0zTM+UE/rKMQZ/zkWp/LGCdyLhBhAdR7dpTyOWqEv8mDuzeRoJcotjRKaDSPppb1d6H7J84GKzdCvcvJUKPg/FbFevqthLiYxKtYTfYb3Kn26S61H8g==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=mt.com;
 Received: from DB6PR03MB3062.eurprd03.prod.outlook.com (2603:10a6:6:36::19) by
- AS8PR03MB8088.eurprd03.prod.outlook.com (2603:10a6:20b:443::14) with
+ AS8PR03MB9486.eurprd03.prod.outlook.com (2603:10a6:20b:5a5::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.19; Wed, 21 May
- 2025 09:06:48 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.30; Wed, 21 May
+ 2025 09:06:58 +0000
 Received: from DB6PR03MB3062.eurprd03.prod.outlook.com
  ([fe80::b201:e423:f29:53b]) by DB6PR03MB3062.eurprd03.prod.outlook.com
  ([fe80::b201:e423:f29:53b%4]) with mapi id 15.20.8678.033; Wed, 21 May 2025
- 09:06:48 +0000
+ 09:06:57 +0000
 From: Markus Burri <markus.burri@mt.com>
 To: linux-kernel@vger.kernel.org
 Cc: Markus Burri <markus.burri@mt.com>,
@@ -68,16 +68,17 @@ Cc: Markus Burri <markus.burri@mt.com>,
 	linux-rtc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Markus Burri <markus.burri@bbv.ch>
-Subject: [PATCH v4 4/7] rtc-rv8803: extend sysfs to trigger internal ts-event
-Date: Wed, 21 May 2025 11:05:49 +0200
-Message-Id: <20250521090552.3173-5-markus.burri@mt.com>
+Subject: [PATCH v4 5/7] rtc-rv8803: extend sysfs to read status
+Date: Wed, 21 May 2025 11:05:50 +0200
+Message-Id: <20250521090552.3173-6-markus.burri@mt.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250521090552.3173-1-markus.burri@mt.com>
 References: <20250521090552.3173-1-markus.burri@mt.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MI1P293CA0002.ITAP293.PROD.OUTLOOK.COM (2603:10a6:290:2::9)
- To DB6PR03MB3062.eurprd03.prod.outlook.com (2603:10a6:6:36::19)
+X-ClientProxiedBy: ZR0P278CA0116.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:20::13) To DB6PR03MB3062.eurprd03.prod.outlook.com
+ (2603:10a6:6:36::19)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -85,156 +86,262 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB6PR03MB3062:EE_|AS8PR03MB8088:EE_
-X-MS-Office365-Filtering-Correlation-Id: f243b747-7608-435b-ec50-08dd9846d13a
+X-MS-TrafficTypeDiagnostic: DB6PR03MB3062:EE_|AS8PR03MB9486:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3864fcff-63a2-421f-46c6-08dd9846d6d7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
+	BCL:0;ARA:13230040|1800799024|52116014|376014|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?t9e3ZZJVWFXOF4XESCK1BHYNR1Be4B38EsxCUgmFrAa0I7ovA3PSw7otQRzH?=
- =?us-ascii?Q?3dgfZcpl3cNNQ7aeg8vNRti5siELa7yWxoq+UeIb8xEgUJuiQNwAJ+aXRkpu?=
- =?us-ascii?Q?0pfxDqhPTrTQZGdjYETSiKRqI3shvAMWfpMufCVZCnrB79wZrea0AUS37EyY?=
- =?us-ascii?Q?tEjlm6fvIc0jmcyMLD/baBeo+UW/p3329fwFT9r3ObzfStq5r/0AxRLHMGgj?=
- =?us-ascii?Q?WKle52UJyr3Dq7GbgsnSN1svLJxw0aQyBUKhyrl94Dx+vLtPUJgK0dAgJBWX?=
- =?us-ascii?Q?6E3wNxClBNPkN2Ixinl6rKEmmVvovkMigV/lD6O/ojDajWuDcPLI6AJk4IAp?=
- =?us-ascii?Q?lBrNz/7GTKdCHx/TBRdYxt1jVV7DTWnJXgDMVHvXiutrjcYDDW9D5IquIQj4?=
- =?us-ascii?Q?p46MU/56/enE6fJ0W8Y6XU6XrsVmu8T1DbBM/uZmaENzdoNHSRbw8FVryzwu?=
- =?us-ascii?Q?VtT+sDwfejxf0RblZ/iSXBdOVQTA51ldkaMPW4qbMScU9P7Jqo0P9olHJUiL?=
- =?us-ascii?Q?zgUXEQIsa7CclqeLybOQHtAfREYXbCS2mso6140OAePD5+nOSXYRTwfL4YGH?=
- =?us-ascii?Q?3Ae6ZDUY3IoFL6H1xwIDanQa9o4DQzK4USaqxpRWboDuET4UW80+9E9SkKtM?=
- =?us-ascii?Q?x022A60ElO/cK46w8XGalB+OmGjiueb0C0XLd2xJ3lyJqVkDHHtqnWfQ/Khx?=
- =?us-ascii?Q?hN9uhFmdOw6paJ9vxB1n1PSeLPnqPhUGS1Qip7uVRHEtk1bjDm8AScnpKb6V?=
- =?us-ascii?Q?oCmTwWIbgtNCBhCZnmvnJo1cagFeHYFXT0YJvwd91eJYRUny0ABG2eWe9JP0?=
- =?us-ascii?Q?Cw529ZqBjE7r84eQEw7t9v5Zn42U/Fb1YKrrD6eqBoKosRcH+Q3cCaVaj+x6?=
- =?us-ascii?Q?6R+YLTFzB1lTyrVGvs+AMIXbnVhmrHedvx3XkglWI8/JBLwi9om+PG4jDubi?=
- =?us-ascii?Q?gONdQFZ03EYronu/HAgbFRePraXMMs83bgt69tQBJhVm2mHFs7iMpibSdIgy?=
- =?us-ascii?Q?+jqcApqG+ejnOs+ejB/YpIBZagFf5Snnm/R/Pw9rH2svJBpG/evXlhO79vMJ?=
- =?us-ascii?Q?ekHRzxF12Rr6wte9cuw3gh2BisqLRcR4NqbOJ2n3IGl9eJ4QeHKjmkFRLsFP?=
- =?us-ascii?Q?3Gsre6BrBDSWwY/pIjNXeSoIue/9phutGfO1uJX0mKqpOL4g64Fox31y+47L?=
- =?us-ascii?Q?fqpcVwzsoGWjw8RCd54iJ+JcwcLQ5K/Uo5DCmGEu+voL5AXMQgLPm2n5YwBH?=
- =?us-ascii?Q?oiQ1ricf8uG1BPZLvlaGxcrVVBz9AAgHKTEGAbX2NtdiMyD0z5P+1tngIIVq?=
- =?us-ascii?Q?t1cbaHBn1vFOXfC6MX8IC+gUIHFNV8tkZADWSJw5pPnPkIMS88cr7o3YdIhm?=
- =?us-ascii?Q?/fWM45g5GvAym6sEZaJ0HebU/q96jp5NKRV2BZlTqFQUZGRgaKg3osc9EV3E?=
- =?us-ascii?Q?8I0RhEu+CodsgtUH7XCUPyw9BUI+qA8J8webu6hr7j9mIFi4OQpvNg=3D=3D?=
+	=?us-ascii?Q?pquA3FcDTBX0WvJ8jyqUW/yYWzR2D+0BYZN8TMZakOvbfVuQqFoPWYM+n0kz?=
+ =?us-ascii?Q?TDAnedNWFPIfOLAMWVK63CaKity+RH5O17doFo3bzuywVcXZC5AOJzLnSWzy?=
+ =?us-ascii?Q?JzNf+Dh4IVrR+4hymFIQr9QLrqilo5/3V25u6BasigdHEISm+E0U2dBRmMwK?=
+ =?us-ascii?Q?JyCwTe5ugB8zYu1Q8fZwOfaAe5bvFAJMZBglzLWBbgz/ufyCVKF9uPL5EqWY?=
+ =?us-ascii?Q?1obw1PepTuY1olb7IYpgfy9donRAZVo00p3luwTYUvESUrJPN1u9ppc0FRaJ?=
+ =?us-ascii?Q?CIfd67P7SHpdQVreEkf1gEWhx6bg2DeipuXDsO9BWPdYWnbUXD1fmGmDtlW5?=
+ =?us-ascii?Q?tYAykoNGc8aphfR561dnDjlIjha9f6A52275OZ7+GVusF4bE20Pi6XHj2vH7?=
+ =?us-ascii?Q?BZEaK6T0YhwRk/YemC8tn1taGM6mTQ6qpmAK69gJNPjpYoKux2vEyDi2ZAFw?=
+ =?us-ascii?Q?e4Sjrk0f0OD0tmOQxo0dhoLz/0GkjrKhsHLr38VKXRULR+xpwrML+C6HeWej?=
+ =?us-ascii?Q?plWtLkWHhT+LDzOK/44rIz6hwhOKB7yNzo2xE3h0sDvo8RZ7xRI29/L9I7cT?=
+ =?us-ascii?Q?l6PYWniAGFTH+ZjYq8tWPOIyacyd3oa9GW4lcyrl4ghD/GQA6mAgYaIZsMuW?=
+ =?us-ascii?Q?m1mfloylFNqoekI+63v/950wXPXnSNIdEBD59IwhKHuy6qXb/wzLQ9CiZzqC?=
+ =?us-ascii?Q?l9CFo6jrLDIFPCBh/BUVFB66NpALmE1F8aXGiDnOiBn2gyTTrBVotFwIwIZM?=
+ =?us-ascii?Q?DNJkOs9/qzbAxk6ksQ6MSmqbByysqrNrPQlH/eH4dGD8u8YKUaANOe/aQMvm?=
+ =?us-ascii?Q?ykgJnYLg8DmD9/GF8fA3m3OK8Vjoq4OF1MGYEhM5g50VKEvnL8k+u6fgne/t?=
+ =?us-ascii?Q?GjgBd2lfdawbmj5QSXg9ah1J/ukNXLqod15xhk7wGakkVEIBw4r0kXEEy8d4?=
+ =?us-ascii?Q?GTWhvKOYV61selnU0dnnYdok8hhV21u+QoM+O1FQw+eoaiLQC0tgNViozRE2?=
+ =?us-ascii?Q?kpl3L4DlLdzOxb7YzD6iKKRXjnFNkPBGVZf3RqIAqAZeboaEJq6LQ8KIcYTW?=
+ =?us-ascii?Q?PlY6nWH6kpVvimZkneyzCbgSlgsV5JxDBdfIfbr1bhCOHgrwxpB3JS64Bs5y?=
+ =?us-ascii?Q?GgOxgy+HESDWbzUUkp5/HnvXlb466azOoqzEjhJ6QNREvc1dwlw6eTzo3XVt?=
+ =?us-ascii?Q?FmvFmeUXYPm0iUmsEa75wxG2tmkW2IT2lv3xgkTSvkHQNBihMVqt0O1XdGyh?=
+ =?us-ascii?Q?1KBfvcuDtGVzIgPZYgAa1USIt1hxjIaTwr51t2nnu7EoFIz9MjtAo/Ht+CHo?=
+ =?us-ascii?Q?lvMimZ8EbNFNJV0QA0uw7zysHixGDttajvfeqeZV/4Ibo192jH+kj26VTmfb?=
+ =?us-ascii?Q?74JAI3IiGHCIVGD1HScrm1c9sB/61Csqsy1n8R31FtWSgB9pyd304ziWGeuN?=
+ =?us-ascii?Q?AywcBVb/Jk4bfi66rUBNQfflipZdO5C4A86j9AeXRdRYHc3k/qsAhw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR03MB3062.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR03MB3062.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(376014)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?a2wK6G7ENmPjIr9tF82hDvMKhfQLT1DiFMz0M8phsglsv2XBB56K/XZYTg3H?=
- =?us-ascii?Q?fpZ0IfT36JNERy82xQjIbtyeseBm0okmRidhdj4+IA9OxD4ELgIKlUgnhXco?=
- =?us-ascii?Q?X5eFjeR3yRykLKmtCSm/+NKOupwxLCjCrxVbY1OMVDf63Ft7x+pHsfyH1OlH?=
- =?us-ascii?Q?kPWldazOXYsbX3WMuvmEH+lbVHqGAhNvBxpc/PEOln/7erU5t92dKjh3Egls?=
- =?us-ascii?Q?Pu95DlKTnLXDN/DSRXLrQ2Jdg6s4l+vyD6gX7qgt/3EvZ+r9+lux+rTXGfTR?=
- =?us-ascii?Q?WR2SRnYvSRJl8hsI1oqSqAvM3SAzt5hgky0h1CGbtwQYwPDBUPc3ykXmhsis?=
- =?us-ascii?Q?p81a3glMvqrxAC4vbNQqREFQqpXy9B3bEBzrHZSn9ndygNO4/6g+T4FRY4dZ?=
- =?us-ascii?Q?W4Xozy+C3PPD4fePrDlPNdORBCdSZN/k79FJpAlMOeDAgm3pinOpLZae1ev6?=
- =?us-ascii?Q?n3y/DCC9OcymVWWFDiBVQrO1hv2CKcg/uRkyal5zUpe1YtGXF3xK0oh/XXhp?=
- =?us-ascii?Q?xIZC5A2zNP8Wj/KdOZ9+Q+Kpf8KCWsesd37UlSDNOuu18bltsnJ5n2cvjdSi?=
- =?us-ascii?Q?TUnSGbndpFXWKdt2sQA54NYlpivJpavmlzOAUDnDjJeHrIzUdy99n6bxjevM?=
- =?us-ascii?Q?2fDZdrR7bKKeWtqc0IBBvGL0SrENnGD2XMpbYFWY4YHsiDgcVO1VRxiQcD3J?=
- =?us-ascii?Q?Jp9hpm5oST9avoP1DJyCTJU/dkObyEg5Udl2GI96dX4tvagaG7e+/V0J3wKa?=
- =?us-ascii?Q?PXQdTsJJHzRO0veNJbGfLI67MCNaKS/emjJob8Vg74wd5e+zj2LzefmZi7O3?=
- =?us-ascii?Q?49ZKD6s7Cnm2PdU69EvZh3hZdxCw1lwb74YtTo8sACblVKuNHEkovbeL+yte?=
- =?us-ascii?Q?0NEe09jGGV7uVj7QkQyg5OOhwXZTlhtdkgfAIWTYfd9Upl4Adh7oNUN+JMoI?=
- =?us-ascii?Q?1OvwYuqY524zDFZ9XrupKhEtvdinDtbmvcssopWAusuOpFgybg1/WzNZFDhF?=
- =?us-ascii?Q?zLQQxKB4lHPZv0duLwpzUuvRX41nyRF7j50hOx+Jdr062RX5JwZnzvtJRc8g?=
- =?us-ascii?Q?6T6eIcb3zQKGLIyFvY52P/UFp0sah4TH2kAV8ZXCPWcfJ1e4WuDLAfNw6kl2?=
- =?us-ascii?Q?6W9Qap5KtW2H8BoTAQpYXtYGlRA0dk0QjpXMSDr32XfYtoIxvgW5y5c1yOUM?=
- =?us-ascii?Q?O65ut8eNHg5kpcOD5cQ9wHh0haY1Qwps5rUEdwyxsybG6z7oYGKLEOzp/FEh?=
- =?us-ascii?Q?/noYaMjJwtttKyFNkayu3FETGR6EdOUqDFiB2+qcxGi6LhbEQp8cVRcQC6G6?=
- =?us-ascii?Q?nvSU5a3nIUh/lIc39hCudOgkBQ8BWBqTKZrdh7NzdEsE+qtFZ+Y5UDEKHHXu?=
- =?us-ascii?Q?3jubasGl2vpSsgK7cDYdS3qR1W4f18ksbMkBudf0kN+i2BdiSlPtAbOHujmd?=
- =?us-ascii?Q?BwKCg4ULBfiDvrCL3kmD4C+ehBMYMFu6EuwkRep1Dqyc651+zyEXFS8JF/mz?=
- =?us-ascii?Q?MTfFU74h5ZBBNp0EibtrB+Xwh6NvaLb/nUJnhcUee5M8eImqYuViBApxovKw?=
- =?us-ascii?Q?/QKvpx2E747g1cCxKWyjlL/RNwPSJS0+fYZAwQGL?=
+	=?us-ascii?Q?jMrxKoxVML5sqrkBFuQVU/oHRT2113dls1co/7qjT8L08DeYwG6E5YszfaRU?=
+ =?us-ascii?Q?1yE3ly1sBk2qch/rhrlat6z3E/sPgZv1z18nl7n81uFU1gR55IiTKOhntLIc?=
+ =?us-ascii?Q?H+SaZfjC0dnUvFNbNLz90CjQXS6a60R8/QUnleQ+2NzfW2ttzcC6qBHR91dN?=
+ =?us-ascii?Q?WDko5RImgEwOYPEJAeSvZk54CsgPZ6NBSjj/w6HPoMcqjXIjMGFuycdnG/Sk?=
+ =?us-ascii?Q?r56Ng8Kx92q1/pjf4qc9uOH+cZ6K9y8vF6QEvT2y6D94Dc5VLEjVxu+OKDJ4?=
+ =?us-ascii?Q?mJRiNZ6r0CEyEvpEEqUOW0Yf87+bFfCaLAAR+lUG+XvOGSGehvSuzH2O0zx2?=
+ =?us-ascii?Q?sYvjKYGGA6ajWOy4uFRRYXJoUARco68gFrWUtEJZF5Zq8L161duGLYqBF60t?=
+ =?us-ascii?Q?to9ZLdmQ+vEUidPYoDTdtA/zqEQMlKRiihL0nP6U1VXU3YbNszDEi9FqhBjK?=
+ =?us-ascii?Q?tkU8bHujZE73IiJ9ccU1B4UQ7Yo28y5hCK6LZMrnRK+pnqimsJ1rPdJy3Ih5?=
+ =?us-ascii?Q?v5XEf6pWpiwEs4XMLXGa2p9v/i8MPrw81XFC/KRrjh2sLNqNMZ7dStLc6XD+?=
+ =?us-ascii?Q?nfAVMMweWRj0zDgu7MaFaTHJWuZwPnG8jgz3w1RnESDaRuTocfRVLuP69LRR?=
+ =?us-ascii?Q?v8BA2lrvKzH7WXWS+nTBty6+w+ag5zw8XcB5gQKw+WVSdio+KMbl2biWOjMk?=
+ =?us-ascii?Q?Z642rI9kv7zDq1rpSn64ZoqLeLTvQDqnieSkYO2/+MNL+gBKjxHM9KukK7/n?=
+ =?us-ascii?Q?FAr8AFvEfzU97fz5bQ6Gee1glR2fuYlU7rk0ApqZApX3P+6BJcCVFlrzKBl+?=
+ =?us-ascii?Q?h6MzzPvK6L5xDZKV3BUfO1UTzT6J8UZWk4uhovT4RNLjp6/B8WOTUfddlszL?=
+ =?us-ascii?Q?iWbsGuWA1gMVGDkoFhGJQVzKpHaEgYbVSPCy0gwTQw1gFh3OglGXGfK/CGV0?=
+ =?us-ascii?Q?+qVRr4AXJBOJHGTSlMHN54cydI1mCyPLxzYtnEOyD4JsJG5nNvn/jJQiLubZ?=
+ =?us-ascii?Q?6Ov9zjchRqvCH2ERIEkTQQHzG0TrbDaHcUWXTs8/6o3H5eiYiuXSIaBGHzyC?=
+ =?us-ascii?Q?VhPLx6Vd1PjCFAtsu5OFbr5Yp8yZ34HICIVIYOMQcXSZoSnRT64DAhA0DDO4?=
+ =?us-ascii?Q?AGhyWROkDjVy0fQTpgwIh5V3XeRbNi3waAh1W4+hi3aUimHbiAW7uVi9koDU?=
+ =?us-ascii?Q?8AnBWKBYKazJUXgelxVeqcKSJLK13UxlXsjWk0QxiXxjKU1zWXv270ErRLcJ?=
+ =?us-ascii?Q?V3K4vLeOBOmnuQifP7sappX3zlCwY9lu2wsaGu87uTtMZUuk17BwLJiCDwZm?=
+ =?us-ascii?Q?jYzgngOPgrQkv71imdm+YOSJ8RX+CRmht9axFBhwCnAR9pmd4wm2NaHzY9se?=
+ =?us-ascii?Q?wGrpXWmrjgn5OxOENyT0WT4UlFzDRZOtMS12JpcGbymhHBYbNzGk7YSq6WEO?=
+ =?us-ascii?Q?lOUbkiZHQ6TFqejq5Rj2t+/3EO7OTELcb+oeADHuB8lALIaxRo27bybHT6QD?=
+ =?us-ascii?Q?jaYTKIzKOafawoTA1mXSvvpjyuHPycErIiaAugSvzLYfEIljKcnUi3dbY8Wa?=
+ =?us-ascii?Q?Yn8+bJ5QM4o7CXSeSuSaxHepxfkFLjRtY2FnA9Fr?=
 X-OriginatorOrg: mt.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f243b747-7608-435b-ec50-08dd9846d13a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3864fcff-63a2-421f-46c6-08dd9846d6d7
 X-MS-Exchange-CrossTenant-AuthSource: DB6PR03MB3062.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2025 09:06:48.2737
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2025 09:06:57.7387
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: fb4c0aee-6cd2-482f-a1a5-717e7c02496b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mVrV6VQYYaUtL2tm3iGY8HOM6vxaroiFOIfbvlLeWT5GP4aIHaNvIrSMiNRCNBNf4XwxUnT7utlG9JLxp5l34w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB8088
+X-MS-Exchange-CrossTenant-UserPrincipalName: CmrxvVPO8LEqs2AEsQPGGpJZH3gWWbBI36C8YnyFDVaSx6cNCUXcdRvZMTSolxdMJsE8XSqyBb6brMZOK1BvWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB9486
 
-Extend sysfs to trigger an internal time-stamp event.
-
-The trigger function can be used from an application to trigger an
-internal time-stamp event.
+Add sysfs functionality to read the status and configuration.
+The functions provide the number of stored timestamp events, the current
+EVIN pin configuration and the enabled/disabled status.
 
 Signed-off-by: Markus Burri <markus.burri@mt.com>
 Reviewed-by: Manuel Traut <manuel.traut@mt.com>
 ---
- .../ABI/testing/sysfs-class-rtc-tamper        |  7 ++++
- drivers/rtc/rtc-rv8803.c                      | 33 +++++++++++++++++++
- 2 files changed, 40 insertions(+)
+ .../ABI/testing/sysfs-class-rtc-tamper        |   8 ++
+ drivers/rtc/rtc-rv8803.c                      | 115 ++++++++++++++++++
+ 2 files changed, 123 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-rtc-tamper b/Documentation/ABI/testing/sysfs-class-rtc-tamper
-index 3e61ed628c17..83b2fae1fc6e 100644
+index 83b2fae1fc6e..ef6d5f43abd8 100644
 --- a/Documentation/ABI/testing/sysfs-class-rtc-tamper
 +++ b/Documentation/ABI/testing/sysfs-class-rtc-tamper
-@@ -18,4 +18,11 @@ Description:	(RO) Attribute to read the stored timestamps form buffer FIFO.
- 		- "1234.567 EVIN1=1" for a trigger from EVIN1 changed from low to high
- 		- "1234.567 EVIN1=0 EVIN2=1 for a simultaneous trigger of EVIN1 changed to low and
- 		  EVIN2 changed to high.
-+		- "1234.567 CMD=0" for a internal trigger
- 
-+What:		/sys/class/rtc/rtcX/tamper/trigger
+@@ -26,3 +26,11 @@ KernelVersion:	6.15
+ Contact:	Markus Burri <markus.burri@mt.com>
+ Description:	(WO) Attribute to trigger an internal timestamp event
+ 		Write a '1' to trigger an internal event and store a timestamp.
++
++What:		/sys/class/rtc/rtcX/tamper/status
 +Date:		May 2025
 +KernelVersion:	6.15
 +Contact:	Markus Burri <markus.burri@mt.com>
-+Description:	(WO) Attribute to trigger an internal timestamp event
-+		Write a '1' to trigger an internal event and store a timestamp.
++Description:	(RO) Attribute to read configuration and status for EVINx and buffer.
++		Provide the number of stored timestamp events, the current EVIN pin configuration
++		and the enabled/disabled status.
 diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-index e367d37e6a8f..d0aac250774a 100644
+index d0aac250774a..39d5881ba261 100644
 --- a/drivers/rtc/rtc-rv8803.c
 +++ b/drivers/rtc/rtc-rv8803.c
-@@ -929,12 +929,45 @@ static ssize_t read_show(struct device *dev, struct device_attribute *attr, char
- 	return offset;
+@@ -85,8 +85,11 @@
+ 
+ #define RX8901_EVNT_INTF		0x47
+ 
++#define RX8901_BUF_OVWF			0x4F
++
+ #define NO_OF_EVIN			3
+ 
++#define EVIN_FILTER_FACTOR		125
+ #define EVIN_FILTER_MAX			40
+ 
+ enum rv8803_type {
+@@ -117,6 +120,26 @@ struct cfg_val_txt {
+ 	bool hide;
+ };
+ 
++static const struct cfg_val_txt pull_resistor_txt[] = {
++	{ "no", no },
++	{ "PU/500k", pull_up_500k },
++	{ "PU/1M", pull_up_1M },
++	{ "PU/10M", pull_up_10M },
++	{ "PD/500k", pull_down_500k },
++	{ "no", 0b101, 1 },
++	{ "no", 0b110, 1 },
++	{ "no", 0b111, 1 },
++	{ NULL }
++};
++
++static const struct cfg_val_txt trigger_txt[] = {
++	{ "falling", falling_edge },
++	{ "rising", rising_edge },
++	{ "both", both_edges },
++	{ "both", 0b11, 1 },
++	{ NULL }
++};
++
+ static const struct cfg_val_txt trg_status_txt[] = {
+ 	{ "EVIN1", BIT(5) },
+ 	{ "EVIN2", BIT(6) },
+@@ -633,6 +656,16 @@ static int rv8803_nvram_read(void *priv, unsigned int offset,
+ 	return 0;
  }
  
-+static ssize_t trigger_store(struct device *dev, struct device_attribute *attr, const char *buf,
-+			     size_t count)
++static char *cfg2txt(const struct cfg_val_txt *cfg, u8 value)
 +{
-+	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
-+	struct i2c_client *client = rv8803->client;
-+	int ret;
-+	unsigned long tmo;
-+
-+	guard(mutex)(&rv8803->flags_lock);
-+
-+	/* CMDTRGEN */
-+	ret = rv8803_write_reg(client, RX8901_WRCMD_CFG, BIT(0));
-+	if (ret < 0)
-+		return ret;
-+	ret = rv8803_write_reg(client, RX8901_WRCMD_TRG, 0xFF);
-+	if (ret < 0)
-+		return ret;
-+
-+	tmo = jiffies + msecs_to_jiffies(100); /* timeout 100ms */
 +	do {
-+		usleep_range(10, 2000);
-+		ret = rv8803_read_reg(client, RX8901_WRCMD_TRG);
-+		if (ret < 0)
-+			return ret;
-+		if (time_after(jiffies, tmo))
-+			return -EBUSY;
-+	} while (ret);
++		if (cfg->val == value)
++			return cfg->txt;
++	} while (++cfg && cfg->txt);
 +
-+	return count;
++	return NULL;
++}
++
+ static int rv8803_ts_event_write_evin(int evin, struct rv8803_data *rv8803,
+ 				      enum evin_pull_resistor pullup_down,
+ 				      enum evin_trigger trigger, int filter)
+@@ -960,14 +993,96 @@ static ssize_t trigger_store(struct device *dev, struct device_attribute *attr,
+ 	return count;
+ }
+ 
++static ssize_t status_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
++{
++	int evin_en;
++	int evin_cfg, evin_flt;
++	int buf1_cfg, buf1_stat, buf_ovwf;
++	int inte;
++	int i;
++	int offset = 0;
++	u8 ev_pullupdown[NO_OF_EVIN];
++	u8 ev_trigger[NO_OF_EVIN];
++	int ev_filter[NO_OF_EVIN];
++
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct rv8803_data *rv8803 = dev_get_drvdata(dev->parent);
++
++	scoped_guard(mutex, &rv8803->flags_lock) {
++		evin_en = rv8803_read_reg(client, RX8901_EVIN_EN);
++		if (evin_en < 0)
++			return evin_en;
++
++		inte = rv8803_read_reg(client, RX8901_EVNT_INTE);
++		if (inte < 0)
++			return evin_en;
++
++		for (i = 0; i < NO_OF_EVIN; ++i) {
++			evin_cfg = rv8803_read_reg(client, evin_cfg_regs[i]);
++			evin_flt = rv8803_read_reg(client, evin_flt_regs[i]);
++			if (evin_cfg < 0 || evin_flt < 0)
++				return -EIO;
++
++			ev_pullupdown[i] = FIELD_GET(RX8901_EVENTx_CFG_PUPD, evin_cfg);
++			ev_trigger[i] = FIELD_GET(RX8901_EVENTx_CFG_POL, evin_cfg);
++			ev_filter[i] = EVIN_FILTER_FACTOR * evin_flt;
++		}
++
++		buf1_cfg = rv8803_read_reg(client, RX8901_BUF1_CFG1);
++		buf1_stat = rv8803_read_reg(client, RX8901_BUF1_STAT);
++		buf_ovwf = rv8803_read_reg(client, RX8901_BUF_OVWF);
++		if (buf1_stat < 0 || buf1_stat < 0 || buf_ovwf < 0)
++			return -EIO;
++	}
++
++	offset += sprintf(buf + offset, "Mode: %s\n",
++			  FIELD_GET(BIT(6), evin_en) ? "direct" : "fifo");
++	offset += sprintf(buf + offset, "\nExternal Event config:\n");
++	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "", "EVIN1", "EVIN2", "EVIN3");
++	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Enable",
++			  FIELD_GET(BIT(0), evin_en), FIELD_GET(BIT(1), evin_en),
++			  FIELD_GET(BIT(2), evin_en));
++	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Capture",
++			  FIELD_GET(BIT(3), evin_en), FIELD_GET(BIT(4), evin_en),
++			  FIELD_GET(BIT(5), evin_en));
++	offset += sprintf(buf + offset, "  %-13s  %-7ld %-7ld %-7ld\n", "Interrupt",
++			  FIELD_GET(BIT(5), inte), FIELD_GET(BIT(6), inte),
++			  FIELD_GET(BIT(7), inte));
++	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "Pull-resistor",
++			  cfg2txt(pull_resistor_txt, ev_pullupdown[0]),
++			  cfg2txt(pull_resistor_txt, ev_pullupdown[1]),
++			  cfg2txt(pull_resistor_txt, ev_pullupdown[2]));
++	offset += sprintf(buf + offset, "  %-13s  %-7s %-7s %-7s\n", "Edge",
++			  cfg2txt(trigger_txt, ev_trigger[0]),
++			  cfg2txt(trigger_txt, ev_trigger[1]),
++			  cfg2txt(trigger_txt, ev_trigger[2]));
++	offset += sprintf(buf + offset, "  %-13s  %-7d %-7d %-7d\n", "Filter [ms]",
++			  ev_filter[0], ev_filter[1], ev_filter[2]);
++
++	offset += sprintf(buf + offset, "\nBuffer config:\n");
++	offset += sprintf(buf + offset, "  %-13s  %-10s\n", "Mode",
++			  (FIELD_GET(BIT(6), buf1_cfg) ? "overwrite" : "inhibit"));
++	offset += sprintf(buf + offset, "  %-13s  %-10s\n", "Status",
++			  (FIELD_GET(BIT(7), buf1_stat) ? "full" : "free"));
++	offset += sprintf(buf + offset,  "  %-13s  %-10ld\n", "Overrun",
++			  (FIELD_GET(BIT(4), buf_ovwf)));
++	offset += sprintf(buf + offset,  "  %-13s  %-10ld\n", "No of data",
++			  (FIELD_GET(GENMASK(5, 0), buf1_stat)));
++
++	return offset;
 +}
 +
  static DEVICE_ATTR_WO(enable);
  static DEVICE_ATTR_ADMIN_RO(read);
-+static DEVICE_ATTR_WO(trigger);
+ static DEVICE_ATTR_WO(trigger);
++static DEVICE_ATTR_RO(status);
  
  static struct attribute *rv8803_rtc_event_attrs[] = {
  	&dev_attr_enable.attr,
  	&dev_attr_read.attr,
-+	&dev_attr_trigger.attr,
+ 	&dev_attr_trigger.attr,
++	&dev_attr_status.attr,
  	NULL
  };
  
