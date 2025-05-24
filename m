@@ -1,188 +1,142 @@
-Return-Path: <linux-rtc+bounces-4138-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4139-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC876AC25F1
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 May 2025 17:06:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27CDAAC3187
+	for <lists+linux-rtc@lfdr.de>; Sat, 24 May 2025 23:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFC397BCDFB
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 May 2025 15:04:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D79971798C0
+	for <lists+linux-rtc@lfdr.de>; Sat, 24 May 2025 21:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE04A2957A1;
-	Fri, 23 May 2025 15:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E6C41DF27C;
+	Sat, 24 May 2025 21:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eRvN1wXa"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gsglZqDZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E3C2957CD
-	for <linux-rtc@vger.kernel.org>; Fri, 23 May 2025 15:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065272DCC06;
+	Sat, 24 May 2025 21:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748012764; cv=none; b=I3l1jqt/lqSVYNmxnZe/pnfE/Q+uCEgxVoI8/FSgiFl96JsaoZQjozds5ICSRCZalbN2R3ER8/afanX4dz7HUO2tPU6mA0VnzKygBp77AkNZnMUh05JvAMzimSdh0e70Ig6VPhyhTyP2aACKwD/W4KAiaWuqRylQ1yGIYVh/Gko=
+	t=1748122616; cv=none; b=DiPKqTj+cmIqk3LcfsHEdK+GGpdhmozA8ur3qvRTaFce6ghSsWTdTQ+zRDCbCGyXaMI/sjLVVPux2abyE8WD1CY8FdvsNeJQbTvwbdkTbz0w5vkJNR62cU7qUX51RxtRKFmegHCaIcxTKs7vvhH7xLp8SN3/2kc7qjKKlsHET8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748012764; c=relaxed/simple;
-	bh=SLnohmIUfW8m2aMD83EgpwPGGc3qtsP4KoHhsCPewb4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DXn9tiUarJq9PKQSQDxozTp0ETcHRUZ2Cl0tCBHogrpt1o16f4+7ynMTVO5RxOr/wH9YygENkBJpV5BmUQJumA/g7VDVgdDX4rwLlGUUm0CytQFxIo53LbxucaIkOG6g32oxzSCQ4b1mBa7GCZQYAdgPoCM5PQn0LC4xeFjTn9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eRvN1wXa; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=ffYBTA6OEd7qi4BoEMBhM7U3VJGXanMZigO/kCkMaz4=; b=eRvN1w
-	Xa+bjr3LE/FbEveKFIF61l2KYNmtdmPYRPPOHWg63GyFam2bZn952FHExB8tc05G
-	UHf/7ch5vK4eR0GtyPOhLAJwXvpPYOEYcn6k138WGNgQxEQyaKNG1UiIflIZ+MbR
-	LsTny6xD93M27GIK5Ah5028sB8anQsgi47ykMtaSmaHhX+F+/zhM2kXnxtjVUDWn
-	IAdsaP0ApJzNUl5OXyeHQbLt96sMXZvhOmDB4r2l3COY3jLBa81NSixSSzxD256L
-	SNUyq8ZOR4gY3/N571bbH/0lzg50mUm2IOpKlSOvFIZESRyR4egKUJwGUcHFXYnK
-	IY9qT2ylsAm8+gmQ==
-Received: (qmail 4083042 invoked from network); 23 May 2025 17:05:59 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 May 2025 17:05:59 +0200
-X-UD-Smtp-Session: l3s3148p1@8PCT7841vWFtKPAL
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH v2 3/3] rtc: rzn1: support input frequencies other than 32768Hz
-Date: Fri, 23 May 2025 17:05:40 +0200
-Message-ID: <20250523150541.8390-4-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250523150541.8390-1-wsa+renesas@sang-engineering.com>
-References: <20250523150541.8390-1-wsa+renesas@sang-engineering.com>
+	s=arc-20240116; t=1748122616; c=relaxed/simple;
+	bh=DmWLwxblFFqXHebpbRJy07gQkYWL1VyyHH0I0CMqHeg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aa+u0QD2PA1yhlGocoOziGvQCPv4bQUVDb3/aA3At9D6/hmWswdromzGzBlf0oktFmVQSs+S5W9c7cZdlnpxc+TyRjoyHuOl6mvcBkjNEIqPv6Mqin6wlr1ov0IeWOaoK6cbd51soNRB09Vx0d+HmPoVIevgGiqG7ZefJjcks0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gsglZqDZ; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3731042F79;
+	Sat, 24 May 2025 21:36:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1748122606;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g2d8KXwEQ380rtettT2TdxGXEtyPNhKQH/1IcB985gY=;
+	b=gsglZqDZ9tv1Db6c8cjm9FOCs6yj+RpiwOy9t6ID2VggLf3QZViLZ9xZwMCtolUjTt0dyk
+	lpVEfR5iuRfyMrI5Q0p5O5db2S4go/OivRyJOnyXwWnj9X5rqd5Ym83P64xrCi7pdSi1um
+	Nr1crgRFwIZdawPWxJz+b1E/RsBorMj0IRMLZblYrONTpY5fnmcqvgmRYvRtvrYHuNJA6i
+	dgHJFHnj81er9sCDc4cjlTK6Rdbzu11465ueSYUlhMrnaZI/VloCmPudkmf1Abai26NnPZ
+	Tnref6QyEaIXIrxhwHN4/QF4ws4qYwb3KYwKm1JEBPzbtxinQab6zDhHG+iBag==
+Date: Sat, 24 May 2025 23:36:45 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Troy Mitchell <troymitchell988@gmail.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf8563: fix wrong alarm register
+Message-ID: <20250524213645d5543d64@mail.local>
+References: <20250419-pcf8563-fix-alarm-v1-1-b893a5de55b8@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250419-pcf8563-fix-alarm-v1-1-b893a5de55b8@gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdduvdektdculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehtrhhohihmihhttghhvghllhelkeeksehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesv
+ hhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-When using the SCMP mode instead of SUBU, this RTC can also support
-other input frequencies than 32768Hz. Also, upcoming SoCs will only
-support SCMP.
+On 19/04/2025 22:37:10+0800, Troy Mitchell wrote:
+> Fix wrong register and align `pcf8563_get_alarm_mode`
+> with the naming convention used in ops.
+> 
+> Signed-off-by: Troy Mitchell <troymitchell988@gmail.com>
+> ---
+> Since this patch[1], the set_alarm function has been setting
+> an wrong register.
+> 
+> Link:
+> https://lore.kernel.org/all/20241010084949.3351182-3-iwamatsu@nigauri.org/ [1]
+> ---
+>  drivers/rtc/rtc-pcf8563.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+> index 5a084d426e58d09cfedf0809695a96a27627c420..61e2f9757de9f24407f9262657da0d1586ce124e 100644
+> --- a/drivers/rtc/rtc-pcf8563.c
+> +++ b/drivers/rtc/rtc-pcf8563.c
+> @@ -103,7 +103,7 @@ static int pcf8563_set_alarm_mode(struct pcf8563 *pcf8563, bool on)
+>  	return regmap_write(pcf8563->regmap, PCF8563_REG_ST2, buf);
+>  }
+>  
+> -static int pcf8563_get_alarm_mode(struct pcf8563 *pcf8563, unsigned char *en,
+> +static int pcf8563_read_alarm_mode(struct pcf8563 *pcf8563, unsigned char *en,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/rtc/rtc-rzn1.c | 51 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 38 insertions(+), 13 deletions(-)
+I was going to apply the patch but this is an unrelated change, please submit
+just the fix so it can be backported.
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index 7777df1e3426..33fd20f37588 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/bcd.h>
-+#include <linux/clk.h>
- #include <linux/init.h>
- #include <linux/iopoll.h>
- #include <linux/module.h>
-@@ -22,7 +23,6 @@
- #include <linux/spinlock.h>
- 
- #define RZN1_RTC_CTL0 0x00
--#define   RZN1_RTC_CTL0_SLSB_SUBU 0
- #define   RZN1_RTC_CTL0_SLSB_SCMP BIT(4)
- #define   RZN1_RTC_CTL0_AMPM BIT(5)
- #define   RZN1_RTC_CTL0_CEST BIT(6)
-@@ -50,6 +50,8 @@
- #define   RZN1_RTC_SUBU_DEV BIT(7)
- #define   RZN1_RTC_SUBU_DECR BIT(6)
- 
-+#define RZN1_RTC_SCMP 0x3c
-+
- #define RZN1_RTC_ALM 0x40
- #define RZN1_RTC_ALH 0x44
- #define RZN1_RTC_ALW 0x48
-@@ -357,22 +359,21 @@ static int rzn1_rtc_set_offset(struct device *dev, long offset)
- 	return 0;
- }
- 
--static const struct rtc_class_ops rzn1_rtc_ops = {
-+static struct rtc_class_ops rzn1_rtc_ops = {
- 	.read_time = rzn1_rtc_read_time,
- 	.set_time = rzn1_rtc_set_time,
- 	.read_alarm = rzn1_rtc_read_alarm,
- 	.set_alarm = rzn1_rtc_set_alarm,
- 	.alarm_irq_enable = rzn1_rtc_alarm_irq_enable,
--	.read_offset = rzn1_rtc_read_offset,
--	.set_offset = rzn1_rtc_set_offset,
- };
- 
- static int rzn1_rtc_probe(struct platform_device *pdev)
- {
- 	struct rzn1_rtc *rtc;
--	u32 val;
--	int irq;
--	int ret;
-+	u32 val, scmp_val = 0;
-+	struct clk *xtal;
-+	unsigned long rate;
-+	int irq, ret;
- 
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
- 	if (!rtc)
-@@ -404,10 +405,24 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
- 
--	/*
--	 * Ensure the clock counter is enabled.
--	 * Set 24-hour mode and possible oscillator offset compensation in SUBU mode.
--	 */
-+	/* Only switch to scmp if we have an xtal clock with a valid rate and != 32768 */
-+	xtal = devm_clk_get_optional(&pdev->dev, "xtal");
-+	if (IS_ERR(xtal)) {
-+		ret = PTR_ERR(xtal);
-+		goto dis_runtime_pm;
-+	} else if (xtal) {
-+		rate = clk_get_rate(xtal);
-+
-+		if (rate < 32000 || rate > BIT(22)) {
-+			ret = -EOPNOTSUPP;
-+			goto dis_runtime_pm;
-+		}
-+
-+		if (rate != 32768)
-+			scmp_val = RZN1_RTC_CTL0_SLSB_SCMP;
-+	}
-+
-+	/* Disable controller during SUBU/SCMP setup */
- 	val = readl(rtc->base + RZN1_RTC_CTL0) & ~RZN1_RTC_CTL0_CE;
- 	writel(val, rtc->base + RZN1_RTC_CTL0);
- 	/* Wait 2-4 32k clock cycles for the disabled controller */
-@@ -416,8 +431,18 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto dis_runtime_pm;
- 
--	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | RZN1_RTC_CTL0_SLSB_SUBU,
--	       rtc->base + RZN1_RTC_CTL0);
-+	/* Set desired modes while leaving the controller disabled */
-+	writel(RZN1_RTC_CTL0_AMPM | scmp_val, rtc->base + RZN1_RTC_CTL0);
-+
-+	if (scmp_val) {
-+		writel(rate - 1, rtc->base + RZN1_RTC_SCMP);
-+	} else {
-+		rzn1_rtc_ops.read_offset = rzn1_rtc_read_offset;
-+		rzn1_rtc_ops.set_offset = rzn1_rtc_set_offset;
-+	}
-+
-+	/* Enable controller finally */
-+	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | scmp_val, rtc->base + RZN1_RTC_CTL0);
- 
- 	/* Disable all interrupts */
- 	writel(0, rtc->base + RZN1_RTC_CTL1);
+>  				  unsigned char *pen)
+>  {
+>  	u32 buf;
+> @@ -127,7 +127,7 @@ static irqreturn_t pcf8563_irq(int irq, void *dev_id)
+>  	char pending;
+>  	int err;
+>  
+> -	err = pcf8563_get_alarm_mode(pcf8563, NULL, &pending);
+> +	err = pcf8563_read_alarm_mode(pcf8563, NULL, &pending);
+>  	if (err)
+>  		return IRQ_NONE;
+>  
+> @@ -262,7 +262,7 @@ static int pcf8563_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *tm)
+>  	tm->time.tm_mday = bcd2bin(buf[2] & 0x3F);
+>  	tm->time.tm_wday = bcd2bin(buf[3] & 0x7);
+>  
+> -	err = pcf8563_get_alarm_mode(pcf8563, &tm->enabled, &tm->pending);
+> +	err = pcf8563_read_alarm_mode(pcf8563, &tm->enabled, &tm->pending);
+>  	if (err < 0)
+>  		return err;
+>  
+> @@ -285,7 +285,7 @@ static int pcf8563_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *tm)
+>  	buf[2] = bin2bcd(tm->time.tm_mday);
+>  	buf[3] = tm->time.tm_wday & 0x07;
+>  
+> -	err = regmap_bulk_write(pcf8563->regmap, PCF8563_REG_SC, buf,
+> +	err = regmap_bulk_write(pcf8563->regmap, PCF8563_REG_AMN, buf,
+>  				sizeof(buf));
+>  	if (err)
+>  		return err;
+> 
+> ---
+> base-commit: 8560697b23dc2f405cb463af2b17256a9888129d
+> change-id: 20250419-pcf8563-fix-alarm-5e787f095861
+> 
+> Best regards,
+> -- 
+> Troy Mitchell <troymitchell988@gmail.com>
+> 
+
 -- 
-2.47.2
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
