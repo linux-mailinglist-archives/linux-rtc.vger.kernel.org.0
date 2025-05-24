@@ -1,62 +1,62 @@
-Return-Path: <linux-rtc+bounces-4144-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4145-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F828AC31CA
-	for <lists+linux-rtc@lfdr.de>; Sun, 25 May 2025 00:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 087FEAC31CC
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 May 2025 00:32:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 93A60189B37F
-	for <lists+linux-rtc@lfdr.de>; Sat, 24 May 2025 22:28:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DC5818941CE
+	for <lists+linux-rtc@lfdr.de>; Sat, 24 May 2025 22:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE22327C162;
-	Sat, 24 May 2025 22:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636911A23AD;
+	Sat, 24 May 2025 22:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KSr/nbjR"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Fwtb9Q68"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9D217B506;
-	Sat, 24 May 2025 22:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5F016D9C2;
+	Sat, 24 May 2025 22:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748125702; cv=none; b=iulSghgvNvciTQ0c4GTbnG1IKEsJHbpU5YwxVyKylaeLbEcHXTHHQ9YkN236mxVF0bKLnAnBGcsYMEq0jAzR5Dr+ACKiNkPvNqI/tXxALNVIKItxDOvVtRHHzh0fwmGAqdNCeQ5sLui7QSEeXx2yZm4ct5eMT3OFcgaCrpe1RxM=
+	t=1748125922; cv=none; b=mmUP2Z5oA21aNrzuN5uirqVX0/DQJHSAndNYc2+GJunYVC99TqmmNdQc9r/J+/8o9vSFJbL0kDxxmm4Kl/5Y6q6pyb5eUVkpYC7NiET7aD1YYTBLtO3gQcQfUvSm9YQ69n3JLqzf+K3Ku7xalcEGXV40/UDOlpmil9lqsIF3Nu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748125702; c=relaxed/simple;
-	bh=jWq0ex1AQAEiET0qc4liQ/5fmCSQqfggZ3TOlwcfK6g=;
+	s=arc-20240116; t=1748125922; c=relaxed/simple;
+	bh=+rG7oX5eth85rNKkvEQbRhRSKSFrL6Rki09gLGBzzl0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H+DCO/curirsOYPDrMGMEQIR4JSFx2VqyxSiglWDTDjBSWyDNoM6Gpe35Afajp4QlE9ouYNRwWlDMvOEGGJYb+fPR+ZUmV0jhBfxktFx2aLfpG3VzjGZWuwMVJKmz3g666bIyY1jKzSPsFmaWmRYi9WKRWIZnZzAwioA0MMlOqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KSr/nbjR; arc=none smtp.client-ip=217.70.183.198
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAENZOLPr96Dn6jkT9ejM3m2kCdZhDh+2zdDm6s2cdC7/aC+F/enWEye9JWdkA7YruaYwRdT0oVmxP+ILk+x1NRMxrZ8fGK1VaYmnTy9CG4uFsN6a5Sm7J30Of/kFc3vnfouLG0bSi7p297kzCH938622sHS7eY8CeaFprH/rIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Fwtb9Q68; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 95D7741C93;
-	Sat, 24 May 2025 22:28:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DABF443308;
+	Sat, 24 May 2025 22:31:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1748125698;
+	t=1748125918;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8y+QOWU43n1T13VyqswY27wl2gnGcpvM+vA/SjWpyGk=;
-	b=KSr/nbjR4GrbpXmjK8WIrU+grEjPmisDIlDt6zJ9GsVUoGy6TKApn95mQFLSnSIhiGVsde
-	ErUrTW8Cwg0gbe/qThFhKoJfekuxTeU/Mm3UFPGZGjlNfhpSqTaaipUVBA/Gu0xgxr5Ial
-	DMyYSymT0BgKbYIycffBVN1nBhKVP7gJCym5E1Rz85aAsxZj3FBquaJ+qJ6BA/Yj0djIl1
-	M24gvu0BYvJPguJYG5RnB4eAAEBTTFVZ1h7zLHWcvu+gDWhcVbkupXNGUJdl4cu9qKisC8
-	ydyaH4PTJfblqEMY007vfwPVvmw/fd5/mRcz1gZffx3oX8FlQdfn35kE/ybETw==
-Date: Sun, 25 May 2025 00:28:17 +0200
+	bh=ctA+pw0iwq71a2CU5/HfDOmg6L4QLY/4rAetftgLJfE=;
+	b=Fwtb9Q68LXYuMwGTgH6ki4eecalXw93ok0fpht6jqEJQqsUwkNw6d9gLJheTHHSLrlshv1
+	6osgGSYStO3i+7WLQZOM5iLG0nYzU1EFmbOfoiX735m7189RufFLKZOIyRYG3hGz1m2Crb
+	CmqJsDd5uYtC904ZtaQQZCSE0doyPP4zBVV+uh3uEpQDle6QAuLXwCncqTWZhSgnRbfVwO
+	f29VJhVdgyTiuhUMoEKT7xPTK0tT+3Ir9Eo1ngvRB9wOlO9WNj3Tap5BYQLWhFBtIsCZ+c
+	iMfT/VMaDkjjhDYEM+Ztnd/jpcnrU4m20/ZL6q4sju40JLwOh9/bjPbgyYNc3A==
+Date: Sun, 25 May 2025 00:31:57 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: zhoubinbin@loongson.cn, wangming01@loongson.cn,
-	Liu Dalin <liudalin@kylinsec.com.cn>
-Cc: chenhuacai@kernel.org, gaojuxin@loongson.cn, git@xen0n.name,
-	jiaxun.yang@flygoat.com, keguang.zhang@gmail.com,
-	lixuefeng@loongson.cn, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] rtc: loongson: Add missing alarm notifications for
- ACPI RTC events
-Message-ID: <174812515308.1273250.15722574329194803657.b4-ty@bootlin.com>
-References: <20250429062736.982039-1-liudalin@kylinsec.com.cn>
- <20250509084416.7979-1-liudalin@kylinsec.com.cn>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	nicolas.ferre@microchip.com, claudiu.beznea@tuxon.dev,
+	lee@kernel.org, sre@kernel.org, p.zabel@pengutronix.de,
+	Ryan.Wanner@microchip.com
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: (subset) [PATCH v5 00/11] Enable Power Modes Support for
+ SAMA7D65 SoC
+Message-ID: <174812590116.1278122.18254321478152467419.b4-ty@bootlin.com>
+References: <cover.1744666011.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,27 +65,30 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250509084416.7979-1-liudalin@kylinsec.com.cn>
+In-Reply-To: <cover.1744666011.git.Ryan.Wanner@microchip.com>
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdduvdeltdculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepiihhohhusghinhgsihhnsehlohhonhhgshhonhdrtghnpdhrtghpthhtohepfigrnhhgmhhinhhgtddusehlo
- hhonhhgshhonhdrtghnpdhrtghpthhtoheplhhiuhgurghlihhnsehkhihlihhnshgvtgdrtghomhdrtghnpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrghojhhugihinheslhhoohhnghhsohhnrdgtnhdprhgtphhtthhopehgihhtseigvghntdhnrdhnrghmvgdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtohepkhgvghhurghnghdriihhrghnghesghhmrghilhdrtghomh
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdduvdeludculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejfefhffekjeeuheevueevjedvleevjeetudffheeutdffudefjeduffeuvddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedugedprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrn
+ hgvlhdrohhrghdprhgtphhtthhopehnihgtohhlrghsrdhfvghrrhgvsehmihgtrhhotghhihhprdgtohhmpdhrtghpthhtoheptghlrghuughiuhdrsggviihnvggrsehtuhigohhnrdguvghvpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphdriigrsggvlhesphgvnhhguhhtrhhonhhigidruggv
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Fri, 09 May 2025 16:44:16 +0800, Liu Dalin wrote:
-> When an application sets and enables an alarm on Loongson RTC devices,
-> the alarm notification fails to propagate to userspace because the
-> ACPI event handler omits calling rtc_update_irq().
+On Mon, 14 Apr 2025 14:41:17 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> As a result, processes waiting via select() or poll() on RTC device
-> files fail to receive alarm notifications.
+> This patch set adds support for low power modes for the SAMA7D65 SoC and
+> the required components and changes for low power modes.
+> 
+> The series includes changes in the asm code to account for the addtional
+> clocks that are in this SoC.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] rtc: loongson: Add missing alarm notifications for ACPI RTC events
-      https://git.kernel.org/abelloni/c/5af9f1fa5768
+[04/11] dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+        https://git.kernel.org/abelloni/c/0a68f5be7883
+[05/11] dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+        https://git.kernel.org/abelloni/c/bf1c27c6d540
 
 Best regards,
 
