@@ -1,57 +1,59 @@
-Return-Path: <linux-rtc+bounces-4163-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4164-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F4F8AC441D
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 May 2025 21:40:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A636AAC4892
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 May 2025 08:44:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073B1177BA4
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 May 2025 19:40:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76B31179968
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 May 2025 06:44:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4604823F413;
-	Mon, 26 May 2025 19:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6981FDA92;
+	Tue, 27 May 2025 06:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CG8/V6tn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XvBrMiwc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0919A16EB7C;
-	Mon, 26 May 2025 19:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAD91F55FA;
+	Tue, 27 May 2025 06:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748288410; cv=none; b=GRvee8xYXsvtwpYOLwdeXZY/qZYMMDJLSsRqcMndiELzSmV8ItgQILNAUsRZMYRPCp3ncOj0LzfPvh3QQumxn+TzkqvpcNx4H7keFrKCER97vRu+nHYhRHT55GCkHB2gTORaOpcBU+4G8xJ1mBJflmqMJcRiOshEHzH6Cqt/ukY=
+	t=1748328165; cv=none; b=bXfbXFAgcMVmEYx5DfJoQqF4IgUFl/hrcko0h8EOOqiCbrCFgPQZytAC0NXwaterHCg6Iuij42qiVUQSyaUopJvO+YHeuBrRaw9wH6dgYO/PQYL1pbd+ADKtpeY+dDlf220Xe3kpo4rW3lM0M+agCfSCaNrZ9hda9xn1twDXPvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748288410; c=relaxed/simple;
-	bh=EBLl2nBgeb7VjutThW6xJ5CJh8s51hdNm7D6aqdBkoA=;
+	s=arc-20240116; t=1748328165; c=relaxed/simple;
+	bh=oGFTTXHeeRELd+EmqNl5xHfn9/xSWthUbVZeziASEGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dGwRM0A95SB8frobYxzV4wx4uluvJ4vE2l0x6JS51fVSmOKkAS2aXigN7ULKRoO3PPhrKQYGjzuo0gWN+iPwNqUNkfKTKZMEh6TK85i/4RLQI+1IClg7z4Er0xVt7hh3tiQiUTtuEmydC6liYgNuNwYhEsVJ02PlHMPREtiO56M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CG8/V6tn; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4116E44110;
-	Mon, 26 May 2025 19:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1748288399;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IzsvBOMSgUY7uIQrnXNy/GUUgeV25zxgRzEzRH+pgBQ=;
-	b=CG8/V6tn6yh2rmsmvRdsKebjCjjtGCHiIafU8IpjcE9Fu4VPqP7eOM7huqWiI4uVe/3sSw
-	dLJJO5d7wmlOg5UgpLy8IEpGLDI/9CgTvtrCa4skLiIP7+VbrDL6j+ee7gkw1mK9BbE3KG
-	Hfcpk/DSERfDoqWTMUQH3e7MDqL70FDKnWoYJT93giXwt+mtZSR8u9WlurwMexv9OzoMZj
-	SkSbNq986EneQa7VUJP8GOcs8qFzi2DP3hh50tqf8aKsWmWpJhFPtLthlsyVqhK3odWx6w
-	8r16Nqptipi3eJpBaQXhxSTd2HUnLJecB7vuf2B8EZA1VA4Fy1UsE6BqXnScXQ==
-Date: Mon, 26 May 2025 21:39:58 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Giampiero Baggiani <giampiero@sferalabs.cc>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf2127: align power management configuration
-Message-ID: <20250526193958617d18ab@mail.local>
-References: <20250526161234.13236-1-giampiero@sferalabs.cc>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sr34s+3IZE27yj0mzvao0YzPpEpiyFpRly4zNgLD3mkesbwfIzUQIa4mbBKPEi0Y1Q02Pp8NRd2mcSI0icz9PBgApW2Cijn7zFQhYdUMggGl/NWP2/s+U8nRKMAO+riQrHKDI+GcveM8gg9pCiekxMnssWc8vyHMTN0jpGzX+JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XvBrMiwc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859AEC4CEEA;
+	Tue, 27 May 2025 06:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1748328165;
+	bh=oGFTTXHeeRELd+EmqNl5xHfn9/xSWthUbVZeziASEGI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XvBrMiwcV7I11c0Vw55ytK7Aajy1E8jfptMtqniNLS3JhjwcUw5xdznTgNVs9cl1k
+	 zX9p7lPt+r+dnYkAmsyXFK/xfwjAw/ohBjJR59I0EDcKTIbxFSTy7k7Kb6tBnd4ALu
+	 4+XScAxj8MUmhCnGj1A+0RG6l7oWNDa8DenZVojE5HYp+kx88vCWDeeF1s/XjahaCc
+	 gpc2qsgAMDCsTpSbPJh5hvLPLJzkLymLb23TN0Z/csund+Uk0QJDhnJzHQCnf2R/wx
+	 tplaGxQf13YAxusFMXnAyJy2EatoF/EcThHpGsxxGfh2OaET9E2qKgRRnjKA0gl2jP
+	 hFHZiEE0DVnAw==
+Date: Tue, 27 May 2025 08:42:42 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Markus Burri <markus.burri@mt.com>
+Cc: linux-kernel@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Manuel Traut <manuel.traut@mt.com>, Marek Vasut <marex@denx.de>, linux-rtc@vger.kernel.org, 
+	devicetree@vger.kernel.org, Markus Burri <markus.burri@bbv.ch>
+Subject: Re: [PATCH v4 6/7] dt-bindings: rtc-rv8803: add tamper detection
+ property node
+Message-ID: <20250527-loutish-powerful-tiger-45a296@kuoka>
+References: <20250521090552.3173-1-markus.burri@mt.com>
+ <20250521090552.3173-7-markus.burri@mt.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -60,58 +62,80 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250526161234.13236-1-giampiero@sferalabs.cc>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgddukeefkeculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfehueeiieekhffgvdfhheeivdfhgfejteffgfethfdugfetffefveeltdeljeetnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehgihgrmhhpihgvrhhosehsfhgvrhgrlhgrsghsrdgttgdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhor
- hhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <20250521090552.3173-7-markus.burri@mt.com>
 
-On 26/05/2025 18:12:34+0200, Giampiero Baggiani wrote:
-> The PCF2131 comes with the following default settings:
-> - battery switch-over function is disabled;
-> - battery low detection function is disabled.
-> These defaults differ from those of other models supported by this driver.
+On Wed, May 21, 2025 at 11:05:51AM GMT, Markus Burri wrote:
+> The RV8901 RTC chip provides a function to store timestamp events.
+> There are three input pins (EVIN1-3) available for triggering.
+> The input pins can be configured and adapted according to the connected
+> hardware.
+> Add document of tamper detection properties for epson,rx8901 rtc chip.
 > 
-> This commit aligns the behavior across all supported models, configuring
-> them to the settings typically expected from an RTC.
-
-We can't do that as this is going to break existing users as they may rely on
-the current behaviour and the configuration is persistent across reboots.
-
-> 
-> Signed-off-by: Giampiero Baggiani <giampiero@sferalabs.cc>
+> Signed-off-by: Markus Burri <markus.burri@mt.com>
 > ---
->  drivers/rtc/rtc-pcf2127.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  .../devicetree/bindings/rtc/epson,rx8900.yaml | 37 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 31c7dca8f469..cbdf7f23e6a6 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -1312,8 +1312,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  	 * Clear battery interrupt flags which can block new trigger events.
->  	 * Note: This is the default chip behaviour but added to ensure
->  	 * correct tamper timestamp and interrupt function.
-> +	 *
-> +	 * Power management functions set to:
-> +	 * - battery switch-over function is enabled in standard mode;
-> +	 * - battery low detection function is enabled;
-> +	 * - extra power fail detection function is enabled.
-> +	 * Note: This is the default configuration except for pcf2131.
->  	 */
->  	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-> +				 PCF2127_CTRL3_PM |
->  				 PCF2127_BIT_CTRL3_BTSE |
->  				 PCF2127_BIT_CTRL3_BIE |
->  				 PCF2127_BIT_CTRL3_BLIE, 0);
-> -- 
-> 2.39.2 (Apple Git-143)
-> 
+> diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+> index 03af81754482..2682cbb9097d 100644
+> --- a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+> @@ -9,9 +9,6 @@ title: EPSON RX8900 / Microcrystal RV8803 Real-Time Clock
+>  maintainers:
+>    - Marek Vasut <marex@denx.de>
+>  
+> -allOf:
+> -  - $ref: rtc.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+> @@ -33,6 +30,40 @@ properties:
+>  
+>    wakeup-source: true
+>  
+> +  tamper:
+> +    description: Subnode for tamper configuration.
+> +      This subnode is only available for epson,rx8901.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Drop last sentence. Don't repeat constraints in free form text.
+
+> +    type: object
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      buffer-overwrite:
+
+Missing vendor prefix or where is this property defined?
+
+> +        type: boolean
+> +        description: Set the buffer mode to overwrite. Default is inhibit.
+
+Why woould this be a board configuration? You described the desired
+Linux feature or behavior, not the actual hardware. The bindings are
+about the latter, so instead you need to rephrase the property and its
+description to match actual hardware capabilities/features/configuration
+etc.
+
+> +
+> +    patternProperties:
+> +      "^evin-[0-3]$":
+
+Commit says three, schema says four.
+
+Where is this property defined? Which common schema? Or is it vendor
+property?
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +        minItems: 3
+> +        maxItems: 3
+> +        description: External event input pin configuration.
+> +          The configuration is an array of tree values and contains
+> +          "pull-resistor", "trigger" and "filter".
+
+What are the values here? Missing constraints, missing defaults.
+
+Best regards,
+Krzysztof
+
 
