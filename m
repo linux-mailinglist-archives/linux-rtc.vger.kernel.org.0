@@ -1,78 +1,78 @@
-Return-Path: <linux-rtc+bounces-4192-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4193-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068EDAC6E4A
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 18:46:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 727F7AC6E52
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 18:46:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0D2818991DB
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 16:46:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51F43178FB4
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 16:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E87328DF10;
-	Wed, 28 May 2025 16:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424A128DF00;
+	Wed, 28 May 2025 16:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gxdYYrHi"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="XhZ89rjO"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DFF28DEF7
-	for <linux-rtc@vger.kernel.org>; Wed, 28 May 2025 16:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8D828CF70
+	for <linux-rtc@vger.kernel.org>; Wed, 28 May 2025 16:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748450764; cv=none; b=S8KscWy+gq8S78/qgFYSzl6/lylSachJgELynSPM/hZZc4g3J64La/hNTAHa7hx0bQcN14HMeRXyB6cts702DXZqqMtJCJWadLTlaq2kOKI5v2WVdqkjfBmLOcGkIFszGzjfuBvSVLv5erP79vfq1ASqy9VCnsrsnkKCZPULpOQ=
+	t=1748450800; cv=none; b=cRuV08ZC+DywpZFrhGmohngRM7Z+kCcS60H2k9Odwz9nHi/GgYRx1rsCgRESzCbZJGUw98cei9BSd95OX8OU16Ov387X5CQbpllM0U5bWjGzh7xmQDEu+sFm+hQgxe7VFaDHoIzh4A4X6ApUB/yJN5/hP4apP6YJZcnOuoDX9+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748450764; c=relaxed/simple;
-	bh=DmepkfV1uDO57Y5SMc5Alh4+4DNwBam01/LL8tNZMC4=;
+	s=arc-20240116; t=1748450800; c=relaxed/simple;
+	bh=fas8NjeBHx36fk2SeFaW4ahoas3ree6HOp9z1G1GKPA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vGOz0+fzg8SllQwUOzAmMqZHGaf8oEYN7jRsinweJFgX8+KsN1n++ZkhVFTkcgNvj9xxzD5CPjnkq6hE9JpMFPZI+pvrFI3fGvVzsE5DolowoYeajI1x3IkU4nyio7qSRvkbVvdkVrc8Dm4KN+QdvMo9WOwkvE1vtvQJftVMAFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=gxdYYrHi; arc=none smtp.client-ip=209.85.214.176
+	 In-Reply-To:Content-Type; b=iIOIF3rc3vfH1Y3aem28z7Q1YCMNqRIRl2+0ynLTptiTOQJzszn/FSCxuIjy3oUYYpH7SYhhI35gqNx6ZzTl8NtZWG3haiOVVFpipwWY7eiK1sGhgYd90x//dGLF3Fiud7kZpNYVgGaPqJ/C0pHXvHQobEWv+XWI43u3LJ/Y1rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=XhZ89rjO; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-23278ce78efso914875ad.2
-        for <linux-rtc@vger.kernel.org>; Wed, 28 May 2025 09:46:01 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-234bfe37cccso1457965ad.0
+        for <linux-rtc@vger.kernel.org>; Wed, 28 May 2025 09:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1748450761; x=1749055561; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1748450796; x=1749055596; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1SRpD7poP71J0Z5qeEtY8RTEWey1In+xs4H1dHguqyI=;
-        b=gxdYYrHiIcFCUQP/l4Y1Cvie6AmMouAClNJAPnS/9tlfgaiHNvZL0o2alqH2xj3A73
-         K4UXEy7Q5PTGOJqN8PSY8OR6Aukj6RPb4PooFqPm2iYtWJ9AeDyKg/zBwLd1oYljFTDM
-         ObP8IY0vUj+r/kl3H9aiZjNVEUF9lyVyEth6Y=
+        bh=bTrLQar6gjTjFnrAkyn0kezzixoXN+IjT1tsTT4veX4=;
+        b=XhZ89rjOXrmaNwv1rX3EsAV5kY9U493RpL6+RXX41CxFWq1AShjnlN+1EqbdzrD2B3
+         Sab2cMxEHlfce+TPOxCA5c2WcLfN6bph3U5UX/Bsmhb5JJF7EYz/faVK3C9jS7Jk/5sW
+         xn/C72oawNPVryD6x0MxFjry0zN9Il6OjeZEc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748450761; x=1749055561;
+        d=1e100.net; s=20230601; t=1748450796; x=1749055596;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1SRpD7poP71J0Z5qeEtY8RTEWey1In+xs4H1dHguqyI=;
-        b=G9D0mhwzGG2ltaB1O2g0TZqy5dNFtqCwm2BWYaK8aSdr799nAebwc2rJ6yCvCbnvRC
-         AYFM6ZWvy2DYGrrODkyHSCJqxDyps/hMMXMSDuStI4AjNa2gQLnkbSiPV+Ada27FXzsB
-         kEg6YBW+wmOqrJN9Qn1UpggkLz0FN+0dZFUrZK9Y7PP+ITirimYrVMeFMp4D0vkLsJxd
-         HEun8Bim4ROIAH4hnfkZBKqZp63YT+A+GUa8AKph9Hb0lmC8+lGRwp13jK5IXfZFcosL
-         gIUa3nv1OQpYWA7c+woxb5SCNTfsvcwgOMR1ZmgVHF6RvNhbIeHPVIlu0LsPyrqI2ZYJ
-         Tqlw==
-X-Forwarded-Encrypted: i=1; AJvYcCXSt7WNMY2QPRbDhFFX3N5y2R0A/ta8/uf4MCCJsN9PghsDJCohPM7InNuuWiH+7V2K1AVm2seHm8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxyti1d8IdVsEix1Wp6Ckm2y2aG5inJsvA64EzEcfyjlfOeP4BA
-	TJRYzhw1fktMVrcy1OowyKKKUK5o1nUQ4FD2UeK1XhPZ+scsLxans3jkuc7pJ+Fd2g==
-X-Gm-Gg: ASbGnctyIYE7PJZVMmZTvQe4KFpA2y/c3IlKZ6+Cr50rMnrU0QeFokIl5p3ARTa/eWz
-	OXBvMxMB6Cj7gK6z89gi6eHstTZRkqgeMJuFdcprNeE3aq5kqAPHdsioV7qUnsNFVNKj/TL1nPX
-	uEB0RmQMZz6VhXzrjyf1yX2vI8dTvaxDQv/SVkygXPK3PZXi0S1FMcU9RAnElQ7Sf2UJGU/p67A
-	piNPzC3VwoH+2wz1kcKJxFKeRDgzBoY4pK651Tiacq9+RvmN1dxji1FrqWF0I9kh0IDrhikP1tT
-	smfDwXhCq8kMyGzroRXjGCI9yJvlhCw1n2DazwHCC+2bwjEIpwNJ4WF1M5L3kN09ds7GVj5eG+/
-	xpYe3ha/Cz+yPg4Q=
-X-Google-Smtp-Source: AGHT+IFDqqRyt96nyrm1smBWGPbaIUUGA60gdUbEGZQYCr4hXTXZ7qx/vOTbUl93u1wjePXxrv/QGQ==
-X-Received: by 2002:a17:902:d50b:b0:234:a734:4ac2 with SMTP id d9443c01a7336-234a7344be1mr87356785ad.9.1748450760577;
-        Wed, 28 May 2025 09:46:00 -0700 (PDT)
+        bh=bTrLQar6gjTjFnrAkyn0kezzixoXN+IjT1tsTT4veX4=;
+        b=FprlMW6p2VBPkTPkEIKVt7lSPMpZAaBq9mEfvH8s07k0LjIe3t9FljMji2vZuRDVG1
+         4JHe389+rrjDE70+QfBvfrhbfUO8ONoqa6mtTPpzxn312Bpvlu+MKuaVjol29TpuvTWb
+         BCBzNOchrw6JQegu1/ceJvm/1Dg+T2VPHSMAAw4qtAiRuRqWCwkupLzwOUnhsYFYIRbd
+         mndlR8T5jZaP6rjPL/CVWs6vOZe/6G+e0u0bmhkBzEkPIP2g8sl6+fxacFJMEIMbsbDI
+         NXkazMPuzojJ35Pc4GJKAzaRC55I0gjOYvaOYMSaioLCxZf+ZFKbNKY4vyD+iGnDOFxZ
+         WOfw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYbSoSPWwqLRp4i9WrtZJ4AO1jWAJW3iDheJILxAMclcSDNub1hsbSWCzxrIotOsqP2DRnNwTqD14=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/JehoI+R2f0MHqWtDCf7EVKkYtHKrbSsh0RoAgeqaBeP8FS9T
+	xCDvoFoa7MB059haS5ViSsrc32LU9xH4sjYXk2H81bOjj8ORR4l6mxwSy/4iVHknRA==
+X-Gm-Gg: ASbGncsfzDH6mqiUQQ/wU4JzhFouNIg6TPC9mslVzJvnnHnEQnvuQfvKo3KMNvJ+sn4
+	rbljf806cd/NGwJLogSJURLiFLYliCKMUOBei0DP5o0dq3v/lF+3EAEzxw+0/rB7EM9DwuRqhJF
+	LvUX7j7Tmh1JGeGSMKlC7gphrxsz3UCaZambvXF7oKH1Ts2LhgTNJW4YmW8TGiGGkizWy8AKZ6J
+	3MvRskBKtaVSBJJ+IeGDBzsdSd8/2vb7k35IgoUp0vitS9Ef4hTmF7esI2jggnn2cxz0o5RAG0t
+	4EGOqGlAUhThaTq56nzx5YcXY9PxsilPjzb5EmFynjvMp6jsbv6/2rkJhIrlxdWzAxYWICQLa94
+	KgYQXGzoBvY0emVM=
+X-Google-Smtp-Source: AGHT+IFZp5UK5jGx1R+UdIJR5to06T9Np6rNPVYDOR8PPYv1Mujf2unJbIiknwRlJEbu8Z7S2Ap77w==
+X-Received: by 2002:a17:902:e848:b0:234:8ac5:754 with SMTP id d9443c01a7336-2348ac50844mr145646295ad.4.1748450796372;
+        Wed, 28 May 2025 09:46:36 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-234d2fd22besm14180885ad.40.2025.05.28.09.45.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-234d2fe1854sm14097295ad.66.2025.05.28.09.46.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 May 2025 09:45:59 -0700 (PDT)
-Message-ID: <4474875f-bfd7-4f98-836c-0624f75c0f27@broadcom.com>
-Date: Wed, 28 May 2025 09:45:49 -0700
+        Wed, 28 May 2025 09:46:35 -0700 (PDT)
+Message-ID: <0df6f879-f819-492b-b9c5-f91d544203ad@broadcom.com>
+Date: Wed, 28 May 2025 09:46:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -80,7 +80,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/17] pinctrl: bcm: Constify static 'pinctrl_desc'
+Subject: Re: [PATCH 08/17] pinctrl: bcm: cygnus-mux: Move fixed assignments to
+ 'pinctrl_desc' definition
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  Linus Walleij <linus.walleij@linaro.org>,
  Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
@@ -119,7 +120,7 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com
 References: <20250528-pinctrl-const-desc-v1-0-76fe97899945@linaro.org>
- <20250528-pinctrl-const-desc-v1-7-76fe97899945@linaro.org>
+ <20250528-pinctrl-const-desc-v1-8-76fe97899945@linaro.org>
 Content-Language: en-US
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
@@ -154,13 +155,13 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20250528-pinctrl-const-desc-v1-7-76fe97899945@linaro.org>
+In-Reply-To: <20250528-pinctrl-const-desc-v1-8-76fe97899945@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/28/25 03:41, Krzysztof Kozlowski wrote:
-> The local static 'struct pinctrl_desc' is not modified, so can be made
-> const for code safety.
+> Assign 'struct pinctrl_desc' .npins member in definition to make clear
+> that number of pins is fixed and have less code in the probe.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
