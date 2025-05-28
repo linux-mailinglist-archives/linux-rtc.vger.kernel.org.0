@@ -1,162 +1,218 @@
-Return-Path: <linux-rtc+bounces-4190-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4191-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7FA6AC69F4
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 15:02:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F740AC6E39
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 18:42:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AD213B02D9
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 13:01:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51D191896509
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 May 2025 16:43:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E5E28369F;
-	Wed, 28 May 2025 13:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C7928D8EE;
+	Wed, 28 May 2025 16:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="kfGWocLV";
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="IYdfo65I"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BCB3595D;
-	Wed, 28 May 2025 13:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748437314; cv=none; b=nySrysMTn2BJWq8Tha4AR3ixTAbENfDp4L2p6A7GXcwULDQXJ1a92EVOvHA+xPIJcDA0K/PdGAMHs7VzFwCiL+mGd5V5X9lu3FHeyiP1cxbdERtb/JM7gjD7B72JKqMGokxhw34fvQyzQ60S+7/FhNJc/EH1iinPtlocJTBkESI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748437314; c=relaxed/simple;
-	bh=y9bMKWA1mUCVhYWK+2mE7dMzU1P7hxUNnWy/QdoIJFY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gvMJtkrodsUI3j++zARCTGRMxpM/JSGvrTEQtyWwl19snFuQt+rpaPqW/AZWWQFfVZl2MUhywxzwREak/+FOx7+8r/EkWzI2ivtoht72z+SmAO9EMvAJTiCycq5XiIxL1L7SWo+e8tioCCFDGxNI8zIGqeFGZS1r3Ws8hfEycLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2e8f84653c3so4952fac.0;
-        Wed, 28 May 2025 06:01:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748437312; x=1749042112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IbSvaL2uho5iBNc6UnxSmb8ikoxZVNAuMK5QOEf9/rc=;
-        b=BbTRec1bpCnN4rHckQFYX/xiPcs2SeZiLpQA4hYIzslpPo4VIDm23IprF8ZPrxyp8Z
-         go++DU7QhfzytUMRiVqKemrg1NT2TA0Z0TJLiuAZTx91650yOh4m3eJVKJwgHb2j3qU/
-         68CI5+7rkPvkSa9P1v8nZCm9hkMbEr8UDggsqdRxi+oXcS8yTuX//sLXfd89rUDT6s52
-         ZvmHBplLV3IW+O/bqb7xclTT5Y5HnO1RwCkrNjW5nMdAyh5VPTfSMvwDJO2A+Ac11oVx
-         D+BPKtesekyi7fvHO7L4uq8hg+OkfYg78h94ks2fRxqd1K4aHitLX8Js8G+ZrR+hURxr
-         flcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZLXfTd7UFlxEjHH8O7C7pVO927/oElFlPnlw7HDaTfkqfixZKd86Elk7wGZmQpN+RxKPRid5uDiNUK/ml@vger.kernel.org, AJvYcCWZwOO3VpxZxygy18Vj8uvOH8X/Grwfr7sIBbRnRMFIbTEH/hP7hwzaB/8FQq956QfAnTMPSBkV4SPu@vger.kernel.org, AJvYcCWgZSGL9zOcq02+QzzLQ1SLhRK1C6+cp0z5ChGv8w+nyhaSY1Stx5A5BhYFL3H38cseGEPmKXlUiotW/fk=@vger.kernel.org, AJvYcCWt3MH2kG4BDq3KtqrgHzbVg8gwBrjNxRYNuKqjvcoOJft3U9+aA/TBM7JPqLwA1ID4czCzzQUO1DjXYTM/H4akrmc=@vger.kernel.org, AJvYcCXSoSr0uSSc0Iq5eRHN8eG9AeLbNvjw6hq09REB+FypHQ6PsZ4ReYLMMN4uueSOIcQXD/uTi2RktF5o@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/OQ6bLrzJlcN/AyaUmMpkOkkRv4XCv0uF+Fh9PPwk0TIBcRLi
-	Ev6p9t9krNrfROARyrIggY+5aOaJ/AdReEy+XnnI4GHbMGYFYDpgpbbmWUtrQWjY
-X-Gm-Gg: ASbGncvGVf36xJt0B8A2czpq+epOKCzoihdsQJF7I46vcr8Lb1iuKSzzPohszC5SBs5
-	VJG4KrL4WwF7OQmH47sQwJ6S1Kf4oJ3G2z/iol+uYDKXEjRWFbQcDWDizwKNlPBGPCpemXHfeyo
-	hIsk8cGSZ1TA0n+ZxggSV6N8JkTnAlefzQwyiX5ZtI0jR5hW02t1EhbFStJYY7n1SeFJyG65xxI
-	RcVsnphOnAktY29ASS3qc6XMpSYpo75UmbnFzUW8hBsNcNP3XZVSo6oT8O/C6InU3zfKDbu6Gec
-	1iGvGREWdCowG5GnjJAUrNqtb75SBqb9ksCgyLEwvxbYRes5JMxBmGEj1ivMkcVQBHuZ7gR3gtk
-	XG7KKcqXyoDKu6izi6yOLsN30kzsd
-X-Google-Smtp-Source: AGHT+IFzcGONDX9eh+40zCjEjeFb827OyifAm7A+OIhWfUZ92FQgovECyH9fx8Gqkz32CO+JnAyf/A==
-X-Received: by 2002:a05:6871:e809:b0:29e:6bdb:e362 with SMTP id 586e51a60fabf-2e861e86388mr8793896fac.17.1748437311165;
-        Wed, 28 May 2025 06:01:51 -0700 (PDT)
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a3c0a6443asm5766681cf.4.2025.05.28.06.01.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 May 2025 06:01:51 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4774d68c670so17827391cf.0;
-        Wed, 28 May 2025 06:01:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWd/ngvJU7ORBgFZGig8fmQD8V+K9FlzCiIFf4p6nUl5XBhdv3RhLgisfnfy8nD5PfToGe03awvkW/o@vger.kernel.org, AJvYcCXHmFd9VzH/Sti9F6bliEjmWdOvgeIQVtnDmSZrlfm6CiReQt/cdw0WHoY5OWAtiErx61vQWUVOSzhyCbmO@vger.kernel.org, AJvYcCXcAltGmwP5hvB2y5IavOMge3M3Orgi9yRrGvT/mmVjlowIyFXMJd4j+v5WZdT7GWbMNznhs5Zif2RU@vger.kernel.org, AJvYcCXjSqWj6c4ravcAstUXBZn2CNPoquKiP4Yd/pFpcl2rzb/5UKXmrZ6iYMDGqGj/+9DLWGHW7GgNmPJ37l45FkJJla8=@vger.kernel.org, AJvYcCXnQBrVzL9MiiQxR0fSehtVn1NFtO8kV4TUQV/a5ssbmwMwQeCkDCHqu9NJZUpAsaudT3hQQlbcK9WUo4Y=@vger.kernel.org
-X-Received: by 2002:a05:6102:2911:b0:4df:93e0:fb7 with SMTP id
- ada2fe7eead31-4e42419b8c0mr12541235137.25.1748436893682; Wed, 28 May 2025
- 05:54:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A2F28BA8E;
+	Wed, 28 May 2025 16:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.149.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748450565; cv=fail; b=e4/vPl51kF/8AjtXGy6KhdmDYpaF2h5wRHuGr8lvtwS+M8iknavpWoDA79FfeoUPAQjdM31xaHhKie5QyHiSdA0ojUo4sooF+zB2jj60tF30O/y51/YcMvG5HjX6eDo+qtXyPRKg5lgEMvO/yIINK5rD5/m48eTLhd//zfu8a5g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748450565; c=relaxed/simple;
+	bh=Dz/oZvHwSBS4vgdeafofvgFbYhhkPSkLrNhNjJL1J4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dl0HNL2qyiGBn4J9N3h7Dcg/TbqKkqTyS8ngEDwe89w+XQ2ILSkk0C2QS9CiuPzNRFk8YWaKtrYjCS/lVGBGHy5LybTM/5LEPImIOfWcB0s5NHCSo1XP4SK95ssdFkrWtR7ZYu9j1TbDLsTt3fxMjjBqh+iuhO9vBUalbY8dGjQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=kfGWocLV; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=IYdfo65I; arc=fail smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54SDiAOs031715;
+	Wed, 28 May 2025 11:41:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=PODMain02222019; bh=u08B+em4gzK6P9FvSl
+	eq/IeRx5REGlJAmj6OjBJhsys=; b=kfGWocLV76iX64DqEWbqEOkt64mWbWldJ+
+	r8EuZh5mGmabK6gtUfv6meM1Fwor7UgqZ8Gcq2EnikyKxLePDgW5WgHfUlPr5YCi
+	DQP2IdC5YcBftBjNUc6K8cdW00XWKzR3FWHMjAnXq/qcf/VdR+67SJnyUR1BtdJa
+	AQ9cJ83s6X0oHDp32yEnEbyR7EwWhrHLjpBvHLFCaxVt6OpjtjVVtVpoGB7pfmq9
+	fC/tvQ3rTizAYP1mPrv77mqpEgT4WIbGptP+IrypkbQbDAOo9KJtrNaNkQn+aY0q
+	R3llRnj2+rEAbXj24HHx/YhgGLmxGlz2Ai0dQkn8EzZ/3t5gH7bw==
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12on2125.outbound.protection.outlook.com [40.107.237.125])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 46x3msra2b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 28 May 2025 11:41:29 -0500 (CDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yaZTHDs5t21c2Fnb6GU+D7mSjgmDKVhAuJAr1XS+fb6lY0o9EgwM73D7jOSHpdxk2MAyHvtgWGvTrTtvAqRccExwm/ReDJvl46MLqKGHsvhHBi/zeJdaHfVmQtFwPRc6I2/JhLnxFv5/guo6XTOHGH8fK2PvC/mIrxWE6suxbzkDb4RbkMBU4HEefHetSnSmpiLBki+2arAKCifDOKAYzu7lfAqciJi1v4vC0wSZ1Xkop48vNTY3PmHhjt4wcJ2qTWe6QVSVaN9c9mexjdfqxSy0IXUZ86GeGLLKzzYPC2hTFVQRb1Zl4P3DCRMK68Z7gOLyovO/gpbgZR44AJoyoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u08B+em4gzK6P9FvSleq/IeRx5REGlJAmj6OjBJhsys=;
+ b=WqLIbtEmT1N8KPX2UBD4nUzF2nEt4Dp4FgBNkHbgx0WSDu59zmR6cvJUa4iiqO3Hk4J8ZdSkB0IHaZ2Haf9yAX1q5nytGZ6fEXbvPWszQsvU8ecbJkAFg6LhdM7p3pk+BfwPUYHomjmhQBAYB3jK9ci8d2eH4x76sVFsb8y9fv2EGqkRPyVDL60YRYwu/1MGuPDDaG9dm5bmvTPmYlC+TrLabwr1WZDZKlA5XwznJlvuK2RBklgKWNpCvXays5jUeMySdj3QBGc4TytkRJc/Crgpwjs2VXwLoCCtTEow8QqK26DN6ybXwvlf5yXJJauZTCBenIBZMAJvr3OBrbEP0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 84.19.233.75) smtp.rcpttodomain=amd.com smtp.mailfrom=opensource.cirrus.com;
+ dmarc=fail (p=reject sp=reject pct=100) action=oreject
+ header.from=opensource.cirrus.com; dkim=none (message not signed); arc=none
+ (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u08B+em4gzK6P9FvSleq/IeRx5REGlJAmj6OjBJhsys=;
+ b=IYdfo65IywPdGNiU7yuA3Eye0+K2riFsoZde3T1Tu40iu5ZlvynqHwUGPO3CZmUr/KCvRbAdVd//ps0Ynz+bXCfPc8iHezyH01K1jKruKfgvcx14ojVxq0hkujxPItkaOeb4njj7jbrpvG2H6TeodlzwamiDWkN/FJdsH7nok/g=
+Received: from PH8P220CA0034.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:348::17)
+ by DM4PR19MB6025.namprd19.prod.outlook.com (2603:10b6:8:6c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.29; Wed, 28 May
+ 2025 16:41:24 +0000
+Received: from CY4PEPF0000EDD0.namprd03.prod.outlook.com
+ (2603:10b6:510:348:cafe::86) by PH8P220CA0034.outlook.office365.com
+ (2603:10b6:510:348::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.21 via Frontend Transport; Wed,
+ 28 May 2025 16:41:24 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
+ smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
+Received-SPF: Fail (protection.outlook.com: domain of opensource.cirrus.com
+ does not designate 84.19.233.75 as permitted sender)
+ receiver=protection.outlook.com; client-ip=84.19.233.75;
+ helo=edirelay1.ad.cirrus.com;
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ CY4PEPF0000EDD0.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18
+ via Frontend Transport; Wed, 28 May 2025 16:41:22 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 71C38406545;
+	Wed, 28 May 2025 16:41:21 +0000 (UTC)
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 4A81E820249;
+	Wed, 28 May 2025 16:41:21 +0000 (UTC)
+Date: Wed, 28 May 2025 17:41:20 +0100
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Andrew Jeffery <andrew@codeconstruct.com.au>,
+        Joel Stanley <joel@jms.id.au>, Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Jesper Nilsson <jesper.nilsson@axis.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Damien Le Moal <dlemoal@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-sound@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@axis.com, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 16/17] pinctrl: Constify static 'pinctrl_desc'
+Message-ID: <aDc8sEMh2UpcHzVr@opensource.cirrus.com>
+References: <20250528-pinctrl-const-desc-v1-0-76fe97899945@linaro.org>
+ <20250528-pinctrl-const-desc-v1-16-76fe97899945@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250528-pinctrl-const-desc-v1-0-76fe97899945@linaro.org> <20250528-pinctrl-const-desc-v1-14-76fe97899945@linaro.org>
-In-Reply-To: <20250528-pinctrl-const-desc-v1-14-76fe97899945@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 28 May 2025 14:54:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUGDf5n_Fg7pwiPumm95nPUXyH15geAy2ULwY3U+OtZJA@mail.gmail.com>
-X-Gm-Features: AX0GCFu5yojjEPsbiWTwjJJQ5khyE5KBTwGS5B0aqZkGtvZvOhYOGPRkjlMB-4Q
-Message-ID: <CAMuHMdUGDf5n_Fg7pwiPumm95nPUXyH15geAy2ULwY3U+OtZJA@mail.gmail.com>
-Subject: Re: [PATCH 14/17] pinctrl: renesas: Move fixed assignments to
- 'pinctrl_desc' definition
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Basavaraj Natikar <Basavaraj.Natikar@amd.com>, 
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
-	Joel Stanley <joel@jms.id.au>, Avi Fishman <avifishman70@gmail.com>, 
-	Tomer Maimon <tmaimon77@gmail.com>, Tali Perry <tali.perry1@gmail.com>, 
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>, 
-	Benjamin Fair <benjaminfair@google.com>, =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
-	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	David Rhodes <david.rhodes@cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	Charles Keepax <ckeepax@opensource.cirrus.com>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Sean Wang <sean.wang@kernel.org>, Jesper Nilsson <jesper.nilsson@axis.com>, 
-	Lars Persson <lars.persson@axis.com>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Damien Le Moal <dlemoal@kernel.org>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Michal Simek <michal.simek@amd.com>, 
-	Emil Renner Berthing <kernel@esmil.dk>, Jianlong Huang <jianlong.huang@starfivetech.com>, 
-	Hal Feng <hal.feng@starfivetech.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
-	openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, 
-	linux-renesas-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org, 
-	linux-arm-kernel@axis.com, linux-riscv@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250528-pinctrl-const-desc-v1-16-76fe97899945@linaro.org>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD0:EE_|DM4PR19MB6025:EE_
+X-MS-Office365-Filtering-Correlation-Id: 08f9df47-b677-4a4c-3ecf-08dd9e067b1d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|61400799027|36860700013|82310400026|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?VBEBjkAyTr2kN8QdSs5yBj6FRJ96ftcJDl2LthDFL3T/SWMTgRwHtbQN8eEY?=
+ =?us-ascii?Q?OLN0Bibox3b/rgwbsd9da7jE4g7qYBb+8nacteJM85/WDgW+cTLSnWLTd6Uv?=
+ =?us-ascii?Q?KMOl0gZ14B0eR/D0iiH12Vcp25jRSfuulayJW6coo/ndMs6BmuWqnuyBmeDK?=
+ =?us-ascii?Q?XnIcgp77Nx9/1fZnoZMpB4m0Nu0I+KgxXBav0fWMrsIBb5yXUWqwX0nrjIa9?=
+ =?us-ascii?Q?4jQIl4isCnCRZ/CRS+iImfZXEwQ2wh0H97i/8lnjK4bsBnCV0Zle6ACUwcPO?=
+ =?us-ascii?Q?1kIU4b0hcRNiJHoaA9NnlQc/gEJYshqDkakhKX8vwaTL/GeYjAF6HXWOfBt1?=
+ =?us-ascii?Q?+D2RMaRn/upVD2sfqzTevNuyLrsX/ZPFy9NQd54SGXEfMkJILkj5yG4VJbj2?=
+ =?us-ascii?Q?qiZVLfHvfpa+/R0QDxNzKXa/PhU4Cana0zrsAGqY9UJ7LFl1WP0ilUqFFrDo?=
+ =?us-ascii?Q?r5kg1b6X7rhbg+uKFHLED++FagdzPbdeb//JPO7jbfifIe4OeM0xtT+jqyvi?=
+ =?us-ascii?Q?6XKmeGRI+Qw+b1cq4jODBsmxSN4cEk6DRh2RlC28lvjqze+8YleGxlVyzGha?=
+ =?us-ascii?Q?7RAhHXjvaje1oC+QcyLzAt02gWZtq53wipgSz/LPixeeziTK30nSVF9tBe5K?=
+ =?us-ascii?Q?yepUe1179kfWAFGcKSsI/21i3cKqYZfLALMynD9axBYv732BHPc8b8yJCMwi?=
+ =?us-ascii?Q?JyAjmVaecSFYlDqaJMKsIPiDKj7h55aEDrEZcDT1hnCzHfwpOarrA5cphZAs?=
+ =?us-ascii?Q?XtAFrXOKs2uxWGQcZ0lYKL1yci/3feXheOAPU0MMyFtCepw7NRZWyMcHT+qw?=
+ =?us-ascii?Q?qKqF4tPNVsYBNxxbgKspg8psGTi22YqyrwafZVuggNe+Eu4Fno8P6RqAg2Uu?=
+ =?us-ascii?Q?PNim4XuU1KWYE8juLIvuYLKwgOjo77dr/y6mPLKmL/gFmzX+hvC7CXg88LYe?=
+ =?us-ascii?Q?XLhEnzx/l9dJxXaoYcSI89TgGBroQsRd9lxSEKBSc/TKXmiLozCJIpMzTOcb?=
+ =?us-ascii?Q?bwvUoGObEgtPf+uN3NsWAhEYivhSdBcNbQXcN1ruazynRRku2v4aQaKbRdZI?=
+ =?us-ascii?Q?Z1llvbNHfahNb9fr75cdHFjfjhel5ADtf3dmX3e3d2AMfMK3xLwl5GxrK0+n?=
+ =?us-ascii?Q?D1lDZp6GJT6DZwfSw6oixXuxYnCfZsWVHNWAqmpmzOOThfFImrcQijF5QSam?=
+ =?us-ascii?Q?ciwvf/paT1kBGlTrYLv/5i+2Ts0bv6lDn5hml4xe4T/SuLznBCFMMcWNzjfW?=
+ =?us-ascii?Q?d7vq65hH8i1rbJmGk/1nSMzqOS/rUJXCImh+CF62j+8L4umMfm2FOqMqo/yE?=
+ =?us-ascii?Q?qepxP0zXPJeu/UkucazQRq1fiEpQxlcaZLe3WXJ4QvI0IHXSM+HrQPM1HF+L?=
+ =?us-ascii?Q?+h+tgrbBkknjXWlUzeIDXpLf53QwNUe/TQw4lcTTZtV+MBKHuxlA/OLXQYTS?=
+ =?us-ascii?Q?NYd289wkYBlQ4a/RGBgiG8q5NrJkz8gs0vwIyoIWOU/ctfe+qm+O5woiedZc?=
+ =?us-ascii?Q?yFKY5cggqSIdpbGKguROvrCPub6dOqBSr64G?=
+X-Forefront-Antispam-Report:
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(61400799027)(36860700013)(82310400026)(376014)(7416014);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2025 16:41:22.6358
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08f9df47-b677-4a4c-3ecf-08dd9e067b1d
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD0.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR19MB6025
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI4MDE0NSBTYWx0ZWRfX/77eowpPrNJV okq6AGhdh+AeiBWGgUus89iUbeeaBfd7Mg7o+Qg5Aq+ap5mU+ABWR9xIGXXrgUETVF51XLqcO0K EBQ4ZEK0J4mPeaewxak2JSy6cuw7J/uOyD/zRuLQrElfr65RzqbAAQyw3u1wu3ni071nJfxLScB
+ EUbUVDKMobW0SZPK4hVoBDkc7HcqKEFzKLSuLpCJaiRGN5Tw4XYLeD6Ku8nxqwMBmRq2u/TLRBR WebC+iuPrSTvxiAbrYr6GXASv4/sn18IlcmbO9op+iJyx4BN320G9Jg+qd97rHk+F8ADbFjH9Qw NFPsgP23DASexd8l/WwclQNdR7loBCgz+tRZUYx7bPtcBqZ6dXVNs8dHu523n9WXOYpYH3keJLQ
+ QFl8eJF43GCDRdEAUvhvm5SeSj4ZmfcvSHlYGnhPTjXNjWXnpzhJy8uic1W0ZmMl33rpfkNp
+X-Authority-Analysis: v=2.4 cv=Qohe3Uyd c=1 sm=1 tr=0 ts=68373cb9 cx=c_pps a=azKGx87FDiaoMypZd7Lp/w==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=kj9zAlcOel0A:10
+ a=dt9VzEwgFbYA:10 a=RWc_ulEos4gA:10 a=KKAkSRfTAAAA:8 a=w1d2syhTAAAA:8 a=pp8jMgpbGpZJBU6_-_QA:9 a=CjuIK1q_8ugA:10 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: FhwEZxe0gSqpkkLY4NWltVICs7azydqM
+X-Proofpoint-ORIG-GUID: FhwEZxe0gSqpkkLY4NWltVICs7azydqM
+X-Proofpoint-Spam-Reason: safe
 
-Hi Krzysztof,
-
-On Wed, 28 May 2025 at 12:42, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Assign 'struct pinctrl_desc' .pins and .npins members in definition to
-> make clear that number of pins is fixed and have less code in the probe.
->
+On Wed, May 28, 2025 at 12:41:12PM +0200, Krzysztof Kozlowski wrote:
+> The local static 'struct pinctrl_desc' is not modified, so can be made
+> const for code safety.
+> 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+For the cs42l43:
 
-> --- a/drivers/pinctrl/renesas/pinctrl-rzn1.c
-> +++ b/drivers/pinctrl/renesas/pinctrl-rzn1.c
-> @@ -680,6 +680,8 @@ static struct pinctrl_desc rzn1_pinctrl_desc = {
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-This structure could be made const...
-
->         .pmxops = &rzn1_pmx_ops,
->         .confops = &rzn1_pinconf_ops,
->         .owner = THIS_MODULE,
-> +       .pins = rzn1_pins,
-> +       .npins = ARRAY_SIZE(rzn1_pins),
->  };
->
->  static int rzn1_pinctrl_parse_groups(struct device_node *np,
-> @@ -878,8 +880,6 @@ static int rzn1_pinctrl_probe(struct platform_device *pdev)
->
->         ipctl->dev = &pdev->dev;
->         rzn1_pinctrl_desc.name = dev_name(&pdev->dev);
-
-... if you would replace this assignment by a hardcoded name
-like "pinctrl-rzn1".
-
-> -       rzn1_pinctrl_desc.pins = rzn1_pins;
-> -       rzn1_pinctrl_desc.npins = ARRAY_SIZE(rzn1_pins);
->
->         ret = rzn1_pinctrl_probe_dt(pdev, ipctl);
->         if (ret) {
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Charles
 
