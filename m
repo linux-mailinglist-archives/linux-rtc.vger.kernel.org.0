@@ -1,138 +1,120 @@
-Return-Path: <linux-rtc+bounces-4215-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4216-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56DDFACBC48
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 22:27:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C59EAACBCA6
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 23:19:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F3FF1892A09
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 20:28:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8132B3A1337
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 21:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CBAE221FD0;
-	Mon,  2 Jun 2025 20:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D9281749;
+	Mon,  2 Jun 2025 21:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="w0Jxn9HD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QX/uzXWE"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B843F1BEF8C
-	for <linux-rtc@vger.kernel.org>; Mon,  2 Jun 2025 20:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6572C3251;
+	Mon,  2 Jun 2025 21:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748896065; cv=none; b=uMLcPytohJYfDJ1/xluuZoRkLiX9ZO7wrEDcAIkx+yL1RCnseLZc7cIyaZJ8DfzOPXFJ3sX4sLEoajiBDtTYqK0lCwlo1RhwZkt1+wcjYrYmpU5Lu4WCaVW9AS2cESUP2tEKy5I0U/gQmZ9XV+iGP4kaJYjYE1/C9qaZWNWw4u0=
+	t=1748899169; cv=none; b=d9MVqW9Ggsr0HAosaZ9aW7BSEVC5F2v/YfZD7PXGRSYzVWrp+4dHC4iCEBBQRNQK9nXhXuTgXc2Wk4i28v/YemkDAfafSzbpkKEv0G4jP1NAlULhG8Sm7eRLADTRwM1E1f4LBBsabtR6nC83bipWPUALAA9ykVCeQm07JmquMGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748896065; c=relaxed/simple;
-	bh=n+jCYVhQRi5LIQhJcRoGurAAZtIH5inbBx+yn9CpDw8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fJk1keVwwmsf9zCqtciIyIG8OIdlX6Eg0oajWKKQ9QHWp3zlLn44Esj59vqsBQy/Yb7AGLWnBGtZQhkAHAAn6Vxifs/zxFpvnz5Qkh6w0uV/iPOBIMYQB2Yvk+Cvtk4JLFJ58CudzyU8Mv4EjQAP+5EFDfYBvR5aZzhU0YjCXOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=w0Jxn9HD; arc=none smtp.client-ip=193.222.135.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 34503 invoked from network); 2 Jun 2025 22:20:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
-          t=1748895659; bh=ym2M7zvD/JGRuJYqVWmOqTfwrMcLMYmxiC+N/CwqG2I=;
-          h=From:To:Cc:Subject;
-          b=w0Jxn9HDQdfXD8Bz4Fc6o/IowBYPV8f0Orvcb1H7EYtQ53nn/r59FzwnTej9Ndzw7
-           iLlAyIJxL/fxZYc/eEosRE+7hkzjZqWf0YrdCCBkzM60OxgmoE5s0JqQBbyRP34Uw5
-           q9Gbz8L5Q7IcYFJ544Wy4vuaLk3cuW52EBdwcatAOJZ5BvP+5GDOM1WIAQp22oQqj2
-           LRfOsk+QaHdEmaYN+275fMusoGtw/d0WbHZzT18nZDhy0D0zYBYNQbcfn0pZqZS/UP
-           mmkII6xHvuyKA36pU1iSflLlbGP4NLMz2oY3PZI6qeOWWsv8kJxs1GL/lagtBcxARH
-           4BVbCl5Ka3Kkw==
-Received: from apn-31-0-2-65.dynamic.gprs.plus.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[31.0.2.65])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <chris.bainbridge@gmail.com>; 2 Jun 2025 22:20:59 +0200
-From: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To: Chris Bainbridge <chris.bainbridge@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	linux-rtc@vger.kernel.org,
+	s=arc-20240116; t=1748899169; c=relaxed/simple;
+	bh=fA7kkOGHTvsZ6p5lbH9wX+TNESc5QgAkSJcorlZrVM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FvlLoZ0jZUsIyl5e3FULcNdoEOWy4Wv9wMQ+t+w9pv6ceos1HQYfo2EBXcH7z/NYTwpRZmdk/LoFpuOyCjRHLmxgUp0VgxNyY6Y0cpqDUMdHxFUNzVKOkzdKIi9mHuoMojLLBqBsCrto5HIyTb+9pQOgvDH3nlshi8uVclXV+TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QX/uzXWE; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-451d7b50815so14051265e9.2;
+        Mon, 02 Jun 2025 14:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748899165; x=1749503965; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Jkp8Zo9nGduEKF5bIjgb1RX1iaMvxoQSzr2bwuYc8UQ=;
+        b=QX/uzXWEiZL152rCkU85ZrAhZ7lf9GwqRoNrhlXMuLp18tYXhel4CzsRTGjwTX7qEH
+         UJmmTkJ+kYZbo/hZhcoOg9QWeAaiEmwH1sFvjnos+J19FwIx4WEYn7e53GZdMfRt9vyh
+         T2KDQUqBVJJmtb0g41YBul/LvKXn7/qpzTmN+W7BlL7hsui9kYvP8iG608+aYEhxcezT
+         7pjUxOzunfis+pzaogF5EOUWRr88hYSWsXg3c3oRuLU6OpGuLKVFsMdiSIVXBqDx46m2
+         sB7IyJsK8Z3WB3Gm7vT4HaHhtPYvOwi20Ici8/o0QKKC5fh8CuK+9fJM/qy+V+luqil9
+         gYAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748899165; x=1749503965;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jkp8Zo9nGduEKF5bIjgb1RX1iaMvxoQSzr2bwuYc8UQ=;
+        b=Ef8ME42nfsjcUXyx9s2YyvAhjWpOZ9pJyU2eY68kyOxzZKdeA8/GTrrVG0Dx0l9lQX
+         XfOqzTiOU5e68FAmrCcSe+bWusx4DtQVS8d7UdEn8Swpz3gbCTMh7+yLOLTuc3pcA5XV
+         1VHZqreIdlSPxmTnkgPgsGjmy0x749GFM/FTal/vvRI6FkLCDlKN7ZL/y/MPciLwMUYc
+         SbL3wgdKbyuK0aAiOk813CUnxaB7ygWgg0EckRvQ3nM/MXd8MmbqZcyhTt0FK+HeTqa8
+         1TtGi1tzmjXCltC3rwZxvjuEYa7icpOY2FKqEwyCaHTUicUeGuM8PZMuv9wGwD8ztAoh
+         Ab+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUlnymfLv6EEJDpWcHuEs3Qet/rCtAZkbIrR3ITsFjLHjr6XIF+QkxKxnfroE74HIazrCQUGF7cQ6eY@vger.kernel.org, AJvYcCUukhUflmuQkcsw31XYbt15Md0/QDQ2Dl/pz763gqw0idlpGCkHsl53Y8WfY+j7x3Znio5BJ+wndm2BTX0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJyFQV0re9ydPNN/gTGbi8IFnrxSvpIegsXiPgjn5x6LOH0PX9
+	JIwYkz9bhfc19WcljeuiFYw9g2KTAJcZzAHdpmhXZPSDHnJKiRDv/0iUwzbDfoRL9FU=
+X-Gm-Gg: ASbGnctvWSSrefTCXFWaOV5TBa8figqo64WT7Rc55jSrsT/ffEEMA8yrZdTTvMfNDZl
+	I4bPLANWyY9XI7atNLw9U98ETNJRsydjnHnsXYNNTPu6ux/YvKUfBj8622alysoqCx4t5onhHVd
+	urxjkEWZnBxPn5vSNzHT49Za14UAZ/xmyUy080pPf69fjoZeOLOQJbr0tjmJVP8esYcM3gjPZXj
+	viaFLUMf29OS6AK8Tu6rvVX86UQW37QnBkMtASfUOv+Un/xC/DWF4P224SSvH+Qwbsr9ktBltre
+	4PS9RJ6QZ7GziwF0H5gipu7JM5LT2tJ6GCUOhrHPtpilhfpov8bj1VZEh7KYqbydnZZuqMo=
+X-Google-Smtp-Source: AGHT+IGIJAoFS2NiL1tf4NFBAQyjhFxYI/D+mNHMut91QdUhNHMvaxDM+oCYR+cy8Rl7Vchth6p6IA==
+X-Received: by 2002:a05:600c:45d0:b0:43d:26e3:f2f6 with SMTP id 5b1f17b1804b1-450d882b456mr106362175e9.5.1748899165290;
+        Mon, 02 Jun 2025 14:19:25 -0700 (PDT)
+Received: from debian.local ([81.78.104.57])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450d7f9efa3sm134425025e9.9.2025.06.02.14.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jun 2025 14:19:24 -0700 (PDT)
+Date: Mon, 2 Jun 2025 22:19:22 +0100
+From: Chris Bainbridge <chris.bainbridge@gmail.com>
+To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>, linux-rtc@vger.kernel.org,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	lkml <linux-kernel@vger.kernel.org>,
 	Anna-Maria Behnsen <anna-maria@linutronix.de>,
 	Frederic Weisbecker <frederic@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	=?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: [DRAFT PATCH] rtc-cmos: use spin_lock_irqsave in cmos_interrupt
-Date: Mon,  2 Jun 2025 22:20:19 +0200
-Message-Id: <20250602202019.625331-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <74bcd576-d410-45b2-aaf0-05aedf96b8be@o2.pl>
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [DRAFT PATCH] rtc-cmos: use spin_lock_irqsave in cmos_interrupt
+Message-ID: <aD4VWov2L1pJfxUY@debian.local>
 References: <74bcd576-d410-45b2-aaf0-05aedf96b8be@o2.pl>
+ <20250602202019.625331-1-mat.jonczyk@o2.pl>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-WP-DKIM-Status: good (id: o2.pl)                                                      
-X-WP-MailID: c6440f7c3ffbb3307021f0e989c11d45
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [UdOR]                               
+In-Reply-To: <20250602202019.625331-1-mat.jonczyk@o2.pl>
 
-cmos_interrupt() can also be called also in non-interrupt contexts, such
-as in ACPI handlers via rtc_handler(). Therefore, usage of
-spin_lock(&rtc_lock) is insecure. Use spin_lock_irqsave() / etc.
-instead.
+On Mon, Jun 02, 2025 at 10:20:19PM +0200, Mateusz Jończyk wrote:
+> cmos_interrupt() can also be called also in non-interrupt contexts, such
+> as in ACPI handlers via rtc_handler(). Therefore, usage of
+> spin_lock(&rtc_lock) is insecure. Use spin_lock_irqsave() / etc.
+> instead.
+> 
+> Remove the local_irq_disable() hacks in cmos_check_wkalrm() and add a
+> comment so that these _irqsave / _irqrestore will not be disabled again,
+> as in
+> 
+> commit 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
+> 
+> Untested yet.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Fixes: 13be2efc390a ("rtc: cmos: Disable irq around direct invocation of cmos_interrupt()")
 
-Remove the local_irq_disable() hacks in cmos_check_wkalrm() and add a
-comment so that these _irqsave / _irqrestore will not be disabled again,
-as in
-
-commit 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
-
-Untested yet.
-
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Fixes: 13be2efc390a ("rtc: cmos: Disable irq around direct invocation of cmos_interrupt()")
----
- drivers/rtc/rtc-cmos.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 8172869bd3d7..399bb82e6153 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -692,8 +692,12 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- {
- 	u8		irqstat;
- 	u8		rtc_control;
-+	unsigned long	flags;
- 
--	spin_lock(&rtc_lock);
-+	/* We cannot use spin_lock() here, as cmos_interrupt() is also called
-+	 * in non-irq context.
-+	 */
-+	spin_lock_irqsave(&rtc_lock, flags);
- 
- 	/* When the HPET interrupt handler calls us, the interrupt
- 	 * status is passed as arg1 instead of the irq number.  But
-@@ -727,7 +731,7 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- 			hpet_mask_rtc_irq_bit(RTC_AIE);
- 		CMOS_READ(RTC_INTR_FLAGS);
- 	}
--	spin_unlock(&rtc_lock);
-+	spin_unlock_irqrestore(&rtc_lock, flags);
- 
- 	if (is_intr(irqstat)) {
- 		rtc_update_irq(p, 1, irqstat);
-@@ -1295,9 +1299,7 @@ static void cmos_check_wkalrm(struct device *dev)
- 	 * ACK the rtc irq here
- 	 */
- 	if (t_now >= cmos->alarm_expires && cmos_use_acpi_alarm()) {
--		local_irq_disable();
- 		cmos_interrupt(0, (void *)cmos->rtc);
--		local_irq_enable();
- 		return;
- 	}
- 
--- 
-2.25.1
-
+I tested this, and can confirm it does fix the "inconsistent lock state"
+error in my test case.
 
