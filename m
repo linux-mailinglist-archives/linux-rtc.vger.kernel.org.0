@@ -1,189 +1,214 @@
-Return-Path: <linux-rtc+bounces-4213-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4214-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C30F1ACB3D2
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 16:45:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B10ACBC0F
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 21:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D61AB188D447
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 14:35:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D5933A35D7
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Jun 2025 19:59:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE6622F762;
-	Mon,  2 Jun 2025 14:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB591ACEC7;
+	Mon,  2 Jun 2025 19:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="hHhuzuTN"
+	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="gb16/+RV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2062.outbound.protection.outlook.com [40.107.22.62])
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE8522F751;
-	Mon,  2 Jun 2025 14:28:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748874539; cv=fail; b=Kmc8q7BP4MydQ0lfaFn/dMa9TYPDSZOgqgkweEknSHsg+TRpneZ/r9ysPdShtMBCdhuep5RsM+S+vYQPRDOocTWmebrM2P++XI28Z2TrilddeZELajj1uiNKzAsgDI63KMpmtkD8cFiZWncZ2SvJRz62c1JFRsS0CYedFpMrEwg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748874539; c=relaxed/simple;
-	bh=O9tcRvqxp1bui85AOgcWtSgNn6AgzVq2Wx6f4JQ/mIA=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=VfMgtiFFHXcBQIkZmLu1FxAJ4Q6F59nwDNnYBpZDs1CDWp7HnbRhjLnRcE1+BIDjpNbbfvpQtlixCCdz83CCEEZ7WCB0r5yoYJ1Qybl2GR6yLmMHnVU+jXdXLlJ4UHAq5e1AzX0Q5Hi8949W3NOcrQMocu1aajTgFsRW08j0RQY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=hHhuzuTN; arc=fail smtp.client-ip=40.107.22.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qx2Vlzqi1YZL/eaGL81vB2w+MVUuOEb2zzYZwciktEbYVH9bcQPD4ZPtacKlojQSEJ0V1Pfboc3bzyq3oF9Y6EFSnJ71OFyRBUmvsvoBpa60RpX+pKgamIoWNpuS8xv3Gq1x1kXCMg/FZxCpt7l4hWcWSV9aH+qP61sUhPF2NXI05RgaYsz5q6UYHgDkfhJ++ioIrFBF6Klue7f3L9cMH+Kl9ZzOs7d+PGPabSfkdAcLe4xZeX6lk9dbaPd+75UWSbeIElz0M21fKu2g+j7+Q36il1tKwySTGHN2Zsi0VlNX1jCdESd6PE/ErcOengfOn+U3yPkKuXKOQJ8wNXQTvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3cWrZyKXkOWGCqkEjiN2GOqhgJTFuyDIRcqM25x/hRQ=;
- b=Q2KkTiOwR3St+Klw+cJpPGHvyD9JjVEe6TbmjPuo9b9fs8gWR2vhGNikSLruceE+Qdc3/Exsi2l2Hq7zvDrCJPb9QJMSQ9ji2dIgUmcq/kVGxlDHI6oLqmO/mAeFpiVH4rV+ySr3QpXQ1KgNgzpvyVfJuNpflock/JGAP2KLy8IHibxirsq3sAznHPG0FvOxjSB15yFBl46kX9LIw0cV3U2tyuxn9kUMc5vDoS4V35WOWf8wA2+eadSPmg2HgfM2CYewmAVWeuNlW8hpLJPqACrYLELAhB+1c9QJsYsefG5JnRROrTUrRHVuTBYqLInbewvEl1OxEYMsa0a2lVoqYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3cWrZyKXkOWGCqkEjiN2GOqhgJTFuyDIRcqM25x/hRQ=;
- b=hHhuzuTNJ8lTvSgQX5qAOdCOxs82HnMfPl4ZmfyRymCUKMNvBoPSO7SQ+nUpYQRpey3rYTgas+nV8iJnJTXC8Wide3vtKhow1mTbw2F4GstHTnDJLP5tyOZffiTvmwTkAGdCtko64ZCb/jClb91iOdVu2LIYS12xJvWaAZGMYfFJNf8Kyhh76UhPj7r6HGMTz2Wp+vIhefF/9+RF4+/kWSafiLBYzgoiw2BnPb0+xZ3SN4o2s2d86qGoqER2D25Wh7V+5ttpiuiM3G7oLnJ9ntHClTEF0OvuphONmwr86jglfKItXix30YUvCTXQ5LjQpGaqXk4dyyPgHtN+bbPYkg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by GVXPR04MB10133.eurprd04.prod.outlook.com (2603:10a6:150:1b2::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.32; Mon, 2 Jun
- 2025 14:28:54 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%6]) with mapi id 15.20.8769.025; Mon, 2 Jun 2025
- 14:28:54 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH 1/1] dt-bindings: rtc: nxp,lpc1788-rtc: add compatible string nxp,lpc1850-rtc
-Date: Mon,  2 Jun 2025 10:28:41 -0400
-Message-Id: <20250602142842.942700-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR01CA0010.prod.exchangelabs.com (2603:10b6:a02:80::23)
- To PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9928801
+	for <linux-rtc@vger.kernel.org>; Mon,  2 Jun 2025 19:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748894384; cv=none; b=Bqjj+l3I6l/Qe0JpEgWu/h/hog/3jNubmkkNtz1rmpmdoWy3CwceUqLIpw9+sOGBTWx3TBkLU6n/il8SxO3TKy1/BrGwfgoeE+ciFn6gSE8yIPhygh5RPokq4mJ3+n2QNKa8kZ2QgwVwqZn5qvGTU6YoY6rAhc9hmDx3ONmZ3Wk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748894384; c=relaxed/simple;
+	bh=Fcz640mvj6gMj4rgzvp8j8IpfhgQmNorFpXb1SzXLfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RbLsaw7ky18ySrWdbNZPrX6gAOYIrsWbKBAthQgEs89Z8n0QPyvFRFxA29hx7nw+c+Z8CpOtTdvdRmCcV125tzgYbIBhlf8ZuWaV2EcRTMzQeFr3xnMwiV8DE9bNaYSyFRmlnBERYV/a4GCnODwJ+ayO2myRxVW2v17vv66nju0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=gb16/+RV; arc=none smtp.client-ip=193.222.135.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
+Received: (wp-smtpd smtp.tlen.pl 36768 invoked from network); 2 Jun 2025 21:52:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
+          t=1748893979; bh=Fcz640mvj6gMj4rgzvp8j8IpfhgQmNorFpXb1SzXLfA=;
+          h=Subject:To:Cc:From;
+          b=gb16/+RVJhXAXJ6L8/jw2ToDupfDyI1vzS8EcHXxES4Eduo0bwTrJnpktOv+h6EIj
+           7srUIS5GlVP7gpQZPKfkMLheH1w3IAaNhpUYJ/VHOwUSCcyOM6iKuY20NNBdApwg8v
+           C3d2SP++WWFfFpRbElqloFgHO2mB8EPY4ZGV1aFiJCpvumRPiCLrskvcRQFUmyeJM4
+           g+5ctJd4yGCnTzaIGRBNmpdEIF5zC1uckmKTDHYFdSbEnPpBY0tZ/FeL9amP5rsVld
+           I+rKBNqAHRq8Ps0IpqhxcRpXWZIgR9CHYE9jq2gLWRp5gRp+ctFWmOTiI4s704RPFI
+           fbfeu8zHOSDqw==
+Received: from apn-31-0-2-65.dynamic.gprs.plus.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[31.0.2.65])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <chris.bainbridge@gmail.com>; 2 Jun 2025 21:52:59 +0200
+Message-ID: <74bcd576-d410-45b2-aaf0-05aedf96b8be@o2.pl>
+Date: Mon, 2 Jun 2025 21:52:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|GVXPR04MB10133:EE_
-X-MS-Office365-Filtering-Correlation-Id: d7042a02-2396-4f56-8b2d-08dda1e1cd67
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?P4qnMOC6K6dZM6Y1ceLSIqlJIsITV3Z1Hfo+FTFwzqH0Xb2K0GZ3ay7FiRmQ?=
- =?us-ascii?Q?dQjm3d1Kn9m3f95tVNEsmvItF26NOx0HbWe9u+9NI0iPb8TDvJjEaV6GYXNJ?=
- =?us-ascii?Q?vlAQGIO47a5cFJbfo8NBc6A2N412Is3fpsmMjZrSwiketVOmys+2gQ7NAa8U?=
- =?us-ascii?Q?qpTwjsCkXPTa59c+I2jSTmkYAzyyV13TK8rr3hoFAqCYStV/st0jFjdzrxKQ?=
- =?us-ascii?Q?icziiLO+/wJkhHhUsznDLKoVqekWiocr5xWuFnhZLGy+zSgOgWMoqFaou2x9?=
- =?us-ascii?Q?IRaJiQ6w41uCPiwxFMz1kdGbqxtBFoeMnqF7kzj+HH5lPmUenXYk6lKxie4B?=
- =?us-ascii?Q?IaX2pbHBr9AYhpsRkCbmLDOhgtxI9dzdmRaRjVznaLSPtaj5WEcxXK8D5bod?=
- =?us-ascii?Q?pbJbSud7BJ9xUQospizZtsludSc/j/KUdwcR5lAzBYBXQdyPHhWTyljCY63A?=
- =?us-ascii?Q?0f8FHI0CpUXPCfBFm7dnf1yzfZSrwi3ExLFqvcNAg4mvWS2gQ9E0zuWO4Mb/?=
- =?us-ascii?Q?wAZAGAMS2N2sFnYkMFtnlLg9//n9afAQeZhyrtqbxpZCZDg+p/xe7Zm1kUEF?=
- =?us-ascii?Q?a8j8QavPj6sk0hSAU4CRerANHAWAgZ+UqtecOrquoHl/k2lCO+mtRE8j+Bxd?=
- =?us-ascii?Q?iYUcUApPG7sq3cVeJUsyJ6pPOCoJoppV08ZFci4OqnGEIqNKYeXs0ZNjrlEW?=
- =?us-ascii?Q?hO/iJdyI1b5oFfYyycBmo9ZgY9EhKWl/ZKbePn6zK4HslkjqFf777ATFvfUO?=
- =?us-ascii?Q?LkeI9AFjIvgecmFoZ746+te1D6gTSEADqnvlGshcfl9E+przDci7sxDgk6BQ?=
- =?us-ascii?Q?5zL7EP/qr1X09t+xLa1+OcfWV9aecqrkqlt0yH0uPt5WR81q+Q4zjg9XJ0pG?=
- =?us-ascii?Q?0t2ZItqSq3uDJBiXqYBPVPKzfGdWy8CJ9CPVm/7eMK7cHd2WiAHIbCvVcDEy?=
- =?us-ascii?Q?XlZydc8HmgBXkuByZ9TMnvoMW6Ku0c5ryFbmRHB4xp9k7HoA35m8mXTnK7yV?=
- =?us-ascii?Q?+ke0o0OmO6Qqx9fT3r+WSLGmSo9gWnl1DMDS1a/ewubSXqaMUIO6ufHhVk1I?=
- =?us-ascii?Q?iCLyf+unUDA3omyLfkMW9xbEBOnjCtWAfwZx9BpmMdT1WJ06ZeKRZgK4Sbgg?=
- =?us-ascii?Q?QS5YoWBQV2bZt8Ke+XRYnfSdQhaq86km8KRJvNEVRe72kSWPQSFNnBo1iLFy?=
- =?us-ascii?Q?9YGLGH2VcCIjYQULpBP/0ZqU1QeQe8cGBeJWJ+GLAgJfxBiJsDSaS+Lgfx0Y?=
- =?us-ascii?Q?bjtqs+PnnxAnUGJSf6FmTXCz4grD5x0/0nJTctD2HWKzmPa8wVrf7/KSnc9j?=
- =?us-ascii?Q?3b26GbkB7bxwac4kDNWk5iHEvdxeADogniDbBGbCrd9255o1dsoIV/teEOXY?=
- =?us-ascii?Q?7qaEAQ19H6kHmEyn8sAoCu2FRq/MTAIqDRIJYj1aH2lqdgpxjC8hdcIG0pW2?=
- =?us-ascii?Q?XwcW5AWauFO3Fk3tuffNYl3CtTuMysBRm8ZS1ZfB4bNTjaIbhmZm0g=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?OWl4axWqLEZ8iMQ6pYZ2ZCSZbCeMd8Th5SJFaoyzSv82nWopX9N/GW3hTNae?=
- =?us-ascii?Q?hWswBMWq0ZzdxLNYzuAZRLuBqjKZVcpiyJpW93IDMSbabz5FPHVk2RcNjjoK?=
- =?us-ascii?Q?xf5+v66nkFggAkNNx5uFqDHhfZ79HX6A+1aA1aEztr/skq6U126rvAwAUvC+?=
- =?us-ascii?Q?XCz0ntww4D0+PNdaFoV1guw5L6zSH9tIlboT6xPIRHHJhz5C0bfYzMnmIxop?=
- =?us-ascii?Q?9rOw69wYyS6691HLU6DefvVQLdNsZj/M61Jtm6+b9kptQP4x+oJPcc0k+uo1?=
- =?us-ascii?Q?XJ0JkIDYCSeiJX9gXaS+vhx6YHfm0hMRY8jn3b2ErZTmu4sGHNFniWDdpPjl?=
- =?us-ascii?Q?C+0XgM8mFvmD9yX1oETYkDCRcBeXnBY/Nd4rIc522y4puAact9fs8M67b/gT?=
- =?us-ascii?Q?TzVJ3CiCLJH5f8CoGUyvAtDFbfe7/PmRzpc60mefivNdokzoUEwZZpe2VrjS?=
- =?us-ascii?Q?w1pd3Iv+Aonl6FvX3eRlHFujXwUChavzdFH8luY3OkS+SmbV6TV1l7ySl7CJ?=
- =?us-ascii?Q?5JJ6OETXZXtj7hP0iDVM7VgXV7eu/+s9YheEgtFfXfDeZ5gmzvZ0aU6Z74lj?=
- =?us-ascii?Q?egNup9rXYNvAmhLJ+wNuysQsh9Jyu+gwaYQuSlHUIAjgaYGcyVyuhOsbylkW?=
- =?us-ascii?Q?lNcPLNj8sV5Fkr3y/ReBX9IPjASXOxo+fzBGBT+6neYNIoy5p++iEuoeg6ij?=
- =?us-ascii?Q?DQ+WUQNyuO1VybdFlKN3jPvlXLUyhNoE2PEp44oX/6Io4S2AuVS5y8m/L5rX?=
- =?us-ascii?Q?GLvlXoix2thoeW+9Ounrx8YnyQgnKs/WFVCkXPq0435C9CzLkP04vzKLiwu0?=
- =?us-ascii?Q?3ZY7qAl8glq2QRa6SNJZKGCDfnTUc8U+zP0ihD63bEe9PLSbsHJilthM3IdJ?=
- =?us-ascii?Q?dmXZY52TzaWTUKmbrZsDc3XJOzoc846xGqfMpilPPH14lYxNMTKIuB8UkG/c?=
- =?us-ascii?Q?19WJ2/Hf4g1kuTwokx7R/uPGvesHVTYLxTcqbKNaO1Ez8atLVqzKnHDFJDEi?=
- =?us-ascii?Q?cB3lVGViQ+/CAgEyAbPeic7tAgWl+kLEQkjdszY/p7prC1nlac4QrS2W1MZn?=
- =?us-ascii?Q?PadyCKnF1MnAG4h/TDFak9020yy9KBlZQ0UQ8q56jCT3+tzoydeHjvUruP36?=
- =?us-ascii?Q?i9FbsHPfmdaSEbMbNmBK3Et6ocgba8xmmuDEo6I79XAK36R9NeilQuWxMLqh?=
- =?us-ascii?Q?mip6odvZHH6Twkd6xWjQqOdlj4fUmYaZc/j+mhbhmznIpLc7rdCQ1na0ecwH?=
- =?us-ascii?Q?1bJBvWANelBIeU762zhl9CGp0fMjLGhy86KFoARWIjS8JSripZLE+EM7ssxw?=
- =?us-ascii?Q?hY1np7K37Bkde3myAtLhqt/loLtWPL62RSaA7Brfj8c09X6F4rihgo4x5pHp?=
- =?us-ascii?Q?mDiVSMI3Um9BtwjUW6PAdCBblpm+oEAeBxRI3aPB4UIxDzhSiNKdXwbl/8A5?=
- =?us-ascii?Q?/qdhPzFpvcXgdyvnDXLTUF8gDlg8Oh+saeS3GDsi3c/o4z5iQxcjLy5CEdOw?=
- =?us-ascii?Q?5qxFQ9fQCquQU514L6iDj3WfdflH0E3b3FNDZF9yawfBRNjyu/7QYGsydRN/?=
- =?us-ascii?Q?DWueDj6uXLCf5U4BDhw7KOV53Gk6P7rd7UcowULE?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7042a02-2396-4f56-8b2d-08dda1e1cd67
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2025 14:28:54.5975
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HTTlFFuyYIP1WS5+rECMVR+4C4V1VTegfa+5xJaz3LBktB7smDNqI5+UMx75YeWKphwFDdg2jUVKN65AbwqDqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10133
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] timekeeping: Add a lockdep override in tick_freeze().
+To: Chris Bainbridge <chris.bainbridge@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+ linux-rtc@vger.kernel.org, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, lkml <linux-kernel@vger.kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>
+References: <20250330113202.GAZ-krsjAnurOlTcp-@fat_crate.local>
+ <87sempv17b.ffs@tglx> <20250403135031.giGKVTEO@linutronix.de>
+ <20250403193659.hhUTgJLH@linutronix.de> <87r029uh3j.ffs@tglx>
+ <20250404133429.pnAzf-eF@linutronix.de> <aDtJ92foPUYmGheF@debian.local>
+ <aDtVhPJD43DKNG3A@debian.local>
+Content-Language: en-GB, pl
+From: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Autocrypt: addr=mat.jonczyk@o2.pl; keydata=
+ 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
+ TANkZ3QqXNX2
+In-Reply-To: <aDtVhPJD43DKNG3A@debian.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 5ea12a9f76c8c90aa018d69cfb6df30c
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [seNB]                               
 
-Add compatible string nxp,lpc1850-rtc and fallback to nxp,lpc1788-rtc.
+W dniu 31.05.2025 o 21:16, Chris Bainbridge pisze:
+> On Sat, May 31, 2025 at 07:27:03PM +0100, Chris Bainbridge wrote:
+>> Hi,
+>>
+>> I'm getting "WARNING: inconsistent lock state" on resume with this
+>> commit (92e250c624ea37fde64bfd624fd2556f0d846f18):
+>>
+> Further testing shows there are some required conditions for this
+> warning to be shown. The suspend must be of a short enough duration that
+> it does "not reach hardware sleep state" (according to amd_s2idle.py).
+>
+> Also the warning is only shown once, I don't know if this is because the
+> conditions for the warning only occur once, or if there is log limit
+> somewhere that prevents it from being logged more than once.
+>
+> I can reliably reproduce the warning by running amd_s2idle.py and
+> waiting for the automatic resume:
+>
+> # ./amd_s2idle.py --log log --duration 5 --wait 4 --count 1
+> Debugging script for s2idle on AMD systems
+> 💻 HP HP Pavilion Aero Laptop 13-be0xxx (103C_5335KV HP Pavilion) running BIOS 15.17 (F.17) released 12/18/2024 and EC 79.31
+> 🐧 Debian GNU/Linux trixie/sid
+> 🐧 Kernel 6.15.0-rc1-00002-g92e250c624ea
+> 🔋 Battery BAT0 (313-27-3C-A PC03043XL) is operating at 100.00% of design
+> Checking prerequisites for s2idle
+> ✅ Logs are provided via systemd
+> ✅ AMD Ryzen 7 5800U with Radeon Graphics (family 19 model 50)
+> ✅ SMT enabled
+> ✅ LPS0 _DSM enabled
+> ✅ ACPI FADT supports Low-power S0 idle
+> ✅ HSMP driver `amd_hsmp` not detected (blocked: False)
+> ✅ PMC driver `amd_pmc` loaded (Program 0 Firmware 64.73.0)
+> ✅ GPU driver `amdgpu` bound to 0000:03:00.0
+> ✅ System is configured for s2idle
+> ✅ NVME Intel Corporation SSD 670p Series [Keystone Harbor] is configured for s2idle in BIOS
+> ✅ GPIO driver `pinctrl_amd` available
+> 🚦 Device firmware checks unavailable without fwupd gobject introspection
+> Started at 2025-05-31 19:46:33.911590 (cycle finish expected @ 2025-05-31 19:46:42.911616)
+> Results from last s2idle cycle
+> ○ Suspend count: 1
+> ○ Hardware sleep cycle count: 1
+> ○ Wakeup triggered from IRQ 9: ACPI SCI
+> ○ Woke up from IRQ 9: ACPI SCI
+> ○ gpe03 increased from 140 to 148
+> ✅ Userspace suspended for 0:00:08.256333
+> ❌ Did not reach hardware sleep state
+>
+> If the duration arg is 6 or higher, then amd_s2idle.py reports that the
+> hardware sleep state was entered, and the "inconsistent lock state"
+> warning does not appear. If the duration is too low (e.g. 1 second),
+> then the laptop does not wake up automatically, and upon pressing a
+> keyboard key, the amdgpu driver will report an error resuming the GPU,
+> and the GPU will not be working. (I don't think the amdgpu problem is
+> related to the lock state warning, I'm just mentioning it for
+> completeness). It is the state between these two cases, where the laptop
+> does suspend and resume correctly, but the suspend is too short to enter
+> a hardware sleep state, where the problem occurs.
 
-Fix below CHECK_DTB warning:
-  arch/arm/boot/dts/nxp/lpc/lpc4337-ciaa.dtb: rtc@40046000 (nxp,lpc1850-rtc): compatible: ['nxp,lpc1850-rtc', 'nxp,lpc1788-rtc'] is too long
+Hello,
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- Documentation/devicetree/bindings/rtc/nxp,lpc1788-rtc.yaml | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Thank you for this bug report.
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,lpc1788-rtc.yaml b/Documentation/devicetree/bindings/rtc/nxp,lpc1788-rtc.yaml
-index e88b847a1cc51..e896ba59302a4 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,lpc1788-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,lpc1788-rtc.yaml
-@@ -18,7 +18,12 @@ allOf:
- 
- properties:
-   compatible:
--    const: nxp,lpc1788-rtc
-+    oneOf:
-+      - items:
-+          - enum:
-+              - nxp,lpc1850-rtc
-+          - const: nxp,lpc1788-rtc
-+      - const: nxp,lpc1788-rtc
- 
-   reg:
-     maxItems: 1
--- 
-2.34.1
+amd_s2idle apparently uses an RTC alarm to wake the system up
+(which on newer systems is handled by ACPI SCI instead).
+When the delay before the alarm is very low (like 1 second),
+the alarm fires before the system is fully
+suspended and the system does not wake thereafter - you have
+to wake it up manually. The ACPI SPI interrupt is queued, however,
+and fires just thereafter.
+
+It appears, however, that both the RTC interrupt and ACPI SPI
+interrupts fired (one after the other or at the same time).
+
+I have noticed that cmos_interrupt() in drivers/rtc/rtc-cmos.c
+uses spin_lock(), not spin_lock_irqsave() etc., even though it
+can be called from a non-interrupt context - indirectly by
+cmos_resume() during system resume and also by rtc_handler().
+
+This can lead to a deadlock and is likely while lockdep is
+complaining - see "Single-lock state rules:" in
+Documentation/locking/lockdep-design.rst .
+
+It is possible that
+commit 92e250c624ea ("timekeeping: Add a lockdep override in tick_freeze()")
+is masking the current problem because only the first issue is shown.
+
+I'll send you a debug patch shortly.
+
+Greetings,
+Mateusz
 
 
