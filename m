@@ -1,154 +1,204 @@
-Return-Path: <linux-rtc+bounces-4231-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4232-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7282ACEB2C
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Jun 2025 09:50:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34606ACECBF
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Jun 2025 11:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BCE1189657C
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Jun 2025 07:50:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4EF53AB411
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Jun 2025 09:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8D91C6FF5;
-	Thu,  5 Jun 2025 07:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B35C2063FD;
+	Thu,  5 Jun 2025 09:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0TT3FFQ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eSn7E3NM"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551191ACEDC;
-	Thu,  5 Jun 2025 07:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D86566A;
+	Thu,  5 Jun 2025 09:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749109809; cv=none; b=nAkN6PaIuhGykr1PPnFCx5XIjmJhvuo8/s5Gg3lW67+TJ0/CH2jQtLzXIHSufSGDXmqseyIVAx7XQFiSH8IGLg5+fRLBTNhCuTo/1+Q+He9IXwRzNQlKAgtX2GBBuoOZA+aYlJ1NNICXtWyphqpyLuqRNCyvCb9E+r9jFjRIZYw=
+	t=1749115446; cv=none; b=ax6h6LvisgFTyEQo7ZaCE/GPv34Of46LT0keXx7Vwtd62RO2GGHJ+WQGuDP7rAnoQ7dz1D0MCJ/FhJAtegKoqmWIeq/bByp3Q33kanoa2ZtkOn4/6QnmPCbFi7gOAanKBjm4G6/BwRpoc+YuRmOJlVqB2jkoB7Ga0J1LRk3PJ2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749109809; c=relaxed/simple;
-	bh=NFEt3ikujWPaJWewthF9QhICJ+AtUtfzhLL2sKi7ryI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M5s7bf1g9ydh/CMW2mugiiCU4xDAMl/Q9BgCIgIe9CsFBLUFbKOdXIY/MDxtKvvrmltkLQGxvHT1r6gjxJ7t6mzfH415iC57Xhpd3EGMOBGd7/fmIiIRTii/n51F4+s5Gy29UkdOzqpVmDJi9yZDNxpUfwVh4/bu9luOGbE6Asc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d0TT3FFQ; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-70e78e04e48so5958897b3.1;
-        Thu, 05 Jun 2025 00:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749109807; x=1749714607; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vv9G32NpLFaX25gDQw1bEAmle7ctnzmIrCsVohjdytg=;
-        b=d0TT3FFQ9L0UjrOI9uQ0IpfkdfBOVGaZ8q2KiNXe90zr9nuWdzyrrpQK0JsxzKHdkg
-         BC0rXcYk85uTSXcSNwSXnd+TngZlyVwEpOFRh6O+uhvaARl/OCTqoDP+eIo0ZpijiRRA
-         jzj0LDQcZK7KapKj2q1s+K2xiL/2OutpjMm1YngynTzH7ex2tMjtFFiMFb4b73TU77c+
-         X8AtIjatpPhFStZ3BBhH3z7+jYnZ5EX6seNKWOs7Trh4qO8fpmNJq/4srE5g1N1EFUgB
-         6vDcmNVD5FWTbQy6CAVDzHTNRV65RRvAgCFs+G5TQclZ/4RgPY8/PawCcH0t6v2nP4yV
-         y8AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749109807; x=1749714607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vv9G32NpLFaX25gDQw1bEAmle7ctnzmIrCsVohjdytg=;
-        b=V/RQF0Yk16ZSSaAXu9Hjyi5+iLqIAwgL1PUBT0txtiOeHIwy3V70w7t1XU+Tqe0Fda
-         KpumFxnIFv3urbCg78xaAKJniC7R6FUD62TLZfO96Sl1ruP3oY2HA5k79iLuGxzbJF+u
-         Sw4DuSiRcmae7s0RYQLVEBgQGNhLNvbCUW072Bv4BCK2RP34+St97I0GoicDjNmHuee3
-         2TCdO5CQfCNg1eW/H33bGArjx1NSzqXNC7YrhN3pWYERRSq4i5y2m7ux/sm+0g1p5too
-         IEWKxqG41au6kTgc+G2gVJEOsdTlVSAwYMExAVNLtsf0dfIpMh/SX30TX/Rk3syUDqsg
-         iiRw==
-X-Forwarded-Encrypted: i=1; AJvYcCULNg/s+xqpiYe0Fo3Am6YtvnjjFcVCig2niSG3sJwEZ4EZLU3EQpiu7piHxQZRS0lQ3Q3cIXFDP8v8@vger.kernel.org, AJvYcCUX7qcoH4rORxjumwnBf+1mZDv5lc5O822j6oRbkI9yW4bJ6dcpB03P99FtXUam1qese5HUCT6kDA4=@vger.kernel.org, AJvYcCUk95mmQNOQqssOq4nJSNtSqqsJxomB0BZn4AUr7Wnq1HjdCi6QUj5Nh+i1zTmiqehu/AMG8qD77ZYm@vger.kernel.org, AJvYcCVZcBQIJBjXeyZwyyxdOH4GohjFMgtlgJ12f5kbO4YL0V9dVmIiiTzQAHwN3EYhBUlIxzOXKwCfW+3bPMXy0AE=@vger.kernel.org, AJvYcCX7Vq4BCuB5ZYvxUkLg/7f2Ag5TOQ47oP/mXj5QDJqsw5yc+WpGy5UkUlJW2mVkNEagFdvZ93eQ9gt7TZ0d@vger.kernel.org, AJvYcCXEzolLmyyZeWCTJuWSsNPxP2/7oKlHtFb4a+fnJueBv5eL9106kqKE73EkwN5fEoPQWRPVEIEBA19w@vger.kernel.org, AJvYcCXHpRMLMVr9jnwsjiFmtK5NBX8rDUr+JQh56dpmoxYMUvmDwosx/mbf1VIaatzEMT/R/LNDEF7KX4ZvzA==@vger.kernel.org, AJvYcCXj/dgT7m6xrSIKoHWhyf8Dmk6MwawqgkdTDWyCxTsgSbycvrCyAfjxU/HN+bkdAByfGPiAqUoBqtN2iKQ=@vger.kernel.org, AJvYcCXykNscGC+DQvPq4u31nTxmMjbpu173KrP9G8VdQ/WtXgnl1B5adt2DQz1gSOyuAmfmu+OdNfsc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/vlr2KxemO+/HofwlrSINMSOyjrSgRZ92QVAiVdWbI401m0fw
-	q99vrrlJoN972JTY+32j34ADZZp8XEAbDAnp1bTLobInY0MEUC+v7xd3FkJqS5BfVQAhoQQl4HK
-	0RXTSixtN4WF4j5h1su3s33fwd0KKOQE=
-X-Gm-Gg: ASbGnct90y+wmuRklmDfo+MzCK1822qzjMTv53zAyNfm9FfMu/m+8cIsxEfr70VeBJF
-	AM1xRQZfeySUeUER1nfXspR0IvP10tg+BqOTf4pqtY0A59wayf6UwEtUysK01g3R0uK3Tpc0C6N
-	MA3BYE4vCLRvWJQjV5AR3jvuiv5SxAojF2KhrCss1GyWdpkG0qhHqoJw3ao6wqTj95wtfENcdoK
-	JXKpg==
-X-Google-Smtp-Source: AGHT+IEKl7dOmjqUWqH25+XmsY5+Z8Pbe84hzqNlaHy8+eh2tbFgL93ikeyaEq28vtyB7pfuEhhqZi96LHD/oy0/HzM=
-X-Received: by 2002:a05:6902:10c3:b0:e7f:7d5f:f2f6 with SMTP id
- 3f1490d57ef6-e8179d77130mr7100063276.30.1749109807043; Thu, 05 Jun 2025
- 00:50:07 -0700 (PDT)
+	s=arc-20240116; t=1749115446; c=relaxed/simple;
+	bh=BiRN5nBnZIp/sJcuRCoUB4GHMYYC58pEDXWvQczJNsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=s+b7xWAuOppDVoVDkjtXx0G1478YC0Q2POTKvk5txdXPxeYqPV8HVoZDq23NwJoKnBvbAnCj6YEQLAKpmMQ0WR3822Ac31cIjz347n2uDlphBjVJ6aeiYwZhs8kLg9H9iZmR6cIRlPEfzm2u5VV/+9Yo8FZaYUL/BzgDiBXzyU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eSn7E3NM; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C00F43ACE;
+	Thu,  5 Jun 2025 09:24:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1749115442;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hMtQCtS8IpJTkp97fNAgEE15+YSM+ATUwrgLcxt4Rdk=;
+	b=eSn7E3NM2/a1XL2QCHZ51w/xSFAL+iEZEQboby9jHTs+K7Nvdupz/F7tlxFjA4SZ0+t6Yk
+	IaS1HH4qimcQlrUnTscjr8wXLrDa5llZxxO/uhnsiEMZP/+GB8UnaOmTI/JUhnwlH3boNe
+	e6EugCFOKAu+aLoZCV685Ow7tj908BPs7BIycS44sR/0FFSmiaSGv7TztQiVgAmhCmMRZ4
+	upJ/cQU5kcDPefZJCzPEaXHwRb+M0/uwBsWnKLWQt7bdczxgCObraYqlVcLhTt4Aac/9kv
+	Ul5XZNYHabuX/WaaO+gt8hbFbOX7Do55Ol4WHd8Q2wgmWMdKFAaln7JfUSgHjA==
+Date: Thu, 5 Jun 2025 11:24:00 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 6.16
+Message-ID: <202506050924004af15615@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com> <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <b4c15a6b-0906-4fea-b218-4467afdd8345@suse.com> <12098259-32c4-4524-813e-38aeced837a0@roeck-us.net>
-In-Reply-To: <12098259-32c4-4524-813e-38aeced837a0@roeck-us.net>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 5 Jun 2025 15:49:55 +0800
-X-Gm-Features: AX0GCFuUxMlMU_KMxBpnhMPmDDfld3GWVUhukFRMKc6rmekAAGk7TR-a7l1-mUA
-Message-ID: <CAOoeyxWd29OWvmp2cHVmit5kJpngYWUJ2Xfdt7C9hOv4iZvArg@mail.gmail.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Oliver Neukum <oneukum@suse.com>, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de, 
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdefgeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfggtggugfesthekredttddtudenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegueffgfdvhefggefgieehffeikefhfeffudelvdetheffheefffelhfelgefhkeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvuddvrddutdehrdduhedtrddvhedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdduvddruddthedrudehtddrvdehvddphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehtohhrvhgrlhgusheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Dear Guenter,
+Hello Linus,
 
-Thank you for reviewing,
+Here is the RTC subsystem pull request for 6.16. There are two new drivers this
+cycle. There is also support for a negative offset for RTCs that have been
+shipped with a date set using an epoch that is before 1970. This unfortunately
+happens with some products that ship with a vendor kernel and an out of tree
+driver.
 
-Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2025=E5=B9=B46=E6=9C=884=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=888:40=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> >> +static void usb_int_callback(struct urb *urb)
-> >> +{
-> >> +    struct nct6694 *nct6694 =3D urb->context;
-> >> +    unsigned int *int_status =3D urb->transfer_buffer;
-> >> +    int ret;
-> >> +
-> >> +    switch (urb->status) {
-> >> +    case 0:
-> >> +        break;
-> >> +    case -ECONNRESET:
-> >> +    case -ENOENT:
-> >> +    case -ESHUTDOWN:
-> >> +        return;
-> >> +    default:
-> >> +        goto resubmit;
-> >> +    }
-> >> +
-> >> +    while (*int_status) {
-> >> +        int irq =3D __ffs(*int_status);
-> >> +
-> >> +        generic_handle_irq_safe(irq_find_mapping(nct6694->domain, irq=
-));
-> >> +        *int_status &=3D ~BIT(irq);
-> >> +    }
-> >
-> > Does modifying the byte have any benefit?
-> >
->
-> Not sure if I understand the question, and assuming your question is rega=
-rding
-> *int_status: *int_status!=3D0 is the loop invariant, so, yes, modifying i=
-t does
-> have a benefit.
->
-> I'd be more concerned that transfer_buffer is the raw buffer, and that da=
-ta
-> read from it is not endianness converted. That makes me wonder if and how=
- the
-> code would work on a big endian system.
->
+The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
-I will update the code in the next patch to use __le32 for the
-variable to ensure proper endianness handling across architectures.
+  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
+are available in the Git repository at:
 
-Best regards,
-Ming
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.16
+
+for you to fetch changes up to 3d8b44b104fb5f93a853ae34fbcf8d840e4482f5:
+
+  rtc: mt6359: Add mt6357 support (2025-06-02 00:25:32 +0200)
+
+----------------------------------------------------------------
+RTC for 6.16
+
+Core:
+ - support negative offsets for RTCs that have shipped with an epoch earlier
+   than 1970
+
+New drivers:
+ - NXP S32G2/S32G3
+ - Sophgo CV1800
+
+Drivers:
+ - loongson: fix missing alarm notifications for ACPI
+ - m41t80: kickstart ocillator upon failure
+ - mt6359: mt6357 support
+ - pcf8563: fix wrong alarm register
+ - sh: cleanups
+
+----------------------------------------------------------------
+A. Niyas Ahamed Mydeen (1):
+      rtc: m41t80: kickstart ocillator upon failure
+
+Alexandre Belloni (2):
+      rtc: interface: silence KMSAN warning
+      rtc: m41t80: reduce verbosity
+
+Alexandre Mergnat (3):
+      rtc: Make rtc_time64_to_tm() support dates before 1970
+      rtc: Fix offset calculation for .start_secs < 0
+      rtc: mt6359: Add mt6357 support
+
+Ciprian Marian Costea (2):
+      dt-bindings: rtc: add schema for NXP S32G2/S32G3 SoCs
+      rtc: s32g: add NXP S32G2/S32G3 SoC support
+
+Jingbao Qiu (1):
+      rtc: sophgo: add rtc support for Sophgo CV1800 SoC
+
+Johan Hovold (9):
+      dt-bindings: rtc: qcom-pm8xxx: add uefi-variable offset
+      rtc: pm8xxx: fix uefi offset lookup
+      rtc: at91rm9200: drop unused module alias
+      rtc: cpcap: drop unused module alias
+      rtc: da9063: drop unused module alias
+      rtc: jz4740: drop unused module alias
+      rtc: pm8xxx: drop unused module alias
+      rtc: s3c: drop unused module alias
+      rtc: stm32: drop unused module alias
+
+Krzysztof Kozlowski (1):
+      rtc: amlogic: Do not enable by default during compile testing
+
+Liu Dalin (1):
+      rtc: loongson: Add missing alarm notifications for ACPI RTC events
+
+Ryan Wanner (2):
+      dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+      dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+
+Troy Mitchell (1):
+      rtc: pcf8563: fix wrong alarm register
+
+Uwe Kleine-König (3):
+      rtc: test: Emit the seconds-since-1970 value instead of days-since-1970
+      rtc: test: Also test time and wday outcome of rtc_time64_to_tm()
+      rtc: test: Test date conversion for dates starting in 1900
+
+Wolfram Sang (13):
+      rtc: sh: assign correct interrupts with DT
+      rtc: sh: remove update interrupt handling
+      rtc: sh: only disable carry interrupts in probe()
+      rtc: sh: remove periodic interrupt handling
+      rtc: sh: simplify irq setup after refactoring
+      rtc: sh: remove useless wrapper function
+      rtc: sh: use local variables in probe() for mapping IO
+      rtc: sh: minor fixes to adhere to coding style
+      rtc: rzn1: clear interrupts on remove
+      rtc: da9063: simplify irq management
+      dt-bindings: rtc: rzn1: add optional second clock
+      rtc: rzn1: Disable controller before initialization
+      rtc: rzn1: support input frequencies other than 32768Hz
+
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml         |   4 +-
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml        |   1 +
+ .../devicetree/bindings/rtc/nxp,s32g-rtc.yaml      |  72 ++++
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |   6 +
+ .../devicetree/bindings/rtc/renesas,rzn1-rtc.yaml  |   8 +-
+ drivers/rtc/Kconfig                                |  25 +-
+ drivers/rtc/Makefile                               |   2 +
+ drivers/rtc/class.c                                |   2 +-
+ drivers/rtc/interface.c                            |   2 +-
+ drivers/rtc/lib.c                                  |  24 +-
+ drivers/rtc/lib_test.c                             |  27 +-
+ drivers/rtc/rtc-at91rm9200.c                       |   1 -
+ drivers/rtc/rtc-cpcap.c                            |   1 -
+ drivers/rtc/rtc-cv1800.c                           | 218 ++++++++++++
+ drivers/rtc/rtc-da9063.c                           |  31 +-
+ drivers/rtc/rtc-jz4740.c                           |   1 -
+ drivers/rtc/rtc-loongson.c                         |   8 +
+ drivers/rtc/rtc-m41t80.c                           |  78 +++--
+ drivers/rtc/rtc-mt6397.c                           |   1 +
+ drivers/rtc/rtc-pcf8563.c                          |   2 +-
+ drivers/rtc/rtc-pm8xxx.c                           |  18 +-
+ drivers/rtc/rtc-rzn1.c                             |  71 +++-
+ drivers/rtc/rtc-s32g.c                             | 385 +++++++++++++++++++++
+ drivers/rtc/rtc-s3c.c                              |   1 -
+ drivers/rtc/rtc-sh.c                               | 285 +++------------
+ drivers/rtc/rtc-stm32.c                            |   1 -
+ 26 files changed, 946 insertions(+), 329 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,s32g-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-cv1800.c
+ create mode 100644 drivers/rtc/rtc-s32g.c
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
