@@ -1,86 +1,86 @@
-Return-Path: <linux-rtc+bounces-4236-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4237-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96D2DAD0628
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Jun 2025 17:52:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38DC6AD0617
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Jun 2025 17:51:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDB603B49D8
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Jun 2025 15:50:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6495417C02A
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Jun 2025 15:50:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B259028B401;
-	Fri,  6 Jun 2025 15:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFDC228B40E;
+	Fri,  6 Jun 2025 15:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TAopHYqr"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="b99U7M+K"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DBD28B408
-	for <linux-rtc@vger.kernel.org>; Fri,  6 Jun 2025 15:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEA31CFBA
+	for <linux-rtc@vger.kernel.org>; Fri,  6 Jun 2025 15:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749224712; cv=none; b=ILfEkhMsKGDDC4aEqEHy6h0dicrrUdQ2llqMo3AVqguVHImSAAdFSw3RhB5yGw5VoVrCc40zfN1IUF95AdmamjINj+fx5VB3OrRTOr9Oa+g71hCOosHeADCFXsFFAG5VaerHCpfhcqGWRoHk7Gw1wUQ/8IPRKe+FyfLjYJNEwEg=
+	t=1749224713; cv=none; b=SBURz1Y/Lg/7jneI3OVToNT4vJrgDXC1xe2o/gN7muaK0Bi3HLiWV1VVQoun813orIEH+0meHu2ItGx4fyLMjNANdYphv9iePHqewRPFFbE1Svn1W9/zcGaaLOT1E/RNIxZZSioV7rT0WfK4GcPHelHQxqiM3mi/0sMXVjbkKS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749224712; c=relaxed/simple;
-	bh=jZ54zUGYRtaYPC2dNzgFfWoIaofVNb8663snXPh4iuw=;
+	s=arc-20240116; t=1749224713; c=relaxed/simple;
+	bh=bg6miEh+iCb361OA/ohJfoY5S4a8QSX064eJ72AIIf8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DBnRx3bydOAQYwmJl+azyjUgjHq0OWMrnjSHDfBe7QMrXR9HZrVO+EOmpailJx0fH3tIRyqmJFcpOAe4c1L00QwskgDbXQuCWuQ7QNNyF9LWWX+Mt1AiGboa7r6wgFQUh2LmGOLi2iV7C7LfGq7cxK/tvAjV/1nURUDy+Ck02z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TAopHYqr; arc=none smtp.client-ip=209.85.128.53
+	 MIME-Version:Content-Type; b=AZYeyTqUDWTr3tzxGVpp6mmNeUxep2Zp+IC1Y/6b8TGUw0XMVQy12MlRNGX+QMejr9zVB/P2OqkGS0y4o7K70aR69mLHH413jz/BJHUVm1aDD9mMHFncDyNMuXuGmqxFT/y9j7/pZtD48wV7PKxkHQzYMvcxfK29nwv09A3dVb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=b99U7M+K; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so18087365e9.0
-        for <linux-rtc@vger.kernel.org>; Fri, 06 Jun 2025 08:45:09 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a3798794d3so1797075f8f.1
+        for <linux-rtc@vger.kernel.org>; Fri, 06 Jun 2025 08:45:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749224708; x=1749829508; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749224709; x=1749829509; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EZGpdp7+aEvwvZZDF4Nd8/ciwU4q/ZoafPYs+J9R60o=;
-        b=TAopHYqrrCYwYPM2FYd/BTGmQGgXgUK8KbRyKAsunuV6SGPjs+bBC5mBVlTM9HWfry
-         FPmONw5S44PL7t3ti6Sfjp53vGECyig3oETywVBN2D8PuSbV0DTKOYYr9WWb/2LCYdb1
-         ZTD6f7PdHgQlmj9eRhUaNC4IYPNFZ47R4dyCkgaYpG7Ez0BfRdpoptcLfFBWmJqoIbJE
-         BQ4eL8OreCDSvYIiu7rjxUbdOX8cJ34NrRABq9yJNclXFd3U1cjYkzvvseH3TYS2YNcw
-         QkngTRMPFhOauDaHVpQ9+SHzB+8hLGsXMd6A4925sTyZ2yL5efDJnU5FNfU6ZnLn7Nya
-         PTig==
+        bh=yZizXFoeXcBMD/wt5p6bPEFDEKvQa75O7yJfeKXIgJk=;
+        b=b99U7M+K3kP9kFAVPseaX2nUG1axySzRglfk76SlaQSxT0I6vsHHCq5R9vwXCiM/bn
+         gQwc63M8EH/QLaFCa3B8+l6N0xHOIT1kr6A/ityZ7YpZhdD4eRuig5K00tuXdBaJAxIX
+         0YhbgY0vG492QP+/7tdRN5YYT3SXFem2CjZbiz/PmvS9pWjhB8AjB+vd0Isc/LJzB/H3
+         mMNHiycmUovJVsVLnpMtkL4DRKAErOTXP/3iPjCIDReGHGxehwr5N8vPSWudqDo6+BBD
+         GRzic8rUfzX7mbD/CRZxPsWYQgq5Udaif3Nnw4fpMtmmsvTpgg9M3ysMRxySIXmRJUSu
+         Wjwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749224708; x=1749829508;
+        d=1e100.net; s=20230601; t=1749224709; x=1749829509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EZGpdp7+aEvwvZZDF4Nd8/ciwU4q/ZoafPYs+J9R60o=;
-        b=KheE+pVhvl31oNHnq+096ctOYT7EufFv6CT+yb4FynCDVPnd9ve5eiCHjpYiMpdIYE
-         FpdmOuCsR/EUszI68OD03NUfb7mjQLOe7RKu70/1pqzbXR8WYkgZzht37wMRD3SFbLuD
-         iezyvZM/OW51udjWBOoqZ625jlQo7S6HQqOHQsfnzH5esaTSUDUXlMDNE0EfSj+6H5S6
-         hL8uTPl+NVk5c91tLII5PoQJezkFLJKyGzKPu9C8G2CCyPrpKiaEs2FC9BNr6jQs4Zmb
-         IM/A90DgYOMLO+tUe5hzO3uFojUaOvyyxPBAOgfW7esiWN6EyX944C3rBivUjNpaXC3D
-         PNcg==
-X-Gm-Message-State: AOJu0Yz5v2L9Fd+84hF3X6nCt6YVaOspojjiY9edLQdNW5PlkU6BRxQB
-	sB4i5heFrXw5HukCbDe0kMtqQ/0RhAv0Iw/2wp2O6lSipGVS8FzXTFMTod1cHL78N2Q=
-X-Gm-Gg: ASbGncvoWlWqUOrZl0p0043zMiQRrMzDDHeDcjQGW10ajHTWkc187LggN7TH8cOfFGy
-	SzEM5BPbpmPndp4ebcMmag/fbcAG2zaX9aNVQfKPkPAtiJhy1i8ntwOwGNgUZV/wmvJPZW1blCY
-	BYFLNzxZpcAN/ry/CYWy/cnw9cjC0OCgRgdkz2B5eVCRaM3Vb1A7ESuVbdXMNSuZwHcS7O2ADoY
-	SmRy5T8oWznBVQRVYFYWf2+2CpXlaaHzpccSmiEJ/TXaLfcOZTSWoN/q3AkOWzEkZACq9fDf+5K
-	f0TaYUSB0+S4RQ4w1yrQrloERnIO+cIl356SdEPJV2N1mxrLXpV9HtiBTUTFQ104E+V/Q/BQFDK
-	EeKxPUPT9S0F1hADSUA==
-X-Google-Smtp-Source: AGHT+IGnUvlfo0UQ4rvZrlFoNBcvHu2pYraip4kpIwhTpKWAE8txMCEibwhOOsacnXjCerAPk1WK8Q==
-X-Received: by 2002:a05:600c:4686:b0:444:c28f:e81a with SMTP id 5b1f17b1804b1-45201423593mr39201105e9.27.1749224708154;
-        Fri, 06 Jun 2025 08:45:08 -0700 (PDT)
+        bh=yZizXFoeXcBMD/wt5p6bPEFDEKvQa75O7yJfeKXIgJk=;
+        b=qj7J+oAbL6xn33kETWaQvdIXse5Y8scj6XMYtvuu8ZE2luJQzs0nO3azUxAz6cbmrp
+         T3L/bax/931Mz++ut2lxdGBjJq96xt6YgmGcl40iiCLSJ2qNdYvL7JUZIL3lWcY8L5FX
+         ECikHGRjEd1M/tkGP/G0PXe3fkk5xEGHlU/21DUjigtML9UhPz5aijRAedo6QZFckl33
+         ZWKQvNncal5va+gVjW6T01l1pN7B91pX9cQaxnYwYZYUF0nipA9RJTvSgORjxKWPpMh/
+         s5K4MEPRIAF+aYeyZi59kqGRU9nf5RtANuIS5eIe1/yE5a6fswIh39fobwkADaeXIZT2
+         AOSQ==
+X-Gm-Message-State: AOJu0YxTOhb3qET9+U7rFPePHB8SM6tQ6MOI2sa+bSQDojpiVSaQQkIE
+	9dZZ/+C4kDKF3sXP/MWHiI5nACfqUgXR3Vxo0dyWQ3VQMvLLNTWlYTsOccwqy7OzzKs=
+X-Gm-Gg: ASbGnctGVErBouuPNsskq6GH7Fc/YjbKW9JFQ0LPj5KXON/XZO9P9I25Zc8Psczfwr6
+	l9nsEypAaPLqjGuTalZvxgPXMMjnCsEl4VkxgBHxPyOWc2n77FpANyiOQNBCd5pfHczgcdtAF7M
+	xZxDM0NTc2n0RoedPICYdDvySU36hqrsxAuoiIjkD7K0BQzhu0QHbr5NC7qruteidi9QVsQLyJx
+	8F459ZU+SLw1JZ3qqOIV60jkyyh2g0X/FCQD09p4zvtyq99gEElPhAaPHaiKwUDkwxe3CejzPqW
+	P0y7QpgsqqkJATzLh00jfzIkRrjErbNAmr+1OsMmKyWhzjOQxxMCzX5PPlI9lGP6/Hiipp7zamG
+	35ZEarktOd1c1bO3f6A==
+X-Google-Smtp-Source: AGHT+IH2560opVVTWYslchgiaWiKQkm+zzBwIStdZ9KzldE06una1z0Sz+Zcv4rkjm3NlUEOltOCuA==
+X-Received: by 2002:a05:6000:24c7:b0:3a4:f71e:d2e with SMTP id ffacd0b85a97d-3a531ce8887mr3425351f8f.56.1749224709606;
+        Fri, 06 Jun 2025 08:45:09 -0700 (PDT)
 Received: from localhost (p200300f65f13c80400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f13:c804::1b9])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4526e0563cesm27067275e9.1.2025.06.06.08.45.07
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a5323b5147sm2281715f8f.37.2025.06.06.08.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 08:45:07 -0700 (PDT)
+        Fri, 06 Jun 2025 08:45:09 -0700 (PDT)
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
 To: Alessandro Zummo <a.zummo@towertech.it>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Alexandre Mergnat <amergnat@baylibre.com>
 Cc: linux-rtc@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH 6.15.y 1/2] rtc: Make rtc_time64_to_tm() support dates before 1970
-Date: Fri,  6 Jun 2025 17:44:38 +0200
-Message-ID:  <b36409ef16fd9662b442a0fc908cb44f52535d63.1749223334.git.u.kleine-koenig@baylibre.com>
+Subject: [PATCH 6.15.y 2/2] rtc: Fix offset calculation for .start_secs < 0
+Date: Fri,  6 Jun 2025 17:44:39 +0200
+Message-ID:  <1243af4fd5d2974b4e77e85873b999fd877161e7.1749223334.git.u.kleine-koenig@baylibre.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <cover.1749223334.git.u.kleine-koenig@baylibre.com>
 References: <cover.1749223334.git.u.kleine-koenig@baylibre.com>
@@ -91,88 +91,57 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2619; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=NXKdrbrx/lgAWCXht+l/W99usKyzytg6t1rZeScXRPg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoQwzpEfTPsoXUucetMdYNEH8pvYLptbUGOrYA6 nXm3EGmHYSJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaEMM6QAKCRCPgPtYfRL+ TrgeB/9+5mt+iPcUBmYczus79vrwere5SvCKwlLfKNDdSAhUJoVDX+6o3pq/LU1TlcSEze8GiQn xs5bPpJWH5Y8+EClDQhKM9HgTJbetCtzpQ6kcd2BrkD5xL5+lB+93k/rA4Dhxg8YSLT7wM0070c AK5cLpt8IdIlcO15mtdAA9oyqd63zuaf3HAURikDZGQbYsBnskh5pRiEHx+RdXExlWUO73xYUqN JUC+W5kxpLxkJYpwvkrF45V8Rz1fEBhOLN/D00Ony1Xs5sZu0+JMp3/9jbfzLVQvR8g75PVeyBd 1elzhhTgDQtdNGSZMCsSKX0QBXMtthWCcC0YHJSgoEYxb9BU
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=tb6a1806ds76dx2ZIuVUstCWxxnAgZjj4OhPVhe0dNo=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoQwzsv0ZkI6czjWXMl4cAryKMZ4Z/NCk3+CLYg r14uM57CJiJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaEMM7AAKCRCPgPtYfRL+ Thf/B/4zevmHiaKXalPE2ES5JgEX4xhSzWMktYKBaQBrAzswpGpvmKkSVBMLhgpJn0LmEQDzInq iOyVIyZOYghjsYbh4KNQzVmnMce0/AGA1N22lOs7bTHy+FM+PawdktHLojzEaWJTMAbTH3zuoZo knrTTMLbq/+PnaBTFlFS3azlkldM59hq2V7Oz0qlpfJoi8w2P5PFtjmwr8NQ+rK9oHNXtXQy6cy t+Msnws6X35qVDjfCW3eEDta8DaZZkZ46D7GqlJP1IEWATqgtl3HbC+i6MYGaF0UZ/n/dnTwWd2 574ELvq4qQUJdnolI0rDu49lm25xo2Kr800jZeQJnMlMorCr
 X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
 From: Alexandre Mergnat <amergnat@baylibre.com>
 
-commit 7df4cfef8b351fec3156160bedfc7d6d29de4cce upstream.
+commit fe9f5f96cfe8b82d0f24cbfa93718925560f4f8d upstream.
 
-Conversion of dates before 1970 is still relevant today because these
-dates are reused on some hardwares to store dates bigger than the
-maximal date that is representable in the device's native format.
-This prominently and very soon affects the hardware covered by the
-rtc-mt6397 driver that can only natively store dates in the interval
-1900-01-01 up to 2027-12-31. So to store the date 2028-01-01 00:00:00
-to such a device, rtc_time64_to_tm() must do the right thing for
-time=-2208988800.
+The comparison
 
+        rtc->start_secs > rtc->range_max
+
+has a signed left-hand side and an unsigned right-hand side.
+So the comparison might become true for negative start_secs which is
+interpreted as a (possibly very large) positive value.
+
+As a negative value can never be bigger than an unsigned value
+the correct representation of the (mathematical) comparison
+
+        rtc->start_secs > rtc->range_max
+
+in C is:
+
+        rtc->start_secs >= 0 && rtc->start_secs > rtc->range_max
+
+Use that to fix the offset calculation currently used in the
+rtc-mt6397 driver.
+
+Fixes: 989515647e783 ("rtc: Add one offset seconds to expand RTC range")
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 Reviewed-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-Link: https://lore.kernel.org/r/20250428-enable-rtc-v4-1-2b2f7e3f9349@baylibre.com
+Link: https://lore.kernel.org/r/20250428-enable-rtc-v4-2-2b2f7e3f9349@baylibre.com
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 ---
- drivers/rtc/lib.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+ drivers/rtc/class.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/lib.c b/drivers/rtc/lib.c
-index fe361652727a..13b5b1f20465 100644
---- a/drivers/rtc/lib.c
-+++ b/drivers/rtc/lib.c
-@@ -46,24 +46,38 @@ EXPORT_SYMBOL(rtc_year_days);
-  * rtc_time64_to_tm - converts time64_t to rtc_time.
-  *
-  * @time:	The number of seconds since 01-01-1970 00:00:00.
-- *		(Must be positive.)
-+ *		Works for values since at least 1900
-  * @tm:		Pointer to the struct rtc_time.
-  */
- void rtc_time64_to_tm(time64_t time, struct rtc_time *tm)
- {
--	unsigned int secs;
--	int days;
-+	int days, secs;
- 
- 	u64 u64tmp;
- 	u32 u32tmp, udays, century, day_of_century, year_of_century, year,
- 		day_of_year, month, day;
- 	bool is_Jan_or_Feb, is_leap_year;
- 
--	/* time must be positive */
-+	/*
-+	 * Get days and seconds while preserving the sign to
-+	 * handle negative time values (dates before 1970-01-01)
-+	 */
- 	days = div_s64_rem(time, 86400, &secs);
- 
-+	/*
-+	 * We need 0 <= secs < 86400 which isn't given for negative
-+	 * values of time. Fixup accordingly.
-+	 */
-+	if (secs < 0) {
-+		days -= 1;
-+		secs += 86400;
-+	}
-+
- 	/* day of the week, 1970-01-01 was a Thursday */
- 	tm->tm_wday = (days + 4) % 7;
-+	/* Ensure tm_wday is always positive */
-+	if (tm->tm_wday < 0)
-+		tm->tm_wday += 7;
- 
- 	/*
- 	 * The following algorithm is, basically, Proposition 6.3 of Neri
-@@ -93,7 +107,7 @@ void rtc_time64_to_tm(time64_t time, struct rtc_time *tm)
- 	 * thus, is slightly different from [1].
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index b88cd4fb295b..b1a2be1f9e3b 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -326,7 +326,7 @@ static void rtc_device_get_offset(struct rtc_device *rtc)
+ 	 *
+ 	 * Otherwise the offset seconds should be 0.
  	 */
- 
--	udays		= ((u32) days) + 719468;
-+	udays		= days + 719468;
- 
- 	u32tmp		= 4 * udays + 3;
- 	century		= u32tmp / 146097;
+-	if (rtc->start_secs > rtc->range_max ||
++	if ((rtc->start_secs >= 0 && rtc->start_secs > rtc->range_max) ||
+ 	    rtc->start_secs + range_secs - 1 < rtc->range_min)
+ 		rtc->offset_secs = rtc->start_secs - rtc->range_min;
+ 	else if (rtc->start_secs > rtc->range_min)
 -- 
 2.47.2
 
