@@ -1,153 +1,99 @@
-Return-Path: <linux-rtc+bounces-4239-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4240-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB4AFAD0FDF
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Jun 2025 23:13:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18111AD154B
+	for <lists+linux-rtc@lfdr.de>; Mon,  9 Jun 2025 00:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB0683AD52F
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Jun 2025 21:13:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C185F188AE56
+	for <lists+linux-rtc@lfdr.de>; Sun,  8 Jun 2025 22:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58919215798;
-	Sat,  7 Jun 2025 21:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1830620FA94;
+	Sun,  8 Jun 2025 22:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="ITNH5pMI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="At/yWD8z"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B02202996
-	for <linux-rtc@vger.kernel.org>; Sat,  7 Jun 2025 21:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5ECB1D47B4;
+	Sun,  8 Jun 2025 22:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749330818; cv=none; b=sPqItV52EAfSintYGNf2F7J2WgLtRMCXVbkismokqBrfawS1R1JQX1yt/QTMqs06mdPg4kj9bf3eFW1r+ZPOl2fD0wRtO9F+i5TWwfqt9sDLYCFqeC4AhyyAjotBjCGu3960mOsu6M8Nfc2+DQl1jdWbXmdrz8a9nW83ud+pkEA=
+	t=1749422578; cv=none; b=WgLfZtTetHqCamuglMtLPIxnpIXR47uGpNWtzOoOuN1arc+PFWPA3vE26YoATiOVQK40xhbhOCHBF0TymsCCDcN4G9QIqaxdWkwtL5qgRkAYPUk6zsiGOj9Wery+qInc3SDjlx4mSdVS98o+wCKxLIo+U392HXPMU1QF/Is779U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749330818; c=relaxed/simple;
-	bh=JhS/3J2SU7iIGZNswJTzWeXgREd1y0GyGvdgpN4wbjo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ZDfNasAISj5VdS+3xZoXzkL/Y2LxTR2t0nSCOxN7pRK1aEFBOCLhfR3O0MwySXny4WphWBMSSzegK9eXG9V6052JL6sWNqOyHBkft5dEfouq6q0J5NNnrYM0QyAnk38XJyF24F223MdFU5JKws0H5shUL9XDsXylspdOWc7UGCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=ITNH5pMI; arc=none smtp.client-ip=193.222.135.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 48497 invoked from network); 7 Jun 2025 23:06:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
-          t=1749330411; bh=J8z8CmQGGnB7Po1XsaFy2bygOPjhaFEoBcJC83rCADc=;
-          h=From:To:Cc:Subject;
-          b=ITNH5pMIvX/YMOIRljeHHOAw8BRIqAgscg2v5PSDuxzHuJ91hWlydSg7OfUQrcHIs
-           2dbP+ZGEU5kwiTydX676hoNqsorOCICxKkuCW0opqjl8dcrobtNXWyBKKMhe4qlYfn
-           j7YqaJFjZ8ez0GrRjpLAZRaeOoM/Oc0nI8wtXOoXt6WyUL2MKbHXO1ruWHnK80FO7h
-           PGxXSsf50vCLbVeMv2nyEU08in3oZFvAypQ8hD20J5ogjQ2yADLRfpul9LGys7dz+j
-           Jk6UH6TnCwcE93lZQKCDF48FJ3nj8rT15G5XZ7ngncMO3r5yW1jtAsWC0c/IN5q/uD
-           wiZ+3ptGwMGfg==
-Received: from unknown (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[37.109.146.87])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <alexandre.belloni@bootlin.com>; 7 Jun 2025 23:06:51 +0200
-From: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
+	s=arc-20240116; t=1749422578; c=relaxed/simple;
+	bh=+Ow8C5IDyvj7h168sBfQeN9yDKxNW7U1c0diPxjACy8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IDgIoQW0mMMM3OoQFTWmMKtQ0TXOqmZCgkuoe4wlu6HJpTKJrUxoMiGlE3TOyMhHGp4Wm8wgl4prb+v5YJnpwZof4jxWY13O5AXpUhqr3hvT9jFkr9WEaWPjjsYZwNNFOpRdz9BAWHzLX+VIeF0lb6io0d/KbEM6G/Kz0UCuvFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=At/yWD8z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A258C4CEEE;
+	Sun,  8 Jun 2025 22:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749422577;
+	bh=+Ow8C5IDyvj7h168sBfQeN9yDKxNW7U1c0diPxjACy8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=At/yWD8zn/DyP6c3CHHI5pK+CKgjyJU8SwVXiL7V8F3s/OeoVg5V428lBc0ahyxs3
+	 7xVOaOFJDFv0td7SbS1GwgWQLXKDXJ4dTf+V0cREAN48wlVQ/ZkW5dw/Arcoj6dFbw
+	 2R5LJTo/n9KYKHuuPW0p5JBaQFb5rfEOuTszmNaPC9AMjAHhuWuShc6DlzyS+vjwIl
+	 iuTnWjTiuB58EacNORhPo6EgBp4ZbjmlNvQszi9bIz3EUrlPwmh+op5YCGTP1KJmTf
+	 +Bn3dxleOLqRS5tINJFanfiI4iT8RGgIK9uNCzvf4h2lmJc3w3lQi9EmER2DA/nk3A
+	 /LmKBQ9x2DHMA==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	sophgo@lists.linux.dev,
+	Jingbao Qiu <qiujingbao.dlmu@gmail.com>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	linux-rtc@vger.kernel.org,
-	lkml <linux-kernel@vger.kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Chris Bainbridge <chris.bainbridge@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Xiaofei Tan <tanxiaofei@huawei.com>,
-	=?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-	stable@vger.kernel.org
-Subject: [PATCH] rtc-cmos: use spin_lock_irqsave in cmos_interrupt
-Date: Sat,  7 Jun 2025 23:06:08 +0200
-Message-Id: <20250607210608.14835-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: Move sophgo,cv1800b-rtc to rtc directory
+Date: Sun,  8 Jun 2025 17:42:51 -0500
+Message-ID: <20250608224252.3902421-1-robh@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: bd40430050a01a7b884864c3ef3e9e75
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [AZNk]                               
 
-cmos_interrupt() can be called in a non-interrupt context, such as in
-an ACPI event handler (which runs in an interrupt thread). Therefore,
-usage of spin_lock(&rtc_lock) is insecure. Use spin_lock_irqsave() /
-spin_unlock_irqrestore() instead.
+The $id path for the sophgo,cv1800b-rtc binding was missing part of the
+path 'soc'. However, the correct place for RTC bindings (even if it's
+also a "syscon") is the rtc directory, so move the binding there while
+fixing the $id value.
 
-Before a misguided
-commit 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
-the cmos_interrupt() function used spin_lock_irqsave(). That commit
-changed it to spin_lock() and broke locking, which was partially fixed in
-commit 13be2efc390a ("rtc: cmos: Disable irq around direct invocation of cmos_interrupt()")
-
-That second commit did not take account of the ACPI fixed event handler
-pathway, however. It introduced local_irq_disable() workarounds in
-cmos_check_wkalrm(), which can cause problems on PREEMPT_RT kernels
-and are now unnecessary.
-
-Add an explicit comment so that this change will not be reverted by
-mistake.
-
-Cc: <stable@vger.kernel.org>
-Fixes: 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Tested-by: Chris Bainbridge <chris.bainbridge@gmail.com>
-Reported-by: Chris Bainbridge <chris.bainbridge@gmail.com>
-Closes: https://lore.kernel.org/all/aDtJ92foPUYmGheF@debian.local/
-
+Fixes: 76517429dbfd ("dt-bindings: soc: sophgo: add RTC support for Sophgo CV1800 series")
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
+ .../bindings/{soc/sophgo => rtc}/sophgo,cv1800b-rtc.yaml        | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ rename Documentation/devicetree/bindings/{soc/sophgo => rtc}/sophgo,cv1800b-rtc.yaml (96%)
 
-Changes after DRAFT version of the patch:
-- rewrite commit message,
-- test this locally (also on top of 5.10.238 for the stable backport),
-- fix a grammar mistake in the comment.
----
- drivers/rtc/rtc-cmos.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 8172869bd3d7..0743c6acd6e2 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -692,8 +692,12 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- {
- 	u8		irqstat;
- 	u8		rtc_control;
-+	unsigned long	flags;
+diff --git a/Documentation/devicetree/bindings/soc/sophgo/sophgo,cv1800b-rtc.yaml b/Documentation/devicetree/bindings/rtc/sophgo,cv1800b-rtc.yaml
+similarity index 96%
+rename from Documentation/devicetree/bindings/soc/sophgo/sophgo,cv1800b-rtc.yaml
+rename to Documentation/devicetree/bindings/rtc/sophgo,cv1800b-rtc.yaml
+index 5cf186c396c9..c695d2ff9fcc 100644
+--- a/Documentation/devicetree/bindings/soc/sophgo/sophgo,cv1800b-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/sophgo,cv1800b-rtc.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/sophgo/sophgo,cv1800b-rtc.yaml#
++$id: http://devicetree.org/schemas/rtc/sophgo,cv1800b-rtc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
--	spin_lock(&rtc_lock);
-+	/* We cannot use spin_lock() here, as cmos_interrupt() is also called
-+	 * in a non-irq context.
-+	 */
-+	spin_lock_irqsave(&rtc_lock, flags);
- 
- 	/* When the HPET interrupt handler calls us, the interrupt
- 	 * status is passed as arg1 instead of the irq number.  But
-@@ -727,7 +731,7 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- 			hpet_mask_rtc_irq_bit(RTC_AIE);
- 		CMOS_READ(RTC_INTR_FLAGS);
- 	}
--	spin_unlock(&rtc_lock);
-+	spin_unlock_irqrestore(&rtc_lock, flags);
- 
- 	if (is_intr(irqstat)) {
- 		rtc_update_irq(p, 1, irqstat);
-@@ -1295,9 +1299,7 @@ static void cmos_check_wkalrm(struct device *dev)
- 	 * ACK the rtc irq here
- 	 */
- 	if (t_now >= cmos->alarm_expires && cmos_use_acpi_alarm()) {
--		local_irq_disable();
- 		cmos_interrupt(0, (void *)cmos->rtc);
--		local_irq_enable();
- 		return;
- 	}
- 
+ title: Real Time Clock of the Sophgo CV1800 SoC
 -- 
-2.25.1
+2.47.2
 
 
