@@ -1,230 +1,140 @@
-Return-Path: <linux-rtc+bounces-4242-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4243-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67655AD18D7
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Jun 2025 09:08:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26225AD2EC9
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jun 2025 09:35:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08B7A188B9E7
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Jun 2025 07:08:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0E943A9DF2
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jun 2025 07:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C969C280A2C;
-	Mon,  9 Jun 2025 07:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BD4A27FB0D;
+	Tue, 10 Jun 2025 07:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="TemttoME"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="UHFOtx/Z"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013005.outbound.protection.outlook.com [40.107.159.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCF811185;
-	Mon,  9 Jun 2025 07:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749452878; cv=fail; b=FhlybvWe+aEjaxMYug9v8wJt2FICLPrDKUhqVWNfCeubLBJBECkDwAs19Kbvraf71NIo1sVv8B+OYAtPc/X60eIByDNQT95IXP/I7kvLEmYjvUjUcPHsrRuKkucxMtiCE8jtsN3AX3WCtTyXylwRw4EHzaqJx69p624UVhDDQpM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749452878; c=relaxed/simple;
-	bh=yt5zhpyhsn0RgpFDz8ciR6BWJmlyjsqIQ53qFzPjVAM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=eWcMYP+QQTf0l+GrTpjpIu4FV+9x2mzVKvikG9kETbp8SW6OzR6u4lv75uuac7UsRh+5h1AYSxH8Het0CFEM0vBCx3YA99/mHFIM21p7ml6npeRTCRJ/RCcutWtyBcChAPEoaB8txhDBh3raHu8ueVtTcKm8p9CINvfJnlzDnhM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TemttoME; arc=fail smtp.client-ip=40.107.159.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uHrhaPJ5GYq40aWwm0oJkywtqbrY+Y8BwsAAyH2Nl8jrQfQVpb2LX2xs2sSOAm8njYri16qeBS7GWcBBXoG1Flk8xiXBONHyQ7dve1DHWQqg2hZrEe91gE0Q2T7gW4pb765stbrmQfM5FMa1hSNhFL/YeFpYUZAZOTjMWlM/duQ7OjrSyxiawt7Bvo5Zj2hsd13vod/lPfSejh0klM1I2h0lrNHk+THyOGIyUjeXaoGObXLxhYKMwwL2l/U4URj+vzhK9R6W7JRQTeK/NNwkpridwwQEj177ETKaXNzyrOCxbteW4Sof3h3RKJXhSAdpYBtDFwB3MKreHmBfC/br9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yt5zhpyhsn0RgpFDz8ciR6BWJmlyjsqIQ53qFzPjVAM=;
- b=Aj/uvTBUvEYiKbUNmRw4xChxN9NrDJfJtMzJBuKfliYi8vQzDbw3WrxTYewiDCHhG1x48fdvhRzu4YD0p6hTd3v4vqSKE6dLedXQSndtQHpJ/E2rWc/lkostl99FZyQUyh8g3zshGh+/XuMOmJqiHXOvhp6sXfgUttXDUzJ7IDVi2y9HUZzZuPw7gdzLmeBUJfhewTLTUrAg1KfGyQc0fZK2a3Umjk0F2OM1SaQUIqqCv3wogCjCM0ZfkKzORooWjr4iBIs2bb8Lu3UG6TnIO0Om2shIDhrUI2+jGtaRAaSCuE4J3IPqn9Eh/AyjM495pFbkyARh0Pgd5vCshzGyJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yt5zhpyhsn0RgpFDz8ciR6BWJmlyjsqIQ53qFzPjVAM=;
- b=TemttoMENcG3eJXp380I42KTF4Ws1THZp9EjntKxVxp6nX91OKn/hKltq0OPzYYOQAH4Fj08WZLUT/ufvGFBc+NQ8jtWnhmFMDhK09TuNbHIB6azF8YLx5/OGf+4YEjrHmCnxGa3MnS9Eb/9Pc0eYdWJ7vkWNX7YGdTHuYh3RY1uMXyx5uXBRcpNXOSdcc+QjyW3meahrs/zPLVUoQARpo11qPIrtLOsRiAAQJ0WyRNtjxyLzlQkQT4tm+AT11wgdgYdEoA9CaHb0WSOzwh1lod2bWMEikugiYhe+BpDn9H6kek9lqKmZDicPre3t+W9tx4WA2JwpVaoEZxMZxWV/A==
-Received: from AM0PR04MB6515.eurprd04.prod.outlook.com (2603:10a6:208:16f::10)
- by AM9PR04MB8521.eurprd04.prod.outlook.com (2603:10a6:20b:430::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.27; Mon, 9 Jun
- 2025 07:07:53 +0000
-Received: from AM0PR04MB6515.eurprd04.prod.outlook.com
- ([fe80::ca11:63b8:aeea:8043]) by AM0PR04MB6515.eurprd04.prod.outlook.com
- ([fe80::ca11:63b8:aeea:8043%3]) with mapi id 15.20.8769.033; Mon, 9 Jun 2025
- 07:07:53 +0000
-From: Pankit Garg <pankit.garg@nxp.com>
-To: Conor Dooley <conor@kernel.org>, "linux-rtc@vger.kernel.org"
-	<linux-rtc@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "alexandre.belloni@bootlin.com"
-	<alexandre.belloni@bootlin.com>
-CC: Vikash Bansal <vikash.bansal@nxp.com>, Priyanka Jain
-	<priyanka.jain@nxp.com>, Daniel Aguirre <daniel.aguirre@nxp.com>, Shashank
- Rebbapragada <shashank.rebbapragada@nxp.com>, Aman Kumar Pandey
-	<aman.kumarpandey@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a support
-Thread-Topic: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a support
-Thread-Index: AQHbvyFWcjUresCpX0SM58nE89m7ErPHOM0AgAD6hsCAAJgWAIAxzuuA
-Date: Mon, 9 Jun 2025 07:07:53 +0000
-Message-ID:
- <AM0PR04MB65150C8930FE1A49E4BE99CEE76BA@AM0PR04MB6515.eurprd04.prod.outlook.com>
-References: <20250507072618.153960-1-pankit.garg@nxp.com>
- <20250507-zap-dyslexia-924cfd1b6ec9@spud>
- <AM0PR04MB6515B27367279C935A295379E78BA@AM0PR04MB6515.eurprd04.prod.outlook.com>
- <20250508-goal-harmonics-e8c286f74954@spud>
-In-Reply-To: <20250508-goal-harmonics-e8c286f74954@spud>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR04MB6515:EE_|AM9PR04MB8521:EE_
-x-ms-office365-filtering-correlation-id: de904ac4-d6c6-4b18-c131-08dda7245a6a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?Wvmhgu+1IRMDPGm6h8ym0mbX8BcyRaKFggJpNCGBNvcqdfJxjPp+J6kmDNDW?=
- =?us-ascii?Q?V9f0N7siRm/zCBvxYu+2glD2bbLw9+q4jvt8deWgdYGJXK1rm+GSEVNHUyen?=
- =?us-ascii?Q?Pvh4MuWIgKyrMODbyymIhGmSRnakqoC+u9XbeZ5/KuNIMKIi+j54tJkCsuuq?=
- =?us-ascii?Q?Z0Rv/7z9jiWx1p3fseC+OFp1mmyREKwW2Fkh7X4mQc2MLuPtKR6GqVuclBMY?=
- =?us-ascii?Q?ojiABD0LRb+IS3GjNDGj1YIfFtE0zoXArDOV1zeXJaBepGthta3Zq8idpkmm?=
- =?us-ascii?Q?IWk5PAwh+98lUQ1Ug833E7EwUqO7OxdQNniQl9vb1r9l/Sxi5aT89pSrYicj?=
- =?us-ascii?Q?t5mBlc3LkK3UEs1EzjCJs0hDXUE37CZKBe31L6a1P8b0OdbP5U4nqUOVAWnW?=
- =?us-ascii?Q?ubwrmb6eB+NRbWezGs/D2sWcmXyD6TAZri0k0xj2PfFTCBXksIOAfSaqI0Ip?=
- =?us-ascii?Q?bpnG6XNMNV3yODeo8tcxXnaxuClGjOXWlGR6Wd8QFmU1Q6D+XMxjYZRwWc8u?=
- =?us-ascii?Q?386DWclFJOCBF0vjJgGEdu9uDVVxaadH6hQQgY7Sr3cQ9Ysyu/qdr3deqodv?=
- =?us-ascii?Q?zKDmOqrBZ2OsYMzoYY/7Rw5mdM9Gl9MeNmckDDXX7qj2TATTNROma2SGLlZJ?=
- =?us-ascii?Q?SRGzQiyh+Q9SWdaCKzyOyh5Es6Ycf6oS1/LUeL7ESGV7fd2lfDFfbJptszck?=
- =?us-ascii?Q?VNr5kjMdy+X//PsaOsRIjUlAsHRBtTVr2e0RNK9Avr+KAIz19SArDUemK4c6?=
- =?us-ascii?Q?XKOdtDVnqkcxeJVojek45Q/ts1Nx5oUR4+hLuHKeAqHXr9bnmPTew/WAED1r?=
- =?us-ascii?Q?/XlfL5SOfGZ5TtWtZtqqmKYjhxtgDbq5PVMK04I52g9dqWxAP2d3mrdIbx1W?=
- =?us-ascii?Q?UuDBr1THySd0qUo+aNfDszRKDg56f930mFCFyMs0/95PAJ2W6ftes6+/tNQG?=
- =?us-ascii?Q?icTgyAITgsthT1L7i/u7d+MyO8eOMwd+hAuD+cMUUSPqoNlQq33cyeI/ZGTI?=
- =?us-ascii?Q?HXgi3/OXHZ1PP+9k0F4chdPGzLEs6VBjcNicASTuydcw7fj3v2T6zMHVb0J6?=
- =?us-ascii?Q?6JkdVNKiGBZUL56slzjDYZLsppqXqShh4uZ7uKCIHEFd8kuyhcxBXcys7SCy?=
- =?us-ascii?Q?JUwZef+34AartN4YPJCwQGsvQHl5jq01eAqrc61F/fFDItRmcUSkNuXxBOrP?=
- =?us-ascii?Q?jTgPjWdyuwKrE1Yyxoc94C1Cc3nQ9Izg+Ud5WzbJXdteOFhT47cUmLfqNMT9?=
- =?us-ascii?Q?E0veNrkMj5usZWcvYtEXwGmp1kRP6WdYFw63L2a7Gu+pBF7kux0rLmHzkYA1?=
- =?us-ascii?Q?Eyzs/HZ884N/Vo46wHAliFjTiC2FPlper65nN6Cuty8EPH7immJRLCMC8luv?=
- =?us-ascii?Q?tPLZhKA+KiuPweZOmRPDv8Xd+BaMST47fHAlsoWgwYYC4mtBEXsS9bHU4L+E?=
- =?us-ascii?Q?blz45YLfshO9icchhVZm/zdt7M9Q8Q4If7csB8aOGbUjR44qXH8TfYmKDDTH?=
- =?us-ascii?Q?8poyM9JGDUhhQw0=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6515.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?wh9ON+4tNuEMFrrw8gvqIkMS/0xvvg+V3Z58OyGa9f8871T29OYeAuD84z7m?=
- =?us-ascii?Q?ckvRRYe/iaS2QZ7uEvbgEcpHp2jk9Agriq/IH0dRAk32maAQIyYgnpfF7DNN?=
- =?us-ascii?Q?kLOS+IEBDWXc/J6akRLHqqTIyZ2FrcWYUr7ulBuQkP2in53ZZcH0oUU9J+Q/?=
- =?us-ascii?Q?7nptKpVWs2n/QfnWE368/vagEO1tQLtdW1wBHk57nQOJKsqgjoiAo5k9PUkO?=
- =?us-ascii?Q?TdBfUrrWIa6JStT6WgzDkoDnGvufKmMpItZJ7TqnG7FeZc1Koi+sLoS8uFzB?=
- =?us-ascii?Q?lpXf8no9IQSWyBWrXC2QX95mZBLzqcAnoJ8QDRMNLo7KYS0bI1OyPKyqqCxs?=
- =?us-ascii?Q?TB9R7Eu4W3G0+Uviaj/fNOBQEuB7Y9DHGaVBMl0OsiQpo2oRJKKc2dITD8M/?=
- =?us-ascii?Q?NHeK6Ls0rij6Nh9AJhEOGWB72iNlxvKUa+5L+Aclkl+wYtBBMfHpWGTh0hpl?=
- =?us-ascii?Q?fcYXsBX1H3DFK+pFsB9B6Z7NFmVV2ABlMqu/ArJ1daK7f6gvskwsjwVFtOsw?=
- =?us-ascii?Q?XWWgc5F0U+JFc94+r1BDROm6HPSdmgE+eqnWQU+FOy+QkX6swB1PbyAc6F/K?=
- =?us-ascii?Q?fySQu5s8s8AM8b7xhq49dDsKaY3Whk3+LoWUYnMSuKnclaBETqi8E01Jp00t?=
- =?us-ascii?Q?hu1SDB52bSjWPqBQRN0/hntCy19s+sVLi4K5BvFVAIChkDqHebBDGDEU5QNQ?=
- =?us-ascii?Q?dVhFNzLwiaofLOX6B09RDeJtAJvGmpnld3IxSjUzkUrcAsxAxMcZBWXIft3p?=
- =?us-ascii?Q?3i7wRfDI6i1Xork36fc/TIhElOSW2XLL5cmPe3fCsDau6rGQ8Vt5NelzrQ21?=
- =?us-ascii?Q?5IJMRYIU/xLp/SfurY2Gtwiag9idTwgDBcwp9DO5HKVJdcgP9j8q0aViwXHN?=
- =?us-ascii?Q?dqfCO0WlPt7x2qSZ+g4AIxmtBcKSthZ1778IA48/Cm803CfsjmeNRRw6TtQ4?=
- =?us-ascii?Q?9xnzuSOm8HYonqUIIOgegzsEhDFi33WhxPnFiHDv6dwk+9/2OBTE5r/0brbm?=
- =?us-ascii?Q?ueKYfqN5ps0a5pa4aD1nNTRSWbF11aLQKUmH98SEFc/VITEUCzw0iUlwmjJX?=
- =?us-ascii?Q?HHH99/Hd51ZEo3tg5S+YWtgF9faBD858fQ9QW7TQ1/FsuX1cjmf+CPS3BpnV?=
- =?us-ascii?Q?OVxt8TElu3VMXybgSO8itxY18JaV/DpSKFJPdiVReGceMKEODic3SB3mOOQ/?=
- =?us-ascii?Q?DXwpGgelAQFk4NH/nufdG5izm7SJrUA0kXZ4ZIXu6vN+hqWuh2M8RodjgEsH?=
- =?us-ascii?Q?WEab4imgHenowQmh6XoKfSPWDZqHl8OKDHwU7utfkJzEzsB1r36PV83STCZT?=
- =?us-ascii?Q?7t6r+9tcrSoIdfLuLgHYteEUHE/cyUGxU1J60+S0iUqD2rD8YLH/C7DffuAR?=
- =?us-ascii?Q?pU8wVWLyuGQIeGYQXVAh3gP123QZOnfOGsYnMjlJSAfzDdVSYn5rrMEu/Fab?=
- =?us-ascii?Q?+Unjlv/QvbAioXC05taHnIMiQ/zI/eJ0xYZURr3pRXyNy2WiXN58uZuGpYBC?=
- =?us-ascii?Q?hL4f93QWJRHAbqhbUJIpVD5y4fwfretH1TapRuBGw7EM1hl+1lkixGE4f2Mx?=
- =?us-ascii?Q?0n6kDbyj6mMBpc8KYyQ+K9JkykpAlggS+1fNVBUA?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200A825C807
+	for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 07:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749540929; cv=none; b=CDuepfhlvBpyNmJyPRoqPySLNIjlJYRBC4wWQ5BVPvO4PZmYADwWqHb7F3I+yDKDs/cgt2t6b7co3ksuhPYU9dzPEMKOKvd6AwwLsVfITOoGbxZsz5T0I9gjA0VE/yKZoEsY2W9TVwGnp+IPhB/uNXZschHHKGzuAhBVSVFUWvw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749540929; c=relaxed/simple;
+	bh=71kPFbeIHYmPXRrsapFjJ64rErsVjsccg2t4mfNpiEM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Xga/tpbNDgcZl11Zc6nlZzA1jp3UP1fBrKOftuu9yn64K5/mis0CzJV43Hg7v+Cuf4VjQRzrrcv5TfpbIPBC1+NJAZk1n+Dk6jhFw8wz5fgALb76xEDqwqljfQXoj3C67BtV+WqR1tzLTrCNorQBeEBCHyAu5Tnnhrwgz5wZ7XM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=UHFOtx/Z; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a5257748e1so3410695f8f.2
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 00:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749540923; x=1750145723; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8h3pByd7nHfj/LOV5MKawLqfW6jLcpqpN4uASplC/o=;
+        b=UHFOtx/Zq2ijB4N9CyS/RSsKXse9SG6I5ILS8/zIG0MDDQWZgThEWge5lGhwmlMXUS
+         zw7dqdvn7clTkJV5MsEqDfpRL3L+FnhahuqWUP8Hs48QG2qWB3BQfPLIPhvfGGEQtfNV
+         HzuCq17yUvjmmQbYtDJ3AfTcKuevFynySCs7y3+Wlg91TtNwmdXF7fKXizANexd1SPjp
+         5/c9e8WBYyE3RPxg/ZYUiPalJ1PnSCkvG1Q4LE6HF02VvLkfCOTTE7gcLKBr+rBykPhG
+         G8eFbv+78cab0TRw08uFl/Q4A9bUUVkBKzoGsZcBex0UNXKskmarPyblQl3rOe2C5Rom
+         VyDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749540923; x=1750145723;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J8h3pByd7nHfj/LOV5MKawLqfW6jLcpqpN4uASplC/o=;
+        b=HrB03F+jQRcs6Z+ng1hKrmHUazExmBF7+Vrs5G9AcsoKOzbDpOYMb6BGulrWRjv9+i
+         bzI/Mp35EM/6rDiTNVLuDN6dxZdi3wF8ig3NvlgcboNkrp4OIU6N+bMCnH19oDgxTOoX
+         RpYrz1805VKbchKUnzk37dpIYEeo54Ai8gh0M+/d7MUKCX3gwJLMWAOEH2AQK6rStcqI
+         EEw+Hk609viwnvU1qJ29oTv/YY0hSxW1vD/sGSuXMbRgEcYhtKsSSMfEFHfA+Dvcy2qo
+         K5r1VrrQPylnORBl9EmWSg6TKD66FGhLIx4m7BB9LI8cltCq76NyodyFMjiGt8RwxCbL
+         ho5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVkaaoipm74i6g8KrK7EV8NYCwmu63DIXHMlQUq9KPwT7ntVv+AgcgJHo7ZRtwkFTRzc0IJeemcvnY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyal+MT1a3ICzTXFSY0KprtrXUpAAr0oxH+4r7rTk/NPkMm/2/W
+	+8cuMAvqUDbAC8UNSPCpceCq9jaFAfiiZQHXDAVt6Cj8+H35S77P5imIF8/00U961JS4MMTpEer
+	PewOM
+X-Gm-Gg: ASbGncsIqQZ837EWqcLDAJB4WB4u+/WmW6bihZPcDd+7kFB7lkkCJ6PV/Lq3Fg8cb0g
+	ux48KyvNa9OjePp0Cvi9U4SQQAWp3+6brWp7Y5uKm5bgfmSKsSGpPJ1+K+g3uxMSSrzv2A5mOzT
+	fmOUe8gj1h2KoCWeH13BPm0Gv8BB9V2bceiZjQkHQr9lkx+RHM5Y65HSIcpjc+Nn/A6Dix9akv1
+	qdfjpm6/IjhwLmG35KwF6NBcaOb65rIUKNGTj2CNzlhBQReq+90Uo5d1u8d7MWCV2FHTtcrwNfc
+	gHfrdfmPoSfpKvq2lbqxV66gYJUvfTjAgsDh/dmHaKNsZqaZFnTnb81e9Gnp1K82ghbZH2p4h7D
+	qWWqxl46Q0ovgvv+/drdWcG6hZSs3dpt5syWkaIE=
+X-Google-Smtp-Source: AGHT+IHsjxzUdELx18rezFNzmxJKTNRB40yRUhdYPbz4AWECwksdtBmek2zjwBXvFRk/XTsDTzbT5w==
+X-Received: by 2002:a5d:4dcd:0:b0:3a4:fefb:c8d3 with SMTP id ffacd0b85a97d-3a5319a7a59mr10793288f8f.40.1749540923424;
+        Tue, 10 Jun 2025 00:35:23 -0700 (PDT)
+Received: from localhost (p200300f65f13c80400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f13:c804::1b9])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a53229de0csm11340604f8f.1.2025.06.10.00.35.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jun 2025 00:35:23 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Alexandre Mergnat <amergnat@baylibre.com>,
+	Cassio Neri <cassio.neri@gmail.com>,
+	stable@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH 5.10.y 0/3] rtc: backport support for handling dates before 1970
+Date: Tue, 10 Jun 2025 09:34:57 +0200
+Message-ID: <cover.1749539184.git.u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6515.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de904ac4-d6c6-4b18-c131-08dda7245a6a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2025 07:07:53.3690
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YT/sPMc/FrIc4xpwfIwE1pVY2HkOJf9y1UvKGNpRm2J9Nv5coH8jiz390s+idq44dHpb1Nxrn5+NjmUVLqVr4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8521
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1574; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=71kPFbeIHYmPXRrsapFjJ64rErsVjsccg2t4mfNpiEM=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoR+AimG2JUFGxzNyMnxXuTqUnbHEaEpsW4FXrB 2PwIf+nkaqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaEfgIgAKCRCPgPtYfRL+ TgjDB/91AsfWdd/8uhhcXzbfmNtuQ6RvC731jWw73QR5/rwcdreCaKfHog6g1KSTSp9WhuSe5S1 Mv9F/RW23lj7vyPKz5JIkPjCU3EAI0MNyCLu5Y4SfvTzEF0vMpTat8bAlHZaTfQ6ulCpgR6HKfq n4LxGhMQYI7OCUt2UOpPofHDAdMdTL2DeyjmMJDw7XKyNoKO05dFFzGC68PlGqe8bLYYTmGTtdF U38unQADW5/7+wha7eEhQTRnsyYBg1iOIl7EcZzj4JAx9oOGiqSkhmULtcoO8llRtzxNk9RG8bd kiQL9oNKV6gIAEKNvXOmriWpw872xna05QDPkDQ4W6qhQAOz
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+
+Hello,
+
+this is a followup to
+https://lore.kernel.org/stable/cover.1749223334.git.u.kleine-koenig@baylibre.com
+that handled backporting the two patches by Alexandre to the active
+stable kernels between 6.15 and 5.15. Here comes a backport to 5.10.y, git
+am handles application to 5.4.y just fine.
+
+Compared to the backport for later kernels I included a major rework of
+rtc_time64_to_tm() by Cassio Neri. (FTR: I checked, that commit by
+Cassio Neri isn't the reason we need to fix rtc_time64_to_tm(), the
+actual problem is older.)
+
+Now that I completed the backport and did some final checks on it I
+noticed that the problem fixed here is (TTBOMK) a theoretic one because
+only drivers with .start_secs < 0 are known to have issues and in 5.10
+and before there is no such driver. I'm uncertain if this should result
+in not backporting the changes. I would tend to pick them anyhow, but
+I won't argue on a veto.
+
+Best regards
+Uwe
+
+Alexandre Mergnat (2):
+  rtc: Make rtc_time64_to_tm() support dates before 1970
+  rtc: Fix offset calculation for .start_secs < 0
+
+Cassio Neri (1):
+  rtc: Improve performance of rtc_time64_to_tm(). Add tests.
+
+ drivers/rtc/Kconfig    |  10 ++++
+ drivers/rtc/Makefile   |   1 +
+ drivers/rtc/class.c    |   2 +-
+ drivers/rtc/lib.c      | 121 ++++++++++++++++++++++++++++++++---------
+ drivers/rtc/lib_test.c |  79 +++++++++++++++++++++++++++
+ 5 files changed, 185 insertions(+), 28 deletions(-)
+ create mode 100644 drivers/rtc/lib_test.c
 
 
-
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Thursday, May 8, 2025 7:54 PM
-> To: Pankit Garg <pankit.garg@nxp.com>
-> Cc: linux-rtc@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org; conor+dt@kernel.org; robh@kernel.org;
-> alexandre.belloni@bootlin.com; Vikash Bansal <vikash.bansal@nxp.com>;
-> Priyanka Jain <priyanka.jain@nxp.com>; Daniel Aguirre
-> <daniel.aguirre@nxp.com>; Shashank Rebbapragada
-> <shashank.rebbapragada@nxp.com>; Aman Kumar Pandey
-> <aman.kumarpandey@nxp.com>
-> Subject: Re: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a sup=
-port
->=20
-> On Thu, May 08, 2025 at 05:21:47AM +0000, Pankit Garg wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Conor Dooley <conor@kernel.org>
-> > > Sent: Wednesday, May 7, 2025 7:53 PM
-> > > To: Pankit Garg <pankit.garg@nxp.com>
-> > > Cc: linux-rtc@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org; conor+dt@kernel.org; robh@kernel.org;
-> > > alexandre.belloni@bootlin.com; Vikash Bansal
-> > > <vikash.bansal@nxp.com>; Priyanka Jain <priyanka.jain@nxp.com>;
-> > > Daniel Aguirre <daniel.aguirre@nxp.com>; Shashank Rebbapragada
-> > > <shashank.rebbapragada@nxp.com>; Aman Kumar Pandey
-> > > <aman.kumarpandey@nxp.com>
-> > > Subject: [EXT] Re: [PATCH v3 1/2] dt-bindings: rtc: Add pcf85053a
-> > > support
-> > >
-> > > On Wed, May 07, 2025 at 12:56:17PM +0530, Pankit Garg wrote:
-> > > > Add device tree bindings for NXP PCF85053a RTC chip.
-> > > >
-> > > > Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
-> > > > ---
-> > > > V2 -> V3: Moved MAINTAINERS file changes to the driver patch
-> > > > V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
-> > >
-> > > You forgot to add my ack.
-> > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > Yes, I forgot. I will add it in v4. Let me wait for more review/comment=
-s for
-> couple of days.
->=20
-> And if you don't get comments, don't resend just for that, the maintainer=
- will
-> gather the tag.
-
-Since there wasn't any feedback for this patch, i want to send a gentle
-reminder ...
-
-Regards
-
-
-
-
+base-commit: 01e7e36b8606e5d4fddf795938010f7bfa3aa277
+-- 
+2.49.0
 
 
