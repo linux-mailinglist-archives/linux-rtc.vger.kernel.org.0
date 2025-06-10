@@ -1,151 +1,128 @@
-Return-Path: <linux-rtc+bounces-4246-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4247-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034A0AD2EEC
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jun 2025 09:36:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C62B4AD35CF
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jun 2025 14:17:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3FBA3A932C
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jun 2025 07:35:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CCB97A6FD8
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Jun 2025 12:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4461281368;
-	Tue, 10 Jun 2025 07:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A5C28F507;
+	Tue, 10 Jun 2025 12:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="u7TpJ0Yq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xKAYnwT0"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F8C27AC44
-	for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 07:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC95928ECEC
+	for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 12:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749540932; cv=none; b=fUSfiZ4Wq9O3tjiwYVPnRGsWKu3rm3Xry13firDx0vJRoTVPYTuBNPS9eGfnN6Y/9CZtmVKGNf5wdI6LuizPOqypScd0pmT8VLK6QBht/YIJNcqabpvL4FlqKdsW2807OQfbmP/BarhBfzf+aMn7xMFtbeDmDpXZfa1grk8apQQ=
+	t=1749557824; cv=none; b=dY844b8bEt4kk+Ejg/x9UoPLWMzrOfilGddoPTGZCpnOW3gX0nlbWnBqOdQh345bx4bqO8+boVp8xxeV6ezo2GeI3n4JamVUErkUEFs5HYTEoZJTK7Yz8py54QCa+VjDQ3i100n9po0467vhfKUryrju0VqFAXoX1Le6NKkDXSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749540932; c=relaxed/simple;
-	bh=qYWWP+zpjIyMrJlRbwnOtKfwQXnuMdXDuWoMJsoC4D0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oukMDyePFioLlLWn7XjIv4Zuq7uFLcf1n+be4Y8mgg+XsgH4wygt6DgSI9lOVFeHEOqmhl2sl99EQ7HaZa9AxLDFL6UQgTBuiIy1fvzukSxYder0CE4wi3dJ4VSsit2ur0QCrBLOInAaJ/3upU+LGu1o6m5adX0yuMcf5c3xXqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=u7TpJ0Yq; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-450cfb6a794so32802745e9.1
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 00:35:29 -0700 (PDT)
+	s=arc-20240116; t=1749557824; c=relaxed/simple;
+	bh=siXBLzRLss7mh07NwalB4yKgr7YnqKr9rIj6Xo6f3j4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=izGJe5BxF7gWu5PkyjAp9G7062SUww9A+ktG7d8nhZ2GCiTSulABCNJaixGounC22Dy6iTVee8Hh4SVVtiOrfYKX9l5Nvysy0Vl4rNj6kW0qK5QgsOT+i+sTAtWyZm8+eGYSrNghK8IBfiRe0EqjT6DyjXHA/mqES1wgAWn4Ekg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xKAYnwT0; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-32adebb15c5so35144471fa.3
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 05:17:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749540927; x=1750145727; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1749557821; x=1750162621; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0mwQDB1V1PMK3IYAreD4ugNvP/HNaIrh6csOiogWyt0=;
-        b=u7TpJ0Yq1WEymvGqsE7D/Y27s89irCz5pmwCl5/FC6GRhcqoeKJhxlWyk1VvSynTxW
-         GjaGEEw43TMcImdDQgsg+T/1GsKxkpG+K9tsoK0zOCh3mOymk71WDCK4jS8US/VJblDH
-         MHnPGuMwd5IVUFD56ujeZMYNgxcYwX1QKyMN4Gb7B2/81m/DDYHK5htMtfZc6kGpd1SC
-         XdJMFeuSwqsj/mwZsnP/SGR8lmVRsSr9eOVi+EDhlg+n9mlJt7lZdHKiT5QvVYlN57oa
-         udku+6jEg5g9gCYtr/W11oL7u+7TtaG7pWkaJvR8Vgprk8b8nQKj/8UH/71kVY5eYiXU
-         KZqQ==
+        bh=siXBLzRLss7mh07NwalB4yKgr7YnqKr9rIj6Xo6f3j4=;
+        b=xKAYnwT01L2nhypvYKscjinTuM31ltvKGf5E3UmypxMkAwpbw3718/cE2rbHHKcZNz
+         Twzyryv3vHidqjN9rTY4zlibzIYqXCC7qtrthfAKCmLYrhLoF+3+ratQCgG38FhZ7mEK
+         bCLGlqOEZLloWdF8ACmzbyRRiwPhp3b2pjzLa+IPetGeksw5pVXtLJJkWbx1wNzq0X1i
+         u3M2Ag8GcLV9JpROERwk6wd7dZMrkuzwyt4y4m6KXmkuDFZTzhG7ZYnTSNU0/OTaMTJN
+         i8XbF0aThVtJ0UlYncCosCYbtpFwIwtCOar/SgjJTxlhXzRIBmIncQZhqpT0ajXjCUVA
+         TFIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749540927; x=1750145727;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1749557821; x=1750162621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0mwQDB1V1PMK3IYAreD4ugNvP/HNaIrh6csOiogWyt0=;
-        b=GwZelQ6CVfi/YeWNq5lDQudRcMQ6X7WW61hjMvoTI+kd2QnDH4ptzk0x/S1qGU/UwG
-         rq7QsMh2ct/VNdPKH9rYx8oURS1mmHyDCS3vKxzAz/Xt6l1SgDcBvFGYJIfnUFnAaunP
-         rHuM7VySehuUKHL5twPrE6yAzdXKpS3xyF8DZ3r7N4CSgw8guqgjn0/vVvXRBw8BgAC1
-         XqAePd14+YBWvGWQ8k/qG0MHkzeG803QcXowHHM9lGoLhEzGLFO26701vNc8OkARopY+
-         8468lQ/KKJ4Dgj2EHwGECSXBlTTu36AbpG41yLsKD7ybvWnbiyXwjgik6VXtHQOY5Yy1
-         DYtA==
-X-Forwarded-Encrypted: i=1; AJvYcCWH9b1Sw7AyBLQWafhNso1yFQVniVIoYSZQrgwZUCoc/Ab+1dF7r+EgWEYVqJsshPdaX9Q665P91ko=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvYbGdcOyuzUsKmmhjTmsAUPJEPajoBU5HswWpHO9LWVAp6wNl
-	WgsD5S3zBpUhaOCUB51Iicer9BD9uvmLpU7MtOcpTv0VAsRIdXwNLheA3exVMLxvRCis9ZC0O6V
-	SHPfs
-X-Gm-Gg: ASbGncsJEXnCob0/x6zHKNI9Zl3rhSNHwsnQKnWJqBVCdIkC1Rmy3joT31p+6OpgDo5
-	GKDq582Oe2iJvf3MvZXENpoUgNytod06q5NlGuzwG3HouLxvczbZYEHb6f+H6lbMkne5moIyuO/
-	n7jf8M7+uZ+Dx7N7EN7GfE1aiiPkxLMaOQpeNAjUkyFTTevc0/xQTA/Q0u8SdT6BUwcZrxLWYOO
-	YbBAiwcW5sa4SjfSJvNfbhumdMnxZkfz25h4eXDqwLrvFPYapxi8Jf19h85ojIwA9PMGWn3WEsX
-	mwoJhaD7EbTanAA7cL9dsz7+nKwJUCcPwSfmsSUeE3+LxByIJMpIWTlX+2MlJBQOPD8z+0nMhWj
-	cWYAYcfVVfCZhK1VXXIIGmY++tED1
-X-Google-Smtp-Source: AGHT+IGiKgGq2K6bFjJ6JdVvMouVeeMTVCRkqaymJUWuhRWmRgHQPUaaS3Q7GB4qTMvVQt4GfV8udg==
-X-Received: by 2002:a05:600c:1e0d:b0:442:f482:c421 with SMTP id 5b1f17b1804b1-4531de6ca66mr9848365e9.22.1749540927446;
-        Tue, 10 Jun 2025 00:35:27 -0700 (PDT)
-Received: from localhost (p200300f65f13c80400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f13:c804::1b9])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4531febf905sm5995905e9.0.2025.06.10.00.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 00:35:27 -0700 (PDT)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alexandre Mergnat <amergnat@baylibre.com>,
-	Cassio Neri <cassio.neri@gmail.com>,
-	stable@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH 5.10.y 3/3] rtc: Fix offset calculation for .start_secs < 0
-Date: Tue, 10 Jun 2025 09:35:00 +0200
-Message-ID:  <1f965f4886f65e45423f863930ccc7139944272d.1749539184.git.u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <cover.1749539184.git.u.kleine-koenig@baylibre.com>
-References: <cover.1749539184.git.u.kleine-koenig@baylibre.com>
+        bh=siXBLzRLss7mh07NwalB4yKgr7YnqKr9rIj6Xo6f3j4=;
+        b=CC9BWyA+Jp4m/yn8frXcO2BrwQOr7BIANQjTWDSb8UvA2zA0/FlObF6mCLNYApN9zF
+         IV6HqvcshZ08VD2BIfH13oSnU0ojxGU+f+4BH+CYnWRXyjFkDoJ3anh5xjhWJarsZHaL
+         8u0pNYKoseX2SjCMphndpkTSD7SuyMImeMKe/YPsuyKnWzEVU06BZX0w/Gvj3zA/b6Vy
+         KNQ9rv7JRPtij+545VlQup9V1RZ3sOwO1BUUt5LAeN8AtYmbhIfbcnn2pFB39rmurlFv
+         1zM1/XuobdHJSU/BtrsPo/e1/ySOUa1ZxB7+HxCrpbHQTDBU6UFNfRRJnjbUKBoJx7RE
+         cp+g==
+X-Forwarded-Encrypted: i=1; AJvYcCUpFSvfHdUsPLtM14E951uQfw+J7cia+bdM2ZMqiXGHkhwSiydPR28DYCn6RUr8Oya3X2ZsUFzV4Kc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjugBOy/rt2q0iKXuFIzzlde/B9lgIKKbVEjXd9PNM8Y1v6oNw
+	/P6VBjtyC96FbEVdmHB6UPuMBfdrTJgflFE50tj/DqKUFawKfVAFKQf2EeX7c6LTfyuyvkRXOCb
+	i0daIMIr7K7LlGTXNeSRY2pgvBF8WOtHqcn8qih1wfA==
+X-Gm-Gg: ASbGnctt9n2qPMzqA1H7I/HnyNf0Jx7qkcsR03L8M3v54J4bPcxPMaLDiCzW1/O4/t2
+	rUS85p04apnwRSzLtsYKIuFPXY0mwfY9l96s2I53ebs16d10qlsfVXLs60hQWrp/3hFqXb5KTkr
+	CYU6OIcNzsQzxvA2OKfja0hLN7RAnmjjcf7fAcQ/izvoHNjUnFMhB/JA==
+X-Google-Smtp-Source: AGHT+IFQxMti2+Q8Uenwhc0/S6UdaliHxGCkJGgDod8emAA4asQK/90KUnu0JtAhA4sI4nKXBC2mhVRJZkpkWFN1Jcw=
+X-Received: by 2002:a05:651c:2211:b0:32a:8591:66a9 with SMTP id
+ 38308e7fff4ca-32adfbb0c50mr43449421fa.6.1749557820819; Tue, 10 Jun 2025
+ 05:17:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=X84EWsmN871czU1dFWJrOfrFlJlzjw1vvjrJHqVSPyg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBoR+ArQBYeSFSZJ4ktSO5e1eqFAZgtBRzAwzJ4n EhS6OOPI+WJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaEfgKwAKCRCPgPtYfRL+ ToAsCACb/wdMka0BapKkfUDpg9Y9zstN7YdTWY+CZS8Vxb/UPnEpkfGVQ1KYOSfKQZMjf0v3lI7 +sVdYjDqeosq3NFXGd93UH4o6EOFXpcA7htkcgwB9S0STx/KQwdni4y6C7kDtst0NF6aiF+6Fjs bszqk6qEKjp9aEWdnlAyIgkpmuuGvP3E3YrP7lhJP0ChPRXoeY/1nB6pYxBBsjiKCZDvmF/pbrI 4hL6e2cI1CFNoAHBNFAKssJsKmuoQChJZFmWrccJsvFAN1covV8DMCOkVmquhzl7zFCTMxwYfLN pDq6P0xPpidP80QBa8u876FwSqv2jQ+Y+7rQvScBlofdudY+
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+References: <20250528-pinctrl-const-desc-v1-0-76fe97899945@linaro.org>
+In-Reply-To: <20250528-pinctrl-const-desc-v1-0-76fe97899945@linaro.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 10 Jun 2025 14:16:49 +0200
+X-Gm-Features: AX0GCFuA2Dfvx1J77MshD7Tzhu9rwDlijvkgXfC-wltdCoDdq-4uVh1ABAKFvmw
+Message-ID: <CACRpkdaQLq3YGfOg81gt5=1Wh2ZkoKHeK6H=NWaeW9aLbX4VCA@mail.gmail.com>
+Subject: Re: [PATCH 00/17] pinctrl: Constify pointers to 'pinctrl_desc' and more
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>, 
+	Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>, 
+	Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>, 
+	Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>, 
+	=?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	David Rhodes <david.rhodes@cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
+	Charles Keepax <ckeepax@opensource.cirrus.com>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Sean Wang <sean.wang@kernel.org>, Jesper Nilsson <jesper.nilsson@axis.com>, 
+	Lars Persson <lars.persson@axis.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Damien Le Moal <dlemoal@kernel.org>, 
+	Vladimir Zapolskiy <vz@mleia.com>, Michal Simek <michal.simek@amd.com>, 
+	Emil Renner Berthing <kernel@esmil.dk>, Jianlong Huang <jianlong.huang@starfivetech.com>, 
+	Hal Feng <hal.feng@starfivetech.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org, 
+	openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org, 
+	linux-renesas-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org, 
+	linux-arm-kernel@axis.com, linux-riscv@lists.infradead.org, 
+	linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Alexandre Mergnat <amergnat@baylibre.com>
+Hi Krzysztof,
 
-commit fe9f5f96cfe8b82d0f24cbfa93718925560f4f8d upstream.
+On Wed, May 28, 2025 at 12:41=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-The comparison
+> In several drivers pointers to 'struct pinctrl_desc' is not modified, so
+> since core does not modify it, it can be made as const.
 
-        rtc->start_secs > rtc->range_max
+will you rebase this series on v6.16-rc1, fix the snags and send a new vers=
+ion?
+It's all nice cleanups so it'd be great to just merge this.
 
-has a signed left-hand side and an unsigned right-hand side.
-So the comparison might become true for negative start_secs which is
-interpreted as a (possibly very large) positive value.
-
-As a negative value can never be bigger than an unsigned value
-the correct representation of the (mathematical) comparison
-
-        rtc->start_secs > rtc->range_max
-
-in C is:
-
-        rtc->start_secs >= 0 && rtc->start_secs > rtc->range_max
-
-Use that to fix the offset calculation currently used in the
-rtc-mt6397 driver.
-
-Fixes: 989515647e783 ("rtc: Add one offset seconds to expand RTC range")
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-Link: https://lore.kernel.org/r/20250428-enable-rtc-v4-2-2b2f7e3f9349@baylibre.com
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
- drivers/rtc/class.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index 625effe6cb65..b1ce3bd724b2 100644
---- a/drivers/rtc/class.c
-+++ b/drivers/rtc/class.c
-@@ -314,7 +314,7 @@ static void rtc_device_get_offset(struct rtc_device *rtc)
- 	 *
- 	 * Otherwise the offset seconds should be 0.
- 	 */
--	if (rtc->start_secs > rtc->range_max ||
-+	if ((rtc->start_secs >= 0 && rtc->start_secs > rtc->range_max) ||
- 	    rtc->start_secs + range_secs - 1 < rtc->range_min)
- 		rtc->offset_secs = rtc->start_secs - rtc->range_min;
- 	else if (rtc->start_secs > rtc->range_min)
--- 
-2.49.0
-
+Yours,
+Linus Walleij
 
