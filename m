@@ -1,83 +1,81 @@
-Return-Path: <linux-rtc+bounces-4253-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4254-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7484AD4AF4
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 08:14:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCF6AAD4B16
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 08:15:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DD987A9FE5
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 06:13:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DD85189E454
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 06:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884A022AE7C;
-	Wed, 11 Jun 2025 06:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA3522D7BD;
+	Wed, 11 Jun 2025 06:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fac+vam4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jCjuaYR7"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF9D227EBE
-	for <linux-rtc@vger.kernel.org>; Wed, 11 Jun 2025 06:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375E022D4C4
+	for <linux-rtc@vger.kernel.org>; Wed, 11 Jun 2025 06:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749622459; cv=none; b=kl3Nlmu5WMmTmRbHV5UIv/2utN5x04KLBBA6B0Shzvdv8f+5keTE1Zq3mIgKwHKC03zjPqfMNnR3avge14OUulP10aD9v6rn1WyaHMxYH971Eg8CX523+B5jsl2LNE1NcCZqs0YIRJ51eBHkRRrT1UUbi0X0Nt0BA4EfakDV5tI=
+	t=1749622464; cv=none; b=bApXFGv4jFOuR5rN5Rz6J/eZP1mlT+7WMcd5pw4tC4d/zctVJcoxO2I1dJWXwiwxKE605S96pe5MrvM4qnoLuvmeQ2NwJZ+iXJ9HR1lIaWYrUeTVorB2LV169DE0BP6helAXRw/OOh20kF42AToQc9vF0cX0UTG2anXsObsO5qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749622459; c=relaxed/simple;
-	bh=uGHDfIA31YKh5ahk8efaA6IVYuJLI6m+zDCouPPq644=;
+	s=arc-20240116; t=1749622464; c=relaxed/simple;
+	bh=NNpY2A6LBp263syvyG1Ecsfx8CioM309dnOrlcmWHKA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mo3+TXIQHTrypcLnNh7s+do98hhzW8qthYm7GZWGOGLBtwCLzHYSHlcRYA7u4R/LBe//VKRpJHmAc+32F6gk4stbDpw/ZfWN2h9h5h7mwuXbkTU2zqy24Ezu0s6sl5gVKScF+qqxojOc7P7VyHYJfXsFWL+QQwLZR6dK7UtQv9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fac+vam4; arc=none smtp.client-ip=209.85.221.53
+	 In-Reply-To:To:Cc; b=WO6wPwzs4MrqK0sk/X8lSkRwGS8lBZiH/FbcnHcw9FV6wYkBln5anjSuecg6/xDiQnwrS8X6C0z3TTnaNeDv4Qinzt0Hq0EaMRr3Gf9ool7bKNT3i/aC8XG2a8OMknLkcETVWN+bkk1tS3I7R2tM9sMRalXViSnY0xlJLJOdYio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jCjuaYR7; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a4eb4acf29so27433f8f.0
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 23:14:17 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4531898b208so313375e9.3
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Jun 2025 23:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749622456; x=1750227256; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1749622459; x=1750227259; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LmGTr9Avtp+9E1jrxJpsP4+QY45B/matmjkDOASukCY=;
-        b=Fac+vam4oc8RdfoM42T4WhQ9GbiEkekKkPdEux9SMdo014+A7g51g8KD2/RwaXQ+9P
-         QgJ8cyMwhY1sVptE6bkMBo+eALrd1xN0DLW3jrBaelCYiFDsAlyD+RNERmWcLGHD6xp/
-         kkAfMz/O9grwA6ZubNmDicyCp4VOwntnZx0B+zvWzYY7Run4YiCLNP5IAMnJymGnGJhH
-         5lU1SutesNifWeSdHorE6/qH6Z0h/EbMx8goPtABL6jkL4fHqAN10mFUaAXN+8ul+58l
-         rBKlL/xGsk4S/kAboIJKYVOjCfcgXpcJiWjjx8bxTl3tz8qtQpaApRt8F6gCPfbzO5Qt
-         jQQA==
+        bh=q86QDWzbyqUrHwy10F9ZLVZs4bIWtafdYZALzNzfzYA=;
+        b=jCjuaYR7O8tZkQzIrDwhyqdYKo7gzjZ6heJtIsGbQCMg90zGo1duRORdJqVtqhC3Rn
+         bivuqUQZtpTVSqbOBs0fEY6AvyfrKimtF+8oOC8CrdqAMd1vkkcO5c3wh0hrGJWKNP9R
+         cctucrVnc5l8ABnbI3mjbn+GBwldtp9NJIwf6UP5jbDfEcG5HVJDY1LGsqvGrGG8WHti
+         63dTiJxUMuNAUP6QoKZDY6qbIO3NvuhuTbnLz8skuXYLXaPEaeJ1TPfcbXILOMiKGRH1
+         syJmxEZXr1ej8YSiUg+PksC4eZDpXO3LX+oWtZIjEYLxCI88cYxcmLz8mbf7XZXJMeQL
+         yA8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749622456; x=1750227256;
+        d=1e100.net; s=20230601; t=1749622459; x=1750227259;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LmGTr9Avtp+9E1jrxJpsP4+QY45B/matmjkDOASukCY=;
-        b=FWxFtyUEWYylq3JeIj30Lc+DjsvXhIWSm4L5a1G7jh2onHiLa7s40qneX9uwb7Zu3b
-         ajXmxlVIbggRFraNnLyN6Phjgfel0v/1U3AdgdFJSyNxs/g5coaiqu5lOFC7FPfKzcge
-         peMuK9AseKPKhOtbTpjlTUSe4yfvW+1FWd2PUCU9TRYmB229LkRINKFLJ+NT2J13yKVX
-         LwfrNgwBRbV7h3FkDYvPpqw+QneZUnVKAw1RNXijIvkj3KeT63ClueU++00dJk63CvHx
-         coBMJthf7e3vl1rkpH8E10ZjiWcz2AZmNroTP3uDtSfau0E0iBi7FOgYGdBzwp7KGoM1
-         FU3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVH7iueFv3Iqb9tiEEJ5eA0TmfKmmDX5CLJfpLsUwVzXOUsrb1XrmE4qHGyyGpzwS5zlcv5x/nHOf8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/hcJUxmP4Ek1ScpNRhd7v5+XSzR2tHrOTCG4XB2OzSKGDRGhS
-	5fW1tq9L2HQ8RTxr8dv0u2mxtpmnooHH5wv75pkqx43AmDCmbae1fUB8VJBKBm1hovTfF5J1QB8
-	MQXzb
-X-Gm-Gg: ASbGncutSiZ9uBSFkYYcwxGLCNWAIu1+bvocUR6nNOaltehDmSAjLxuUAkJc8TOvQei
-	Lg9QUKXLUUoicgNC2MQmYEdL/QgjpFdGMQIMmJmnSLAHwjW+WciKVPbLURurQnLXWAsoUDVYJ0k
-	jIjE4qZLDrRmpHQu8i7zzt3P/QqIq450KFAVOzLwYlT8Z2cEKAzgMHQknjy1nbxEnW9zbGXyHi5
-	Z7TLSI4uPo1uYmF0c5ujMP4nUeAG6b7jj6lUvkdb2htdIFSZ9V9DuzO1Y0fJOZp/fW3UidrMDGA
-	RoL8C+pZXcLyGg/s8PzfIRbJzkSrg8eEsaMYGyDrY186BdkZsN6SxOUUdM0iIVQZjs5DKUdTfg9
-	L0zV57p8=
-X-Google-Smtp-Source: AGHT+IGuARTYLyF3UiF9reCUirhd/Exv3gey0a/FHP4hXPUPwwAH7XeVaLmvzmzisoq7vXGGNYY6fw==
-X-Received: by 2002:a05:6000:4205:b0:3a3:7be3:d0f3 with SMTP id ffacd0b85a97d-3a558820e34mr451650f8f.14.1749622456103;
-        Tue, 10 Jun 2025 23:14:16 -0700 (PDT)
+        bh=q86QDWzbyqUrHwy10F9ZLVZs4bIWtafdYZALzNzfzYA=;
+        b=K7tKUOgCqF9XrdlR6szViaOJR03lKO5amZ+/tQtxozhdPJmdzRT9+Z/P9JT1CZBc2T
+         RIILvAEmouSvKgSr8VlCpj5GBLxF0YRj6EQujGXPxZbZHa+lqwmYwZaAVRY/cHaAgpew
+         vSd5ZNOpchMFyncqenBtqZ/91qGFzZsHbM+2jxvcQZ4sZD2Apioz06JUD2lM5h109pxH
+         ELbD8XksJ9cNg6HLC+AxUDgvcUdv4OPFNHyK37P7Q7g/AnuNzMrJBh8KjYBBbMW+XDqE
+         tM4I44PUgBkrgx8V9eCTvsx7XF8kciqeaEfDn9EoQdUchiY4FLlhKQC/iOaqWuBB4u8L
+         13kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXR38li2JzDlbhv5zdFM4eIvnV3NS1ddFQ/6j5uS9qwtycn1gM3pBSVF8GnzF7YsFCAEd4q10Gnw7M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH9USG79HXvZLUUQKsQ2E9lRweOCQZUsKMXSsQXaEjFlZCvAoK
+	mi+uy0QBiVCg41PjgQ8MbMnEDsiebXlyzMzKh/ysMwseQx8OUB8/eDqhtttte2Akrno=
+X-Gm-Gg: ASbGncsXm9sHR+V+bl6iM3Gt0/TbNfrtReOkrmkjxPYehH4oTcWfRcBe50OZH9rH41Z
+	S7oetcGkAqe92XE3S4I/C0mrGdjTfXieJXeLPfiJCna24Nv7brFFhmVGnsEhZ4dClPPyf3E8zz2
+	WJx5S9GZjIFM4/KZ0G/NsNOZM/CZXor0sFgUYgXO//jrE96joSkzrFtluO/cqM9YmSR2RsrPP/6
+	jOD9cLd9YT3hOf85T+vpy0Bsj5UrdSw/bbC6RwldSOJ0TnE9tUBamwX/2Bhn+iKhRZf+B+qDnjo
+	q0AyRspJ1oqtxzGgdWIT0QvzrZxfQtNLuYjdvQRAOQ+jArUK0GU7dqjq37OCiXbPL8cZiRAUj/u
+	UIUebsSM=
+X-Google-Smtp-Source: AGHT+IG0MrurMqwANRNDslKVkh3dKprU9y6IrTQpViebfAkp6mB1Umn/L5OKQlg735b88DTWJ/T9nQ==
+X-Received: by 2002:a05:6000:288e:b0:3a5:2dae:970f with SMTP id ffacd0b85a97d-3a558821396mr547873f8f.13.1749622459437;
+        Tue, 10 Jun 2025 23:14:19 -0700 (PDT)
 Received: from [192.168.1.29] ([178.197.223.125])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a53244f516sm14142791f8f.74.2025.06.10.23.14.13
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a53244f516sm14142791f8f.74.2025.06.10.23.14.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 23:14:15 -0700 (PDT)
+        Tue, 10 Jun 2025 23:14:18 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Wed, 11 Jun 2025 08:13:34 +0200
-Subject: [PATCH v2 02/17] pinctrl: Allow compile testing for K210, TB10X
- and ZYNQ
+Date: Wed, 11 Jun 2025 08:13:35 +0200
+Subject: [PATCH v2 03/17] pinctrl: amd: Constify pointers to 'pinctrl_desc'
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -86,7 +84,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250611-pinctrl-const-desc-v2-2-b11c1d650384@linaro.org>
+Message-Id: <20250611-pinctrl-const-desc-v2-3-b11c1d650384@linaro.org>
 References: <20250611-pinctrl-const-desc-v2-0-b11c1d650384@linaro.org>
 In-Reply-To: <20250611-pinctrl-const-desc-v2-0-b11c1d650384@linaro.org>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -126,66 +124,74 @@ Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, 
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1377;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2097;
  i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=uGHDfIA31YKh5ahk8efaA6IVYuJLI6m+zDCouPPq644=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoSR6g8xxyHU0HpiCDaPmzEcUGbG3i/Yo/YG0Wn
- 7rcaYbUuOCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaEkeoAAKCRDBN2bmhouD
- 15vZEACL9S/hnI46RCXgnSdsn6o+epweo7vg2Ve0a0tgPgDpJPr9sxin7UVOYpBd9VSMJJQoLLF
- aeqFMhIemW0RcumAWboyA4gfV7dVt4MPt/v++UUEhPUE9TwivxEkN5kMfkB1dRF4+MjSjHDuvGC
- ZPBUhFjQCXOgwCVHKydx8vmuJV0CXug08L0YllTPL8pXovkyewDPdTKqQaFhukVSfPcO9IOAgtx
- M5yXLQe29xMW0Qyyul/SVfUXoGYtMZqzVJ6W6dzSnw0YNlMlEQg2zyirVpJ5F+/OHhCzmyC/8hL
- vY3Rtcjw+MHY8cI42dcQDzeoAKALlg2/hy1crOMdKh8wSr6O6LFk7rAOTcWChL14XAoUvJpX+zd
- r0YhSuMLTab6mVHTRRgnXKL1v2XuGeY/7QwPQxo0jcTZpaoreoReVm+cJ1biQiLJhRB30IaCe1g
- tpwj/e5Occ6qRtXtGh73XlrINYyxw5OzGdzDUiTSx1Bd8fBfKqn1ojFrBZU6c0EfEOEodfM1L3V
- sIrLevCzW4HtOtGrGg1HFUXnHrJ5DdHAsk/NQrAi6Yy0jFf+hLnI1SRhJfuSoGrStvp5Z4M4RDJ
- lCsyjBjzLRgK6m8GXnTUqaoCeXd9zcxJxwOmrrtEsnEGDuREqGFpURGacr7KDtTH88JLMKCC9g1
- C5kgftvilxEQjiA==
+ bh=NNpY2A6LBp263syvyG1Ecsfx8CioM309dnOrlcmWHKA=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoSR6hdhqC2eDe217cvGUZMEh1W/4vld1oNnYW+
+ YkZbRVX0u6JAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaEkeoQAKCRDBN2bmhouD
+ 15CoD/4hfYjkCZdVyazNq2ibT7AGxKu+nI1YPoMthyyZMz5plU+l+nNgmymy2NyhFPLVlkvCK4A
+ 4FsvS1iJn3Dkr+y2bC4QBIUT6dXj23C/I9Y+3v2Xg6Hx56dWfC6oNqEvF+rYuLqoJpq7A4T3RPj
+ 11snIaP0e4JrVwiKZh0u+TcJM7WOVXMiQmX60PHyUR1rnzJ8HXuhCqTtE+RTBK6gIjHFzZGp5L9
+ q8UgvNJTUf5z2aiIeb1m20vw8f+zaUsHEVTBA5pQfrzaP3VRCuXmtWb9nRDuE1Q5btLjbaAmtiG
+ 9eaROFIx5bFOf+Sg9Ok9Gj2Q10AZYnHmnkoy4IqVI6kGx30tO/SVz/T3rgjNol+hXAQHI1hLcmk
+ XVGVC16NfQipwhxK+aPcl2ywGautuFcWgIHKgPcVZZENQIcSUvtYzB18VACNwO+5ipDcASefqro
+ QFP3fiWL3DaMswdeQCBUr36ds+srNu1ED0hRChkBFVsv/mKeJCXpoy9aEwWCSVtFi89Zld0QFFX
+ MVKlitmuZXfSPnxmXiQaGaYXstF+0Fj4VHKYg2U27Irx1aunnaZdNwgPgX5pSPhe9Y4xoUm0xrm
+ 2HtZbv19j2BQ7vx/8hkKMv2025M8QDoGlqAB55eUy1ppAZx8gZ1ZQyAOOBIcShwwTyUgeLGvELM
+ hElg3VcQFmHOyDg==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
  fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
-Pinctrl drivers for K210, TB10X and ZYNQ do not reference any machine
-headers, thus can be compile tested for increased build coverage.
+Internal functions obtaining pointers to 'struct pinctrl_desc' do not
+modify the contents so they can be made pointers to const.  This makes
+code safer, explicit and later allows constifying 'pinctrl_desc' in
+pinctrl core code.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/pinctrl/Kconfig | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/pinctrl/pinctrl-amd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index eb1b37af81fb81175d22018cf4856bfafaea75db..9b93a11c5755d5e1b239b34d5d66d5717b281265 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -269,7 +269,8 @@ config PINCTRL_INGENIC
+diff --git a/drivers/pinctrl/pinctrl-amd.c b/drivers/pinctrl/pinctrl-amd.c
+index 5cf3db6d78b79af9ac5e7226de239a0d2f9aaacc..85617cfed2299e131c110e9d4084370790106404 100644
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -872,7 +872,7 @@ static const struct pinconf_ops amd_pinconf_ops = {
  
- config PINCTRL_K210
- 	bool "Pinctrl driver for the Canaan Kendryte K210 SoC"
--	depends on RISCV && SOC_CANAAN_K210 && OF
-+	depends on RISCV && SOC_CANAAN_K210 || COMPILE_TEST
-+	depends on OF
- 	select GENERIC_PINMUX_FUNCTIONS
- 	select GENERIC_PINCONF
- 	select GPIOLIB
-@@ -554,8 +555,8 @@ config PINCTRL_SX150X
- 	  - 16 bits: sx1509q, sx1506q
+ static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+ {
+-	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
++	const struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+ 	unsigned long flags;
+ 	u32 pin_reg, mask;
+ 	int i;
+@@ -901,7 +901,7 @@ static void amd_gpio_irq_init(struct amd_gpio *gpio_dev)
+ static void amd_gpio_check_pending(void)
+ {
+ 	struct amd_gpio *gpio_dev = pinctrl_dev;
+-	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
++	const struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+ 	int i;
  
- config PINCTRL_TB10X
--	bool
--	depends on OF && ARC_PLAT_TB10X
-+	bool "Pinctrl for TB10X" if COMPILE_TEST
-+	depends on OF && ARC_PLAT_TB10X || COMPILE_TEST
- 	select GPIOLIB
+ 	if (!pm_debug_messages_on)
+@@ -957,7 +957,7 @@ static bool amd_gpio_should_save(struct amd_gpio *gpio_dev, unsigned int pin)
+ static int amd_gpio_suspend_hibernate_common(struct device *dev, bool is_suspend)
+ {
+ 	struct amd_gpio *gpio_dev = dev_get_drvdata(dev);
+-	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
++	const struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+ 	unsigned long flags;
+ 	int i;
+ 	u32 wake_mask = is_suspend ? WAKE_SOURCE_SUSPEND : WAKE_SOURCE_HIBERNATE;
+@@ -1001,7 +1001,7 @@ static int amd_gpio_hibernate(struct device *dev)
+ static int amd_gpio_resume(struct device *dev)
+ {
+ 	struct amd_gpio *gpio_dev = dev_get_drvdata(dev);
+-	struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
++	const struct pinctrl_desc *desc = gpio_dev->pctrl->desc;
+ 	unsigned long flags;
+ 	int i;
  
- config PINCTRL_TPS6594
-@@ -590,7 +591,7 @@ config PINCTRL_TH1520
- 
- config PINCTRL_ZYNQ
- 	bool "Pinctrl driver for Xilinx Zynq"
--	depends on ARCH_ZYNQ
-+	depends on ARCH_ZYNQ || COMPILE_TEST
- 	select PINMUX
- 	select GENERIC_PINCONF
- 	help
 
 -- 
 2.45.2
