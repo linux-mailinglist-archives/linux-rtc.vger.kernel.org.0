@@ -1,250 +1,213 @@
-Return-Path: <linux-rtc+bounces-4270-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4273-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C29DAD4CC9
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 09:34:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0164AD4CF4
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 09:35:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 790A43A2C58
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 07:33:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99C6B3A2E5B
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 07:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D192622F749;
-	Wed, 11 Jun 2025 07:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9B4231847;
+	Wed, 11 Jun 2025 07:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YRH2rkqM"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sfdj3dKr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2086.outbound.protection.outlook.com [40.107.102.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73A81B042C;
-	Wed, 11 Jun 2025 07:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749627241; cv=none; b=UovBHnyvTrNHxcPAQ59hJObmnIphOMylBQ0sy/jlSm3Zd9EZg0t2IeFfnaYxmvt2eK4wXllO+1Vyn18xYQjG5tDxf33FqnRiAl3TXz1y3NTn7oYPPydaSGiYab88YVE7BZ9UuICs7muEHt4QhWA+1IlXqaY2lt/lHyYdceFeeVA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749627241; c=relaxed/simple;
-	bh=fsr0J3GbmP7hL06I6PKMguXN5HK25KKsiISCDTWRwPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sdw5px64BeWgHeTJ2WvdH/eEJ53Nrg1yzfb+2Dn+kq50ap6FoYbe+BZNGtKLr4EdOJTbjpB7k4iPPQ6fxQCAZoZUknq83ldok7cjkTXPVQcqis41tG1M8pBogjY1eecKGLoCxnqk4I8eyCVlzdSHGXns+EdG7bQweYL9vkkB+78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YRH2rkqM; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 02D004396B;
-	Wed, 11 Jun 2025 07:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1749627231;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4CWdOoq1qidV9/1An9FZ04o3Pv9jPdXHf4LO9wWtVBg=;
-	b=YRH2rkqMRTm3J8lXH/ZQshT1fUXaBJAN2LjTbbcR58eOgd0Yqm1EzvySJShlqBAJIM/fmR
-	yIOG+Xp2oWU3zxkYTW2/Y8G8VOiVSn7WMo5kkW5MebfrmVH6NmUpJ7FnkuKmuYqqAYRYao
-	F+CNNxpuEkjYcVAYXuRSzVtsbWoy/q3QvxAW3YGOJdNTQejIw5RWbnN7UjlThaF88v6Guy
-	rTv7TPxliIZo+3aJRCxrJBu6K8HKHqagBdk6T4TumXdJsNHGiF9eW7sTp2vWRl7OBvAQAP
-	nIFLVBW6cMQiPkXFYHVAyKmvPyGp2PTIqmFjNLjbZeZbU5bi1E35t1e3o2Lmhg==
-Date: Wed, 11 Jun 2025 09:33:50 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Cassio Neri <cassio.neri@gmail.com>
-Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Mergnat <amergnat@baylibre.com>, stable@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 5.10.y 2/3] rtc: Make rtc_time64_to_tm() support dates
- before 1970
-Message-ID: <20250611073350f9e928ec@mail.local>
-References: <cover.1749539184.git.u.kleine-koenig@baylibre.com>
- <955e2c8f70e95f401530404a72d5bec1dc3dd2aa.1749539184.git.u.kleine-koenig@baylibre.com>
- <CAOfgUPg0Z6e5+awuqVMa7QUPiJ7aPp-dX6QNk80Y-bhpBYcsoQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE11229B38;
+	Wed, 11 Jun 2025 07:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749627321; cv=fail; b=hcETicNVAUX+0Q3FuboGczYPGcyT6LCmJFYC8fzm+tGep90QvQ1aGcowyLr0AQBof4FVCQ3GOKayd1AwgDqKqkmbpwps3QqkE6UaojNXOHJMdfGP86NmYf/S0Nkrcq4z9edlHE/D2rmR/a9iP6bBTHr1gudadyVmcAjRkK3ZcQM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749627321; c=relaxed/simple;
+	bh=1H5pdi90WEmcsHN802PNnhKsyed7dFEANvT60IvbUNY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hj82SSEhJDaIvgxFSuVSfnN+EyoYpI52GDG4yMVbhuWnxMpeQ4SJQaGCcA7f5sT577MS7JUS0Jkx0t2VR+utWmWO4Va4JU7YaEUo9v4Pxc0zWQHE2MIYb6AETavlOsrxDBVt5Llrnn4y81a2QWA1wj7zyT9p6MuQszA4e2Q4vfo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sfdj3dKr; arc=fail smtp.client-ip=40.107.102.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eiRNVbSSYfFeYo6pKaP2orgvEpe58mAbeBALNaZZ88WUBs0Gf403uV/cKCuT6m+R8w7HTdxBu29KJl01+o1lyyLGacD2Y/wnh67YSmClFezzBZ8LTBizBDQPkvb7oAKiAq68LedXv0pDaqRR8m/gyEZkFb2C7CbDAROqkqigW9I6L55YibPdyQGeaKObejeZ17L+BnaqiKnSvQoDw5rBV3gX3VulK5IISm8U6NRZ97C74l0kFDDsrEcMvtWoHdBYdtf+Yex3ocCcvjT9e9PUDFseIr3Eq2AXlcew/tAxISObu5+iR+IVZI9r18WupOvCDs4H5yQ+qso0gfOLM+pohw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E/akTU0u9I0bjgBlaCWnT8iQ9Uqr2fyYmwqc7EVjddk=;
+ b=PG1Yl/T5ntyQvswIsWZxOuxEGxmhmvjS50MdUIXcalIxbNtHBtxdYGSExUyMTf3K7WV+PI6Sxt4ATowmP9ZPszfWPvdRq6jm6iMOXBqOVykhSXh7p+JyAPRFFiBbQka+XT6BLGf2S11MTTYCAxc1IlJlqqj49zlz7hOjDUbtk9M1DK4ixgwMcyjBSpPt/V02Lu/u5gahXYrdvmDmGEl0ll5ZtsNHG+oxw14KsZadFdEziBdxQ6FZqPZdCdprk2nT4L87wILeZhCeJxUd2tAzCldBEmVWN7LMuYnUzeuAiM4paz6M5rNQeRgWXf2M4eigcoQIw3ivQuKBTEHad+wi8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E/akTU0u9I0bjgBlaCWnT8iQ9Uqr2fyYmwqc7EVjddk=;
+ b=sfdj3dKrdAJF0bu/GI/OpoHqf43wzFUdpSOXK1aeLEy4pJKqsfNFsycu+ygD5l+G0nR0G4mxJWftQJqYDN7fe3wtPw7R50igIWQ2eErXFGBYO/ddhmNGWjjkt0tPmhuD1DBwQ39S1vAW6xktpTocl9ZhVaZlBrx2gStVxvNivbLaq5outc4ek1WQTFt3pCDB7UrSZg+g6D5baVmC2/F1WnfxENSgBbehjYQmkh1u3oTE+dU5DMlj+PTKHs5utzIIQWiwu3UyurTAeR5evtYpqsZZGXO2aKF616FVuFz/Y+EDMUi+/HaoIkkpMGGBFQOPsvgz8tFft0Ez0dn8ZSDiOg==
+Received: from BL0PR02CA0013.namprd02.prod.outlook.com (2603:10b6:207:3c::26)
+ by IA4PR12MB9786.namprd12.prod.outlook.com (2603:10b6:208:5d3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.18; Wed, 11 Jun
+ 2025 07:35:13 +0000
+Received: from BL02EPF00021F6E.namprd02.prod.outlook.com
+ (2603:10b6:207:3c:cafe::8b) by BL0PR02CA0013.outlook.office365.com
+ (2603:10b6:207:3c::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.35 via Frontend Transport; Wed,
+ 11 Jun 2025 07:35:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF00021F6E.mail.protection.outlook.com (10.167.249.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8835.15 via Frontend Transport; Wed, 11 Jun 2025 07:35:13 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 11 Jun
+ 2025 00:34:56 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 11 Jun
+ 2025 00:34:56 -0700
+Received: from build-shgarg-noble-20250422.internal (10.127.8.11) by
+ mail.nvidia.com (10.129.68.9) with Microsoft SMTP Server id 15.2.1544.14 via
+ Frontend Transport; Wed, 11 Jun 2025 00:34:56 -0700
+From: Shubhi Garg <shgarg@nvidia.com>
+To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, <--to=jonathanh@nvidia.com>
+CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-rtc@vger.kernel.org>, <linux-tegra@vger.kernel.org>, Shubhi Garg
+	<shgarg@nvidia.com>
+Subject: [PATCH v3 0/6] Add NVIDIA VRS PSEQ support
+Date: Wed, 11 Jun 2025 07:34:48 +0000
+Message-ID: <20250611073454.978859-1-shgarg@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOfgUPg0Z6e5+awuqVMa7QUPiJ7aPp-dX6QNk80Y-bhpBYcsoQ@mail.gmail.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdduudekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffeggfdtlefhudduheevtefftdevgfeiueejvedtjefhueejvddvleetledukeelnecuffhomhgrihhnpeguohhirdhorhhgpdhkvghrnhgvlhdrohhrghenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmedvugdutdemkeejugehmedvsgguieemvdehjeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmedvugdutdemkeejugehmedvsgguieemvdehjeejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheptggrshhsihhordhnvghrihesghhmrghilhdrtghomhdprhgtphhtthhopehurdhklhgvihhnvgdqkhhovghnihhgsegsrgihlhhisghrvgdrt
- ghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopegrmhgvrhhgnhgrthessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepshhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00021F6E:EE_|IA4PR12MB9786:EE_
+X-MS-Office365-Filtering-Correlation-Id: 42567657-2bbb-4641-8e31-08dda8ba80ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?5UM6TcTUka2+X/dTFFhz12YfJDqOVJzqtgfQaKJrbUM2EySkX9zJtvP+9xXS?=
+ =?us-ascii?Q?duv8GR6Rm8VN288WPSkrXJsLPAq57CAzPUVyhfNqLXxoXGhrd5CDgtAIHWOv?=
+ =?us-ascii?Q?+7lPRr8V9nw0CfQekU1zM6UhpI41WRC86FXRLJtKIRkSqHKF6Au9+KwQGg2L?=
+ =?us-ascii?Q?0fEvWgPLR1dvafcshkEZTUT2ek9j1G1+f7xIre6S6ZbCEa/IYkBbXpRHjtIe?=
+ =?us-ascii?Q?JNDaeffPWCySDSZUejYVKPfaRr35SvlpDHbUph7/MU7qbdDPKz98q3IO+Vak?=
+ =?us-ascii?Q?DNEKxf07bPghzNQI0VU8jTDQOgdwjXA6xP4/bFzmSw9o33Wbk2pjwHULapQr?=
+ =?us-ascii?Q?2hH5zx3W63qHfof2goNwVh0sIk6Pr/0H9X8yLGpy425vMyx6SUPZS/VviazG?=
+ =?us-ascii?Q?KZfVRYBnFqw6ikvk23fYR+2U6vHxTyMBl0drFReQm5le3I6sJ7GR+tmQyhbX?=
+ =?us-ascii?Q?27DbD/u9Z94nwTsrdXeBQ+ftVYvTDb4TU573yDLADdFWlmEHG+AqH4gJy9zg?=
+ =?us-ascii?Q?ODgLtTiuWGrpUIWJCvm6iPzApevEYSSnrAIILfSkwXqpVRr6EJ4hdOvHo8Ty?=
+ =?us-ascii?Q?tDKVxjrMd5CEpEBA/GSe6eFU1/UJLujzqlYA4p80ll8H6n0A/ZAN8OznhLY4?=
+ =?us-ascii?Q?/NhYIRatrk7qx+BMdhva08T/vzFZrnsa8jXt6Vbb5oi+674hcLsTxBXj6jgq?=
+ =?us-ascii?Q?7EPdZjQGIrFwEuGkyYnIB3Rz5050vtBbPT/us4qzL8G7FIPuWSfj6t3vKZQg?=
+ =?us-ascii?Q?1bzsCQd7+pi6HxbCW2hk29gIGDWotkiLpjVGdpFhN0I+Q5XY174R18QD8l4D?=
+ =?us-ascii?Q?tgL2h5B67fnzbV9M8jiSR7prbJnDxhBMklCv4EeyyVnDwk8U38VfThNhPULQ?=
+ =?us-ascii?Q?R5EEp+c7Py1QDbE/mJQuROWTUK9rvUJoAs6MfmjX8Nfrcsn9IEx3KwEr3ePg?=
+ =?us-ascii?Q?MYIiB8E1+adDAUvI+lAxM4ZOTNTWf+pD/B/ICrcH3eZUmDqI9mXbMDwSV1Rt?=
+ =?us-ascii?Q?8AUHMI5dpuhF7AVjVoRz0dqPxEvqO0nX+BDB3wJ+Fj/xFVKjmRdd0t8eQCWP?=
+ =?us-ascii?Q?doOmKVt2LCJP8wDwEPoQTVxXFS3GA4C9nd6Md0t7b4EuIvezS+FgYZNh2bGl?=
+ =?us-ascii?Q?oQ2hs7MXoic2CsA9mpP9nudGnaIxP51OUV6EQewDFtbv8elh88q2VSU0Q15/?=
+ =?us-ascii?Q?z9R1GlQZxXNn8gJ7RWpbCGSWnKfW5zpDy9+65AVpjQN7UyyFd2BtFGO9ejvq?=
+ =?us-ascii?Q?WeqIU6/YVZx2nOSJEvnzgkQ2WzwaCI0u0pDDjJuYa0kCvK2m/9raNZBsNWKY?=
+ =?us-ascii?Q?nSqOmnXNTUv7vfOfYxPx5os1+DVe8mr0RiyBjlu3vG/qcy6Lnen9aSzE4f29?=
+ =?us-ascii?Q?vob17l8E6HAln/KuSEjgwDv4LlXPpgy0jKm9vwNhbGUqxzEEXEfBTlS1TPmF?=
+ =?us-ascii?Q?YWxG6kzW1LUiF0yjtgLeFQp18iGhtNzTVGS/n42fC+AgSR3Pczv5EmLzjQGw?=
+ =?us-ascii?Q?eSd3FGXK+yV3ziZ0eWbogRu1o7uGp1k1yjTq?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2025 07:35:13.1535
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42567657-2bbb-4641-8e31-08dda8ba80ba
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF00021F6E.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA4PR12MB9786
 
-Hello Cassio,
+This patch series adds support for NVIDIA's Voltage Regulator Specification
+(VRS) Power Sequencer (PSEQ) controller. This controller includes a PSEQ
+hardware block, that manages power sequencing and voltage regulation for
+various components in the system. This controller also provides 32kHz RTC
+support with backup battery for system timing.
 
-On 10/06/2025 21:31:48+0100, Cassio Neri wrote:
-> Hi all,
-> 
-> Although untested, I'm pretty sure that with very small changes, the
-> previous revision (1d1bb12) can handle dates prior to 1970-01-01 with no
-> need to add extra branches or arithmetic operations. Indeed, 1d1bb12
-> contains:
-> 
-> <code>
-> /* time must be positive */
-> days = div_s64_rem(time, 86400, &secs);
-> 
-> /* day of the week, 1970-01-01 was a Thursday */
-> tm->tm_wday = (days + 4) % 7;
-> 
-> /* long comments */
-> 
-> udays = ((u32) days) + 719468;
-> </code>
-> 
-> This could have been changed to:
-> 
-> <code>
-> /* time must be >=  -719468 * 86400 which corresponds to 0000-03-01 */
-> udays = div_u64_rem(time + 719468 * 86400, 86400, &secs);
-> 
-> /* day of the week, 0000-03-01 was a Wednesday (in the proleptic Gregorian
-> calendar)  */
-> tm->tm_wday = (days + 3) % 7;
-> 
-> /* long comments */
-> </code>
-> 
-> Indeed, the addition of 719468 * 86400 to `time` makes `days` to be 719468
-> more than it should be. Therefore, in the calculation of `udays`, the
-> addition of 719468 becomes unnecessary and thus, `udays == days`. Moreover,
-> this means that `days` can be removed altogether and replaced by `udays`.
-> (Not the other way around because in the remaining code `udays` must be
-> u32.)
-> 
-> Now, 719468 % 7 = 1 and thus tm->wday is 1 day after what it should be and
-> we correct that by adding 3 instead of 4.
-> 
-> Therefore, I suggest these changes on top of 1d1bb12 instead of those made
-> in 7df4cfe. Since you're working on this, can I please kindly suggest two
-> other changes?
-> 
-> 1) Change the reference provided in the long comment. It should say, "The
-> following algorithm is, basically, Figure 12 of Neri and Schneider [1]" and
-> [1] should refer to the published article:
-> 
->    Neri C, Schneider L. Euclidean affine functions and their application to
-> calendar algorithms. Softw Pract Exper. 2023;53(4):937-970. doi:
-> 10.1002/spe.3172
->    https://doi.org/10.1002/spe.3172
-> 
-> The article is much better written and clearer than the pre-print currently
-> referred to.
-> 
+The series includes:
+- Device tree bindings for the VRS PSEQ controller
+- MFD driver to handle the core functionality
+- RTC driver for the PSEQ's real-time clock functionality
+- Device tree nodes for Tegra234 platforms
+- Configuration updates to enable the driver
+- driver entry in MAINTAINERS
 
-Thanks for your input, I wanted to look again at your paper and make those
-optimizations which is why I took so long to review the original patch.
-Unfortunately, I didn't have the time before the merge window.
+Changes in v3:
+- fixed device tree node name to generic "pmic@3c"
+- fixed indentation in dt-bindings
+- added rate limiting to interrupt clearing debug logs
+- removed unnecessary braces in if blocks
+- changed dependency from I2C=y to I2C in mfd Kconfig
+- fixed return value in RTC driver function calls
+- fixed sizeof(*variable) inside rtc driver devm_kzalloc
+- switch to devm_device_init_wakeup() for automatic cleanup
 
-I would also gladly take patches for this if you are up for the task.
+Changes in v2:
+- fixed, copyrights, definitions and dtb node in dt-bindings
+- removed unnecessary logs from MFD and RTC driver
+- fixed RTC allocation and registration APIs
+- removed unnecessary functions in RTC driver
+- used rtc_lock/unlock in RTC irq handler
+- added alias to assign VRS RTC as RTC0
+- added driver entry in MAINTAINERS
+- few other miinor changes done in driver
 
-> 2) Function rtc_time64_to_tm_test_date_range in drivers/rtc/lib_test.c, is
-> a kunit test that checks the result for everyday in a 160000 years range
-> starting at 1970-01-01. It'd be nice if this test is adapted to the new
-> code and starts at 1900-01-01 (technically, it could start at 0000-03-01
-> but since tm->year counts from 1900, it would be weird to see tm->year ==
-> -1900 to mean that the calendar year is 0.) Also 160000 is definitely an
-> overkill (my bad!) and a couple of thousands of years, say 3000, should be
-> more than safe for anyone. :-)
+Shubhi Garg (6):
+  dt-bindings: mfd: add NVIDIA VRS PSEQ
+  arm64: tegra: Add device-tree node for NVVRS PSEQ
+  mfd: nvvrs: add NVVRS PSEQ MFD driver
+  rtc: nvvrs: add NVIDIA VRS PSEQ RTC device driver
+  arm64: defconfig: enable NVIDIA VRS PSEQ
+  MAINTAINERS: Add NVIDIA VRS PSEQ driver entry
 
-This is also something on my radar as some have been complaining about the time
-it takes to run those tests.
+ .../bindings/mfd/nvidia,vrs-pseq.yaml         |  60 +++
+ MAINTAINERS                                   |   9 +
+ .../arm64/boot/dts/nvidia/tegra234-p3701.dtsi |  11 +
+ .../arm64/boot/dts/nvidia/tegra234-p3767.dtsi |  15 +
+ arch/arm64/configs/defconfig                  |   2 +
+ drivers/mfd/Kconfig                           |  12 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/nvidia-vrs-pseq.c                 | 267 ++++++++++
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nvidia-vrs-pseq.c             | 457 ++++++++++++++++++
+ include/linux/mfd/nvidia-vrs-pseq.h           | 127 +++++
+ 12 files changed, 972 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/nvidia,vrs-pseq.yaml
+ create mode 100644 drivers/mfd/nvidia-vrs-pseq.c
+ create mode 100644 drivers/rtc/rtc-nvidia-vrs-pseq.c
+ create mode 100644 include/linux/mfd/nvidia-vrs-pseq.h
 
-> 
-> Many thanks,
-> Cassio.
-> 
-> 
-> 
-> On Tue, 10 Jun 2025 at 08:35, Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-> wrote:
-> 
-> > From: Alexandre Mergnat <amergnat@baylibre.com>
-> >
-> > commit 7df4cfef8b351fec3156160bedfc7d6d29de4cce upstream.
-> >
-> > Conversion of dates before 1970 is still relevant today because these
-> > dates are reused on some hardwares to store dates bigger than the
-> > maximal date that is representable in the device's native format.
-> > This prominently and very soon affects the hardware covered by the
-> > rtc-mt6397 driver that can only natively store dates in the interval
-> > 1900-01-01 up to 2027-12-31. So to store the date 2028-01-01 00:00:00
-> > to such a device, rtc_time64_to_tm() must do the right thing for
-> > time=-2208988800.
-> >
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> > Reviewed-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-> > Link:
-> > https://lore.kernel.org/r/20250428-enable-rtc-v4-1-2b2f7e3f9349@baylibre.com
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-> > ---
-> >  drivers/rtc/lib.c | 24 +++++++++++++++++++-----
-> >  1 file changed, 19 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/rtc/lib.c b/drivers/rtc/lib.c
-> > index fe361652727a..13b5b1f20465 100644
-> > --- a/drivers/rtc/lib.c
-> > +++ b/drivers/rtc/lib.c
-> > @@ -46,24 +46,38 @@ EXPORT_SYMBOL(rtc_year_days);
-> >   * rtc_time64_to_tm - converts time64_t to rtc_time.
-> >   *
-> >   * @time:      The number of seconds since 01-01-1970 00:00:00.
-> > - *             (Must be positive.)
-> > + *             Works for values since at least 1900
-> >   * @tm:                Pointer to the struct rtc_time.
-> >   */
-> >  void rtc_time64_to_tm(time64_t time, struct rtc_time *tm)
-> >  {
-> > -       unsigned int secs;
-> > -       int days;
-> > +       int days, secs;
-> >
-> >         u64 u64tmp;
-> >         u32 u32tmp, udays, century, day_of_century, year_of_century, year,
-> >                 day_of_year, month, day;
-> >         bool is_Jan_or_Feb, is_leap_year;
-> >
-> > -       /* time must be positive */
-> > +       /*
-> > +        * Get days and seconds while preserving the sign to
-> > +        * handle negative time values (dates before 1970-01-01)
-> > +        */
-> >         days = div_s64_rem(time, 86400, &secs);
-> >
-> > +       /*
-> > +        * We need 0 <= secs < 86400 which isn't given for negative
-> > +        * values of time. Fixup accordingly.
-> > +        */
-> > +       if (secs < 0) {
-> > +               days -= 1;
-> > +               secs += 86400;
-> > +       }
-> > +
-> >         /* day of the week, 1970-01-01 was a Thursday */
-> >         tm->tm_wday = (days + 4) % 7;
-> > +       /* Ensure tm_wday is always positive */
-> > +       if (tm->tm_wday < 0)
-> > +               tm->tm_wday += 7;
-> >
-> >         /*
-> >          * The following algorithm is, basically, Proposition 6.3 of Neri
-> > @@ -93,7 +107,7 @@ void rtc_time64_to_tm(time64_t time, struct rtc_time
-> > *tm)
-> >          * thus, is slightly different from [1].
-> >          */
-> >
-> > -       udays           = ((u32) days) + 719468;
-> > +       udays           = days + 719468;
-> >
-> >         u32tmp          = 4 * udays + 3;
-> >         century         = u32tmp / 146097;
-> > --
-> > 2.49.0
-> >
-> >
+-- 
+2.43.0
+
 
