@@ -1,130 +1,250 @@
-Return-Path: <linux-rtc+bounces-4269-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4270-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60E33AD4B62
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 08:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C29DAD4CC9
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 09:34:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 232893A328C
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 06:20:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 790A43A2C58
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 07:33:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F23E227EB2;
-	Wed, 11 Jun 2025 06:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D192622F749;
+	Wed, 11 Jun 2025 07:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YRH2rkqM"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845C6227E87;
-	Wed, 11 Jun 2025 06:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73A81B042C;
+	Wed, 11 Jun 2025 07:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749622852; cv=none; b=tWsyO1rxgE1z2qa/xkNZayXiuaWZWR50zA+Cla58ssnfBLOuqbiHQ84Af0BRv/PLF5UjFWfypTn7Bfsv2W1sWXFgjVwCM/65P35Ji6T6hU45AR6q3cgMegUz1TkGp7TMdYoWCHSs9c+mqpUU95WQ+pfR7C0aQvdEB/4+sJIvYys=
+	t=1749627241; cv=none; b=UovBHnyvTrNHxcPAQ59hJObmnIphOMylBQ0sy/jlSm3Zd9EZg0t2IeFfnaYxmvt2eK4wXllO+1Vyn18xYQjG5tDxf33FqnRiAl3TXz1y3NTn7oYPPydaSGiYab88YVE7BZ9UuICs7muEHt4QhWA+1IlXqaY2lt/lHyYdceFeeVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749622852; c=relaxed/simple;
-	bh=2zd2BHcJOc7cbE0glr3lO3tCYJ6nmQeJCp+M5fYAAnw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mYW0Z53V4LVf5TkZC97/2yCNbBp4Y84GXEGDufvwwdIXwHj3ttz3H5a08UhUZ2EdogTvz3b9CujIYIAV4t0KLU2U5moRbC1y3blPD2XJO+PoYMO0EVeb1MKtp09B87RGwYy6cEJUuLuk/2gJy0fY6gj5+zKNJYFCmaOpFLe8jhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.207.111.194])
-	by gateway (Coremail) with SMTP id _____8BxJHAuIEloq3QTAQ--.6932S3;
-	Wed, 11 Jun 2025 14:20:30 +0800 (CST)
-Received: from ubuntu.. (unknown [111.207.111.194])
-	by front1 (Coremail) with SMTP id qMiowMCxrhsqIEloqYsVAQ--.15055S2;
-	Wed, 11 Jun 2025 14:20:28 +0800 (CST)
-From: Ming Wang <wangming01@loongson.cn>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	lixuefeng@loongson.cn,
-	chenhuacai@loongson.cn,
-	gaojuxin@loongson.cn
-Subject: [PATCH] rtc: efi: Defer driver initialization to prioritize more capable RTCs
-Date: Wed, 11 Jun 2025 14:20:25 +0800
-Message-ID: <20250611062025.3243732-1-wangming01@loongson.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1749627241; c=relaxed/simple;
+	bh=fsr0J3GbmP7hL06I6PKMguXN5HK25KKsiISCDTWRwPI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sdw5px64BeWgHeTJ2WvdH/eEJ53Nrg1yzfb+2Dn+kq50ap6FoYbe+BZNGtKLr4EdOJTbjpB7k4iPPQ6fxQCAZoZUknq83ldok7cjkTXPVQcqis41tG1M8pBogjY1eecKGLoCxnqk4I8eyCVlzdSHGXns+EdG7bQweYL9vkkB+78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YRH2rkqM; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02D004396B;
+	Wed, 11 Jun 2025 07:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1749627231;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4CWdOoq1qidV9/1An9FZ04o3Pv9jPdXHf4LO9wWtVBg=;
+	b=YRH2rkqMRTm3J8lXH/ZQshT1fUXaBJAN2LjTbbcR58eOgd0Yqm1EzvySJShlqBAJIM/fmR
+	yIOG+Xp2oWU3zxkYTW2/Y8G8VOiVSn7WMo5kkW5MebfrmVH6NmUpJ7FnkuKmuYqqAYRYao
+	F+CNNxpuEkjYcVAYXuRSzVtsbWoy/q3QvxAW3YGOJdNTQejIw5RWbnN7UjlThaF88v6Guy
+	rTv7TPxliIZo+3aJRCxrJBu6K8HKHqagBdk6T4TumXdJsNHGiF9eW7sTp2vWRl7OBvAQAP
+	nIFLVBW6cMQiPkXFYHVAyKmvPyGp2PTIqmFjNLjbZeZbU5bi1E35t1e3o2Lmhg==
+Date: Wed, 11 Jun 2025 09:33:50 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Cassio Neri <cassio.neri@gmail.com>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Mergnat <amergnat@baylibre.com>, stable@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 5.10.y 2/3] rtc: Make rtc_time64_to_tm() support dates
+ before 1970
+Message-ID: <20250611073350f9e928ec@mail.local>
+References: <cover.1749539184.git.u.kleine-koenig@baylibre.com>
+ <955e2c8f70e95f401530404a72d5bec1dc3dd2aa.1749539184.git.u.kleine-koenig@baylibre.com>
+ <CAOfgUPg0Z6e5+awuqVMa7QUPiJ7aPp-dX6QNk80Y-bhpBYcsoQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMCxrhsqIEloqYsVAQ--.15055S2
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/1tbiAQEKEmhItWoGogACsB
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kry5AFy7Cr1DuF1xWrWfWFX_yoW8uF4fpa
-	y3AFyYkr1v9ay3uas7JrsrCFy5u3Z3G3y09r18Jw1Svwn8Ar1qkrs7tayYv3W7Jr4xG3Wa
-	yw1YvF13uFs8CwbCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8bTm3UU
-	UUU==
+In-Reply-To: <CAOfgUPg0Z6e5+awuqVMa7QUPiJ7aPp-dX6QNk80Y-bhpBYcsoQ@mail.gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdduudekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffeggfdtlefhudduheevtefftdevgfeiueejvedtjefhueejvddvleetledukeelnecuffhomhgrihhnpeguohhirdhorhhgpdhkvghrnhgvlhdrohhrghenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmedvugdutdemkeejugehmedvsgguieemvdehjeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmedvugdutdemkeejugehmedvsgguieemvdehjeejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheptggrshhsihhordhnvghrihesghhmrghilhdrtghomhdprhgtphhtthhopehurdhklhgvihhnvgdqkhhovghnihhgsegsrgihlhhisghrvgdrt
+ ghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopegrmhgvrhhgnhgrthessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepshhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-The EFI GetWakeupTime call, used by efi_read_alarm() to fetch RTC
-wakeup alarm information, is specified to return EFI_UNSUPPORTED on
-EFI firmware v1.10 and later. This effectively means that on most
-modern systems, the efi-rtc driver cannot provide working RTC alarm
-functionality.
+Hello Cassio,
 
-If efi-rtc registers early during boot, it might become the primary
-RTC device (e.g., /dev/rtc0). This can lead to a situation where the
-system appears to have an RTC, but userspace utilities cannot set or
-get RTC alarms, even if other RTC hardware (like rtc-cmos, which
-typically supports alarms) is present but registers later.
+On 10/06/2025 21:31:48+0100, Cassio Neri wrote:
+> Hi all,
+> 
+> Although untested, I'm pretty sure that with very small changes, the
+> previous revision (1d1bb12) can handle dates prior to 1970-01-01 with no
+> need to add extra branches or arithmetic operations. Indeed, 1d1bb12
+> contains:
+> 
+> <code>
+> /* time must be positive */
+> days = div_s64_rem(time, 86400, &secs);
+> 
+> /* day of the week, 1970-01-01 was a Thursday */
+> tm->tm_wday = (days + 4) % 7;
+> 
+> /* long comments */
+> 
+> udays = ((u32) days) + 719468;
+> </code>
+> 
+> This could have been changed to:
+> 
+> <code>
+> /* time must be >=  -719468 * 86400 which corresponds to 0000-03-01 */
+> udays = div_u64_rem(time + 719468 * 86400, 86400, &secs);
+> 
+> /* day of the week, 0000-03-01 was a Wednesday (in the proleptic Gregorian
+> calendar)  */
+> tm->tm_wday = (days + 3) % 7;
+> 
+> /* long comments */
+> </code>
+> 
+> Indeed, the addition of 719468 * 86400 to `time` makes `days` to be 719468
+> more than it should be. Therefore, in the calculation of `udays`, the
+> addition of 719468 becomes unnecessary and thus, `udays == days`. Moreover,
+> this means that `days` can be removed altogether and replaced by `udays`.
+> (Not the other way around because in the remaining code `udays` must be
+> u32.)
+> 
+> Now, 719468 % 7 = 1 and thus tm->wday is 1 day after what it should be and
+> we correct that by adding 3 instead of 4.
+> 
+> Therefore, I suggest these changes on top of 1d1bb12 instead of those made
+> in 7df4cfe. Since you're working on this, can I please kindly suggest two
+> other changes?
+> 
+> 1) Change the reference provided in the long comment. It should say, "The
+> following algorithm is, basically, Figure 12 of Neri and Schneider [1]" and
+> [1] should refer to the published article:
+> 
+>    Neri C, Schneider L. Euclidean affine functions and their application to
+> calendar algorithms. Softw Pract Exper. 2023;53(4):937-970. doi:
+> 10.1002/spe.3172
+>    https://doi.org/10.1002/spe.3172
+> 
+> The article is much better written and clearer than the pre-print currently
+> referred to.
+> 
 
-To address this, change the efi-rtc driver initialization from
-module_init() to late_initcall(). By deferring its initialization,
-we give other, potentially more capable RTC drivers (such as rtc-cmos)
-a better chance to register first and become the primary RTC.
+Thanks for your input, I wanted to look again at your paper and make those
+optimizations which is why I took so long to review the original patch.
+Unfortunately, I didn't have the time before the merge window.
 
-This change increases the likelihood that systems with multiple RTC
-sources will use the one with the most complete feature set (including
-alarms) as the primary RTC. The efi-rtc driver can still serve as a
-time source or a fallback RTC if no other RTC is available or preferred.
+I would also gladly take patches for this if you are up for the task.
 
-Signed-off-by: Ming Wang <wangming01@loongson.cn>
----
- drivers/rtc/rtc-efi.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+> 2) Function rtc_time64_to_tm_test_date_range in drivers/rtc/lib_test.c, is
+> a kunit test that checks the result for everyday in a 160000 years range
+> starting at 1970-01-01. It'd be nice if this test is adapted to the new
+> code and starts at 1900-01-01 (technically, it could start at 0000-03-01
+> but since tm->year counts from 1900, it would be weird to see tm->year ==
+> -1900 to mean that the calendar year is 0.) Also 160000 is definitely an
+> overkill (my bad!) and a couple of thousands of years, say 3000, should be
+> more than safe for anyone. :-)
 
-diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
-index fa8bf82df948..f97a228510f4 100644
---- a/drivers/rtc/rtc-efi.c
-+++ b/drivers/rtc/rtc-efi.c
-@@ -286,9 +286,20 @@ static struct platform_driver efi_rtc_driver = {
- 	.driver = {
- 		.name = "rtc-efi",
- 	},
-+	.probe = efi_rtc_probe,
- };
- 
--module_platform_driver_probe(efi_rtc_driver, efi_rtc_probe);
-+static int __init efi_rtc_driver_init(void)
-+{
-+	return platform_driver_register(&efi_rtc_driver);
-+}
-+late_initcall(efi_rtc_driver_init);
-+
-+static void __exit efi_rtc_driver_exit(void)
-+{
-+	platform_driver_unregister(&efi_rtc_driver);
-+}
-+module_exit(efi_rtc_driver_exit);
- 
- MODULE_AUTHOR("dann frazier <dannf@dannf.org>");
- MODULE_LICENSE("GPL");
--- 
-2.43.0
+This is also something on my radar as some have been complaining about the time
+it takes to run those tests.
 
+> 
+> Many thanks,
+> Cassio.
+> 
+> 
+> 
+> On Tue, 10 Jun 2025 at 08:35, Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> wrote:
+> 
+> > From: Alexandre Mergnat <amergnat@baylibre.com>
+> >
+> > commit 7df4cfef8b351fec3156160bedfc7d6d29de4cce upstream.
+> >
+> > Conversion of dates before 1970 is still relevant today because these
+> > dates are reused on some hardwares to store dates bigger than the
+> > maximal date that is representable in the device's native format.
+> > This prominently and very soon affects the hardware covered by the
+> > rtc-mt6397 driver that can only natively store dates in the interval
+> > 1900-01-01 up to 2027-12-31. So to store the date 2028-01-01 00:00:00
+> > to such a device, rtc_time64_to_tm() must do the right thing for
+> > time=-2208988800.
+> >
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> > Reviewed-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> > Link:
+> > https://lore.kernel.org/r/20250428-enable-rtc-v4-1-2b2f7e3f9349@baylibre.com
+> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> > ---
+> >  drivers/rtc/lib.c | 24 +++++++++++++++++++-----
+> >  1 file changed, 19 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/rtc/lib.c b/drivers/rtc/lib.c
+> > index fe361652727a..13b5b1f20465 100644
+> > --- a/drivers/rtc/lib.c
+> > +++ b/drivers/rtc/lib.c
+> > @@ -46,24 +46,38 @@ EXPORT_SYMBOL(rtc_year_days);
+> >   * rtc_time64_to_tm - converts time64_t to rtc_time.
+> >   *
+> >   * @time:      The number of seconds since 01-01-1970 00:00:00.
+> > - *             (Must be positive.)
+> > + *             Works for values since at least 1900
+> >   * @tm:                Pointer to the struct rtc_time.
+> >   */
+> >  void rtc_time64_to_tm(time64_t time, struct rtc_time *tm)
+> >  {
+> > -       unsigned int secs;
+> > -       int days;
+> > +       int days, secs;
+> >
+> >         u64 u64tmp;
+> >         u32 u32tmp, udays, century, day_of_century, year_of_century, year,
+> >                 day_of_year, month, day;
+> >         bool is_Jan_or_Feb, is_leap_year;
+> >
+> > -       /* time must be positive */
+> > +       /*
+> > +        * Get days and seconds while preserving the sign to
+> > +        * handle negative time values (dates before 1970-01-01)
+> > +        */
+> >         days = div_s64_rem(time, 86400, &secs);
+> >
+> > +       /*
+> > +        * We need 0 <= secs < 86400 which isn't given for negative
+> > +        * values of time. Fixup accordingly.
+> > +        */
+> > +       if (secs < 0) {
+> > +               days -= 1;
+> > +               secs += 86400;
+> > +       }
+> > +
+> >         /* day of the week, 1970-01-01 was a Thursday */
+> >         tm->tm_wday = (days + 4) % 7;
+> > +       /* Ensure tm_wday is always positive */
+> > +       if (tm->tm_wday < 0)
+> > +               tm->tm_wday += 7;
+> >
+> >         /*
+> >          * The following algorithm is, basically, Proposition 6.3 of Neri
+> > @@ -93,7 +107,7 @@ void rtc_time64_to_tm(time64_t time, struct rtc_time
+> > *tm)
+> >          * thus, is slightly different from [1].
+> >          */
+> >
+> > -       udays           = ((u32) days) + 719468;
+> > +       udays           = days + 719468;
+> >
+> >         u32tmp          = 4 * udays + 3;
+> >         century         = u32tmp / 146097;
+> > --
+> > 2.49.0
+> >
+> >
 
