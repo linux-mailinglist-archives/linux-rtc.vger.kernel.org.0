@@ -1,52 +1,52 @@
-Return-Path: <linux-rtc+bounces-4284-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4285-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAFD3AD5DEE
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 20:14:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE2BDAD5DEF
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 20:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 645877A85F3
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 18:13:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C2C83A6D62
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Jun 2025 18:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B372777F2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C3E280CC8;
 	Wed, 11 Jun 2025 18:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="iMuCI+cl"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="r0fbLwIO"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3A8221567;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1027D25E45A;
 	Wed, 11 Jun 2025 18:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749665663; cv=none; b=Nkgrg2pulAZIfv2sJMyf3ECFBz1YTrjW+PvtlGBeqwXrsZflaXELCpimr2YdqWG++xDegV912z5uQBMTk4GM8vovggCb24H/PyUhA20UJ16j17Xlnfy/Kr92FuDHb018Urqh4rkp+Orzf8YOaWWjjzxyM1JMPhsPVeQGzBcdhwQ=
+	t=1749665664; cv=none; b=Ty/TDpv21DJBss1Fhqg43lZR+f4h8aEugfwlQ/tereXJQsmxMlYlsLlyeBmP2kQTBinGKl4tQf7j6Z4E5Oh8KnlSdjHtudgTw+snjueHR0n5vvYFD45jHxr9BIPhrk2YVC1IyzxmEQbyj0CnFPfK6tz/zoiCDkQO8I0vQ0ADF/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749665663; c=relaxed/simple;
-	bh=JBerx9EjpL9rizCgP7LpIvBzrydqelSerGeMeSsliNs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=R06NjpSzgtUeOP3bOfizTKFIm1mzPYYlmNNvE9LjTPZHOH3wz8pfsv2mOYUbGBF5bMFR+RybYZ6fr4DRRiTl5mOrlMOMz5zBnO1NBRjoiZRb+1GH5L/pUy9gJGdNEU30zhtUvTLNxLZgjyzixrUKFyLl8AGObJKgUeSzVnQ2WPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=iMuCI+cl; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1749665664; c=relaxed/simple;
+	bh=39OSO62+KgDDFi5a/EtOCYMaxrBeNZ4EMYx2dpC73Ik=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=SzgdzITSviGWd/7p3zx44nTc0NnCwNgeB9hrOIH0WabLlqWFMgtpknKROLElMIjg5gbfSzWEo31y/UyLY9gta6YRsvjzGoel4GML2ZgWKyy4SsDC2t5PaX8n9Tx/Iy0g0JYn4EDNBeqGKBsEHF8mPb133m+Ki18Qwt68HR7IJxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=r0fbLwIO; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: by linux.microsoft.com (Postfix, from userid 1223)
-	id 3CAAC21151A2; Wed, 11 Jun 2025 11:14:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3CAAC21151A2
+	id BDBD121151AA; Wed, 11 Jun 2025 11:14:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDBD121151AA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1749665662;
-	bh=BrBhtvBu2yogVkjzA/1F+oESS+O20nH8x0SOEbCXEYU=;
+	bh=EMkdDtA91tsl1gvVusnCTDwxHY/U6R83WxT1qe9+6Xo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iMuCI+clmegvwgt2oX/8FhKpUazmkcTAwkZz67Ltv5foXOXw46/g48+wjF0+wS0km
-	 +0uIVAzppOaNBZJesf1SlYwfscBwZMdPo6EGa61JiSP5ZxfkhNj+lo1RWkA7BgHT8q
-	 hniEF6KpF6mwKDRZwzKP4BBGhcgLTIyuxe1W/srA=
+	b=r0fbLwIOMVY6zh7dE89LuYZDD4LeQnf4Kurk06Iyc+TH1Qm1uLEG4e8lAeUuWNmMj
+	 089jkujptIxF9W8Ht+8DaYfwSjI+H/CMlB7q2YH5boFTaAlFEWo6GgIqSR0VzbPnoE
+	 HcRG47RZoPrVtsJzXioJW/Umm88EqwUKR0FJpROs=
 From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
 To: alexandre.belloni@bootlin.com
 Cc: linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	code@tyhicks.com,
 	Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-Subject: [PATCH 1/2] rtc: ds1307: remove clear of oscillator stop flag (OSF) in probe
-Date: Wed, 11 Jun 2025 11:14:15 -0700
-Message-Id: <1749665656-30108-2-git-send-email-meaganlloyd@linux.microsoft.com>
+Subject: [PATCH 2/2] rtc: ds1307: handle oscillator stop flag (OSF) for ds1341
+Date: Wed, 11 Jun 2025 11:14:16 -0700
+Message-Id: <1749665656-30108-3-git-send-email-meaganlloyd@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1749665656-30108-1-git-send-email-meaganlloyd@linux.microsoft.com>
 References: <1749665656-30108-1-git-send-email-meaganlloyd@linux.microsoft.com>
@@ -63,37 +63,48 @@ unpredictable future time or the default 01/01/00 from the datasheet.
 The oscillator stop flag (OSF) is set in these scenarios due to the
 power loss and can be used to determine the validity of the RTC data.
 
-Some chip types in the ds1307 driver already have OSF handling to
-determine whether .read_time provides valid RTC data or returns -EINVAL.
-
-This change removes the clear of the OSF in .probe as the OSF needs to
-be preserved to expand the OSF handling to the ds1341 chip type (note
-that DS1341 and DS1342 share a datasheet).
+This change expands the oscillator stop flag (OSF) handling that has
+already been implemented for some chips to the ds1341 chip (DS1341 and
+DS1342 share a datasheet). This handling manages the validity of the RTC
+data in .read_time and .set_time based on the OSF.
 
 Signed-off-by: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
 ---
 Compile tested on rtc-next. Tested on an older kernel with ds1342 which
 has the same datasheet as ds1341.
 ---
- drivers/rtc/rtc-ds1307.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/rtc/rtc-ds1307.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 5efbe69bf5ca8..65beb7067e3f5 100644
+index 65beb7067e3f5..ce0994d9219a2 100644
 --- a/drivers/rtc/rtc-ds1307.c
 +++ b/drivers/rtc/rtc-ds1307.c
-@@ -1813,10 +1813,8 @@ static int ds1307_probe(struct i2c_client *client)
- 		regmap_write(ds1307->regmap, DS1337_REG_CONTROL,
- 			     regs[0]);
- 
--		/* oscillator fault?  clear flag, and warn */
-+		/* oscillator fault? warn */
- 		if (regs[1] & DS1337_BIT_OSF) {
--			regmap_write(ds1307->regmap, DS1337_REG_STATUS,
--				     regs[1] & ~DS1337_BIT_OSF);
- 			dev_warn(ds1307->dev, "SET TIME!\n");
- 		}
+@@ -279,6 +279,13 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
+ 		if (tmp & DS1340_BIT_OSF)
+ 			return -EINVAL;
  		break;
++	case ds_1341:
++		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
++		if (ret)
++			return ret;
++		if (tmp & DS1337_BIT_OSF)
++			return -EINVAL;
++		break;
+ 	case ds_1388:
+ 		ret = regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
+ 		if (ret)
+@@ -377,6 +384,10 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
+ 		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
+ 				   DS1340_BIT_OSF, 0);
+ 		break;
++	case ds_1341:
++		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
++				   DS1337_BIT_OSF, 0);
++		break;
+ 	case ds_1388:
+ 		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+ 				   DS1388_BIT_OSF, 0);
 -- 
 2.49.0
 
