@@ -1,383 +1,175 @@
-Return-Path: <linux-rtc+bounces-4290-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4291-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A36AAD73F4
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 16:33:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E24C2AD746D
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 16:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2CDE169222
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 14:33:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EC2B7A5BF4
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 14:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C57246BC9;
-	Thu, 12 Jun 2025 14:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFC8253935;
+	Thu, 12 Jun 2025 14:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sferalabs.cc header.i=@sferalabs.cc header.b="Do0VcHHd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xc8ZAVex"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f98.google.com (mail-ej1-f98.google.com [209.85.218.98])
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A52142048
-	for <linux-rtc@vger.kernel.org>; Thu, 12 Jun 2025 14:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CA223FC54;
+	Thu, 12 Jun 2025 14:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749738830; cv=none; b=oUG8K/fal+ZB/1AcgXgfvSX0HQhEVphHI1im7s6XzucwdsYzr6WDrH/rpfTBNjWxJtEf9DiO+Qf+l9BwT+lwgP4RUE7gV3Dfxm+xc4E2t5QRhno9+xYKpsz2hClVFOFHqb59Mt0NZpF8TbU6PlppCeF9obUXl6ZxzcVCcj/r9GE=
+	t=1749739268; cv=none; b=B9mzufX18sWz4aZ4Y+fRCZE8aY4yWt/Emo7AXvi8ThW3TWAdRtb3NHfcdjs0k5LtLbg2HUTsZqEy6R5kOYsAhtp42YjVGzLT1n+tbQNqyeIJtRhIqikAwOV1dOnx5o7g3KhFaVQ/mKnXmIS0qaZebG88fhlh9zig4vVUQUmwy04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749738830; c=relaxed/simple;
-	bh=YSUbtUuizklExpnzU8VpfcNv0fngsTJdsERQci1RWp0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y0x8hTXG4X1X0tUdt44c8ReUIMCMteeBJ/gzR7luFrNTJtNgGivn0QYC/cHDzijhXQ6BE0LQSThCbiUBKnBey9NIQeWyhH3YKX015kkF3Pdb3QCwe4qDI91PxaXiW0FiSd/50aJ3rS19mSb7Q74jv9nrLqyHgUx/bRouaAVxNPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sferalabs.cc; spf=pass smtp.mailfrom=sferalabs.cc; dkim=pass (2048-bit key) header.d=sferalabs.cc header.i=@sferalabs.cc header.b=Do0VcHHd; arc=none smtp.client-ip=209.85.218.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sferalabs.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sferalabs.cc
-Received: by mail-ej1-f98.google.com with SMTP id a640c23a62f3a-ade30256175so194518866b.1
-        for <linux-rtc@vger.kernel.org>; Thu, 12 Jun 2025 07:33:45 -0700 (PDT)
+	s=arc-20240116; t=1749739268; c=relaxed/simple;
+	bh=HrIXxbRS7o44pmuf/yuZGjngQDdq7t0cP+O1OJL88j8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VqC7SHG8NJPVn2TEtZh94I8J8jYlqt7UhbnuvR0RPDql8+eNXUI0cxy/7SMT3LrOP5Vq12xKv5aIxqNozoM6OaV+sYHpaIIiTf00OT5RC6bRwUzNG+yajui7PcPrMD0MnqJ++qFT7+gIJoRPfXUvgU6iyRiHzsJeJ3gQzZ+opjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xc8ZAVex; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e740a09eae0so967246276.1;
+        Thu, 12 Jun 2025 07:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sferalabs.cc; s=google; t=1749738824; x=1750343624; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkFa1Jh0hAp7VXFgDt4c5m6aT1cILx31aOxZ9A4iZ3Q=;
-        b=Do0VcHHdwB3mogd0mPbdmhVLLjHHpGY15RIHUCRRjNfRWuzl2gPeDz45UkPCdO0p3f
-         ED5hNaB2967Ptt1Spu5kA19Rps6cVEp+NLycDL4iH52RhxNBzlVkKs6PlWejtYvO7uv0
-         EmgarXU1KdrI1EbLyRUeMBu/3CeCq6dCs6F/BKPGbd/qgCzyyBxmY4QqmDs6P/091Fik
-         0USQ8+Va7hKxFwIAgVqLI1J0m+Dzvd3yPZRpUG8SWNOif0nQCqEhOJlF3eLWuCk3aHGe
-         rkUEqvLEnEN3ubvAXdSEK5jPrGtQPEo2qG3B7gsZfZeqGBNbovQMlD+fbvlRLp5k6Mu8
-         6qBw==
+        d=gmail.com; s=20230601; t=1749739266; x=1750344066; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tEpDdSY+2jWUkNnS9iYms3NFnNi5IdWvmT0Vr9mFNCU=;
+        b=Xc8ZAVex4jR4+ai3zlbLPFYV60D26DWi7+7ZnYsj4ZxhVefyc0FjLeNIuMBnY93huO
+         lHdbcvbJgzkqWLWiVkp401jVRfAu5gxWwXKYpwlh5H/mMF3kaEKJ2rf6QNJrlxA8f0LR
+         jO115yiMD218EBY9yytBuSck3EvcI5ocrEcWaUK6CW9DwXpYQL2h9Bxu6lcNg4tKuxV0
+         G5CxDXD4zrMURDoj5pCdg0lxOBG4n9v3u/cLRj57nUuwlZYK/EZ5iPHaY15tILfHXFXA
+         q/e6TCMzPZIIjfxFTwYKHTSmkLp9ddMb53Ql835GHKJcbBFY2RRrv4dyWAw05p/V0fNN
+         Lg4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749738824; x=1750343624;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkFa1Jh0hAp7VXFgDt4c5m6aT1cILx31aOxZ9A4iZ3Q=;
-        b=CvtaCc+6oPDLaibR1IjohMDeVHjLUc/kft+qOurrEUoSmumvd4UI+RPJDD6wmxSRCw
-         MKkQtslcPXQcOKWbBdU8ox1vQa4r5gL1B4L43F+4utquBKl3TLZfehNBtzQHC1StbSP/
-         mWwVU8UMpXyTJPX7CTFdKA1LYdBSm6dp92mudh+FMOCs89lKA08OLXw/4sDQ1FaTXT9U
-         miCGknefzVUXW16Nu3DJQlpspQNkHG6li2uj/J8oo14eo7wgQEvrKKdSPsD4HsUPnmlH
-         AeKL6kGlQD5qpOUonycNaSNwKLj//cy9cH9rGUhY8KHdbnkl0oWAAuoGFkm5MIcwsFTo
-         qPlg==
-X-Forwarded-Encrypted: i=1; AJvYcCWhfN0Dd/3n0WlLthAYN0nCGxwtWtUcqzA1uyau2GgZrsvjgMQ5ullBmTnJdappTljZOhKaQ7hRuEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyYOjbfZMDb/G1aQHnUcu4dZ3Mds/7s0aZs0BRVHfgZvaie3f/
-	m1+5uhHgAW2TovZzHmgcKrwrvsfiPlwfoAbrLNrjFM5ZAErVTqOy1acZSm+qVxI5ePYDlh+IroU
-	TAxxKR45zuL97hTxrmhI0oD607VQIbh2cOAFE
-X-Gm-Gg: ASbGnct4eVwetjAWJrT1tA++qClrlo9Bd7q30/S5nRhfi54a7f2fhz4V0XY6qE18Dua
-	hdm1jMnTixkDEaZu6C14Rqi6S3/jMojdjJSpwq5tGkkF6JB2nlzI+Ghx1g0Sc+F1hLZ+NLsI1d6
-	eAFro3wVCuTg5+EmjOrcOnBHZPHZTSMRgUFrTwnkeNo/CgxaFBw8GkTazmVw9+QTsgw7+xHQS7M
-	kklEqLZ+WiFZ+oIIqYB79ss3zdNpTf3CFeEQkHxioXfGODGoO4H7bSWhmOeC7pC1FhU48A9QQ2j
-	xHFSpt1w3oBf8JQZJPYIue5TBYNleG/REWIHq0qaInJSa2MQnseRcN0fo2qVLVXYeTrf/PEqU78
-	W3lo=
-X-Google-Smtp-Source: AGHT+IGnhKK23yR1xHZZWzF61fUpeG2TlhMWsxzXLzc1dL1xHOAteivntPVBueKnIToEoqjGc4A6kecpFjzD
-X-Received: by 2002:a17:907:e895:b0:ad1:fa48:da0a with SMTP id a640c23a62f3a-adea9410734mr337093666b.35.1749738824090;
-        Thu, 12 Jun 2025 07:33:44 -0700 (PDT)
-Received: from giampiero.localdomain (net-5-89-7-58.cust.vodafonedsl.it. [5.89.7.58])
-        by smtp-relay.gmail.com with ESMTPS id a640c23a62f3a-adeadb636acsm9220266b.183.2025.06.12.07.33.43
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 12 Jun 2025 07:33:44 -0700 (PDT)
-X-Relaying-Domain: sferalabs.cc
-From: Giampiero Baggiani <giampiero@sferalabs.cc>
-To: alexandre.belloni@bootlin.com
-Cc: Giampiero Baggiani <giampiero@sferalabs.cc>,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: pcf2127: add power management device properties
-Date: Thu, 12 Jun 2025 16:33:38 +0200
-Message-Id: <20250612143338.45943-1-giampiero@sferalabs.cc>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        d=1e100.net; s=20230601; t=1749739266; x=1750344066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tEpDdSY+2jWUkNnS9iYms3NFnNi5IdWvmT0Vr9mFNCU=;
+        b=Sx/jy3hThgUz3oVGrBpnRtzIDhKIzvjqqLIYkbHCZZmW0aIrjREaGsXZbU6s3i6RXi
+         qP1JXpkddZjHxPj+KUJWN53kOh1S88PVD8h2zFkHdHygUFjy748TrFu08+6w6OkNidQO
+         Mx0E88r4EBMl5cwHd1QupRmTUzDP0LJ5gkao0FAa5n7Ny4+sNqM+oH7q23/co/8INy92
+         B1ebSih2y5LkRdeeOpWscjIQawuaxXixNQTopbYLN3+jnxXriPgfUjfjIgzngZ2Y1WxE
+         cLpSoW2I18ccu/KSleNBZrEOcXcYLrMIM7NvGAaLWObeih5Nv/f+qlr+OFAhLmWiIPLR
+         FuWA==
+X-Forwarded-Encrypted: i=1; AJvYcCUthQn2QrvX9y5H4+YKd29zMwPx7jMDytbjGsSa303CnDy4WVs2MXd548ElFyBGGKBbLDMIiespzN5l@vger.kernel.org, AJvYcCV8n8UVBRNoqze9fz4TQhgpZaw2hMqDLzDGNvWDqI/7B+LdU5CSjUH0Q7c0RoTR/foketLDwTASJtbdEAI=@vger.kernel.org, AJvYcCVFF48N5ri5FV9T1nI7am9QDnMchPmjPrfymosu9BGKKKw/inQSQDqpWf6BFOdOPeYmyelihd3w@vger.kernel.org, AJvYcCVQKIZ16YmXf6oD7ZfLx7EfmrMhm85UlM6PRaRS5cCE4v7ujlQm2OGvFLhR298KJr5Px4Zkr/t8P7Tq@vger.kernel.org, AJvYcCWH/vJpy/YVVCei1GnpzBM5e1lD3PNmvo78Wp2oBDNlrgYbO2BCre+5i8kMQl5Y2frdizSlLCJzufw=@vger.kernel.org, AJvYcCX0S0q9icaPAaptlUwbDGJU+pDrp0O4/HucISh3VQOvjfYXGd+Nm7XeIPD4ZE0a6C27+ogJtQpei6/1CVAWaCQ=@vger.kernel.org, AJvYcCX43prmBg7BDoHZsqoOIo3PrnTu5y963NUiO53BPRhJiLgK080R/Z+ScNQSlYv4+8jRahArMjL8jJA2zfr6@vger.kernel.org, AJvYcCXmGOjfWSZcl8DPYxjB8vL/8vTFtkMH711nmvMnY2+KdBIBVCI9jnhD+FVSZnckRZCvubtNF4t1O78HAQ==@vger.kernel.org, AJvYcCXpBDxYasujhOwWAiRw0Ct6ZqpZk9J333QfpU0xh9L9KXvO1cJPI1rLBsKgyHAhJVCReE/VLMiDPGTr@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAE6iMggz2Yq4jc7yNJg5YVuRVMktooNo2NN+/reLPRODMM6xo
+	3UFZeLBhDENG4T653n/hOaRhXKGJz6m+9+Uel3Dy66v5QkrYCmjro6V/ZJj+u+TDX3S4RxpNjec
+	1IPUUiDKuV3LyZU6wOIeB9EG/tqn80ic=
+X-Gm-Gg: ASbGncvxV+cUzVKGAXIZpbUxbaSqfF3hPxsIr2G1PLTP/6xNEYC/PhJ+iNb3WDmtM3l
+	bGrvoAoEMbUbS724Rany9rSWaiBoEFUv5gzkVIoUYbxZT4pJbdA/PVSWjQIr6G8Z+gVjZo+W0hU
+	UvzqYDUnA9lnspfh5E2S61X1tUXieyVLuR0BuZUHS+TPM=
+X-Google-Smtp-Source: AGHT+IHbXkDYNuadtMxqrLv3eWpepQOun6qiF0ETWy2zrWyc5v6lbDG/lF+Rb/oCRSfW2as0T8+Q8KacySN6ARKlV7s=
+X-Received: by 2002:a05:6902:160c:b0:e81:a0b8:e351 with SMTP id
+ 3f1490d57ef6-e81fda04835mr10460738276.5.1749739265971; Thu, 12 Jun 2025
+ 07:41:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250604041418.1188792-1-tmyu0@nuvoton.com> <20250604041418.1188792-2-tmyu0@nuvoton.com>
+ <20250612140041.GF381401@google.com>
+In-Reply-To: <20250612140041.GF381401@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 12 Jun 2025 22:40:55 +0800
+X-Gm-Features: AX0GCFsHJ9k1Lm2CrO34dBCfeL0tuuLt-YrRc-whSYIUck_BRu3E49ZxjLYE8dA
+Message-ID: <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	Ming Yu <tmyu0@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Added the "backup-switchover-mode" and the "battery-low-detection-set"
-device properties.
-Especially relevant for PCF2131 which comes with BSM and BLD disabled
-by default.
-If the properties are not specified the driver behaves as before, keeping
-the configuration unchanged.
-The "battery-low-detection-set" property solves the current issue of BLD
-config lost when switching between BSMs.
-The RTC_FEATURE_BACKUP_SWITCH_MODE is also set.
+Dear Lee,
 
-Signed-off-by: Giampiero Baggiani <giampiero@sferalabs.cc>
----
- drivers/rtc/rtc-pcf2127.c | 206 ++++++++++++++++++++++++++++++--------
- 1 file changed, 163 insertions(+), 43 deletions(-)
+Thank you for reviewing,
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 31c7dca8f469..b381b31b6d20 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -182,6 +182,12 @@ struct pcf21xx_ts_config {
- 	u8 ie_bit; /* Interrupt enable bit. */
- };
- 
-+struct pcf21xx_pwrmng_config {
-+	int bsm;
-+	bool bld;
-+	bool pfd;
-+};
-+
- struct pcf21xx_config {
- 	int type; /* IC variant */
- 	int max_register;
-@@ -209,6 +215,7 @@ struct pcf2127 {
- 	bool irq_enabled;
- 	time64_t ts[PCF2127_MAX_TS_SUPPORTED]; /* Timestamp values. */
- 	bool ts_valid[PCF2127_MAX_TS_SUPPORTED];  /* Timestamp valid indication. */
-+	bool bld_set;
- };
- 
- /*
-@@ -333,26 +340,130 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	return 0;
- }
- 
--static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
-+static int pcf2127_rtc_get_pwrmng(struct device *dev,
-+				  struct pcf21xx_pwrmng_config *cfg)
- {
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
--	u32 value;
-+	unsigned int value;
-+	int ret;
-+
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+	if (ret < 0)
-+		return ret;
-+
-+	value = FIELD_GET(PCF2127_CTRL3_PM, value);
-+
-+	switch (value) {
-+	case 0:
-+		cfg->bsm = RTC_BSM_LEVEL;
-+		cfg->bld = true;
-+		cfg->pfd = true;
-+		break;
-+
-+	case 1:
-+		cfg->bsm = RTC_BSM_LEVEL;
-+		cfg->bld = false;
-+		cfg->pfd = true;
-+		break;
-+
-+	case 2:
-+		cfg->bsm = RTC_BSM_LEVEL;
-+		cfg->bld = false;
-+		cfg->pfd = false;
-+		break;
-+
-+	case 3:
-+		cfg->bsm = RTC_BSM_DIRECT;
-+		cfg->bld = true;
-+		cfg->pfd = true;
-+		break;
-+
-+	case 4:
-+		cfg->bsm = RTC_BSM_DIRECT;
-+		cfg->bld = false;
-+		cfg->pfd = true;
-+		break;
-+
-+	case 5:
-+		cfg->bsm = RTC_BSM_DIRECT;
-+		cfg->bld = false;
-+		cfg->pfd = false;
-+		break;
-+
-+	case 6:
-+		cfg->bsm = RTC_BSM_DISABLED;
-+		cfg->bld = false;
-+		cfg->pfd = true;
-+		break;
-+
-+	default:
-+		cfg->bsm = RTC_BSM_DISABLED;
-+		cfg->bld = false;
-+		cfg->pfd = false;
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int pcf2127_rtc_set_pwrmng(struct device *dev,
-+				  struct pcf21xx_pwrmng_config *cfg)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	unsigned int value;
-+
-+	if (cfg->bld)
-+		cfg->pfd = true;
-+
-+	switch (cfg->bsm) {
-+	case RTC_BSM_LEVEL:
-+		if (cfg->bld)
-+			value = 0;
-+		else if (cfg->pfd)
-+			value = 1;
-+		else
-+			value = 2;
-+		break;
-+
-+	case RTC_BSM_DIRECT:
-+		if (cfg->bld)
-+			value = 3;
-+		else if (cfg->pfd)
-+			value = 4;
-+		else
-+			value = 5;
-+		break;
-+
-+	case RTC_BSM_DISABLED:
-+		if (cfg->bld)
-+			return -EINVAL;
-+		else if (cfg->pfd)
-+			value = 6;
-+		else
-+			value = 7;
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+				  PCF2127_CTRL3_PM,
-+				  FIELD_PREP(PCF2127_CTRL3_PM, value));
-+}
-+
-+static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
-+{
-+	struct pcf21xx_pwrmng_config cfg;
- 	int ret;
- 
- 	switch (param->param) {
- 	case RTC_PARAM_BACKUP_SWITCH_MODE:
--		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+		ret = pcf2127_rtc_get_pwrmng(dev, &cfg);
- 		if (ret < 0)
- 			return ret;
- 
--		value = FIELD_GET(PCF2127_CTRL3_PM, value);
--
--		if (value < 0x3)
--			param->uvalue = RTC_BSM_LEVEL;
--		else if (value < 0x6)
--			param->uvalue = RTC_BSM_DIRECT;
--		else
--			param->uvalue = RTC_BSM_DISABLED;
-+		param->uvalue = cfg.bsm;
- 
- 		break;
- 
-@@ -366,49 +477,23 @@ static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
- static int pcf2127_param_set(struct device *dev, struct rtc_param *param)
- {
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
--	u8 mode = 0;
--	u32 value;
-+	struct pcf21xx_pwrmng_config cfg;
- 	int ret;
- 
- 	switch (param->param) {
- 	case RTC_PARAM_BACKUP_SWITCH_MODE:
--		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+		ret = pcf2127_rtc_get_pwrmng(dev, &cfg);
- 		if (ret < 0)
- 			return ret;
- 
--		value = FIELD_GET(PCF2127_CTRL3_PM, value);
--
--		if (value > 5)
--			value -= 5;
--		else if (value > 2)
--			value -= 3;
--
--		switch (param->uvalue) {
--		case RTC_BSM_LEVEL:
--			break;
--		case RTC_BSM_DIRECT:
--			mode = 3;
--			break;
--		case RTC_BSM_DISABLED:
--			if (value == 0)
--				value = 1;
--			mode = 5;
--			break;
--		default:
--			return -EINVAL;
--		}
--
--		return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
--					  PCF2127_CTRL3_PM,
--					  FIELD_PREP(PCF2127_CTRL3_PM, mode + value));
--
--		break;
-+		cfg.bsm = param->uvalue;
-+		if (pcf2127->bld_set && cfg.bsm != RTC_BSM_DISABLED)
-+			cfg.bld = true;
-+		return pcf2127_rtc_set_pwrmng(dev, &cfg);
- 
- 	default:
- 		return -EINVAL;
- 	}
--
--	return 0;
- }
- 
- static int pcf2127_rtc_ioctl(struct device *dev,
-@@ -1181,6 +1266,8 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	struct pcf2127 *pcf2127;
- 	int ret = 0;
- 	unsigned int val;
-+	struct pcf21xx_pwrmng_config pm_cfg;
-+	bool pm_cfg_write = false;
- 
- 	dev_dbg(dev, "%s\n", __func__);
- 
-@@ -1323,6 +1410,39 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		return ret;
- 	}
- 
-+	ret = pcf2127_rtc_get_pwrmng(dev, &pm_cfg);
-+	if (ret) {
-+		dev_err(dev,
-+			"%s: power management config (ctrl3) read failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	if (!device_property_read_u32(dev, "backup-switchover-mode",
-+				      &pm_cfg.bsm)) {
-+		pm_cfg_write = true;
-+	}
-+
-+	pcf2127->bld_set = device_property_read_bool(dev,
-+					"battery-low-detection-set");
-+	if (pcf2127->bld_set) {
-+		if (pm_cfg.bsm != RTC_BSM_DISABLED)
-+			pm_cfg.bld = true;
-+		pm_cfg_write = true;
-+	}
-+
-+	if (pm_cfg_write) {
-+		ret = pcf2127_rtc_set_pwrmng(dev, &pm_cfg);
-+		if (ret) {
-+			dev_err(dev,
-+				"%s: power management config (ctrl3) failed\n",
-+				__func__);
-+			return ret;
-+		}
-+	}
-+
-+	set_bit(RTC_FEATURE_BACKUP_SWITCH_MODE, pcf2127->rtc->features);
-+
- 	/*
- 	 * Enable timestamp functions 1 to 4.
- 	 */
--- 
-2.39.2 (Apple Git-143)
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=97=A5 =E9=
+=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+...
+> > +static const struct mfd_cell nct6694_devs[] =3D {
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
+> > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
+> > +
+> > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
+> > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
+> > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
+> > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
+> > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
+> > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+>
+> Why have we gone back to this silly numbering scheme?
+>
+> What happened to using IDA in the child driver?
+>
 
+In a previous version, I tried to maintain a static IDA in each
+sub-driver. However, I didn=E2=80=99t consider the case where multiple NCT6=
+694
+devices are bound to the same driver =E2=80=94 in that case, the IDs are no=
+t
+fixed and become unusable for my purpose.
+
+I=E2=80=99ve since realized that using pdev->id avoids the need for cell->i=
+d,
+so I reverted to the earlier approach.
+
+That said, do you think it would be a better solution to manage all
+the IDAs centrally within the driver? For example:
+in nct6694.c
+struct nct6694 {
+    struct device *dev;
+
+    struct ida gpio_ida;
+    struct ida i2c_ida;
+    struct ida can_ida;
+    struct ida wdt_ida;
+};
+
+static int nct6694_probe(struct platform_device *pdev)
+{
+    ida_init(&nct6694->gpio_ida);
+    ...
+}
+
+in gpio-nct6694.c
+static int nct6694_gpio_probe(struct platform_device *pdev)
+{
+    id =3D ida_alloc(&nct6694->gpio_ida, GFP_KERNEL);
+}
+
+
+Best regards,
+Ming
 
