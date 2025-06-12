@@ -1,152 +1,116 @@
-Return-Path: <linux-rtc+bounces-4292-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4293-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F1AAD7627
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 17:31:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00FB7AD7E6E
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Jun 2025 00:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73CCB3A1C63
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 15:30:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 792743A4491
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 22:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97442C3249;
-	Thu, 12 Jun 2025 15:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2742DECBD;
+	Thu, 12 Jun 2025 22:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XBK70+8m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chZHuC9c"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B8D2BF3DF;
-	Thu, 12 Jun 2025 15:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F95230D1E;
+	Thu, 12 Jun 2025 22:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749741801; cv=none; b=ubFsq8l3K9/SEBP/fqQvoC0QsSeKuX/nrLrT8XPTrNrxvfS0yJdt7XiwN6lMxMbKFICh9S17nx0przsl+U3wl8emRfCT7cGqmaYJBVJOIEQAXl+0nl4jqCDRBsf5yJePDPZdMidUT4wVhP+OsYgBkKV3nco5A4Zkex2VJvdhc2g=
+	t=1749767650; cv=none; b=aBaNIaEbbbBKJrsNRfDliSqhHOR8kRj/Mw3rdnGEDUHAz5TgR7FdKJRak5Oj8sZhGywW6TROIdj1YhjZ84HFh3umgoEWiAO2l5zznCkH4vAMVoPyyD3MA5a7e52DqG6BtYXJLowz88oJ68FXrTbN5G9UkWAfJVXu4afRphm9XXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749741801; c=relaxed/simple;
-	bh=7+POKnao7dJbjl1goCWSf3SOuai5TxMCVJI0eCvMhl0=;
+	s=arc-20240116; t=1749767650; c=relaxed/simple;
+	bh=NKWTLr65Hcmg0MMBeQ2Z/lSxWCh4uYG9hCxq/seIme8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pNkO2JWjTzeqHm438qpva+KTCIUGy1joYCwlHdBWwYQXKIKxhGru2FUdgaC9J9jmTJ1J5m/+Eb9oaLMjw7rb8KunAoQzG9JiVUztZA4Wjn1mrwtyOdQH/5pKjFr/DCfwHLyJjwunRdFBkE/KoNYrjmFerj5JpAtgn9HFm6FaqhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XBK70+8m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7476AC4CEEA;
-	Thu, 12 Jun 2025 15:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749741801;
-	bh=7+POKnao7dJbjl1goCWSf3SOuai5TxMCVJI0eCvMhl0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XBK70+8mAD6hUz34u1ynNTORuPkMNSYLirTEViOINENBZ5407zYk4HLRqeP17W/9B
-	 r2T/RngfGRyjBXFassi3AwAo//t5JSlaSdlpTbSuktY5YqTigeFGAe14UPRecFFGrZ
-	 h4ANsE8KM7zyJ+MYcjcoFhRZh1spF96TQOIJ6ll/bwZ63quYEUyuRF3RQZ0aFaWp5z
-	 B7wzht3/RTptjwaOhYWbWSbdiH1a41WZVhZ3YqtuyUzJgiZa6Xf8DoATPYsjAnkWyw
-	 GbRMD5Y3RQ3ktzKKHY9r4VFDpYLxoWpTAVt4wQDa4FF7eEXPjkrKK3xkJNquJNO65f
-	 rwCl5GmA+SldA==
-Date: Thu, 12 Jun 2025 16:23:13 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250612152313.GP381401@google.com>
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <20250612140041.GF381401@google.com>
- <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3KKZk+TC4tp9l/9ZjGl2enSNqlhD0/dt0J/OKbpZtBQLpoxTd2qjgjRgSfxRIhL/G4vz5ga5zNrmvC8ROYeSrBdsnGCKH+lGDLA7wbRq0Ib9gqSrQYD1nUFftW7apmFIzVsDUp9S5WbzseDX7H6v0dirsh5IAzc4A0RIqLGBP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chZHuC9c; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749767648; x=1781303648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NKWTLr65Hcmg0MMBeQ2Z/lSxWCh4uYG9hCxq/seIme8=;
+  b=chZHuC9ci33WHPbsRz8MFaf0u51tfoerzpMLyTBaHTIgm4PcXCoRetm3
+   NWZfGK/pmT4Ga1XhRxmKJhx6w17mfkOm4NNS5tMN9DhL92BDTIb+heS10
+   UupcTgYRYUgdzYGdMszYhxsaO8/VMFKmZg7j3QA/imhLVT4MydtPt5gUj
+   SYyZngNIw2Lmn9/dJtm0eeBHK+20jlcBmzDfl+W0rvs1ZkJeze7Hoe7p/
+   OaSx2MFdg+8YjgnG53riF4Ucm9SLUkAS71hd6fW3q794z5ydJIBUVtxSA
+   xuImIrKm2JNZQrEtJOlfHvo6wjaDNVAkzWwaB9Gfv888ANgXENdgVXTNA
+   w==;
+X-CSE-ConnectionGUID: kvidIT0vQoeCDsmC+f8eVQ==
+X-CSE-MsgGUID: CilzCWI1SauycZt7+LLmQQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="55771878"
+X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
+   d="scan'208";a="55771878"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2025 15:34:08 -0700
+X-CSE-ConnectionGUID: IgjqehKISRuLCpQGukBFWw==
+X-CSE-MsgGUID: /5HrnusNQSmAq6DS1AB4Iw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,231,1744095600"; 
+   d="scan'208";a="184892812"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 12 Jun 2025 15:34:06 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uPqUl-000C0I-30;
+	Thu, 12 Jun 2025 22:34:03 +0000
+Date: Fri, 13 Jun 2025 06:33:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Wang <wangming01@loongson.cn>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
+	lixuefeng@loongson.cn, chenhuacai@loongson.cn, gaojuxin@loongson.cn
+Subject: Re: [PATCH] rtc: efi: Defer driver initialization to prioritize more
+ capable RTCs
+Message-ID: <202506130610.5rhXSP5U-lkp@intel.com>
+References: <20250611062025.3243732-1-wangming01@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
+In-Reply-To: <20250611062025.3243732-1-wangming01@loongson.cn>
 
-On Thu, 12 Jun 2025, Ming Yu wrote:
+Hi Ming,
 
-> Dear Lee,
-> 
-> Thank you for reviewing,
-> 
-> Lee Jones <lee@kernel.org> 於 2025年6月12日 週四 下午10:00寫道：
-> >
-> ...
-> > > +static const struct mfd_cell nct6694_devs[] = {
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > +
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> >
-> > Why have we gone back to this silly numbering scheme?
-> >
-> > What happened to using IDA in the child driver?
-> >
-> 
-> In a previous version, I tried to maintain a static IDA in each
-> sub-driver. However, I didn’t consider the case where multiple NCT6694
-> devices are bound to the same driver — in that case, the IDs are not
-> fixed and become unusable for my purpose.
+kernel test robot noticed the following build warnings:
 
-Not sure I understand.
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on linus/master v6.16-rc1 next-20250612]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> I’ve since realized that using pdev->id avoids the need for cell->id,
-> so I reverted to the earlier approach.
-> 
-> That said, do you think it would be a better solution to manage all
-> the IDAs centrally within the driver? For example:
-> in nct6694.c
-> struct nct6694 {
->     struct device *dev;
-> 
->     struct ida gpio_ida;
->     struct ida i2c_ida;
->     struct ida can_ida;
->     struct ida wdt_ida;
-> };
-> 
-> static int nct6694_probe(struct platform_device *pdev)
-> {
->     ida_init(&nct6694->gpio_ida);
->     ...
-> }
-> 
-> in gpio-nct6694.c
-> static int nct6694_gpio_probe(struct platform_device *pdev)
-> {
->     id = ida_alloc(&nct6694->gpio_ida, GFP_KERNEL);
-> }
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Wang/rtc-efi-Defer-driver-initialization-to-prioritize-more-capable-RTCs/20250611-142308
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20250611062025.3243732-1-wangming01%40loongson.cn
+patch subject: [PATCH] rtc: efi: Defer driver initialization to prioritize more capable RTCs
+config: arm-multi_v7_defconfig (https://download.01.org/0day-ci/archive/20250613/202506130610.5rhXSP5U-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250613/202506130610.5rhXSP5U-lkp@intel.com/reproduce)
 
-No that would be way worse.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506130610.5rhXSP5U-lkp@intel.com/
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: drivers/rtc/rtc-efi: section mismatch in reference: efi_rtc_driver+0x0 (section: .data) -> efi_rtc_probe (section: .init.text)
 
 -- 
-Lee Jones [李琼斯]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
