@@ -1,268 +1,383 @@
-Return-Path: <linux-rtc+bounces-4289-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4290-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 782C8AD72D6
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 16:00:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A36AAD73F4
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 16:33:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01D623A4AB6
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 14:00:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2CDE169222
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Jun 2025 14:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17D0167DB7;
-	Thu, 12 Jun 2025 14:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C57246BC9;
+	Thu, 12 Jun 2025 14:33:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBN8jJ3j"
+	dkim=pass (2048-bit key) header.d=sferalabs.cc header.i=@sferalabs.cc header.b="Do0VcHHd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f98.google.com (mail-ej1-f98.google.com [209.85.218.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBBC2745E;
-	Thu, 12 Jun 2025 14:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A52142048
+	for <linux-rtc@vger.kernel.org>; Thu, 12 Jun 2025 14:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749736849; cv=none; b=c57uZvRrXIF1YP2dQ1G1iJCDot+4FrY+Qtfwa0vMJK7CjeuqhV7F+bWBFQB64FEU3T3aSp4NDx2XguyBfqatqi4M87XEmYOtxyfD4oW+u7P4OR2K2lLa2eJ0vuuYERiABiRQkRFhwKckiu6daUUGvzhjN8/gpH+UU9yGq4JdbKU=
+	t=1749738830; cv=none; b=oUG8K/fal+ZB/1AcgXgfvSX0HQhEVphHI1im7s6XzucwdsYzr6WDrH/rpfTBNjWxJtEf9DiO+Qf+l9BwT+lwgP4RUE7gV3Dfxm+xc4E2t5QRhno9+xYKpsz2hClVFOFHqb59Mt0NZpF8TbU6PlppCeF9obUXl6ZxzcVCcj/r9GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749736849; c=relaxed/simple;
-	bh=b/HubsKTNPeTRSAp6TCHMgHzCQE3BmzRFQuGAGVx1pg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MU0bl7DTV2oUOx7pEaU+pa/0K8V0lkKgEkIHYUkpXLUcAZ7ewYXZn2Au1lU7S4PHkAEu1CWYvok1MdH2vAqgGgRuqu39w9RpeLY1+GuXv10jM+KeE4K2oelwlmEPixirKEdZ0cMezvRpv6sl3Oh0cNJvQf/2jTHFRaSIRRL+1Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBN8jJ3j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C71DC4CEEB;
-	Thu, 12 Jun 2025 14:00:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749736849;
-	bh=b/HubsKTNPeTRSAp6TCHMgHzCQE3BmzRFQuGAGVx1pg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TBN8jJ3j/nD9SkRH3SZ2FjuvzuqbmCx00Z16QXYn7b8lFktXXebNl7vmpa0++ML4v
-	 bOxBaHYiP7DdiYLNTvtH1FzmOQDoJLCq/OHvG1C2lCDpMzW9QT6KIkf+XZMkyZEI1Y
-	 bLtjIkPrzk7kxSIMFdKjYwBhjekGm+8PuXEzKurCg7k4y/H+VZZP76948rtqznjb6o
-	 Wy21rMZ9Y54R74JsZJtB8OA4dgznGaI8n3J7wiX13wRG33spDDVZljvWbTVSS5jCv8
-	 qK46AmrpJP8IHJJEa6aGTS+HMRzFdLdZdN5FpLfI81lRoTsu/gzO5+Uq9LOCobFKT7
-	 /UEMhZAQ4F0BQ==
-Date: Thu, 12 Jun 2025 15:00:41 +0100
-From: Lee Jones <lee@kernel.org>
-To: a0282524688@gmail.com
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250612140041.GF381401@google.com>
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com>
- <20250604041418.1188792-2-tmyu0@nuvoton.com>
+	s=arc-20240116; t=1749738830; c=relaxed/simple;
+	bh=YSUbtUuizklExpnzU8VpfcNv0fngsTJdsERQci1RWp0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y0x8hTXG4X1X0tUdt44c8ReUIMCMteeBJ/gzR7luFrNTJtNgGivn0QYC/cHDzijhXQ6BE0LQSThCbiUBKnBey9NIQeWyhH3YKX015kkF3Pdb3QCwe4qDI91PxaXiW0FiSd/50aJ3rS19mSb7Q74jv9nrLqyHgUx/bRouaAVxNPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sferalabs.cc; spf=pass smtp.mailfrom=sferalabs.cc; dkim=pass (2048-bit key) header.d=sferalabs.cc header.i=@sferalabs.cc header.b=Do0VcHHd; arc=none smtp.client-ip=209.85.218.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sferalabs.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sferalabs.cc
+Received: by mail-ej1-f98.google.com with SMTP id a640c23a62f3a-ade30256175so194518866b.1
+        for <linux-rtc@vger.kernel.org>; Thu, 12 Jun 2025 07:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sferalabs.cc; s=google; t=1749738824; x=1750343624; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkFa1Jh0hAp7VXFgDt4c5m6aT1cILx31aOxZ9A4iZ3Q=;
+        b=Do0VcHHdwB3mogd0mPbdmhVLLjHHpGY15RIHUCRRjNfRWuzl2gPeDz45UkPCdO0p3f
+         ED5hNaB2967Ptt1Spu5kA19Rps6cVEp+NLycDL4iH52RhxNBzlVkKs6PlWejtYvO7uv0
+         EmgarXU1KdrI1EbLyRUeMBu/3CeCq6dCs6F/BKPGbd/qgCzyyBxmY4QqmDs6P/091Fik
+         0USQ8+Va7hKxFwIAgVqLI1J0m+Dzvd3yPZRpUG8SWNOif0nQCqEhOJlF3eLWuCk3aHGe
+         rkUEqvLEnEN3ubvAXdSEK5jPrGtQPEo2qG3B7gsZfZeqGBNbovQMlD+fbvlRLp5k6Mu8
+         6qBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749738824; x=1750343624;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lkFa1Jh0hAp7VXFgDt4c5m6aT1cILx31aOxZ9A4iZ3Q=;
+        b=CvtaCc+6oPDLaibR1IjohMDeVHjLUc/kft+qOurrEUoSmumvd4UI+RPJDD6wmxSRCw
+         MKkQtslcPXQcOKWbBdU8ox1vQa4r5gL1B4L43F+4utquBKl3TLZfehNBtzQHC1StbSP/
+         mWwVU8UMpXyTJPX7CTFdKA1LYdBSm6dp92mudh+FMOCs89lKA08OLXw/4sDQ1FaTXT9U
+         miCGknefzVUXW16Nu3DJQlpspQNkHG6li2uj/J8oo14eo7wgQEvrKKdSPsD4HsUPnmlH
+         AeKL6kGlQD5qpOUonycNaSNwKLj//cy9cH9rGUhY8KHdbnkl0oWAAuoGFkm5MIcwsFTo
+         qPlg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhfN0Dd/3n0WlLthAYN0nCGxwtWtUcqzA1uyau2GgZrsvjgMQ5ullBmTnJdappTljZOhKaQ7hRuEA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyYOjbfZMDb/G1aQHnUcu4dZ3Mds/7s0aZs0BRVHfgZvaie3f/
+	m1+5uhHgAW2TovZzHmgcKrwrvsfiPlwfoAbrLNrjFM5ZAErVTqOy1acZSm+qVxI5ePYDlh+IroU
+	TAxxKR45zuL97hTxrmhI0oD607VQIbh2cOAFE
+X-Gm-Gg: ASbGnct4eVwetjAWJrT1tA++qClrlo9Bd7q30/S5nRhfi54a7f2fhz4V0XY6qE18Dua
+	hdm1jMnTixkDEaZu6C14Rqi6S3/jMojdjJSpwq5tGkkF6JB2nlzI+Ghx1g0Sc+F1hLZ+NLsI1d6
+	eAFro3wVCuTg5+EmjOrcOnBHZPHZTSMRgUFrTwnkeNo/CgxaFBw8GkTazmVw9+QTsgw7+xHQS7M
+	kklEqLZ+WiFZ+oIIqYB79ss3zdNpTf3CFeEQkHxioXfGODGoO4H7bSWhmOeC7pC1FhU48A9QQ2j
+	xHFSpt1w3oBf8JQZJPYIue5TBYNleG/REWIHq0qaInJSa2MQnseRcN0fo2qVLVXYeTrf/PEqU78
+	W3lo=
+X-Google-Smtp-Source: AGHT+IGnhKK23yR1xHZZWzF61fUpeG2TlhMWsxzXLzc1dL1xHOAteivntPVBueKnIToEoqjGc4A6kecpFjzD
+X-Received: by 2002:a17:907:e895:b0:ad1:fa48:da0a with SMTP id a640c23a62f3a-adea9410734mr337093666b.35.1749738824090;
+        Thu, 12 Jun 2025 07:33:44 -0700 (PDT)
+Received: from giampiero.localdomain (net-5-89-7-58.cust.vodafonedsl.it. [5.89.7.58])
+        by smtp-relay.gmail.com with ESMTPS id a640c23a62f3a-adeadb636acsm9220266b.183.2025.06.12.07.33.43
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 12 Jun 2025 07:33:44 -0700 (PDT)
+X-Relaying-Domain: sferalabs.cc
+From: Giampiero Baggiani <giampiero@sferalabs.cc>
+To: alexandre.belloni@bootlin.com
+Cc: Giampiero Baggiani <giampiero@sferalabs.cc>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: pcf2127: add power management device properties
+Date: Thu, 12 Jun 2025 16:33:38 +0200
+Message-Id: <20250612143338.45943-1-giampiero@sferalabs.cc>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250604041418.1188792-2-tmyu0@nuvoton.com>
 
-On Wed, 04 Jun 2025, a0282524688@gmail.com wrote:
+Added the "backup-switchover-mode" and the "battery-low-detection-set"
+device properties.
+Especially relevant for PCF2131 which comes with BSM and BLD disabled
+by default.
+If the properties are not specified the driver behaves as before, keeping
+the configuration unchanged.
+The "battery-low-detection-set" property solves the current issue of BLD
+config lost when switching between BSMs.
+The RTC_FEATURE_BACKUP_SWITCH_MODE is also set.
 
-> From: Ming Yu <tmyu0@nuvoton.com>
-> 
-> The Nuvoton NCT6694 provides an USB interface to the host to
-> access its features.
-> 
-> Sub-devices can use the USB functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupt that will be called when the USB device receives its
-> interrupt pipe.
-> 
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
-> Changes since version 11:
-> - Modify the irq_domain_add_simple() to irq_domain_create_simple()
-> - Fix mfd_cell back to v9, and use Use platform_device's id to replace IDA
->   in sub-drivers
-> 
-> Changes since version 10:
-> - Add change log for the patch
-> - Fix mfd_cell to MFD_CELL_NAME()
-> - Remove unnecessary blank line
-> 
-> Changes since version 9:
-> - Add KernelDoc to exported functions
-> 
-> Changes since version 8:
-> - Modify the signed-off-by with my work address
-> - Rename all MFD cell names to "nct6694-xxx"
-> - Fix some comments in nct6694.c and in nct6694.h
-> 
-> Changes since version 7:
-> - Add error handling for devm_mutex_init()
-> 
-> Changes since version 6:
-> 
-> Changes since version 5:
-> - Fix mfd_cell to MFD_CELL_NAME() and MFD_CELL_BASIC()
-> - Drop unnecessary macros
-> 
-> Changes since version 4:
-> - Modify arguments in read/write function to a pointer to cmd_header
-> 
-> Changes since version 3:
-> - Modify array buffer to structure
-> - Fix defines and comments
-> - Add header <linux/bits.h> and use BIT macro
-> - Modify mutex_init() to devm_mutex_init()
-> 
-> Changes since version 2:
-> 
-> Changes since version 1:
-> - Implement IRQ domain to handle IRQ demux
-> - Modify USB_DEVICE to USB_DEVICE_AND_INTERFACE_INFO API
-> - Add command structure
-> - Fix USB functions
-> - Sort each driver's header files alphabetically
-> 
->  MAINTAINERS                 |   6 +
->  drivers/mfd/Kconfig         |  15 ++
->  drivers/mfd/Makefile        |   2 +
->  drivers/mfd/nct6694.c       | 386 ++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/nct6694.h |  98 +++++++++
->  5 files changed, 507 insertions(+)
->  create mode 100644 drivers/mfd/nct6694.c
->  create mode 100644 include/linux/mfd/nct6694.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 98201e1f4ab5..29d2d05bac22 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17679,6 +17679,12 @@ F:	drivers/nubus/
->  F:	include/linux/nubus.h
->  F:	include/uapi/linux/nubus.h
->  
-> +NUVOTON NCT6694 MFD DRIVER
-> +M:	Ming Yu <tmyu0@nuvoton.com>
-> +S:	Supported
-> +F:	drivers/mfd/nct6694.c
-> +F:	include/linux/mfd/nct6694.h
-> +
->  NVIDIA (rivafb and nvidiafb) FRAMEBUFFER DRIVER
->  M:	Antonino Daplas <adaplas@gmail.com>
->  L:	linux-fbdev@vger.kernel.org
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 96992af22565..489c1950f1ac 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1078,6 +1078,21 @@ config MFD_MENF21BMC
->  	  This driver can also be built as a module. If so the module
->  	  will be called menf21bmc.
->  
-> +config MFD_NCT6694
-> +	tristate "Nuvoton NCT6694 support"
-> +	select MFD_CORE
-> +	depends on USB
-> +	help
-> +	  This enables support for the Nuvoton USB device NCT6694, which shares
-> +	  peripherals.
-> +	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> +	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> +	  PWM, and RTC.
-> +	  This driver provides core APIs to access the NCT6694 hardware
-> +	  monitoring and control features.
-> +	  Additional drivers must be enabled to utilize the specific
-> +	  functionalities of the device.
-> +
->  config MFD_OCELOT
->  	tristate "Microsemi Ocelot External Control Support"
->  	depends on SPI_MASTER
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 5e5cc279af60..a96204d938fc 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -120,6 +120,8 @@ obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
->  obj-$(CONFIG_MFD_MC13XXX_SPI)	+= mc13xxx-spi.o
->  obj-$(CONFIG_MFD_MC13XXX_I2C)	+= mc13xxx-i2c.o
->  
-> +obj-$(CONFIG_MFD_NCT6694)	+= nct6694.o
-> +
->  obj-$(CONFIG_MFD_CORE)		+= mfd-core.o
->  
->  ocelot-soc-objs			:= ocelot-core.o ocelot-spi.o
-> diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
-> new file mode 100644
-> index 000000000000..82d378ee47ed
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694.c
-> @@ -0,0 +1,386 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2025 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 core driver using USB interface to provide
-> + * access to the NCT6694 hardware monitoring and control features.
-> + *
-> + * The NCT6694 is an integrated controller that provides GPIO, I2C,
-> + * CAN, WDT, HWMON and RTC management.
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/usb.h>
-> +
-> +static const struct mfd_cell nct6694_devs[] = {
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> +	MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> +
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> +	MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
+Signed-off-by: Giampiero Baggiani <giampiero@sferalabs.cc>
+---
+ drivers/rtc/rtc-pcf2127.c | 206 ++++++++++++++++++++++++++++++--------
+ 1 file changed, 163 insertions(+), 43 deletions(-)
 
-Why have we gone back to this silly numbering scheme?
-
-What happened to using IDA in the child driver?
-
-> +
-> +	MFD_CELL_BASIC("nct6694-canfd", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-canfd", NULL, NULL, 0, 1),
-> +
-> +	MFD_CELL_BASIC("nct6694-wdt", NULL, NULL, 0, 0),
-> +	MFD_CELL_BASIC("nct6694-wdt", NULL, NULL, 0, 1),
-> +
-> +	MFD_CELL_NAME("nct6694-hwmon"),
-> +
-> +	MFD_CELL_NAME("nct6694-rtc"),
-> +};
-
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 31c7dca8f469..b381b31b6d20 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -182,6 +182,12 @@ struct pcf21xx_ts_config {
+ 	u8 ie_bit; /* Interrupt enable bit. */
+ };
+ 
++struct pcf21xx_pwrmng_config {
++	int bsm;
++	bool bld;
++	bool pfd;
++};
++
+ struct pcf21xx_config {
+ 	int type; /* IC variant */
+ 	int max_register;
+@@ -209,6 +215,7 @@ struct pcf2127 {
+ 	bool irq_enabled;
+ 	time64_t ts[PCF2127_MAX_TS_SUPPORTED]; /* Timestamp values. */
+ 	bool ts_valid[PCF2127_MAX_TS_SUPPORTED];  /* Timestamp valid indication. */
++	bool bld_set;
+ };
+ 
+ /*
+@@ -333,26 +340,130 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	return 0;
+ }
+ 
+-static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
++static int pcf2127_rtc_get_pwrmng(struct device *dev,
++				  struct pcf21xx_pwrmng_config *cfg)
+ {
+ 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+-	u32 value;
++	unsigned int value;
++	int ret;
++
++	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
++	if (ret < 0)
++		return ret;
++
++	value = FIELD_GET(PCF2127_CTRL3_PM, value);
++
++	switch (value) {
++	case 0:
++		cfg->bsm = RTC_BSM_LEVEL;
++		cfg->bld = true;
++		cfg->pfd = true;
++		break;
++
++	case 1:
++		cfg->bsm = RTC_BSM_LEVEL;
++		cfg->bld = false;
++		cfg->pfd = true;
++		break;
++
++	case 2:
++		cfg->bsm = RTC_BSM_LEVEL;
++		cfg->bld = false;
++		cfg->pfd = false;
++		break;
++
++	case 3:
++		cfg->bsm = RTC_BSM_DIRECT;
++		cfg->bld = true;
++		cfg->pfd = true;
++		break;
++
++	case 4:
++		cfg->bsm = RTC_BSM_DIRECT;
++		cfg->bld = false;
++		cfg->pfd = true;
++		break;
++
++	case 5:
++		cfg->bsm = RTC_BSM_DIRECT;
++		cfg->bld = false;
++		cfg->pfd = false;
++		break;
++
++	case 6:
++		cfg->bsm = RTC_BSM_DISABLED;
++		cfg->bld = false;
++		cfg->pfd = true;
++		break;
++
++	default:
++		cfg->bsm = RTC_BSM_DISABLED;
++		cfg->bld = false;
++		cfg->pfd = false;
++		break;
++	}
++
++	return 0;
++}
++
++static int pcf2127_rtc_set_pwrmng(struct device *dev,
++				  struct pcf21xx_pwrmng_config *cfg)
++{
++	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
++	unsigned int value;
++
++	if (cfg->bld)
++		cfg->pfd = true;
++
++	switch (cfg->bsm) {
++	case RTC_BSM_LEVEL:
++		if (cfg->bld)
++			value = 0;
++		else if (cfg->pfd)
++			value = 1;
++		else
++			value = 2;
++		break;
++
++	case RTC_BSM_DIRECT:
++		if (cfg->bld)
++			value = 3;
++		else if (cfg->pfd)
++			value = 4;
++		else
++			value = 5;
++		break;
++
++	case RTC_BSM_DISABLED:
++		if (cfg->bld)
++			return -EINVAL;
++		else if (cfg->pfd)
++			value = 6;
++		else
++			value = 7;
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
++				  PCF2127_CTRL3_PM,
++				  FIELD_PREP(PCF2127_CTRL3_PM, value));
++}
++
++static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
++{
++	struct pcf21xx_pwrmng_config cfg;
+ 	int ret;
+ 
+ 	switch (param->param) {
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+-		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
++		ret = pcf2127_rtc_get_pwrmng(dev, &cfg);
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		value = FIELD_GET(PCF2127_CTRL3_PM, value);
+-
+-		if (value < 0x3)
+-			param->uvalue = RTC_BSM_LEVEL;
+-		else if (value < 0x6)
+-			param->uvalue = RTC_BSM_DIRECT;
+-		else
+-			param->uvalue = RTC_BSM_DISABLED;
++		param->uvalue = cfg.bsm;
+ 
+ 		break;
+ 
+@@ -366,49 +477,23 @@ static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
+ static int pcf2127_param_set(struct device *dev, struct rtc_param *param)
+ {
+ 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+-	u8 mode = 0;
+-	u32 value;
++	struct pcf21xx_pwrmng_config cfg;
+ 	int ret;
+ 
+ 	switch (param->param) {
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+-		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
++		ret = pcf2127_rtc_get_pwrmng(dev, &cfg);
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		value = FIELD_GET(PCF2127_CTRL3_PM, value);
+-
+-		if (value > 5)
+-			value -= 5;
+-		else if (value > 2)
+-			value -= 3;
+-
+-		switch (param->uvalue) {
+-		case RTC_BSM_LEVEL:
+-			break;
+-		case RTC_BSM_DIRECT:
+-			mode = 3;
+-			break;
+-		case RTC_BSM_DISABLED:
+-			if (value == 0)
+-				value = 1;
+-			mode = 5;
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-
+-		return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
+-					  PCF2127_CTRL3_PM,
+-					  FIELD_PREP(PCF2127_CTRL3_PM, mode + value));
+-
+-		break;
++		cfg.bsm = param->uvalue;
++		if (pcf2127->bld_set && cfg.bsm != RTC_BSM_DISABLED)
++			cfg.bld = true;
++		return pcf2127_rtc_set_pwrmng(dev, &cfg);
+ 
+ 	default:
+ 		return -EINVAL;
+ 	}
+-
+-	return 0;
+ }
+ 
+ static int pcf2127_rtc_ioctl(struct device *dev,
+@@ -1181,6 +1266,8 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 	struct pcf2127 *pcf2127;
+ 	int ret = 0;
+ 	unsigned int val;
++	struct pcf21xx_pwrmng_config pm_cfg;
++	bool pm_cfg_write = false;
+ 
+ 	dev_dbg(dev, "%s\n", __func__);
+ 
+@@ -1323,6 +1410,39 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 		return ret;
+ 	}
+ 
++	ret = pcf2127_rtc_get_pwrmng(dev, &pm_cfg);
++	if (ret) {
++		dev_err(dev,
++			"%s: power management config (ctrl3) read failed\n",
++			__func__);
++		return ret;
++	}
++
++	if (!device_property_read_u32(dev, "backup-switchover-mode",
++				      &pm_cfg.bsm)) {
++		pm_cfg_write = true;
++	}
++
++	pcf2127->bld_set = device_property_read_bool(dev,
++					"battery-low-detection-set");
++	if (pcf2127->bld_set) {
++		if (pm_cfg.bsm != RTC_BSM_DISABLED)
++			pm_cfg.bld = true;
++		pm_cfg_write = true;
++	}
++
++	if (pm_cfg_write) {
++		ret = pcf2127_rtc_set_pwrmng(dev, &pm_cfg);
++		if (ret) {
++			dev_err(dev,
++				"%s: power management config (ctrl3) failed\n",
++				__func__);
++			return ret;
++		}
++	}
++
++	set_bit(RTC_FEATURE_BACKUP_SWITCH_MODE, pcf2127->rtc->features);
++
+ 	/*
+ 	 * Enable timestamp functions 1 to 4.
+ 	 */
 -- 
-Lee Jones [李琼斯]
+2.39.2 (Apple Git-143)
+
 
