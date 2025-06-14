@@ -1,189 +1,170 @@
-Return-Path: <linux-rtc+bounces-4298-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4299-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C820AD90D9
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Jun 2025 17:09:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 725A2AD9C72
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Jun 2025 13:17:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD1B97AF0C2
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Jun 2025 15:08:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B294189D112
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Jun 2025 11:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10E2C1E1C02;
-	Fri, 13 Jun 2025 15:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A97825486F;
+	Sat, 14 Jun 2025 11:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ACT9Ctvy"
+	dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b="Lca7QKh6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5EC1A5BBD;
-	Fri, 13 Jun 2025 15:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0C48633A
+	for <linux-rtc@vger.kernel.org>; Sat, 14 Jun 2025 11:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749827380; cv=none; b=jlqr1y34+kAX4poxkZHPDI7eUYY7sQqXxtmswshQBlrppz4962D2ckys8wIqhKHuYT7C5IBMRf7cNFmhzIpzk9rYAuC9JHRpiH33NavR5mY++ErdWFv/vEJKD5lGI4mKYxggGwt3JdqDxrNWLqBt4FitEoiDKZG8Ksbv9li7hB8=
+	t=1749899842; cv=none; b=shUEinmXwxS9mivLyCxt4ZGykg/MaZiBDwW4Bo/yH79JwfGjQwcZk8mW0/96vIAfUBRaHdbRvdHSbDvuKveQbdf7Coah8Ab7huTEzbRq9Rk0rPWHeQpvhV0rNw8Ezos7Vha9JG0Uog50OmRHdsMDg2dCRJZJNM/SgMjcce2RGxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749827380; c=relaxed/simple;
-	bh=z/B4crK4//VWrh72iGUgU3FOvjCigqNKpzaJajGP9V8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tMYiq0Znnj1aTgvu2o3JOU+xMD+I6OKGAF/DWO61PoGOQ7Ovmhtn0pgZfGZuc9PBq9gmmKFGwVxqGsRoCEWTogvmOnUI7vnX7OqtOLJuFlOIwfKsreECOWWLfFjoYC7xBFSIie1Xr8wzL+f5uxNMqCef97QFnYEYH+yLdYNBqH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ACT9Ctvy; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-70e40e3f316so16288647b3.0;
-        Fri, 13 Jun 2025 08:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749827378; x=1750432178; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XWqMgx2TvmM3ycijogqU+1oUaN+kSDJ1tpwyXgBX/1Q=;
-        b=ACT9CtvyPK9T8l9/nDC5wx19mATVqkBZitaPQ7wNcq2THXMTzIiDwGztTvnHomh2R4
-         C3Xsg4DgQmnv7RrLOoXUYjvmHXZx/Hj90CltaogJwPSrwpC5s/JRNwTSTqflRuBCX+EW
-         7MCcFb3uIaV5iCPTAVIFoPaV2oD7qpavVKYp/Aht5XDHrRhCLzs88Sb3+sCT+mD+wTqB
-         FKGNqDvWZfUFVBni35ikQvo8PTftCglZ6DM1xYWHuMNg0JwlDwlINytv5T5J4cZQLMwc
-         0NHXY2Z7H+z4Z9cjAXzu23urFbazHLssp2RbgFMbmExFcBEx8OBROAkX7sn54+rAjAd3
-         vA1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749827378; x=1750432178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XWqMgx2TvmM3ycijogqU+1oUaN+kSDJ1tpwyXgBX/1Q=;
-        b=rWm76/jfrIRtPPXBkEZBD7kirhG+xMRk6X7EcgZ3CFqgbRliFy6e4zNaPrG4pgmlqe
-         hPz4ql4wJSHueGsrSUTPt9/QEnrJddVuPqt536qSIQIk9enU8C1XQhnSt+cSqFQkhtUg
-         BsSFCT19fCw3i2DNpFVcQN5gDa1youf7kLsE/zVb3KimUWYqmngGdz4UrrwmL/NOUQtS
-         zJ2E2xWuGqzopL2zgDHX9YL3NmbCaz0R+8eq4tChU6sGjVw5aYQnhkGnFu14/wmmBnMx
-         9T7aQtqvzA71QPeOGRj/NuWiJcm9hsDgMC0o0lXlOs4uw21To+Q62SYPe+2uhAUbJPhp
-         3dyw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0vnZonVlXO0LHRC6jSz6gYNPqGQytcqrQag2YLBVjclKJuLtPalr+7tDnqgRx1CmQ9cAAfpRpPgyMIA==@vger.kernel.org, AJvYcCUXkFGRSAxO53rVNUZzBO7sIY2qdoy15mt2RQ+bimQMhty4ByqVm2PPPG0N+aZftLWEyxEkknWosl3H/got@vger.kernel.org, AJvYcCUc5Fom9C5tBBdpqR61OYMLqQOqHe+fO2uyPDdHYs8oH3d+liyJp0uLbH5LH/MSTTN1TYTX2jeJwdDtQ7IWGng=@vger.kernel.org, AJvYcCUy6CZH/EzPRXqrLnmwZcURtknqByoNv5gSQ8PvM6ZOM9qH6TuSJUsZzAN80EsTW820db+EDUYy@vger.kernel.org, AJvYcCV2Iv0hjLoVizO4MRuHJ4Lq+DmOL3TLUNaR50K7qRsaqrw44p6hgK5fzcguS2+twUIhoOvb2K8+Gjgf@vger.kernel.org, AJvYcCVdKWgyJY0a8vj68k+NZ+UxCIU0KhZ5MjtFcLStV3Z5hRmONl3QMJ/+M8kk0f6zEzS2w2pt8Waw78M=@vger.kernel.org, AJvYcCXZ8/u9MRKgeh8+RgHjqMFJ1Z242R6eevyM0K8Sg9cpdD+c9rJdZGU04PYonCERdESKqEnw1vOKwYlAvuo=@vger.kernel.org, AJvYcCXc0ZAJxm08X16nAJUFlr0XiZJj4iDskQhX2ax48z4NLNZ0dnw3bd8SS2zxWId+LyCEe7JdiYoxATgA@vger.kernel.org, AJvYcCXoUuvAPGfwwRCfMdLHfmF1QC1xNpmC2RznnRwfW3aQ6IXfg+Is4+WX/OI2GXHdzo+no0mhbJb/ei6Y@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfOsNHNGxfAUJhpnBkDUcsUiuW3V7YXy9emSKLzhM1Eoh4zmGk
-	aPzFbrFOc8kh+eu7RHv0Wyzz0ssBFP4mVgu5efh5y18SAZzZpNvaL8udlWbnNO+x5UqY43UGRJh
-	dHomxiI4LXHx5T0k3Uqby5Qc/C07HkqE=
-X-Gm-Gg: ASbGncvvjw2N2zsZL9ipEnakjN9kg6JMtFTcfavfkKre1EIDDYR/6z/6thr8rtsEMxx
-	hDfB7LKuD/q4b9AFrw0oocaTATvYjY0Za+BgkGpZjwKo/kIB9X09Dn/dZfPeW3k8RNFHlxv1Mc9
-	JOGT0jT/eV3uCi899Z51j76WtiTLOIPM3E3HPsggyguwk=
-X-Google-Smtp-Source: AGHT+IFEZW5Zweega7Vs4Va9mvrBEoLdKArCyxKoyJ0+pHn1zEerFQ5BhPKVvvzu3kXh6ZeNdgy1Z3Yu68TbnLlhnSk=
-X-Received: by 2002:a05:690c:fcb:b0:70d:f338:8333 with SMTP id
- 00721157ae682-7116371fb14mr50260087b3.22.1749827373395; Fri, 13 Jun 2025
- 08:09:33 -0700 (PDT)
+	s=arc-20240116; t=1749899842; c=relaxed/simple;
+	bh=d4gNp/0M9SMRUX5Vo9jyFaZjMh959oqzUg9NU3r341s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PP4cIfsjw8KwKIkyJN3LeZR02mb7oR49vfVwk3QlGJ2LM5ioll/J1mcSeugBircR5g8xwRxLwzNANjLjgsFPK6b1xCtsFArIZGCldQZUcQrLtbD+HYwp8ooFIw7qZDjJe1Yo1MQp0xQy06O4bwsL+yTobBPWTwO9Pk2NBg7Nsvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (3072-bit key) header.d=posteo.net header.i=@posteo.net header.b=Lca7QKh6; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 130D624002A
+	for <linux-rtc@vger.kernel.org>; Sat, 14 Jun 2025 13:17:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net;
+	s=1984.ea087b; t=1749899832;
+	bh=d4gNp/0M9SMRUX5Vo9jyFaZjMh959oqzUg9NU3r341s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=Lca7QKh6j957WM9z2uGhxtJ0SvljdRqwb2jlCuWb67exWTonQombxmqnjTCtYsFh5
+	 6wowc8OD7y1uR6Sw0DHc7nc4rp52t+Rbn3jb8JHD0rUjXbYpYuHB6gfPsHghCVQg1k
+	 eoJ2CP6AwhUzFU59QB2uLKmOd0CwOSpJvr0YtHsIyquoZKeJuhyOZNpWCPA4H4ipdP
+	 KEYfc6osVgjdgmG7N53P3rDmLbHF3QmOvxWttVVH1aYepo6ts9ge+t/1ITkpW3xiIE
+	 OHDYljxwR+Lhl8ZCW+tPbDXSFrQr2DSLCWhJX3lyb+i+/pdDQS+Ax41Ro/PF3TLz9K
+	 y2dTiXxYmjplrVYGQDEaSFRCtGqFFCT9vExXL/7K/c1Y2Z6bK2+IJ6VSkVp5GvKZjh
+	 Bn/uUwVyKxJfvKsYREBojzFDxPlooV9wHrXo+vNfSvVFZ3+IvmSSjjFfG6mUDw76eY
+	 lsDFOq2AlyLTUZ+oeOO8HjF1lzN2TVUesC7UWC4oFZB9vL+7jLv
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4bKDHh1hfPz6tsf;
+	Sat, 14 Jun 2025 13:17:04 +0200 (CEST)
+Date: Sat, 14 Jun 2025 11:17:03 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Joel Stanley <joel@jms.id.au>, Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	David Rhodes <david.rhodes@cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Sean Wang <sean.wang@kernel.org>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	Lars Persson <lars.persson@axis.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Jianlong Huang <jianlong.huang@starfivetech.com>,
+	Hal Feng <hal.feng@starfivetech.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Manivannan Sadhasivam <mani@kernel.org>, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+	openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, linux-sound@vger.kernel.org,
+	patches@opensource.cirrus.com, linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@axis.com, linux-riscv@lists.infradead.org,
+	linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2 06/17] pinctrl: nuvoton: Constify static 'pinctrl_desc'
+Message-ID: <aE1aL_ff1230w2DL@probook>
+References: <20250611-pinctrl-const-desc-v2-0-b11c1d650384@linaro.org>
+ <20250611-pinctrl-const-desc-v2-6-b11c1d650384@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604041418.1188792-1-tmyu0@nuvoton.com> <20250604041418.1188792-2-tmyu0@nuvoton.com>
- <20250612140041.GF381401@google.com> <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
- <20250612152313.GP381401@google.com> <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com>
-In-Reply-To: <20250613131133.GR381401@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 13 Jun 2025 23:09:22 +0800
-X-Gm-Features: AX0GCFvsLelkG587zTzgv7nzzjr9mHXHWsTBgmTxfQezIbWJWpZn_6A6aO9a14A
-Message-ID: <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250611-pinctrl-const-desc-v2-6-b11c1d650384@linaro.org>
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8813=E6=97=A5 =E9=
-=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=889:11=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, 13 Jun 2025, Ming Yu wrote:
->
-> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=97=A5=
- =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:23=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > >
-> > > > Dear Lee,
-> > > >
-> > > > Thank you for reviewing,
-> > > >
-> > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8812=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > > > >
-> > > > ...
-> > > > > > +static const struct mfd_cell nct6694_devs[] =3D {
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 0),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 1),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 2),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 3),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 4),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 5),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 6),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 7),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 8),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 9),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 10),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 11),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 12),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 13),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 14),
-> > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0, 15),
-> > > > > > +
-> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 0),
-> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 1),
-> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 2),
-> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 3),
-> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 4),
-> > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, 5),
-> > > > >
-> > > > > Why have we gone back to this silly numbering scheme?
-> > > > >
-> > > > > What happened to using IDA in the child driver?
-> > > > >
-> > > >
-> > > > In a previous version, I tried to maintain a static IDA in each
-> > > > sub-driver. However, I didn=E2=80=99t consider the case where multi=
-ple NCT6694
-> > > > devices are bound to the same driver =E2=80=94 in that case, the ID=
-s are not
-> > > > fixed and become unusable for my purpose.
-> > >
-> > > Not sure I understand.
-> > >
-> >
-> > As far as I know, if I maintain the IDA in the sub-drivers and use
-> > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, the first
-> > NCT6694 device bound to the GPIO driver will receive IDs 0~15.
-> > However, when a second NCT6694 device is connected to the system, it
-> > will receive IDs 16~31.
-> > Because of this behavior, I switched back to using platform_device->id.
->
-> Each of the devices will probe once.
->
-> The first one will be given 0, the second will be given 1, etc.
->
-> Why would you give multiple IDs to a single device bound to a driver?
->
+On Wed, Jun 11, 2025 at 08:13:38AM +0200, Krzysztof Kozlowski wrote:
+> The local static 'struct pinctrl_desc' is not modified, so can be made
+> const for code safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The device exposes multiple peripherals =E2=80=94 16 GPIO controllers, 6 I2=
-C
-adapters, 2 CAN FD controllers, and 2 watchdog timers. Each peripheral
-is independently addressable, has its own register region, and can
-operate in isolation. The IDs are used to distinguish between these
-instances.
-For example, the GPIO driver will be probed 16 times, allocating 16
-separate gpio_chip instances to control 8 GPIO lines each.
+Reviewed-by: J. Neuschäfer <j.ne@posteo.net>
 
-If another device binds to this driver, it is expected to expose
-peripherals with the same structure and behavior.
+Thanks!
 
 
-Thanks,
-Ming
+> ---
+>  drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 2 +-
+>  drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c | 2 +-
+>  drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+> index dfd32feb34286b7a4d807e9033a11f507e277dce..b8872d8f5930ad931dad208afec4e08a23c3d653 100644
+> --- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+> +++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+> @@ -1817,7 +1817,7 @@ static const struct pinconf_ops npcm7xx_pinconf_ops = {
+>  };
+>  
+>  /* pinctrl_desc */
+> -static struct pinctrl_desc npcm7xx_pinctrl_desc = {
+> +static const struct pinctrl_desc npcm7xx_pinctrl_desc = {
+>  	.name = "npcm7xx-pinctrl",
+>  	.pins = npcm7xx_pins,
+>  	.npins = ARRAY_SIZE(npcm7xx_pins),
+> diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c
+> index be3db8ab406c416f0709d06eb864e33e3208541a..3c3b9d8d3681c64c21927615e1bb49f157f156b5 100644
+> --- a/drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c
+> +++ b/drivers/pinctrl/nuvoton/pinctrl-npcm8xx.c
+> @@ -2299,7 +2299,7 @@ static const struct pinconf_ops npcm8xx_pinconf_ops = {
+>  };
+>  
+>  /* pinctrl_desc */
+> -static struct pinctrl_desc npcm8xx_pinctrl_desc = {
+> +static const struct pinctrl_desc npcm8xx_pinctrl_desc = {
+>  	.name = "npcm8xx-pinctrl",
+>  	.pins = npcm8xx_pins,
+>  	.npins = ARRAY_SIZE(npcm8xx_pins),
+> diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+> index 4264ca749175a2ce0f3603c1d7aa271d98e6cd89..8d8314ba0e4cb55db2b1d3adf2de07e6fb93c279 100644
+> --- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+> +++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+> @@ -989,7 +989,7 @@ static const struct pinconf_ops wpcm450_pinconf_ops = {
+>  	.pin_config_set = wpcm450_config_set,
+>  };
+>  
+> -static struct pinctrl_desc wpcm450_pinctrl_desc = {
+> +static const struct pinctrl_desc wpcm450_pinctrl_desc = {
+>  	.name = "wpcm450-pinctrl",
+>  	.pins = wpcm450_pins,
+>  	.npins = ARRAY_SIZE(wpcm450_pins),
+> 
+> -- 
+> 2.45.2
+> 
 
