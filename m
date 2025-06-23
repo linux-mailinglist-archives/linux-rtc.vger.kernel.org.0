@@ -1,153 +1,130 @@
-Return-Path: <linux-rtc+bounces-4334-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4335-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D07DAE2F91
-	for <lists+linux-rtc@lfdr.de>; Sun, 22 Jun 2025 13:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF261AE3B82
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 12:02:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD09B1622E5
-	for <lists+linux-rtc@lfdr.de>; Sun, 22 Jun 2025 11:36:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC9AC175EB2
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 10:02:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80AE1DB366;
-	Sun, 22 Jun 2025 11:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77989243371;
+	Mon, 23 Jun 2025 10:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="becY3tL9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k7F5c1ig"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B083A8F6C;
-	Sun, 22 Jun 2025 11:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9966A242D80;
+	Mon, 23 Jun 2025 10:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750592182; cv=none; b=EujRdSgsZQQPJE8B05xgjCWsR+aCVy+2daLLR/pTHulBBRSki96klr0iim5vNeEt9g5lrJ3+dOn7rAPkEWF/UKlqAeA36Il2o6+HiYAAOumpS1L5dMktbS//xmx9HIe/DF6Lsw2bUYBVqNppU3bGSJTKhcHTWDxJ6CqaqiSA2Yc=
+	t=1750672839; cv=none; b=kF6Xx7Ahg+JDZEb1kMXj80P2eTdmE7RKeJSlzJDVCJNkIERiavQyvxl6bbu5xvilQ4tGhnZvqo0Yr1ft0LLD9ihlmNHwI23RAYVDqB13Ko80HrJb/GJDUB9hxs9lzbF6yd6P/Sry6qEnxD3cIQSY4iGoHZ6vtUxqjZe2QChCfO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750592182; c=relaxed/simple;
-	bh=6EBc43I0hRetS6oG4fS9WzjeCLsol5+NvkR7edl/i6w=;
+	s=arc-20240116; t=1750672839; c=relaxed/simple;
+	bh=4JV+By1pXi83zG+o1aVXBhH+PKzXW71STeMIFjFmBZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PW0+5Tfs3BOVvVGt3wT59wlz3X6HPiaPICm9HLxJHXu93+LAlq1r5xt2+s9GbHTai+U8EEZeEN4pMRMj68KgCXyoPvrHUnKcFzbIkA38N1MqqIfL+4kjMdd7Y2UmpZx+H0evaOZq8pg0Ir/txMTgnUWEN++iGbJWqKtz5C53ohs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=becY3tL9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D371C4CEE3;
-	Sun, 22 Jun 2025 11:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750592182;
-	bh=6EBc43I0hRetS6oG4fS9WzjeCLsol5+NvkR7edl/i6w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=becY3tL9N6PqEruLxFbcmySSiLdV9J7nYdd79GVeM0qf3neU8OvEIkDSYQpmmL424
-	 voDH4OKqkMpRFZK7XznSONMPSuSJEl39rst9RufOf9MnVdA8T3E3u+7o79pc+8ts7Z
-	 5UuPjFOzzIVQSU7HUD923hyVnEFBW/XPBlmZNImlXNbpcQ15Rqbgglvp1HPaGGusNO
-	 c9x9bCFxKFUXv5TvSpm9fLl1/yVKi/R3jMDXSqpU2xEBlYXcjRV8GGL5dst3tfRMM9
-	 OhdG12UGrBRnoRb7AlixQPmPavJJiwV7ML+2N5Qudlcfw8+VOx0lv2peTxVTqQQa8e
-	 8c6bdPLi1zUGQ==
-Date: Sun, 22 Jun 2025 13:36:19 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Shubhi Garg <shgarg@nvidia.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
-	linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] dt-bindings: mfd: add NVIDIA VRS PSEQ
-Message-ID: <ug3zbannk22ziy7g25rhe4v2vv2vlxg3ylwvksy2mbzkf3lb2f@uib4qcvxjig6>
-References: <20250619084427.3559207-1-shgarg@nvidia.com>
- <20250619084427.3559207-2-shgarg@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3+1rWbsIDAUvsIFyrud3QpXp5eS+bzhiO0ccaN75DrMfplbD6VRmo5TijfComifK7KxZm9wHNvEpgjtAmKkkgpIYxmpFfJydCGx3mf+6AvVq9xeIEzEU8rY3WHfh8AfE7lTk3ElSzDBC9j5pfvHLNuJimLrwdEE0Ilkdx7ZHe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k7F5c1ig; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750672838; x=1782208838;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4JV+By1pXi83zG+o1aVXBhH+PKzXW71STeMIFjFmBZI=;
+  b=k7F5c1igoFsU15d3ECPzLau66RpCxPgbwSP+cGb0oEgS0UiJRWmOakTg
+   XMrQ0syztuWoNkHcMVHTtAV8NBKjOpG5CeR7buLS8kRtMIyHy/UwRF95N
+   AnpH9vO2ftFEHoCIG+n0rVqZVfYXghICJb6m0Gp85QtQfbVZFhTbhJEs9
+   w/MzbkvT8yqipeH6xAFsUXfRigFLZoNr+oXrx1yb9m5tAFkQT9GLLe9Zk
+   h0kgDqm8cQIhpD4CfySt4I7HG5vo7vyYd5LESUxYRBQHfD/xKcaXAkRXC
+   xMRbJ8Aiihs3k7DoYWuCwQJhM7Iy83EOn4vLyAIrrGSh+mleqtl9L5auI
+   Q==;
+X-CSE-ConnectionGUID: qXCy3NDUTzaxKOHpeewMgg==
+X-CSE-MsgGUID: BTv9d42zREe9FbIhQCMu9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="64227967"
+X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
+   d="scan'208";a="64227967"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 03:00:38 -0700
+X-CSE-ConnectionGUID: C61qQjCCQhWAJh+i6lHzVw==
+X-CSE-MsgGUID: CLgbVnMMRQCefat+FxcpsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
+   d="scan'208";a="151023781"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 23 Jun 2025 03:00:32 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uTdyX-000NvU-0m;
+	Mon, 23 Jun 2025 10:00:29 +0000
+Date: Mon, 23 Jun 2025 18:00:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Elder <elder@riscstar.com>, lee@kernel.org,
+	alexandre.belloni@bootlin.com, lgirdwood@gmail.com,
+	broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, dlan@gentoo.org,
+	wangruikang@iscas.ac.cn, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	troymitchell988@gmail.com, guodong@riscstar.com,
+	devicetree@vger.kernel.org, spacemit@lists.linux.dev,
+	linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 2/7] mfd: simple-mfd-i2c: add SpacemiT P1 support
+Message-ID: <202506231720.IakJqbvG-lkp@intel.com>
+References: <20250622032941.3768912-3-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250619084427.3559207-2-shgarg@nvidia.com>
+In-Reply-To: <20250622032941.3768912-3-elder@riscstar.com>
 
-On Thu, Jun 19, 2025 at 08:44:22AM +0000, Shubhi Garg wrote:
-> Add support for NVIDIA VRS (Voltage Regulator Specification) power
-> sequencer device. NVIDIA VRS PSEQ provides 32kHz RTC support with backup
-> battery for system timing. It controls ON/OFF and suspend/resume power
-> sequencing of system power rails on below NVIDIA platforms:
-> 
-> - NVIDIA Jetson AGX Orin Developer Kit
-> - NVIDIA IGX Orin Development Kit
-> - NVIDIA Jetson Orin NX Developer Kit
-> - NVIDIA Jetson Orin Nano Developer Kit
-> 
-> Signed-off-by: Shubhi Garg <shgarg@nvidia.com>
-> ---
-> 
-> v4:
-> - no changes
-> 
-> v3:
-> - fixed device tree node name to generic "pmic@3c"
-> - fixed indentation
-> 
-> v2:
-> - fixed copyrights
-> - updated description with RTC information
-> - added status node in dtb node example
-> 
->  .../bindings/mfd/nvidia,vrs-pseq.yaml         | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/nvidia,vrs-pseq.yaml
+Hi Alex,
 
-Does not look like mfd device. Isn't there appropriate directory for this?
+kernel test robot noticed the following build errors:
 
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/nvidia,vrs-pseq.yaml b/Documentation/devicetree/bindings/mfd/nvidia,vrs-pseq.yaml
-> new file mode 100644
-> index 000000000000..65bf77f70c44
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/nvidia,vrs-pseq.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/nvidia,vrs-pseq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NVIDIA Voltage Regulator Specification Power Sequencer
-> +
-> +maintainers:
-> +  - Shubhi Garg <shgarg@nvidia.com>
-> +
-> +description:
-> +  NVIDIA Voltage Regulator Specification Power Sequencer device controls
-> +  ON/OFF and suspend/resume power sequencing of system power rails for NVIDIA
-> +  SoCs. It provides 32kHz RTC clock support with backup battery for system
-> +  timing. The device also acts as an interrupt controller for managing
-> +  interrupts from the VRS power sequencer.
-> +
-> +properties:
-> +  compatible:
-> +    const: nvidia,vrs-pseq
+[auto build test ERROR on 5d4809e25903ab8e74034c1f23c787fd26d52934]
 
-I2C devices, even internal to vendors like Qcom, Samsung, Renesas,
-usually have models and version numbers. This looks really incomplete. I
-don't think generic compatible would be acceptable for I2C.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Elder/dt-bindings-mfd-add-support-the-SpacemiT-P1-PMIC/20250622-113200
+base:   5d4809e25903ab8e74034c1f23c787fd26d52934
+patch link:    https://lore.kernel.org/r/20250622032941.3768912-3-elder%40riscstar.com
+patch subject: [PATCH v3 2/7] mfd: simple-mfd-i2c: add SpacemiT P1 support
+config: i386-randconfig-017-20250623 (https://download.01.org/0day-ci/archive/20250623/202506231720.IakJqbvG-lkp@intel.com/config)
+compiler: clang version 20.1.2 (https://github.com/llvm/llvm-project 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506231720.IakJqbvG-lkp@intel.com/reproduce)
 
-Plus, pseq is redundant. Can it be anything else?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506231720.IakJqbvG-lkp@intel.com/
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 2
-> +    description:
-> +      The first cell is the IRQ number, the second cell is the trigger type.
+All errors (new ones prefixed by >>):
 
-That's the default/standard, drop description.
+>> ld.lld: error: undefined symbol: __devm_regmap_init_i2c
+   >>> referenced by simple-mfd-i2c.c:47 (drivers/mfd/simple-mfd-i2c.c:47)
+   >>>               drivers/mfd/simple-mfd-i2c.o:(simple_mfd_i2c_probe) in archive vmlinux.a
+   >>> referenced by simple-mfd-i2c.c:47 (drivers/mfd/simple-mfd-i2c.c:47)
+   >>>               drivers/mfd/simple-mfd-i2c.o:(simple_mfd_i2c_probe) in archive vmlinux.a
 
-Best regards,
-Krzysztof
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_SIMPLE_MFD_I2C
+   Depends on [m]: HAS_IOMEM [=y] && I2C [=m]
+   Selected by [y]:
+   - MFD_SPACEMIT_P1 [=y] && HAS_IOMEM [=y]
+   Selected by [m]:
+   - JOYSTICK_SENSEHAT [=m] && INPUT_JOYSTICK [=y] && INPUT [=y] && I2C [=m] && HAS_IOMEM [=y]
+   - MFD_MAX77705 [=m] && HAS_IOMEM [=y] && I2C [=m]
+   - MFD_SY7636A [=m] && HAS_IOMEM [=y] && I2C [=m]
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
