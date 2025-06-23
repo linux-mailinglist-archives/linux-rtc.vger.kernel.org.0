@@ -1,137 +1,99 @@
-Return-Path: <linux-rtc+bounces-4343-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4344-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BB9AE5670
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jun 2025 00:20:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51DBFAE5764
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jun 2025 00:29:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C00C173A75
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 22:20:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 256191C24E3E
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 22:29:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D90722422F;
-	Mon, 23 Jun 2025 22:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85259224B07;
+	Mon, 23 Jun 2025 22:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="idfOPu6C"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FYJETrGT"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay16.mail.gandi.net (relay16.mail.gandi.net [217.70.178.236])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C73316D9BF;
-	Mon, 23 Jun 2025 22:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248C71F4628;
+	Mon, 23 Jun 2025 22:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750717201; cv=none; b=m1OoupknZH+ul4bFv8ZjPlXlTYOW8koS1DQPUDuycxL3/CqlhFNJnXiWKruOv0OWhjWzPa9yUN8e5ADKtKebVitoBgGeiVfz+94hDyNK9RYHn9EMzOeY2PhcBsapWsPUVWp5Za5cJy5VRsq+6/Fm1JAYjZVmxL8LH6wcchPzXb4=
+	t=1750717771; cv=none; b=ezaRj846fP8Vsds7PLecpEZWTzwVDrfu8FdSZI4ofcf5qtrErqgMjPnX9Dx51Hk67V5sXwi6eUOvh9HMjZpyplYxv7MMQCA3dsByMtkgXWACHRvWWfm8ZQKw7o4Ws/3bAYZxmIHi6ZfllYR8uE2TnudU6ZLsq0T/H/1HhiImLXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750717201; c=relaxed/simple;
-	bh=rDn+5YGvC8gvlSl3EUM+/gCGTWAM9zvrOA0Z/Ltjg1w=;
+	s=arc-20240116; t=1750717771; c=relaxed/simple;
+	bh=nG0pwO0WDQwgZRRtoVdMq6gbLGb8KezJaQseqijHiMg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StqgfOLg5tFWYmMN4RU9lpea5ZlWrMYn2dpM41tf3Vtsa50pjTwAvFY+5wY6iyQdLOKNcK384qi0ZW20vnw5SJOtLRC3QBUBkqEpm1FThZPIBGTDjypLks3XtQDR89LB7U0J4WnZOnJz7gbZikeQmbWaNTVK7aTzzne7r0gvZYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=idfOPu6C; arc=none smtp.client-ip=217.70.178.236
+	 Content-Type:Content-Disposition:In-Reply-To; b=H5zBtfcbjVSg4rTgASl+DK5Clhj1y/swDEE3qCWMQIFVZn2avtH+hynUqV0vGHjia/DtIXdjj5pmk/x2zM3XorR6ngxUHuE6QjWmsbvgOt3uMQEImdv6ID1Xx820k8Si/9oRgvRysGG8F3/PHq0sWlsrvvm6rJgQRbx1t49vxvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FYJETrGT; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 89E8E43881;
-	Mon, 23 Jun 2025 22:19:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B63C3433CF;
+	Mon, 23 Jun 2025 22:29:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1750717196;
+	t=1750717767;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=UH1bAfPgsbTdwQOw++nDUnjZRfZFJJLgGsLVCvJ6ahA=;
-	b=idfOPu6CKmH+9DH+hAvWkFB5OofPXN392rj5MHDlHB7xm5A8JpjB/Ngp7ZPM83CWguuY3U
-	SsIzspdvUAij3+0eOVlPVAHFCA4wtw9YCQTKyzr/Cgk7NwEl/u3VW00Rz+SGPTO5k9v0Cj
-	74swYO9CSSSYiqJU01Wr3uTG3QKqeR1khIuQnv9qKVcZc6Qie+rE7jL4gEuZtOrroZGXbQ
-	Dd70dgWo6RiOyY8V3o/XAzc++Hwm/8uGcEyKgfwQhVbnyXRdJNvj5dYbEk8x0fGphnqbWe
-	mmaDYf8MBvvzHPZZ5/XXCsf7JIm+N7/LT9F4L0J8S/68pbTpJUOvNxq0YAd5qQ==
-Date: Tue, 24 Jun 2025 00:19:55 +0200
+	bh=6MFU6AiOUmI9A18SBqoOokJUpFmnmc/7USU/z1tLHe4=;
+	b=FYJETrGT7JjUffd3lF1KwyltEfT3pfq6VP5a538CnvGgXo9KKKg7+/4niw3z5udrGkVSFQ
+	4raD7CJaWXSxrGxpBJK5d8VERD2B8pKEjJAbt17dTY7mW6bZxFiTtr11Y4ZPZ8PvyxBEgw
+	emOfdoflWSgPUZ5lfSBMXvDFsPw7Hc6GdOUH97jqOmnCDL3x+W0vZ+hloRqsGULFj05WeM
+	lI8ZyroUTKB6m26iQ9CBAOKlqBbGYDvxzFIDXHADEr3xtLWhghD5rIsYrhyL26kNYeTHMn
+	1DKppMI8RUz+ZPOPhqd79EXMqjpas7UYE3/evLniiJuIylgSwG81yb1JYKosuQ==
+Date: Tue, 24 Jun 2025 00:29:26 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based drivers
-Message-ID: <202506232219552539103b@mail.local>
-References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
- <20250415160212.GA372032@google.com>
- <2025041715425693974c6d@mail.local>
- <24314441936d97a1892474eacdbbd690612de265.camel@linaro.org>
- <905e6cab9932c814a578826329f5e3f944418ef9.camel@linaro.org>
- <b193e94f042cf6134d2bed92152c23ee5bba6a26.camel@linaro.org>
+To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+	linux-rtc@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Chris Bainbridge <chris.bainbridge@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Xiaofei Tan <tanxiaofei@huawei.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] rtc-cmos: use spin_lock_irqsave in cmos_interrupt
+Message-ID: <175071769977.1313689.17031304195809982055.b4-ty@bootlin.com>
+References: <20250607210608.14835-1-mat.jonczyk@o2.pl>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b193e94f042cf6134d2bed92152c23ee5bba6a26.camel@linaro.org>
+In-Reply-To: <20250607210608.14835-1-mat.jonczyk@o2.pl>
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddukedvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveduvefhvdehlefgieelfeetudeugfehgfeugfekleejueefueettdffueetiedvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdefpdhrtghpthhtoheprghnughrvgdrughrrghsiihikheslhhinhgrrhhordhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnv
- ghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrdhnrgifrhhotghkihesshgrmhhsuhhnghdrtghomhdprhgtphhtthhopegtfidttddrtghhohhisehsrghmshhunhhgrdgtohhmpdhrtghpthhtoheprghlihhmrdgrkhhhthgrrhesshgrmhhsuhhnghdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddukedvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdeigfehvdevhfehveejgfehudejkeefuedvhfegudffudevhefgvdegjeehjedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehmrghtrdhjohhntgiihihksehovddrphhlpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepsghps
+ egrlhhivghnkedruggvpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheptghhrhhishdrsggrihhnsghrihgughgvsehgmhgrihhlrdgtohhm
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 16/06/2025 12:33:21+0100, André Draszik wrote:
-> Hi Alexandre,
+On Sat, 07 Jun 2025 23:06:08 +0200, Mateusz JoÅ„czyk wrote:
+> cmos_interrupt() can be called in a non-interrupt context, such as in
+> an ACPI event handler (which runs in an interrupt thread). Therefore,
+> usage of spin_lock(&rtc_lock) is insecure. Use spin_lock_irqsave() /
+> spin_unlock_irqrestore() instead.
 > 
-> On Mon, 2025-05-19 at 15:41 +0100, André Draszik wrote:
-> > Hi Alexandre,
-> > 
-> > On Mon, 2025-04-28 at 19:17 +0100, André Draszik wrote:
-> > > Hi Alexandre,
-> > > 
-> > > On Thu, 2025-04-17 at 17:42 +0200, Alexandre Belloni wrote:
-> > > > On 15/04/2025 17:02:12+0100, Lee Jones wrote:
-> > > > > >  drivers/mfd/Kconfig                                |  35 +-
-> > > > > >  drivers/mfd/Makefile                               |   5 +-
-> > > > > >  drivers/mfd/sec-acpm.c                             | 442 +++++++++++++++++++
-> > > > > >  drivers/mfd/sec-common.c                           | 301 +++++++++++++
-> > > > > >  drivers/mfd/sec-core.c                             | 481 ---------------------
-> > > > > >  drivers/mfd/sec-core.h                             |  23 +
-> > > > > >  drivers/mfd/sec-i2c.c                              | 239 ++++++++++
-> > > > > >  drivers/mfd/sec-irq.c                              | 460 +++++++-------------
-> > > > > 
-> > > > > >  drivers/rtc/rtc-s5m.c                              | 197 ++++++---
-> > > > > 
-> > > > > MFD parts look okay to me now.
-> > > > > 
-> > > > > With Acks from the Clk and RTC maintainers, I can merge all of the
-> > > > > driver stuff together and submit a PR for others to pull from.
-> > > > > 
-> > > > 
-> > > > I don't think the RTC part depends on the MFD one so I was going to
-> > > > apply the patches in my tree if this is fine for everyone.
-> > > 
-> > > RTC patch 27 does depend on the s2mpg10 mfd core driver (due to
-> > > using enums and macros introduced there).
-> > 
-> > Lee has kindly merged all the core driver patches.
-> > 
-> > Any chance the rtc changes will make it into the same kernel release?
+> Before a misguided
+> commit 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
+> the cmos_interrupt() function used spin_lock_irqsave(). That commit
+> changed it to spin_lock() and broke locking, which was partially fixed in
+> commit 13be2efc390a ("rtc: cmos: Disable irq around direct invocation of cmos_interrupt()")
 > 
-> Friendly ping.
+> [...]
 
-I've applied the patches, I'll try to send them to Linus but there are no
-guarantee they will make it for this release.
+Applied, thanks!
 
+[1/1] rtc-cmos: use spin_lock_irqsave in cmos_interrupt
+      https://git.kernel.org/abelloni/c/00a39d8652ff
 
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
