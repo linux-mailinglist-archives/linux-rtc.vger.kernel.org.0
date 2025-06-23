@@ -1,332 +1,122 @@
-Return-Path: <linux-rtc+bounces-4341-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4342-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3135AE52C9
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 23:47:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B014AE5666
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Jun 2025 00:20:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 908997AFD6F
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 21:45:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B34B33A6EA7
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Jun 2025 22:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22447223DEF;
-	Mon, 23 Jun 2025 21:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFEB02253B0;
+	Mon, 23 Jun 2025 22:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jk0w4s50"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hjBhVmbG"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778454414;
-	Mon, 23 Jun 2025 21:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65D01F7580;
+	Mon, 23 Jun 2025 22:17:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750715176; cv=none; b=KL3lLG41m/k1TNjpJ1veYJG05/0z17vnFAAxj5LQkVLV3nvZLYT/IQCqL9PyzEeraQ9MUJNvnXBKMwcQzF6PJy82LORI9b/kFWGFfMIaJ0EqwebWJvWcBhuWUfUbu10P+DLmXo8QWpAkhHXKq7ezvV7qaQLFes7sITQO8AMtYto=
+	t=1750717040; cv=none; b=MkvxzHuznNtds4fwAxayOKgNwhAopQEaSz3WMT/Y8Z6dqmavr26uTJq9ffLw/9zY3wGTeqqHY9NvBEm/7+88CzqAk0WQ+KnKvwLqgL8XZfENLeEbCxnt24Y31rbWzFtxeZGtdBjSfA2QVpOK91sQhQPT/ajaJ5hjWAg8kRFEUu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750715176; c=relaxed/simple;
-	bh=HkoztiGbpLhpQudLv3PtZdfgy+kqcJabi4MWd6sKLT0=;
+	s=arc-20240116; t=1750717040; c=relaxed/simple;
+	bh=Yb2Oac6qZK2DSoUU4vrrkQAAhRRXhu/4wRFPumLI90k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UHK6IjNwLllpxJdjq1coJxYf5oBjxBGllrzcW5gciFwr+mQCYJp5BztO90f6oAKz9zRV2W2iikSURE+MJhUrLcHX5U2y6fdYRmPsvY9WRX5AUBut2YnAfyZhnNXskM+xk5oVoQACQxyNziQBlRfCVdEDbJSIEKIURw75RWIztnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jk0w4s50; arc=none smtp.client-ip=217.70.183.193
+	 Content-Type:Content-Disposition:In-Reply-To; b=fSYIsm2CdC2SRGZB3xIz+n7igvCY+JOLsI0WvaF+jY3NeAQFFR83MekfGJ5NCYCFr4EaBtdWpYKPJYj0VsQa6vWdfWKh3W/GOEzRFfNil1xmTV7JJKCusybJ761sJ44v8mAg4pkIwc5xf5ps7MxisYpurN/likVlu5HugYXb2OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hjBhVmbG; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CE1DA432F6;
-	Mon, 23 Jun 2025 21:46:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B816C4316C;
+	Mon, 23 Jun 2025 22:17:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1750715171;
+	t=1750717034;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4xSi+IxyddMTqXmGVnYyJz8tySoVez0kjUm+TFeoLSY=;
-	b=jk0w4s50cr74qQ71WicvLn2DAtuVQrpTUd9uxcC5A376zDbzn2nRD0KyK2WSfaw5e9NwqO
-	tEAM0WyvCHnPaDL3J2P2jb8FOMYXUwrQ/rzqICPu7ZYFGNxeHtDuEH7pRC9rdACK9yMYfr
-	0tpI96Yz1dhljT2hgVWvxfwnmR8MlSlKSlzHrfh71puXZJNsun6ROCcVBBaGeLnWr2LrGj
-	Y2T5eqYdhESa0FvOc8LkSUhNG3R8qbJwaVJ2hyH+kkDSIGHP3Or5f82UtDUPtPLWEdlu9o
-	Jc6wNyhLauulF726345b2Ju2lzcI94rGhUpsXyOtySQQukxeh6BaO1MoUZrTzQ==
-Date: Mon, 23 Jun 2025 23:46:08 +0200
+	bh=/wujDbdLCxL/DpdBnoqRy5zFxIIGeoL7Sk6EHzkya0U=;
+	b=hjBhVmbGcyiU0FhamaTO4mJ8fYzx9cqq5s7T/OqiVIGwK3l9XsvlKbbCpw2j686knF3DX1
+	P6ZDaxbHqy44tYfap8QsCVkqX3NeoNMbHl3OFW5wvubSbJMLHVhe/Ayj9gWLET0IYLCq0A
+	0J6lZdsUQjOxotNQWgs9Te5pRl8yw+LcspAy39/cF+NV6YjnO8ljYxSbNuobXgIElu8UQ3
+	LcGIIZfm6lOzdIJYy0QcOwZPLG/O5gQ1MDegxr0j99s3n2ubfJV3CHZ6KZzkripG1pYycz
+	dgC171lIPK8pBJU5yL3oW4Y+QA4Uo3KW7hjpmpqwvNRvEupji28KO2Kk1RqP8g==
+Date: Tue, 24 Jun 2025 00:17:12 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Alex Elder <elder@riscstar.com>
-Cc: lee@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	dlan@gentoo.org, wangruikang@iscas.ac.cn, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	troymitchell988@gmail.com, guodong@riscstar.com,
-	devicetree@vger.kernel.org, spacemit@lists.linux.dev,
-	linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 4/7] rtc: spacemit: support the SpacemiT P1 RTC
-Message-ID: <2025062321460859c12377@mail.local>
-References: <20250622032941.3768912-1-elder@riscstar.com>
- <20250622032941.3768912-5-elder@riscstar.com>
- <20250623191400c330f01f@mail.local>
- <f2d04232-6662-49d5-936d-ec58d0fb01b6@riscstar.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
+	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based drivers
+Message-ID: <175071653812.1309305.11999722555032816982.b4-ty@bootlin.com>
+References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <f2d04232-6662-49d5-936d-ec58d0fb01b6@riscstar.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddukedugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegieduueethefhkeegjeevfefhiedujeeuhffgleejgfejgeekueejuefgheeggfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduledprhgtphhtthhopegvlhguvghrsehrihhstghsthgrrhdrtghomhdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlghhirhgufihoohgusehgmhgrihhlrdgto
- hhmpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepughlrghnsehgvghnthhoohdrohhrgh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddukedulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfffieeiffeffedvgedtjedvhfdvheeftddutdetfeefvdelheeiveekgeeutddunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvgedprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrn
+ hgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrnhgrfihrohgtkhhisehsrghmshhunhhgrdgtohhmpdhrtghpthhtoheptgiftddtrdgthhhoihesshgrmhhsuhhnghdrtghomhdprhgtphhtthhopegrlhhimhdrrghkhhhtrghrsehsrghmshhunhhgrdgtohhmpdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomh
 X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 23/06/2025 15:03:25-0500, Alex Elder wrote:
-> On 6/23/25 2:14 PM, Alexandre Belloni wrote:
-> > Hello,
-> > 
-> > On 21/06/2025 22:29:36-0500, Alex Elder wrote:
-> > > Add support for the RTC found in the SpacemiT P1 PMIC.  Initially
-> > > only setting and reading the time are supported.
-> > > 
-> > > The PMIC is implemented as a multi-function device.  This RTC is
-> > > probed based on this driver being named in a MFD cell in the simple
-> > > MFD I2C driver.
-> > > 
-> > > Signed-off-by: Alex Elder <elder@riscstar.com>
-> > > ---
-> > > v3: - Added this driver to the series, in response to Lee Jones saying
-> > >        more than one MFD sub-device was required to be acceptable
-> > > 
-> > >   drivers/rtc/Kconfig  |  10 ++++
-> > >   drivers/rtc/Makefile |   1 +
-> > >   drivers/rtc/rtc-p1.c | 137 +++++++++++++++++++++++++++++++++++++++++++
-> > 
-> > We need something more descriptive than p1 here
+On Wed, 09 Apr 2025 21:37:21 +0100, André Draszik wrote:
+> This series adds initial support for the Samsung S2MPG10 PMIC using the
+> MFD framework. This is a PMIC for mobile applications and is used on
+> the Google Pixel 6 and 6 Pro (oriole / raven).
 > 
-> Are you referring to the chip itself, or do you want a longer
-> file name?   Do you prefer "rtc-spacemit-p1.c" or something?
+> *** dependency note ***
+> 
+> To compile, this depends on the Samsung ACPM driver in Linux next with
+> the following additional patches:
+> https://lore.kernel.org/all/20250324-acpm-atomic-v2-0-7d87746e1765@linaro.org/
+> https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.org/
+> https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@linaro.org/
+> 
+> [...]
 
-Yes, this would be better, I feel like p1 is too short and is going to conflict
-later on.
+Applied, thanks!
 
-> 
-> > >   3 files changed, 148 insertions(+)
-> > >   create mode 100644 drivers/rtc/rtc-p1.c
-> > > 
-> > > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> > > index 9aec922613cec..27cff02ba4e66 100644
-> > > --- a/drivers/rtc/Kconfig
-> > > +++ b/drivers/rtc/Kconfig
-> > > @@ -406,6 +406,16 @@ config RTC_DRV_MAX77686
-> > >   	  This driver can also be built as a module. If so, the module
-> > >   	  will be called rtc-max77686.
-> > > +config RTC_DRV_P1
-> > 
-> > Ditto
-> > 
-> > > +	tristate "SpacemiT P1 RTC"
-> > > +	depends on ARCH_SPACEMIT || COMPILE_TEST
-> > > +	select MFD_SPACEMIT_P1
-> > > +	default ARCH_SPACEMIT
-> > > +	help
-> > > +	  Enable support for the RTC function in the SpacemiT P1 PMIC.
-> > > +	  This driver can also be built as a module, which will be called
-> > > +	  "spacemit-p1-rtc".
-> > > +
-> > >   config RTC_DRV_NCT3018Y
-> > >   	tristate "Nuvoton NCT3018Y"
-> > >   	depends on OF
-> > > diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> > > index 4619aa2ac4697..f8588426e2ba4 100644
-> > > --- a/drivers/rtc/Makefile
-> > > +++ b/drivers/rtc/Makefile
-> > > @@ -171,6 +171,7 @@ obj-$(CONFIG_RTC_DRV_SD2405AL)	+= rtc-sd2405al.o
-> > >   obj-$(CONFIG_RTC_DRV_SD3078)	+= rtc-sd3078.o
-> > >   obj-$(CONFIG_RTC_DRV_SH)	+= rtc-sh.o
-> > >   obj-$(CONFIG_RTC_DRV_SNVS)	+= rtc-snvs.o
-> > > +obj-$(CONFIG_RTC_DRV_P1)	+= rtc-p1.o
-> > >   obj-$(CONFIG_RTC_DRV_SPEAR)	+= rtc-spear.o
-> > >   obj-$(CONFIG_RTC_DRV_STARFIRE)	+= rtc-starfire.o
-> > >   obj-$(CONFIG_RTC_DRV_STK17TA8)	+= rtc-stk17ta8.o
-> > > diff --git a/drivers/rtc/rtc-p1.c b/drivers/rtc/rtc-p1.c
-> > > new file mode 100644
-> > > index 0000000000000..e0d2c0c822142
-> > > --- /dev/null
-> > > +++ b/drivers/rtc/rtc-p1.c
-> > > @@ -0,0 +1,137 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Driver for the RTC found in the SpacemiT P1 PMIC
-> > > + *
-> > > + * Copyright (C) 2025 by RISCstar Solutions Corporation.  All rights reserved.
-> > > + */
-> > > +
-> > > +#include <linux/bits.h>
-> > > +#include <linux/device.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/regmap.h>
-> > > +#include <linux/rtc.h>
-> > > +
-> > > +#define MOD_NAME	"spacemit-p1-rtc"
-> > > +
-> > > +/* Offset to byte containing the given time unit */
-> > > +enum time_unit {
-> > > +	tu_second = 0,		/* 0-59 */
-> > > +	tu_minute,		/* 0-59 */
-> > > +	tu_hour,		/* 0-59 */
-> > > +	tu_day,			/* 0-30 (struct tm uses 1-31) */
-> > > +	tu_month,		/* 0-11 */
-> > > +	tu_year,		/* Years since 2000 (struct tm uses 1900) */
-> > > +	tu_count,		/* Last; not a time unit */
-> > > +};
-> > 
-> > I'm not sure this enum actually brings anything
-> 
-> It's just defining the sequence of register values
-> symbolically.  Do you prefer #defines?
-> 
-> It doesn't matter much to me, I just want to know what
-> you'd prefer.
+[25/32] rtc: s5m: cache device type during probe
+        https://git.kernel.org/abelloni/c/002cc0ee90e6
+[26/32] rtc: s5m: prepare for external regmap
+        https://git.kernel.org/abelloni/c/a57743bf009e
+[27/32] rtc: s5m: add support for S2MPG10 RTC
+        https://git.kernel.org/abelloni/c/e64180846e7e
+[28/32] rtc: s5m: fix a typo: peding -> pending
+        https://git.kernel.org/abelloni/c/972a3b47f6e1
+[29/32] rtc: s5m: switch to devm_device_init_wakeup
+        https://git.kernel.org/abelloni/c/1dd609587414
+[30/32] rtc: s5m: replace regmap_update_bits with regmap_clear/set_bits
+        https://git.kernel.org/abelloni/c/f5adb1fa04d0
+[31/32] rtc: s5m: replace open-coded read/modify/write registers with regmap helpers
+        https://git.kernel.org/abelloni/c/b1248da00836
 
-Most of the drivers simply use the index number directly as the tm_* members are
-descriptive enough.
-
-> 
-> > 
-> > > +
-> > > +/* Consecutive bytes contain seconds, minutes, etc. */
-> > > +#define RTC_COUNT_BASE		0x0d
-> > > +
-> > > +#define RTC_CTRL		0x1d
-> > > +#define RTC_EN		BIT(2)
-> > > +
-> > > +struct p1_rtc {
-> > > +	struct regmap *regmap;
-> > > +	struct rtc_device *rtc;
-> > > +};
-> > > +
-> > > +static int p1_rtc_read_time(struct device *dev, struct rtc_time *t)
-> > > +{
-> > > +	struct p1_rtc *p1 = dev_get_drvdata(dev);
-> > > +	u8 time[tu_count];
-> > > +	int ret;
-> > > +
-> > > +	ret = regmap_bulk_read(p1->regmap, RTC_COUNT_BASE, &time, sizeof(time));
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	t->tm_sec = time[tu_second] & GENMASK(5, 0);
-> > > +	t->tm_min = time[tu_minute] & GENMASK(5, 0);
-> > > +	t->tm_hour = time[tu_hour] & GENMASK(4, 0);
-> > > +	t->tm_mday = (time[tu_day] & GENMASK(4, 0)) + 1;
-> > > +	t->tm_mon = time[tu_month] & GENMASK(3, 0);
-> > > +	t->tm_year = (time[tu_year] & GENMASK(5, 0)) + 100;
-> > > +	/* tm_wday, tm_yday, and tm_isdst aren't used */
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int p1_rtc_set_time(struct device *dev, struct rtc_time *t)
-> > > +{
-> > > +	struct p1_rtc *p1 = dev_get_drvdata(dev);
-> > > +	u8 time[tu_count];
-> > > +	int ret;
-> > > +
-> > > +	time[tu_second] = t->tm_sec;
-> > > +	time[tu_minute] = t->tm_min;
-> > > +	time[tu_hour] = t->tm_hour;
-> > > +	time[tu_day] = t->tm_mday - 1;
-> > > +	time[tu_month] = t->tm_mon;
-> > > +	time[tu_year] = t->tm_year - 100;
-> > > +
-> > > +	/* Disable the RTC to update; re-enable again when done */
-> > > +	ret = regmap_update_bits(p1->regmap, RTC_CTRL, RTC_EN, 0);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	ret = regmap_bulk_write(p1->regmap, RTC_COUNT_BASE, time, sizeof(time));
-> > > +
-> > > +	(void)regmap_update_bits(p1->regmap, RTC_CTRL, RTC_EN, RTC_EN);
-> > 
-> > Don't you care whether the RTC has been reenabled?
-> 
-> Yes, Mateusz pointed this out.  I'll fix this.
-> 
-> I hope that disabling and re-enabling isn't require,
-> which makes the error possibilities a lot simpler.
-> 
-> Otherwise it's not clear how best to recover from
-> an error re-enabling the RTC (but yes, if no error
-> occurs in the bulk write, an error when re-enabling
-> will be returned).
-> 
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +static const struct rtc_class_ops p1_rtc_class_ops = {
-> > > +	.read_time = p1_rtc_read_time,
-> > > +	.set_time = p1_rtc_set_time,
-> > > +};
-> > > +
-> > > +static int p1_rtc_probe(struct platform_device *pdev)
-> > > +{
-> > > +	struct device *dev = &pdev->dev;
-> > > +	struct rtc_device *rtc;
-> > > +	struct p1_rtc *p1;
-> > > +	int ret;
-> > > +
-> > > +	p1 = devm_kzalloc(dev, sizeof(*p1), GFP_KERNEL);
-> > > +	if (!p1)
-> > > +		return -ENOMEM;
-> > > +	dev_set_drvdata(dev, p1);
-> > > +
-> > > +	p1->regmap = dev_get_regmap(dev->parent, NULL);
-> > > +	if (!p1->regmap)
-> > > +		return dev_err_probe(dev, -ENODEV, "failed to get regmap\n");
-> > > +
-> > > +	rtc = devm_rtc_allocate_device(dev);
-> > > +	if (IS_ERR(rtc))
-> > > +		return dev_err_probe(dev, PTR_ERR(rtc),
-> > > +				     "error allocating device\n");
-> > > +	p1->rtc = rtc;
-> > > +
-> > > +	rtc->ops = &p1_rtc_class_ops;
-> > > +	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> > > +	rtc->range_max = RTC_TIMESTAMP_END_2063;
-> > > +
-> > > +	clear_bit(RTC_FEATURE_ALARM, rtc->features);
-> > > +	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
-> > > +
-> > > +	ret = devm_rtc_register_device(rtc);
-> > > +	if (ret)
-> > > +		return dev_err_probe(dev, ret, "error registering RTC\n");
-> > 
-> > This message is unnecessary, there are no silent error path in
-> > devm_rtc_register_device
-> 
-> Awesome.  I'll just return what devm_rtc_regsister_device()
-> returns.
-> 
-> Thanks a lot.
-> 
-> 					-Alex
-> 
-> > 
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static struct platform_driver p1_rtc_driver = {
-> > > +	.probe = p1_rtc_probe,
-> > > +	.driver = {
-> > > +		.name = MOD_NAME,
-> > > +	},
-> > > +};
-> > > +
-> > > +module_platform_driver(p1_rtc_driver);
-> > > +
-> > > +MODULE_DESCRIPTION("SpacemiT P1 RTC driver");
-> > > +MODULE_LICENSE("GPL");
-> > > +MODULE_ALIAS("platform:" MOD_NAME);
-> > 
-> 
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
