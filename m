@@ -1,333 +1,686 @@
-Return-Path: <linux-rtc+bounces-4350-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4351-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39731AE8060
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 12:56:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 931C2AE817A
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 13:37:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC2DE4A2E0A
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 10:56:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5341A3AD4F3
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 11:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 897A32D321F;
-	Wed, 25 Jun 2025 10:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775D82DA744;
+	Wed, 25 Jun 2025 11:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KuvgTef4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGkAowJz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2882D2389;
-	Wed, 25 Jun 2025 10:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1212C2ACE;
+	Wed, 25 Jun 2025 11:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750848878; cv=none; b=tQ9P5I9SnWGeNp2GAaejB+mTMf/X3VxA9ZuUUKFXXk1xyYIjfghvOsZs/5bL34B7FCdtIuGtoe7SHJbE0X1sMIm5lDKX4bRx2ysY8IvpVyv0SBkDFCxTFhBIp7icDdD4CzwIAScfzkUA7zMwN3O/BTslKlc6bkH/P+25uBRl0zI=
+	t=1750850963; cv=none; b=NJFBN5z9Aag8aV3pq+d8gZ0gOWZ5ZRCAgCJoYUmzq+uTI+syRC7r0eEQoSH6wYYMte80/n1cR8uIM9XuZQ3pAGtadjbobmKMp9JhxJfqAlCXjWD8wRtEhvh9QWCVTIf9Tr3LBug8SLLa+qA8hxrJpGOzMvVYblAO3QM3Jy4miKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750848878; c=relaxed/simple;
-	bh=1pw+uqroMWF349QulkbaV2L+xoGUQiIDrgQhwjrbgLU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S6DVZ1tgLPatQ9bmvdRHVOAsyUykXc9I/29LzoUHWA7lPG4crMqXQNupyOHxTlB8SWzMaTQcOpYlaCEEmpueJMb2dcN42x6ssmnHZgh+dxrxhRG3uMF4BG1iWZx2NqX4tTCY9lPR4qBaWIC5DIalE+gXul/qy1xit94LRZLNyE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KuvgTef4; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e7311e66a8eso5606420276.2;
-        Wed, 25 Jun 2025 03:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750848875; x=1751453675; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cilMFj2BlrrsofpUWF0eRD8610fy8kvLozLNgBSSemY=;
-        b=KuvgTef4Sem4pyBuzeuGbV+ddyxuQOWsDiMlUbXu0HUcQdy7OG+B9YuRDLn0pcH8bf
-         J+OQE+Jqsgkp4UQOD7xVN1eUFqMDQgu/ta1Cjr1vhdtZ5oli3CXf11+OLSM+bSYFTNoI
-         4hUAMLRHVYWHKWjyjzuF67esK7aq75b3hOXYwnIftGlTC/ATj01nUoOhCXHRRClcXzuj
-         oIKzAWLmoWA3E/R6Aju9NE6WpyzVtBi26Zw4l6QvCw+CTGFxCksyEJlbF+/YZ98ljJ7w
-         VR+fXv0nYXJqkFptBOcpSygc+ObtkqDPt2cHZlnmAZPVPNJK4jIsHOulO5xRuJExsXRi
-         qvKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750848875; x=1751453675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cilMFj2BlrrsofpUWF0eRD8610fy8kvLozLNgBSSemY=;
-        b=mrKDqHIVdVkR1FkbLM3+r3YyEsLzm7t0WcIzq3YQUiro34Pcwtc8kjTcYhQm5Wv/Sl
-         uQtrhadkf4Qtf/ZX34S2htkniE4tBBFUZQJTbFjMY8usovId7t3BKRETvG7gh5ztPKPN
-         LcF+yMcLzrnljCT0+MBCgyOPGNUocLhc5IP5SvQRwbhECW3/33QjAYJ3Ozi070zKP3KX
-         z+Z6YvOVY4pFdgZknvbrp+43qBrYRlTgIbt/B2npj7vGSEO/lrMfBHBEEWBLy1fjVIce
-         wk0YdTg49Q0UCavfRDHGInp1G0jqXfMB0spnUbWD2CktMNCfMXsLuJpPM5MAZ/J0EK1K
-         w7cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBHJ85O+xBvW6pu0EaTOOu0LeuVZuJHtrOeNu43R2eXKhQnl8RG2db+rrS0csM71NAmoDyi6/Qg+Nv@vger.kernel.org, AJvYcCVBvi1OEgetd9M/VsgcBBYVrZNCJYomCOc2QnJJiyJEoy7lbhB00wt83R/MY8xCfhkn2lxJfeSZm9k=@vger.kernel.org, AJvYcCVKsHjuf3Z8ZzdqV/EW2npVJGbn2Cnmd9JaNhmksHM0cpz4jN2lScn2Y0kJA0JWmlP/quJtz6vGCrp4BfN6xEw=@vger.kernel.org, AJvYcCWdSu82R3PJ0L1TAPIaYqKeHI2DG/8D+Jh81jCgB07grxXzA6JdzZT80aoRZmDUq/XJaSWSQlgBHHmh@vger.kernel.org, AJvYcCX1cUepK3vR5s+CCUTk1H8hQHO2ffqh9eBOAiLGO2D94K1YJn9pKEOTPUUtUyWTAmXhL/Q3yQGXzFcH/YQ=@vger.kernel.org, AJvYcCXc6fPhNXDlCgYaHuq+5xWuOLH8GEHT0D5xHZZlkbMY0J8oMfIhKRXS/Sz2UbN4YGB7hsXWknGVtm1GMA==@vger.kernel.org, AJvYcCXfjJnLQCos9DuPaQY/YUAHQaACR2hDK8lG8X8TQopkmXaFBWcLKUTb/nGPw7XjQCvWI90Jek5exmnn@vger.kernel.org, AJvYcCXhlGAlMvYy6+r9lSEqT0gNNqw0wYGidkJv6qE5CtMxOS9uTSE8JTrv1NT9kTEAtFxNfq/PXVZv@vger.kernel.org, AJvYcCXihyNHvvrBHw59ROpM7XLn3/0YGIiBng8igjW4NHONyaiTbo02vN4Wo0C7iTMY3/WPMU/jI8PxImWk2wXD@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWrtGAwjcIWGMqVnCysk3Twd6Ljgq0dudpCSmfE31rfyTKL8R/
-	TIq2EMKnNP0PHieep4ERASw7d+nxQ5weHau86YWTTFXVxktV/jixkEo0fMciPy50j0zGjHiPvrU
-	waFrG2IaUXznyPMj4A9SLD0AWM8FaSBs=
-X-Gm-Gg: ASbGncvkLqNfuPrPaDIoquE4xF72u35Cjqtvwwx01zHy8p3wiprykwkOKUbLRpeU0GE
-	x5eFoEFx5Qf0Q/YnHJUaQXC8c/+Ktsb9EnnBQJsyGnfOsOVUcrxbbypbAfIH1/Gdz4R09t7a7cc
-	0Zo+Hoi9/uFz1jwTHI2Bk4utfbv2njMkgWWUQ+U2mu7uauHjehnZN39orJ0S5qruKJoXw4ZkmAA
-	XDh8A==
-X-Google-Smtp-Source: AGHT+IEu+R//w0LIcJJxZLM8KxbNtqpVsxRk+v2CqE6RW+SjfC+UBYI6SfhQaDEj74VCCVaHizUOSlRb/0YomJcnvOo=
-X-Received: by 2002:a05:690c:6384:b0:709:197d:5d3c with SMTP id
- 00721157ae682-71406cd24f9mr36191427b3.11.1750848875500; Wed, 25 Jun 2025
- 03:54:35 -0700 (PDT)
+	s=arc-20240116; t=1750850963; c=relaxed/simple;
+	bh=CcWYS6fKwMpfwwV3JsNJq0FJ07VqNzGU5p6m3hA9+RA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a5J99N1BdWYBy7QbjnGxg+4/c4RmS7o8Xf5v0lSbcdJVc5bRhbtEc7UwrvQTbYCbvYGAbxuihVKF7uyadccir+utwfAi23X4Ue8wsGcNB6DL80n2cl5F/FZKAHZzSUlPesleGTFMYZXKQBQrgLJngVaVeLrS3GAxSdaiIs5Vnj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGkAowJz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCF3C4CEEA;
+	Wed, 25 Jun 2025 11:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750850962;
+	bh=CcWYS6fKwMpfwwV3JsNJq0FJ07VqNzGU5p6m3hA9+RA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oGkAowJzjZpzsbecACapkEVOBa2ryl01cMiiCPmJ5abjPtHSlnaRypjdKysZl32hz
+	 uRm4adx+N5JMZlQqJaFT0mCkNIoG7xOwXos0ZRnFxBFCx3bJhAcJC+0nmGGbEUCNwH
+	 SdjPlldScLx+wZ+OtjLjf/A17H+idis+alqkP10+YPep9EXI5TJ2ji/xd/G6LZQepx
+	 Q7qyMJSeyejpmrsT2l4FUhewIra1Mkn4QG3mm9ZuNDX/uzaJukFMDFh1n45UlWNz2F
+	 jgHk8ygJZoSPuYfcITambrQ+1chiIsyka5UDRZJp/Y8HkCp0PtBCUsww79JA+jetwK
+	 dkKxQXneYkMSA==
+Date: Wed, 25 Jun 2025 12:29:17 +0100
+From: Lee Jones <lee@kernel.org>
+To: Shubhi Garg <shgarg@nvidia.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+	linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] mfd: nvvrs: add NVVRS PSEQ MFD driver
+Message-ID: <20250625112917.GV795775@google.com>
+References: <20250619084427.3559207-1-shgarg@nvidia.com>
+ <20250619084427.3559207-4-shgarg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612140041.GF381401@google.com> <CAOoeyxVvZiD18qbGd5oUnqLNETKw50fJBjJO3vR50kon_a5_kA@mail.gmail.com>
- <20250612152313.GP381401@google.com> <CAOoeyxV-E_HQOBu0Pzfy0b0yJ2qbrW_C8pATCTWE4+PXqvHL6g@mail.gmail.com>
- <20250613131133.GR381401@google.com> <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com> <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
- <20250619152814.GK795775@google.com> <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
- <20250625090133.GP795775@google.com>
-In-Reply-To: <20250625090133.GP795775@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 25 Jun 2025 18:54:20 +0800
-X-Gm-Features: Ac12FXyG2HoWaId__CawR23MZ8rb9Qa6uz_UMfhCNFjrCMpzymOvuItjHHgDfoE
-Message-ID: <CAOoeyxWoxC-n3JjjFe8Ruq_VydXk=jev=mopKfL5B7gsaSg=Ag@mail.gmail.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Ming Yu <tmyu0@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250619084427.3559207-4-shgarg@nvidia.com>
 
-Dear Greg and Lee,
+With respect to the subject line, please remove "MFD driver".
 
-Thank you for your comments.
-I've reviewed your suggestions, but would appreciate your feedback on
-a few remaining points.
+You can use "core driver" or replace it for whatever this is.
 
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8825=E6=97=A5 =E9=
-=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:01=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri, 20 Jun 2025, Ming Yu wrote:
->
-> > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8819=E6=97=A5=
- =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:28=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > On Thu, 19 Jun 2025, Ming Yu wrote:
-> > >
-> > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8819=E6=
-=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:53=E5=AF=AB=E9=81=93=EF=BC=9A
-> > > > >
-> > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > >
-> > > > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=8813=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=889:11=E5=AF=AB=E9=81=93=EF=BC=
-=9A
-> > > > > > >
-> > > > > > > On Fri, 13 Jun 2025, Ming Yu wrote:
-> > > > > > >
-> > > > > > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=9C=
-=8812=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8811:23=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > > > > > > > >
-> > > > > > > > > On Thu, 12 Jun 2025, Ming Yu wrote:
-> > > > > > > > >
-> > > > > > > > > > Dear Lee,
-> > > > > > > > > >
-> > > > > > > > > > Thank you for reviewing,
-> > > > > > > > > >
-> > > > > > > > > > Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B46=E6=
-=9C=8812=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:00=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > > > > > > > > > >
-> > > > > > > > > > ...
-> > > > > > > > > > > > +static const struct mfd_cell nct6694_devs[] =3D {
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 0),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 1),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 2),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 3),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 4),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 5),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 6),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 7),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 8),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 9),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 10),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 11),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 12),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 13),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 14),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-gpio", NULL, NULL, 0,=
- 15),
-> > > > > > > > > > > > +
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-0),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-1),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-2),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-3),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-4),
-> > > > > > > > > > > > +     MFD_CELL_BASIC("nct6694-i2c", NULL, NULL, 0, =
-5),
-> > > > > > > > > > >
-> > > > > > > > > > > Why have we gone back to this silly numbering scheme?
-> > > > > > > > > > >
-> > > > > > > > > > > What happened to using IDA in the child driver?
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > In a previous version, I tried to maintain a static IDA=
- in each
-> > > > > > > > > > sub-driver. However, I didn=E2=80=99t consider the case=
- where multiple NCT6694
-> > > > > > > > > > devices are bound to the same driver =E2=80=94 in that =
-case, the IDs are not
-> > > > > > > > > > fixed and become unusable for my purpose.
-> > > > > > > > >
-> > > > > > > > > Not sure I understand.
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > As far as I know, if I maintain the IDA in the sub-drivers =
-and use
-> > > > > > > > multiple MFD_CELL_NAME("nct6694-gpio") entries in the MFD, =
-the first
-> > > > > > > > NCT6694 device bound to the GPIO driver will receive IDs 0~=
-15.
-> > > > > > > > However, when a second NCT6694 device is connected to the s=
-ystem, it
-> > > > > > > > will receive IDs 16~31.
-> > > > > > > > Because of this behavior, I switched back to using platform=
-_device->id.
-> > > > > > >
-> > > > > > > Each of the devices will probe once.
-> > > > > > >
-> > > > > > > The first one will be given 0, the second will be given 1, et=
-c.
-> > > > > > >
-> > > > > > > Why would you give multiple IDs to a single device bound to a=
- driver?
-> > > > > > >
-> > > > > >
-> > > > > > The device exposes multiple peripherals =E2=80=94 16 GPIO contr=
-ollers, 6 I2C
-> > > > > > adapters, 2 CAN FD controllers, and 2 watchdog timers. Each per=
-ipheral
-> > > > > > is independently addressable, has its own register region, and =
-can
-> > > > > > operate in isolation. The IDs are used to distinguish between t=
-hese
-> > > > > > instances.
-> > > > > > For example, the GPIO driver will be probed 16 times, allocatin=
-g 16
-> > > > > > separate gpio_chip instances to control 8 GPIO lines each.
-> > > > > >
-> > > > > > If another device binds to this driver, it is expected to expos=
-e
-> > > > > > peripherals with the same structure and behavior.
-> > > > >
-> > > > > I still don't see why having a per-device IDA wouldn't render eac=
-h
-> > > > > probed device with its own ID.  Just as you have above.
-> > > > >
-> > > >
-> > > > For example, when the MFD driver and the I2C sub-driver are loaded,
-> > > > connecting the first NCT6694 USB device to the system results in 6
-> > > > nct6694-i2c platform devices being created and bound to the
-> > > > i2c-nct6694 driver. These devices receive IDs 0 through 5 via the I=
-DA.
-> > > >
-> > > > However, when a second NCT6694 USB device is connected, its
-> > > > corresponding nct6694-i2c platform devices receive IDs 6 through 11=
- =E2=80=94
-> > > > instead of 0 through 5 as I originally expected.
-> > > >
-> > > > If I've misunderstood something, please feel free to correct me. Th=
-ank you!
-> > >
-> > > In the code above you register 6 I2C devices.  Each device will be
-> > > assigned a platform ID 0 through 5. The .probe() function in the I2C
-> > > driver will be executed 6 times.  In each of those calls to .probe(),
-> > > instead of pre-allocating a contiguous assignment of IDs here, you
-> > > should be able to use IDA in .probe() to allocate those same device I=
-Ds
-> > > 0 through 5.
-> > >
-> > > What am I missing here?
-> > >
-> >
-> > You're absolutely right in the scenario where a single NCT6694 device
-> > is present. However, I=E2=80=99m wondering how we should handle the cas=
-e where
-> > a second or even third NCT6694 device is bound to the same MFD driver.
-> > In that situation, the sub-drivers using a static IDA will continue
-> > allocating increasing IDs, rather than restarting from 0 for each
-> > device. How should this be handled?
->
-> I'd like to see the implementation of this before advising.
->
-> In such a case, I assume there would be a differentiating factor between
-> the two (or three) devices.  You would then use that to decide which IDA
-> would need to be incremented.
->
-> However, Greg is correct.  Hard-coding look-ups for userspace to use
-> sounds like a terrible idea.
->
+> Add support for NVIDIA VRS (Voltage Regulator Specification) power
+> sequencer device driver. NVIDIA VRS PSEQ provides 32kHz RTC support with
+> backup battery for system timing. It controls ON/OFF and suspend/resume
+> power sequencing of system power rails on below NVIDIA platforms:
+> 
+> - NVIDIA Jetson AGX Orin Developer Kit
+> - NVIDIA IGX Orin Development Kit
+> - NVIDIA Jetson Orin NX Developer Kit
+> - NVIDIA Jetson Orin Nano Developer Kit
+> 
+> Signed-off-by: Shubhi Garg <shgarg@nvidia.com>
+> ---
+> 
+> v4:
+> - no changes
+> 
+> v3:
+> - added rate limiting to interrupt clearing debug logs
+> - removed unnecessary braces in if blocks
+> - changed dependency from I2C=y to I2C in mfd Kconfig
+> 
+> v2:
+> - removed unnecessary error logs
+> - changed dev_info to dev_dbg
+> - changed dev_err to dev_err_probe
+> - fixed "of_match_table" assignment
+> 
+>  drivers/mfd/Kconfig                 |  12 ++
+>  drivers/mfd/Makefile                |   1 +
+>  drivers/mfd/nvidia-vrs-pseq.c       | 267 ++++++++++++++++++++++++++++
+>  include/linux/mfd/nvidia-vrs-pseq.h | 127 +++++++++++++
+>  4 files changed, 407 insertions(+)
+>  create mode 100644 drivers/mfd/nvidia-vrs-pseq.c
+>  create mode 100644 include/linux/mfd/nvidia-vrs-pseq.h
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 6fb3768e3d71..9a3451eebd6e 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1437,6 +1437,18 @@ config MFD_SC27XX_PMIC
+>  	  This driver provides common support for accessing the SC27xx PMICs,
+>  	  and it also adds the irq_chip parts for handling the PMIC chip events.
+>  
+> +config MFD_NVVRS_PSEQ
 
-I understand.
-Do you think it would be better to pass the index via platform_data
-and use PLATFORM_DEVID_AUTO together with mfd_add_hotplug_devices()
-instead?
-For example:
-struct nct6694_platform_data {
-    int index;
-};
+Suggest separating the company from the product.
 
-static struct nct6694_platform_data i2c_data[] =3D {
-    { .index =3D 0 }, { .index =3D 1 }, { .index =3D 2 }, { .index =3D 3 },=
- {
-.index =3D 4 }, { .index =3D 5 },
-};
+If you want to use NV for this (I only see a single other instance of
+this), then use NV_VRS_PSEQ.
 
-static const struct mfd_cell nct6694_devs[] =3D {
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[0], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[1], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[2], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[3], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[4], sizeof(struct
-nct6694_platform_data), 0),
-    MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[5], sizeof(struct
-nct6694_platform_data), 0),
-};
-...
-mfd_add_hotplug_devices(dev, nct6694_devs, ARRAY_SIZE(nct6694_devs));
-...
+> +	tristate "NVIDIA Voltage Regulator Specification Power Sequencer"
 
-Thank you again for your support.
+"NVIDIA Voltage Regulator Specification (VRS) Power Sequencer"
 
+> +	depends on I2C
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	select REGMAP_IRQ
+> +	help
+> +	  Say Y here to add support for NVIDIA Voltage Regulator Specification
 
-Best regards,
-Ming
+(VRS) at the end.
+
+> +	  Power Sequencer. NVVRS_PSEQ supports ON/OFF, suspend/resume sequence of
+
+NVVRS_PSEQ seems like the wrong terminology for this paragraph.
+
+"The NVIDIA VRS PSEQ" perhaps.
+
+What does ON/OFF mean?
+
+> +	  system power rails. It provides 32kHz RTC clock support with backup
+
+This paragraph doesn't flow.  You only have a list of 2 items here and
+no connecting "and" anywhere.
+
+"a backup battery"
+
+> +	  battery for system timing.
+
+Is it a "backup battery" if it has a primary function?
+
+>  config RZ_MTU3
+>  	tristate "Renesas RZ/G2L MTU3a core driver"
+>  	depends on (ARCH_RZG2L && OF) || COMPILE_TEST
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 79495f9f3457..9b07289985b5 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -183,6 +183,7 @@ obj-$(CONFIG_MFD_MT6360)	+= mt6360-core.o
+>  obj-$(CONFIG_MFD_MT6370)	+= mt6370.o
+>  mt6397-objs			:= mt6397-core.o mt6397-irq.o mt6358-irq.o
+>  obj-$(CONFIG_MFD_MT6397)	+= mt6397.o
+> +obj-$(CONFIG_MFD_NVVRS_PSEQ)    += nvidia-vrs-pseq.o
+>  
+>  obj-$(CONFIG_RZ_MTU3)		+= rz-mtu3.o
+>  obj-$(CONFIG_ABX500_CORE)	+= abx500-core.o
+> diff --git a/drivers/mfd/nvidia-vrs-pseq.c b/drivers/mfd/nvidia-vrs-pseq.c
+> new file mode 100644
+> index 000000000000..cef7abac08b7
+> --- /dev/null
+> +++ b/drivers/mfd/nvidia-vrs-pseq.c
+> @@ -0,0 +1,267 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> + * NVIDIA VRS Power Sequencer driver.
+
+Put this at the top followed by a line separator before the copyright
+line.
+
+Drop "driver".
+
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/nvidia-vrs-pseq.h>
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +#include <linux/err.h>
+
+Alphabetical.
+
+> +
+> +static const struct resource rtc_resources[] = {
+> +	DEFINE_RES_IRQ(NVVRS_PSEQ_INT_SRC1_RTC),
+> +};
+> +
+> +static const struct regmap_irq nvvrs_pseq_irqs[] = {
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_RSTIRQ, 0, NVVRS_PSEQ_INT_SRC1_RSTIRQ_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_OSC, 0, NVVRS_PSEQ_INT_SRC1_OSC_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_EN, 0, NVVRS_PSEQ_INT_SRC1_EN_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_RTC, 0, NVVRS_PSEQ_INT_SRC1_RTC_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_PEC, 0, NVVRS_PSEQ_INT_SRC1_PEC_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_WDT, 0, NVVRS_PSEQ_INT_SRC1_WDT_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_EM_PD, 0, NVVRS_PSEQ_INT_SRC1_EM_PD_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC1_INTERNAL, 0, NVVRS_PSEQ_INT_SRC1_INTERNAL_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_PBSP, 1, NVVRS_PSEQ_INT_SRC2_PBSP_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_ECC_DED, 1, NVVRS_PSEQ_INT_SRC2_ECC_DED_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_TSD, 1, NVVRS_PSEQ_INT_SRC2_TSD_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_LDO, 1, NVVRS_PSEQ_INT_SRC2_LDO_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_BIST, 1, NVVRS_PSEQ_INT_SRC2_BIST_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_RT_CRC, 1, NVVRS_PSEQ_INT_SRC2_RT_CRC_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_SRC2_VENDOR, 1, NVVRS_PSEQ_INT_SRC2_VENDOR_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR0, 2, NVVRS_PSEQ_INT_VENDOR0_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR1, 2, NVVRS_PSEQ_INT_VENDOR1_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR2, 2, NVVRS_PSEQ_INT_VENDOR2_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR3, 2, NVVRS_PSEQ_INT_VENDOR3_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR4, 2, NVVRS_PSEQ_INT_VENDOR4_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR5, 2, NVVRS_PSEQ_INT_VENDOR5_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR6, 2, NVVRS_PSEQ_INT_VENDOR6_MASK),
+> +	REGMAP_IRQ_REG(NVVRS_PSEQ_INT_VENDOR7, 2, NVVRS_PSEQ_INT_VENDOR7_MASK),
+> +};
+> +
+> +static const struct mfd_cell nvvrs_pseq_children[] = {
+> +	{
+> +		.name = "nvvrs-pseq-rtc",
+> +		.resources = rtc_resources,
+> +		.num_resources = ARRAY_SIZE(rtc_resources),
+> +	},
+> +};
+
+One device is not and MFD.  This is not allowed.
+
+> +static const struct regmap_range nvvrs_pseq_readable_ranges[] = {
+> +	regmap_reg_range(NVVRS_PSEQ_REG_VENDOR_ID, NVVRS_PSEQ_REG_MODEL_REV),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_INT_SRC1, NVVRS_PSEQ_REG_LAST_RST),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_EN_ALT_F, NVVRS_PSEQ_REG_IEN_VENDOR),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_RTC_T3, NVVRS_PSEQ_REG_RTC_A0),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_WDT_CFG, NVVRS_PSEQ_REG_WDTKEY),
+> +};
+> +
+> +static const struct regmap_access_table nvvrs_pseq_readable_table = {
+> +	.yes_ranges = nvvrs_pseq_readable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(nvvrs_pseq_readable_ranges),
+> +};
+> +
+> +static const struct regmap_range nvvrs_pseq_writable_ranges[] = {
+> +	regmap_reg_range(NVVRS_PSEQ_REG_INT_SRC1, NVVRS_PSEQ_REG_INT_VENDOR),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_GP_OUT, NVVRS_PSEQ_REG_IEN_VENDOR),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_RTC_T3, NVVRS_PSEQ_REG_RTC_A0),
+> +	regmap_reg_range(NVVRS_PSEQ_REG_WDT_CFG, NVVRS_PSEQ_REG_WDTKEY),
+> +};
+> +
+> +static const struct regmap_access_table nvvrs_pseq_writable_table = {
+> +	.yes_ranges = nvvrs_pseq_writable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(nvvrs_pseq_writable_ranges),
+> +};
+> +
+> +static const struct regmap_config nvvrs_pseq_regmap_config = {
+> +	.name = "nvvrs-pseq",
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = NVVRS_PSEQ_REG_WDTKEY + 1,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.rd_table = &nvvrs_pseq_readable_table,
+> +	.wr_table = &nvvrs_pseq_writable_table,
+> +};
+> +
+> +static int nvvrs_pseq_irq_clear(void *irq_drv_data)
+> +{
+> +	struct nvvrs_pseq_chip *chip = (struct nvvrs_pseq_chip *)irq_drv_data;
+
+This cast is superfluous.
+
+> +	struct i2c_client *client = chip->client;
+> +	u8 reg, val;
+
+This line on the bottom please.
+
+> +	unsigned int i;
+> +	int ret = 0;
+> +
+> +	/* Write 1 to clear the interrupt bit in the Interrupt
+
+Properly formatted multi-line comments please.
+
+Nit: The top line should be blank.
+
+> +	 * Source Register, writing 0 has no effect, writing 1 to a bit
+> +	 * which is already at 0 has no effect
+> +	 */
+> +
+> +	for (i = 0; i < chip->irq_chip->num_regs; i++) {
+> +		reg = (u8)(chip->irq_chip->status_base + i);
+> +		ret = i2c_smbus_read_byte_data(client, reg);
+> +		if (ret) {
+> +			val = (u8)ret;
+> +			dev_dbg_ratelimited(chip->dev,
+
+How useful is this now that it's ready for publishing?
+
+> +					    "Clear IRQ reg 0x%02x=0x%02x\n",
+> +					    reg, val);
+> +
+> +			ret = i2c_smbus_write_byte_data(client, reg, val);
+> +			if (ret < 0)
+> +				return ret;
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static struct regmap_irq_chip nvvrs_pseq_irq_chip = {
+> +	.name = "nvvrs-pseq-irq",
+> +	.irqs = nvvrs_pseq_irqs,
+> +	.num_irqs = ARRAY_SIZE(nvvrs_pseq_irqs),
+> +	.num_regs = 3,
+> +	.status_base = NVVRS_PSEQ_REG_INT_SRC1,
+> +	.handle_post_irq = nvvrs_pseq_irq_clear,
+> +};
+> +
+> +static int nvvrs_pseq_vendor_info(struct nvvrs_pseq_chip *chip)
+> +{
+> +	struct i2c_client *client = chip->client;
+> +	u8 vendor_id, model_rev;
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_byte_data(client, NVVRS_PSEQ_REG_VENDOR_ID);
+> +	if (ret < 0)
+> +		return dev_err_probe(chip->dev, ret,
+> +				     "Failed to read Vendor ID\n");
+
+You use 100-chars above - why not use that everywhere to prevent these
+line-breaks?
+
+> +
+> +	vendor_id = (u8)ret;
+
+All vendor IDs are supported?
+
+Why does 'vendor_id' have to be u8?
+
+> +	ret = i2c_smbus_read_byte_data(client, NVVRS_PSEQ_REG_MODEL_REV);
+> +	if (ret < 0)
+> +		return dev_err_probe(chip->dev, ret,
+> +				     "Failed to read Model Rev\n");
+> +
+> +	model_rev = (u8)ret;
+> +
+> +	if (model_rev < 0x40) {
+
+No magic numbers.  Please define them.
+
+What if the model_rev is some larger unsupported number?
+
+> +		dev_err(chip->dev, "Chip revision 0x%02x is not supported!\n",
+> +			model_rev);
+> +		return -ENODEV;
+> +	}
+> +
+> +	dev_dbg(chip->dev, "NVVRS Vendor ID: 0x%02x, Model Rev: 0x%02x\n",
+> +		vendor_id, model_rev);
+
+How useful is this now, really?
+
+> +	return 0;
+> +}
+> +
+> +static int nvvrs_pseq_probe(struct i2c_client *client)
+> +{
+> +	const struct regmap_config *rmap_config;
+
+"config"
+
+Why does this need to exist at all?
+
+> +	struct nvvrs_pseq_chip *nvvrs_chip;
+
+"ddata"
+
+> +	const struct mfd_cell *mfd_cells;
+> +	int n_mfd_cells;
+> +	int ret;
+> +
+> +	nvvrs_chip = devm_kzalloc(&client->dev, sizeof(*nvvrs_chip), GFP_KERNEL);
+> +	if (!nvvrs_chip)
+> +		return -ENOMEM;
+> +
+> +	/* Set PEC flag for SMBUS transfer with PEC enabled */
+> +	client->flags |= I2C_CLIENT_PEC;
+> +
+> +	i2c_set_clientdata(client, nvvrs_chip);
+> +	nvvrs_chip->client = client;
+> +	nvvrs_chip->dev = &client->dev;
+
+What are client and dev used for?
+
+I suggest you only need one of them.
+
+> +	nvvrs_chip->chip_irq = client->irq;
+
+Just "irq".
+
+> +	mfd_cells = nvvrs_pseq_children;
+> +	n_mfd_cells = ARRAY_SIZE(nvvrs_pseq_children);
+
+Why are you placing this into another variable?
+
+> +	rmap_config = &nvvrs_pseq_regmap_config;
+
+As above.  Why have we created another local variable for this?
+
+> +	nvvrs_chip->irq_chip = &nvvrs_pseq_irq_chip;
+
+Where is irq_chip used outside of this function?
+
+> +	nvvrs_chip->rmap = devm_regmap_init_i2c(client, rmap_config);
+
+"regmap"
+
+> +	if (IS_ERR(nvvrs_chip->rmap))
+> +		return dev_err_probe(nvvrs_chip->dev, PTR_ERR(nvvrs_chip->rmap),
+> +				     "Failed to initialise regmap\n");
+> +
+> +	ret = nvvrs_pseq_vendor_info(nvvrs_chip);
+> +	if (ret < 0)
+> +		return ret;
+
+dev_err_probe()
+
+> +	nvvrs_pseq_irq_chip.irq_drv_data = nvvrs_chip;
+> +	ret = devm_regmap_add_irq_chip(nvvrs_chip->dev, nvvrs_chip->rmap,
+> +				       client->irq, IRQF_ONESHOT | IRQF_SHARED,
+> +				       0, &nvvrs_pseq_irq_chip,
+> +				       &nvvrs_chip->irq_data);
+> +	if (ret < 0)
+> +		return dev_err_probe(nvvrs_chip->dev, ret,
+> +				     "Failed to add regmap irq\n");
+
+"IRQ Chip"
+
+> +	ret = devm_mfd_add_devices(nvvrs_chip->dev, PLATFORM_DEVID_NONE,
+> +				   mfd_cells, n_mfd_cells, NULL, 0,
+> +				   regmap_irq_get_domain(nvvrs_chip->irq_data));
+> +	if (ret < 0)
+> +		return dev_err_probe(nvvrs_chip->dev, ret,
+> +				     "Failed to add MFD children\n");
+
+Failed to add {children ,sub-}devices.
+
+> +	return 0;
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+
+Use the helper instead.
+
+git grep CONFIG_PM_SLEEP -- drivers/mfd
+<nothing>
+
+> +static int nvvrs_pseq_i2c_suspend(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +
+> +	/*
+> +	 * IRQ must be disabled during suspend because if it happens
+
+IRQs or The IRQ.
+
+> +	 * while suspended it will be handled before resuming I2C.
+> +	 *
+> +	 * When device is woken up from suspend (e.g. by RTC wake alarm),
+> +	 * an interrupt occurs before resuming I2C bus controller.
+> +	 * Interrupt handler tries to read registers but this read
+
+The interrupt ...
+
+> +	 * will fail because I2C is still suspended.
+> +	 */
+
+Most of this is pretty self explanatory and implied TBH.
+
+> +	disable_irq(client->irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nvvrs_pseq_i2c_resume(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +
+> +	enable_irq(client->irq);
+
+'\n' here.
+
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops nvvrs_pseq_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(nvvrs_pseq_i2c_suspend, nvvrs_pseq_i2c_resume)
+> +};
+> +
+> +static const struct of_device_id nvvrs_dt_match[] = {
+> +	{ .compatible = "nvidia,vrs-pseq" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, nvvrs_dt_match);
+> +
+> +static struct i2c_driver nvvrs_pseq_driver = {
+> +	.driver = {
+> +		.name = "nvvrs_pseq",
+> +		.pm = &nvvrs_pseq_pm_ops,
+> +		.of_match_table = nvvrs_dt_match,
+> +	},
+> +	.probe = nvvrs_pseq_probe,
+> +};
+> +
+
+Remove this line.
+
+> +module_i2c_driver(nvvrs_pseq_driver);
+> +
+> +MODULE_AUTHOR("Shubhi Garg <shgarg@nvidia.com>");
+> +MODULE_DESCRIPTION("NVIDIA Voltage Regulator Specification Power Sequencer Driver");
+
+As above.
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/nvidia-vrs-pseq.h b/include/linux/mfd/nvidia-vrs-pseq.h
+> new file mode 100644
+> index 000000000000..7e6f3aa940e7
+> --- /dev/null
+> +++ b/include/linux/mfd/nvidia-vrs-pseq.h
+> @@ -0,0 +1,127 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +// SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved
+
+This should be part of the comment above.
+
+> +
+> +#ifndef _MFD_NVIDIA_VRS_PSEQ_H_
+> +#define _MFD_NVIDIA_VRS_PSEQ_H_
+> +
+> +#include <linux/types.h>
+> +
+> +/* Vendor ID */
+> +#define NVVRS_PSEQ_REG_VENDOR_ID		0x00
+> +#define NVVRS_PSEQ_REG_MODEL_REV		0x01
+> +
+> +/*  Interrupts and Status registers */
+> +#define NVVRS_PSEQ_REG_INT_SRC1			0x10
+> +#define NVVRS_PSEQ_REG_INT_SRC2			0x11
+> +#define NVVRS_PSEQ_REG_INT_VENDOR		0x12
+> +#define NVVRS_PSEQ_REG_CTL_STAT			0x13
+> +#define NVVRS_PSEQ_REG_EN_STDR1			0x14
+> +#define NVVRS_PSEQ_REG_EN_STDR2			0x15
+> +#define NVVRS_PSEQ_REG_EN_STRD1			0x16
+> +#define NVVRS_PSEQ_REG_EN_STRD2			0x17
+> +#define NVVRS_PSEQ_REG_WDT_STAT			0x18
+> +#define NVVRS_PSEQ_REG_TEST_STAT		0x19
+> +#define NVVRS_PSEQ_REG_LAST_RST			0x1A
+> +
+> +/* Configuration Registers */
+> +#define NVVRS_PSEQ_REG_EN_ALT_F			0x20
+> +#define NVVRS_PSEQ_REG_AF_IN_OUT		0x21
+> +#define NVVRS_PSEQ_REG_EN_CFG1			0x22
+> +#define NVVRS_PSEQ_REG_EN_CFG2			0x23
+> +#define NVVRS_PSEQ_REG_CLK_CFG			0x24
+> +#define NVVRS_PSEQ_REG_GP_OUT			0x25
+> +#define NVVRS_PSEQ_REG_DEB_IN			0x26
+> +#define NVVRS_PSEQ_REG_LP_TTSHLD		0x27
+> +#define NVVRS_PSEQ_REG_CTL_1			0x28
+> +#define NVVRS_PSEQ_REG_CTL_2			0x29
+> +#define NVVRS_PSEQ_REG_TEST_CFG			0x2A
+> +#define NVVRS_PSEQ_REG_IEN_VENDOR		0x2B
+> +
+> +/* RTC */
+> +#define NVVRS_PSEQ_REG_RTC_T3			0x70
+> +#define NVVRS_PSEQ_REG_RTC_T2			0x71
+> +#define NVVRS_PSEQ_REG_RTC_T1			0x72
+> +#define NVVRS_PSEQ_REG_RTC_T0			0x73
+> +#define NVVRS_PSEQ_REG_RTC_A3			0x74
+> +#define NVVRS_PSEQ_REG_RTC_A2			0x75
+> +#define NVVRS_PSEQ_REG_RTC_A1			0x76
+> +#define NVVRS_PSEQ_REG_RTC_A0			0x77
+> +
+> +/* WDT */
+> +#define NVVRS_PSEQ_REG_WDT_CFG			0x80
+> +#define NVVRS_PSEQ_REG_WDT_CLOSE		0x81
+> +#define NVVRS_PSEQ_REG_WDT_OPEN			0x82
+> +#define NVVRS_PSEQ_REG_WDTKEY			0x83
+> +
+> +/* Interrupt Mask */
+> +#define NVVRS_PSEQ_INT_SRC1_RSTIRQ_MASK		BIT(0)
+> +#define NVVRS_PSEQ_INT_SRC1_OSC_MASK		BIT(1)
+> +#define NVVRS_PSEQ_INT_SRC1_EN_MASK		BIT(2)
+> +#define NVVRS_PSEQ_INT_SRC1_RTC_MASK		BIT(3)
+> +#define NVVRS_PSEQ_INT_SRC1_PEC_MASK		BIT(4)
+> +#define NVVRS_PSEQ_INT_SRC1_WDT_MASK		BIT(5)
+> +#define NVVRS_PSEQ_INT_SRC1_EM_PD_MASK		BIT(6)
+> +#define NVVRS_PSEQ_INT_SRC1_INTERNAL_MASK	BIT(7)
+> +#define NVVRS_PSEQ_INT_SRC2_PBSP_MASK		BIT(0)
+> +#define NVVRS_PSEQ_INT_SRC2_ECC_DED_MASK	BIT(1)
+> +#define NVVRS_PSEQ_INT_SRC2_TSD_MASK		BIT(2)
+> +#define NVVRS_PSEQ_INT_SRC2_LDO_MASK		BIT(3)
+> +#define NVVRS_PSEQ_INT_SRC2_BIST_MASK		BIT(4)
+> +#define NVVRS_PSEQ_INT_SRC2_RT_CRC_MASK		BIT(5)
+> +#define NVVRS_PSEQ_INT_SRC2_VENDOR_MASK		BIT(7)
+> +#define NVVRS_PSEQ_INT_VENDOR0_MASK		BIT(0)
+> +#define NVVRS_PSEQ_INT_VENDOR1_MASK		BIT(1)
+> +#define NVVRS_PSEQ_INT_VENDOR2_MASK		BIT(2)
+> +#define NVVRS_PSEQ_INT_VENDOR3_MASK		BIT(3)
+> +#define NVVRS_PSEQ_INT_VENDOR4_MASK		BIT(4)
+> +#define NVVRS_PSEQ_INT_VENDOR5_MASK		BIT(5)
+> +#define NVVRS_PSEQ_INT_VENDOR6_MASK		BIT(6)
+> +#define NVVRS_PSEQ_INT_VENDOR7_MASK		BIT(7)
+> +
+> +/* Controller Register Mask */
+> +#define NVVRS_PSEQ_REG_CTL_1_FORCE_SHDN		(BIT(0) | BIT(1))
+> +#define NVVRS_PSEQ_REG_CTL_1_FORCE_ACT		BIT(2)
+> +#define NVVRS_PSEQ_REG_CTL_1_FORCE_INT		BIT(3)
+> +#define NVVRS_PSEQ_REG_CTL_2_EN_PEC		BIT(0)
+> +#define NVVRS_PSEQ_REG_CTL_2_REQ_PEC		BIT(1)
+> +#define NVVRS_PSEQ_REG_CTL_2_RTC_PU		BIT(2)
+> +#define NVVRS_PSEQ_REG_CTL_2_RTC_WAKE		BIT(3)
+> +#define NVVRS_PSEQ_REG_CTL_2_RST_DLY		0xF0
+> +
+> +enum {
+> +	NVVRS_PSEQ_INT_SRC1_RSTIRQ,		/* Reset or Interrupt Pin Fault */
+> +	NVVRS_PSEQ_INT_SRC1_OSC,		/* Crystal Oscillator Fault */
+> +	NVVRS_PSEQ_INT_SRC1_EN,			/* Enable Output Pin Fault */
+> +	NVVRS_PSEQ_INT_SRC1_RTC,		/* RTC Alarm */
+> +	NVVRS_PSEQ_INT_SRC1_PEC,		/* Packet Error Checking */
+> +	NVVRS_PSEQ_INT_SRC1_WDT,		/* Watchdog Violation */
+> +	NVVRS_PSEQ_INT_SRC1_EM_PD,		/* Emergency Power Down */
+> +	NVVRS_PSEQ_INT_SRC1_INTERNAL,		/* Internal Fault*/
+> +	NVVRS_PSEQ_INT_SRC2_PBSP,		/* PWR_BTN Short Pulse Detection */
+> +	NVVRS_PSEQ_INT_SRC2_ECC_DED,		/* ECC Double-Error Detection */
+> +	NVVRS_PSEQ_INT_SRC2_TSD,		/* Thermal Shutdown */
+> +	NVVRS_PSEQ_INT_SRC2_LDO,		/* LDO Fault */
+> +	NVVRS_PSEQ_INT_SRC2_BIST,		/* Built-In Self Test Fault */
+> +	NVVRS_PSEQ_INT_SRC2_RT_CRC,		/* Runtime Register CRC Fault */
+> +	NVVRS_PSEQ_INT_SRC2_VENDOR,		/* Vendor Specific Internal Fault */
+> +	NVVRS_PSEQ_INT_VENDOR0,			/* Vendor Internal Fault Bit 0 */
+> +	NVVRS_PSEQ_INT_VENDOR1,			/* Vendor Internal Fault Bit 1 */
+> +	NVVRS_PSEQ_INT_VENDOR2,			/* Vendor Internal Fault Bit 2 */
+> +	NVVRS_PSEQ_INT_VENDOR3,			/* Vendor Internal Fault Bit 3 */
+> +	NVVRS_PSEQ_INT_VENDOR4,			/* Vendor Internal Fault Bit 4 */
+> +	NVVRS_PSEQ_INT_VENDOR5,			/* Vendor Internal Fault Bit 5 */
+> +	NVVRS_PSEQ_INT_VENDOR6,			/* Vendor Internal Fault Bit 6 */
+> +	NVVRS_PSEQ_INT_VENDOR7,			/* Vendor Internal Fault Bit 7 */
+> +};
+> +
+> +struct nvvrs_pseq_chip {
+> +	struct device *dev;
+> +	struct regmap *rmap;
+> +	int chip_irq;
+> +	struct i2c_client *client;
+> +	struct regmap_irq_chip_data *irq_data;
+> +	const struct regmap_irq_chip *irq_chip;
+> +	void *irq_drv_data;
+
+Where is this used?
+
+> +};
+> +
+> +#endif /* _MFD_NVIDIA_VRS_PSEQ_H_ */
+> -- 
+> 2.43.0
+> 
+
+-- 
+Lee Jones [李琼斯]
 
