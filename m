@@ -1,200 +1,188 @@
-Return-Path: <linux-rtc+bounces-4354-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4355-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35289AE8722
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 16:53:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 906F7AE8A16
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 18:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6487E1643B1
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 14:53:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A54C1885D8F
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Jun 2025 16:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C04C25E455;
-	Wed, 25 Jun 2025 14:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB9D2D5431;
+	Wed, 25 Jun 2025 16:41:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vEVPBNft"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="Zrh3HOUS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D1F1D5165;
-	Wed, 25 Jun 2025 14:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86B8255E23
+	for <linux-rtc@vger.kernel.org>; Wed, 25 Jun 2025 16:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750863209; cv=none; b=kU4zPKBm8njAFWmdB2XmLsZyVnDL64sEsZxyfZZONdNCOP+884WlIyUS1DpXY+2YdN7THbmsxabFVj3eV92/K/gQkJWEhZouk7iLCp+4zUPFt67K1Nta41DuogIXy/S7ZKTWN9ZOItIZczy6vWHo58kR5AMO9hykH0lxsokxsK0=
+	t=1750869687; cv=none; b=DpFA6l64ILCg1MAUiwPPkQ9u5lzOAan/Hv6kUg3eyQti2pPQOWCSiXWi5VUDloe33hsNvkegFEs5HEiRWTeP+YWcYNZhLCtUh6vMxx5wimQEjE0vHiDyfsKyl82wEYrtKGtuI5PotwawgfhZoGN0PPc7KABQBoEFgiSGHBbfr5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750863209; c=relaxed/simple;
-	bh=IJe6mOkdno5hFkqOuZzP6lWj3MzgBpaudeFCugaeW5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nAt1tjPIzZkIJoIYkr0k3ztq16seMjP5OlFLwx5w6umNWdUV9k5Ks5ogMJWUTHt8beFoObIk1koseH25F2THMP2hqTb2m0V2ukh0WTZvtrdgqs3nWzP068ylvqTKb0036VMZg2aN7V23ciQOH1RtEjaY1k/a7J2ClgAslOUnkqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vEVPBNft; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ECC9C4CEEA;
-	Wed, 25 Jun 2025 14:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750863208;
-	bh=IJe6mOkdno5hFkqOuZzP6lWj3MzgBpaudeFCugaeW5w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vEVPBNft67yFnyq10OuAhQPYNrznG7vdFztn5fo09zOvfI1ukOyexva0fcqBcgH1+
-	 Poc+Rb0Q5wYPAF/RBKgwIjSfT2BhCBTKF+H8lEqIVVYj1XhQ6eqImEr0zIkf9KMqw7
-	 wiDedspcBMpswvzBkjaXn7mWBDM8TOacEww3P7XsmLAiB3sIDsxxwTjSwKOjvnR7Q1
-	 1NxF/XUkzI+5ZbrxOPPItZejLHz6Wxesu97Cz+s5IctHQ6Mtt4IqKBjldDxRny3SM9
-	 0ysMFTmtKsCs2h7HEwnIh6QfiPwtGQI/kkcruqpQN+baPGTpL/7UmgHyPI+QBY9a7o
-	 2QdK6TZwf1GhQ==
-Date: Wed, 25 Jun 2025 15:53:21 +0100
-From: Lee Jones <lee@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
-	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
-	linux@roeck-us.net, jdelvare@suse.com,
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Ming Yu <tmyu0@nuvoton.com>
-Subject: Re: [PATCH v12 1/7] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20250625145321.GZ795775@google.com>
-References: <20250613131133.GR381401@google.com>
- <CAOoeyxXftk9QX_REgeQhuXSc9rEguzXkKVKDQdawU=NzGbo9oA@mail.gmail.com>
- <20250619115345.GL587864@google.com>
- <CAOoeyxXSTeypv2qQjcK1cSPtjch=gJGYzqoMsLQ-LJZ8Kwgd=w@mail.gmail.com>
- <20250619152814.GK795775@google.com>
- <CAOoeyxU7eQneBuxbBqepta29q_OHPzrkN4SKmj6RX72L3Euw5A@mail.gmail.com>
- <20250625090133.GP795775@google.com>
- <CAOoeyxWoxC-n3JjjFe8Ruq_VydXk=jev=mopKfL5B7gsaSg=Ag@mail.gmail.com>
- <20250625134634.GY795775@google.com>
- <CAOoeyxVuu-kKoQa84mGOX=thAc0hnzQU8L=MnycoRRhzoZMnNw@mail.gmail.com>
+	s=arc-20240116; t=1750869687; c=relaxed/simple;
+	bh=J1G4wA185/RC88pABxfSgtgPkiCmT4wLJ8Skkm4M8e4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OaltcVlUl7HSkiItPVaR4CnHOnIi/dVdSwY+XpQbxSURll42T/02xtVgnoKRCPyLgN5ufvEpGD7/xSKR6kGVWAhVRi6v7Aohx+fPrJ6gGEQLxumSx6qB48GLjYWHtN3qVHopjuvBJFPsrKj4IqPcKU2pk4sZF91f3n4bV25kN6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=Zrh3HOUS; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7d0a2220fb0so4545785a.3
+        for <linux-rtc@vger.kernel.org>; Wed, 25 Jun 2025 09:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1750869683; x=1751474483; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tDCKEZvvy/u8mP8K+Ymdr+bMEt+s7GIZAgO/5a0i/oc=;
+        b=Zrh3HOUSnh9X3Mi06r+O5wAyrlxTqvX5qejNnuGMcNOFYuLVNOIOAC2v+LOATfid8F
+         P690xyYFui6ZS2y7b3qViATLMWtyxnUh/tjwOgGJjuR4kZudjTn7RZJsIv0QwULQgPt0
+         Fm4Om5hynBeBioGll3q7l9lCrLOHX6vIMs25iLAfC4rEfqsGWxaQSUabWqTqVhAFNkar
+         CBU9YImOSVPHgVHQ4KBS3WvGc+N6kK5Xj+S3I6EDUCvvxkIwnijbjaAy39Tw6DfMVOn5
+         pOF66nan/wpxv60KDDiGRvm+Ua5CvelAr3sl5CRQmKcx5nrYCSOT4iGOx6bGYbYk6c7r
+         lKUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750869683; x=1751474483;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tDCKEZvvy/u8mP8K+Ymdr+bMEt+s7GIZAgO/5a0i/oc=;
+        b=V6rTzzR/0jncqFl+dQPMkDm/CqBJeUdJsgjnpyi3N6OSpp5/x3NOXGFwHRjre3l/pH
+         TAOd1JuMtLFfuBANFVDIUhOA6OPH15QgS7IBtiDIN2fOFd/ils4jdyEKx0uc4n1EZIAV
+         yQq+V+9ADJAYIk42ywZI8zubmGe4DvlnvUNxLN8Z0SpC/lLdSyEuhhQWh4q6sXQ/kMcI
+         FT5aoSUF50Dz8ROQVrEs3AANwi8jNhqB1i6DT27Lfq6fruUJAs+gX7rpHdJ1lPMnS6Sk
+         VMxlq4bjLRPNARodOlAahkH443F5ur1wYIgPoOUDDJbK510Umrv7egSRgM7OIcNMoLH/
+         RvIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUv9RwRdhK3TUyUR+R6HHa+8pEEC/f+RZLips9DM67sUhXY3NXb8XXtULyeLiNVij3O9VvwE6G7VWk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNzkcFMyx4DsrXzEZ+kv7dH06Caw7jicbru4PuDgZ2P64pE25i
+	e+ikylJJQAfZRlzw0WohMeGAgn2IBMe36VxuzEcweXs5Fx2WD267xlL+QknKAssMJZE=
+X-Gm-Gg: ASbGncu9ROshO1t8HU7g7hu/ZZeYETI80tzYFUlwCGiThwKfJEAvBymGCg/VkZXYDCA
+	qQeAF7U35khmThyjY964J/hrSCLsdhfxiw73Z81YYSR02PbSogeXv/VFhZCWPsMN5g/BrJ1sdlZ
+	tYJra4tTwevHNkBfrtk3vVYUed34dunwnhdWgQelbkmo5H6g2PfPQLvXBScsYQ1PwLoYp3RjekS
+	YJZnt9yLX4rmo7fqtXPbavoZGUYgzIoUH6ltYuEPBft0o45KeByVytzgiFYIrW9zS3I4Y+rEx37
+	PFooUoMZF+bcSFSGgYV9/sTW2ETGfPY1F0zfuIEJQXXYKJTx27IqPDE/uhrU0X1Lk8LYwtYi/Mc
+	tfTHhiBuXUj5MyDSgdBaV+G/zNs3WwKWz0xQIlgj2Y7K3xw==
+X-Google-Smtp-Source: AGHT+IF0qAzBR+5ebXXveqzmLr/2w4QQCNXjecbTJ4SgCA/yOFBNe+rVWxWjr5FO7bLbStXLn3XERQ==
+X-Received: by 2002:a05:620a:40cb:b0:7d3:f1ff:5bac with SMTP id af79cd13be357-7d42972ce65mr495536885a.27.1750869683376;
+        Wed, 25 Jun 2025 09:41:23 -0700 (PDT)
+Received: from localhost.localdomain (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3ffdb190esm576783085a.86.2025.06.25.09.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jun 2025 09:41:23 -0700 (PDT)
+From: Alex Elder <elder@riscstar.com>
+To: lee@kernel.org,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	alexandre.belloni@bootlin.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: mat.jonczyk@o2.pl,
+	dlan@gentoo.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	troymitchell988@gmail.com,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/7] spacemit: introduce P1 PMIC support
+Date: Wed, 25 Jun 2025 11:41:11 -0500
+Message-ID: <20250625164119.1068842-1-elder@riscstar.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOoeyxVuu-kKoQa84mGOX=thAc0hnzQU8L=MnycoRRhzoZMnNw@mail.gmail.com>
 
-[...]
+The SpacemiT P1 is an I2C-controlled PMIC that implements 6 buck
+converters and 12 LDOs.  It contains a load switch, ADC channels,
+GPIOs, a real-time clock, and a watchdog timer.
 
-> > > > > > In the code above you register 6 I2C devices.  Each device will be
-> > > > > > assigned a platform ID 0 through 5. The .probe() function in the I2C
-> > > > > > driver will be executed 6 times.  In each of those calls to .probe(),
-> > > > > > instead of pre-allocating a contiguous assignment of IDs here, you
-> > > > > > should be able to use IDA in .probe() to allocate those same device IDs
-> > > > > > 0 through 5.
-> > > > > >
-> > > > > > What am I missing here?
-> > > > > >
-> > > > >
-> > > > > You're absolutely right in the scenario where a single NCT6694 device
-> > > > > is present. However, I’m wondering how we should handle the case where
-> > > > > a second or even third NCT6694 device is bound to the same MFD driver.
-> > > > > In that situation, the sub-drivers using a static IDA will continue
-> > > > > allocating increasing IDs, rather than restarting from 0 for each
-> > > > > device. How should this be handled?
-> > > >
-> > > > I'd like to see the implementation of this before advising.
-> > > >
-> > > > In such a case, I assume there would be a differentiating factor between
-> > > > the two (or three) devices.  You would then use that to decide which IDA
-> > > > would need to be incremented.
-> > > >
-> > > > However, Greg is correct.  Hard-coding look-ups for userspace to use
-> > > > sounds like a terrible idea.
-> > > >
-> > >
-> > > I understand.
-> > > Do you think it would be better to pass the index via platform_data
-> > > and use PLATFORM_DEVID_AUTO together with mfd_add_hotplug_devices()
-> > > instead?
-> > > For example:
-> > > struct nct6694_platform_data {
-> > >     int index;
-> > > };
-> > >
-> > > static struct nct6694_platform_data i2c_data[] = {
-> > >     { .index = 0 }, { .index = 1 }, { .index = 2 }, { .index = 3 }, {
-> > > .index = 4 }, { .index = 5 },
-> > > };
-> > >
-> > > static const struct mfd_cell nct6694_devs[] = {
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[0], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[1], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[2], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[3], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[4], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > >     MFD_CELL_BASIC("nct6694-i2c", NULL, &i2c_data[5], sizeof(struct
-> > > nct6694_platform_data), 0),
-> > > };
-> > > ...
-> > > mfd_add_hotplug_devices(dev, nct6694_devs, ARRAY_SIZE(nct6694_devs));
-> > > ...
-> >
-> > No, that's clearly way worse.  =:-)
-> >
-> > The clean-up that this provides is probably not worth all of this
-> > discussion.  I _still_ think this enumeration should be done in the
-> > driver.  But if you really can't make it work, I'll accept the .id
-> > patch.
-> >
-> 
-> Okay, I would like to ask for your advice regarding the implementation of IDA.
-> 
-> Using a global IDA in the sub-driver like this:
-> (in i2c-nct6694.c)
-> static DEFINE_IDA(nct6694_i2c_ida);
-> 
-> static int nct6694_i2c_probe(struct platform_device *pdev)
-> {
->     ida_alloc(&nct6694_i2c_ida, GFP_KERNEL);
->     ...
-> }
-> 
-> causes IDs to be globally incremented across all devices. For example,
-> the first NCT6694 device gets probed 6 times and receives IDs 0–5, but
-> when a second NCT6694 device is added, it receives IDs starting from
-> 6, rather than starting again from 0. This makes per-device ID mapping
-> unreliable.
-> 
-> To solve this, I believe the right approach is to have each NCT6694
-> instance maintain its own IDA, managed by the MFD driver's private
-> data. As mentioned earlier, for example:
-> (in nct6694.c)
-> struct nct6694 {
->     struct device *dev;
->     struct ida i2c_ida;
-> };
-> 
-> static int nct6694_probe(struct platform_device *pdev)
-> {
->     ...
->     ida_init(&nct6694->i2c_ida);
->     ...
-> }
-> 
-> (in i2c-nct6694.c)
-> static int nct6694_i2c_probe(struct platform_device *pdev)
-> {
->     id = ida_alloc(&nct6694->i2c_ida, GFP_KERNEL);
-> }
-> 
-> This way, each device allocates IDs independently, and each set of
-> I2C/GPIO instances gets predictable IDs starting from 0 per device. I
-> think this resolves the original issue without relying on hardcoded
-> platform IDs.
-> Please let me know if this implementation aligns with what you had in mind.
+This series introduces a multifunction driver for the P1 PMIC as well
+as drivers for its regulators and RTC.
 
-This sounds like an acceptable way forward.
+This version primarily updates the RTC code (in patch 4) based on
+review feedback.  It also adds adds a dependency in patch 2, to
+ensure the MFD_SIMPLE_MFD_I2C dependencies are met when selected.
 
+This series is available here:
+  https://github.com/riscstar/linux/tree/outgoing/pmic-v4
+
+					-Alex
+Between version 3 and version 4:
+  - I got confirmation from SpacemiT that the RTC hardware does not
+    implement the "latch" of registers as documented, and updated the
+    RTC code accordingly (looping on read)
+  - The RTC set_time() callback now returns an error value if one is
+    reported when a regmap write re-enables the RTC
+  - Renamed the RTC Kconfig option to be RTC_DRV_SPACEMIT_P1
+  - Renamed the RTC source file be "rtc-spacemit-p1.c"
+  - Replaced an RTC enumerated type with simple numeric indices
+  - A message is no longer reported when devm_rtc_register_device()
+    returns an error in the RTC driver
+  - CONFIG_MFD_SPACEMIT_P1 now depends on I2C, to avoid a build error
+        
+Here is version 3 of this series:
+  https://lore.kernel.org/linux-rtc/20250622032941.3768912-2-elder@riscstar.com/
+
+Between version 2 and version 3:
+  - Removed "spacemit-pmic.c" and updated "simple-mfd-i2c.c" instead
+  - Added an RTC driver, so that the MFD has more than one sub-device
+  - Other suggestions were directed at "spacemit-pmic.c"
+
+Here is version 2 of this series:
+  https://lore.kernel.org/lkml/20250613210150.1468845-1-elder@riscstar.com/
+
+Between version 1 and version 2:
+  - Added Reviewed-by tag from Mark Brown to patch 3
+  - Implemented suggestions from Vivian Wang:
+      - Fixed a typo in the subject line in patch 1
+      - Now use module_i2c_driver() for the PMIC driver in patch 2
+      - Added MODULE_ALIAS() for both drivers (patches 2 and 3)
+      - Defined and used DRV_NAME in both drivers
+      - Added additional Kconfig module help text for both drivers
+
+Here is version 1 of this series:
+  https://lore.kernel.org/lkml/20250613210150.1468845-1-elder@riscstar.com/
+
+Alex Elder (7):
+  dt-bindings: mfd: add support the SpacemiT P1 PMIC
+  mfd: simple-mfd-i2c: add SpacemiT P1 support
+  regulator: spacemit: support SpacemiT P1 regulators
+  rtc: spacemit: support the SpacemiT P1 RTC
+  riscv: dts: spacemit: enable the i2c8 adapter
+  riscv: dts: spacemit: define fixed regulators
+  riscv: dts: spacemit: define regulator constraints
+
+ .../devicetree/bindings/mfd/spacemit,p1.yaml  |  86 +++++++++
+ .../boot/dts/spacemit/k1-bananapi-f3.dts      | 138 ++++++++++++++
+ arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  |   7 +
+ arch/riscv/boot/dts/spacemit/k1.dtsi          |  11 ++
+ drivers/mfd/Kconfig                           |  11 ++
+ drivers/mfd/simple-mfd-i2c.c                  |  18 ++
+ drivers/regulator/Kconfig                     |  12 ++
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/spacemit-p1.c               | 157 ++++++++++++++++
+ drivers/rtc/Kconfig                           |  10 ++
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-spacemit-p1.c                 | 169 ++++++++++++++++++
+ 12 files changed, 621 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/spacemit,p1.yaml
+ create mode 100644 drivers/regulator/spacemit-p1.c
+ create mode 100644 drivers/rtc/rtc-spacemit-p1.c
+
+
+base-commit: 1b152eeca84a02bdb648f16b82ef3394007a9dcf
 -- 
-Lee Jones [李琼斯]
+2.45.2
+
 
