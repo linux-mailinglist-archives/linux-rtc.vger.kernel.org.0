@@ -1,156 +1,132 @@
-Return-Path: <linux-rtc+bounces-4434-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4435-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2FF4AFAF87
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 11:22:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8A14AFAF93
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 11:23:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34A63BA611
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 09:21:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DE1417A26E
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 09:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E1028D849;
-	Mon,  7 Jul 2025 09:22:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6ED28D8FB;
+	Mon,  7 Jul 2025 09:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y0i7U9zH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAhay+Pu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE2E1DEFE8
-	for <linux-rtc@vger.kernel.org>; Mon,  7 Jul 2025 09:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FED35949;
+	Mon,  7 Jul 2025 09:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751880131; cv=none; b=rZ21wq9i53haFC3i0I5ZNfjLP0A4l+UHaoI/SVhvXiHyo1YSYzeoJbsqk6TzF8jN+jzVEr8whNF2L9TUL+U0woaYHoq+xjeMkAOxyT8aLNxnUoIUJbgD/SlVhqkyh55G+ZqmO3DXG4xIS6Or8HQwyqECw6Xv+Gz+uVZ9nPJQcXQ=
+	t=1751880194; cv=none; b=pWxnk/INvxGKlwtuXga4VRQati+ns3hecsFgxuhoK8RRfpo/TjsGw4TThX3EeToVdtEGogDWe6537326qIV1y346gDpGmuMF/EqW5mU+xK8fx4hx79iAyPzUlPd7hb3Z4weh1axfxh/r6lzcKe7JeoPTAwXkIgTbQuk5XlGw944=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751880131; c=relaxed/simple;
-	bh=9CBiR9TOWCnKgNQi8KK+PKvJFP1JysS8i8mIWb+NpbM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i5x0QhMbdW24K/oeZCMrvba9FjPFHKp3d9q14sp18cQu2Nyc2yMPJ43f3SB3kJBab2GYofO0mDuybUETT0Vzu1qv9S60niiWgU30tyVQP/5W/pN9NfvaVkikRnFXfBi4upvFOwUAhvnUFEb77yL94NnFn+lplCBJS7JEdih2pDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y0i7U9zH; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a4f64cdc2dso419875f8f.1
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Jul 2025 02:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751880128; x=1752484928; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/RGT5HGBF+8VjhFRui57jjPUPIu0aezjJFq6MnGr2Q=;
-        b=Y0i7U9zHjV3m9cOBRDDBSijrVlffvSqGB9Em/ZPdOhU4XpFVWKPV8ohOWFiG2cOVKG
-         F7jeMDh+gW23wy4r/pVVZ7OKWQku79w9DG9OjROr1oD+WpfB1CGGJK2PlQvWxO/1f9FN
-         HrN3sNOKcMjPkftjbiFpOJ+XfYJ+uwAjU1kdmKtsUDJiNqo/Q1gwhVbDSFL1i7mPl7gS
-         90cIGxj5rRcNVo/wa9WnKCLSnibsSSOtAxW9VKP875uqzcqtxjFjgC62XScQWUuMqdDJ
-         m6DR9tW2W4h0de4j2y97RpV98BmS1hV5PgAaAHWr1xxz9EfRJGOraa8ZxeVFvzrZo2/O
-         vqrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751880128; x=1752484928;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X/RGT5HGBF+8VjhFRui57jjPUPIu0aezjJFq6MnGr2Q=;
-        b=LJDRyUHus8Ctw3n0GwiDlbU4W3/4czJyDdJFrKt4DCLA2CTGK5g+1+99CNLcMI7Id7
-         BqMu45QAccvollr70fvIiCz2OiRVzoDSDZoR5VDiitZ+lEgbg9hebr3m1Wei7cDN+IU0
-         yZsDWiiU4bFsNfXdIt2Ni6YwG9Ts/R5onpNNgFDBRtf+Z1m8LY+1GMpdMk8ke6zHPEP2
-         EKVG5O8X8mE1psuQWnBZ3zrpbYUxc2X1BY0A6rKXE8uRI3Z/JDOZNeaff5CUhZAf55yg
-         t0wVz8v69PKfs64MdzhWIp8ndFY1DacqtzHg75PuNbfApfFvx0qIfoXC3gO/pk2k8uH8
-         TFIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCEOibqjEKfq+IV10ruvRSYzEK1Ghi4GFbcfA+t6MVljlIo0x2atA4LRdPIHpxbC4RLhGDKvdmE5Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHvpun2OP67nOVlF/F2kZnXOa93YyFUMIq0bXxtJGsV1ipuOhg
-	uusxHTsb0yhNIwUhDRba5czq7Z+IYFxMWmn+/5aLCU7XBIwLOBJoh7o0pXk9kgtj4iQ=
-X-Gm-Gg: ASbGncumDIorb1qPUJyGLkCct3EfYyrKqOopCm6v6SGVyLdGAB2wCvABuUtxLu1u16l
-	jQEowSD33BuHQ+KazW6FjlK1KszSD4eBUjafwWawsD325tKRsC2MgiFVUAv2lzy2TSDr6B4/xpT
-	jFEbbP7IHP2duOTRM0ajCsItcJZqxIhbL97TCieRJCJxeb2WodzY7h6FJEWrEyBffJa2BS+k8sp
-	LM2/j8wnSJWrfgByn+atKvVBQFtfDHq8QbPB7ab45vjbDw6aIet1tCvgyAZsI/hRZacArDqTaT7
-	SOx5lIelAomUgJGoFe34ZRIPkaFL1SlbaBH9qzZQRJJ409U7Kvar5qHYDOO2Ulh9sh2oRiHTWD8
-	=
-X-Google-Smtp-Source: AGHT+IEmtBu6YeZKoKQoiegI8X/Gknyma+eZ6JqiTsHUQ2DPjssPW5sDnI5kUumTkTjFeRMOXlB7pA==
-X-Received: by 2002:a05:6000:2582:b0:3a3:5c97:70c with SMTP id ffacd0b85a97d-3b49660cf7fmr3536908f8f.14.1751880127510;
-        Mon, 07 Jul 2025 02:22:07 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.222.89])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b470caa1b3sm9453446f8f.43.2025.07.07.02.22.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 02:22:06 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	dev.tailor@samsung.com
-Subject: [PATCH] rtc: s3c: Put 'const' just after 'static' keyword for data
-Date: Mon,  7 Jul 2025 11:22:01 +0200
-Message-ID: <20250707092200.48862-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1751880194; c=relaxed/simple;
+	bh=RbxFgpIxXrfafCP6i22oEUkI/RIpYVuECfRa8OxdDjI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Sdrk3jxH95FteSpYonPWXH/PSD6C2JFEr/Z0SY7YvQf4pEB0OLXEYTt7fxcyITsBeN4Lp58j760PAvbhPIkB2+/ndjyCWQ2d6PR5qIYOkGsz2MRLIgu9Ws88DMXlmubqgLEbBC2kd5kILzon1GM+bDf4TG3QtHj7nGCVAviJ9ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAhay+Pu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CABEC4CEE3;
+	Mon,  7 Jul 2025 09:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751880193;
+	bh=RbxFgpIxXrfafCP6i22oEUkI/RIpYVuECfRa8OxdDjI=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=JAhay+PuU3zrEqQR5yZbH19YArapVD+FeG2ljrXb5m5ROj5NGPTArQBmH7x5ycfOy
+	 LIPUCzuX128X7eE/peBSebV3mS3iiochl+RirD6dfvCdwPpb4K1tnf8wHS8algGM+7
+	 EYFyHHJwQbpwInkjpbsB26NKNFPTygAK8zNRRZ8GGl08Hr4NnGpPqCO/A6v3PdFDNY
+	 CQWroJyESwTQNlrVlA1+/UMSmay91kpzczxpsvtt0xTglmOO2kj7td4wz5A1fFTkke
+	 M6K1FPcHBiOrs1wSz5xX0OkrVi9pPBP1VPszos7c2CmWURlY6mD6HFJmRcQevlXGPN
+	 L9efGblZQgGAg==
+Message-ID: <46fb0a9d-be33-46c6-98d1-501970ec8e7a@kernel.org>
+Date: Mon, 7 Jul 2025 11:23:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1548; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=9CBiR9TOWCnKgNQi8KK+PKvJFP1JysS8i8mIWb+NpbM=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoa5G5aTFUfeFtggW4NUSSXknQqlLnRJGeXM5E4
- 0cN6JK6DeaJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaGuRuQAKCRDBN2bmhouD
- 1znpD/9Duh8C60/047e8drJ3MdCrHRGwxIIHp5ZZi1uwZ5cb7XVJoHylKxZso4Oey3EH2Xxw9/O
- jtQlJ1VgP386O73+AUMMUs40Y9tnZtpAZFzjpKHALNSeDeCgjnZyLKt1vZjsi6V8c+45Z9UcBVt
- 1IpulK7zTzW8ZZj4HuK737DgEQdDsRe9APMxSvB2gXaq9iQ9CkB+f8DOYcNf/rqR2XMoAcl5K9M
- FWTfnFW4VrJv98M+a/P+kU6EtbZw7IbMDdZF4sI4FgOSWvY0hp9X5Cad/64JPUfZ9VaXD0qONkD
- k/I0mfQiBUstgIO8PVmqtbwgFQn7bzU5eutyvNat3KaJWtH3kH8KKMwte84BCmg9NGI6L7EfqBZ
- aLgb6UFyIJf/gleef5gsbL/vJSEg1VutSNenIiY6OfVA4LqDlG4rRD3LV10ivWa/mqjD6x6gpkV
- v+D2RHivRiMGoZSxzDb3GUmkc9xt+0MlVameleYkEea6o3J8vosHNZrYQYZ8CirZ9a0y7k2v6CX
- jDHmbR7Dkyu4V6fSRaJ2BYIKWAMigPL+E5Vo4UfFPGqp2hT/jREW4e3XNVkFJ0F5haXjsby7GgT
- lttMLV9FBlG5HduFM52TGHCwpF6jwF10OoimHMKInqhf8nv9ChDCdt3TEjIptFOaoUbxTyGfmMm Pv6dcfhYyLtyAHQ==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] arm64: dts: exynosautov9: add RTC DT node
+To: Devang Tailor <dev.tailor@samsung.com>, alexandre.belloni@bootlin.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ alim.akhtar@samsung.com, linux-rtc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ inux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ faraz.ata@samsung.com
+References: <20250702052426.2404256-1-dev.tailor@samsung.com>
+ <CGME20250702051533epcas5p28698c81b7ec141938f8808393c498cb7@epcas5p2.samsung.com>
+ <20250702052426.2404256-4-dev.tailor@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250702052426.2404256-4-dev.tailor@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Convention is to define static data as 'static const ...', not 'static
-... const' because of readability, even if the code is functionally
-equal.
+On 02/07/2025 07:24, Devang Tailor wrote:
+> --- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
+> @@ -1633,6 +1633,16 @@ pwm: pwm@103f0000 {
+>  			clock-names = "timers";
+>  			status = "disabled";
+>  		};
+> +
+> +		rtc: rtc@10540000 {
+> +			compatible = "samsung,exynosautov9-rtc";
+> +			reg = <0x10540000 0x100>;
+> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
+> +				<GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
+Misaligned. Should match earlier '<'.
 
-Cc: dev.tailor@samsung.com
----
- drivers/rtc/rtc-s3c.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c
-index 5dd575865adf..79b2a16f15ad 100644
---- a/drivers/rtc/rtc-s3c.c
-+++ b/drivers/rtc/rtc-s3c.c
-@@ -549,25 +549,25 @@ static void s3c6410_rtc_irq(struct s3c_rtc *info, int mask)
- 	writeb(mask, info->base + S3C2410_INTP);
- }
- 
--static struct s3c_rtc_data const s3c2410_rtc_data = {
-+static const struct s3c_rtc_data s3c2410_rtc_data = {
- 	.irq_handler		= s3c24xx_rtc_irq,
- 	.enable			= s3c24xx_rtc_enable,
- 	.disable		= s3c24xx_rtc_disable,
- };
- 
--static struct s3c_rtc_data const s3c2416_rtc_data = {
-+static const struct s3c_rtc_data s3c2416_rtc_data = {
- 	.irq_handler		= s3c24xx_rtc_irq,
- 	.enable			= s3c24xx_rtc_enable,
- 	.disable		= s3c24xx_rtc_disable,
- };
- 
--static struct s3c_rtc_data const s3c2443_rtc_data = {
-+static const struct s3c_rtc_data s3c2443_rtc_data = {
- 	.irq_handler		= s3c24xx_rtc_irq,
- 	.enable			= s3c24xx_rtc_enable,
- 	.disable		= s3c24xx_rtc_disable,
- };
- 
--static struct s3c_rtc_data const s3c6410_rtc_data = {
-+static const struct s3c_rtc_data s3c6410_rtc_data = {
- 	.needs_src_clk		= true,
- 	.irq_handler		= s3c6410_rtc_irq,
- 	.enable			= s3c24xx_rtc_enable,
--- 
-2.43.0
-
+Best regards,
+Krzysztof
 
