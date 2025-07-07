@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-4435-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4436-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A14AFAF93
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 11:23:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E65D3AFAF99
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 11:24:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DE1417A26E
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 09:23:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F41563BC4E2
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jul 2025 09:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6ED28D8FB;
-	Mon,  7 Jul 2025 09:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9D128FFE2;
+	Mon,  7 Jul 2025 09:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAhay+Pu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CC2u+/63"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FED35949;
-	Mon,  7 Jul 2025 09:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2E928FAB7;
+	Mon,  7 Jul 2025 09:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751880194; cv=none; b=pWxnk/INvxGKlwtuXga4VRQati+ns3hecsFgxuhoK8RRfpo/TjsGw4TThX3EeToVdtEGogDWe6537326qIV1y346gDpGmuMF/EqW5mU+xK8fx4hx79iAyPzUlPd7hb3Z4weh1axfxh/r6lzcKe7JeoPTAwXkIgTbQuk5XlGw944=
+	t=1751880238; cv=none; b=Ojm5Ovs8HudumuenjVnnJ57ekfNRXzAwPDRYjuTZ9Y7ZMPuX0pTe6QmzoUGfwUQWvSde2advel6/cjRY0eZonqWiDVXw2YV468aEElFBFEy8rZd4nwz+e7NV+GnuJ2T9EyeQddyWBAn+mogOqNUut7/C6WZR5rfD1LtvrdQU4fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751880194; c=relaxed/simple;
-	bh=RbxFgpIxXrfafCP6i22oEUkI/RIpYVuECfRa8OxdDjI=;
+	s=arc-20240116; t=1751880238; c=relaxed/simple;
+	bh=dUD/W+kkqMmrTrDP9/CpUATKT8y8QfS9afWEsSm07Eo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Sdrk3jxH95FteSpYonPWXH/PSD6C2JFEr/Z0SY7YvQf4pEB0OLXEYTt7fxcyITsBeN4Lp58j760PAvbhPIkB2+/ndjyCWQ2d6PR5qIYOkGsz2MRLIgu9Ws88DMXlmubqgLEbBC2kd5kILzon1GM+bDf4TG3QtHj7nGCVAviJ9ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAhay+Pu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CABEC4CEE3;
-	Mon,  7 Jul 2025 09:23:10 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=QQ7J32VIrnxlX5ocJ1NTlPV5GCK5yu1s2LjoyqkUGULXp+7xoWg2+798mLVIZySIrIo8MnGWhHvLzJLU0hwolQPtrXJit7yXPLwN3OWeYdjoiylGSfUHx9d8q4CL9mAmNeKOdeuAEKRjNBvSVZ15LYL8o+jaAVVl1nyPngVRLtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CC2u+/63; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44606C4CEF5;
+	Mon,  7 Jul 2025 09:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751880193;
-	bh=RbxFgpIxXrfafCP6i22oEUkI/RIpYVuECfRa8OxdDjI=;
+	s=k20201202; t=1751880237;
+	bh=dUD/W+kkqMmrTrDP9/CpUATKT8y8QfS9afWEsSm07Eo=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=JAhay+PuU3zrEqQR5yZbH19YArapVD+FeG2ljrXb5m5ROj5NGPTArQBmH7x5ycfOy
-	 LIPUCzuX128X7eE/peBSebV3mS3iiochl+RirD6dfvCdwPpb4K1tnf8wHS8algGM+7
-	 EYFyHHJwQbpwInkjpbsB26NKNFPTygAK8zNRRZ8GGl08Hr4NnGpPqCO/A6v3PdFDNY
-	 CQWroJyESwTQNlrVlA1+/UMSmay91kpzczxpsvtt0xTglmOO2kj7td4wz5A1fFTkke
-	 M6K1FPcHBiOrs1wSz5xX0OkrVi9pPBP1VPszos7c2CmWURlY6mD6HFJmRcQevlXGPN
-	 L9efGblZQgGAg==
-Message-ID: <46fb0a9d-be33-46c6-98d1-501970ec8e7a@kernel.org>
-Date: Mon, 7 Jul 2025 11:23:09 +0200
+	b=CC2u+/630TZUNgJkmv/ez9oTw6tZnzF7Q2p0NbXcUzgE5MLASAmnfp1aKECDNjEUr
+	 aHevfbQMx2c7gqPBGrNs61XB8QsGJfRsg/ApyhmU6THSu4Sl5eU4h7VMuvL5edBc+N
+	 eE8LclM3FNFK03N5PQ8BnkHrU4WHAHRpFO94Q2FTMuVHlZtqfHunDJBCyShitzwV3Q
+	 LqSyQqEGwEhfmxE5W/FbJq3s4hJPU5ST7CRV0y3tC3HQsCpV6ZtOfP07GvW46yWaZm
+	 MGDPDbm+xG7IIOcmVCYtznSt/oYoeCiKpr8aIQjqjqSwvVOlC5u5onCH0G8wjLAyGm
+	 cKc++BdPtMx1Q==
+Message-ID: <3c794a74-30d6-4a16-8bdb-4345b3b5e453@kernel.org>
+Date: Mon, 7 Jul 2025 11:23:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: exynosautov9: add RTC DT node
+Subject: Re: [PATCH 2/3] rtc: s3c: support for exynosautov9 on-chip RTC
 To: Devang Tailor <dev.tailor@samsung.com>, alexandre.belloni@bootlin.com,
  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  alim.akhtar@samsung.com, linux-rtc@vger.kernel.org,
@@ -58,8 +58,8 @@ To: Devang Tailor <dev.tailor@samsung.com>, alexandre.belloni@bootlin.com,
  inux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  faraz.ata@samsung.com
 References: <20250702052426.2404256-1-dev.tailor@samsung.com>
- <CGME20250702051533epcas5p28698c81b7ec141938f8808393c498cb7@epcas5p2.samsung.com>
- <20250702052426.2404256-4-dev.tailor@samsung.com>
+ <CGME20250702051532epcas5p381e97531e4df64f556e8aba86c5532d9@epcas5p3.samsung.com>
+ <20250702052426.2404256-3-dev.tailor@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,26 +105,64 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250702052426.2404256-4-dev.tailor@samsung.com>
+In-Reply-To: <20250702052426.2404256-3-dev.tailor@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 02/07/2025 07:24, Devang Tailor wrote:
-> --- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> +++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-> @@ -1633,6 +1633,16 @@ pwm: pwm@103f0000 {
->  			clock-names = "timers";
->  			status = "disabled";
->  		};
+> The on-chip RTC of this SoC is almost similar to the previous
+> versions of SoC. Hence re-use the existing driver with platform specific
+> change to enable RTC.
+> 
+> This has been tested with 'hwclock' & 'date' utilities
+> 
+> Signed-off-by: Devang Tailor <dev.tailor@samsung.com>
+> ---
+>  drivers/rtc/rtc-s3c.c | 26 ++++++++++++++++++++++++++
+>  drivers/rtc/rtc-s3c.h |  4 ++++
+>  2 files changed, 30 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c
+> index 5dd575865adf..00686aa805f2 100644
+> --- a/drivers/rtc/rtc-s3c.c
+> +++ b/drivers/rtc/rtc-s3c.c
+> @@ -384,6 +384,23 @@ static void s3c6410_rtc_disable(struct s3c_rtc *info)
+>  	writew(con, info->base + S3C2410_RTCCON);
+>  }
+>  
+> +static void exynosautov9_rtc_disable(struct s3c_rtc *info)
+> +{
+> +	unsigned int con;
 > +
-> +		rtc: rtc@10540000 {
-> +			compatible = "samsung,exynosautov9-rtc";
-> +			reg = <0x10540000 0x100>;
-> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
+> +	con = readb(info->base + S3C2410_RTCCON);
+> +	con &= ~S3C2410_RTCCON_RTCEN;
+> +	writeb(con, info->base + S3C2410_RTCCON);
+> +
+> +	con = readb(info->base + EXYNOSAUTOV9_TICCON0);
+> +	con &= ~EXYNOSAUTOV9_TICCON_TICEN;
+> +	writeb(con, info->base + EXYNOSAUTOV9_TICCON0);
+> +
+> +	con = readb(info->base + EXYNOSAUTOV9_TICCON1);
+> +	con &= ~EXYNOSAUTOV9_TICCON_TICEN;
+> +	writeb(con, info->base + EXYNOSAUTOV9_TICCON1);
 
+You clear these bits during disable, but why aren't they set during
+enable? Why is this asymmetric? This should be clearly explained, but
+both commit msg and code is completely silent.
 
-Misaligned. Should match earlier '<'.
+> +}
+> +
+>  static void s3c_rtc_remove(struct platform_device *pdev)
+>  {
+>  	struct s3c_rtc *info = platform_get_drvdata(pdev);
+> @@ -574,6 +591,12 @@ static struct s3c_rtc_data const s3c6410_rtc_data = {
+>  	.disable		= s3c6410_rtc_disable,
+>  };
+>  
+> +static struct s3c_rtc_data const exynosautov9_rtc_data = {
+
+Please put const after static.
+
 
 
 Best regards,
