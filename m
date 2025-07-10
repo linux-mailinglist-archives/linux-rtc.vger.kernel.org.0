@@ -1,117 +1,153 @@
-Return-Path: <linux-rtc+bounces-4449-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4450-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AA30AFFC97
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 10:42:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5547EAFFE00
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 11:24:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BD7F3A5A61
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 08:41:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9E101657B9
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 09:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4355C28C86E;
-	Thu, 10 Jul 2025 08:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51223292B33;
+	Thu, 10 Jul 2025 09:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XBjU60O1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="beM95PWF"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D79E28373;
-	Thu, 10 Jul 2025 08:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A6E220F32;
+	Thu, 10 Jul 2025 09:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752136919; cv=none; b=q0x6l1sBt8ODLnn8D1Pvsfb9dOEy8Pw+g0hk/tSOW57VepMGaa3mBJokWnDdTCDyqwI41RzNDN3qe4aVbNduT53l+JFgpJMNfOU8ZfE6vgFQKFIsvzQyCfkcBoZt3DN7+CfbHTpWNA67HZVxZBEnf7JI4eJGMuyXMx+UFMDocBc=
+	t=1752139496; cv=none; b=LDduIhkvv0DHGC4y8y0KDEHWudwdTQobCsphzr7ZgYysBBUoBbq/SCZKPFxrNFP3xOvQiCp+3b97YtMBvtqZXxsEUKQqBCjnOa5ffXWM3Za4C8/KdADMoLOy5Ku6wTxT5swEERb+kFoiGR75eNjWgGSn8ldB+37s7YevNPco0MI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752136919; c=relaxed/simple;
-	bh=AA4Ywq7KY2+V+Zzfmm2hAUDAzJGZoYY6D0W4ynbHcw8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KfuwNbsP31XJE8l9L3PAgACdhOdOLczLmveQEIUcb+Nm4kNu9hWGond/wGFfKAHCOzPf7dzJeRClOhnNpuOFcS6uO+IENYq6Iyi6hbu6L2oyWCaWYMNaTSm3OR0557j5XG3indivfgKVF9tDXGXZvXTlE/te/2+7iwgDQ9XhyK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XBjU60O1; arc=none smtp.client-ip=115.124.30.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1752136912; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=fOwodtsOCTSdpblsnNXl1eGkH4855D/djDIb5y7d688=;
-	b=XBjU60O1NQtFt26U9eHzOtoAYVLIkxfwY410KaOr43MU9GPnsOmsprKGIexVnY5AqMIjzjhvrWbc68+dIeMdDmHbvfDIfItcCT0viZt0+p8g3jNo4a+E3ccKLxrLsWMrdpxiTI9WLi3MgP0LU4NnH5v2EPZ8me2NfwN45P0brzE=
-Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0WicApMn_1752136911 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 10 Jul 2025 16:41:52 +0800
-From: Feng Tang <feng.tang@linux.alibaba.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-rtc@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Feng Tang <feng.tang@linux.alibaba.com>
-Subject: [PATCH] rtc: efi: Add runtime check for the wakeup service capability
-Date: Thu, 10 Jul 2025 16:41:51 +0800
-Message-Id: <20250710084151.55003-1-feng.tang@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	s=arc-20240116; t=1752139496; c=relaxed/simple;
+	bh=/45peu3NvT7yg087IQ10UDKJ5n9K7DKeEA4oRGGZWNs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cb8xeyt0RqnYWZmPIrZYN6H4VwXT5wl5sMP8bKQQTQBH7X4FEemcg9dwQI9g2dr3BRNTFn73uc0TfqH9aGDIFO0Wf2hOCogVkMxBAzazET77ZgLHycq3sF90inxmZZGQqiZsD8bOI2dC7So6ksH3qtjqFIh97rychZmuKe78yqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=beM95PWF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342BCC4CEE3;
+	Thu, 10 Jul 2025 09:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752139495;
+	bh=/45peu3NvT7yg087IQ10UDKJ5n9K7DKeEA4oRGGZWNs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=beM95PWFxm2r486Twz81PQr1zgS6iAhoqDAROgBDSunXl2Jk6Xvp0H+VJRCHzyHQo
+	 M/c4RCCLAP2NCCfTSNLWmshbUligbKhEOSp2/fCNFybUXute9W1QUmHtRfKgl27hCx
+	 IUKVxDp4wmeG2KRc3OHddX1vmyOO7plwaMEo6GGBohhBqtRHjnOvANs4aEnki1HvwI
+	 hxyZ+WzH2wI6/L3ed2aw1ufFFH1T7eta+t47f1IjNSdwxdoWaPyMFSvzDEqdFNS7ZO
+	 Q4S2W7aZIz9K2WvKFfUeJBZvhP19jpJEySqYllU57zaABJMag+g19Ngw4yOyGn5+z+
+	 DgLlLSkPv8F7g==
+Date: Thu, 10 Jul 2025 10:24:48 +0100
+From: Lee Jones <lee@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	troymitchell988@gmail.com, guodong@riscstar.com,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/8] mfd: simple-mfd-i2c: specify max_register
+Message-ID: <20250710092448.GA1431498@google.com>
+References: <20250702213658.545163-1-elder@riscstar.com>
+ <20250702213658.545163-3-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250702213658.545163-3-elder@riscstar.com>
 
-The kernel selftest of rtc reported a error on an ARM server which
-use rtc-efi device:
+On Wed, 02 Jul 2025, Alex Elder wrote:
 
-	RUN           rtc.alarm_alm_set ...
-	rtctest.c:262:alarm_alm_set:Alarm time now set to 17:31:36.
-	rtctest.c:267:alarm_alm_set:Expected -1 (-1) != rc (-1)
-	alarm_alm_set: Test terminated by assertion
-		 FAIL  rtc.alarm_alm_set
-	not ok 5 rtc.alarm_alm_set
+> All devices supported by simple MFD use the same 8-bit register
+> 8-bit value regmap configuration.  There is an option available
+> for a device to specify a custom configuration, but no existing
+> device uses it.
+> 
+> Rather than specify a "full" regmap configuration to use this
+> option, Lee Jones suggested allowing just the max_register value
+> to be specified in the simple_mfd_data structure.
+> 
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+> Suggested-by: Lee Jones <lee@kernel.org>
+> ---
+> v2: - Allow max_register *and* regmap_config to be supplied
+> 
+>  drivers/mfd/simple-mfd-i2c.c | 15 ++++++++++++---
+>  drivers/mfd/simple-mfd-i2c.h |  1 +
+>  2 files changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> index 22159913bea03..3f959f4f98261 100644
+> --- a/drivers/mfd/simple-mfd-i2c.c
+> +++ b/drivers/mfd/simple-mfd-i2c.c
+> @@ -33,16 +33,25 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+>  {
+>  	const struct simple_mfd_data *simple_mfd_data;
+>  	const struct regmap_config *regmap_config;
 
-The root cause is, the underlying EFI firmware doesn't support wakeup
-service (get/set alarm), while it doesn't have the EFI RT_PROP table
-either. As Ard Biesheuvel clarified [1], this breaks the UEFI spec,
-which requires EFI firmware to provide a 'RT_PROP' table if it doesn't
-support all runtime services (Section 4.6.2, UEFI spec 2.10).
+> +	struct regmap_config config;
 
-This issue was also reproduced on ARM server from another vendor, which
-doesn't have RT_PROP table either. This means, in real world, there are
-quite some platforms having this issue, that it doesn't support wakeup
-service while not providing a correct RT_PROP table, which makes it
-wrongly claimed to support it.
+Why do we need another regmap_config?
 
-Add a runtime check for the wakeup service to detect and correct this
-kind of cases.
+Can't we just remove the const and make use of the one above?
 
-[1]. https://lore.kernel.org/lkml/CAMj1kXEkzXsjm0dPhzxB+KdtzqADd4NmafKmw2rKw7mAPBrgdA@mail.gmail.com/
+>  	struct regmap *regmap;
+>  	int ret;
+>  
+>  	simple_mfd_data = device_get_match_data(&i2c->dev);
+>  
+>  	/* If no regmap_config is specified, use the default 8reg and 8val bits */
+> -	if (!simple_mfd_data || !simple_mfd_data->regmap_config)
+> +	if (simple_mfd_data) {
+> +		if (simple_mfd_data->regmap_config)
+> +			config = *simple_mfd_data->regmap_config;
 
-Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
----
- drivers/rtc/rtc-efi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+			regmap_config = simple_mfd_data->regmap_config;
 
-diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
-index fa8bf82df948..8d1b9bde6f66 100644
---- a/drivers/rtc/rtc-efi.c
-+++ b/drivers/rtc/rtc-efi.c
-@@ -259,6 +259,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
- 	struct rtc_device *rtc;
- 	efi_time_t eft;
- 	efi_time_cap_t cap;
-+	efi_bool_t enabled, pending;
- 
- 	/* First check if the RTC is usable */
- 	if (efi.get_time(&eft, &cap) != EFI_SUCCESS)
-@@ -272,7 +273,8 @@ static int __init efi_rtc_probe(struct platform_device *dev)
- 
- 	rtc->ops = &efi_rtc_ops;
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
--	if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
-+	if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES) &&
-+		efi.get_wakeup_time(&enabled, &pending, &eft) == EFI_SUCCESS)
- 		set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
- 	else
- 		clear_bit(RTC_FEATURE_ALARM, rtc->features);
+> +		else
+> +			config = regmap_config_8r_8v;
+
+			regmap_config = &regmap_config_8r_8v;
+> +
+> +		if (simple_mfd_data->max_register)
+> +			config.max_register = simple_mfd_data->max_register;
+> +		regmap_config = &config;
+> +	} else {
+>  		regmap_config = &regmap_config_8r_8v;
+
+I suspect we don't need to have this line twice.
+
+Either re-jig the if () above (I suspect this explains the existing
+complexity [multiple conditions]) or pre-set regmap_config to
+regmap_config_8r_8v and only over-write it if the conditions are met.
+
+> -	else -		regmap_config = simple_mfd_data->regmap_config;
+> +	}
+>  
+>  	regmap = devm_regmap_init_i2c(i2c, regmap_config); if
+>  	(IS_ERR(regmap)) diff --git a/drivers/mfd/simple-mfd-i2c.h
+>  	b/drivers/mfd/simple-mfd-i2c.h index
+>  	7cb2bdd347d97..706b6f53155ff 100644 ---
+>  	a/drivers/mfd/simple-mfd-i2c.h +++
+>  	b/drivers/mfd/simple-mfd-i2c.h @@ -27,6 +27,7 @@ struct
+>  	simple_mfd_data { const struct regmap_config *regmap_config;
+>  	const struct mfd_cell *mfd_cell; size_t mfd_cell_size; +
+>  	unsigned int max_register; };
+>  
+>  #endif /* __MFD_SIMPLE_MFD_I2C_H */ -- 2.45.2
+> 
+
 -- 
-2.39.5 (Apple Git-154)
-
+Lee Jones [李琼斯]
 
