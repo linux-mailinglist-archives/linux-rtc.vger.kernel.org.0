@@ -1,121 +1,117 @@
-Return-Path: <linux-rtc+bounces-4448-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4449-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03BB2AFF98E
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 08:18:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AA30AFFC97
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 10:42:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CA6416E000
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 06:16:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BD7F3A5A61
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jul 2025 08:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BAF5288C27;
-	Thu, 10 Jul 2025 06:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4355C28C86E;
+	Thu, 10 Jul 2025 08:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zkU2IP7u"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XBjU60O1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A9E2882B9
-	for <linux-rtc@vger.kernel.org>; Thu, 10 Jul 2025 06:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D79E28373;
+	Thu, 10 Jul 2025 08:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752128010; cv=none; b=HxNpeVbemW+WKe6SNSh3M9U0I8N8t4VG3WGQVWLE9fVXXmQ3abcoe12KifQCrWxj4FONkvMHIAEyW96bUsqfD6tHYHqA1ul1nDwlJl7h65U62qlDAyfjfymovaT1e1cYyelgmRyS2l+QLk3XOqJfwZgAJwi9sy4G9hpu8QO8FwM=
+	t=1752136919; cv=none; b=q0x6l1sBt8ODLnn8D1Pvsfb9dOEy8Pw+g0hk/tSOW57VepMGaa3mBJokWnDdTCDyqwI41RzNDN3qe4aVbNduT53l+JFgpJMNfOU8ZfE6vgFQKFIsvzQyCfkcBoZt3DN7+CfbHTpWNA67HZVxZBEnf7JI4eJGMuyXMx+UFMDocBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752128010; c=relaxed/simple;
-	bh=8z/J1LwddlPoVhpvDuP4Jjqir3C1G5kWxc1+n6Juhwc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S6+NcuwxcrztDx2hSfeWbCgQjtGDR8gmObjJbxO9VhAKBkqfvJOp0s1j2hugsInCyJ4acy8ec/yZGImxd8IyhJMKblelFJhqDQBJUBuNgyg3Q18pTtokw13Suay2FLaJkiMJwljnge8WQ8GBHOyJgMP1ylh0n0Yk42HfzC1ltTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zkU2IP7u; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-451e2f0d9c2so5266125e9.1
-        for <linux-rtc@vger.kernel.org>; Wed, 09 Jul 2025 23:13:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752128007; x=1752732807; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8z/J1LwddlPoVhpvDuP4Jjqir3C1G5kWxc1+n6Juhwc=;
-        b=zkU2IP7ujYqTyGGOEW3gmH5SnilvbRve8qYvn3zZuWyRFLoCp5r16oqHfTezj9RUKv
-         eaBQHBxucWJ691nq6t1XjB618YgEzZgsb3R3GgBmoI0VpHQwL8JY3coW3F5Td43x0NDs
-         LkZplLhz4oDR9SyW0DSMmEN8ShddZ+cSR1E49p8tT2p3oPpEloCx+AUYxR3wFmDKNqhJ
-         9VmSzjIppD2gIZ1LHomX+CyTD1Ug7kntwFqN+DP1J4W5nghXPcx8a5wNPryWoBbfJ/oo
-         TQGdLOtz3y0TtkF9eT7Tm9V2dQjol6TF02lOrzH5NYVT737tEDq/bNIs/v/KSJc4fZk9
-         /QVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752128007; x=1752732807;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8z/J1LwddlPoVhpvDuP4Jjqir3C1G5kWxc1+n6Juhwc=;
-        b=vmP6Jmu/B4Zwbn7MAohK6EiNO//TABCLAdmUmqSNfvD33pMvzPVtzLEh07Cx5tIhdl
-         J9muG0rj0pHfoLbEIvsFhAf1r+WifNPxZRb55pf+/PqSqq97VAbn4ZH4BGcR/aKZ06F6
-         5mpKhyzo8VK2gX+xrTgaAGhRwE+tcQA9OCD9N8JbSna3P6gCm3mz75yaHhpt4KxRHQAA
-         cjJufQH+kXN+Dr3Ye9PuhNrGCrJUvzptuQjul9l2kBU4Sl7l9ziMh4aVCBBTX0PGjz6v
-         BFmoKt4TKxRo4kqCvamFGkZQ+0QItSVXHVYdS/T9nvSUd87Qh7NNZGkLI4AWhA+6P0zk
-         HE5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ/HOJcyuxvr/ICf0vyurD5rL6JC9rJo8+uxEMoWotsSVjC+w3vVF5MhnTZHe1RoSGABbfLD/P+hs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvZgZnL74u4cbyF7d0YVrtF3pRh4nZNVtXWAiIMp7/vWVV9GGH
-	uiaXcKAF7fksKLHOwvL1kCKdXGzSFLY7aTGH2F3deAPF9mlsYhfj/YVFDfWNm6xkv1A=
-X-Gm-Gg: ASbGncs3BmFft88tcu5BgpSZxVxyIM08xWgG3FIGFTUb2JFbO/ga/c7L77pw/kxC1+W
-	AQiYuMCP3G1IOBRR4MV0JD7idHI+6SdU8svkC0zG7pKZg3v8cq8nGw5Nhj/b5oUcloUk9650cmV
-	dXudxhczVhLf7Ve6NrmbpsLODWm52Bkr6YEbYjwnyzKKhFx1wotr0026Kles3xEUTsJGRG7LWu9
-	a6yZl8/LOIuhtQ+6KIFBIhH57BwVqEVir/2YsoTwdrqLBmMRInZ/R1oC3XR2RIuBFPjrHylCcCP
-	juyf/aq36QHzYlhU1uhbsKFhQ/WOLZsHbtaU7Hl88OCxwLXvCtjMJ3GddN04LsYqMg==
-X-Google-Smtp-Source: AGHT+IHg4xHnynLCiIdYwfhLH1O40xn1jbcOOUbuZ4D3/9/bt4jhqFWxA6m1cGXDr1jP9UbGzQIkuQ==
-X-Received: by 2002:a05:600d:7:b0:43c:f509:2bbf with SMTP id 5b1f17b1804b1-454db8d8cd6mr16068235e9.15.1752128006691;
-        Wed, 09 Jul 2025 23:13:26 -0700 (PDT)
-Received: from draszik.lan ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454dd466154sm8854885e9.12.2025.07.09.23.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 23:13:26 -0700 (PDT)
-Message-ID: <176473e3012018e7c6e584314fc68679ad44197c.camel@linaro.org>
-Subject: Re: [PATCH v4 24/32] clk: s2mps11: add support for S2MPG10 PMIC
- clock
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, Rob
- Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Sylwester
- Nawrocki	 <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
- Alim Akhtar	 <alim.akhtar@samsung.com>, Michael Turquette
- <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>, Russell King
- <linux@armlinux.org.uk>, Catalin Marinas	 <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Alexandre Belloni	 <alexandre.belloni@bootlin.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus	
- <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, 
-	kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>
-Date: Thu, 10 Jul 2025 07:13:24 +0100
-In-Reply-To: <20250409-s2mpg10-v4-24-d66d5f39b6bf@linaro.org>
-References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
-	 <20250409-s2mpg10-v4-24-d66d5f39b6bf@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1+build1 
+	s=arc-20240116; t=1752136919; c=relaxed/simple;
+	bh=AA4Ywq7KY2+V+Zzfmm2hAUDAzJGZoYY6D0W4ynbHcw8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KfuwNbsP31XJE8l9L3PAgACdhOdOLczLmveQEIUcb+Nm4kNu9hWGond/wGFfKAHCOzPf7dzJeRClOhnNpuOFcS6uO+IENYq6Iyi6hbu6L2oyWCaWYMNaTSm3OR0557j5XG3indivfgKVF9tDXGXZvXTlE/te/2+7iwgDQ9XhyK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XBjU60O1; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1752136912; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=fOwodtsOCTSdpblsnNXl1eGkH4855D/djDIb5y7d688=;
+	b=XBjU60O1NQtFt26U9eHzOtoAYVLIkxfwY410KaOr43MU9GPnsOmsprKGIexVnY5AqMIjzjhvrWbc68+dIeMdDmHbvfDIfItcCT0viZt0+p8g3jNo4a+E3ccKLxrLsWMrdpxiTI9WLi3MgP0LU4NnH5v2EPZ8me2NfwN45P0brzE=
+Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0WicApMn_1752136911 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 10 Jul 2025 16:41:52 +0800
+From: Feng Tang <feng.tang@linux.alibaba.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Feng Tang <feng.tang@linux.alibaba.com>
+Subject: [PATCH] rtc: efi: Add runtime check for the wakeup service capability
+Date: Thu, 10 Jul 2025 16:41:51 +0800
+Message-Id: <20250710084151.55003-1-feng.tang@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2025-04-09 at 21:37 +0100, Andr=C3=A9 Draszik wrote:
-> Add support for Samsung's S2MPG10 PMIC clock, which is similar to the
-> existing PMIC clocks supported by this driver.
->=20
-> S2MPG10 has three clock outputs @ 32kHz: AP, peri1 and peri2.
->=20
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+The kernel selftest of rtc reported a error on an ARM server which
+use rtc-efi device:
 
-Friendly ping - can this patch be merged please?
+	RUN           rtc.alarm_alm_set ...
+	rtctest.c:262:alarm_alm_set:Alarm time now set to 17:31:36.
+	rtctest.c:267:alarm_alm_set:Expected -1 (-1) != rc (-1)
+	alarm_alm_set: Test terminated by assertion
+		 FAIL  rtc.alarm_alm_set
+	not ok 5 rtc.alarm_alm_set
 
-Cheers,
-Andre'
+The root cause is, the underlying EFI firmware doesn't support wakeup
+service (get/set alarm), while it doesn't have the EFI RT_PROP table
+either. As Ard Biesheuvel clarified [1], this breaks the UEFI spec,
+which requires EFI firmware to provide a 'RT_PROP' table if it doesn't
+support all runtime services (Section 4.6.2, UEFI spec 2.10).
+
+This issue was also reproduced on ARM server from another vendor, which
+doesn't have RT_PROP table either. This means, in real world, there are
+quite some platforms having this issue, that it doesn't support wakeup
+service while not providing a correct RT_PROP table, which makes it
+wrongly claimed to support it.
+
+Add a runtime check for the wakeup service to detect and correct this
+kind of cases.
+
+[1]. https://lore.kernel.org/lkml/CAMj1kXEkzXsjm0dPhzxB+KdtzqADd4NmafKmw2rKw7mAPBrgdA@mail.gmail.com/
+
+Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
+---
+ drivers/rtc/rtc-efi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+index fa8bf82df948..8d1b9bde6f66 100644
+--- a/drivers/rtc/rtc-efi.c
++++ b/drivers/rtc/rtc-efi.c
+@@ -259,6 +259,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+ 	struct rtc_device *rtc;
+ 	efi_time_t eft;
+ 	efi_time_cap_t cap;
++	efi_bool_t enabled, pending;
+ 
+ 	/* First check if the RTC is usable */
+ 	if (efi.get_time(&eft, &cap) != EFI_SUCCESS)
+@@ -272,7 +273,8 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+ 
+ 	rtc->ops = &efi_rtc_ops;
+ 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
+-	if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
++	if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES) &&
++		efi.get_wakeup_time(&enabled, &pending, &eft) == EFI_SUCCESS)
+ 		set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
+ 	else
+ 		clear_bit(RTC_FEATURE_ALARM, rtc->features);
+-- 
+2.39.5 (Apple Git-154)
+
 
