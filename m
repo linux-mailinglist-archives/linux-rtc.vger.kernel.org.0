@@ -1,118 +1,124 @@
-Return-Path: <linux-rtc+bounces-4480-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4481-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C314CB010CB
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Jul 2025 03:26:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29645B0139E
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Jul 2025 08:35:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C81F81AA8014
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Jul 2025 01:26:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E202776255C
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Jul 2025 06:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D87972624;
-	Fri, 11 Jul 2025 01:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB6C1DBB3A;
+	Fri, 11 Jul 2025 06:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rJf/j2N5"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="O0iOs1dV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDAF6F073;
-	Fri, 11 Jul 2025 01:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E58B17A30F
+	for <linux-rtc@vger.kernel.org>; Fri, 11 Jul 2025 06:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752197192; cv=none; b=tugRKl7ZBfFX3CLa8nm2ThLtKqsLQHJlgxQ4agcEo5B8p9RI86L9ROGr96TWCyHrYQmCNf/NkmzEntwEf3lROoaK0xgWKU3O96ddXspfoeYYIe/L/kp7PR88dPxrk0jQ27IxD6h71DRDSW18xTh7iRL+VBfykYDMnq6yO2opyPU=
+	t=1752215744; cv=none; b=f4yus0ctWuRVL1R2mMBBdMt3+xNDW6URx2yCtxvERVfKPq3OSiFjoeb6ggEkpetJqSB8IYWQOcbUgvccJenbozSWFI8uqyPu940DkE5Oc6ndhcnqkKoTdxRLZmrWVLhLZlnO7bdia3c7yQkWFmhTTS5l2fdJ/QU9OidQ/xfp72A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752197192; c=relaxed/simple;
-	bh=RfxQfmg2Dd887FUvfCHez0x+Wjj1R3iRmWBqk9ugQCA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uNYhM42WXbG39Rcy7V60nVcz1wA6llz8LvHG4xWyA6w0ln+mcmviI94LvUMgEik8FUzI4jsweKxWhWg4REiRhbXC01a8qExsNTxtKM6jqhYjHv1f/7gI96Q1/BxgSxU9pgfnGJrtJw8Ill/VA+BcJmiwGOLJOyAUqpes45ugHZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rJf/j2N5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF880C4CEF4;
-	Fri, 11 Jul 2025 01:26:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752197191;
-	bh=RfxQfmg2Dd887FUvfCHez0x+Wjj1R3iRmWBqk9ugQCA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rJf/j2N5Q07CWlnP1M4BmFz+2uM8GwTbXMe4Z0A27pXRY4lShSKueYZ7JLD7Jf9Dj
-	 SAFT1DClPlKSk07Vvqcx+eebmjjZaqkA5a96eDeSim+VhOITOEjLkVfThC52B6apT5
-	 raRNrns+3fugjK3MfvRlNV5JU90vpQMeSXNyeSeh5B7/7yuB7+1e5zcLW1oZ1eaEZu
-	 qsV0RAyL1dfV35pEKNoNFvIrs8EH90J7EukkJcj7TxTJP8RX/9oWn41RnIHL6htcbF
-	 Acqbf47NSVxyjBTiCDNfXMUWpCWf/AjdQOrAZEBUDlQ13laCrG1CG9vRdK3WC+4x+3
-	 0MF5rncxvmIxQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-553c31542b1so1538312e87.2;
-        Thu, 10 Jul 2025 18:26:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU4RkhArmKxKRx0egU4kb9lW1I13Yzniu1IvlHLqrEwEsOf8S1pimhWrAdULQttz8u7+qWR+gVxep9poKIo@vger.kernel.org, AJvYcCUlKAvcYUlw4ZGeFTt6gty3EGDbFalyPYAsCAvSY9MX6tw6wmM211R3O9Hg/CJ3pT06SJA3MhrMZQ+4@vger.kernel.org, AJvYcCV+7r3YEUBBm7fVALBZebkv33p4BX0U2DktXsWib7eHDGiSdh/3KZr7ZwcYTMXh0Ul7I7ZNUFIwWEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrIoBtJtVgVAOuUbyOPUASkoPXFubiShKTeUSqbgwrRwyXQOom
-	YJd8mHbPnm7B9jHZ8tHp2GfbMJf/7TrGwqzIoD+k1q9BN7bXTUFvJCt+wWHPSX2RjtkOv9S9DG4
-	Ani3cjV2YKjkN1N9U+TbOc2RIFV+ySSE=
-X-Google-Smtp-Source: AGHT+IGGzPWQHD569ufcCOEYTYZwdRC3705oAS6A4zsc48S475Ka2iXU/TxJZAgksgyT8EOmAOqmiGHegF6pdf2KlGk=
-X-Received: by 2002:a05:6512:10d6:b0:554:f9cc:bea5 with SMTP id
- 2adb3069b0e04-55a04603ce3mr277116e87.34.1752197190066; Thu, 10 Jul 2025
- 18:26:30 -0700 (PDT)
+	s=arc-20240116; t=1752215744; c=relaxed/simple;
+	bh=AEXqVE0etQh37WXsg6HkMKCvaPGPubgogFWsxy/xjCk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=taE+IcjkIwGS9Z69Dk8o81Ux/8XD/VhS3gEHV2pBTuKkwUyBq+YvIiMTKPxYAa0zuBoTqWW56d0tV+18O3pIyrEBt2emqrBpFPjpi0WgK9F+57Ffc9NGQb/HpGYkpzMpFlTM09t5fsXoccloghsJI8oeQkq2Ebt/2DVyO1UtwAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=O0iOs1dV; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250711063539epoutp012b76310cb6d47dcba8a790179187c763~RHu6Fj3nO0231502315epoutp01d
+	for <linux-rtc@vger.kernel.org>; Fri, 11 Jul 2025 06:35:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250711063539epoutp012b76310cb6d47dcba8a790179187c763~RHu6Fj3nO0231502315epoutp01d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1752215739;
+	bh=ArMuUjUjfuaCEhQVg7xbi9LyS0T9hCbQPYjtmfTWZJs=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=O0iOs1dVDNI1zMe79WFeXMG2qN92E08vjdqSAZY4d6BLGCGfxBTBS4BJKHg1OkH3+
+	 /YBdSKK4Lg6uPK9ajYl6vIc4WWLXfYVAVv7y8NUXq/5K517ZKjY9T6p5jCZyqHsezi
+	 fWtty6C0vG6J5mCe0lDF5NeAeVKI8udZKCWxoxQE=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20250711063539epcas5p26f35b218af46423626481ec75f82db1e~RHu5nraKp3228232282epcas5p23;
+	Fri, 11 Jul 2025 06:35:39 +0000 (GMT)
+Received: from epcas5p2.samsung.com (unknown [182.195.38.182]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4bdhmR4vCgz2SSKw; Fri, 11 Jul
+	2025 06:35:35 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250710082533epcas5p111be26bea2ccc08718eebcb12929bbbf~Q1lkNxKgj2321423214epcas5p1T;
+	Thu, 10 Jul 2025 08:25:33 +0000 (GMT)
+Received: from bose.samsungds.net (unknown [107.108.83.9]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250710082531epsmtip157b0106af49bac387934c44e814c6078~Q1litj7Re0693006930epsmtip1w;
+	Thu, 10 Jul 2025 08:25:31 +0000 (GMT)
+From: Devang Tailor <dev.tailor@samsung.com>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	alim.akhtar@samsung.com, alexandre.belloni@bootlin.com,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, faraz.ata@samsung.com
+Cc: Devang Tailor <dev.tailor@samsung.com>
+Subject: [PATCH v2 0/3] On-chip RTC support for ExynosAutov9
+Date: Thu, 10 Jul 2025 14:04:31 +0530
+Message-Id: <20250710083434.1821671-1-dev.tailor@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250710084151.55003-1-feng.tang@linux.alibaba.com> <CAMj1kXHDFq3FZj4134CTcQZnke4t1=u6iRNNsQBvuhb3F6KurQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXHDFq3FZj4134CTcQZnke4t1=u6iRNNsQBvuhb3F6KurQ@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 11 Jul 2025 11:26:18 +1000
-X-Gmail-Original-Message-ID: <CAMj1kXGiixvwsSmOz65F=OXQuHovO4DMAsJaPZ2sL3PBbMHh8A@mail.gmail.com>
-X-Gm-Features: Ac12FXwEVJ2X_qJfiRJv28DHyB9KSTVoj5V-JDQNvsUzFlu0sloXdMqexP7ENj4
-Message-ID: <CAMj1kXGiixvwsSmOz65F=OXQuHovO4DMAsJaPZ2sL3PBbMHh8A@mail.gmail.com>
-Subject: Re: [PATCH] rtc: efi: Add runtime check for the wakeup service capability
-To: Feng Tang <feng.tang@linux.alibaba.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250710082533epcas5p111be26bea2ccc08718eebcb12929bbbf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250710082533epcas5p111be26bea2ccc08718eebcb12929bbbf
+References: <CGME20250710082533epcas5p111be26bea2ccc08718eebcb12929bbbf@epcas5p1.samsung.com>
 
-On Fri, 11 Jul 2025 at 11:06, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 10 Jul 2025 at 18:41, Feng Tang <feng.tang@linux.alibaba.com> wrote:
-> >
-> > The kernel selftest of rtc reported a error on an ARM server which
-> > use rtc-efi device:
-> >
-> >         RUN           rtc.alarm_alm_set ...
-> >         rtctest.c:262:alarm_alm_set:Alarm time now set to 17:31:36.
-> >         rtctest.c:267:alarm_alm_set:Expected -1 (-1) != rc (-1)
-> >         alarm_alm_set: Test terminated by assertion
-> >                  FAIL  rtc.alarm_alm_set
-> >         not ok 5 rtc.alarm_alm_set
-> >
-> > The root cause is, the underlying EFI firmware doesn't support wakeup
-> > service (get/set alarm), while it doesn't have the EFI RT_PROP table
-> > either. As Ard Biesheuvel clarified [1], this breaks the UEFI spec,
-> > which requires EFI firmware to provide a 'RT_PROP' table if it doesn't
-> > support all runtime services (Section 4.6.2, UEFI spec 2.10).
-> >
-> > This issue was also reproduced on ARM server from another vendor, which
-> > doesn't have RT_PROP table either. This means, in real world, there are
-> > quite some platforms having this issue, that it doesn't support wakeup
-> > service while not providing a correct RT_PROP table, which makes it
-> > wrongly claimed to support it.
-> >
-> > Add a runtime check for the wakeup service to detect and correct this
-> > kind of cases.
-> >
-> > [1]. https://lore.kernel.org/lkml/CAMj1kXEkzXsjm0dPhzxB+KdtzqADd4NmafKmw2rKw7mAPBrgdA@mail.gmail.com/
-> >
-> > Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
-> > ---
-> >  drivers/rtc/rtc-efi.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
->
-> Thanks, I've queued this up now.
->
+Enable on-chip RTC support. The on-chip RTC of this SoC is similar
+to the previous versions of Samsung SoC. So re-use the existing
+RTC driver with applicable call-backs for initialization and IRQ handling.
+Add a separate call-back for disabling RTC since existing '.disable'
+call-backs updates additional bit not valid for RTC of ExynosAutov9.
 
-Actually, we might just remove the EFI get/set wakeup time
-functionality altogether, as it seems rather pointless to me to begin
-with.
+Setting and getting hardware clock has been tested using 'hwclock'
+and 'date' utilities.
 
-I'll send out an RFC shortly.
+Alarm interrupt has been checked with incrementing interrupt
+count via "cat /proc/interrupts | grep rtc" for 10sec
+wakeup time via "echo +10 > /sys/class/rtc/rtc0/wakealarm"
+
+changelog
+---
+Changes in v2:
+- Fixed the review comment of v1 for mis-aligmnent & asymmetry bit logic.
+- link for v1 : https://lore.kernel.org/linux-rtc/20250702052426.2404256-1-dev.tailor@samsung.com/
+
+
+Devang Tailor (3):
+  dt-bindings: rtc: s3c-rtc: add compatible for exynosautov9
+  rtc: s3c: support for exynosautov9 on-chip RTC
+  arm64: dts: exynosautov9: add RTC DT node
+
+ .../devicetree/bindings/rtc/s3c-rtc.yaml       |  1 +
+ .../boot/dts/exynos/exynosautov9-sadk.dts      |  4 ++++
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi   | 10 ++++++++++
+ drivers/rtc/rtc-s3c.c                          | 18 ++++++++++++++++++
+ 4 files changed, 33 insertions(+)
+
+
+base-commit: 58ba80c4740212c29a1cf9b48f588e60a7612209
+-- 
+2.34.1
+
 
