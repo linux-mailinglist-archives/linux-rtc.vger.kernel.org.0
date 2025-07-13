@@ -1,156 +1,180 @@
-Return-Path: <linux-rtc+bounces-4488-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4489-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4179DB018E5
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Jul 2025 11:57:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 113D5B03098
+	for <lists+linux-rtc@lfdr.de>; Sun, 13 Jul 2025 12:05:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C54E3ADC89
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Jul 2025 09:56:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B9CF164277
+	for <lists+linux-rtc@lfdr.de>; Sun, 13 Jul 2025 10:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E7127E1D5;
-	Fri, 11 Jul 2025 09:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D76A2417C3;
+	Sun, 13 Jul 2025 10:05:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="HwcmosRg"
+	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="za9OXL79"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E34521CA1F
-	for <linux-rtc@vger.kernel.org>; Fri, 11 Jul 2025 09:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2142E370E
+	for <linux-rtc@vger.kernel.org>; Sun, 13 Jul 2025 10:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752227829; cv=none; b=NEYcAk43BjFllXYbfknjfUIMuHM7+h7mlJWV5fYEWBwvvpI5dp+FrLbG/tbQ2xjoD6LV28e9Kun9ofJqqLFkP8SXjmsn4pz1ryMrkW/Dnk+qWWLvRMlUHOQmVrJiW1+vy6jSJ+7v+E4bUNd5R5J/PTSuy38NjZICFRBCv/lqQK4=
+	t=1752401117; cv=none; b=qVjqYCmjk+NXQPK34QPGiwWskbjZtnSj2LJy4R6u8ROf0gya4g5v8pJS/v3nEHK0bCaEUC4/2nOwIyYDiVchK0g3RepMbznNwylJTFcQxhWOcCpdIIWN8Hv7RssdigKNQJNdng3hXOFAJb0qkH+dwIDflRVZpMr3oNJIWMnlJnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752227829; c=relaxed/simple;
-	bh=/jz62YG9XUYKioVMwcvC8pt1XPpu81We8MhowTWgq3g=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=Sojne+Z1sZIFWrvSXU3wJDw3zdSxq+1oihrA+96OUiDWTML2a3m2V3v9q37QXO71HCRxlqrbeb7k1mx+5avVI9fH9lcH5kBc+rGTdpyLGQUPhZA0Y5ScG7DXKwYQA+vcoYnzA/Mmbx+SJ7UVwnYIgM/w7eD3CPhOp9jlatpY/wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=HwcmosRg; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250711095659epoutp02369ebbe11abbc88320fc332cfd449904~RKesFWt9k2052020520epoutp02Z
-	for <linux-rtc@vger.kernel.org>; Fri, 11 Jul 2025 09:56:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250711095659epoutp02369ebbe11abbc88320fc332cfd449904~RKesFWt9k2052020520epoutp02Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1752227819;
-	bh=+5zHegncV70kjbqyw48Y9OdFtKw1OBm4PBQI79nv4ew=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=HwcmosRgLUGbih8+toJsjXN/4B4BZaTYNYtYADygEqPVaUrasnRy0U3HrAKqt7uOJ
-	 BBWPO4IQmJIrToH4WZnvuT2h7jv4/75w+8CkeHzw5NzYSgRHdB0aibtd7nygnq7dkb
-	 qW+gsoS3+4aGuUfUqBGoktci3qLLhlsYNp09Vu5U=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250711095658epcas5p33152e44e3698223878ac0bf294f1bf8b~RKerickMk0269002690epcas5p3Y;
-	Fri, 11 Jul 2025 09:56:58 +0000 (GMT)
-Received: from epcas5p1.samsung.com (unknown [182.195.38.183]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4bdnDm74z2z3hhTJ; Fri, 11 Jul
-	2025 09:56:56 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250711095228epcas5p11af898a023698a922eb59ddbbffaa176~RKavvWm-70063600636epcas5p1p;
-	Fri, 11 Jul 2025 09:52:28 +0000 (GMT)
-Received: from INBRO002520 (unknown [107.122.1.191]) by epsmtip1.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250711095226epsmtip153e539dffb1184623f3f9ac93d4bb0dd~RKauOa9jJ2985929859epsmtip1p;
-	Fri, 11 Jul 2025 09:52:26 +0000 (GMT)
-From: "Devang Tailor" <dev.tailor@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzk@kernel.org>
-Cc: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<alim.akhtar@samsung.com>, <alexandre.belloni@bootlin.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-rtc@vger.kernel.org>, <faraz.ata@samsung.com>
-In-Reply-To: <20250711-shapeless-adorable-lobster-d2efbf@krzk-bin>
-Subject: RE: [PATCH v2 2/3] rtc: s3c: support for exynosautov9 on-chip RTC
-Date: Fri, 11 Jul 2025 15:22:25 +0530
-Message-ID: <188001dbf249$831afd00$8950f700$@samsung.com>
+	s=arc-20240116; t=1752401117; c=relaxed/simple;
+	bh=b7b+BiUcV0QfBrTgpAhC9TgYhAcALB/7v8wfMnqVCcc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S69riEKqEjH6qc+0aTaJc2yeAmrLuQCsHpuH03iWu5angS+AQtcq/YJ7XD1guyYkUECiPBhzn+nai0q+ze0q+q6pLIdYUa8HlumNbtoZyh9ykuXzmIm2WKm3bpd5ivoRf54bYe3jMFa1qgoVxPtdi6MbO3/JkhCE4bOt7YytWvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=za9OXL79; arc=none smtp.client-ip=193.222.135.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
+Received: (wp-smtpd smtp.tlen.pl 26647 invoked from network); 13 Jul 2025 12:05:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
+          t=1752401105; bh=otji79oRxh05+WW4Agm5i4NTC7ABRqtnubFQ3DJFaeg=;
+          h=From:To:Cc:Subject;
+          b=za9OXL798y5YF+0Pqf7Wzjb3KEpqhSsaFjIKufqmN+E0KG6xbgQtRpzvNcogXrb+a
+           KdlmFuQxnjbGBotDalJ8mv9D65PFgT50p8GIb7BsQ390wQWt5dBSRUZKcPuBuu5nnG
+           +TqrdWFmq7+GKsTeQXCph8Gh3RyA7eCLb+pAiFY9bRmyNIAvba4iwEgR0qduIwHYB7
+           lta4shUgMBmTvaw5ECzfBzqHdCBLWSGZ9LNN0mpfH1Q/N4Ab533y6oN/yAs+OZ3SVQ
+           5SfHL1/e74bkyVFuQkDghsoXmPhobT+Vt+pqiJ1/+LDz82+bOgXPRyFJ0TB19R8vTA
+           sgkz0ZAHhCxbA==
+Received: from apn-78-30-72-196.dynamic.gprs.plus.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[78.30.72.196])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <jiaxun.yang@flygoat.com>; 13 Jul 2025 12:05:05 +0200
+From: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-mips@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	=?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Subject: [PATCH 1/4] mips: remove unused function mc146818_set_rtc_mmss
+Date: Sun, 13 Jul 2025 12:04:31 +0200
+Message-Id: <20250713100434.699843-2-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250713100434.699843-1-mat.jonczyk@o2.pl>
+References: <20250713100434.699843-1-mat.jonczyk@o2.pl>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQMc6yo9jRPgA4nZ2IiZrgLtyBFMygKSVtdMAw5/R1ICPLNBmLFr0ApA
-Content-Language: en-in
-X-CMS-MailID: 20250711095228epcas5p11af898a023698a922eb59ddbbffaa176
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250710082536epcas5p4f9dcd50ff474066562b2cbd40199d2d9
-References: <20250710083434.1821671-1-dev.tailor@samsung.com>
-	<CGME20250710082536epcas5p4f9dcd50ff474066562b2cbd40199d2d9@epcas5p4.samsung.com>
-	<20250710083434.1821671-3-dev.tailor@samsung.com>
-	<20250711-shapeless-adorable-lobster-d2efbf@krzk-bin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-DKIM-Status: good (id: o2.pl)                                                      
+X-WP-MailID: 4a8feaf425475db3ad0aa7175b576a0f
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [QUP0]                               
 
+I have checked carefully: this function is unused, so remove it.
 
-Hi Krzysztof,
+The last caller appears to have been removed in 2007 in
+commit 4b550488f894 ("[MIPS] Deforest the function pointer jungle in the time code.")
 
+mc146818-time.h is included only in three files:
+- arch/mips/mti-malta/malta-time.c
+- arch/mips/loongson64/numa.c
+- arch/mips/loongson2ef/common/time.c
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzk=40kernel.org>
-> Sent: 11 July 2025 12:51
-> To: Devang Tailor <dev.tailor=40samsung.com>
-> Cc: robh=40kernel.org; krzk+dt=40kernel.org; conor+dt=40kernel.org;
-> alim.akhtar=40samsung.com; alexandre.belloni=40bootlin.com;
-> devicetree=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; lin=
-ux-
-> samsung-soc=40vger.kernel.org; linux-kernel=40vger.kernel.org; linux-
-> rtc=40vger.kernel.org; faraz.ata=40samsung.com
-> Subject: Re: =5BPATCH v2 2/3=5D rtc: s3c: support for exynosautov9 on-chi=
-p RTC
->=20
-> On Thu, Jul 10, 2025 at 02:04:33PM +0530, Devang Tailor wrote:
-> > The on-chip RTC of this SoC is almost similar to the previous versions
-> > of SoC. Hence re-use the existing driver with platform specific change
-> > to enable RTC.
-> >
-> > This has been tested with 'hwclock' & 'date' utilities
-> >
-> > Signed-off-by: Devang Tailor <dev.tailor=40samsung.com>
-> > ---
-> >  drivers/rtc/rtc-s3c.c =7C 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> >
-> > diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c index
-> > 5dd575865adf..8db24b6360b8 100644
-> > --- a/drivers/rtc/rtc-s3c.c
-> > +++ b/drivers/rtc/rtc-s3c.c
-> > =40=40 -384,6 +384,15 =40=40 static void s3c6410_rtc_disable(struct s3c=
-_rtc
-> *info)
-> >  	writew(con, info->base + S3C2410_RTCCON);  =7D
-> >
-> > +static void exynosautov9_rtc_disable(struct s3c_rtc *info) =7B
-> > +	unsigned int con;
-> > +
-> > +	con =3D readb(info->base + S3C2410_RTCCON);
-> > +	con &=3D =7ES3C2410_RTCCON_RTCEN;
-> > +	writeb(con, info->base + S3C2410_RTCCON); =7D
->=20
-> Looks a lot like s3c24xx_rtc_disable()...
->=20
-> Anyway, if you keep ignoring the review, no point to provide reviews here=
-.
->=20
+Also, remove unused macros USEC_AFTER/USEC_BEFORE.
 
-I have removed the redundant code I had added in V1 considering your review=
- comment for asymmetry code.
-s3c24xx_rtc_disable() & s3c6410_rtc_disable() updates additional bit, which=
- is not valid for ExynosAutov9 (only RTCCON=5B4:0=5D are valid), hence I ad=
-ded this and mentioned in V2 cover letter as well.
-Please let me know if I am missing anything.
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+---
+ arch/mips/include/asm/mc146818-time.h | 74 ---------------------------
+ 1 file changed, 74 deletions(-)
 
-> Best regards,
-> Krzysztof
-
+diff --git a/arch/mips/include/asm/mc146818-time.h b/arch/mips/include/asm/mc146818-time.h
+index cbf5cec345f1..07bf30bee792 100644
+--- a/arch/mips/include/asm/mc146818-time.h
++++ b/arch/mips/include/asm/mc146818-time.h
+@@ -12,80 +12,6 @@
+ #include <linux/mc146818rtc.h>
+ #include <linux/time.h>
+ 
+-/*
+- * For check timing call set_rtc_mmss() 500ms; used in timer interrupt.
+- */
+-#define USEC_AFTER	500000
+-#define USEC_BEFORE	500000
+-
+-/*
+- * In order to set the CMOS clock precisely, set_rtc_mmss has to be
+- * called 500 ms after the second nowtime has started, because when
+- * nowtime is written into the registers of the CMOS clock, it will
+- * jump to the next second precisely 500 ms later. Check the Motorola
+- * MC146818A or Dallas DS12887 data sheet for details.
+- *
+- * BUG: This routine does not handle hour overflow properly; it just
+- *	sets the minutes. Usually you'll only notice that after reboot!
+- */
+-static inline int mc146818_set_rtc_mmss(unsigned long nowtime)
+-{
+-	int real_seconds, real_minutes, cmos_minutes;
+-	unsigned char save_control, save_freq_select;
+-	int retval = 0;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&rtc_lock, flags);
+-	save_control = CMOS_READ(RTC_CONTROL); /* tell the clock it's being set */
+-	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
+-
+-	save_freq_select = CMOS_READ(RTC_FREQ_SELECT); /* stop and reset prescaler */
+-	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
+-
+-	cmos_minutes = CMOS_READ(RTC_MINUTES);
+-	if (!(save_control & RTC_DM_BINARY) || RTC_ALWAYS_BCD)
+-		cmos_minutes = bcd2bin(cmos_minutes);
+-
+-	/*
+-	 * since we're only adjusting minutes and seconds,
+-	 * don't interfere with hour overflow. This avoids
+-	 * messing with unknown time zones but requires your
+-	 * RTC not to be off by more than 15 minutes
+-	 */
+-	real_seconds = nowtime % 60;
+-	real_minutes = nowtime / 60;
+-	if (((abs(real_minutes - cmos_minutes) + 15)/30) & 1)
+-		real_minutes += 30;		/* correct for half hour time zone */
+-	real_minutes %= 60;
+-
+-	if (abs(real_minutes - cmos_minutes) < 30) {
+-		if (!(save_control & RTC_DM_BINARY) || RTC_ALWAYS_BCD) {
+-			real_seconds = bin2bcd(real_seconds);
+-			real_minutes = bin2bcd(real_minutes);
+-		}
+-		CMOS_WRITE(real_seconds, RTC_SECONDS);
+-		CMOS_WRITE(real_minutes, RTC_MINUTES);
+-	} else {
+-		printk_once(KERN_NOTICE
+-		       "set_rtc_mmss: can't update from %d to %d\n",
+-		       cmos_minutes, real_minutes);
+-		retval = -1;
+-	}
+-
+-	/* The following flags have to be released exactly in this order,
+-	 * otherwise the DS12887 (popular MC146818A clone with integrated
+-	 * battery and quartz) will not reset the oscillator and will not
+-	 * update precisely 500 ms later. You won't find this mentioned in
+-	 * the Dallas Semiconductor data sheets, but who believes data
+-	 * sheets anyway ...			       -- Markus Kuhn
+-	 */
+-	CMOS_WRITE(save_control, RTC_CONTROL);
+-	CMOS_WRITE(save_freq_select, RTC_FREQ_SELECT);
+-	spin_unlock_irqrestore(&rtc_lock, flags);
+-
+-	return retval;
+-}
+-
+ static inline time64_t mc146818_get_cmos_time(void)
+ {
+ 	unsigned int year, mon, day, hour, min, sec;
+-- 
+2.25.1
 
 
