@@ -1,154 +1,144 @@
-Return-Path: <linux-rtc+bounces-4495-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4496-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A375B0348A
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 04:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E620EB03691
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 08:11:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D61351896DB0
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 02:38:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 153AE189923D
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 06:11:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6BF1BCA1C;
-	Mon, 14 Jul 2025 02:38:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B77D21ABC9;
+	Mon, 14 Jul 2025 06:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eNtZT1UZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B14156C40;
-	Mon, 14 Jul 2025 02:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 742B0212B0A
+	for <linux-rtc@vger.kernel.org>; Mon, 14 Jul 2025 06:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752460698; cv=none; b=QFSPyPt5SILFpAHzdCkF94IJob2YbNeEZ3Wgt3WUK/gTzfOaVh6gQQeH0Kuife8/9+79hAYrHxcZ7xarQWO+e9bLVOmVlK2x+ecLQjDiK3j6f98vWtLC5Op0TQ7u9nnHCqwpqh/xPPtfu1yH3AIZYMrj/xsvyhq9Np2+BV0hO5E=
+	t=1752473459; cv=none; b=MmlIGDmZun2RuN/JT+qnx502T0vM7FsPEoEfhWojnpfzwedkYZnSho5X6uFwHEUMJu2iJGmIW/TUGY996K6ZMhXqt1+lhnvy2DDU3qznacXfwnmSQ0ZUtemwgd5SMQyZPdElA+1CqpmQm2yTqSHmyp+sWeqNEd+/RYe3Ea7qW2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752460698; c=relaxed/simple;
-	bh=tBDQ6T9SB15vLOX23t6RWLMsn+1lBLsQh50/3NqT1rM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=pojXMwpNcgxFRkfR70XD1bub19HPZFAXTSz68tV5dFt8McE7jVIqSYvE4J+PvT0V8Rndbe0riFAJkS0chMbN/4GwuEJGfLk8DkvQ6ASdzJ2hK67eRSVVvyoF3tzw/1dTof+hdoiRJBmcjTfJxtWKcgwDenDqB1qVho7OzSsJM8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8CxqmqKbXRo2usoAQ--.44718S3;
-	Mon, 14 Jul 2025 10:38:02 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowJAxE+SDbXRoXzwWAA--.55950S3;
-	Mon, 14 Jul 2025 10:37:57 +0800 (CST)
-Subject: Re: [PATCH] rtc: efi: Add runtime check for the wakeup service
- capability
-To: Ard Biesheuvel <ardb@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Feng Tang <feng.tang@linux.alibaba.com>, linux-rtc@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250710084151.55003-1-feng.tang@linux.alibaba.com>
- <CAMj1kXHDFq3FZj4134CTcQZnke4t1=u6iRNNsQBvuhb3F6KurQ@mail.gmail.com>
- <CAMj1kXGiixvwsSmOz65F=OXQuHovO4DMAsJaPZ2sL3PBbMHh8A@mail.gmail.com>
- <20250711085608f4146d99@mail.local>
- <CAMj1kXEL90VvygoSk8EtQJO0cjybwpt10uHM+ufJg84LvR+Ouw@mail.gmail.com>
-From: Bibo Mao <maobibo@loongson.cn>
-Message-ID: <af1c5ec4-9e4d-a2d9-e70b-1f182e6b5790@loongson.cn>
-Date: Mon, 14 Jul 2025 10:36:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1752473459; c=relaxed/simple;
+	bh=r3qINUs4GQGQK0KeSYb9XwtihHPTH4GAfxB3icQZeXg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=LVHZI7KD0luzSC/Itj4UAW6q/dinvVnEXBTZo+fGlIksvtkPTn3YZhO1qNXX7z5cfQhYqnWUU0p1LFv0mS1VXojsxRwX7BrzNcmSl/CGVwv3TrROixO6zzKxb6Y+DJHfar3hRG82UPnTcdBNLlx5bELIFgqFgifFPlDrG14o2n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eNtZT1UZ; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-6097b1faec9so3125965a12.3
+        for <linux-rtc@vger.kernel.org>; Sun, 13 Jul 2025 23:10:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752473455; x=1753078255; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=G9Tn70FKTpBDzek73ufnJv469R3NOa6ous5bCCu5m1U=;
+        b=eNtZT1UZ0eiZxwKJ8uZzWGaSrR0nesz10REqhmGhVD5wNc+S8L1ekleKDIjcrnQBHA
+         EY30DbjQVoxVN/CjBXSTksDPZTR6ii1UU1IuvTARMPhjOBGH+VhABB1jN7aDGpDE9X+c
+         L8oz8yY7hmo0fZDNTcgJm5IhDEzR89BlNGzSJp9gau3MxWhQsMcTbAqTacHmwEyzN1X1
+         2FhXL02y+9thkEAxMi5egp29Vpvdp83R1A5DNsX+8/MgwoNVBtR2GH+Yj53AyNMzw0Ur
+         tllDgmjl9EusdA9/Hgd1nINcruUR78y4O2LzV9d7cgmJC6nzjWYv1tNrgV6EYOf5+WXt
+         eUMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752473455; x=1753078255;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G9Tn70FKTpBDzek73ufnJv469R3NOa6ous5bCCu5m1U=;
+        b=KGUNcv0/ITgfzPYGp9jPwbD4d1tER6AvrKo/beVv0BZVxIGZIHGoxgAymHXclkBMJR
+         nhZQ1dOHPzU7CZQN5JQEf3pwU9W1GSVI9j2AQWeEdG8T3uhiaLYFOAnrAGxjqFlRWvW0
+         ptybEtVkWpFxZANZ+19AN9Yg5dhpzaSbCLd6+tnWgSuVsYzko/p0f6rUq6Jvm4xXP28w
+         dCR0VtA0GT+NX3tHgno98Xjkw44f9Zm7Z4PeMBRAIcZOagQap6rw7vZozVGrAT1AtQBS
+         RnX/rkTWQ8Mz1H1qiLnz0Qht6CYv2qvvPOjd/65LaYqs/kPp6XWENKbiABo6xuEebVm2
+         35PA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNFg0rW90NY2KQBBVYG06BHpHflgZWtTdVPMqs1lt7TgEKHblMaQGZGIJBRTNyncdt7WtAMhTtxMk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSHj1EX+CMxqefygun6WMWxpxE4eR3hbAHH28MvO/gPTXlyheB
+	fYopOuzutv9wUVu5xNIJCBAsnWYF2CVxSBTPcFiLlpraymjAkbt+kjAEcw+Amzwy2jU28XTm8w=
+	=
+X-Google-Smtp-Source: AGHT+IHnMYU1tdLUgCWCMkDHtV2ofJo8Kj1jhtO5SeCzNxOoPrZb9dQJqddWyqsdiNjGgTivJJ6PBrvn
+X-Received: from edbec48.prod.google.com ([2002:a05:6402:d70:b0:612:b2a:492f])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:2551:b0:60c:6c85:48dd
+ with SMTP id 4fb4d7f45d1cf-611e84d5ce0mr9692143a12.23.1752473454949; Sun, 13
+ Jul 2025 23:10:54 -0700 (PDT)
+Date: Mon, 14 Jul 2025 08:08:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <CAMj1kXEL90VvygoSk8EtQJO0cjybwpt10uHM+ufJg84LvR+Ouw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxE+SDbXRoXzwWAA--.55950S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxurWrJFyxJryxAry8ArWDAwc_yoW5XrWfpF
-	WUCFWqqr15KFy8Ars2qw1Y9r1aqry3tFy8Xw1DAa4UWrn0vr1jkr40kr4Y9a9FgryrC3WY
-	9Fy2qF9I93WDAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2042; i=ardb@kernel.org;
+ h=from:subject; bh=lBZw99MDLRGQYnmUAEaW8S2w5GuCP7F3IekTWgHFi6g=;
+ b=owGbwMvMwCVmkMcZplerG8N4Wi2JIaNk3vvT+9Y9uuM3TXFJnJtsxIyzqcz/eR/PsPqzeEKNP
+ R/foYsSHaUsDGJcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiJ5gZGS5KK9wuT5s0Q+Ja
+ CftM/4wbF554nvlzf3ftBpG1fNZ/k0QY/nDa+K/0XKev99bz53mu6oadcpenx9Ud4TpWE21YcXy aJQ8A
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250714060843.4029171-5-ardb+git@google.com>
+Subject: [RFC PATCH 0/3] Remove unused EFI runtime APIs
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Juergen Gross <jgross@suse.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, 
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Sunil V L <sunilvl@ventanamicro.com>, 
+	Bibo Mao <maobibo@loongson.cn>, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, x86@kernel.org, 
+	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+From: Ard Biesheuvel <ardb@kernel.org>
 
+Using EFI runtime services to program the RTC to wake up the system is
+supported in theory, but rarely works in practice. Fortunately, this
+functionality is rarely [if ever] used to begin with so we can just drop
+it. (Note that the EFI rtc driver is not used by x86, which programs the
+CMOS rtc directly)
 
-On 2025/7/14 上午10:08, Ard Biesheuvel wrote:
-> On Fri, 11 Jul 2025 at 18:56, Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
->>
->> On 11/07/2025 11:26:18+1000, Ard Biesheuvel wrote:
->>> On Fri, 11 Jul 2025 at 11:06, Ard Biesheuvel <ardb@kernel.org> wrote:
->>>>
->>>> On Thu, 10 Jul 2025 at 18:41, Feng Tang <feng.tang@linux.alibaba.com> wrote:
->>>>>
->>>>> The kernel selftest of rtc reported a error on an ARM server which
->>>>> use rtc-efi device:
->>>>>
->>>>>          RUN           rtc.alarm_alm_set ...
->>>>>          rtctest.c:262:alarm_alm_set:Alarm time now set to 17:31:36.
->>>>>          rtctest.c:267:alarm_alm_set:Expected -1 (-1) != rc (-1)
->>>>>          alarm_alm_set: Test terminated by assertion
->>>>>                   FAIL  rtc.alarm_alm_set
->>>>>          not ok 5 rtc.alarm_alm_set
->>>>>
->>>>> The root cause is, the underlying EFI firmware doesn't support wakeup
->>>>> service (get/set alarm), while it doesn't have the EFI RT_PROP table
->>>>> either. As Ard Biesheuvel clarified [1], this breaks the UEFI spec,
->>>>> which requires EFI firmware to provide a 'RT_PROP' table if it doesn't
->>>>> support all runtime services (Section 4.6.2, UEFI spec 2.10).
->>>>>
->>>>> This issue was also reproduced on ARM server from another vendor, which
->>>>> doesn't have RT_PROP table either. This means, in real world, there are
->>>>> quite some platforms having this issue, that it doesn't support wakeup
->>>>> service while not providing a correct RT_PROP table, which makes it
->>>>> wrongly claimed to support it.
->>>>>
->>>>> Add a runtime check for the wakeup service to detect and correct this
->>>>> kind of cases.
->>>>>
->>>>> [1]. https://lore.kernel.org/lkml/CAMj1kXEkzXsjm0dPhzxB+KdtzqADd4NmafKmw2rKw7mAPBrgdA@mail.gmail.com/
->>>>>
->>>>> Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
->>>>> ---
->>>>>   drivers/rtc/rtc-efi.c | 4 +++-
->>>>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>>>
->>>>
->>>> Thanks, I've queued this up now.
->>>>
->>>
->>> Actually, we might just remove the EFI get/set wakeup time
->>> functionality altogether, as it seems rather pointless to me to begin
->>> with.
->>>
->>> I'll send out an RFC shortly.
->>
->> I guess this is going to also solve the issue reported by loongson
->> https://lore.kernel.org/linux-rtc/20250613061747.4117470-1-wangming01@loongson.cn/
->>
->> However, please let me take care of patches in my subsystem...
->>
-> 
-> Apologies - I've dropped it now.
-> 
-> But please don't queue this, I'll send out my RFC shortly.
-> 
-This is similar problem on Loongarch VM when running ltp testcase rtc02, 
-I do not know whether the root cause is the same, the runtime service is 
-hard to debug.
+The same applies to GetNextHighMonoCount(), which, if implemented,
+usually relies on SetVariable() under the hood *, which is often not
+supported at runtime by non-x86 platforms. But it has no known users
+either so let's drop support for it as well.
 
-Hope for RFC version :)
+This means we need to drop the slightly pointless tests for it too.
 
-Regards
-Bibo Mao
+* EDK2 based EFI implementations usually have a MTC variable carrying
+  the monotonic counter variable, which is therefore not truly
+  monotonic, given that SetVariable() will happily overwrite it. 
+
+Cc: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Cc: Feng Tang <feng.tang@linux.alibaba.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Stefano Stabellini <sstabellini@kernel.org>
+Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com> 
+Cc: Sunil V L <sunilvl@ventanamicro.com>
+Cc: Bibo Mao <maobibo@loongson.cn>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-efi@vger.kernel.org
+Cc: xen-devel@lists.xenproject.org
+Cc: x86@kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: loongarch@lists.linux.dev
+
+Ard Biesheuvel (3):
+  efi-rtc: Remove wakeup functionality
+  efi/test: Don't bother pseudo-testing unused EFI services
+  efi: Remove support for pointless, unused EFI services
+
+ arch/x86/platform/efi/efi_64.c          |  22 ----
+ drivers/firmware/efi/runtime-wrappers.c |  68 ------------
+ drivers/firmware/efi/test/efi_test.c    | 108 +-------------------
+ drivers/rtc/rtc-efi.c                   |  76 +-------------
+ drivers/xen/efi.c                       |  56 ----------
+ include/linux/efi.h                     |   6 --
+ 6 files changed, 4 insertions(+), 332 deletions(-)
+
+-- 
+2.50.0.727.gbf7dc18ff4-goog
 
 
