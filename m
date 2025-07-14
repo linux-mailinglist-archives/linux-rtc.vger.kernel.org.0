@@ -1,127 +1,217 @@
-Return-Path: <linux-rtc+bounces-4503-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4504-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E31A1B0373B
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 08:34:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F007DB037B3
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 09:17:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72FA17A42BE
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 06:33:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBE3E3A88CD
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jul 2025 07:16:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEEE72264CE;
-	Mon, 14 Jul 2025 06:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA89B22F74E;
+	Mon, 14 Jul 2025 07:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kEJvLVQk"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="EJQCnQrX"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92131BE4A;
-	Mon, 14 Jul 2025 06:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2012C22F772;
+	Mon, 14 Jul 2025 07:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752474861; cv=none; b=qc6tJmpXn/36LW+PYFf7P23J4jnVWUWSoI2+69nGXvADNqbCgHTVNk/TqUtBsKyx9zkNu2vrjAkEEK43piyLv8+6ieerHZ8FlqyIjfX9RckSqKtq6h1zoZOTil3ulCZQ1a2jsWjk2HkaxsH0qvUFNt23wk1R+PANue3O+fV4kGc=
+	t=1752477410; cv=none; b=EDrsxOvsjfJCcnoAbtB8aWm0y3Ub92DnNvp4u0AO6I9ABLtKSuIntwho3E6/qoyaempPtOMI6aSDvW8jLqNDYdnyZaSVdJ3DOEfxv8baQq1RaUPqE6HZt6xmVH1H5a9QIQWqEEUv/ELjBKTNCW7WuLxOoK6ARkL/gNbNtwcs8Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752474861; c=relaxed/simple;
-	bh=ynfzJ9dsAps2aTd6f/tPXnxcet4bhZr25ybz3JfD7/o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZN+RsKju3clmFmITox9EOV57K+rXtVajyeLf0Ux5YzmQWJ/zZMLfqmFQByoNN7CYmI0iy5Jx54hizodbS2/rClQn7o2aPWoT+uXrUPoLfXBn3CDb9VXXy9FQr7qQxo5y9++ymUkLiZQ1PciJWgHdk8vGtNKIdtZmMb04UHvD8u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kEJvLVQk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44105C4CEF9;
-	Mon, 14 Jul 2025 06:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752474861;
-	bh=ynfzJ9dsAps2aTd6f/tPXnxcet4bhZr25ybz3JfD7/o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kEJvLVQkjY7hRn/K87feYU0o9wfLcoFoQapbEzji/H3oVgosLIR+n/zpshU8j5xPx
-	 cnTymersGd/N+1mHqJ3BKGWRQrcT85aRPAwcP/faI8e5poEh4ZkWHMwaVBKocHO+rc
-	 dLlEMs5vxTbWhanxYLW+okfeFmBQsBMdx563LZdcvTyj2iv+aiVsVXtnqPaTwDI3J5
-	 Ad4wSY0s6HRoT9uqxSgF5lXh8e2IN8+z1k96CRC4nfbcNwzS/6YDJxQqc+sBU8hMEi
-	 vOLX3wP8hDRXfWv7ELSL3IU03zRlrE1pWJntsOZb60EXxyqcIuI5/EbVfSlwDO+8oX
-	 OGL6/yKjUUb0A==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-32b49ac6431so30674891fa.1;
-        Sun, 13 Jul 2025 23:34:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVcPzKbbCyVeY/6m+9F2wcdWeAcBfbEeFO3Y29Z5vA+3+O8edoT5vUdEfAYa2Cjo/njnBWlSgZOj/w=@vger.kernel.org, AJvYcCXQFQEATWOLoPwoWF/3oGJZLHWRNutHERaDYaI4RUGJOyQk/lqnSfrDgCHxptRB0Icg4YOHeJ5c5zz5AdI4@vger.kernel.org, AJvYcCXyFgK3VKhyvGqKs5ugBb5h7TQVwIDEf3cwr8hWwUScwK9pK8uP7LjIcnWBWFGsRN0jRsgFv1EnU1VN@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7FPBqzqh0OCl8JQGmCIIeHI1Xb8XcWQPGoh5tVjiM0F7FHL+l
-	ClxC6M+uU+N23ft5vbsTpDc9yAYPPzJ64UECNl4f91obL6aH9vzRSFhyAX06hi3F3Kq0jHnFcGR
-	pgZvrS4BlPf7BIiyEcOInBXcb7qjiSlw=
-X-Google-Smtp-Source: AGHT+IEy4x7iRPRFME+dpdQyQI1jtmLIqNYRLMk1ojNaRg715rzBCM8Q86llYRAXa+twgNvvkR8qSO1icXiwfjuZzv0=
-X-Received: by 2002:a2e:a7ca:0:b0:32b:80e1:300d with SMTP id
- 38308e7fff4ca-33053186d88mr35999851fa.0.1752474859585; Sun, 13 Jul 2025
- 23:34:19 -0700 (PDT)
+	s=arc-20240116; t=1752477410; c=relaxed/simple;
+	bh=VO3OlWP7PfH6wAV86OL6U9gKiGINg7rJ7KPBm+jtPZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mtme2pCj+iY9PtgC8s+4w3VtgNE9EM5m/J/kHOYpHTv0KRw64s8jW5R25FCTzG9NIDV7+IGC1KjDRBi619VAw94Y4H2geSNZihf/rI9AFZcCYeue+UzJ+mQc5erFy4e0652jBZdyCUcadzMTbIdDGXZ7pHgxDSH+4lr7BkOBOb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=EJQCnQrX; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1752477399; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=uDmSekQrgZGL8r2lWAymZdEWRY9s0eH9Oe3pP00uIuU=;
+	b=EJQCnQrXmdcSLqSk752xKkuGapxwKdrDM8eMOrazmBCO4N2CxL854+rx9oxeCSUS3ew2P93QKTp+bm9Y2Ka55JP7ejjcDXOYINBZKJNWBoIxV9uV6RsEM7UxCKmDVdEGjxneElhUo82p3nqz0GKQ6FkHbddoM1Yl4EDpjxenuVE=
+Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0WiqeCDu_1752477397 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 14 Jul 2025 15:16:37 +0800
+Date: Mon, 14 Jul 2025 15:16:37 +0800
+From: Feng Tang <feng.tang@linux.alibaba.com>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Sunil V L <sunilvl@ventanamicro.com>,
+	Bibo Mao <maobibo@loongson.cn>, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org, xen-devel@lists.xenproject.org,
+	x86@kernel.org, linux-riscv@lists.infradead.org,
+	loongarch@lists.linux.dev
+Subject: Re: [RFC PATCH 1/3] efi-rtc: Remove wakeup functionality
+Message-ID: <aHSu1WVYXZ2N5X8X@U-2FWC9VHC-2323.local>
+References: <20250714060843.4029171-5-ardb+git@google.com>
+ <20250714060843.4029171-6-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714060843.4029171-5-ardb+git@google.com> <20250714060843.4029171-6-ardb+git@google.com>
- <dade7d17-d45d-455e-a43c-01e9ea95c3b4@gmail.com> <CAMj1kXETDd+19i+awMx1v1sE4RXhF-r2a-mTa3rWfus5s4HMmw@mail.gmail.com>
- <f538a1b9-6a7c-474f-af2a-d87c35b82fc5@gmail.com>
-In-Reply-To: <f538a1b9-6a7c-474f-af2a-d87c35b82fc5@gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 14 Jul 2025 16:34:08 +1000
-X-Gmail-Original-Message-ID: <CAMj1kXGG0Mi+AT7ZeoHLTDhVbbahP-PLRgY1=aSZMVQEgWz5sQ@mail.gmail.com>
-X-Gm-Features: Ac12FXzYFywZb16ZKDUVBGm4_KFbnsnrDO10Xk4vWwqGRcRLn5B3XWIM87WiCT4
-Message-ID: <CAMj1kXGG0Mi+AT7ZeoHLTDhVbbahP-PLRgY1=aSZMVQEgWz5sQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/3] efi-rtc: Remove wakeup functionality
-To: Demi Marie Obenour <demiobenour@gmail.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, 
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Juergen Gross <jgross@suse.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, 
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Sunil V L <sunilvl@ventanamicro.com>, 
-	Bibo Mao <maobibo@loongson.cn>, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, x86@kernel.org, 
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250714060843.4029171-6-ardb+git@google.com>
 
-On Mon, 14 Jul 2025 at 16:22, Demi Marie Obenour <demiobenour@gmail.com> wrote:
->
-> On 7/14/25 02:19, Ard Biesheuvel wrote:
-> > On Mon, 14 Jul 2025 at 16:13, Demi Marie Obenour <demiobenour@gmail.com> wrote:
-> >>
-> >> On 7/14/25 02:08, Ard Biesheuvel wrote:
-> >>> From: Ard Biesheuvel <ardb@kernel.org>
-> >>>
-> >>> The EFI rtc driver is used by non-x86 architectures only, and exposes
-> >>> the get/set wakeup time functionality provided by the underlying
-> >>> platform. This is usually broken on most platforms, and not widely used
-> >>> to begin with [if at all], so let's just remove it.
-> >> systemd uses the underlying functionality: a timer can wake the system up.
-> >> I have no idea if that is implemented in terms of this function, though.
-> >
-> > To be clear, you are referring to wake from poweroff at some date/time
-> > in the future, right?
->
-> Yes.
->
-> > This change does not remove this functionality from the RTC subsystem,
-> > it just ceases to expose it on non-x86 EFI platforms that claim to
-> > support it.
->
-> Do these platforms generally expose the functionality in a different way?
+On Mon, Jul 14, 2025 at 08:08:45AM +0200, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
+> 
+> The EFI rtc driver is used by non-x86 architectures only, and exposes
+> the get/set wakeup time functionality provided by the underlying
+> platform. This is usually broken on most platforms, and not widely used
+> to begin with [if at all], so let's just remove it.
 
-On x86, the CMOS rtc is manipulated directly (and this is officially
-condoned by the EFI spec).
+This solves the problem reported in 
+https://lore.kernel.org/all/20250710084151.55003-1-feng.tang@linux.alibaba.com/T/#u
 
-On non-x86, this functionality rarely works, which is really the point
-of this series.
+Tested-by: Feng Tang <feng.tang@linux.alibaba.com>
 
-> If not, systemd should probably document that the functionality is
-> non-portable if it doesn't do that already.
+Thanks!
 
-Not sure what you mean by non-portable. This functionality should be
-exposed in a generic manner (using the RTC subsystem interfaces), but
-only if it can be relied upon. On x86, the RTC subsystem will use the
-rtc-cmos driver, which implements the wakeup routines in terms of port
-I/O.
+- Feng
 
-If removing this functionality altogether from the EFI rtc driver is a
-problem, perhaps it would be better to implement an allowlist based
-solution that does not attempt to access the runtime services by
-default.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  drivers/rtc/rtc-efi.c | 76 +-------------------
+>  1 file changed, 2 insertions(+), 74 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+> index fa8bf82df948..b4f44999ef0f 100644
+> --- a/drivers/rtc/rtc-efi.c
+> +++ b/drivers/rtc/rtc-efi.c
+> @@ -112,48 +112,6 @@ convert_from_efi_time(efi_time_t *eft, struct rtc_time *wtime)
+>  	return true;
+>  }
+>  
+> -static int efi_read_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+> -{
+> -	efi_time_t eft;
+> -	efi_status_t status;
+> -
+> -	/*
+> -	 * As of EFI v1.10, this call always returns an unsupported status
+> -	 */
+> -	status = efi.get_wakeup_time((efi_bool_t *)&wkalrm->enabled,
+> -				     (efi_bool_t *)&wkalrm->pending, &eft);
+> -
+> -	if (status != EFI_SUCCESS)
+> -		return -EINVAL;
+> -
+> -	if (!convert_from_efi_time(&eft, &wkalrm->time))
+> -		return -EIO;
+> -
+> -	return rtc_valid_tm(&wkalrm->time);
+> -}
+> -
+> -static int efi_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+> -{
+> -	efi_time_t eft;
+> -	efi_status_t status;
+> -
+> -	convert_to_efi_time(&wkalrm->time, &eft);
+> -
+> -	/*
+> -	 * XXX Fixme:
+> -	 * As of EFI 0.92 with the firmware I have on my
+> -	 * machine this call does not seem to work quite
+> -	 * right
+> -	 *
+> -	 * As of v1.10, this call always returns an unsupported status
+> -	 */
+> -	status = efi.set_wakeup_time((efi_bool_t)wkalrm->enabled, &eft);
+> -
+> -	dev_warn(dev, "write status is %d\n", (int)status);
+> -
+> -	return status == EFI_SUCCESS ? 0 : -EINVAL;
+> -}
+> -
+>  static int efi_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	efi_status_t status;
+> @@ -188,17 +146,13 @@ static int efi_set_time(struct device *dev, struct rtc_time *tm)
+>  
+>  static int efi_procfs(struct device *dev, struct seq_file *seq)
+>  {
+> -	efi_time_t        eft, alm;
+> +	efi_time_t        eft;
+>  	efi_time_cap_t    cap;
+> -	efi_bool_t        enabled, pending;
+> -	struct rtc_device *rtc = dev_get_drvdata(dev);
+>  
+>  	memset(&eft, 0, sizeof(eft));
+> -	memset(&alm, 0, sizeof(alm));
+>  	memset(&cap, 0, sizeof(cap));
+>  
+>  	efi.get_time(&eft, &cap);
+> -	efi.get_wakeup_time(&enabled, &pending, &alm);
+>  
+>  	seq_printf(seq,
+>  		   "Time\t\t: %u:%u:%u.%09u\n"
+> @@ -214,26 +168,6 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+>  		/* XXX fixme: convert to string? */
+>  		seq_printf(seq, "Timezone\t: %u\n", eft.timezone);
+>  
+> -	if (test_bit(RTC_FEATURE_ALARM, rtc->features)) {
+> -		seq_printf(seq,
+> -			   "Alarm Time\t: %u:%u:%u.%09u\n"
+> -			   "Alarm Date\t: %u-%u-%u\n"
+> -			   "Alarm Daylight\t: %u\n"
+> -			   "Enabled\t\t: %s\n"
+> -			   "Pending\t\t: %s\n",
+> -			   alm.hour, alm.minute, alm.second, alm.nanosecond,
+> -			   alm.year, alm.month, alm.day,
+> -			   alm.daylight,
+> -			   enabled == 1 ? "yes" : "no",
+> -			   pending == 1 ? "yes" : "no");
+> -
+> -		if (alm.timezone == EFI_UNSPECIFIED_TIMEZONE)
+> -			seq_puts(seq, "Timezone\t: unspecified\n");
+> -		else
+> -			/* XXX fixme: convert to string? */
+> -			seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
+> -	}
+> -
+>  	/*
+>  	 * now prints the capabilities
+>  	 */
+> @@ -249,8 +183,6 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+>  static const struct rtc_class_ops efi_rtc_ops = {
+>  	.read_time	= efi_read_time,
+>  	.set_time	= efi_set_time,
+> -	.read_alarm	= efi_read_alarm,
+> -	.set_alarm	= efi_set_alarm,
+>  	.proc		= efi_procfs,
+>  };
+>  
+> @@ -271,11 +203,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+>  	platform_set_drvdata(dev, rtc);
+>  
+>  	rtc->ops = &efi_rtc_ops;
+> -	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
+> -	if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
+> -		set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
+> -	else
+> -		clear_bit(RTC_FEATURE_ALARM, rtc->features);
+> +	clear_bit(RTC_FEATURE_ALARM, rtc->features);
+>  
+>  	device_init_wakeup(&dev->dev, true);
+>  
+> -- 
+> 2.50.0.727.gbf7dc18ff4-goog
 
