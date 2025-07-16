@@ -1,143 +1,102 @@
-Return-Path: <linux-rtc+bounces-4524-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4525-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC69B06C74
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jul 2025 05:52:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9C2B07CC2
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jul 2025 20:23:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D10C1C20203
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jul 2025 03:52:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E325A43B61
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jul 2025 18:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111801F4CB6;
-	Wed, 16 Jul 2025 03:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnbyNZ/u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABDC2BE64A;
+	Wed, 16 Jul 2025 18:21:58 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D794785260;
-	Wed, 16 Jul 2025 03:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51392BE04D;
+	Wed, 16 Jul 2025 18:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752637944; cv=none; b=WvI6ySC+niOAiU5dxBp9+qM2z6F1hScYr07wqHOL7Svde8fHwwye+hJBWTHQeulA7WHlBMMoSPrBPAJt/1Ie1/onl3+3N4wMRgaloGtTh4WmWgdrNWc46sPzOlhKpKDrqwmz8FMOuGXfyxiTbAtqki5W094TTc6GfBXm0MToZGU=
+	t=1752690118; cv=none; b=MSJaDVyb7gxGrF7lBejBBfsrAfs8kUoM8xaWXAeunht2M0f3V9rUI6DC6RV4/MbcVU4PqVjHKkg5da5/uQ0lf+8z7jIl/z1QOF6JgrBpoeu8K5zAg5syQs+FnwZRJ+8o3Iy0gS218d6JyQwwEEPJduIUj0nuCx8lXnzs+RHkiRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752637944; c=relaxed/simple;
-	bh=kbKYP37k7zLxmRSGbkuGEEJMcz1AsBvMEBjt1v4DxZE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XYsaNYDcoUTZaE05TaZfZqqhWvcJ5+EMK3BVXEo9Lnk3Dtpy+1oWQogyQRFjFb/pEqU7xOTZjc+TNxGGuot8ONDn4W0RLqXTObcgTQnEMWA37f6hnWacB5qyMRbv6P1nY4DwW+GhVP6Cjdcbmj5YVEyNgEMzpqxE45ghq5v2Gaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnbyNZ/u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F48C4AF09;
-	Wed, 16 Jul 2025 03:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752637943;
-	bh=kbKYP37k7zLxmRSGbkuGEEJMcz1AsBvMEBjt1v4DxZE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fnbyNZ/uofGXdgO7Yr2YWSNB67zbnOFOQ+pTadx543mwEWroEHJc4Ic64pAA3Z/11
-	 UGhzH/VIGx0r+EL5bHdyNhfO5qenQAGqdqQXc4sMTG4jO0oHJB6QDFPWPfsXbCmZlH
-	 WLBqi80urwpHRK2uEhCd3hCdgh6UPIlGy7x1ES23qXjUPSoX9k+ltIj0Bj+U9ncrzV
-	 77QMIdVHowgEY/FSjC0zrhqNhEDFdeSB2r9kmK+gvSIfE4jKLfBHdQ6Ootdl1piht0
-	 uqH/qfLzgFHH1RUJtKWlIjdcG5PtZLDK0INZv9ODqbHmZUtQvuXb2pJVrnQ+w0d2FI
-	 XTSf8/KvR6vrg==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-553e5df44f8so5490821e87.3;
-        Tue, 15 Jul 2025 20:52:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVsktIoCYEXbui/DE2Q8u8WlYnlXJt8l3D954giHIbeKW3PoGPiBfOJSMtiBWXDuap37Bwf1umnVcw=@vger.kernel.org, AJvYcCWF/gzQ2X0WU4LInxpT4Rf+EEatcwBqR325IeOjsJ6NiPKfSr8hbwylP5tMCLr7sw6irLDKy9muDhl0IRp2@vger.kernel.org, AJvYcCXo/5jlBJc0ttIHmQ7SNWbiiuBQ33vVu1j97eg2pRUlqWkjta0ZBELHVeCeSYPi2nxyMJD2RlIdpBAY@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPfqlr7OPFba2eKRvxuygQj42jbnfgMU843NmRFE49gJ0M6L+n
-	FdQFvMk8X95yuVx/XBgt9e/Y4ASMFkLgQNuyjzOg80nC51AxPpU+YMnlwJkcNzEm6tPfBdw95Uu
-	f9svObsjLxQr+DGtD8L4VH2fitL+JvVY=
-X-Google-Smtp-Source: AGHT+IGsx+1eBRK7VlvwwK4lrn2tedS/8CBhSaETgUda6ZBIDw8ZzbYDB45sUI1HO8Bko2rjpL9ZJH4DB6I0F9C6dzg=
-X-Received: by 2002:a05:6512:3416:b0:553:ae05:9c48 with SMTP id
- 2adb3069b0e04-55a23fa8c7amr357898e87.45.1752637941719; Tue, 15 Jul 2025
- 20:52:21 -0700 (PDT)
+	s=arc-20240116; t=1752690118; c=relaxed/simple;
+	bh=D8Hv4OGHZrVMgoVJluQ3bHG8biIF97yJJYH9uaRD7k8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLyo5fL+inu6qtRevfZQVDqMHLwqphOOMeNuazRtKIoRCpEr2nVyjzpQFobWs2YB3fWSxLLXVToU+FKxRd+Jh5XCEdx2Mc80rz5sxIrNcIAQQPPpbL3ehdUu/xwsakVitlEF0QfmXNHQSBLZGw/ApEPBCcYfIhGHnOfC9mELWCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uc6ZW-0006DP-00; Wed, 16 Jul 2025 20:09:38 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id F2E65C0B44; Wed, 16 Jul 2025 20:07:00 +0200 (CEST)
+Date: Wed, 16 Jul 2025 20:07:00 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 0/4] mips: CMOS RTC refactoring
+Message-ID: <aHfqRH7vwcjmamMd@alpha.franken.de>
+References: <20250713100434.699843-1-mat.jonczyk@o2.pl>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714060843.4029171-5-ardb+git@google.com> <422e2a72-972f-41f4-a0b3-d69a6cb0c2e2@canonical.com>
- <CAMj1kXEXpBF8hPaVMU0sDgNysYT66MDRmr3JHO4Lg1sJB_Yteg@mail.gmail.com> <aHZsohPoxLYML___@sunil-laptop>
-In-Reply-To: <aHZsohPoxLYML___@sunil-laptop>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 16 Jul 2025 13:52:09 +1000
-X-Gmail-Original-Message-ID: <CAMj1kXF+AP-3hKb8vJQ3oCoPxmEG=udexNCxMLvGE_KHCKcZxw@mail.gmail.com>
-X-Gm-Features: Ac12FXyJHyI8FNCWondq-usX0O9Wq8IR0GvzToxJvHq2L_BDfrGw4oT1HSN0fVw
-Message-ID: <CAMj1kXF+AP-3hKb8vJQ3oCoPxmEG=udexNCxMLvGE_KHCKcZxw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/3] Remove unused EFI runtime APIs
-To: Sunil V L <sunilvl@ventanamicro.com>
-Cc: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>, Ard Biesheuvel <ardb+git@google.com>, 
-	linux-arm-kernel@lists.infradead.org, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Juergen Gross <jgross@suse.com>, 
-	Stefano Stabellini <sstabellini@kernel.org>, 
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Bibo Mao <maobibo@loongson.cn>, 
-	linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, x86@kernel.org, 
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250713100434.699843-1-mat.jonczyk@o2.pl>
 
-On Wed, 16 Jul 2025 at 00:58, Sunil V L <sunilvl@ventanamicro.com> wrote:
->
-> On Tue, Jul 15, 2025 at 01:29:15PM +1000, Ard Biesheuvel wrote:
-> > On Mon, 14 Jul 2025 at 18:11, Heinrich Schuchardt
-> > <heinrich.schuchardt@canonical.com> wrote:
-> > >
-> > > On 7/14/25 08:08, Ard Biesheuvel wrote:
-> > > > From: Ard Biesheuvel <ardb@kernel.org>
-> > > >
-> > > > Using EFI runtime services to program the RTC to wake up the system is
-> > > > supported in theory, but rarely works in practice. Fortunately, this
-> > > > functionality is rarely [if ever] used to begin with so we can just drop
-> > > > it. (Note that the EFI rtc driver is not used by x86, which programs the
-> > > > CMOS rtc directly)
-> > >
-> > > The main problem I see with firmware offering access to the RTC via UEFI
-> > > services is that two different drivers, the firmware one and the Linux
-> > > one might be trying to access the same busses or registers which might
-> > > lead to unexpected results.
-> > >
-> > > Recently there was a discussion in the RISC-V technical group for the
-> > > server platform specification where the same issue was discussed
-> > > concerning SetTime().
-> > >
-> > > As a UEFI firmware should not care which operating system is booted, it
-> > > should be up to the OS to disable EFI access to the RTC if it has native
-> > > access.
-> > >
-> > > Could we disable all the EFI services for the RTC in Linux dynamically
-> > > when an RTC driver is successfully probed?
-> > >
-> >
-> > I don't think this would be the right way to do it.
-> >
-> > It also depends on whether ACPI or DT is being used to describe the
-> > platform to the OS.
-> >
-> > ACPI does not support describing the RTC device, so it should provide
-> > the EFI services.
-> >
-> Hi Ard,
-> IIUC, TAD is defined for this purpose, right?
-> https://uefi.org/specs/ACPI/6.6/09_ACPI_Defined_Devices_and_Device_Specific_Objects.html#time-and-alarm-device
->
-> > DT can describe the RTC device directly, so I think it is acceptable
-> > for such firmware to mark all RTC routines unsupported in the RT_PROP
-> > table, and just expose the RTC device directly.
-> >
-> > The OS shouldn't have to reason about these things: it is up to the
-> > platform to describe itself unambiguously.
->
-> I agree. But I think even with ACPI, EFI GetTime/SetTime can return
-> unsupported if there is a TAD exposed with proper _GRT/_SRT and _GCP.
->
+On Sun, Jul 13, 2025 at 12:04:30PM +0200, Mateusz Jończyk wrote:
+> Hello,
+> 
+> A while ago I wrote some patches that refactor a bit the RTC CMOS support on the
+> MIPS architecture. These were in response to a bug report about locking
+> problems during suspend / resume:
+> 
+> Link: https://lore.kernel.org/all/CAP-bSRZ0CWyZZsMtx046YV8L28LhY0fson2g4EqcwRAVN1Jk+Q@mail.gmail.com/
+> 
+> Back then, I was trying to convert the rtc_lock to a raw spinlock. This proved
+> to be unnecessary and harmful, but in the process I removed some dead and
+> duplicated code that touches the MC146818 (the chip of the CMOS RTC) for
+> the MIPS architecture.
+> 
+> These patches were tested only in an emulator, as I don't have the hardware.
+> They are roughly in the order of increasing risk.
+> 
+> Greetings,
+> Mateusz
+> 
+> Mateusz Jończyk (4):
+>   mips: remove unused function mc146818_set_rtc_mmss
+>   mips/mach-rm: remove custom mc146818rtc.h file
+>   mips: remove redundant macro mc146818_decode_year
+>   mips/malta,loongson2ef: use generic mc146818_get_time function
+> 
+>  arch/mips/Kconfig                             |   2 +
+>  .../include/asm/mach-generic/mc146818rtc.h    |   4 -
+>  arch/mips/include/asm/mach-jazz/mc146818rtc.h |   2 -
+>  .../mips/include/asm/mach-malta/mc146818rtc.h |   2 -
+>  arch/mips/include/asm/mach-rm/mc146818rtc.h   |  21 ----
+>  arch/mips/include/asm/mc146818-time.h         | 105 ++----------------
+>  6 files changed, 9 insertions(+), 127 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/mach-rm/mc146818rtc.h
+> 
+> 
+> base-commit: d7b8f8e20813f0179d8ef519541a3527e7661d3a
+> -- 
+> 2.25.1
 
-Thanks for the pointer. This device did not exist yet when I last
-looked at this stuff.
+series applied to mips-next.
 
-So it seems like TAD is a suitable way for exposing a RTC to the OS
-without the need for a hardware specific driver. However, the existing
-Linux driver does not appear to support get/set time, and is not
-hooked up to the RTC subsystem [yet].
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
