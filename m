@@ -1,60 +1,58 @@
-Return-Path: <linux-rtc+bounces-4553-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4554-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05CEFB0F87E
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 18:54:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0868CB0F883
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 18:55:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00FE11C84148
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 16:55:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2E451C83C32
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 16:55:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1453A204C07;
-	Wed, 23 Jul 2025 16:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11BE7204588;
+	Wed, 23 Jul 2025 16:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DUozZG12"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SBB1vYPo"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AC120126A;
-	Wed, 23 Jul 2025 16:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41A217A2E8;
+	Wed, 23 Jul 2025 16:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753289694; cv=none; b=LAeyMSelRJ1WGTSPh3j8s9H/JdZYZ3iQxaou24pyl3gLzGZJpbwjqCpa6ZYLSIG1/zSjdUZcclPl7RZcwHVpwArrdXANH/m8zV369HaCB4LsKkCxMOIUk+HQzbSMT+RKZxu8I5P9XlM6QzyZz3xd4QLbVRzRKxfdzmH8MBEU9x8=
+	t=1753289704; cv=none; b=bt8zpvqrK7p0BmILwuDlc3h7ij71ieCCyq7zj9P5WM8S8mPQ1y78nvUzcJCBP3Pku3WrT6K8RrdgihmWO8iUXsvroccFA3YpHI/7cNS32d+FIlnoGFWLxX+wGZTI0SXU/yku1DE12nAyHte5/EwGmy1gT7ksoTBJqCx1lP3c/1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753289694; c=relaxed/simple;
-	bh=6EGV5oVqnt2HJv/uuL6WTaHCm4vulgYtHw0OHP8srZk=;
+	s=arc-20240116; t=1753289704; c=relaxed/simple;
+	bh=dVojNLEQbEC0lqiL/eFv2YVmsnpMSdiZOmiE5/KeOqw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D2AEbgNxn6mUFBA9ec/Zl7/Poqj+d8j831Bmsj0wogAL3QdKCipIglFTYMwoOLIQA2LQPPMsRSPfny9Da352tjacY4hD1u8uVnt6HZszSjx1CXB8DxomZkKjdqm3BDbwd/5S6eEHxUV0E4G6amPXGuehwlv3ADXPvBN4xd86viY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DUozZG12; arc=none smtp.client-ip=217.70.178.235
+	 Content-Type:Content-Disposition:In-Reply-To; b=MOGoQqoQWdokB4KRZT6nMBfi3/1zIDEKY2mDCO94ExzkHXqlhZBPjYszuzemOqKqCXKoHhC1HCXvKePmIpsZ9Qs5D8Z5YKkfhsuSKkYuKF2njhclmVShZBYgUrn+NWH9qGqQco9kTLhwmU/YzHP96Yra992YOAV3oUlzsL9z9sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SBB1vYPo; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 60D4744200;
-	Wed, 23 Jul 2025 16:54:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AD000441CB;
+	Wed, 23 Jul 2025 16:54:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1753289689;
+	t=1753289694;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Oh4dfa/0L3B39iTg6k0Zy0MlKxBfFSrzu1Ttqr6MqPg=;
-	b=DUozZG12DcyE2hA3klfjMeAylEK8f7X3ghRiX83HQoSgXjeTAXkI2srqRVetL2D/GaXSe9
-	5ulOJM47G3mtg0FPw8DfTcPtrqSOIkMj/CAa4Mu+WSskHSTZC0JT3vTLd+f8DtLiH8yGnW
-	jnnIBPsQ9SfSBEKwTb2gOOI0Ux6gc2LR22bu4f1dhoKsmtEe6Rj5fXbuSGyiG1aHaqTcpv
-	LzPAd52w/s9y55hBexLgyiCdIZPIAUFCTbjRzofyLuFUJgzlZzCWGZi8TSicSmf4MfWpij
-	amHgHMLHbNSzbApEOO3vGFOzy7RiuYa20irQ+2QA7XhxEcXz+0eQzn7Sdaq4hw==
-Date: Wed, 23 Jul 2025 18:54:49 +0200
+	bh=R8e0eU7Xw9BCsKbEQNq8n6BijK5ViFZ16EDffkZW/o4=;
+	b=SBB1vYPoKgmfQF8kgSeP1aqkv33UW+qSfGRPpEIVxg9AtWeg8M/TmUfgcWs7MAajHKHe5f
+	RnHPcLmxdQ47Ulmv0FuKUI9qQyAGNWhcTCTrZpiuZTVf5vHlzJg3cjm3MGznbMoTGumoG5
+	p8oLMzxkGF05yknV82OxiexwGc2NnJRvWAaaysN7PBLiaDNfitQCsD9Z2Hs6o1rbb42GxY
+	G1GXrzDNK/Y6ztMEOFu1okYNeb7PkI1TRC2JUIH0EF4pfKQxVKx4eSCEFiIUVm+WGXQHQe
+	id4oKwsQvwnope1alTxnLrVQf6NysqXP4z/LmUcPIXTefbnbeAPN0ToTOrFQ7Q==
+Date: Wed, 23 Jul 2025 18:54:54 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2] rtc: Rename lib_test to test_rtc_lib
-Message-ID: <175328962919.785597.17989599955686169611.b4-ty@bootlin.com>
-References: <47019d7f8ced12107b54a372fdf34b1b8f7b6183.1751355848.git.geert@linux-m68k.org>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-sh@vger.kernel.org
+Subject: Re: [PATCH] rtc: sh: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+Message-ID: <175328962921.785597.15864724066910267201.b4-ty@bootlin.com>
+References: <396d4a769b8d3c6fec43c65022cdfd8a6854524a.1752086758.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -63,23 +61,25 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47019d7f8ced12107b54a372fdf34b1b8f7b6183.1751355848.git.geert@linux-m68k.org>
+In-Reply-To: <396d4a769b8d3c6fec43c65022cdfd8a6854524a.1752086758.git.geert+renesas@glider.be>
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejkeeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemsgeiheemsgdvfhdtmeeksgelkeemjeeltdehmegrsggvleemudehvddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmegsieehmegsvdhftdemkegsleekmeejledtheemrggsvgelmeduhedvvddphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegsrhgvnhgurghnrdhhihhgghhinhhssehlihhnuhigrdguvghvpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdpr
- hgtphhtthhopehrmhhorghrsehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkuhhnihhtqdguvghvsehgohhoghhlvghgrhhouhhpshdrtghomh
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejkeeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejfefhffekjeeuheevueevjedvleevjeetudffheeutdffudefjeduffeuvddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmegsieehmegsvdhftdemkegsleekmeejledtheemrggsvgelmeduhedvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemsgeiheemsgdvfhdtmeeksgelkeemjeeltdehmegrsggvleemudehvddvpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepfihsrgdorhgvnhgvshgrshesshgrnhhgqdgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepghgvvghrthdorhgvnhgvshgrshesghhlihguvghrrdgsvgdprhgtphhtthhopehli
+ hhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrhgvnhgvshgrshdqshhotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhshhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Tue, 01 Jul 2025 09:44:39 +0200, Geert Uytterhoeven wrote:
-> When compiling the RTC library functions test as a module, the module
-> has the non-descriptive name "lib_test.ko".  Fix this by renaming it to
-> "test_rtc_lib.ko".
+On Wed, 09 Jul 2025 20:47:52 +0200, Geert Uytterhoeven wrote:
+> Convert the Renesas SuperH On-Chip RTC driver from SIMPLE_DEV_PM_OPS()
+> to DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr().  This lets us drop the
+> __maybe_unused annotations from its suspend and resume callbacks, and
+> reduces kernel size in case CONFIG_PM or CONFIG_PM_SLEEP is disabled.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] rtc: Rename lib_test to test_rtc_lib
-      https://git.kernel.org/abelloni/c/0c6f0d77ab62
+[1/1] rtc: sh: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+      https://git.kernel.org/abelloni/c/e92eda97f8c5
 
 Best regards,
 
