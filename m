@@ -1,61 +1,63 @@
-Return-Path: <linux-rtc+bounces-4538-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4539-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD6F1B0EEC5
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 11:51:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1330AB0EEF9
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 11:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18F9417FC3E
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 09:51:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0301AA0470
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 09:58:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F972877FB;
-	Wed, 23 Jul 2025 09:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5F128A73C;
+	Wed, 23 Jul 2025 09:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jg5aYMkV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sCsvzskT"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C7B283141;
-	Wed, 23 Jul 2025 09:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01BE280325;
+	Wed, 23 Jul 2025 09:59:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753264292; cv=none; b=YjIQovZgjOfLacjpoVqkc4YGiT+T60YddnR4fbjbfFWjd2eN+3Cc4nleYyi/qqP5BXJAWjcYPQR6XdnV1CyNF1wMc73r9uoPcXYgr4Dtb3VdVb48+bjf6Y/TqG9/qjYVjzPVLS0x9zSiLf1GMI4jQHgplsvMiyAfDTvWGOA4Y6c=
+	t=1753264744; cv=none; b=e8Li3cpxCznEs1TPapWtDvKkz176xCVJfmC34S9NG9+S9X1JS0Hyrr/TYn3qbhPkCfH2m/c7Vhs2HkjIm3lKkPZYf1pKR4qhde5Pjgr71FXLpUNXnulK0/0fPHn4bkZ4kbhaBQbR44jpL8aLbLH4/YdOchpAEWaW9V5hpGLvjho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753264292; c=relaxed/simple;
-	bh=wXjG20KF++mohZAH82whMjcdBO3WgxTkFDej6WjYGKw=;
+	s=arc-20240116; t=1753264744; c=relaxed/simple;
+	bh=yzX7va2srxpQsEnQrCqzNSATBc4ZgUiYAKZ5VunBZIw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XB8G01LIHNS1G3U4qekspj5KG8gd0S1/nCNy5nR1VjE8KI1Vr3x9zGUlodsWBi42cJZMOgqlE0HJhgDi1vEC9DHYfUUsoHavIU8fOAZoK0cww+mp0TeBbEe72k7ZKjJNpKgSErXU+K6vbxHJNq/kku4S76Vr9zzF3xhlP/bsIqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jg5aYMkV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9761CC4CEE7;
-	Wed, 23 Jul 2025 09:51:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nA3CmAEuu5Ibf9h1x67b7O/5WiYW7FiDCp9ELXP5Bep3zChqm/UtDJuyxgUTZ3RuGq/InxHo6F8/zEVIlClsn4dmVXExRO8XZBtPge5rjJf3oMA2EMhWoJ8DB1UZ3ApjdF/NAl/Y1aPGP9Asr7dVcAotB60o/hT18yMCxGqeudM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sCsvzskT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0008C4CEE7;
+	Wed, 23 Jul 2025 09:58:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753264292;
-	bh=wXjG20KF++mohZAH82whMjcdBO3WgxTkFDej6WjYGKw=;
+	s=k20201202; t=1753264743;
+	bh=yzX7va2srxpQsEnQrCqzNSATBc4ZgUiYAKZ5VunBZIw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jg5aYMkVGz1FmNjRpleo21K2HbOH++CwJlJB5kEXO6Cy00OTib+Kmm14pG6kH65ip
-	 ytlCj34yf2c1WsgTr7JBftxDXfACRw5BsZ0kRr1cxVECFA2qPqZahYsfoYk/Zu89S6
-	 0C5eeDdwg9L2Y5d+OfqT1yHOKlfHuTvSONFoVo5YMf1ADoeHDI2e0/UHjJabLAo+4T
-	 lYWJ1Tw85Ep6j5uHVwu22vaMFYHKIwemckIrB6VeLfBn5qoNYk7hWmWd0uA0MTPYKo
-	 0r9W2dUMrQQOflJdvmXEUKxwFDXlLUMAbx0lBNrDG3UsctiLjCTJ8OATi4iDlZ5/Og
-	 qvPImRcHSSg0A==
-Date: Wed, 23 Jul 2025 10:51:25 +0100
+	b=sCsvzskTIiUISMxcu3iQM4Mfm3ktUPUQqQFseLTYboda08WkEP3zRtfrg7joDVUka
+	 uvkd+F0St/5hNrzlG6oLHsGtTErA1r82vjNuu7cCbCYLabFfJjPJTPZfNijtXL7Y40
+	 9KWR90q5fYU9f6Z0Ajws0gD8n3urDLp4zn/r30AkGidlSE0aMtIdtgWcm7rjRfBGkl
+	 U37hX6bmqcHXcIbFp7lvRSOhPbFKHdQC4mzVsPecdfQer7drjEAEBtnmoV6+dNbuGh
+	 GYC689eGG45h6W8216ZdckWnBSlC0euXCL3NVZGIrqi6fyRHzICQjKp6RJgngvymvC
+	 ZhC3wk7Q5SAwg==
+Date: Wed, 23 Jul 2025 10:58:56 +0100
 From: Lee Jones <lee@kernel.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	troymitchell988@gmail.com, guodong@riscstar.com,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/8] mfd: simple-mfd-i2c: specify max_register
-Message-ID: <20250723095125.GR11056@google.com>
-References: <20250710175107.1280221-1-elder@riscstar.com>
- <20250710175107.1280221-3-elder@riscstar.com>
+To: a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v14 0/7] Add Nuvoton NCT6694 MFD drivers
+Message-ID: <20250723095856.GT11056@google.com>
+References: <20250715025626.968466-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,91 +67,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250710175107.1280221-3-elder@riscstar.com>
+In-Reply-To: <20250715025626.968466-1-a0282524688@gmail.com>
 
-On Thu, 10 Jul 2025, Alex Elder wrote:
+On Tue, 15 Jul 2025, a0282524688@gmail.com wrote:
 
-> All devices supported by simple MFD use the same 8-bit register 8-bit
-> value regmap configuration.  There is an option available for a device
-> to specify a custom configuration, but no existing device uses it.
+> From: Ming Yu <a0282524688@gmail.com>
 > 
-> Rather than specify a "full" regmap configuration to change only
-> the max_register value, Lee Jones suggested allowing max_register
-> to be specified in the simple_mfd_data structure.  If regmap_config
-> and max_register are both supplied, the max_register field is ignored.
+> This patch series introduces support for Nuvoton NCT6694, a peripheral
+> expander based on USB interface. It models the chip as an MFD driver
+> (1/7), GPIO driver(2/7), I2C Adapter driver(3/7), CANfd driver(4/7),
+> WDT driver(5/7), HWMON driver(6/7), and RTC driver(7/7).
 > 
-> Signed-off-by: Alex Elder <elder@riscstar.com>
-> Suggested-by: Lee Jones <lee@kernel.org>
-> ---
-> v8: - Use regmap_config_8r_8v, modifying it if max_register supplied
+> The MFD driver implements USB device functionality to issue
+> custom-define USB bulk pipe packets for NCT6694. Each child device can
+> use the USB functions nct6694_read_msg() and nct6694_write_msg() to issue
+> a command. They can also request interrupt that will be called when the
+> USB device receives its interrupt pipe.
 > 
->  drivers/mfd/simple-mfd-i2c.c | 8 ++++++--
->  drivers/mfd/simple-mfd-i2c.h | 3 ++-
->  2 files changed, 8 insertions(+), 3 deletions(-)
+> The following introduces the custom-define USB transactions:
+> 	nct6694_read_msg - Send bulk-out pipe to write request packet
+> 			   Receive bulk-in pipe to read response packet
+> 			   Receive bulk-in pipe to read data packet
 > 
-> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> index 22159913bea03..5138aa72140b5 100644
-> --- a/drivers/mfd/simple-mfd-i2c.c
-> +++ b/drivers/mfd/simple-mfd-i2c.c
-> @@ -24,15 +24,16 @@
->  
->  #include "simple-mfd-i2c.h"
->  
-> -static const struct regmap_config regmap_config_8r_8v = {
-> +static struct regmap_config regmap_config_8r_8v = {
->  	.reg_bits = 8,
->  	.val_bits = 8,
-> +	/* .max_register can be specified in simple_mfd_data */
+> 	nct6694_write_msg - Send bulk-out pipe to write request packet
+> 			    Send bulk-out pipe to write data packet
+> 			    Receive bulk-in pipe to read response packet
 
-Drop this comment please.
+[...]
 
->  };
->  
->  static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->  {
->  	const struct simple_mfd_data *simple_mfd_data;
-> -	const struct regmap_config *regmap_config;
-> +	struct regmap_config *regmap_config;
->  	struct regmap *regmap;
->  	int ret;
->  
-> @@ -43,8 +44,11 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->  		regmap_config = &regmap_config_8r_8v;
->  	else
->  		regmap_config = simple_mfd_data->regmap_config;
-> +	if (simple_mfd_data && !simple_mfd_data->regmap_config)
-> +		regmap_config->max_register = simple_mfd_data->max_register;
-
-If max_register is set in simple_mfd_data, it should take precedence.
-
-if (simple_mfd_data && simple_mfd_data->max_register)
-	regmap_config->max_register = simple_mfd_data->max_register;
-
->  	regmap = devm_regmap_init_i2c(i2c, regmap_config);
-> +	regmap_config->max_register = 0;
-
-Does max_register definitely have persistence over subsequent calls?
-
->  	if (IS_ERR(regmap))
->  		return PTR_ERR(regmap);
->  
-> diff --git a/drivers/mfd/simple-mfd-i2c.h b/drivers/mfd/simple-mfd-i2c.h
-> index 7cb2bdd347d97..ea2a96af8bce4 100644
-> --- a/drivers/mfd/simple-mfd-i2c.h
-> +++ b/drivers/mfd/simple-mfd-i2c.h
-> @@ -24,7 +24,8 @@
->  #include <linux/regmap.h>
->  
->  struct simple_mfd_data {
-> -	const struct regmap_config *regmap_config;
-> +	struct regmap_config *regmap_config;
-> +	unsigned int max_register;	/* Ignored if regmap_config supplied */
->  	const struct mfd_cell *mfd_cell;
->  	size_t mfd_cell_size;
->  };
-> -- 
-> 2.45.2
+> Ming Yu (7):
+>   mfd: Add core driver for Nuvoton NCT6694
+>   gpio: Add Nuvoton NCT6694 GPIO support
+>   i2c: Add Nuvoton NCT6694 I2C support
+>   can: Add Nuvoton NCT6694 CANFD support
+>   watchdog: Add Nuvoton NCT6694 WDT support
+>   hwmon: Add Nuvoton NCT6694 HWMON support
+>   rtc: Add Nuvoton NCT6694 RTC support
 > 
+>  MAINTAINERS                         |  12 +
+>  drivers/gpio/Kconfig                |  12 +
+>  drivers/gpio/Makefile               |   1 +
+>  drivers/gpio/gpio-nct6694.c         | 499 +++++++++++++++
+>  drivers/hwmon/Kconfig               |  10 +
+>  drivers/hwmon/Makefile              |   1 +
+>  drivers/hwmon/nct6694-hwmon.c       | 949 ++++++++++++++++++++++++++++
+>  drivers/i2c/busses/Kconfig          |  10 +
+>  drivers/i2c/busses/Makefile         |   1 +
+>  drivers/i2c/busses/i2c-nct6694.c    | 196 ++++++
+>  drivers/mfd/Kconfig                 |  15 +
+>  drivers/mfd/Makefile                |   2 +
+>  drivers/mfd/nct6694.c               | 388 ++++++++++++
+>  drivers/net/can/usb/Kconfig         |  11 +
+>  drivers/net/can/usb/Makefile        |   1 +
+>  drivers/net/can/usb/nct6694_canfd.c | 832 ++++++++++++++++++++++++
+>  drivers/rtc/Kconfig                 |  10 +
+>  drivers/rtc/Makefile                |   1 +
+>  drivers/rtc/rtc-nct6694.c           | 297 +++++++++
+>  drivers/watchdog/Kconfig            |  11 +
+>  drivers/watchdog/Makefile           |   1 +
+>  drivers/watchdog/nct6694_wdt.c      | 307 +++++++++
+>  include/linux/mfd/nct6694.h         | 102 +++
+>  23 files changed, 3669 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-nct6694.c
+>  create mode 100644 drivers/hwmon/nct6694-hwmon.c
+>  create mode 100644 drivers/i2c/busses/i2c-nct6694.c
+>  create mode 100644 drivers/mfd/nct6694.c
+>  create mode 100644 drivers/net/can/usb/nct6694_canfd.c
+>  create mode 100644 drivers/rtc/rtc-nct6694.c
+>  create mode 100644 drivers/watchdog/nct6694_wdt.c
+>  create mode 100644 include/linux/mfd/nct6694.h
+
+I will apply this the other side of the pending merge-window.
 
 -- 
 Lee Jones [李琼斯]
