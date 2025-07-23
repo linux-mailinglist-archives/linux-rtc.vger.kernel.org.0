@@ -1,230 +1,217 @@
-Return-Path: <linux-rtc+bounces-4542-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4545-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DAB5B0F273
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 14:42:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DA4FB0F32F
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 15:09:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9AF91AA3FD7
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 12:43:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B362A3A690F
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 13:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9DD2E62B2;
-	Wed, 23 Jul 2025 12:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B872E88AE;
+	Wed, 23 Jul 2025 13:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="YilIbIqi"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PvKsGuq3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCC82E6118
-	for <linux-rtc@vger.kernel.org>; Wed, 23 Jul 2025 12:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753274572; cv=none; b=QRlliAhZ4VCGKg8T+pdxaT+tiuNOHgMSkLriCZa/S2ZuoKvK883hOCzg/hkIl8n90OjTTkbvD65nuEDc4MVXEi+B2uGn9hfR8GpmHRIVHM7X6K6Ae/4uKDHankQyYc1HnWTZskXMyXEJ8GSu/oOpcPGEsj8pKqKoCiurQRv67RU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753274572; c=relaxed/simple;
-	bh=s3GF7BZK1IbnAZRMzTFfekDE+ccoYiXy3ZkZDb60ad8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pwWuMq9WXheE9ITsiU+dy53aFLfz4tKVW2kb2a+Pb6iwBE/GJj8UI9SiMHLULveRfLCijUP2hRkZboSh0h3SQaRbsTg6hM7cGxR7x8pGlXRl4Ip//VtNWlDiBTFiBCbjcvKTR/HHEWpeAmPky8xAVc0BaeKAXYU1WCDQ4LFgIA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=YilIbIqi; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3e2c521efddso11847055ab.3
-        for <linux-rtc@vger.kernel.org>; Wed, 23 Jul 2025 05:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1753274568; x=1753879368; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G0Ew/UlImyFN4HlGy+L8fhyDF3AVGX/UG84SYw3xHZQ=;
-        b=YilIbIqiqcpZntXBIaozMc2Lg4RxSqeJp3EFREdAfEZa60ilM4Q+wmogslSmCfTLhr
-         bQDkWK60rkRgCI4bP9TYHmSCLVNl/xtIr03kbHZn10S1aua96vedv6lb7FDTJRerqy12
-         pxl03dpx7/+xYlBbhR95twtviIj8GVB2dbPXmaMYZMB2qjY4Hf0Phng5y0Its1TPLi01
-         1c3fLtmMMLQcCeXLjAzL1wQYi8Zadq1yMtHmI+puh0PPfB8JdLpKaKi4niRjlnBM5yyD
-         iBTrXQaLT/Qx47FbNo6+bLEXGfnXVysAZgGp0Z88I2DB+HZ1IVKsXHqJn16XPTFf9hBG
-         k1pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753274568; x=1753879368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G0Ew/UlImyFN4HlGy+L8fhyDF3AVGX/UG84SYw3xHZQ=;
-        b=eoG0xsrL5xtrEPjbVYw5ao3VRMIWCD4guLpqbTJS20Ioth1GMjrQI6B433nn5qJOwD
-         kxw008zdL7weA4pa2mboYW0VMRjr81UloeezEkS6wbG7VS3FIF5JWBs403WRSZe306wF
-         FAQbA8wD2daU4J64OdTDIQ95GGEoPCCDwn4fsGQgKzzjbaP2oZgyvRrjLXPzzfw5pRaX
-         zp0P3Sp1E4PLb3bis6HOHgNJjc0t4LYbswLO+MMYxKQXJVkUv5ukSXwrbeqaUPMAZ/q5
-         bLoPbLMsIdK/IO5AiFFF66IoxvkZbmDe70uKtH0u7DjfCnYQxUgsaOchp/XEw0A1qDi/
-         2l1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUiM6QzcScC1fxvWtEX+V3G6Ims63tYh26h/A8wpl7XH+N5uI5LHzRde7hPxF2rm2wk+6m2h5SiJHw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa4STdWyPF5chLkQs829LgHQIZNMSwXiAn7un5PAZ7o1MtB9kO
-	8ZOThHfJBPN+upQtYebEPhJeCWzboRaHzKwv0bF6Gkb+xnOeOj1FPHQogeNKzoO8xKo=
-X-Gm-Gg: ASbGncsUOQZ6/+OL/fmry1usscOOP95rFG5iS16hCvMe8FsOt8jgzaX7dNmlIuyOgVS
-	IH7X9J6hQJdMlILy0N8OGee2tjCDxtIFZvofV1MkuuqASNNqo48F6zf8POdclrrXAuSBw/T6+Py
-	pFO6tVY1Mh3+rovTmvlOD2qibrHuL647Z8vzGn6cPaI6W74ZCkUEEgsTT3Q8rm1FE1L90MyULaB
-	k1JdMSuRaUFaamfTqrX0AEaoswE60uM8Hicp2Bkw/x/e0HUetxTsygahDuiy33sn43aFHvzfOB0
-	35/rb8CIXiR4nIizS7xSVmcAa1YwNqui8TNIx+CPA6Oj1I4q/VHgAbtieBBsmTag7HttffsxrDB
-	qXT6PLSbN8xcdkMzC1f6EaSaamiY/5fWZkQ==
-X-Google-Smtp-Source: AGHT+IEqaLJWveuGtuwL6xUVomxEyO/I/mq75BNTRkLodb+q0fudHO2/No8ZaCo9o8H/kGbU5GpHqw==
-X-Received: by 2002:a05:6e02:1f82:b0:3df:3d1a:2e76 with SMTP id e9e14a558f8ab-3e32fc22705mr56940445ab.1.1753274568312;
-        Wed, 23 Jul 2025 05:42:48 -0700 (PDT)
-Received: from [10.211.55.5] ([199.59.116.160])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e2982aff75sm38954785ab.54.2025.07.23.05.42.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jul 2025 05:42:47 -0700 (PDT)
-Message-ID: <877dcf99-107e-4d96-8790-6608976d13ca@riscstar.com>
-Date: Wed, 23 Jul 2025 07:42:45 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548B72E54C9;
+	Wed, 23 Jul 2025 13:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753275853; cv=fail; b=DRZHT6iGiAPiV6ZaYPpB2gqTT3T+1lAxQrV+qEDq8xC8T+F2Xzx+xpp/rd8kcAvywhrr8XEDt2dIYo4jCUZb6vt8/VlnjKg1t0hocTiAa94yGVB1rxeytqoI4bTOj0RximHvYLwL4+Xz/OeWNmhT5CESHTA7Im/z+gpM4+6PjLs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753275853; c=relaxed/simple;
+	bh=aIAz3v6KoIlcgvh0T9VSWIPyJAnz3F3X5fExTAwaeJg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ocVUzzYlfdyBZ1UsHM2IbMZFyVvh3InQF40AYxQIhOcyZ7xSNjjBMALSaMpc+zeDO5AVb93VSqyzdlfYY44RXDH+Ia8al9icdzu5hA+joWGtWqq2BZ7xg+N4xMcZzKN5FyANnug2etdECu3PCa/yxc2KinHl+mOiah4Hx0aDdjk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PvKsGuq3; arc=fail smtp.client-ip=40.107.220.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dpXu6JI3x4jEQXCcYG6zl7UuoMshdlWBHzU8DIeFvA/HENASkt+dKA0L1A0Yw6vJd4Fmfkou5lgY1dFUi7/B8+1EIeLMZOPpWFZUAmkauW5uqhg88pfzZy5ANKIUYOILeiltg3pzgtyUluErdNOpFj7GbI3bxdmF01b3kcWyOyuO2fa9qevka3Fn9yTZrPO6nPLUupBT4w8tXrqzuCRzMuLbRNCbkyPt0fIgubvbCm95Q/i4563JiRBRC/O+GKAk3F87q7GMCb+CDO8Bwq7EVP0opcaOaJSBJ7oTPX/w8+KWeK5QpNnLTFngWw08luZdlX0l7sgwJsOiG/15CYKE3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z+JVOfU7GAElVl7eD0hfqiiaS3b9A51dtuNxrbW1zH4=;
+ b=WsQjE3RccZyZTUE+t7ZiLpaRZlZIMAsb4RIK0F8sqO+hBi1hbrur1s5mWft8oDjvhmS7k+qwktov6/4LRWTXofhwpK77NFVGC2mPbhID1kW2k3Q5cgjacPVF0rSY/0FyCBWsHtW8Q8yDjcBeLx3vg3l2QguvJvFnA+nPmrhVGDauC6pas5t5FEfhLQSTFJMb+mkrf4YJoGxyb7pnZ7ZXT2urMw0fEDzsOoGEt5OnQ+JSGFleRrh/komAngHpJ+Uf7ZKqArWxjbfE1MAvSD9raj79BuprOIsqAvpdPiNDVm8h4vfT41ycZetNCKr7FxJcAuQfPTMlJi+//nYrfQWFuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z+JVOfU7GAElVl7eD0hfqiiaS3b9A51dtuNxrbW1zH4=;
+ b=PvKsGuq3OmywGGdORh16fQ+xtVLrq05j/Qr0u0gi1IbESheCg3I5Z4qmqS50/CSMf4NrYbBYQ+qmWn4f3yKGYgiy/KjLQlyv660f7/mreIHa3X0jKj38OEAZXKg9DO8w75FKkZmx8/Geu6gFqYSwNqH0BJoKBlMGZ6utiaMB3Lf52b3ZwrSCChjj31yqK6D9hzJ2xl4c0nMfR0ZtoYX3Fw+x8ab5Z+SJjbdT07824SAx69mMkVv08uW18n9fJ32mUZ2lkUFhdwIaIXX59uucCOhcMWTyHwCyDMvDpZsTMT+LTviREwJ9Fa2yEFvXS/EiZV68tcjG+Ok10xDTHkPkRA==
+Received: from SN6PR08CA0006.namprd08.prod.outlook.com (2603:10b6:805:66::19)
+ by SA5PPF06C91DA0C.namprd12.prod.outlook.com (2603:10b6:80f:fc04::8c4) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Wed, 23 Jul
+ 2025 13:04:02 +0000
+Received: from SN1PEPF00036F3D.namprd05.prod.outlook.com
+ (2603:10b6:805:66:cafe::3c) by SN6PR08CA0006.outlook.office365.com
+ (2603:10b6:805:66::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.29 via Frontend Transport; Wed,
+ 23 Jul 2025 13:04:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SN1PEPF00036F3D.mail.protection.outlook.com (10.167.248.21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8964.20 via Frontend Transport; Wed, 23 Jul 2025 13:04:02 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Wed, 23 Jul
+ 2025 06:03:45 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 23 Jul 2025 06:03:45 -0700
+Received: from build-shgarg-noble-20250715.internal (10.127.8.11) by
+ mail.nvidia.com (10.126.190.182) with Microsoft SMTP Server id 15.2.1544.14
+ via Frontend Transport; Wed, 23 Jul 2025 06:03:45 -0700
+From: Shubhi Garg <shgarg@nvidia.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Jonathan Hunter <jonathanh@nvidia.com>
+CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-rtc@vger.kernel.org>, <linux-tegra@vger.kernel.org>, Shubhi Garg
+	<shgarg@nvidia.com>
+Subject: [PATCH v5 0/4] Add NVIDIA VRS RTC support
+Date: Wed, 23 Jul 2025 13:03:39 +0000
+Message-ID: <20250723130343.2861866-1-shgarg@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 2/8] mfd: simple-mfd-i2c: specify max_register
-To: Lee Jones <lee@kernel.org>
-Cc: lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, mat.jonczyk@o2.pl,
- dlan@gentoo.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, troymitchell988@gmail.com,
- guodong@riscstar.com, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250710175107.1280221-1-elder@riscstar.com>
- <20250710175107.1280221-3-elder@riscstar.com>
- <20250723095125.GR11056@google.com>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <20250723095125.GR11056@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3D:EE_|SA5PPF06C91DA0C:EE_
+X-MS-Office365-Filtering-Correlation-Id: 84974357-6775-4ec3-04cf-08ddc9e965a8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?RCemnTy/JFVp80q3ovR9wCVhRVJW72NNY8fjV2TDm+Lz4abZQUMfOPDFyGWC?=
+ =?us-ascii?Q?OnbJ7+AvzpDP+2QIb8B8KO+CIdWZUDce/BVntAU8xrOjbEBK2+QxbfeX0fRh?=
+ =?us-ascii?Q?R6FadBL3H2x1g9jJAXsZ3jU786KLJHY63EB8GhML8xFuI5rsv2kUWP1paXi2?=
+ =?us-ascii?Q?HCrJlKgrDBe/ZorN5uP0qsI6sutpPMZmmjKMjEEQo9JiQMGwMMBvdzUFP+vh?=
+ =?us-ascii?Q?RiaW1JCUZALGYaH8YblrVRRpftIYFC2Ua6/f0RqF7CFbUfQfd7RTFgFj37Sk?=
+ =?us-ascii?Q?jGDNjXdMUaU4APC9/v4CQllraAk4u8vLQyjk4vUtgvHxOlIRUavtOCFDAtlo?=
+ =?us-ascii?Q?honmed8cdwIcj6pzxdKTZpaXEMjOuWTwxIkkal2etqNSnYiyGJmv04mb4eRi?=
+ =?us-ascii?Q?LULtrbcMHcK2RZaLqihST/aVsv3MPQpkmbSAfqqMKevIo3p4NQkq6dBaTLJ+?=
+ =?us-ascii?Q?dfUC/IhPEHnBMZaZbNhB9J1yIdX3Wy7Ne8lMkiiIi7f6BDqvfr9JvKbzqsMq?=
+ =?us-ascii?Q?PhUJ6WXSYmHPRIh3f7kxB7/e7OeSoZoVi8D/tESLdxYMupcflN4zLfmVBEHK?=
+ =?us-ascii?Q?DYvGhVv5Fbv51bN67plvmpbuz5IVASZtkHKCiPbqqu/Jv7deuw4YS8vm9+Ws?=
+ =?us-ascii?Q?JPjAZ/lJxGq12L759ZWLAcQTZALqqEkJKNwJSINR/JOpzRCfA0isAGmIeZ8L?=
+ =?us-ascii?Q?odRu3qTzkR4VSiesHl7IV8OB1gLX2zMrpzzT01eBZca59FFQTN+oJ4fiJ3N3?=
+ =?us-ascii?Q?2JIlCNaHuv5vSN8h6hiTzKyE0Hm/e5jAIl29nPtrsNeDrbNE9+AIqswiXrBn?=
+ =?us-ascii?Q?9Ub5aG7IDHQWQXaXFN34DfdKMHFd/S468roVCDsLHStd3DMFNWOn+2EoLI+g?=
+ =?us-ascii?Q?pbx8/L+1ow1O1vH8SjPwxHPv84ln5yH7PTQ75Fi24MuwpsdOW4XR7qh6zkG8?=
+ =?us-ascii?Q?+IrezQ9ViQDmWfNML1krgHULwQFzn0iiD9kuQZ6nLZUlb6i57iageBcGwqDI?=
+ =?us-ascii?Q?Hyq6XfLzKoKkVsenbEG80D5d9hxEioDzwNb/R63wplFUJ4aVOtNSGyKyi8SF?=
+ =?us-ascii?Q?LF6HoNThPkX67Ovv5h+YJYmlIjroakZFx/Eu8vvIsDRWSn748xtHFZgao7v8?=
+ =?us-ascii?Q?pFV/iRuYSgHHR+2uA7QDT3+szR8AbmxdPnAD6OJ9YyjVKMcpn//KIAaCOxTH?=
+ =?us-ascii?Q?GR7y4/0UQo+XY4lEUhg/TsVT+vgj/SlF4lvhBKHz2ZoSwgmuKg6OlhZyTa4S?=
+ =?us-ascii?Q?01VGQ18wLgIGUlyuDT8RV3DCcgE+/53HswIV+QxrmWwj8VjXW7zQFSikJCZX?=
+ =?us-ascii?Q?Wo7Y5k4/1YdYjMR/SILnZVpaGxMDXugoHOHj4MeCdeRp4OhdcRXelg3jH0mC?=
+ =?us-ascii?Q?ofzyX/5TM3hmFaOY7hA4q2LsbEdeCr5/KIWqwCkOvzJmEiKqqjzZKPCowGbH?=
+ =?us-ascii?Q?sqbToMTUZn3svOhC1aSEVt4eyLAoehZC/XcfBRvXFO2DycoyHASyw016kvap?=
+ =?us-ascii?Q?jpG+BiyYg/9krbY+JqzbDrxLMkv8rZnmu9Dc?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2025 13:04:02.5114
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84974357-6775-4ec3-04cf-08ddc9e965a8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF00036F3D.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA5PPF06C91DA0C
 
-On 7/23/25 4:51 AM, Lee Jones wrote:
-> On Thu, 10 Jul 2025, Alex Elder wrote:
-> 
->> All devices supported by simple MFD use the same 8-bit register 8-bit
->> value regmap configuration.  There is an option available for a device
->> to specify a custom configuration, but no existing device uses it.
->>
->> Rather than specify a "full" regmap configuration to change only
->> the max_register value, Lee Jones suggested allowing max_register
->> to be specified in the simple_mfd_data structure.  If regmap_config
->> and max_register are both supplied, the max_register field is ignored.
->>
->> Signed-off-by: Alex Elder <elder@riscstar.com>
->> Suggested-by: Lee Jones <lee@kernel.org>
->> ---
->> v8: - Use regmap_config_8r_8v, modifying it if max_register supplied
->>
->>   drivers/mfd/simple-mfd-i2c.c | 8 ++++++--
->>   drivers/mfd/simple-mfd-i2c.h | 3 ++-
->>   2 files changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
->> index 22159913bea03..5138aa72140b5 100644
->> --- a/drivers/mfd/simple-mfd-i2c.c
->> +++ b/drivers/mfd/simple-mfd-i2c.c
->> @@ -24,15 +24,16 @@
->>   
->>   #include "simple-mfd-i2c.h"
->>   
->> -static const struct regmap_config regmap_config_8r_8v = {
->> +static struct regmap_config regmap_config_8r_8v = {
->>   	.reg_bits = 8,
->>   	.val_bits = 8,
->> +	/* .max_register can be specified in simple_mfd_data */
-> 
-> Drop this comment please.
-> 
->>   };
->>   
->>   static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->>   {
->>   	const struct simple_mfd_data *simple_mfd_data;
->> -	const struct regmap_config *regmap_config;
->> +	struct regmap_config *regmap_config;
->>   	struct regmap *regmap;
->>   	int ret;
->>   
->> @@ -43,8 +44,11 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->>   		regmap_config = &regmap_config_8r_8v;
->>   	else
->>   		regmap_config = simple_mfd_data->regmap_config;
->> +	if (simple_mfd_data && !simple_mfd_data->regmap_config)
->> +		regmap_config->max_register = simple_mfd_data->max_register;
-> 
-> If max_register is set in simple_mfd_data, it should take precedence.
+This patch series adds support for NVIDIA's Voltage Regulator Specification
+(VRS) RTC device. It provides following features:
+- read/set system time
+- 32kHz clock support with backup battery input to retain system time
+  across boot
+- alarm functionality to wake system from suspend and shutdown state
 
-I don't really agree with that.  If simple_mfd_data->regmap_config
-is provided, why not use the max_register field already available
-there?
+The series includes:
+- Device tree bindings for the VRS RTC
+- VRS device tree nodes for NVIDIA platforms
+- VRS RTC device driver
+- Configuration updates to enable the driver
 
-This is why I said above that I think this feature doesn't add
-much value.  It provides a second way to specify something, but
-in the end it complicates the code more than it's worth.
+Changes in v5:
+- moved device tree bindings from mfd to rtc
+- changed dtb node name to rtc@3c
+- removed VRS MFD driver
+- moved VRS common functions to RTC driver
+- removed unused register definitions from header
+- changed driver compatible to "nvidia,vrs10-rtc"
 
-The only time this new simple_mfd_data->max_register field seems
-to make sense is if it were the only thing provided (without
-simple_mfd_data->regmap_config being supplied).  In that case,
-I see the benefit--a null simple_mfd_data->regmap_config means
-use regmap_config_8r_8v, and overlay it with the max_register
-value.  The new max_register field avoids defining another huge
-but mostly empty regmap_config structure.
+Changes in v4:
+- fixed device tree node name to "pmic@3c" in dtb aliases
 
-Anyway, back to your original point:  I said in v7 "If both
-are specified, the max_register value is ignored" and I think
-that's the simplest.  Specify one or the other--if you want
-to define things in regmap_config, then that's where you add
-your max_register.  If you like regmap_config_8r_8v but want
-to define a max_register value, just provide max_register.
+Changes in v3:
+- fixed device tree node name to generic "pmic@3c"
+- fixed indentation in dt-bindings
+- added rate limiting to interrupt clearing debug logs
+- removed unnecessary braces in if blocks
+- changed dependency from I2C=y to I2C in mfd Kconfig
+- fixed return value in RTC driver function calls
+- fixed sizeof(*variable) inside rtc driver devm_kzalloc
+- switch to devm_device_init_wakeup() for automatic cleanup
 
-If you insist, I'll do what you say but before I sent another
-version I wanted to explain my reasoning.
+Changes in v2:
+- fixed, copyrights, definitions and dtb node in dt-bindings
+- removed unnecessary logs from MFD and RTC driver
+- fixed RTC allocation and registration APIs
+- removed unnecessary functions in RTC driver
+- used rtc_lock/unlock in RTC irq handler
+- added alias to assign VRS RTC as RTC0
+- added driver entry in MAINTAINERS
+- few other miinor changes done in drivers
 
+Shubhi Garg (4):
+  dt-bindings: rtc: Document NVIDIA VRS RTC
+  arm64: tegra: Add device-tree node for NVVRS RTC
+  rtc: nvvrs: add NVIDIA VRS RTC device driver
+  arm64: defconfig: enable NVIDIA VRS PSEQ RTC
 
-> if (simple_mfd_data && simple_mfd_data->max_register)
-> 	regmap_config->max_register = simple_mfd_data->max_register;
-> 
->>   	regmap = devm_regmap_init_i2c(i2c, regmap_config);
->> +	regmap_config->max_register = 0;
-> 
-> Does max_register definitely have persistence over subsequent calls?
+ .../bindings/rtc/nvidia,vrs10-rtc.yaml        |  57 ++
+ MAINTAINERS                                   |   8 +
+ .../arm64/boot/dts/nvidia/tegra234-p3701.dtsi |  11 +
+ .../arm64/boot/dts/nvidia/tegra234-p3767.dtsi |  15 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/rtc/Kconfig                           |   9 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nvidia-vrs10.c                | 508 ++++++++++++++++++
+ include/linux/rtc/rtc-nvidia-vrs10.h          |  78 +++
+ 9 files changed, 688 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nvidia,vrs10-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-nvidia-vrs10.c
+ create mode 100644 include/linux/rtc/rtc-nvidia-vrs10.h
 
-It is a global variable.  Isn't that how they work?  When
-it was read-only there was no concern about that, nor about
-any possible concurrent access (though I don't think multiple
-probes can be using this code at once).
-
-We could allocate a new one each time instead.
-
-I think what I offered in v5 was acceptable.  If you're
-willing to accept that I will be happy to keep discussing
-(and implementing) the max_register feature.
-
-					-Alex
-
-> 
->>   	if (IS_ERR(regmap))
->>   		return PTR_ERR(regmap);
->>   
->> diff --git a/drivers/mfd/simple-mfd-i2c.h b/drivers/mfd/simple-mfd-i2c.h
->> index 7cb2bdd347d97..ea2a96af8bce4 100644
->> --- a/drivers/mfd/simple-mfd-i2c.h
->> +++ b/drivers/mfd/simple-mfd-i2c.h
->> @@ -24,7 +24,8 @@
->>   #include <linux/regmap.h>
->>   
->>   struct simple_mfd_data {
->> -	const struct regmap_config *regmap_config;
->> +	struct regmap_config *regmap_config;
->> +	unsigned int max_register;	/* Ignored if regmap_config supplied */
->>   	const struct mfd_cell *mfd_cell;
->>   	size_t mfd_cell_size;
->>   };
->> -- 
->> 2.45.2
->>
-> 
+-- 
+2.43.0
 
 
