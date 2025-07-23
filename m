@@ -1,56 +1,60 @@
-Return-Path: <linux-rtc+bounces-4552-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4553-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEFF8B0F880
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 18:54:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CEFB0F87E
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 18:54:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A733FAC3A30
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 16:54:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00FE11C84148
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Jul 2025 16:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7E28202C5D;
-	Wed, 23 Jul 2025 16:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1453A204C07;
+	Wed, 23 Jul 2025 16:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iWv1AMAV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DUozZG12"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DF717A2E8
-	for <linux-rtc@vger.kernel.org>; Wed, 23 Jul 2025 16:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AC120126A;
+	Wed, 23 Jul 2025 16:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753289691; cv=none; b=td2i+Mng5PRnzxmyS3y5izr7TO+dtC3Xt5Q7urXwav7tXJfuDsG+4kdATesr1uVGC253a0r8Z3UGn/fSv6xtBXnCLnfdZgz7tsylQ4e0M1eCz6CZGA3uZOMtX+j5SrEN6qDsnxOQDmOeEjmG2gsM7DVut/f1fdwwDuwx4Fzsmsg=
+	t=1753289694; cv=none; b=LAeyMSelRJ1WGTSPh3j8s9H/JdZYZ3iQxaou24pyl3gLzGZJpbwjqCpa6ZYLSIG1/zSjdUZcclPl7RZcwHVpwArrdXANH/m8zV369HaCB4LsKkCxMOIUk+HQzbSMT+RKZxu8I5P9XlM6QzyZz3xd4QLbVRzRKxfdzmH8MBEU9x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753289691; c=relaxed/simple;
-	bh=dLZb/SvGATrdjTaYdtPad2fWVNCVZ++5UosQWO6aIkA=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eAAk5wMeeW8c4X4ERAW19FzG3U/w7VvSz04psQ+7zq/91cb1iDp8wLwVnCbyfBzEan92y3OXM/MYipQ2C1xgUGWNVP8iU9SG7RsczxiZ+OFXViFCxNLxARbK1xWNG5wuygSEtxxcAzMiZV1FVM2SXF2DkfwuVCWdz3tllzAVxZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iWv1AMAV; arc=none smtp.client-ip=217.70.183.196
+	s=arc-20240116; t=1753289694; c=relaxed/simple;
+	bh=6EGV5oVqnt2HJv/uuL6WTaHCm4vulgYtHw0OHP8srZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D2AEbgNxn6mUFBA9ec/Zl7/Poqj+d8j831Bmsj0wogAL3QdKCipIglFTYMwoOLIQA2LQPPMsRSPfny9Da352tjacY4hD1u8uVnt6HZszSjx1CXB8DxomZkKjdqm3BDbwd/5S6eEHxUV0E4G6amPXGuehwlv3ADXPvBN4xd86viY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DUozZG12; arc=none smtp.client-ip=217.70.178.235
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A43EB444F0;
-	Wed, 23 Jul 2025 16:54:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 60D4744200;
+	Wed, 23 Jul 2025 16:54:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1753289681;
+	t=1753289689;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=82OKXSabBzQ5of6DfbLoXOt9Nkr8C/Vt4+3UIRk93Z4=;
-	b=iWv1AMAVniIQ8je/6yVqUxHF7Ysm7ld0IGEV1mcvH8m3iiqpps56KAhwItHlmd8oCeNLrO
-	gs6QHAc3w/GHVouwLw3P2++0AMoH9Ujvejb47U7JSVoGh/+5yympXdjvbAZM0GPavZbN3B
-	5LmmEZm2W9ow9jKAdz5YBzVxMVxynW431KCdcOpFQmrESNpdx1a9bg1h0TofLPEBxYpgLP
-	4h+XNLBpFIOwB6S7ck/1/vR4/DLoiwbiBzkC/2gMg0M0ozISzDLrxDXwimcos2uaxMfKXc
-	GaL3ZAl8zikgAvzp0HloSZlc0HcGicpTmwFATsuhkN5OR3mtJA0DRvNCXUia8Q==
-Date: Wed, 23 Jul 2025 18:54:41 +0200
+	bh=Oh4dfa/0L3B39iTg6k0Zy0MlKxBfFSrzu1Ttqr6MqPg=;
+	b=DUozZG12DcyE2hA3klfjMeAylEK8f7X3ghRiX83HQoSgXjeTAXkI2srqRVetL2D/GaXSe9
+	5ulOJM47G3mtg0FPw8DfTcPtrqSOIkMj/CAa4Mu+WSskHSTZC0JT3vTLd+f8DtLiH8yGnW
+	jnnIBPsQ9SfSBEKwTb2gOOI0Ux6gc2LR22bu4f1dhoKsmtEe6Rj5fXbuSGyiG1aHaqTcpv
+	LzPAd52w/s9y55hBexLgyiCdIZPIAUFCTbjRzofyLuFUJgzlZzCWGZi8TSicSmf4MfWpij
+	amHgHMLHbNSzbApEOO3vGFOzy7RiuYa20irQ+2QA7XhxEcXz+0eQzn7Sdaq4hw==
+Date: Wed, 23 Jul 2025 18:54:49 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-rtc@vger.kernel.org,
-	Alexander Shiyan <eagle.alexander923@gmail.com>
-Subject: Re: [PATCH] rtc: m41t80: remove HT feature for m41t65
-Message-ID: <175328962923.785597.10987425789103592643.b4-ty@bootlin.com>
-References: <20250704091144.45389-1-eagle.alexander923@gmail.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2] rtc: Rename lib_test to test_rtc_lib
+Message-ID: <175328962919.785597.17989599955686169611.b4-ty@bootlin.com>
+References: <47019d7f8ced12107b54a372fdf34b1b8f7b6183.1751355848.git.geert@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -59,23 +63,23 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250704091144.45389-1-eagle.alexander923@gmail.com>
+In-Reply-To: <47019d7f8ced12107b54a372fdf34b1b8f7b6183.1751355848.git.geert@linux-m68k.org>
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejkeeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedutdfgheetveetvdetleelfeffkefhtdfhleegfeeuleegueeugefgheehledvgeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemsgeiheemsgdvfhdtmeeksgelkeemjeeltdehmegrsggvleemudehvddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmegsieehmegsvdhftdemkegsleekmeejledtheemrggsvgelmeduhedvvddphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvggrghhlvgdrrghlvgigrghnuggvrhelvdefsehgmhgrihhlrdgtohhm
-X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejkeeftdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemsgeiheemsgdvfhdtmeeksgelkeemjeeltdehmegrsggvleemudehvddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmegsieehmegsvdhftdemkegsleekmeejledtheemrggsvgelmeduhedvvddphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopegsrhgvnhgurghnrdhhihhgghhinhhssehlihhnuhigrdguvghvpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtghomhdpr
+ hgtphhtthhopehrmhhorghrsehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkuhhnihhtqdguvghvsehgohhoghhlvghgrhhouhhpshdrtghomh
 
-On Fri, 04 Jul 2025 12:11:44 +0300, Alexander Shiyan wrote:
-> The M41T65 device does not support the "Halt Update Bit" (HT) feature
-> as per its datasheet.
-> This aligns the driver with the actual hardware capabilities.
+On Tue, 01 Jul 2025 09:44:39 +0200, Geert Uytterhoeven wrote:
+> When compiling the RTC library functions test as a module, the module
+> has the non-descriptive name "lib_test.ko".  Fix this by renaming it to
+> "test_rtc_lib.ko".
 > 
 > 
 
 Applied, thanks!
 
-[1/1] rtc: m41t80: remove HT feature for m41t65
-      https://git.kernel.org/abelloni/c/289642767c2e
+[1/1] rtc: Rename lib_test to test_rtc_lib
+      https://git.kernel.org/abelloni/c/0c6f0d77ab62
 
 Best regards,
 
