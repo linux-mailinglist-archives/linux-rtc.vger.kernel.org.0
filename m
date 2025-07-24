@@ -1,155 +1,188 @@
-Return-Path: <linux-rtc+bounces-4569-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4570-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF00CB10761
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 12:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B362AB10789
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 12:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD3E74E4010
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 10:05:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 075EDAA5862
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 10:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CBF625EF9C;
-	Thu, 24 Jul 2025 10:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACC2260575;
+	Thu, 24 Jul 2025 10:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vO0RCnci"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDrsj7RG"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24E425E47D;
-	Thu, 24 Jul 2025 10:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDA625FA3B;
+	Thu, 24 Jul 2025 10:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753351568; cv=none; b=IKrbUyVwtewO9iPyTWCcVMxn/zffmEaMfoEBLmHQsxm561TxHwNfFQ2BokxOOCnfUS8q8RQ5JlIgxgMtoYDKYcA5HYZbLMNd+2OCSrQsBaQYlT50XaXDvv80BLtgJr46rWVhHx7gjoDPagJmscdhe5lfaWQB7TCbis4cILEOCkk=
+	t=1753352094; cv=none; b=DXqUgDrLqVwm6JrOdU4f8Iyhzd4SywT9pS5r3+rgmzPZ4UgQyS1rv+xiTPoUR8AYAvaLY7S6wYd2J+oxPdwP8WV/xZ3yFSe6IvFIFGENDmxsdQkGFL2mQRElhftuxHXcxMmKZW+rwTrfJZ8gUDvin6/yrKdq7vTqnezd/OCsjko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753351568; c=relaxed/simple;
-	bh=CZQB8Gu6DwGDSg7j2DBqQNvibsRcjWZdAQ1gA39lJRA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A4N23JBzGBOdU2cDbLvzGnpxj03gbhVaIcXDThopmpEo+zkKtnPrUDy2mlvQtgv5HKliUC1EaKWXv+tbibVnIiPt9C1UcvzsLQTNbSBvcN48zhXOYL4smetStaPJX9jCuuwy1YPy4xjtlaxGIcasECVUb7MsW8kjDWg0HRcTAG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vO0RCnci; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779F8C4CEED;
-	Thu, 24 Jul 2025 10:06:05 +0000 (UTC)
+	s=arc-20240116; t=1753352094; c=relaxed/simple;
+	bh=zORcxo3mS6brPEl87DE6MRdiyeVVqdihj/3FCEKbiTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QSKkmBkuJsCw8rawUtgzccMF6pBcCKZYskU7exrgp0uSDFFQIsyD/Qktm1WSKVDYiWJPh2YUcOosPhnFmXsUu1zLCODN0WB+XR7Y+p9irRDhR3lGq9bvfN0yuoRxN13iXVZzR76YZd/gUnCb357l1NmOKWgKht99NFPXuGWiBdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GDrsj7RG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D83C4CEF4;
+	Thu, 24 Jul 2025 10:14:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753351568;
-	bh=CZQB8Gu6DwGDSg7j2DBqQNvibsRcjWZdAQ1gA39lJRA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vO0RCnciK35ngvsiAvS+HQ6LEeTAuHwG8wjHqGvuEShhR1VdjpK20T9CdegHhFmGy
-	 XcIrTgYrFAc089yLAbZ5J/CGJMzGVH1osr69M9+vnoc5l0WWW5snxGkns8BZE0egih
-	 WNlUbskjHtnxwwv7w4g5Mwyhs13S0nQcSdG2nTUxUt9yzFAeVrx4Qem/TPVG/+SFR6
-	 XfS3HUyjlo3dHQGpbTwKOMiwy4kgW37nngOLE/+r/8wt13AKUAmK48rw+IuhgzhM2M
-	 mjqhgJhC/zhIThDghIhePdCrOcowq0Kf5zjVCVFKuvsUMJG1JyNw6nPKWefg//fM8Y
-	 ZGAQkDdVYuOgg==
-Message-ID: <f69a76c5-157d-4cb4-bf46-1acdb6a87319@kernel.org>
-Date: Thu, 24 Jul 2025 12:06:03 +0200
+	s=k20201202; t=1753352093;
+	bh=zORcxo3mS6brPEl87DE6MRdiyeVVqdihj/3FCEKbiTM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GDrsj7RGaUKmRFe2YmNRj6/sLBAYZIQjaT4lMyvILBdotUjyjjp9PjzGhfiKnPkhb
+	 wdo+ZkLnBwjW8MtDK3qrZT7gMrPKySmosNZNHnzunk3wcRAkiPozCGDIZanfeUFgR1
+	 JifMizySQ87kY9Pm3P9t03L8anZuOJDiarkZFUJ0flEAYrfHrsK18EJ2xknSeOXqRz
+	 kOeRWhTUSd9D/VoqhMCSIepkmo4hSmWSqD2ge6ibK6qHY9ZAPPSgQIbGWpUypKRJcv
+	 guW2Mq5oK6fCWyBpdzQlM/jYkEZrA0jC4Wt0ykT5pBBgdlJdG5Mk+6GNzR10ZpJps1
+	 lO2wqUbfktYPw==
+Date: Thu, 24 Jul 2025 11:14:47 +0100
+From: Lee Jones <lee@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	troymitchell988@gmail.com, guodong@riscstar.com,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/8] mfd: simple-mfd-i2c: specify max_register
+Message-ID: <20250724101447.GY11056@google.com>
+References: <20250710175107.1280221-1-elder@riscstar.com>
+ <20250710175107.1280221-3-elder@riscstar.com>
+ <20250723095125.GR11056@google.com>
+ <877dcf99-107e-4d96-8790-6608976d13ca@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/4] dt-bindings: rtc: Document NVIDIA VRS RTC
-To: Jon Hunter <jonathanh@nvidia.com>, Shubhi Garg <shgarg@nvidia.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20250723130343.2861866-1-shgarg@nvidia.com>
- <20250723130343.2861866-2-shgarg@nvidia.com>
- <20250724-peridot-chachalaca-of-progress-a9f2ee@kuoka>
- <2c59e665-6415-460b-8ff8-c06f8d94f9eb@nvidia.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <2c59e665-6415-460b-8ff8-c06f8d94f9eb@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <877dcf99-107e-4d96-8790-6608976d13ca@riscstar.com>
 
-On 24/07/2025 11:41, Jon Hunter wrote:
+On Wed, 23 Jul 2025, Alex Elder wrote:
+
+> On 7/23/25 4:51 AM, Lee Jones wrote:
+> > On Thu, 10 Jul 2025, Alex Elder wrote:
+> > 
+> > > All devices supported by simple MFD use the same 8-bit register 8-bit
+> > > value regmap configuration.  There is an option available for a device
+> > > to specify a custom configuration, but no existing device uses it.
+> > > 
+> > > Rather than specify a "full" regmap configuration to change only
+> > > the max_register value, Lee Jones suggested allowing max_register
+> > > to be specified in the simple_mfd_data structure.  If regmap_config
+> > > and max_register are both supplied, the max_register field is ignored.
+> > > 
+> > > Signed-off-by: Alex Elder <elder@riscstar.com>
+> > > Suggested-by: Lee Jones <lee@kernel.org>
+> > > ---
+> > > v8: - Use regmap_config_8r_8v, modifying it if max_register supplied
+> > > 
+> > >   drivers/mfd/simple-mfd-i2c.c | 8 ++++++--
+> > >   drivers/mfd/simple-mfd-i2c.h | 3 ++-
+> > >   2 files changed, 8 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> > > index 22159913bea03..5138aa72140b5 100644
+> > > --- a/drivers/mfd/simple-mfd-i2c.c
+> > > +++ b/drivers/mfd/simple-mfd-i2c.c
+> > > @@ -24,15 +24,16 @@
+> > >   #include "simple-mfd-i2c.h"
+> > > -static const struct regmap_config regmap_config_8r_8v = {
+> > > +static struct regmap_config regmap_config_8r_8v = {
+> > >   	.reg_bits = 8,
+> > >   	.val_bits = 8,
+> > > +	/* .max_register can be specified in simple_mfd_data */
+> > 
+> > Drop this comment please.
+> > 
+> > >   };
+> > >   static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+> > >   {
+> > >   	const struct simple_mfd_data *simple_mfd_data;
+> > > -	const struct regmap_config *regmap_config;
+> > > +	struct regmap_config *regmap_config;
+> > >   	struct regmap *regmap;
+> > >   	int ret;
+> > > @@ -43,8 +44,11 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+> > >   		regmap_config = &regmap_config_8r_8v;
+> > >   	else
+> > >   		regmap_config = simple_mfd_data->regmap_config;
+> > > +	if (simple_mfd_data && !simple_mfd_data->regmap_config)
+> > > +		regmap_config->max_register = simple_mfd_data->max_register;
+> > 
+> > If max_register is set in simple_mfd_data, it should take precedence.
 > 
-> On 24/07/2025 08:59, Krzysztof Kozlowski wrote:
->> On Wed, Jul 23, 2025 at 01:03:40PM +0000, Shubhi Garg wrote:
->>> +description:
->>> +  NVIDIA VRS (Voltage Regulator Specification) RTC provides 32kHz RTC clock
->>> +  support with backup battery for system timing. It provides alarm functionality
->>> +  to wake system from suspend and shutdown state. The device also acts as an
->>> +  interrupt controller for managing interrupts from the VRS.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: nvidia,vrs10-rtc
->>
->> Nothing improved. You never replied to comments and then replaced one
->> redundant word into other redundant word.
->>
->> Respond to review or implement it fully, not partially.
->>
->> Or add COMPLETE bindings, not partial ones. See writing bindings doc.
+> I don't really agree with that.  If simple_mfd_data->regmap_config
+> is provided, why not use the max_register field already available
+> there?
+
+Why would a user add a max_register override to simple_mfd_data if they
+didn't want to use it?
+
+> This is why I said above that I think this feature doesn't add
+> much value.  It provides a second way to specify something, but
+> in the end it complicates the code more than it's worth.
 > 
-> OK, right so the DT binding should describe the overall PMIC device, 
-> even though the driver needs to support the RTC.
+> The only time this new simple_mfd_data->max_register field seems
+> to make sense is if it were the only thing provided (without
+> simple_mfd_data->regmap_config being supplied).  In that case,
+> I see the benefit--a null simple_mfd_data->regmap_config means
+> use regmap_config_8r_8v, and overlay it with the max_register
+> value.  The new max_register field avoids defining another huge
+> but mostly empty regmap_config structure.
 
+This is your use-case, right?
 
-This is not a driver patch. This is patch for hardware. Sending
-incomplete pieces of a device, without complete picture is really not
-the right way. Knowing this is part of PMIC this should be rejected, but
-how can we decide on that if contributor never tells us this is a part
-of PMIC?
-
+> Anyway, back to your original point:  I said in v7 "If both
+> are specified, the max_register value is ignored" and I think
+> that's the simplest.  Specify one or the other--if you want
+> to define things in regmap_config, then that's where you add
+> your max_register.  If you like regmap_config_8r_8v but want
+> to define a max_register value, just provide max_register.
 > 
-> Shubhi, is vrs10 the version of the VRS spec for the PMIC device or just 
-> the RTC portion? If it is, the maybe 'nvidia,vrs10' is sufficient here.
-> 
-> Jon
-> 
+> If you insist, I'll do what you say but before I sent another
+> version I wanted to explain my reasoning.
 
+I hear you and I get what you're saying.
 
-Best regards,
-Krzysztof
+I see no use-case where a user would provide both regmap_config AND
+max_register either.  However, I see max_register in simple_mfd_data as
+an override, so I would like it to take precedence please.
+
+> > if (simple_mfd_data && simple_mfd_data->max_register)
+> > 	regmap_config->max_register = simple_mfd_data->max_register;
+> > 
+> > >   	regmap = devm_regmap_init_i2c(i2c, regmap_config);
+> > > +	regmap_config->max_register = 0;
+> > 
+> > Does max_register definitely have persistence over subsequent calls?
+> 
+> It is a global variable.  Isn't that how they work?  When
+> it was read-only there was no concern about that, nor about
+> any possible concurrent access (though I don't think multiple
+> probes can be using this code at once).
+> 
+> We could allocate a new one each time instead.
+> 
+> I think what I offered in v5 was acceptable.  If you're
+> willing to accept that I will be happy to keep discussing
+> (and implementing) the max_register feature.
+
+Yes, I'm inclined to agree.
+
+Make the call and I will respect your decision.
+
+-- 
+Lee Jones [李琼斯]
 
