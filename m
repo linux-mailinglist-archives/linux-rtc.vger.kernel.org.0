@@ -1,239 +1,160 @@
-Return-Path: <linux-rtc+bounces-4581-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4582-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 980AAB1124A
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 22:27:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A695B112D8
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 23:11:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 770B8AC3534
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 20:26:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A69F57B9BFE
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 21:09:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1474271477;
-	Thu, 24 Jul 2025 20:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="e6qNgGpk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B1E2750ED;
+	Thu, 24 Jul 2025 21:11:20 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0972B26C3A3
-	for <linux-rtc@vger.kernel.org>; Thu, 24 Jul 2025 20:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8711494C3;
+	Thu, 24 Jul 2025 21:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753388733; cv=none; b=A4jVeOSh2PJCul9OwWjyKwNUmjK4LIqz9F+XszqioaIglOTNxqCgf36rI1Qdg2D0y+CdOqVNZlMSdJp70L/lnPIGVlMHe23Ec1fORbUvvbBF2LgcqKtS3OTOYqJjKgfrzLd6GacITCl5NceA7Sjx44esdbL1VcBwx2gP9E202wU=
+	t=1753391480; cv=none; b=MStmh4h4xM7KInCwX1r7YX08qrE6OIiStRVc/Z/850eG6jYQvU+tw5ZOMjX++r77Qq6F9zw0KCuLsgSpxb3MdDKa04c3xjgkOC/6Ez50viX5kyVRDnlMIrSO29JAhFGqoMrlE3edlqsft0iUkBuJhO+Z+VmuuknC0JmPuKyXtQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753388733; c=relaxed/simple;
-	bh=gQgnEu46nXffeDK/T2EsMnfRsMV5amrAJvwckiMVDxI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bNjfCu3JKcLv7EpKHRnK+XiLnVCR6bMpkQ8w9Lf6kpdvhZ1nAc70B/WJVu7YwC88Y7hwt8/XyQNolI7EuI1eWtPalsQKbWUXOsUqkPVySXJw65qLyCFmZtenwL1zIR2uH/KLzTJRSNzCoPqRRrWXTWTCSXFa0uM3hZNqJGzqIo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=e6qNgGpk; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-879c7464843so30258539f.2
-        for <linux-rtc@vger.kernel.org>; Thu, 24 Jul 2025 13:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1753388731; x=1753993531; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EEiPn0cbVvyWonyoHzSQ1laMwOj6/PCdxE3K2rEb90M=;
-        b=e6qNgGpk/Zvo72makg5Wbl7ZUFGc6Ee4S2kr8+Y/9brDu/BZaE5rGekaJDZ800mz33
-         BXTI/vuQdDnsA7KZ76Xm7KPH0rh/DyjIs3E4Xy2cJlPohAFU30e+GmRjmbO+XdL9biZy
-         2LKmLedSx+fvSU05sX3jYIjlckztJW95WeAMrBxFxBh9UbJ7Gwbirf1zEQR1dz2ENlWf
-         L/3bWhizGGq8fcgG49ytVFKrUzhWphcbO/Lhtr8Bm+DWBF0BHEPb4km3iGLluo5FdD6Q
-         eyNMv7JUi2TtHwyy3m1eOsgZH7Gz5+cuzDkhDWlRV8GAv/7HRZyc/OKgntJJSdoabkoW
-         ++zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753388731; x=1753993531;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EEiPn0cbVvyWonyoHzSQ1laMwOj6/PCdxE3K2rEb90M=;
-        b=kn8x0mkvekQ5FcC8lP/W877xTOtb9kcSqplWYZsN1KvBISR4pcxxb8rc2gVIfPyDgx
-         6inyTxLyQ1mb0xGWOR3YCMPyFHFftpw2O4I/srQaTagVnrvxYlXvcUbnZk4Aa1iockwN
-         3Bz5GZWYZbO5YAtCEShgD2onHowykWiAb58w3fEbDgaXJTGJrF8Ru1dlKErtSUI6w7rR
-         OhjHK3FhWjwv9Z78aLDFYNEkN4SiQNnwQEX2BOpofB6kcud6qGgozakeJjXQzxIx93S9
-         PbCjtTUSodUNZoA4jx69uPJoBewIKYT1rmplW/5K49sqA9mrijgKWRNUSxJqdyIhWdMS
-         uh8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVxQxPTn56mTNiPlKScize1gUUCac1WXBdH6SUy0AoLKTRIRnr8i2vl4jPLxUdO3lPMcQv9IoTKWzs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkUQCaKN5sZoVPo1iKITNaM9o5VgSOg/KhwL3A7cv051f32m+S
-	NKiW7rhizok3OheLvTI11+I+WV+Ll7I8GNXOYrQQHrOPwG31ijhU66BwxUSXFLfpavY=
-X-Gm-Gg: ASbGncti8CbMlAb2GC0fxHBXwDvolCWmk6+mRtEnHC4SOGoY8bluUxr8wqAnwqVwvof
-	cmYs0gVTEiOSsu+IQ+H6m3yjNb3yT2wq213Hmeqo3U/m3TR+Dbspg9lyO1N1dHfTZNnQuwokSlx
-	Ybs4+0JFPC3r7/y0gYHCIj6T1V/zgMTN13QHYWs8r2Q4QRpG9/lMJSxEDccIjwU/kIB89OX4oDT
-	8Nyo6bcj8La5p2VUsYOjQJ+yv5NIkwdxFuiDURmYpUgujrgWp4fUuSwld0d4CkEzxeDsOZ2CbNQ
-	GvLVqUV1LqTuz/8RP2qLdp9sl3+4TCC/8nIN1BNJy1hgKAOff+Pr0HcrQkTjmA+r19zpkKk4Yvi
-	p1yTz4Pu35awqaGu0uzunY7JUHhlmbBozQSBqmev6
-X-Google-Smtp-Source: AGHT+IEOCPJEmS++a59jxbnEfzm6BGBxv4jrcgvVSaZ5cgZIE4C2TYD/gzvOZX8xyz7qYVEph48/fQ==
-X-Received: by 2002:a05:6602:3421:b0:87c:4496:329d with SMTP id ca18e2360f4ac-87c64f64aafmr1508845939f.5.1753388730846;
-        Thu, 24 Jul 2025 13:25:30 -0700 (PDT)
-Received: from zoltan.localdomain ([199.59.116.160])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-87c74316a3bsm63080239f.23.2025.07.24.13.25.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 13:25:30 -0700 (PDT)
-From: Alex Elder <elder@riscstar.com>
-To: lee@kernel.org,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	alexandre.belloni@bootlin.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: mat.jonczyk@o2.pl,
-	dlan@gentoo.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	linux.amoon@gmail.com,
-	troymitchell988@gmail.com,
-	guodong@riscstar.com,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v9 8/8] riscv: dts: spacemit: define regulator constraints
-Date: Thu, 24 Jul 2025 15:25:09 -0500
-Message-ID: <20250724202511.499288-9-elder@riscstar.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250724202511.499288-1-elder@riscstar.com>
+	s=arc-20240116; t=1753391480; c=relaxed/simple;
+	bh=Sg/5pE6bUeWBvnfigj1Hnnl3+6CiShL1sby6PguO+14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CB1Y0/+qhFrCSWiZW4RCJHVjQpWVd2YZPDG8d6H9e1EpcZhPN8/f75P3bVemaIqXcBQHgJL3yT+vb1fRTgXvwlkPcIGDdRssyzi9ukOuoGdNvOEXaNOqf+PgkoPcUisTNN1zAl3sZ4pIqO6X/Z1/prd47vHMsLa0HJCgrrpxWuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from localhost (unknown [116.232.48.207])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dlan)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id EE945340D1F;
+	Thu, 24 Jul 2025 21:11:17 +0000 (UTC)
+Date: Fri, 25 Jul 2025 05:11:13 +0800
+From: Yixun Lan <dlan@gentoo.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: lee@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+	alexandre.belloni@bootlin.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, mat.jonczyk@o2.pl, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	linux.amoon@gmail.com, troymitchell988@gmail.com,
+	guodong@riscstar.com, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 6/8] riscv: dts: spacemit: enable the i2c8 adapter
+Message-ID: <20250724211113-GYA748868@gentoo>
 References: <20250724202511.499288-1-elder@riscstar.com>
+ <20250724202511.499288-7-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250724202511.499288-7-elder@riscstar.com>
 
-Define basic constraints for the regulators in the SpacemiT P1 PMIC,
-as implemented in the Banana Pi BPI-F3.
+Hi Alex,
 
-Signed-off-by: Alex Elder <elder@riscstar.com>
----
- .../boot/dts/spacemit/k1-bananapi-f3.dts      | 104 ++++++++++++++++++
- 1 file changed, 104 insertions(+)
+On 15:25 Thu 24 Jul     , Alex Elder wrote:
+> Define properties for the I2C adapter that provides access to the
+> SpacemiT P1 PMIC.  Enable this adapter on the Banana Pi BPI-F3.
+> 
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+> ---
+>  arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts | 15 +++++++++++++++
+>  arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi    |  7 +++++++
+>  arch/riscv/boot/dts/spacemit/k1.dtsi            | 11 +++++++++++
+>  3 files changed, 33 insertions(+)
+> 
+> diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+> index fe22c747c5012..7c9f91c88e01a 100644
+> --- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+> +++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+> @@ -40,6 +40,21 @@ &emmc {
+>  	status = "okay";
+>  };
+>  
+> +&i2c8 {
+> +	pinctrl-0 = <&i2c8_cfg>;
+> +	pinctrl-names = "default";
+..
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+I think these two can be moved into dtsi, as they are
+common and fixed properties for the i2c controller
 
-diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-index a1c184b814262..83907cc1d5ccf 100644
---- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-@@ -70,7 +70,111 @@ pmic@41 {
- 		compatible = "spacemit,p1";
- 		reg = <0x41>;
- 		interrupts = <64>;
-+		vin-supply = <&reg_vcc_4v>;
- 		status = "okay";
-+
-+		regulators {
-+			buck1 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck2 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck3 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck4 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck5 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck6 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			aldo1 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-boot-on;
-+			};
-+
-+			aldo2 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			aldo3 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			aldo4 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo1 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-boot-on;
-+			};
-+
-+			dldo2 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo3 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo4 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-always-on;
-+			};
-+
-+			dldo5 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo6 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-always-on;
-+			};
-+
-+			dldo7 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+		};
- 	};
- };
- 
+> +	status = "okay";
+> +
+> +	pmic@41 {
+> +		compatible = "spacemit,p1";
+> +		reg = <0x41>;
+> +		interrupts = <64>;
+..
+> +		status = "okay";
+status property here can be dropped as enabled by default
+> +	};
+> +};
+> +
+>  &uart0 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&uart0_2_cfg>;
+> diff --git a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+> index 3810557374228..96d7a46d4bf77 100644
+> --- a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+> +++ b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+> @@ -11,6 +11,13 @@
+>  #define K1_GPIO(x)	(x / 32) (x % 32)
+>  
+>  &pinctrl {
+> +	i2c8_cfg: i2c8-cfg {
+> +		i2c8-0-pins {
+> +			pinmux = <K1_PADCONF(93, 0)>,	/* PWR_SCL */
+> +				 <K1_PADCONF(94, 0)>;	/* PWR_SDA */
+> +		};
+> +	};
+> +
+>  	uart0_2_cfg: uart0-2-cfg {
+>  		uart0-2-pins {
+>  			pinmux = <K1_PADCONF(68, 2)>,
+> diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
+> index abde8bb07c95c..2a5a132d5a774 100644
+> --- a/arch/riscv/boot/dts/spacemit/k1.dtsi
+> +++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
+> @@ -459,6 +459,17 @@ pwm7: pwm@d401bc00 {
+>  			status = "disabled";
+>  		};
+>  
+> +		i2c8: i2c@d401d800 {
+> +			compatible = "spacemit,k1-i2c";
+> +			reg = <0x0 0xd401d800 0x0 0x38>;
+..
+> +			interrupts = <19>;
+I'd suggest to move interrupts property after clock, see my similar
+comment
+https://lore.kernel.org/all/20250724121916-GYA748228@gentoo/
+
+> +			clocks = <&syscon_apbc CLK_TWSI8>,
+> +				 <&syscon_apbc CLK_TWSI8_BUS>;
+> +			clock-names = "func", "bus";
+> +			clock-frequency = <400000>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pinctrl: pinctrl@d401e000 {
+>  			compatible = "spacemit,k1-pinctrl";
+>  			reg = <0x0 0xd401e000 0x0 0x400>;
+> -- 
+> 2.43.0
+> 
+
 -- 
-2.43.0
-
+Yixun Lan (dlan)
 
