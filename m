@@ -1,88 +1,101 @@
-Return-Path: <linux-rtc+bounces-4572-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4573-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2642B11026
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 19:05:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DCF4B11237
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 22:26:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 822EC1884EE1
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 17:05:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25A2F5C06EF
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 20:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64AD26A1CF;
-	Thu, 24 Jul 2025 17:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84982528FC;
+	Thu, 24 Jul 2025 20:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="P/LeDhnT"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="JgsZo+9c"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2068.outbound.protection.outlook.com [40.107.93.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C421F7586;
-	Thu, 24 Jul 2025 17:05:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753376731; cv=fail; b=NWLuBkIAxGIhmCkQXh6QhTEo0wSlCTTDlFWkpU1bmXYeytlG/dNzYgY0cDY1Z6d8jf0BtxRqdNeMVHqvYsZKS7LsdVOgiyV7VzfgfDqriUs2ZYnZDcWDorq5cUZumwNJZS6a2Aalgtx4FFDeCUEkHmmgRJ//roSCGr1Rf9zjsrQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753376731; c=relaxed/simple;
-	bh=z+z5L52SbnsXcj20KEP/tKGeVI35qDT8de9d6s9C1so=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=s/+HbWaXfDwYkVoDGY3JVYs4OsOZZCp5RcKxrAItKab8n98RuDeyBWlgkhsjjXwia4fo2g8iN/KXSYKczJWeSd4CtOcE8eZH7Kh7KLsXeMXwuqbRnp0ca1YjNyXImcI284os4aN3HoR2ybB0Z7PauBLasCBOO85xuUEpO3U7hMU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=P/LeDhnT; arc=fail smtp.client-ip=40.107.93.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FnQZfA+8waWDmW1ZkB0jTk6jfWKmHF9oDdbmK1oMLtSuhaQDw2D7akcg1s2VHbpChTz5QV+bAZrMQB2OSGCeS1GSjrdgfUlGtIW693qAxIYSsSNZPo82o/+t+10ICM/AvsvzgOa9szlZczyKjr7v5cDckSHhM5HuOcjrXTYEAqT+v7qAWRJ+bHmBHPMgS+miVKIl8Fdd4ARJAFO/IRPcj+rMTsoRkqlQ6k0PxWxkcw6kTs4Vn8EcbBg13Ad5ydMFR/DWkfs253gV0ccn9DgVn6FUMFPeIOa9h7VTwc0KUQ7CrIF/9s1H/WGG4qmYQp6QT9AECTtfUjXmL73+kSSJOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Q28tk5/wEddHaLhqYUGiyX97GLYr8lNa1B9eCru5P4=;
- b=tDcv6kaVvhR9zgzFd2jTNbAPYTPRKXtMo9D2/LY77RRG0EjmRrnpbu7xnU/DKQvc/fJpujvI9t5xXjipEi0ZELAKM4XJtKYjwVTKUIG5VWXT7rdTmpbCjp4GHXev7AZu0CAfeUoVCHAcr9xozBWxYSp0OTCn0tiTw1S7XO3PsXxC4vyWGXYmspA7HTq14M7mJN/ceEbkY7BcJh++NZorbAH/LFvnCSM5Fq2KM12Ymnd3/W/VLWHKpTPoecci0QDkW6wv23bfx/Y9dNzMUoPx8s15cffvRbpafwiMC4tcpcUQkMwkeQo6l3yYjl7YI3d5XLuCFLnn/YPCXDOIHMUEqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=bootlin.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0Q28tk5/wEddHaLhqYUGiyX97GLYr8lNa1B9eCru5P4=;
- b=P/LeDhnTAgKesl5pbyCT7XjbS9so7e1OnmHSDAdlCLqdHfSegNgV9mIGBXGNRIzSMVzFt2pJn0ULaQQIZ2wr3FNWiJmSeNxHuV7iDBkp9L5pWwtgxB3BTnQpxJsz/OGPvO2+TU51pHwzbKlvsi0ILogXY96nP8T78wuGKB42Y28=
-Received: from BN9PR03CA0079.namprd03.prod.outlook.com (2603:10b6:408:fc::24)
- by DS7PR12MB8322.namprd12.prod.outlook.com (2603:10b6:8:ed::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Thu, 24 Jul
- 2025 17:05:27 +0000
-Received: from BL02EPF00021F69.namprd02.prod.outlook.com
- (2603:10b6:408:fc:cafe::7) by BN9PR03CA0079.outlook.office365.com
- (2603:10b6:408:fc::24) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.21 via Frontend Transport; Thu,
- 24 Jul 2025 17:05:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL02EPF00021F69.mail.protection.outlook.com (10.167.249.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8964.20 via Frontend Transport; Thu, 24 Jul 2025 17:05:26 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 24 Jul
- 2025 12:05:23 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 24 Jul
- 2025 12:05:22 -0500
-Received: from xhdharinit40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 24 Jul 2025 12:05:20 -0500
-From: Harini T <harini.t@amd.com>
-To: <alexandre.belloni@bootlin.com>, <michal.simek@amd.com>
-CC: <linux-rtc@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <git@amd.com>, Harini T <harini.t@amd.com>
-Subject: [PATCH] rtc: zynqmp: Add shutdown callback for kexec support
-Date: Thu, 24 Jul 2025 22:35:17 +0530
-Message-ID: <20250724170517.974356-1-harini.t@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84530243964
+	for <linux-rtc@vger.kernel.org>; Thu, 24 Jul 2025 20:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753388718; cv=none; b=s4LdxDVdko5K+TZs82OTxBUR/s7rm8rJWnoH0SPk4ZGXGoTKqFhuUArZ9igJ+SPYmEyQbpK6iDhNFToBISRcjtD53GkP9Gt/HxxlXarWN/IceDmrZUBc6DZj/X0jVIS6msNHqjS8p3KlcKtaqM0WqgsAiDSnj8kd1JK/DO92MsM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753388718; c=relaxed/simple;
+	bh=XqFmUKYyFJuP9gT1VB2HqW1p4rCZAg9SeYxN+uj0LfA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ADqmZhBmr4bjG1eA0lxCNw6m7mbdtKuIvT/Jiv+tlVVFo3b2rOXNXVq7jtExMtdwxbzqGrUB8awKwYTUsQ6YK0v24joHF0J6/gcd4ZCp/fPlDSu1DRnbHgvvJH6bKIkaowit92VXCE9rdeq3CzOvE7REnDMTrgBvK5dRWAMsS1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=JgsZo+9c; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3dda399db09so16434455ab.3
+        for <linux-rtc@vger.kernel.org>; Thu, 24 Jul 2025 13:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1753388715; x=1753993515; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lrEbbbAkAppzih/TPSBGsQGG4aRG/XXDaMLZfTbNAAw=;
+        b=JgsZo+9cWFnZxYjldlepDi3rd4ZE95SQfWcAGXn3MPqHRc1jow6Hb+tyyI5X7pNxaP
+         1TFeuWiY86dsU1L4b7pUW+HzrPWxhau+hSP1Q7qK3UvsYr2AwZavTKG81wXGKi8RcfEU
+         6zaUn/VhSQuTNrfgzjikY18Cc5BbhUx8lN0RhqMbZtN9LTptaEb4rVAGfE3hBrFd/07t
+         SLTDQASrk5T6SC8d+ObTuTRNaqC9kQW1X4nZXUyAZWpg5xMQr8QDzHr+UDX9DkFFhUOY
+         L7CH5UgHTgrcoykxd76LWCuahDu0k89SMhwFZUMA+JtGbSLMR52GQEYj7JQavDwRtvtm
+         cpnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753388715; x=1753993515;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lrEbbbAkAppzih/TPSBGsQGG4aRG/XXDaMLZfTbNAAw=;
+        b=H8BumPNoJAyd99TIhG+IyE6YyxRsyn1+VlLCR3bktR1xbnL3WEZB231G4COeKn4xIC
+         saXRTAO40DBNwnYaMhVNm9Fa+4W/M6BKxhxOYAFstGjw3kahgn+VPd1XCsry/aE7UGGs
+         R/Z01Pmqom8L1sNgkZJYt5mOvyC4+06KrKIKVCS+NufZbbOH8DA5OcP8Wbq78mtSdVs/
+         fhDV5ZDoclM/al8tK0gTL6AqzpDS/sI5a5lTON/dlNuJj9wfhVQoY4XDcKxqSymJbyTw
+         U3Jrnvc/7dFI/o9qGIJp6wgxSQs9FYuYml4FtYY2p+w3U2EeNJ6tX8fdUJjjLwuOymw+
+         AXkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWe9QMwXw1tugRR6ahiHQF6KonaT8oDRz5W/mhi2tlNGiGKkV7sI48VM0+JzvBmnSAcODycVPK8aBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzKuPluIjA6AznylbhxMHuYUoujLcAVVE8F4haxQ8Zrn47JTB1
+	ZRIf/UmDfSjvIOdhvvP6mOqhgXphpbboqJDlaX9ImAN0uZeKxi+CzpKvl8jShyb/zbM=
+X-Gm-Gg: ASbGncuy9bMK7qUMQULwCz3iyxt/Yw6uLA9+MCQnTiVIViLGfTXlDi33GvGH/H0KyVS
+	oDtX9r/oLCtZJZ/v4IRbUToeZBk74DUGJu1fxisUA4Fl1jLGgVEcI04Zy88bu5V07ILDYOOY+EC
+	C0hEwGzF3ZP0MK993eoo/cgBqtOb65LoV6wO7Bf7ask6iVLjP8vHGTAkJH2Kir5D7Fl5TAcSF5x
+	jRzFahRMAG2Oc0eHM/2QaItz1yqxFyw1C+8bhxDfjiZcus8XxuL3u2nrbmRhRWaQzDyKFQ93nPX
+	z3veXIh2bJ+Le/HyZP2/K/BHVXSb8U4cTL4CWwbujBwr/JBipcmBFeC24nCycG4s7VSuGYC29gH
+	VXIHgJ6zA15Q7tUngQtdBYk6MUbKFvhGIsSVyM3rZ
+X-Google-Smtp-Source: AGHT+IE5uFkVwfcYSkjHyZF/c2W8eIlexXUx47CDYyxHzh9kAbZHbQXPpnACm7peHUuN/ml5vSYqEw==
+X-Received: by 2002:a05:6602:1551:b0:87c:6d49:deb1 with SMTP id ca18e2360f4ac-87c6d4a568fmr1148165839f.8.1753388715572;
+        Thu, 24 Jul 2025 13:25:15 -0700 (PDT)
+Received: from zoltan.localdomain ([199.59.116.160])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-87c74316a3bsm63080239f.23.2025.07.24.13.25.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jul 2025 13:25:14 -0700 (PDT)
+From: Alex Elder <elder@riscstar.com>
+To: lee@kernel.org,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	alexandre.belloni@bootlin.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: mat.jonczyk@o2.pl,
+	dlan@gentoo.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	linux.amoon@gmail.com,
+	troymitchell988@gmail.com,
+	guodong@riscstar.com,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v9 0/8] spacemit: introduce P1 PMIC support
+Date: Thu, 24 Jul 2025 15:25:01 -0500
+Message-ID: <20250724202511.499288-1-elder@riscstar.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -91,80 +104,117 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00021F69:EE_|DS7PR12MB8322:EE_
-X-MS-Office365-Filtering-Correlation-Id: 545fdaee-3a34-40e0-4445-08ddcad44962
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?K2tFCaT3BXbPrCA+X874mFfdOHSgW+n2SwfxpQhymC3RE49U9S1uvzW6gbLr?=
- =?us-ascii?Q?pZijTYS6WeT37Tefb/Sow/KniXuka834IRsPP2AZ1dQ1eJSzpvDMMOTNWGur?=
- =?us-ascii?Q?cxj6flYGzs5mjHM04UexyO1k/3vItB9hpkgy2TYr63GZm7uqn4/Il4FKWjvE?=
- =?us-ascii?Q?B/7BM2x4jhDf4vF6r5XAZNhKHDy/zYuBmzMe2IiVbzxsxKlEA6IikRIk0qV/?=
- =?us-ascii?Q?dP0XiWuNNTxNSADZ4FUmUI6FlRnfkVNT4VijCbF9J2NkGa8htqKMQxETUrpl?=
- =?us-ascii?Q?DSsAbKQhSlbazp/IZQMNl9psOhqNqMmIJ2sBtyCr9UsJ19stsibb8Sg2T8GO?=
- =?us-ascii?Q?tZOZvY0dFzFZAnfRr4Ftl0X8S7pkOIiqE5kr75Ecv/bxcva52ctV6oX/2vSA?=
- =?us-ascii?Q?2lt92FnqEFQbm2Go7ovkCwQkS7SgCkYOEPMn8bR+UaNhFuGLlO73EH4VrYVe?=
- =?us-ascii?Q?qIsKdqMDQmkNZGff0xQjfhP+2N+foqrkn8aoN/fujGOZ9aGLZ+39/wPZIHj7?=
- =?us-ascii?Q?ARwdf0T1XprJmPIGm3dlRCoUtuOH2ETbld+RCGU4seIgJec/b01E10dnEYcb?=
- =?us-ascii?Q?vO0etX8rRgvGzgTCggZ9VMEGGOGLgwl0zHy+w58Utevh6qB2MiOWPE/wZgSv?=
- =?us-ascii?Q?JZJVzEMy+nuWzcq3OUlIiK0US7mbQ9swoGIuKgz/tmyFOTx2f+5d27ecjRvF?=
- =?us-ascii?Q?1bsFHixbleLivbSkNW8Ne/dq0tsLEp7xHbhWhHuKIPmKy+uZ8Gu2g9dHXZVa?=
- =?us-ascii?Q?wX0MNATvG7yHv0g8NZyJLzrSokCrttfH+AH1rLZGZHjRZThq2VikrmJlTkCe?=
- =?us-ascii?Q?9I/26FJeqVj0Lr0UfRaj2qgrh11rOe3FPVRIGC0x+v6J0r98sQnHsqjl/DfT?=
- =?us-ascii?Q?TQvNG9zRuXmnqQ60u6DgEzNVELcfbNOz6vhPvLoNlIIrPK3ZbO0cVnGUjHB+?=
- =?us-ascii?Q?w+lfu+Re8CSxeLX31qpZPKMULfxiPU8qjMBxCab+6/BndGLS8+wZPR9dCA4N?=
- =?us-ascii?Q?RV518oLTelKUgViW5N0K048Mh29AKnnV1tOMFmuVOFquNfCc+so+RBr+81tY?=
- =?us-ascii?Q?HSZyF+CtG4wOFV77Jg0D/nu6JbenwHyvH7ocPoWRmq6l+9n65hiQKx3cXxW8?=
- =?us-ascii?Q?eHDv0fOpNW7qZv+gG7RZaxOr3tal00sg2YFt12FrTyUSQBxfgOmV9H0WRUZK?=
- =?us-ascii?Q?GIEvt0HWDY7aBfbT9z0pWRK+06nDLjcmWYA8LVx8tmfCoHa7oVP09v7mSfjE?=
- =?us-ascii?Q?SYsp3nk0Cj1BvHgidFNlqyfAELOjEW1gMMadK0rtYPOjbJQM4uh3nxrpoDLR?=
- =?us-ascii?Q?CSkHiXrKoRRa7kphMpwqlUxEVRhbtcbAWcCse6hLE3MKbMZ1ZnV4sbDHNjnR?=
- =?us-ascii?Q?qwU2KX0fwB0EhljqHA3rm29H4cn6gDM874ZuWhooRmT8ECqsPlIuPOEhHuBh?=
- =?us-ascii?Q?G7fZ9Z0K92aXactPfJL1fHK7v9R3ZqDRi101sgbIcimQgKdlXJU9LAQoYTpY?=
- =?us-ascii?Q?+760rvDe0gr9wAAgC+De7dJP9eaVapP2ZTsN?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jul 2025 17:05:26.9096
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 545fdaee-3a34-40e0-4445-08ddcad44962
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF00021F69.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8322
 
-During kexec, the hardware is not reset and any enabled interrupts can
-interfere with the new kernel's RTC initialization.
+The SpacemiT P1 is an I2C-controlled PMIC that implements 6 buck
+converters and 12 LDOs.  It contains a load switch, ADC channels,
+GPIOs, a real-time clock, and a watchdog timer.
 
-The shutdown callback reuses the existing remove function to disable
-alarm interrupts and wakeup capability, putting the device in a
-quiescent state rather than completely removing it.
+This series introduces a multifunction driver for the P1 PMIC as well
+as drivers for its regulators and RTC.
 
-Signed-off-by: Harini T <harini.t@amd.com>
----
- drivers/rtc/rtc-zynqmp.c | 1 +
- 1 file changed, 1 insertion(+)
+Version 8 provided the ability in "simple-mfd-i2c.c" to specify the
+max_register value for the regmap configuration as an alternative
+to providing a "full" regmap structure.  Lee Jones asked that the
+max_register value take precedence if the regmap_config was also
+provided.
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index f39102b66eac..26893367f0f5 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -383,6 +383,7 @@ MODULE_DEVICE_TABLE(of, xlnx_rtc_of_match);
- static struct platform_driver xlnx_rtc_driver = {
- 	.probe		= xlnx_rtc_probe,
- 	.remove		= xlnx_rtc_remove,
-+	.shutdown	= xlnx_rtc_remove,
- 	.driver		= {
- 		.name	= KBUILD_MODNAME,
- 		.pm	= &xlnx_rtc_pm_ops,
+This version changes a few things from v8:
+  - Alexandre Belloni's ack is added to patch 5.
+  - The max_register value in simple_mfd_data is always used if
+    it is non-zero, as requested by Lee Jones.
+  - The global regmap_config_8r_8v structure is back to being
+    const again.
+  - A new function simple_regmap_config() has been added in patch 2
+    to encapsulate the logic that determines what regmap_config
+    structure will be used.
+      - It uses regmap_config_8r_8v if simple_mfd_data is not supplied
+        for some reason.
+      - It uses regmap_config_8r_8v if the simple_mfd_data defines
+        neither regmap_config nor max_register.
+      - Otherwise, it dynamically allocates a regmap_config structure.
+        If simple_mfd_data refers to a regmap_config structure, it is
+	copied into the allocated struct; otherwise regmap_config_8r_8v
+	is copied.
+      - Finally, if the simple_mfd_data structure provides a non-zero
+        max_register value, it is used in the regmap_config.
+  - A small duplicated comment in "simple-mfd-i2c.h" is removed.
+
+  					-Alex
+
+This series is available here:
+  https://github.com/riscstar/linux/tree/outgoing/pmic-v9
+
+Between version 8 and version 9:
+  - The max_config value is always used if it is provided with the
+    simple_mfd_data structure.
+  - The regmap_config structure used is allocated dynamically if
+    necessary; otherwise regmap_config_8r_8v is used.
+  - A small duplicated comment is removed
+
+Here is version 8 of this series:
+  https://lore.kernel.org/lkml/20250710175107.1280221-1-elder@riscstar.com/
+
+Between version 7 and version 8:
+  - Change the global regmap_config to not be const in patch 2.
+
+Here is version 7 of this series:
+  https://lore.kernel.org/lkml/20250702213658.545163-1-elder@riscstar.com/
+
+Between version 6 and version 7:
+  - Revise patch 2 to preserve the option to provide a full regmap config
+
+Here is version 6 of this series:
+  https://lore.kernel.org/lkml/20250627142309.1444135-1-elder@riscstar.com/
+
+Between version 5 and version 6:
+  - Added Rob Herring's reviewed-by to patch 1
+  - Add the simple MFD functionality suggested by Lee Jones
+  - Update patch 3 (previously 2) accordingly
+
+Here is version 5 of this series:
+  https://lore.kernel.org/lkml/20250625164119.1068842-1-elder@riscstar.com/
+
+Between version 4 and version 5:
+  - Only check the seconds register for change when looping on read
+  - Return without re-enabling the RTC if writing registers fails
+  - If the RTC is disabled when reading, return an error
+
+Here is version 4 of this series:
+  https://lore.kernel.org/lkml/20250625164119.1068842-1-elder@riscstar.com/
+
+More complete history is available at that link.
+
+
+Alex Elder (8):
+  dt-bindings: mfd: add support the SpacemiT P1 PMIC
+  mfd: simple-mfd-i2c: specify max_register
+  mfd: simple-mfd-i2c: add SpacemiT P1 support
+  regulator: spacemit: support SpacemiT P1 regulators
+  rtc: spacemit: support the SpacemiT P1 RTC
+  riscv: dts: spacemit: enable the i2c8 adapter
+  riscv: dts: spacemit: define fixed regulators
+  riscv: dts: spacemit: define regulator constraints
+
+ .../devicetree/bindings/mfd/spacemit,p1.yaml  |  86 +++++++++
+ .../boot/dts/spacemit/k1-bananapi-f3.dts      | 138 +++++++++++++++
+ arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  |   7 +
+ arch/riscv/boot/dts/spacemit/k1.dtsi          |  11 ++
+ drivers/mfd/Kconfig                           |  11 ++
+ drivers/mfd/simple-mfd-i2c.c                  |  50 +++++-
+ drivers/mfd/simple-mfd-i2c.h                  |   5 +-
+ drivers/regulator/Kconfig                     |  12 ++
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/spacemit-p1.c               | 157 ++++++++++++++++
+ drivers/rtc/Kconfig                           |  10 ++
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-spacemit-p1.c                 | 167 ++++++++++++++++++
+ 13 files changed, 647 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/spacemit,p1.yaml
+ create mode 100644 drivers/regulator/spacemit-p1.c
+ create mode 100644 drivers/rtc/rtc-spacemit-p1.c
+
+
+base-commit: 9ee814bd78e315e4551223ca7548dd3f6bdcf1ae
 -- 
 2.43.0
 
