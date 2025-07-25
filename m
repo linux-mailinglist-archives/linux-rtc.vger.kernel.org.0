@@ -1,216 +1,241 @@
-Return-Path: <linux-rtc+bounces-4587-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4588-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D9F3B11E77
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 14:27:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A4B0B12167
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 17:59:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B301A4E6956
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 12:27:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DD8A1CC6D5D
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 15:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2432E54DB;
-	Fri, 25 Jul 2025 12:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E39C2EF2A9;
+	Fri, 25 Jul 2025 15:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="1VSLg4M0"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="slrZJjc/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2085.outbound.protection.outlook.com [40.107.96.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2EA2E5400
-	for <linux-rtc@vger.kernel.org>; Fri, 25 Jul 2025 12:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753446452; cv=none; b=bPsdDBZTWG1dOY65vcVo7pkdMq4Cj+tziObYYc3nNm+6opB88G4IXV0FDP9Yvaf9C/AYddnqlmk3fqItjotFNeb5Yww8hVafn7dZIgq4Uj5JsR9SNQwDnaPgNSPWK8JFaK98geysgVpNzrwqUxpErfuTJVmttdFdALQ+zKou2M8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753446452; c=relaxed/simple;
-	bh=Hcy+1FkKcmyE8pc2/30HA2M4yktRO2YfEreRAJCLW5c=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RxXA+2Dh8VO6DjDEj3seJGplijhopotBzOwa5LMeY7TwX3FtT2xz0RwqQcS8sdgLn9eZY7bGATtnWVp3AzgqRW4gpT1YT2xdlpRKRVyk9e5F001OVgdN48fVWAgFX2Fl1AZOKYGqXBGX1BLTbwW43bMp61ML/zJqbl2vfZaH4EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=1VSLg4M0; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3de1875bf9dso14693765ab.2
-        for <linux-rtc@vger.kernel.org>; Fri, 25 Jul 2025 05:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1753446449; x=1754051249; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mXLHt76hrkTzdwesrILbdl/mLwV7e1Au7y/ET7GKzzA=;
-        b=1VSLg4M0As1uRZ0HSlwP2YA9wUNFDo0y8/0IijusydOkvjtDEbGH+GKQ0Z5rlC1zGO
-         cnSEUdTnDUXF8XHZ6Znal8Njx5ZLc44cWIaLfzeTotEO53Nmz3YT8dS4CLL0FD3uqcIF
-         CTvBzw3vyuI9CROAhoGGQw7fCfvO4RqAdsjrrBDciVOftbqZ1JJwrtxFJ3DZ+lz5BIgI
-         datApO63bWk8rBHQ409OsHt+OOw+CHAN1dak+0fAEEkFgVkdoim7f8WlioXymP/YtXFS
-         ElN5EOtwYECTpnqz08sxYvdzk5cBjWWVI95HBjQwJV57LyXfM4L6FzgASngxtZGK5ZKm
-         tysg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753446449; x=1754051249;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mXLHt76hrkTzdwesrILbdl/mLwV7e1Au7y/ET7GKzzA=;
-        b=RNCeOvmvBHAqDVKl37keHWEE2lzl+4d8aOPzkmMP67u5ry2pVBVjG9+6O4noqWT4XB
-         VZMcEVf5EwsDuPUk85bDniH+5qa3rTsddJ/ndXtEGzM2EXG3SZvxLM0pqfllrbTdeEjk
-         iAjN0qj/jE4VClWVovo+jhJYa8DMpySA9d2c81u/IPjInj5ZXlbFB59BtjCgJMnPStH+
-         5MvBhnTXD0xpQ3B1h77PYI8yLFZHXgWvzwO9pSRD+ndhv+Cpo2W/gp0V3i8Ul/+OfpCM
-         FPBFC5D/VpFpmjdbCzrGm3V/sb5qz79aK2Ewe7pHpkSawAHHAPQ2zLJhJxSDLexl47M2
-         iUSw==
-X-Forwarded-Encrypted: i=1; AJvYcCW94e3ye6OgSo/LYti7RdPn6Qid/o43AlEm0Zt71cH/zV+BoGHedqWU4Zt4oCNk/5rXDtL20i/FgZE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykFTgQD7ywpoW4CgabNNpyhdQGOXKaC3nlQL1PbomtQQq8L/mY
-	ygYbQWG1V2zoFUdGbRi+N/F3Yo9oSEHVjQGt881CX7SuyEieHoakwTDnZygboo6D+vk=
-X-Gm-Gg: ASbGncuCkP2PvYoyqkXyo4OsM6kU4mNb43WEICEfK/AriqOwW5eadWOE9sE43vC2eXC
-	FUzr7JvYZk13m9cyEaef05kgew4aXp3ZgfkxtbrDtqt6AitmoCARdf8s1AwFRos6BkxsxvC4fhd
-	qeoqnibQW36vD22bxwSP+jtsyjtjiGpJcp9b0bfQKcgEKceeufdINZvBJKTmF8OtZF53UvDyJ70
-	qpylpJVNDfYBMk9LRyyI9dcXyFHWTMjl5uGKMGJOmA6WqHkN+Oy0IU7nQrcbwnzP2uQeaZWY08u
-	BdeB8SHxXcbv6adt4kkdzhbpIgsNgB1+zhLfxT2pJoBhtd2grgU0viCXHk210rohcND1b7WM7D9
-	vO/Av+X++bLaVrT76kCpJcLrjBUdyKF/WrA==
-X-Google-Smtp-Source: AGHT+IGhO7mEEzu6qStEKP3YhLwseiPFmOnrBPl6/OYfukEuwKgUEIwMH1W9FrN/Z85sZ2BLST8iBQ==
-X-Received: by 2002:a05:6e02:1a4b:b0:3e3:b7e7:7a67 with SMTP id e9e14a558f8ab-3e3c52b01f6mr23978105ab.14.1753446449421;
-        Fri, 25 Jul 2025 05:27:29 -0700 (PDT)
-Received: from [10.211.55.5] ([199.59.116.160])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-508aebd545fsm992684173.57.2025.07.25.05.27.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jul 2025 05:27:28 -0700 (PDT)
-Message-ID: <e236fa5e-7085-419e-bc68-c49f9416847b@riscstar.com>
-Date: Fri, 25 Jul 2025 07:27:27 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DC52EF293;
+	Fri, 25 Jul 2025 15:58:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.85
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753459133; cv=fail; b=ecGc/weeX7RyUitn3nWgpZb5JdzTWKBMWA/Ky4sSUWLtUb7K2xtPWC/1E2s0K4x8cT+4TiosPEubYWWw2VxcyHnBYMOgmONmIsqgfQylEAnYUjnF9Or6apD7Yr0ldtz32+SSccftVB81ouHC8mVa0jl5fDtDNEzbluyfa8Zyz1M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753459133; c=relaxed/simple;
+	bh=jBgcwkgPrt4HLyD0Hibo872ezW44dEDtJ39uQzgyaOE=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=EeDT2NMNSO9/0ybJeG24Is514Fpp9zh0Pgmua4kW0rLcNIeGOHKJMAHYx2DrJcPWqaMOvd1tVHbQXQRKzjgKihZfCeBv2jFbIjpux2cV7Itu3WoZMNfV2uu/iG/axuGil9i6aavlMbJNl7GmpVih8uaGmwu3PUR1IRsDarnfZVM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=slrZJjc/; arc=fail smtp.client-ip=40.107.96.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oGJtLrKQ9Tlti8CtLofe9bT7G4ObobeyEt/zoMB9OzJoEjCzl3xkTdQNTbC7KIWJQt4h1+7hlkqJuxqXGFXvfZ1QONZbUycBMPc4IZbFqsSH6VEZK3rac597pJXI0qiksi3Vrv8UbbqUScnaeCu150gEmm2pNyfmCVcSQctJ9B7U3hkdsO86Ka+0+EWachMLxm9bNrbYy1TBk12vSKH1MZUhuuLESODmvLZTrUtvGY/wfoQy8ugu1+8O2qUIXto2BAtjCrVcKUNQDSXR0cgNNnlZJgu2Va/QglZuwX/zYOHaGEVD2SiysXbMljuTQQ5R9XH/gNo2QmLVtJKBpEHKUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HZtc3A/1+XU779WCc/25vqVFq8l9gEmxpBjAGWbf+qA=;
+ b=AJsYiRZZhdWuUTWB7tJ31F7tb6eMWWyvs6N9CcNk/bmNDIL/HM+y2ovzCXpf9SbUeJwTnH6fT3KtHVjianTTyxNnsrYR/tJ1fefq5UKrn/pTVfG2kz6FBPqZz1nYjaSD4FuedwgTUAegVsmApLPiALqajUrEG+NSVHpjTCnX3kN/IxxPHUY/cbyt+7/4m+w1eDuYqQqWuoszCzTTlc+mFdTclM08nV4ndEzu2hYa9eiAjjUqCeUWfUk9hZDMyuFYkpCBn6qJfKubwv+SSysN2/qyzB3NJNN3gp3hSmJaNeFXXnL2Izp8kNw0+26+dJ7G1rN+f0ITksb4EsP0b1WULw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HZtc3A/1+XU779WCc/25vqVFq8l9gEmxpBjAGWbf+qA=;
+ b=slrZJjc/gBsc7BXsnD1q1qy9kyt9NgKqmmIvbh7gwjlAEZ0E4s9kZ7jKFTSRaNirQn4r7CwkRYJ53olCoYsdYsl8pYwLTFClL8iVsxoJP2Cc4TBn5uMEt3cKcYEyW6bC/3bcsImoKPwAwLWW+TVftUwrr31XGQzkTSIPvRaRsTheeuBU++MTmbmegUmkIBO19RRq/y7lw/dCOiq1KGgrKsUsOO6m7r+0D0Qi9RcwkILXEEboJVDk8DbubvOqSTjIBdnJf0gJ/H57cpC8b8SMUdLGjVac9maUBTXl7swF0XKc7tuLaNQGXsrb7dvLMW4+TwwpAnOUuhOk4DsFhoIIYw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH8PR12MB9768.namprd12.prod.outlook.com (2603:10b6:610:260::9)
+ by DM4PR12MB6422.namprd12.prod.outlook.com (2603:10b6:8:b9::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.22; Fri, 25 Jul
+ 2025 15:58:46 +0000
+Received: from CH8PR12MB9768.namprd12.prod.outlook.com
+ ([fe80::f7db:9f0:a574:1abf]) by CH8PR12MB9768.namprd12.prod.outlook.com
+ ([fe80::f7db:9f0:a574:1abf%7]) with mapi id 15.20.8964.023; Fri, 25 Jul 2025
+ 15:58:46 +0000
+Message-ID: <bad01da7-5e25-492b-a476-5fb4cfc13718@nvidia.com>
+Date: Fri, 25 Jul 2025 21:28:32 +0530
+User-Agent: Mozilla Thunderbird
+From: Shubhi Garg <shgarg@nvidia.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: rtc: Document NVIDIA VRS RTC
+To: Jon Hunter <jonathanh@nvidia.com>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+ Shubhi Garg <shgarg@nvidia.com>
+References: <20250723130343.2861866-1-shgarg@nvidia.com>
+ <20250723130343.2861866-2-shgarg@nvidia.com>
+ <20250724-peridot-chachalaca-of-progress-a9f2ee@kuoka>
+ <2c59e665-6415-460b-8ff8-c06f8d94f9eb@nvidia.com>
+ <f69a76c5-157d-4cb4-bf46-1acdb6a87319@kernel.org>
+ <0d70270e-2290-47f4-87d1-9a11019fa169@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <0d70270e-2290-47f4-87d1-9a11019fa169@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA5P287CA0021.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:179::10) To CH8PR12MB9768.namprd12.prod.outlook.com
+ (2603:10b6:610:260::9)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/8] mfd: simple-mfd-i2c: specify max_register
-From: Alex Elder <elder@riscstar.com>
-To: lee@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
- alexandre.belloni@bootlin.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org
-Cc: mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
- linux.amoon@gmail.com, troymitchell988@gmail.com, guodong@riscstar.com,
- linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250724202511.499288-1-elder@riscstar.com>
- <20250724202511.499288-3-elder@riscstar.com>
-Content-Language: en-US
-In-Reply-To: <20250724202511.499288-3-elder@riscstar.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH8PR12MB9768:EE_|DM4PR12MB6422:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a429df9-ded8-4b89-345f-08ddcb9420c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?c1pFSXNtQjFXWlhPTUVhSWdwVWlhb0FMSFBGVUpIaFRCbTdNWmdSMVFzNGox?=
+ =?utf-8?B?elY2ZU53c1lrWGc3ZVdzQytrN3lmL0tBYkpUUkc2UkFwU1JDWlJXWnRQUmQz?=
+ =?utf-8?B?dnFUcW9EZXlFTDl1b2lKbmx1aWRZcEhyK01TWCt6bzZ1akNjdzJkemRrcll6?=
+ =?utf-8?B?SVZON3Y1enhpSWxmRUZrTFVQajQ0NEhyWC9RR29HVTdJN2ExblZmSlhTYzRi?=
+ =?utf-8?B?cmZFeDg0Uk5aeFhyZFNxVEFqeGlqcTU2QWVSTFZOdkhBeEViZUtjRVorVHBK?=
+ =?utf-8?B?WjdSZ0FLc2gwYTJSOUxtTVJ4bHV6eDRyMW01aVI2YUtkbkVkamd5VEpEeXdn?=
+ =?utf-8?B?a3F0d3d2anVTZHV0YkFNaGFrUHVEaEdITlMycnZnL1FoWVp1N2dkS2Y3bi85?=
+ =?utf-8?B?RE42dGRqaDFuM2gyTmJhVGdtdXNsYitmamJOenlSVURRVFI4RDZvV0g2Yy9X?=
+ =?utf-8?B?SE9BMUZxbG9Xc2NOMG9OYTAyODJMM2l0amc4a0FteGc0NTF4Q21FVnNPblhl?=
+ =?utf-8?B?MFpBemViT2RXRlJrL2R6RXRja3ZjSlVnV01Ob0xEaGExSU5EenZtRWRNaDRS?=
+ =?utf-8?B?b3YyQzVHLzhqUTd5dS9FS3dNWDhKUWdyM2xpUGNidlR1aFNPdFAwbEh4Qi9Y?=
+ =?utf-8?B?d3hjN1JNV250ZXVaS1FWbWRabjdtamZMbjNnUy9OTGpoSExncmpaUm8wVVM2?=
+ =?utf-8?B?ODNBQkdZcklLOFBvRjBhZUkvVWhEM3p4alJ0OWJuS3pQMk0yazk5MkM5amgv?=
+ =?utf-8?B?SGEzTHVZd0pkK0FGRStKQzI0eUdvUXl3RHkzNVVEL0NtT1R6MlF2a2NMUFV1?=
+ =?utf-8?B?eEJqZzFpOW9KYnlZbTRXWExTd0g2MmdOb0xNR2dYWVg5dzRWaEE0UGhOMkVF?=
+ =?utf-8?B?WDBENmhGbXBBWWx3eXEyd2lpd1k0M3dtSEVhNndHZjRTM2JEMi9helgzUlc1?=
+ =?utf-8?B?Rk94VENLNU0rZHpEU2FlK2U0L0w0OGYyWjVvNm5rdlFpOS9FK0VmdEpWdWRS?=
+ =?utf-8?B?UU9BWjN4R2FzZE9VSFQ2VDNZYms3bmMyVWE3bXhhV0twMmx6L2ZYWURuVjI1?=
+ =?utf-8?B?MXcxT2JYZVZKRkxuRXdFSWpqL0dWbHdtLzBIZHBhVDR3QWtqWjRLRWdnbTRM?=
+ =?utf-8?B?ZlNoaC92MFpyN1NocmozYTYvcm1yN0VQN0pJR20yR0M0ZE9HMFhTUW5Wd3RX?=
+ =?utf-8?B?dmI0cmQ2OUhxeklmZnhpVnhwRmFiYVNkOXBkK2R6Q0JxYjU5VVduVWNyYkVH?=
+ =?utf-8?B?Q0ozcHg2blJtY2ViaS90WVRneHlvelgrRjBDQ2hkLzkyeStDWncxTDNWa0x0?=
+ =?utf-8?B?ZEI5SzJOdDJvZnpxUllpVllVMHJaV2twSTNtRmxURDh0YThFZ2p3U0NqT2NY?=
+ =?utf-8?B?YjF3dE5ENkNvSVhxT243aHpFRFc0d0duZUJEbitoMXlpWHFHTkordng5NmdE?=
+ =?utf-8?B?Tlk4ekVBTnByQnphSmRNeTBHUm9DR1JxbUs1RzhTS0ZkZEEyWmxya2tITUdv?=
+ =?utf-8?B?dFNZaVRzUjBRZXhmOEZBOEJieUF6TW1QSmNsWk5MYmRXZVFqZm0yblBhUm5m?=
+ =?utf-8?B?RGJubHNyM1BVUU5LQnVXVHQ5NGlNMC9DZkdNczVrQzlTMVJRRFhWRG5FS2VC?=
+ =?utf-8?B?UkY4WC91ckpUS2tWOUxvTFV1VFNRSSt3RHErY0trTXRzUko4Z2VCamZKa0p0?=
+ =?utf-8?B?MEVkMXE1enBoa0c5c3RpNlJublBBbHJWSWpqUVVHd0gzdWU4WXMrcCtodU1M?=
+ =?utf-8?B?MGphbXVXUXJoZFRMYXVNL3JLemVhZis1bEVkWlpIQ0h3M2VnMTlXWVZCTTEr?=
+ =?utf-8?B?VVJCRVpEcEJ0S0FYU0lnWGdyRDBveWJxcGQzMTJZWncxZlc0ZDBFY3BUdlY3?=
+ =?utf-8?B?L3h4SC9wRnlBYmlscFppbEVOTFU1MXpxVlAvcjlLQVFLeXNMVGVKWkZhUmVH?=
+ =?utf-8?Q?okSazaeJNjE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH8PR12MB9768.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?K29NdWJLWHN2TTlGa3dSWDZDYWhjN3hNcDRqYUpZQVN5TUVqcmsyNHZDdGYv?=
+ =?utf-8?B?d2xrVTlPRE9YUVY3Lzd2VkhTUUROZm5YajN5SXErWDJMRDZ6NHQ1QUNxcGFT?=
+ =?utf-8?B?UE55Wi91Z0JQNkFPYTdKam05bHVzT0ZEK2RsZTdKV28zY1lEVTd2L1N0emgw?=
+ =?utf-8?B?Z0NyRjFTSzllSFE1NGR3VWxWd1J6My9xdW4rd2RiQkxWdVBZQ1VxN3lDS2FU?=
+ =?utf-8?B?ZEhPbllKSUtsQ0ozSDJ4UlgzZHhqNE9UTVFWdlBneFRTdGJDcXp1VW9NUmc4?=
+ =?utf-8?B?WWtWNGh3Vnc1Unc4dkU0bGVhdm5qeEVjY0VlelZvK0hqVUNUendjTFVaZGRN?=
+ =?utf-8?B?WGc5enM0WEdRZEtScmtZbHlNT0hvUTBiV1FINXp6a3JjUXRCOURHS09ZbzhX?=
+ =?utf-8?B?OFFLM3JrNW1mYXUrZWpHSy9FeEh1NTYvNGIzUGNZOUQ2cGtSRGVJVy9RWnh3?=
+ =?utf-8?B?MGkxNzNhdjZYN0c1ZE9PZ3pTNStFWUxLUmYyd2pEY0tTNkFLUWhZTEl2MDlp?=
+ =?utf-8?B?YkxudzZnNEpuV1h4ZjF3bDNXTkxBWFRKTDVIZUpXQkZkcFdVZzFJRmh1cDlJ?=
+ =?utf-8?B?Ujk0eHRFZnRGL0pDQWY2Y0lFTE5wS2JsdlZ1aEFDdm1CV3J4SEQrWHdtL1or?=
+ =?utf-8?B?WlE4c3lkeVZtbzBjVGVKM01jTytjdzgwOXBWYTNFRlhGV0dERTJQa1R6bStE?=
+ =?utf-8?B?Sm9MVTBxOE5JSzduRUVWYkRPc3lVTi9UcTlqNWZjOW1UeXhLUUVBekFPR3ZR?=
+ =?utf-8?B?SWRjMzBoTTVJVUhHb2czZnZBN1I5M3p2bW5BWVVDelcrbTlCeC9MUkw3bXQ5?=
+ =?utf-8?B?Q3hvbmFZS2FzWlJDaHdjT1JzMkdnQVlOWmd2ZVp2NzBQaVNJTk1oQlUzNUJE?=
+ =?utf-8?B?UklBd3hZYmxDcFFlZzFDbmJkdnRFekxyRm1iL2N4eGozaVZkRDVtZTZ3NlNv?=
+ =?utf-8?B?LzNxMGduRzJhbHh2Ym8xelo1WnNzU2hzeEdUTlVCRk1uV3Uvay8wWDlLVEtR?=
+ =?utf-8?B?NzB0Zyt1RTU1dlVPZjAzU3R4K0RYcUFaNTZXSWcwaGV5dlZuZldFT2xIbG81?=
+ =?utf-8?B?V2g1enRNdjNVQUJDeVM3NXNjMWJvcURWUURseHlWclR4L2ZOMDBHbzVuMGd3?=
+ =?utf-8?B?bEN2dDFxbTBmbGQ0U0dZSGltL081UWQrN3RkSTBZTjRsRUJsYmNVekFUWk4r?=
+ =?utf-8?B?Z1UzT3BIZ2ZHOVFLNjNvcDBtdHpoNmtOVmRBVUdNVVJKYTZ0UVQwTEFKSmtQ?=
+ =?utf-8?B?VjBRWGtINkxLeUhrTFA1L01PbWhIS0w2SWdvNXJIdnhWc1lBVyt2UVJiUlpy?=
+ =?utf-8?B?b2s5eURadlFRVStPeTQybmNzZnhHVEJWemFXaG41RUxWTi9jWFlyVUdYdUpN?=
+ =?utf-8?B?cHE4ZFl2bFRsOTh3ME1tanJQcDhHU0FvTmd6Y21kMFQ1bFhFRGNQNXMyZTIy?=
+ =?utf-8?B?UHVFMDVGYVZacjdSY3lPNDNuMGllaTBtTGNWMzNrUllYSHlYU2U5QUNBdUt3?=
+ =?utf-8?B?MU9zbXhPV0VMYkV1Z2tNNSt3YVdmNGU1Z01UOGlYaHhKVWFSQkFYN1FSRFpU?=
+ =?utf-8?B?YkYwd1dYY0R6UkUyZTFLNHpQNXNPSkQvOUtnVnNHQ2UxeWR5d2RIMzRoYitE?=
+ =?utf-8?B?TlY2aURhalRiUFdLcy95VlZzOCtCdktTeVhiUEh0eTVDU0JVREdXM28wY3JO?=
+ =?utf-8?B?S2JLMTdjbzNQL0xIR0RyYmJWV05hSm8zYXVRdzRsUVZWM0JqVVJ6ay9GYTZJ?=
+ =?utf-8?B?TG05TG5SZHJ5TkZLQjFIQlZqR1dxeUcvRnJzZjNWbEQ4TGswRngwNHB4NTJ5?=
+ =?utf-8?B?Q0cwRWFZUE9Jc0RlTWFTS0IzbTFZajlQNFdQNWUwaHNuOElLWXRxaUZvcVdQ?=
+ =?utf-8?B?T3ZGUTV2NSt2UlBrM21vU3c2QUxkWXl0N3V5RUQvLzJTaS9ud2FXTk1zUngx?=
+ =?utf-8?B?blVMdjVWYjhTcXZFc000Rm1xZ2xuV1pjRmIzRVhaczRQMEJwYWtrbnNTOEJh?=
+ =?utf-8?B?U1Fya1FyOERtMXFXVThXMXlMZjQzYllxc1JZQUNJZm1USW81cWkrMHdVcVE1?=
+ =?utf-8?B?cWkyVFdqWGNteHRzZTNYbHpDZUIxMFZsR2RBMUZwaVNYbkJHV3ZoRU9XQ0N6?=
+ =?utf-8?Q?f402PDAts2SchBl7m1/1FH9Wt?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a429df9-ded8-4b89-345f-08ddcb9420c3
+X-MS-Exchange-CrossTenant-AuthSource: CH8PR12MB9768.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2025 15:58:45.9722
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JCMPXHG/o+HqoX3gHJDk0+eyBhn/WPBMVBL6RR8dX/4At5nO0msSi6lzwh0qC61nIlCovXS66iekoiRNxgqLKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6422
 
-On 7/24/25 3:25 PM, Alex Elder wrote:
-> All devices supported by simple MFD use the same 8-bit register 8-bit
-> value regmap configuration.  There is an option available for a device
-> to specify a custom configuration, but no existing device uses it.
-> 
-> Rather than requiring a "full" regmap configuration to be provided to
-> change only the max_register value, Lee Jones suggested allowing
-> max_register to be specified in the simple_mfd_data structure.  The
-> 8-bit register 8-bit configuration is still used by default, but
-> max_register is also applied if it is non-zero.
-> 
-> If both regmap_config and max_register are provided, the max_register
-> field in the regmap_config structure is ignored.
 
-It occurred to me this morning that the regmap_config structure
-can be freed after the call to devm_regmap_init_i2c(), so I'm
-going to add a function to free it (if it was dynamically
-allocated).
 
-					-Alex
+On 24/07/25 4:20 pm, Jon Hunter wrote:
+> 
+> On 24/07/2025 11:06, Krzysztof Kozlowski wrote:
+>> On 24/07/2025 11:41, Jon Hunter wrote:
+>>>
+>>> On 24/07/2025 08:59, Krzysztof Kozlowski wrote:
+>>>> On Wed, Jul 23, 2025 at 01:03:40PM +0000, Shubhi Garg wrote:
+>>>>> +description:
+>>>>> +  NVIDIA VRS (Voltage Regulator Specification) RTC provides 32kHz 
+>>>>> RTC clock
+>>>>> +  support with backup battery for system timing. It provides alarm 
+>>>>> functionality
+>>>>> +  to wake system from suspend and shutdown state. The device also 
+>>>>> acts as an
+>>>>> +  interrupt controller for managing interrupts from the VRS.
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: nvidia,vrs10-rtc
+>>>>
+>>>> Nothing improved. You never replied to comments and then replaced one
+>>>> redundant word into other redundant word.
+>>>>
+>>>> Respond to review or implement it fully, not partially.
+>>>>
+>>>> Or add COMPLETE bindings, not partial ones. See writing bindings doc.
+>>>
+>>> OK, right so the DT binding should describe the overall PMIC device,
+>>> even though the driver needs to support the RTC.
 
-> Signed-off-by: Alex Elder <elder@riscstar.com>
-> Suggested-by: Lee Jones <lee@kernel.org>
-> ---
-> v9: - max_register takes precedence over regmap_config in simple_mfd_data
->      - New function simple_regmap_config() encapsulates providing config
->      - simple_regmap_config() allocates a regmap_config if necessary
->      - A small duplicated comment is removed in "simple-mfd-i2c.h"
+VRS-10 is the device name. VRS-10 has an I2C interface and implements a 
+power sequencer, RTC , 32kHZ clock output. From software perspective, we 
+are handling VRS-10 interrupts and providing RTC driver support. I will 
+add complete VRS-10 information in bindings.
+
+>>
+>> This is not a driver patch. This is patch for hardware. Sending
+>> incomplete pieces of a device, without complete picture is really not
+>> the right way. Knowing this is part of PMIC this should be rejected, but
+>> how can we decide on that if contributor never tells us this is a part
+>> of PMIC?
 > 
->   drivers/mfd/simple-mfd-i2c.c | 38 +++++++++++++++++++++++++++++++-----
->   drivers/mfd/simple-mfd-i2c.h |  5 +----
->   2 files changed, 34 insertions(+), 9 deletions(-)
+> Yes I understand that this is not a driver patch and must describe the 
+> hardware. It is a simple misunderstanding because it was rejected as an 
+> MFD, but we should not have then made the DT look like only a RTC 
+> device. This is a mistake on our side and we will fix.
 > 
-> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> index 22159913bea03..f3ba79c112d4e 100644
-> --- a/drivers/mfd/simple-mfd-i2c.c
-> +++ b/drivers/mfd/simple-mfd-i2c.c
-> @@ -29,6 +29,36 @@ static const struct regmap_config regmap_config_8r_8v = {
->   	.val_bits = 8,
->   };
->   
-> +/*
-> + * Determine regmap config to use.  If no regmap_config is provided,
-> + * regmap_config_8r_8v is used.  If max_register is specified it is
-> + * (also) used, whether or not regmap_config is provided.
-> + */
-> +static const struct regmap_config *
-> +simple_regmap_config(struct device *dev, const struct simple_mfd_data *data)
-> +{
-> +	struct regmap_config *regmap_config;
-> +
-> +	if (!data)
-> +		return &regmap_config_8r_8v;
-> +
-> +	if (data->regmap_config && !data->max_register)
-> +		return data->regmap_config;
-> +
-> +	regmap_config = devm_kzalloc(dev, sizeof(*regmap_config), GFP_KERNEL);
-> +	if (!regmap_config)
-> +		return NULL;
-> +
-> +	if (data->regmap_config)
-> +		*regmap_config = *data->regmap_config;
-> +	else
-> +		*regmap_config = regmap_config_8r_8v;
-> +	if (data->max_register)
-> +		regmap_config->max_register = data->max_register;
-> +
-> +	return regmap_config;
-> +}
-> +
->   static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->   {
->   	const struct simple_mfd_data *simple_mfd_data;
-> @@ -38,11 +68,9 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->   
->   	simple_mfd_data = device_get_match_data(&i2c->dev);
->   
-> -	/* If no regmap_config is specified, use the default 8reg and 8val bits */
-> -	if (!simple_mfd_data || !simple_mfd_data->regmap_config)
-> -		regmap_config = &regmap_config_8r_8v;
-> -	else
-> -		regmap_config = simple_mfd_data->regmap_config;
-> +	regmap_config = simple_regmap_config(&i2c->dev, simple_mfd_data);
-> +	if (!regmap_config)
-> +		return -ENOMEM;
->   
->   	regmap = devm_regmap_init_i2c(i2c, regmap_config);
->   	if (IS_ERR(regmap))
-> diff --git a/drivers/mfd/simple-mfd-i2c.h b/drivers/mfd/simple-mfd-i2c.h
-> index 7cb2bdd347d97..6fa36b3d7a217 100644
-> --- a/drivers/mfd/simple-mfd-i2c.h
-> +++ b/drivers/mfd/simple-mfd-i2c.h
-> @@ -8,10 +8,6 @@
->    * shared by all sub-devices.  Children can use their parent's device structure
->    * (dev.parent) in order to reference it.
->    *
-> - * This driver creates a single register map with the intention for it to be
-> - * shared by all sub-devices.  Children can use their parent's device structure
-> - * (dev.parent) in order to reference it.
-> - *
->    * Once the register map has been successfully initialised, any sub-devices
->    * represented by child nodes in Device Tree or via the MFD cells in the
->    * associated C file will be subsequently registered.
-> @@ -25,6 +21,7 @@
->   
->   struct simple_mfd_data {
->   	const struct regmap_config *regmap_config;
-> +	unsigned int max_register;
->   	const struct mfd_cell *mfd_cell;
->   	size_t mfd_cell_size;
->   };
+
+I acknowledge, will improve bindings by describing VRS-10 hardware for 
+clear understanding.
+
+-- 
+Regards,
+Shubhi
 
 
