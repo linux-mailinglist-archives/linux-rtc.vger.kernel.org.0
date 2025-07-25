@@ -1,108 +1,105 @@
-Return-Path: <linux-rtc+bounces-4583-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4584-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DF40B114F5
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 01:55:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7790BB11A8B
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 11:07:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22FDA1CE4F59
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Jul 2025 23:56:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFFD45A263D
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Jul 2025 09:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E26246BC5;
-	Thu, 24 Jul 2025 23:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E42FD2727ED;
+	Fri, 25 Jul 2025 09:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TKTLx0vM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hp8d/An+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFABA155C97;
-	Thu, 24 Jul 2025 23:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FB327145A;
+	Fri, 25 Jul 2025 09:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753401339; cv=none; b=eCxKI1R1Mb0FW6pZSOHhyC9naM1G8Lq20cmML4+HUyz4XokKaH7/rqQMi1FzudkNRpsnqKgp9TPU5gg2odoTCE6i7GmPkUrAe376L2cuNd9DoNuQGlAonv7cytYRkRoBgB2vM5iXf7/kNipiS7nrXqWVXpKsndIcesj5DVuvohI=
+	t=1753434433; cv=none; b=ABFi9YiS+/uFl4x087XP9ifxoiy+8tVUfTZ5bSbiR4Oj80vFLGqMbwmfUTJpCRzsNPqq6RTtrzVDk+pPD0JDXvPxzW+jf8sE1M3MqZRlfpCxySUq2JQWDDIONn0mp6tgr/uin/4qFFOmsX9cbo3woEuhb9VqGdwrQ9i+RmPKuq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753401339; c=relaxed/simple;
-	bh=ZjptyIksVFLTo8u9FVIx2HruCBSBg0ymIQO0X7ZkFjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kAwVafjXkZMo57+eL3G66Vq6KTePzgO3ZtmIG997/6uj0TT4OEWLYuBmgcRBcysbzLCiMTbW5FqUTf1PPSyr4DdO4m4BHwhrwKxsASKfdnh9WK8kSklEPOtmeXiNYtZ0MubH0Lms6KES7ACgzll9/ti+VEnxuey65eIIiY91/VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TKTLx0vM; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B196C4320E;
-	Thu, 24 Jul 2025 23:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1753401328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=objrwpFDBlS7gEaH818Sz3OvSK4JziosCw8nboGO1xM=;
-	b=TKTLx0vM3T62Yjqi3gzLldn8hViEIx37DEcJhH4DQkWX+AASVyDDoKGKMdVjkoIppwtnTK
-	NA0kW672efHNTEdxrYLAMQQAvyKVjcufz7EZdpzFWBTeTnEV+eeAnR7nyXegdi7CF5OO5w
-	53o3ZC0tX/kIMZ8gY11Fej7pX1vq3QYsnDMSskvVEhVqIlgqBRDrsBwcVTa/C39PcTW8lE
-	lLTL/I3A/AtxraiS7DqNe8UESHH0XpBbhFH5MOjbWJA/pY+8D7+/bVGBCxfGlJzzXx/XP5
-	BXuO5Jhkdbfpa3fByh5vkRDsX7BD8Un3flPpUQRmpELa7l4estnu7mEH2v69YQ==
-Date: Fri, 25 Jul 2025 01:55:27 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Harini T <harini.t@amd.com>
-Cc: michal.simek@amd.com, linux-rtc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	git@amd.com
-Subject: Re: [PATCH] rtc: zynqmp: Add shutdown callback for kexec support
-Message-ID: <2025072423552753300d57@mail.local>
-References: <20250724170517.974356-1-harini.t@amd.com>
+	s=arc-20240116; t=1753434433; c=relaxed/simple;
+	bh=f+HoknzAfUhciWezY8bQPVYKEB9d842f3T6STLNB0iI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TVUU8jznXitrKDQST5QbHVLXXRESTw9v3YWAyWlcyAYKDhSEEMlsCEGodgLzZLzY+aDKwqeUIBZjzg2hto880IZrnr0XDCQc/Da263m3jh11HX3MbFgfLjGCamXUJlDpCC3gAB0bpPZjV7excZ2BNw7+mQSjo8ZB3BuIuY5TB1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hp8d/An+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0ED0C4CEE7;
+	Fri, 25 Jul 2025 09:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753434433;
+	bh=f+HoknzAfUhciWezY8bQPVYKEB9d842f3T6STLNB0iI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hp8d/An+y2FArfzE9H4sZS6jYwiQIyUMbmS5weoGaQg1mlyT0WnPlBtNneb3jt7Dt
+	 9drDnGupWWvtcQlrrI/9wWQ3hVov+3y1Gdwcl5H28MB/Q9aFVpmcF5LXskYK4p0Ck2
+	 gPKmADXObQtS6Bdhplis88LsmiPpchfqrrG0/USgVW9s5WnXZNSO2jUxMBE/8P2w78
+	 STsN9R9NXbDJ7ims0l9tD3raUSRitnUcDmu5BRDr3rdvm2I7cicLFbrjdqFjvjmTXQ
+	 oK2tNLEuEuFRIYREUMjCHpfU7xqwsQmBWIuOZjkCUb7IXrFhKN1+5nkx+t9gJk+RDe
+	 MFIHjJ1m6FcIg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Antoni Pokusinski <apokusinski01@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Lukas Stockmann <lukas.stockmann@siemens.com>,
+	Maud Spierings <maudspierings@gocontroll.com>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: pcf85063: hide an unused variable
+Date: Fri, 25 Jul 2025 11:07:06 +0200
+Message-Id: <20250725090709.2505113-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250724170517.974356-1-harini.t@amd.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdekvddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegieduueethefhkeegjeevfefhiedujeeuhffgleejgfejgeekueejuefgheeggfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmegsieehmegsvdhftdemkegsleekmeejledtheemrggsvgelmeduhedvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemsgeiheemsgdvfhdtmeeksgelkeemjeeltdehmegrsggvleemudehvddvpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtohephhgrrhhinhhirdhtsegrmhgurdgtohhmpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgv
- ghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgihhtsegrmhgurdgtohhm
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On 24/07/2025 22:35:17+0530, Harini T wrote:
-> During kexec, the hardware is not reset and any enabled interrupts can
-> interfere with the new kernel's RTC initialization.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Please elaborate on the issue because alarm are supposed to stay enabled across
-reboots, this is the whole point of the RTC.
+The newly introduced configuration is only used by code that is
+inside of an #ifdef block, cauing a warning when that block is
+disabled by the configuration is still there:
 
-> 
-> The shutdown callback reuses the existing remove function to disable
-> alarm interrupts and wakeup capability, putting the device in a
-> quiescent state rather than completely removing it.
-> 
-> Signed-off-by: Harini T <harini.t@amd.com>
-> ---
->  drivers/rtc/rtc-zynqmp.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-> index f39102b66eac..26893367f0f5 100644
-> --- a/drivers/rtc/rtc-zynqmp.c
-> +++ b/drivers/rtc/rtc-zynqmp.c
-> @@ -383,6 +383,7 @@ MODULE_DEVICE_TABLE(of, xlnx_rtc_of_match);
->  static struct platform_driver xlnx_rtc_driver = {
->  	.probe		= xlnx_rtc_probe,
->  	.remove		= xlnx_rtc_remove,
-> +	.shutdown	= xlnx_rtc_remove,
->  	.driver		= {
->  		.name	= KBUILD_MODNAME,
->  		.pm	= &xlnx_rtc_pm_ops,
-> -- 
-> 2.43.0
-> 
+drivers/rtc/rtc-pcf85063.c:566:37: error: 'config_rv8063' defined but not used [-Werror=unused-const-variable=]
 
+Add the same #ifdef here.
+
+Fixes: a3c7f7e16ea8 ("rtc: pcf85063: add support for RV8063")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/rtc/rtc-pcf85063.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
+index d9b67b959d18..41e4a5a16574 100644
+--- a/drivers/rtc/rtc-pcf85063.c
++++ b/drivers/rtc/rtc-pcf85063.c
+@@ -563,6 +563,7 @@ static const struct pcf85063_config config_rv8263 = {
+ 	.force_cap_7000 = 1,
+ };
+ 
++#if IS_ENABLED(CONFIG_SPI_MASTER)
+ static const struct pcf85063_config config_rv8063 = {
+ 	.regmap = {
+ 		.reg_bits = 8,
+@@ -574,6 +575,7 @@ static const struct pcf85063_config config_rv8063 = {
+ 	.has_alarms = 1,
+ 	.force_cap_7000 = 1,
+ };
++#endif
+ 
+ static int pcf85063_probe(struct device *dev, struct regmap *regmap, int irq,
+ 			  const struct pcf85063_config *config)
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.5
+
 
