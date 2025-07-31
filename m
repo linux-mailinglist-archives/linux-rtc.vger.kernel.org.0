@@ -1,111 +1,105 @@
-Return-Path: <linux-rtc+bounces-4615-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4616-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71269B171DB
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 15:18:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C58B171DD
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 15:18:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE2AB7B273E
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 13:17:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCA0D5847A2
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 13:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B71EC238C1D;
-	Thu, 31 Jul 2025 13:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBB52C3276;
+	Thu, 31 Jul 2025 13:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XAZydeyJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FrtH5N8Z"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883FDA94A;
-	Thu, 31 Jul 2025 13:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29077A94A;
+	Thu, 31 Jul 2025 13:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753967909; cv=none; b=L5sLr69TLqbjfDVHpGoPQQHTn6A5ZJ5gzx4/LbR+uPpjKLd9NGJVFC9JR9NgDb8h36h0aKA+SIRZbgt75OXbgNrdzvfbGDhY8b0Gp3fwtCKdbMzIkS9+Mvkz7pV3UrOTM6P8YmnDYeCXTtywjT92jDWHGsQ5q/rVPtNZd5NRBU0=
+	t=1753967915; cv=none; b=N2dr4MRyY2LADbYuLI4PaZuExdxm3Frpq1H1irnQYFP+e3YzYQW6XFTQrnkFOfa10+kE4L0nj8zvPNohMBE25VRcT2j+FM3QsmInKKqSFnhKaHqb+sSCc2oKYY4QVn06Rx8XbRgnRjyAW4FCwAeW6TrqHg6MUg1XGBrjZQUAvyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753967909; c=relaxed/simple;
-	bh=P9nn/jMwr1m9nGwweKXqIMHsZ31lkdI/FpSSZFBBJl0=;
+	s=arc-20240116; t=1753967915; c=relaxed/simple;
+	bh=Setdk4P0LfxRRgUblhfUiMB1mpM6wOnPj1k9C7xJ+eA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nz+iYzsWH/9VMfZ3EMNjyaUu9dS16Xq3UZEfHy1mYTcoT9aZ2FI7nnuvfzdEL0f5mEWDBLXxPgweaKpCdlWyATJknzXSOSNHaYjj5yzDsbalQOCCH817Am6z2xbYCoBTFPMf3q9afu+f5pUsE3ThBQRy0Bs+OL0e9EuUCuNDco4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XAZydeyJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D582C4CEEF;
-	Thu, 31 Jul 2025 13:18:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Eg4fHW1dA1Ms0Rsu8qoTdIYg2zR0Cf6njgM/3Pv8DPkjEXDK9wgTTrY0uUFvrm97xsvsh3+Gs6xMJopGcAu/RxAh3fPldduAV1PSGD1bY8B6qvvoHJqeYfN/HZ2NGD7SOG354brQtcbUMEoq4MsPZoV2ZaUjsbrNlPg9D8VRkL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FrtH5N8Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AA9C4CEF4;
+	Thu, 31 Jul 2025 13:18:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753967909;
-	bh=P9nn/jMwr1m9nGwweKXqIMHsZ31lkdI/FpSSZFBBJl0=;
+	s=k20201202; t=1753967914;
+	bh=Setdk4P0LfxRRgUblhfUiMB1mpM6wOnPj1k9C7xJ+eA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XAZydeyJ0AEoDy0Nl9cgGOqihOaWg/O8h2lvu09HVo9Acw+/trxsBU6GuCkpM4Jra
-	 ptYB5iJTc4bMLkis7vdCOtNsowyEF8ku1wqNvYHZSF4By+tCqsS8ZA8Vd24rSH9HBh
-	 XlaSKMMRTtyZaGL8jSc3PvXaZ8YkSthqUQDm8yaGGNGiz7BB5Kzy0s+uAUvC88//lo
-	 wefZsDTfTi9XdsKw/wMRJy47Q2tVnktZI+Tg3vtxc+Hdl6wtS8Lefkp75nLu4Qqdre
-	 uxk4mzDK48LXn/6mQTZ7fRHXTuCRL1X77rF2jbtCF6Jt8HQmmhOSk5g6IEtZHruVff
-	 GDtdQbqnvKitw==
-Date: Thu, 31 Jul 2025 14:18:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thierry Reding <treding@nvidia.com>
-Subject: Re: [BUG] 6.16-rc7: lockdep failure with max77620-gpio/max77686-rtc
-Message-ID: <4f80be02-0bbe-4c10-a3d2-324916ea2ca4@sirena.org.uk>
-References: <aIpdVejR3Jkh9Z_I@shell.armlinux.org.uk>
- <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
- <aItfC4AjjH-IdBfy@shell.armlinux.org.uk>
- <68c210a2-49b2-4fd2-97ad-27af85369d9f@sirena.org.uk>
- <aItk4vWPnFk6lYjn@shell.armlinux.org.uk>
+	b=FrtH5N8ZTn11r98wDtyoPuCNbywhaLiKlTjNEgfpJ/MYE/ueVe5av8X9ILRQrhb16
+	 mS3r96kKh9t0oR7lkViwtGeMY+rBqx2wELrNEo1Is+Zzk/zIiQSgRSH1IhYrFj7vzr
+	 ORSi5DH0N6BqtvdXtfojBgAM7Bt3Qf/0P8fRxyRiqCRQgos2KjaMHs10fqj1AmLsTD
+	 RZd3BM/J59xtxhiNcGN+hsTaClqOSrGzlznRRqhQLm0o4txNRQh45/nanuCwrWOkn+
+	 oIVWx0Dn/xgMBcLcWWfp9FNqrOLMdgikCCaUDZoS27xf976zWdhGP7KDeD+B40oCC/
+	 cuB42vd5zpd9A==
+Date: Thu, 31 Jul 2025 14:18:27 +0100
+From: Lee Jones <lee@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	linux.amoon@gmail.com, troymitchell988@gmail.com,
+	guodong@riscstar.com, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 2/8] mfd: simple-mfd-i2c: specify max_register
+Message-ID: <20250731131827.GG1049189@google.com>
+References: <20250726131003.3137282-1-elder@riscstar.com>
+ <20250726131003.3137282-3-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4N7Hgo9XZnVXYWfV"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aItk4vWPnFk6lYjn@shell.armlinux.org.uk>
-X-Cookie: Gloffing is a state of mine.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250726131003.3137282-3-elder@riscstar.com>
 
+On Sat, 26 Jul 2025, Alex Elder wrote:
 
---4N7Hgo9XZnVXYWfV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> All devices supported by simple MFD use the same 8-bit register 8-bit
+> value regmap configuration.  There is an option available for a device
+> to specify a custom configuration, but no existing device uses it.
+> 
+> Rather than requiring a "full" regmap configuration to be provided to
+> change only the max_register value, Lee Jones suggested allowing
+> max_register to be specified in the simple_mfd_data structure.  The
+> 8-bit register 8-bit configuration is still used by default, but
+> max_register is also applied if it is non-zero.
+> 
+> If both regmap_config and max_register are provided, the max_register
+> field in the regmap_config structure is ignored.
+> 
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+> Suggested-by: Lee Jones <lee@kernel.org>
+> ---
+> v10: - Rename simple_regmap_config() -> simple_regmap_config_get()
+>      - Introduce simple_regmap_config_put() to free regmap_config
+> 
+>  drivers/mfd/simple-mfd-i2c.c | 45 ++++++++++++++++++++++++++++++++----
+>  drivers/mfd/simple-mfd-i2c.h |  5 +---
+>  2 files changed, 41 insertions(+), 9 deletions(-)
 
-On Thu, Jul 31, 2025 at 01:43:14PM +0100, Russell King (Oracle) wrote:
-> On Thu, Jul 31, 2025 at 01:31:32PM +0100, Mark Brown wrote:
+This has gone from an in-function 11 line change to 50 lines and the
+inclusion of 2 new functions.  As much as I _really_ appreciate the time
+and effort you have put into this [0], the added complexity being added
+here doesn't sit right with me.  How would you like to go back to your
+v4 idea of providing a bespoke regmap_config for for device?
 
-> > Yes, your analysis is right here - it's not come up before because it's
-> > very rare to chain regmap-irq chips.
+[0] Beers on me for sending you down this path!
 
-> Yep, I just changed all the "d" variables in regmap-irq to "ricd"
-> (first letter of the each word of the struct name), and lockdep
-> confirms that it's the mutex.
-
-> I'm not familiar enough with lockdep to know how to fix this, so what's
-> the solution here?
-
-I *think* mutex_lock_nested() is what we're looking for here, with the
-depth information from the irq_desc but I'm also not super familiar with
-this stuff.
-
---4N7Hgo9XZnVXYWfV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiLbR8ACgkQJNaLcl1U
-h9CZIgf/VCKbx2IqEZ4RivwWxNiTjzhCYz6rQarqp3v29lwY+IjOPnJBc3Xn6e5x
-ltpBBzFwuthE2SPMMd5z/VVRbu7CRqIUMCs/wx9fed1QwBLnXO1RHxjg+o+e4vHc
-TRDtyFGigtDOBLst+70fv0UJMXnjTp53eYmh8aIGD7Kyp3r7TNrSDNZijwT3OOLh
-1TQPZoejRaVEy77re3IRMDx+47dV3agiCIQFmIfNjaskKrueFFTnoVxTb2qHiSj1
-wwK4pbypDahQHOuNs5rLIDMHGf5em39LJ16FfqoOFEYc0gu7RQm6LAcS1MpdeEli
-fkyXwVVi2ZlWvRTC70DJpOjkWVwDKg==
-=QZl/
------END PGP SIGNATURE-----
-
---4N7Hgo9XZnVXYWfV--
+-- 
+Lee Jones [李琼斯]
 
