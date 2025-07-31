@@ -1,117 +1,119 @@
-Return-Path: <linux-rtc+bounces-4618-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4619-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 163D5B1723E
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 15:42:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 054BDB17465
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 17:58:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B269189F7D2
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 13:42:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 688057B88B6
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 15:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62652C3745;
-	Thu, 31 Jul 2025 13:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E579C21C19D;
+	Thu, 31 Jul 2025 15:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ij8PkJSh"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="LIDPdUCT"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B537B16419;
-	Thu, 31 Jul 2025 13:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2282576;
+	Thu, 31 Jul 2025 15:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753969315; cv=none; b=Xd7mkpldXWzQjxLdcfZQHP3eg+IeoVm5Sxi0bh7EA6unltedgEgZeBYqiwWasMqO6wVkXq8PMPNX4KRTGEIOqgE88vQUA59fHhwSBXtcxWxvs/Xw1lpCQld2N8BGKzMbt+9ZOHWr6OKaidzlOSfxYkzuW/k2SvaM+wrhcwUElRE=
+	t=1753977483; cv=none; b=rOZMCrEMiywE9238REuVsak/GxOi8ESeD8Qyd1IjGqclQe8LsbiXFwr6CsWIs4TnMMOCuYZblMpKJivQF/OmUc/+bSF7+S2swmfiUzE76NVx0WJGZFomaR+fBEvZvKbhrGPULXQ5gxp4xiZo2ZZLlk1/EANgaQtwFiD/hXgBWmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753969315; c=relaxed/simple;
-	bh=trI9eEiA5VY8YQDC03bJMw+fv5vHkRIbkQ2JDxq1II0=;
+	s=arc-20240116; t=1753977483; c=relaxed/simple;
+	bh=NnOFvtAhasoDMaNzs29uzhKFQ/AOM0pOvWOPrPDQqTo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0jvXvD3tKh5Ng7ADOq9unJwrR5obD1LxEvcS5zrb9xpiIzGZYs4VNil2VxmQ/YWUgOTOqwcbNSESuzmHOCE9KYAvXHjoE8kRORVdce9KHIyENOsKNvYFaZNx4B56v4cnVbJ7p0bw2P2i/y3imkWFq9jGf9TraHP44Xl0VUozAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ij8PkJSh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC91C4CEEF;
-	Thu, 31 Jul 2025 13:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753969315;
-	bh=trI9eEiA5VY8YQDC03bJMw+fv5vHkRIbkQ2JDxq1II0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ij8PkJShew8pu4ZGzkFdAFzoVmlvHFirzjpMKDqKVC1ruFUCkYgsklBDSvJx8UlNV
-	 VzfYdfROTIRh9IoGe6I/K3Cv9LHmsrwvdubM2KBTPFwDNPxbfMlxw3e5wRBDrBkxvc
-	 d4eag+/alBpnnjHKYGC4teXTPtpVmlq4liGjAc4nxSFyswJyKrCN9DiNANNqxYKvqX
-	 SX4yiyee514bkcfPBjYqArFvOhJF9uI5HsZHB+wGzsEpYM2oGCew42tDcc5zXstyS5
-	 OcFeAX7DAWPvAU5szCjEqxo+aoDnEbxFdOu8b0yzxYLaZ6GeHmJ3+APnola/gK6kVq
-	 X/qF5OfxxpAzw==
-Date: Thu, 31 Jul 2025 14:41:48 +0100
-From: Lee Jones <lee@kernel.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: lgirdwood@gmail.com, broonie@kernel.org, alexandre.belloni@bootlin.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux.amoon@gmail.com, troymitchell988@gmail.com,
-	guodong@riscstar.com, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 2/8] mfd: simple-mfd-i2c: specify max_register
-Message-ID: <20250731134148.GI1049189@google.com>
-References: <20250726131003.3137282-1-elder@riscstar.com>
- <20250726131003.3137282-3-elder@riscstar.com>
- <20250731131827.GG1049189@google.com>
- <e3cd0e11-e516-4cf6-b8f8-5cf2b5a236a4@riscstar.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X05Xc5dL5ee7Ikm06CvNzehjSyDAbvKBsG2cPbVasmCpY06e63hx+8uH94szKo9XVdz8Uli8kqgkrJ+xOZQlVVsdj+NlXTYv3p6BDYb8WwYRoTv848iUZ9AerPgD2pjofoVpJDc2jqAmtqEagQBgcG9FW7PvRA9Zs0C/gdZAgDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=LIDPdUCT; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=7Ohqtk4ILA9GIa5jOmf23ccmCkNfdCR1xKx8go53Xfc=; b=LIDPdUCTkzfHNnYA85IoqJ5CgT
+	gz2ebMInBlyGdQdfE3arPrhbS8bq7z92iR6D7LLG12btRnApeCgvOVqSREklf8EscGN7IET2sWlKK
+	9BF/7y+NEFaCvDGyID8fzE8WT+bWSxBNXuQBagJfYQ/VVIQehQ0IkErhdWpZAHU3lqi3s78AOsWCY
+	2CyXXihiMHIkosSaBHBkOwncH1WBcsbkg+FTcxL5Ven8D0v2Q1qpKYNWK0FOJ/ThyIIB6R4/wllPD
+	kJ8Z9Jk14xeTz/XWBl5kmFzlkZuOs9WZb3SxrPL22C1YWG8KdVDtU9ZpQNCgQgV5XX4UMsKQvYO6/
+	GOkN/zjQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39258)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1uhVf8-0005E5-0E;
+	Thu, 31 Jul 2025 16:57:46 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1uhVf4-00019T-2O;
+	Thu, 31 Jul 2025 16:57:42 +0100
+Date: Thu, 31 Jul 2025 16:57:42 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Mark Brown <broonie@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thierry Reding <treding@nvidia.com>
+Subject: Re: [BUG] 6.16-rc7: lockdep failure with max77620-gpio/max77686-rtc
+Message-ID: <aIuSdnV8sWnUqLOq@shell.armlinux.org.uk>
+References: <aIpdVejR3Jkh9Z_I@shell.armlinux.org.uk>
+ <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
+ <aItfC4AjjH-IdBfy@shell.armlinux.org.uk>
+ <68c210a2-49b2-4fd2-97ad-27af85369d9f@sirena.org.uk>
+ <aItk4vWPnFk6lYjn@shell.armlinux.org.uk>
+ <4f80be02-0bbe-4c10-a3d2-324916ea2ca4@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e3cd0e11-e516-4cf6-b8f8-5cf2b5a236a4@riscstar.com>
+In-Reply-To: <4f80be02-0bbe-4c10-a3d2-324916ea2ca4@sirena.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, 31 Jul 2025, Alex Elder wrote:
+On Thu, Jul 31, 2025 at 02:18:24PM +0100, Mark Brown wrote:
+> On Thu, Jul 31, 2025 at 01:43:14PM +0100, Russell King (Oracle) wrote:
+> > On Thu, Jul 31, 2025 at 01:31:32PM +0100, Mark Brown wrote:
+> 
+> > > Yes, your analysis is right here - it's not come up before because it's
+> > > very rare to chain regmap-irq chips.
+> 
+> > Yep, I just changed all the "d" variables in regmap-irq to "ricd"
+> > (first letter of the each word of the struct name), and lockdep
+> > confirms that it's the mutex.
+> 
+> > I'm not familiar enough with lockdep to know how to fix this, so what's
+> > the solution here?
+> 
+> I *think* mutex_lock_nested() is what we're looking for here, with the
+> depth information from the irq_desc but I'm also not super familiar with
+> this stuff.
 
-> On 7/31/25 8:18 AM, Lee Jones wrote:
-> > On Sat, 26 Jul 2025, Alex Elder wrote:
-> > 
-> > > All devices supported by simple MFD use the same 8-bit register 8-bit
-> > > value regmap configuration.  There is an option available for a device
-> > > to specify a custom configuration, but no existing device uses it.
-> > > 
-> > > Rather than requiring a "full" regmap configuration to be provided to
-> > > change only the max_register value, Lee Jones suggested allowing
-> > > max_register to be specified in the simple_mfd_data structure.  The
-> > > 8-bit register 8-bit configuration is still used by default, but
-> > > max_register is also applied if it is non-zero.
-> > > 
-> > > If both regmap_config and max_register are provided, the max_register
-> > > field in the regmap_config structure is ignored.
-> > > 
-> > > Signed-off-by: Alex Elder <elder@riscstar.com>
-> > > Suggested-by: Lee Jones <lee@kernel.org>
-> > > ---
-> > > v10: - Rename simple_regmap_config() -> simple_regmap_config_get()
-> > >       - Introduce simple_regmap_config_put() to free regmap_config
-> > > 
-> > >   drivers/mfd/simple-mfd-i2c.c | 45 ++++++++++++++++++++++++++++++++----
-> > >   drivers/mfd/simple-mfd-i2c.h |  5 +---
-> > >   2 files changed, 41 insertions(+), 9 deletions(-)
-> > 
-> > This has gone from an in-function 11 line change to 50 lines and the
-> > inclusion of 2 new functions.  As much as I _really_ appreciate the time
-> > and effort you have put into this [0], the added complexity being added
-> > here doesn't sit right with me.  How would you like to go back to your
-> > v4 idea of providing a bespoke regmap_config for for device?
-> 
-> I LOVE this suggestion.  I will send v11 shortly and it will
-> be very much like v6 (or something like that).
-> 
-> > [0] Beers on me for sending you down this path!
-> 
-> I'm looking forward to seeing you again, beer or not.
+I'm not sure about that, because the irq_desc locks don't nest:
 
-Likewise!  =:-)
+        raw_spin_lock_init(&desc->lock);
+        lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+
+What saves irq_desc lock nesting in this case is that
+__irq_put_desc_unlock() unlocks desc->lock calling the
+irq_bus_sync_unlock() method. So, I don't think we have anything at
+the irq_desc level which deals with lock-nesting.
+
+I guess I'll just ignore the lockdep warning or turn lockdep off,
+one or other is probably like everyone else does.
 
 -- 
-Lee Jones [李琼斯]
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
