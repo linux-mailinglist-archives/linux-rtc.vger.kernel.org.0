@@ -1,138 +1,240 @@
-Return-Path: <linux-rtc+bounces-4611-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4612-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0528B16F5A
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 12:21:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD08BB170F5
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 14:18:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D89665A7A42
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 10:20:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F6393B3DCF
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 12:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 653D82BDC34;
-	Thu, 31 Jul 2025 10:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6978322D4E2;
+	Thu, 31 Jul 2025 12:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DdtIclw1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="b3EZfFre"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9496729B8E0
-	for <linux-rtc@vger.kernel.org>; Thu, 31 Jul 2025 10:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FCA621FF4E;
+	Thu, 31 Jul 2025 12:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753957262; cv=none; b=U35OuZnQOHEVLtTeihLkMsCpMB2ruMIlat136V/W39yW8wqAOLQauNTQLpq8I8Ph+tgC+KAkRNv8Ymq30sWWU9Q6t6NXAa2X9cQ4mZ3O8me2s+ycvi80nl5i3kIl586lYnsrvMtHXOWLMU8Mg6VzfA7u17wU4c8AbunOIs/cA7M=
+	t=1753964315; cv=none; b=TUHR3s5iakInXjpauIHlKCgyldpkleH6w8fVqkrqZDioapgdOqa49Epuvx5OcguDSnQIEp3v4m1zkurdI24OmygOzOGb3GPftrBUXue7Q7QDLTMTrcKxoihRuZJXtUNYP3L9tsJnKSSd+NTf4+8FMnduP+cvhJqMGfIAacnpx5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753957262; c=relaxed/simple;
-	bh=eeZqZiIDDXHwWP76HNKsyEyhco1yGowTasqjD2qFGQY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BdULhwTO5wy3Bnco0VKbd2rnCYpcz/qsF2ln2VQAULCOvjNZM+prk3zPXHYyRy3qa3qUjRziApnvCMIMQnR5u3KG02eUEcYR6w6umCPUZ+DFuhmSa3RbsrY7BF/iHFX+XfMOF/7kwWeLEaRDfbeX4RcdeDvRjhVpXR1TanYTbiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DdtIclw1; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b7848df30cso1081714f8f.0
-        for <linux-rtc@vger.kernel.org>; Thu, 31 Jul 2025 03:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753957259; x=1754562059; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eeZqZiIDDXHwWP76HNKsyEyhco1yGowTasqjD2qFGQY=;
-        b=DdtIclw12SBilY5CAMUdd7ccs+qeIRvc729/Y/7UPBM7zvnOIkCTQa+PU+3MJJUsN9
-         dG4R06mRsp1hbfYxL0kgmbOvYyVuNrNNosd+NSNRlaAT6OSliYUNJpvgFcnT1TOVWyt+
-         8c7bL1pH+7uBj8YRe0k7lF/fsw8je13pwwN+jhYH1k+D1kuA/QwxHF9165P6WVWnYkpf
-         hbRbRzV0eQiXOwOqcY8rEACSBKl2hBMWHJbBi0jH9aqO+Mu2UcuadTpkzcbfLpLlyNi4
-         0i7yimw64ONL2CPFVzcT9ic3bY7oTJBjqUot7A2wNJVQ49S8+MMJ7NBSgzO7czvp7MsG
-         YM3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753957259; x=1754562059;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eeZqZiIDDXHwWP76HNKsyEyhco1yGowTasqjD2qFGQY=;
-        b=kXxDFIV/woHL7Y1DQZVwFPCjh/Zr82DxDiWPSY9BwmrEoFdW6dTQEvqyaPeXcx1u2G
-         QHn0HHDBIP3jFH8x1OAMwQ5oLOvs+g55VF2LJlaw157Lqm/o3o3ilrzIDHiJEQTNjB7i
-         8JlhqGB4hPivIKMEq6DtstTpKRIQoHNdzyKUUOV9uNQfTqeZQrYLHT4aHAbz8neYl2xp
-         890tqP4F5lppSH3WXkItvYNrvqYPlt/r14P9f+frMG8SEEGyyIOCBXqsL/21dNXYQzr6
-         m76gMhK0pXY1mGNj3yCWTUy4/HK/0eX3tRTvzwCSZfO1gaJm0RZ4THqrH5f5aM7fF6cs
-         UJow==
-X-Forwarded-Encrypted: i=1; AJvYcCWzrxQvM0hrS+JWD6gIpRnMfWAC30MDpdiZZysiC1GRB2jByS3qL5O+AB18/1JLJ20RSFY4H5jTZg8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywlXrCDgc7iQziaJG3ptTDfmnGQg7qrdrqkoP7yt2DSsejynIW
-	CD5I58DUj8g3lW8lcR+Y8ICgoZ4C2zg8Kck9lKabomnzkFCsr/ALNhg23GAJSGU9oBM=
-X-Gm-Gg: ASbGncvQl7jstXVPBvMXoFq8i+UjRnreQh1x+hk4Fghl6gSXHocJkfeAMYnM8RubZFR
-	eob8d0AbJzEJzpy7/8/cJU7XuJWmlzhxCafDefYQmnsYsZjTgXxv798NNswIfOfAe0ATF+8Zhwz
-	bBwulA7Pf5l+ql6VenbfTZIqEj0F+ivIUOsZku7l2Cp8s76Gpc+h9uAsUlciJri83jk1BNqxfyp
-	TtZjLEIxiqReKu8GX0ocmjxBIqGpxdO708u0UyJ0i2n2y7EP3yF6ivhG5F9PYaWhheYRf2m/Rns
-	tHUcwIRs1bH4Oipw7edRSOAZI9WiNXj8eehmAzlJ9YoxQr15+MhVRpsGd4zh3rooaQhkwD43huw
-	RiIqzcRv/a1lpGg8Q3EaHZU8x4g==
-X-Google-Smtp-Source: AGHT+IFVEwLIcO4fNKnjyIY1mnWetXH6kHJKTnn/c6Wln21XoHb709OPThVEb0OesSZIKjx5gzja4Q==
-X-Received: by 2002:a05:6000:22c8:b0:3a4:cec5:b59c with SMTP id ffacd0b85a97d-3b79d812bc8mr1195293f8f.25.1753957258867;
-        Thu, 31 Jul 2025 03:20:58 -0700 (PDT)
-Received: from [10.1.1.59] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4588d89c50fsm60787795e9.0.2025.07.31.03.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Jul 2025 03:20:58 -0700 (PDT)
-Message-ID: <1a72e672995ef6cd186f8ff18a91bb8b72d86554.camel@linaro.org>
-Subject: Re: [PATCH v5 0/2] Samsung S2MPG10 PMIC MFD-based drivers
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Sylwester Nawrocki
- <s.nawrocki@samsung.com>, Chanwoo Choi	 <cw00.choi@samsung.com>, Alim
- Akhtar <alim.akhtar@samsung.com>, Michael Turquette
- <mturquette@baylibre.com>, Russell King <linux@armlinux.org.uk>, Catalin
- Marinas	 <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexandre Belloni	 <alexandre.belloni@bootlin.com>, Peter Griffin
- <peter.griffin@linaro.org>,  Tudor Ambarus <tudor.ambarus@linaro.org>, Will
- McVicker <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, Krzysztof
- Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Thu, 31 Jul 2025 11:20:56 +0100
-In-Reply-To: <20250730145100.GA6782@google.com>
-References: <20250730-s2mpg10-v5-0-cd133963626c@linaro.org>
-	 <20250730145100.GA6782@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1+build2 
+	s=arc-20240116; t=1753964315; c=relaxed/simple;
+	bh=/CX/2RUDCbJNymubyca94X8VkSeBMIkHqttQZcMwmrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lHWgiyJgSQvvckNwgYs0/WFSjev+lxvpV0OIJlgplEqKKqG9xCqgBD90amTqnVnlRl5W59ZLJBeb3S1uvNlSad5k7hFl9vjsDesfMyvT7h1594ZrjcZmkYcRzn/KNtgl7C3oSDwWOH7m8vHdU/OsESjgJWSmQKlaF11DnhiIxTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=b3EZfFre; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=g9Y7U/7ppk8ar0axssLp7z8gd0mGPsu1bQlpBfW6e04=; b=b3EZfFretx430nxnoplfKCSoWp
+	AqS0ZtdWaIL4Heo98IdCVrm8qeBUzMxo3HPsClly57SSYN8aEBuUvmWriY2yVTHbJpaAenhmMmzrm
+	yYqvsQsZm/hd7oxALeo87ZlbnVi8w+4A/65LMV7LSuvuq97vwxk1taBFAEnCnpUNGx8jFp8LWvT4T
+	rc86qdViT9kQk3+NzI+DlAB73QKVFNjglSlhNHoKyNfCvHW061tHoXmQTal2yA6IGpzNBv/n29WsA
+	B6YRGEDU8SHrkneTS+/PH/cjchjb07rCo4LoCOwgML3TpFcRtryWonaYYmIp58yzw/t2L1Y1xMy20
+	BKbkNLLw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52096)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1uhSEo-0004wD-0f;
+	Thu, 31 Jul 2025 13:18:22 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1uhSEl-00011Y-1g;
+	Thu, 31 Jul 2025 13:18:19 +0100
+Date: Thu, 31 Jul 2025 13:18:19 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thierry Reding <treding@nvidia.com>
+Subject: Re: [BUG] 6.16-rc7: lockdep failure with max77620-gpio/max77686-rtc
+Message-ID: <aItfC4AjjH-IdBfy@shell.armlinux.org.uk>
+References: <aIpdVejR3Jkh9Z_I@shell.armlinux.org.uk>
+ <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Wed, 2025-07-30 at 15:51 +0100, Lee Jones wrote:
-> On Wed, 30 Jul 2025, Andr=C3=A9 Draszik wrote:
->=20
-> > Original cover letter further down.
-> >=20
-> > This is a resend of two patches from the original series that haven't
-> > been merged yet. That series was merged except for the attached two
-> > patches here. Other than rebasing against next-20250729 there are no
-> > changes to them.
-> >=20
-> > Lee, I think Stephen's intention was to get these two merged via the
-> > MFD tree please.
->=20
-> Although I have no issue with this, it does seem a little odd now that
-> the set consists of only Clk patches.=C2=A0 Let me know what you / Stephe=
-n
-> decide.
+On Wed, Jul 30, 2025 at 09:43:02PM +0200, Krzysztof Kozlowski wrote:
+> On 30/07/2025 19:58, Russell King (Oracle) wrote:
+> > Hi,
+> > 
+> > First, I'm not sure who is responsible for the max77620-gpio driver
+> 
+> 77620 is only for nvidia platforms and nvidia was upstreaming it,
+> although it shares the RTC driver part with max77686. You should Cc
+> nvidia SoC maintainers, maybe Thierry has someone around who could
+> investigate it.
+> 
+> > (it's not in MAINTAINERS) but this bug points towards a problem with
+> > one or other of these drivers.
+> > 
+> > Here is /proc/interrupts which may help debug this:
+> > 
+> >            CPU0       CPU1       CPU2       CPU3       CPU4       CPU5
+> >  94:          1          0          0          0          0          0 max77620-
+> > top   4 Edge      max77686-rtc
+> >  95:          1          0          0          0          0          0 max77686-rtc   1 Edge      rtc-alarm1
+> > 
+> > While running 6.16-rc7 on the Jetson Xavier NX platform, upon suspend,
+> > I receive the following lockdep splat. I've added some instrumentation
+> > into irq_set_irq_wake() which appears twice in the calltrace to print
+> > the IRQ number and the "on" parameter to locate which interrupts are
+> > involved in this splat. This splat is 100% reproducable.
+> > 
+> > [   46.721367] irq_set_irq_wake: irq=95 on=1
+> > [   46.722067] irq_set_irq_wake: irq=94 on=1
+> > [   46.722181] ============================================
+> > [   46.722578] WARNING: possible recursive locking detected
+> > [   46.722852] 6.16.0-rc7-net-next+ #432 Not tainted
+> > [   46.722965] --------------------------------------------
+> > [   46.723127] rtcwake/3984 is trying to acquire lock:
+> > [   46.723235] ffff0000813b2c68 (&d->lock){+.+.}-{4:4}, at: regmap_irq_lock+0x18/0x24
+> > [   46.723452]
+> >                but task is already holding lock:
+> > [   46.723556] ffff00008504dc68 (&d->lock){+.+.}-{4:4}, at: regmap_irq_lock+0x18/0x24
+> > [   46.723780]
+> >                other info that might help us debug this:
+> > [   46.723903]  Possible unsafe locking scenario:
+> > 
+> > [   46.724015]        CPU0
+> > [   46.724067]        ----
+> > [   46.724119]   lock(&d->lock);
+> > [   46.724212]   lock(&d->lock);
+> > [   46.724282]
+> >                 *** DEADLOCK ***
+> > 
+> > [   46.724348]  May be due to missing lock nesting notation
+> > 
+> > [   46.724492] 6 locks held by rtcwake/3984:
+> > [   46.724576]  #0: ffff0000825693f8 (sb_writers#3){.+.+}-{0:0}, at: vfs_write+0x184/0x350
+> > [   46.724902]  #1: ffff00008fd7fa88 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x104/0x1c8
+> > [   46.725258]  #2: ffff000080a64588 (kn->active#87){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x10c/0x1c8
+> > [   46.725609]  #3: ffff8000815d4fb8 (system_transition_mutex){+.+.}-{4:4}, at: pm_suspend+0x220/0x300
+> > [   46.725897]  #4: ffff00008500a8f8 (&dev->mutex){....}-{4:4}, at: device_suspend+0x1d8/0x630
+> > [   46.726173]  #5: ffff00008504dc68 (&d->lock){+.+.}-{4:4}, at: regmap_irq_lock+0x18/0x24
+> 
+> 
+> max77686 only disables/enables interrupts in suspend path, but max77620
+> is doing also I2C transfers, but above is regmap_irq_lock, not regmap
+> lock. Maybe this is not really max77620/77686 related at all? None of
+> these do anything weird (or different than last 5 years), so missing
+> nesting could be result of changes in other parts...
+> 
+> 
+> > [   46.732435]
+> >                stack backtrace:
+> > [   46.734019] CPU: 3 UID: 0 PID: 3984 Comm: rtcwake Not tainted 6.16.0-rc7-net-next+ #432 PREEMPT
+> > [   46.734029] Hardware name: NVIDIA NVIDIA Jetson Xavier NX Developer Kit/Jetson, BIOS 6.0-37391689 08/28/2024
+> > [   46.734033] Call trace:
+> > [   46.734036]  show_stack+0x18/0x24 (C)
+> > [   46.734070]  dump_stack_lvl+0x90/0xd0
+> > [   46.734080]  dump_stack+0x18/0x24
+> > [   46.734107]  print_deadlock_bug+0x260/0x350
+> > [   46.734114]  __lock_acquire+0xf28/0x2088
+> > [   46.734120]  lock_acquire+0x19c/0x33c
+> > [   46.734126]  __mutex_lock+0x84/0x530
+> > [   46.734135]  mutex_lock_nested+0x24/0x30
+> > [   46.734155]  regmap_irq_lock+0x18/0x24
+> > [   46.734161]  __irq_get_desc_lock+0x8c/0x9c
+> > [   46.734170]  irq_set_irq_wake+0x5c/0x1ac	<== I guess IRQ 94
+> 
+> ...like changes in irqchip.
+> 
+> > [   46.734176]  regmap_irq_sync_unlock+0x314/0x4f4
+> > [   46.734182]  __irq_put_desc_unlock+0x48/0x4c
+> > [   46.734190]  irq_set_irq_wake+0x88/0x1ac	<== I guess IRQ 95
+> > [   46.734195]  max77686_rtc_suspend+0x34/0x74
+> 
+> 
+> Because really above part is virtually unchanged since 10 years, except
+> my commit d8f090dbeafdcc3d30761aa0062f19d1adf9ef08 (you can try
+> reverting it... but it still could be correct/needed and just irqchip
+> changed something around locking).
 
-Thanks Lee.
+Thanks. I can say that reverting this has no effect on lockdep's splat,
+so your change is in the clear.
 
-I simply went by Stephen's ACK, which to me implies he wanted it merged
-via a different tree (mfd). I guess at this stage it doesn't matter anymore=
-,
-since all the core changes are in already.
+However, there's also regmap-irq stuff to consider in the backtrace,
+and looking at this today, I can't see how regmap-irq can be nested.
 
-I'll defer to Stephen :-)
+drivers/rtc/rtc-max77686.c makes use of regmap-irq since commit
+f3937549a975 ("rtc: max77686: move initialisation of rtc regmap, irq
+chip locally") in 2016.
 
+drivers/mfd/max77620.c also makes use of regmap-irq since commit
+327156c59360 ("mfd: max77620: Add core driver for MAX77620/MAX20024")
+also in 2016.
 
-Cheers,
-Andre'
+Looking at the regmap-irq code, not much has changed in
+regmap_irq_lock() and regmap_irq_sync_unlock(). The same seems true of
+the ordering in irq_set_irq_wake(). So, I don't think this is a
+regression as such, but a latent bug that either no one has bothered
+to report, or no one bothers to test with lockdep enabled anymore.
 
+I think the sequence here is:
+
+irq_set_irq_wake() for IRQ 95 (rtc-alarm1) is called.
+ + regmap_irq_lock() is called, which takes d->lock for IRQ 95
+ + ... irq_set_irq_wake() does stuff
+ ` regmap_irq_sync_unlock() is then called
+   + this synchronises the wake state with the parent by calling
+   | disable_irq_wake() or enable_irq_wake() as appropriate.
+   | This calls irq_set_irq_wake(), causing recursion but on a
+   | different IRQ, which also uses regmap-irq.
+   | + regmap_irq_lock() is called, which takes d->lock for IRQ 94
+   | |    * SPLAT *
+   | + ...
+   ` d->lock is released
+
+This highlights the problem with "d->lock" - using "d" for a variable
+name, while short, doesn't actually tell us what lock it is - is it
+the irqdesc lock in kernel/irq ? Is it the regmap_irq_chip_data mutex
+called "lock" in regmap_irq? It looks to me like it's the mutex.
+
+So, I'd like to start a campaign against single-letter variables,
+especially when it comes to code that takes locks! We should have
+something in the kernel coding style which prevents single-letter
+variable names when locks are taken!
+
+I can't see that anything has changed in the code with regards to the
+locking, so I think this is a bug that's been present ever since these
+drivers were introduced, and regmap-irq is deficient in that it causes
+the same lockdep lock class to be taken recursively when the IRQ wake
+state changes.
+
+From what I can see, irq wake support for regmap-irq was added in
+commit a43fd50dc99a5 ("regmap: Implement support for wake IRQs") and
+this is the only operation that is propagated to the parent
+interupt(s). Thus, the above splat is unlikely to occur unless one
+makes use of wake support on a regmap-irq based interrupt whose
+parent is also regmap-irq based.
+
+So, adding Mark Brown.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
