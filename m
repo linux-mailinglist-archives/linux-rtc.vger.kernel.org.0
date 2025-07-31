@@ -1,119 +1,90 @@
-Return-Path: <linux-rtc+bounces-4621-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4622-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43FECB174EB
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 18:29:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE133B17533
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 18:46:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78A4B567E11
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 16:29:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B34D18C01D8
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 16:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9331F23B602;
-	Thu, 31 Jul 2025 16:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1754F21CA07;
+	Thu, 31 Jul 2025 16:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="HK+zaTKR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sPXGXw+s"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BFE1DD88F;
-	Thu, 31 Jul 2025 16:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59FDA921;
+	Thu, 31 Jul 2025 16:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753979333; cv=none; b=Xu4SZhtW2dibyepR+uqNGLA5Nhfvma3e6yb8VXE74COCHBI+JSXeL472yYfN1OCR9QE1hoqkkuJrj8VXGVxluh5StJFjMGXn5lcRmHEIXSCeakrbepquIRqdZLqDEYc+U6D68RD+8yHsLHKviVN8ivCKM7PIttC9Wigg+KKOIBU=
+	t=1753980414; cv=none; b=CBlwggY09J4vi9RgRCrvZbZl8PJvSg/hcFzR8q6fumfStyprrFktY7BIGFOHKC8oDLiYNV4egE+i0RY/nRBihc9tz107WsXiSGfWZUVtXnF34bs7RBmft0gI0v/wd3xRvYLeXiejW7FK2j5Men1GR0+zI/IBEv/g8zseQO+nd6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753979333; c=relaxed/simple;
-	bh=EZq1onKeGbOCYgztz4cXy6ukiKrLEvoFTODQY8N+SQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gTjMD+BSV2DrG5whdk2Cqhb5CoR7WNoCRVam1/jWphp8N4nIyeN8p1kzq3VQfpmByzO19GBE6fCDDuhFb4X3+kUHV21CP01nWxkAxhCiSGrYAxs+IjNkPI7Ygp1TNuYGxPK02eruuYq3RlvQkRMAme8tJ1AcFrNCQHwMkVnpS3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=HK+zaTKR; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=YWwp4TE/YPh29hTFAA70aDsjbLV0IDUmerqb9zc6zYg=; b=HK+zaTKR3ZRMhUuu8sKrxTzaXg
-	TNwjQ0hByJDkHtLX8JJKeUhFZPssrtEo+crCkgN3Usm7kVT+e/4j24f3fMVWxf3gIj9BOw1VnrBI0
-	UYTASiUFQWgGTWPHSi+GiAPdpTGT3D1gl3tyG24sN2qoD1I68+m5PwlFlSTKtA7RxuYyWTNlCgjQZ
-	5sEcQCgmD4+fRi5G/c3JK7lCMuevi0IcTAqGKVq1mt0ZMJfJm39VlmnD6oR4stteeRkRv3iKIdwG9
-	VH8BYm0+fvuup7HzFTGzF/jD3tm8zNKiHpYQwaCpc2e00pyjwnbvNmansnI4QfRLQ7UHaHC66W/PJ
-	2J2u4mzw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:39196)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1uhW94-0005G5-2G;
-	Thu, 31 Jul 2025 17:28:42 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1uhW92-0001Ar-0C;
-	Thu, 31 Jul 2025 17:28:40 +0100
-Date: Thu, 31 Jul 2025 17:28:39 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Mark Brown <broonie@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thierry Reding <treding@nvidia.com>
-Subject: Re: [BUG] 6.16-rc7: lockdep failure with max77620-gpio/max77686-rtc
-Message-ID: <aIuZt3asLeiYncH1@shell.armlinux.org.uk>
-References: <aIpdVejR3Jkh9Z_I@shell.armlinux.org.uk>
- <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
- <aItfC4AjjH-IdBfy@shell.armlinux.org.uk>
- <68c210a2-49b2-4fd2-97ad-27af85369d9f@sirena.org.uk>
- <aItk4vWPnFk6lYjn@shell.armlinux.org.uk>
- <4f80be02-0bbe-4c10-a3d2-324916ea2ca4@sirena.org.uk>
- <aIuSdnV8sWnUqLOq@shell.armlinux.org.uk>
- <14c68c29-68d8-4119-8f70-616c07397dc4@sirena.org.uk>
+	s=arc-20240116; t=1753980414; c=relaxed/simple;
+	bh=nWnE0BuMLT8kWS1iBNxdI5fCsX3JKkXaj3S/LVk43S8=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=RBS0da45HfdjFgvw6ArMBJtUwDUmQ1k4PgVArU4kelFi7Qv09uvyKvznjhp9T07s0xd/LNmG0al018M23n8DTVpzK49THQC6WI45QBHnPl0/inatEf+ouzOq7TywUHLGpr/TP8YpqiJDudQUBXso6b5PjcWGPUKU/c0Gt87stBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sPXGXw+s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48DF4C4CEEF;
+	Thu, 31 Jul 2025 16:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753980413;
+	bh=nWnE0BuMLT8kWS1iBNxdI5fCsX3JKkXaj3S/LVk43S8=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=sPXGXw+scJs3C7UZI/DA7MkT8ZN7ufgUcQDo6OoT3wd0tG1XIxdEmW42mDTr2FwvB
+	 +g2toyhn+m4aah5rzF3VTaYgwwnfqkAUadACT2JKaGyZoyNkSAengCkwSnWhj089yJ
+	 KRLUQFV8aP3CfE6SS5dlWSxgtaAwf2DyO0uuJvY5Mg9t6FgEUvQEqLETVtBmGG4LVE
+	 FAy5pKc8Lv2IS284454L5lY1pw78sQaMjs1qNnoExK+AbO43poml56YaYA2ZT0WZJ/
+	 0uveNgKYd+S2bTIiBTMYW7opEXNGfiiklXc3bTfggoVvJOq11Kxa0M3sB9m6ZRGo0h
+	 oQmOrF2fr/Qag==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14c68c29-68d8-4119-8f70-616c07397dc4@sirena.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1a72e672995ef6cd186f8ff18a91bb8b72d86554.camel@linaro.org>
+References: <20250730-s2mpg10-v5-0-cd133963626c@linaro.org> <20250730145100.GA6782@google.com> <1a72e672995ef6cd186f8ff18a91bb8b72d86554.camel@linaro.org>
+Subject: Re: [PATCH v5 0/2] Samsung S2MPG10 PMIC MFD-based drivers
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, Michael Turquette <mturquette@baylibre.com>, Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, kernel-team@android.com, linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: =?utf-8?q?Andr=C3=A9?= Draszik <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>
+Date: Thu, 31 Jul 2025 09:46:51 -0700
+Message-ID: <175398041189.3513.13629420060562627196@lazor>
+User-Agent: alot/0.11
 
-On Thu, Jul 31, 2025 at 05:16:13PM +0100, Mark Brown wrote:
-> On Thu, Jul 31, 2025 at 04:57:42PM +0100, Russell King (Oracle) wrote:
-> > On Thu, Jul 31, 2025 at 02:18:24PM +0100, Mark Brown wrote:
-> 
-> > > I *think* mutex_lock_nested() is what we're looking for here, with the
-> > > depth information from the irq_desc but I'm also not super familiar with
-> > > this stuff.
-> 
-> > I'm not sure about that, because the irq_desc locks don't nest:
-> 
-> >         raw_spin_lock_init(&desc->lock);
-> >         lockdep_set_class(&desc->lock, &irq_desc_lock_class);
-> 
-> > What saves irq_desc lock nesting in this case is that
-> > __irq_put_desc_unlock() unlocks desc->lock calling the
-> > irq_bus_sync_unlock() method. So, I don't think we have anything at
-> > the irq_desc level which deals with lock-nesting.
-> 
-> Yeah, and that's all internals which we're not super encouraged to peer
-> at.  There should be something that'll give us a nesting level
-> somewhere...  
-> 
-> Lockdep's handling of nesting is generally fun.
+Quoting Andr=C3=A9 Draszik (2025-07-31 03:20:56)
+> On Wed, 2025-07-30 at 15:51 +0100, Lee Jones wrote:
+> > On Wed, 30 Jul 2025, Andr=C3=A9 Draszik wrote:
+> >=20
+> > > Original cover letter further down.
+> > >=20
+> > > This is a resend of two patches from the original series that haven't
+> > > been merged yet. That series was merged except for the attached two
+> > > patches here. Other than rebasing against next-20250729 there are no
+> > > changes to them.
+> > >=20
+> > > Lee, I think Stephen's intention was to get these two merged via the
+> > > MFD tree please.
+> >=20
+> > Although I have no issue with this, it does seem a little odd now that
+> > the set consists of only Clk patches.=C2=A0 Let me know what you / Step=
+hen
+> > decide.
+>=20
+> Thanks Lee.
+>=20
+> I simply went by Stephen's ACK, which to me implies he wanted it merged
+> via a different tree (mfd). I guess at this stage it doesn't matter anymo=
+re,
+> since all the core changes are in already.
+>=20
 
-As I said, I'm just going to disable lockdep to shut up the warning and
-not pursue any further time on this. If someone else cares about it
-(which I doubt) they can try to come up with a solution. I suspect
-nested regmap-irq is extremely rare.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+I'll pick it up after the merge window closes.
 
