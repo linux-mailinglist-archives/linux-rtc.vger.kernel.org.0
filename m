@@ -1,208 +1,138 @@
-Return-Path: <linux-rtc+bounces-4610-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4611-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9A8B16706
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Jul 2025 21:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0528B16F5A
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 12:21:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 567965A6D06
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Jul 2025 19:42:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D89665A7A42
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 10:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FED3202C3E;
-	Wed, 30 Jul 2025 19:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 653D82BDC34;
+	Thu, 31 Jul 2025 10:21:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UINQwgg7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DdtIclw1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBB11E7C19;
-	Wed, 30 Jul 2025 19:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9496729B8E0
+	for <linux-rtc@vger.kernel.org>; Thu, 31 Jul 2025 10:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753904587; cv=none; b=u06bpficSksIws0J4SPmwzZMIuUf2wldKb4q71Dz+rLnGtMQLq3QiUA6bYxjO8qAbFzqdKI74vIzBHrrTHyX8YkhlnN+/CoG2Ay/saH22+r5pUCPCkUr2To4H8zLxNeYLf/zK3DfxgLna1i+IvYhURZpi4lVtDPthu/sfcfeF+Y=
+	t=1753957262; cv=none; b=U35OuZnQOHEVLtTeihLkMsCpMB2ruMIlat136V/W39yW8wqAOLQauNTQLpq8I8Ph+tgC+KAkRNv8Ymq30sWWU9Q6t6NXAa2X9cQ4mZ3O8me2s+ycvi80nl5i3kIl586lYnsrvMtHXOWLMU8Mg6VzfA7u17wU4c8AbunOIs/cA7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753904587; c=relaxed/simple;
-	bh=mBiqnCcZwzp9m9hdznpsjeipa38RLGVR0dI7J56QWk0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dWh4yDVVPwh8eXmJx5cWDAiWt2nU8ak4vygYCgoCVwZtEA4ouxn7zXWsJVhTxCwwP9Avoue0i4YXoSXFnf/X+/g723l6cf1XudF0/z9ExxL+eb7DO6HZMXUuo0bLcu/wpjdD2w7+fj0bbYLcnbmeJUTBFNqGa79n0XmBG43F9/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UINQwgg7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E38C4CEE3;
-	Wed, 30 Jul 2025 19:43:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753904586;
-	bh=mBiqnCcZwzp9m9hdznpsjeipa38RLGVR0dI7J56QWk0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UINQwgg7Bb48/XtWfqnqCIwmV5O4WK+re72ovMlkeyBukCbQ364LNyPE4/bDCh6uP
-	 S+Hh6CfmIk3VU3PFPss1lwON+eQRjJss7mHmHXy14DF0cByMUpk41ecOueq3X/yj1k
-	 8IWz0CWVqyADmStOZWJRuqswMinXGDnXuDPT1vbXqgxNReVhKD1p63Uid+i2abrpDs
-	 ysrmw6MV2DeYa4wwG8KBDev17ssFqTnLIgJNX441CqqzQbBqIJRKXgXXIea1A4NMm5
-	 Tz29kbWk+fjxV1XHiPJ3CX0VvvaDZaj9qpuyvB71B4OMyoCSzmh4iG1hs+DkxY7urr
-	 ZOO1vqwstiKQg==
-Message-ID: <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
-Date: Wed, 30 Jul 2025 21:43:02 +0200
+	s=arc-20240116; t=1753957262; c=relaxed/simple;
+	bh=eeZqZiIDDXHwWP76HNKsyEyhco1yGowTasqjD2qFGQY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BdULhwTO5wy3Bnco0VKbd2rnCYpcz/qsF2ln2VQAULCOvjNZM+prk3zPXHYyRy3qa3qUjRziApnvCMIMQnR5u3KG02eUEcYR6w6umCPUZ+DFuhmSa3RbsrY7BF/iHFX+XfMOF/7kwWeLEaRDfbeX4RcdeDvRjhVpXR1TanYTbiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DdtIclw1; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3b7848df30cso1081714f8f.0
+        for <linux-rtc@vger.kernel.org>; Thu, 31 Jul 2025 03:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753957259; x=1754562059; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eeZqZiIDDXHwWP76HNKsyEyhco1yGowTasqjD2qFGQY=;
+        b=DdtIclw12SBilY5CAMUdd7ccs+qeIRvc729/Y/7UPBM7zvnOIkCTQa+PU+3MJJUsN9
+         dG4R06mRsp1hbfYxL0kgmbOvYyVuNrNNosd+NSNRlaAT6OSliYUNJpvgFcnT1TOVWyt+
+         8c7bL1pH+7uBj8YRe0k7lF/fsw8je13pwwN+jhYH1k+D1kuA/QwxHF9165P6WVWnYkpf
+         hbRbRzV0eQiXOwOqcY8rEACSBKl2hBMWHJbBi0jH9aqO+Mu2UcuadTpkzcbfLpLlyNi4
+         0i7yimw64ONL2CPFVzcT9ic3bY7oTJBjqUot7A2wNJVQ49S8+MMJ7NBSgzO7czvp7MsG
+         YM3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753957259; x=1754562059;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eeZqZiIDDXHwWP76HNKsyEyhco1yGowTasqjD2qFGQY=;
+        b=kXxDFIV/woHL7Y1DQZVwFPCjh/Zr82DxDiWPSY9BwmrEoFdW6dTQEvqyaPeXcx1u2G
+         QHn0HHDBIP3jFH8x1OAMwQ5oLOvs+g55VF2LJlaw157Lqm/o3o3ilrzIDHiJEQTNjB7i
+         8JlhqGB4hPivIKMEq6DtstTpKRIQoHNdzyKUUOV9uNQfTqeZQrYLHT4aHAbz8neYl2xp
+         890tqP4F5lppSH3WXkItvYNrvqYPlt/r14P9f+frMG8SEEGyyIOCBXqsL/21dNXYQzr6
+         m76gMhK0pXY1mGNj3yCWTUy4/HK/0eX3tRTvzwCSZfO1gaJm0RZ4THqrH5f5aM7fF6cs
+         UJow==
+X-Forwarded-Encrypted: i=1; AJvYcCWzrxQvM0hrS+JWD6gIpRnMfWAC30MDpdiZZysiC1GRB2jByS3qL5O+AB18/1JLJ20RSFY4H5jTZg8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywlXrCDgc7iQziaJG3ptTDfmnGQg7qrdrqkoP7yt2DSsejynIW
+	CD5I58DUj8g3lW8lcR+Y8ICgoZ4C2zg8Kck9lKabomnzkFCsr/ALNhg23GAJSGU9oBM=
+X-Gm-Gg: ASbGncvQl7jstXVPBvMXoFq8i+UjRnreQh1x+hk4Fghl6gSXHocJkfeAMYnM8RubZFR
+	eob8d0AbJzEJzpy7/8/cJU7XuJWmlzhxCafDefYQmnsYsZjTgXxv798NNswIfOfAe0ATF+8Zhwz
+	bBwulA7Pf5l+ql6VenbfTZIqEj0F+ivIUOsZku7l2Cp8s76Gpc+h9uAsUlciJri83jk1BNqxfyp
+	TtZjLEIxiqReKu8GX0ocmjxBIqGpxdO708u0UyJ0i2n2y7EP3yF6ivhG5F9PYaWhheYRf2m/Rns
+	tHUcwIRs1bH4Oipw7edRSOAZI9WiNXj8eehmAzlJ9YoxQr15+MhVRpsGd4zh3rooaQhkwD43huw
+	RiIqzcRv/a1lpGg8Q3EaHZU8x4g==
+X-Google-Smtp-Source: AGHT+IFVEwLIcO4fNKnjyIY1mnWetXH6kHJKTnn/c6Wln21XoHb709OPThVEb0OesSZIKjx5gzja4Q==
+X-Received: by 2002:a05:6000:22c8:b0:3a4:cec5:b59c with SMTP id ffacd0b85a97d-3b79d812bc8mr1195293f8f.25.1753957258867;
+        Thu, 31 Jul 2025 03:20:58 -0700 (PDT)
+Received: from [10.1.1.59] ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4588d89c50fsm60787795e9.0.2025.07.31.03.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Jul 2025 03:20:58 -0700 (PDT)
+Message-ID: <1a72e672995ef6cd186f8ff18a91bb8b72d86554.camel@linaro.org>
+Subject: Re: [PATCH v5 0/2] Samsung S2MPG10 PMIC MFD-based drivers
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sylwester Nawrocki
+ <s.nawrocki@samsung.com>, Chanwoo Choi	 <cw00.choi@samsung.com>, Alim
+ Akhtar <alim.akhtar@samsung.com>, Michael Turquette
+ <mturquette@baylibre.com>, Russell King <linux@armlinux.org.uk>, Catalin
+ Marinas	 <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Alexandre Belloni	 <alexandre.belloni@bootlin.com>, Peter Griffin
+ <peter.griffin@linaro.org>,  Tudor Ambarus <tudor.ambarus@linaro.org>, Will
+ McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, Krzysztof
+ Kozlowski <krzysztof.kozlowski@linaro.org>
+Date: Thu, 31 Jul 2025 11:20:56 +0100
+In-Reply-To: <20250730145100.GA6782@google.com>
+References: <20250730-s2mpg10-v5-0-cd133963626c@linaro.org>
+	 <20250730145100.GA6782@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1-1+build2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] 6.16-rc7: lockdep failure with max77620-gpio/max77686-rtc
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>,
- Chanwoo Choi <cw00.choi@samsung.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-References: <aIpdVejR3Jkh9Z_I@shell.armlinux.org.uk>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <aIpdVejR3Jkh9Z_I@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 30/07/2025 19:58, Russell King (Oracle) wrote:
-> Hi,
-> 
-> First, I'm not sure who is responsible for the max77620-gpio driver
+On Wed, 2025-07-30 at 15:51 +0100, Lee Jones wrote:
+> On Wed, 30 Jul 2025, Andr=C3=A9 Draszik wrote:
+>=20
+> > Original cover letter further down.
+> >=20
+> > This is a resend of two patches from the original series that haven't
+> > been merged yet. That series was merged except for the attached two
+> > patches here. Other than rebasing against next-20250729 there are no
+> > changes to them.
+> >=20
+> > Lee, I think Stephen's intention was to get these two merged via the
+> > MFD tree please.
+>=20
+> Although I have no issue with this, it does seem a little odd now that
+> the set consists of only Clk patches.=C2=A0 Let me know what you / Stephe=
+n
+> decide.
 
-77620 is only for nvidia platforms and nvidia was upstreaming it,
-although it shares the RTC driver part with max77686. You should Cc
-nvidia SoC maintainers, maybe Thierry has someone around who could
-investigate it.
+Thanks Lee.
 
-> (it's not in MAINTAINERS) but this bug points towards a problem with
-> one or other of these drivers.
-> 
-> Here is /proc/interrupts which may help debug this:
-> 
->            CPU0       CPU1       CPU2       CPU3       CPU4       CPU5
->  94:          1          0          0          0          0          0 max77620-
-> top   4 Edge      max77686-rtc
->  95:          1          0          0          0          0          0 max77686-rtc   1 Edge      rtc-alarm1
-> 
-> While running 6.16-rc7 on the Jetson Xavier NX platform, upon suspend,
-> I receive the following lockdep splat. I've added some instrumentation
-> into irq_set_irq_wake() which appears twice in the calltrace to print
-> the IRQ number and the "on" parameter to locate which interrupts are
-> involved in this splat. This splat is 100% reproducable.
-> 
-> [   46.721367] irq_set_irq_wake: irq=95 on=1
-> [   46.722067] irq_set_irq_wake: irq=94 on=1
-> [   46.722181] ============================================
-> [   46.722578] WARNING: possible recursive locking detected
-> [   46.722852] 6.16.0-rc7-net-next+ #432 Not tainted
-> [   46.722965] --------------------------------------------
-> [   46.723127] rtcwake/3984 is trying to acquire lock:
-> [   46.723235] ffff0000813b2c68 (&d->lock){+.+.}-{4:4}, at: regmap_irq_lock+0x18/0x24
-> [   46.723452]
->                but task is already holding lock:
-> [   46.723556] ffff00008504dc68 (&d->lock){+.+.}-{4:4}, at: regmap_irq_lock+0x18/0x24
-> [   46.723780]
->                other info that might help us debug this:
-> [   46.723903]  Possible unsafe locking scenario:
-> 
-> [   46.724015]        CPU0
-> [   46.724067]        ----
-> [   46.724119]   lock(&d->lock);
-> [   46.724212]   lock(&d->lock);
-> [   46.724282]
->                 *** DEADLOCK ***
-> 
-> [   46.724348]  May be due to missing lock nesting notation
-> 
-> [   46.724492] 6 locks held by rtcwake/3984:
-> [   46.724576]  #0: ffff0000825693f8 (sb_writers#3){.+.+}-{0:0}, at: vfs_write+0x184/0x350
-> [   46.724902]  #1: ffff00008fd7fa88 (&of->mutex#2){+.+.}-{4:4}, at: kernfs_fop_write_iter+0x104/0x1c8
-> [   46.725258]  #2: ffff000080a64588 (kn->active#87){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x10c/0x1c8
-> [   46.725609]  #3: ffff8000815d4fb8 (system_transition_mutex){+.+.}-{4:4}, at: pm_suspend+0x220/0x300
-> [   46.725897]  #4: ffff00008500a8f8 (&dev->mutex){....}-{4:4}, at: device_suspend+0x1d8/0x630
-> [   46.726173]  #5: ffff00008504dc68 (&d->lock){+.+.}-{4:4}, at: regmap_irq_lock+0x18/0x24
+I simply went by Stephen's ACK, which to me implies he wanted it merged
+via a different tree (mfd). I guess at this stage it doesn't matter anymore=
+,
+since all the core changes are in already.
+
+I'll defer to Stephen :-)
 
 
-max77686 only disables/enables interrupts in suspend path, but max77620
-is doing also I2C transfers, but above is regmap_irq_lock, not regmap
-lock. Maybe this is not really max77620/77686 related at all? None of
-these do anything weird (or different than last 5 years), so missing
-nesting could be result of changes in other parts...
+Cheers,
+Andre'
 
-
-> [   46.732435]
->                stack backtrace:
-> [   46.734019] CPU: 3 UID: 0 PID: 3984 Comm: rtcwake Not tainted 6.16.0-rc7-net-next+ #432 PREEMPT
-> [   46.734029] Hardware name: NVIDIA NVIDIA Jetson Xavier NX Developer Kit/Jetson, BIOS 6.0-37391689 08/28/2024
-> [   46.734033] Call trace:
-> [   46.734036]  show_stack+0x18/0x24 (C)
-> [   46.734070]  dump_stack_lvl+0x90/0xd0
-> [   46.734080]  dump_stack+0x18/0x24
-> [   46.734107]  print_deadlock_bug+0x260/0x350
-> [   46.734114]  __lock_acquire+0xf28/0x2088
-> [   46.734120]  lock_acquire+0x19c/0x33c
-> [   46.734126]  __mutex_lock+0x84/0x530
-> [   46.734135]  mutex_lock_nested+0x24/0x30
-> [   46.734155]  regmap_irq_lock+0x18/0x24
-> [   46.734161]  __irq_get_desc_lock+0x8c/0x9c
-> [   46.734170]  irq_set_irq_wake+0x5c/0x1ac	<== I guess IRQ 94
-
-...like changes in irqchip.
-
-> [   46.734176]  regmap_irq_sync_unlock+0x314/0x4f4
-> [   46.734182]  __irq_put_desc_unlock+0x48/0x4c
-> [   46.734190]  irq_set_irq_wake+0x88/0x1ac	<== I guess IRQ 95
-> [   46.734195]  max77686_rtc_suspend+0x34/0x74
-
-
-Because really above part is virtually unchanged since 10 years, except
-my commit d8f090dbeafdcc3d30761aa0062f19d1adf9ef08 (you can try
-reverting it... but it still could be correct/needed and just irqchip
-changed something around locking).
-
-Best regards,
-Krzysztof
 
