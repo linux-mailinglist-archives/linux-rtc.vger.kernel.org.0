@@ -1,123 +1,139 @@
-Return-Path: <linux-rtc+bounces-4625-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4626-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F464B176C8
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 21:50:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCFA2B19159
+	for <lists+linux-rtc@lfdr.de>; Sun,  3 Aug 2025 03:02:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C25962268B
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Jul 2025 19:50:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFB9117B00B
+	for <lists+linux-rtc@lfdr.de>; Sun,  3 Aug 2025 01:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B288024DCF9;
-	Thu, 31 Jul 2025 19:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B37BE65;
+	Sun,  3 Aug 2025 01:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSmPU6wP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="me7oGRjP"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C4315533F;
-	Thu, 31 Jul 2025 19:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33D62F29;
+	Sun,  3 Aug 2025 01:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753991431; cv=none; b=eXgdgQv9L295Qo25AlT2Ri1y4d3uue2j0QC0wOGTphQzfFH097r0HH/dRDmbAf2dK+21fOY3nb8SpuD/OyyN6XYAfGY5NxQOb52hVri5PuTQZuOPM0bFEvggAe37xrNyLUT3egjf3H2VXgtnslmKhMI16rFB44SasrSzGGAwS4w=
+	t=1754182918; cv=none; b=YbdSikrX2un2xhskD9+05kDHvEVDEU+OcP0mAZUYQc7VLxTSv+UmL6/l7vruPs9y/wUo1ibJbRb7Jxy3a/mrupjI2UUeNy1zoV80ltDmOtynxbS1c50bLgm4fa8DB0Kc9zZGKsHzB/EKXzUQiYsn9CxokrTG7xnFYhwvjFcK8Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753991431; c=relaxed/simple;
-	bh=wHHdwi555LSUCs8fy2BKukjUKmCeQeyBVIJjWXpMqpQ=;
+	s=arc-20240116; t=1754182918; c=relaxed/simple;
+	bh=wbhG94bTOLli9sAnU1nb+7xW3n983Xe2P9tkf4FiPtU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mDIbVmbqdlXvelxP9QgDMt2v1waAEMuK0AiPijfqC3EVUunzHp2mB74DIjU5rkpTSEkHCN8yzXGv8fgWzNIEhd2MZ+4sNaQ1mBsdGxrNHGqMtKEJ6tadoktwYpD4+tRwpBdTCyzo6/5g18JuWnCCgGBkWRKcLh+pT5IdwGF0VRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSmPU6wP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A325C4CEEF;
-	Thu, 31 Jul 2025 19:50:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753991431;
-	bh=wHHdwi555LSUCs8fy2BKukjUKmCeQeyBVIJjWXpMqpQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eSmPU6wPzGmDNBOjo1p0nZdSMhwexlQKEIUzglJM5VAuWSHFPxf05HE6wUtOOD/Lp
-	 sf+vWnufWeYLi1rN/wUXx2GK4jRLWcmmHcxPv1SevBWuEppLemd0fDLh+7gAXN1vuS
-	 kKxvZ0R7gzQKXhDrSvrHmTeXoekV9BcKIUOjGO9P3jS3RtqbvSvdpkhGJNcBCgqJN5
-	 JGqCVMYhKPrRDzEo/vf5LrP4XF4kurpURDAcwldh6GzIvRyPgVLZ0EtEPNrEPoXnfF
-	 z3HSgfcSk876IiSle/2Ca++ShrG60EfMJo60+2KKt7/idWAVJfTXIxCKQkQap2Ihg/
-	 fk7hSCCMJmiNA==
-Date: Thu, 31 Jul 2025 20:50:25 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thierry Reding <treding@nvidia.com>
-Subject: Re: [BUG] 6.16-rc7: lockdep failure with max77620-gpio/max77686-rtc
-Message-ID: <db1d1256-8911-4db1-98e2-4f5808cbd712@sirena.org.uk>
-References: <97f0e27f-3128-4821-bc09-2acde1ebf81a@kernel.org>
- <aItfC4AjjH-IdBfy@shell.armlinux.org.uk>
- <68c210a2-49b2-4fd2-97ad-27af85369d9f@sirena.org.uk>
- <aItk4vWPnFk6lYjn@shell.armlinux.org.uk>
- <4f80be02-0bbe-4c10-a3d2-324916ea2ca4@sirena.org.uk>
- <aIuSdnV8sWnUqLOq@shell.armlinux.org.uk>
- <14c68c29-68d8-4119-8f70-616c07397dc4@sirena.org.uk>
- <aIuZt3asLeiYncH1@shell.armlinux.org.uk>
- <b91dd3c5-c24e-43d1-8d06-8ec4d01f2762@sirena.org.uk>
- <aIvCE4x24RigKBKF@shell.armlinux.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jM4a27zt23/nlHxcbMyqxT87qrrsU/GS6yfTcgfa3lspGF1REdMJk1aJAH6iLB+l+DL6vQAHNnM4n/bhayuFSn8d2WBYBb0bq297efekR5EueYWrhmQjS/+gS1SqkqF+93j5GAkEKx5rGQvlUxAY6PyOqIsQzzDrcTr5R0cqAyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=me7oGRjP; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4BC4E43390;
+	Sun,  3 Aug 2025 01:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1754182907;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xbH8hOkjMz5i59oT3KbdPFr9gL61/+cWeH+sH8L1hf4=;
+	b=me7oGRjPlj9OSgUS7mP2TCViY2896IWqAGfAc6dIhlrLfGj2780LVpIoFSAQpq/rQkj7p+
+	Wp0e8NbM8aNFESGRby0PxDH+xwt/RumYvtZwipFDkrhwKOt/Z3FN1K4pyAABjZF9XkqxLn
+	d7xxNlwjI4c7xs4AJEC/q+LTyTS3CONLCpWmGl/tp0EWaQ/qeM/oFmiSvP2cBsN4gSz+Zn
+	nw5f1R4bafZ3F8U3mDNgmiv4wvgf+tInw4n9AdjnT+4cnnvKcyGWS+vbS2qLBbKvEvebQF
+	WhJ74TcfbIYLJd789PNtto8/q3ZTqoVgSjeEhdv66zgyXBa6uD32JyJ7rH2bYg==
+Date: Sun, 3 Aug 2025 03:01:45 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Akinobu Mita <akinobu.mita@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Mia Lin <mimi05633@gmail.com>,
+	Michael McCormick <michael.mccormick@enatel.net>,
+	Heiko Schocher <hs@denx.de>, Parthiban Nallathambi <pn@denx.de>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Maxime Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney@redhat.com>
+Cc: linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: [PATCH 00/15] rtc: convert from clk round_rate() to
+ determine_rate() and fix a few bugs
+Message-ID: <175418267001.2341527.14209599648775421774.b4-ty@bootlin.com>
+References: <20250710-rtc-clk-round-rate-v1-0-33140bb2278e@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="clFkggijA/AbTF/J"
-Content-Disposition: inline
-In-Reply-To: <aIvCE4x24RigKBKF@shell.armlinux.org.uk>
-X-Cookie: Gloffing is a state of mine.
-
-
---clFkggijA/AbTF/J
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250710-rtc-clk-round-rate-v1-0-33140bb2278e@redhat.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddutdektdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejfefhffekjeeuheevueevjedvleevjeetudffheeutdffudefjeduffeuvddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvvddprhgtphhtthhopegrkhhinhhosghurdhmihhtrgesghhmrghilhdrtghomhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhmp
+ dhrtghpthhtohephhgvihhkohesshhnthgvtghhrdguvgdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprghvihhfihhshhhmrghnjedtsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhmrghimhhonhejjeesghhmrghilhdrtghomhdprhgtphhtthhopehtrghlihdrphgvrhhrhidusehgmhgrihhlrdgtohhmpdhrtghpthhtohepvhgvnhhtuhhrvgesghhoohhglhgvrdgtohhm
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On Thu, Jul 31, 2025 at 08:20:51PM +0100, Russell King (Oracle) wrote:
-> On Thu, Jul 31, 2025 at 06:03:43PM +0100, Mark Brown wrote:
+On Thu, 10 Jul 2025 11:20:20 -0400, Brian Masney wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() clk ops, so let's go ahead and convert the
+> drivers in the rtc subsystem using the Coccinelle semantic patch
+> posted below. I did a few minor cosmetic cleanups of the code in a
+> few cases.
+> 
+> I also noticed that in some of the drivers that if round_rate() is
+> called with a requested rate higher than the highest supported rate,
+> then the clock is disabled. According to the clk API, round_rate()
+> should instead return the highest supported rate. This series also
+> updates the functions to return the maximum supported rate.
+> 
+> [...]
 
-> > I'm pretty sure it's extremely rare, and I'll have to construct a
-> > virtual setup to actually test.  After poking at it some more I think
-> > we're actually going to need an explicit lock_class_key for each
-> > regmap-irq rather than relying on the default lockdep one.  I'll try to
+Applied, thanks!
 
-> I hope we don't have too many regmap-irq's in a system - see the
-> section on "Troubleshooting" in the lockdep documentation. There's
-> a limit on the numbe of classes over the entire kernel.
+[01/15] rtc: ds1307: fix incorrect maximum clock rate handling
+        https://git.kernel.org/abelloni/c/cf6eb547a24a
+[02/15] rtc: hym8563: fix incorrect maximum clock rate handling
+        https://git.kernel.org/abelloni/c/d0a518eb0a69
+[03/15] rtc: nct3018y: fix incorrect maximum clock rate handling
+        https://git.kernel.org/abelloni/c/437c59e4b222
+[04/15] rtc: pcf85063: fix incorrect maximum clock rate handling
+        https://git.kernel.org/abelloni/c/186ae1869880
+[05/15] rtc: pcf8563: fix incorrect maximum clock rate handling
+        https://git.kernel.org/abelloni/c/906726a5efee
+[06/15] rtc: rv3028: fix incorrect maximum clock rate handling
+        https://git.kernel.org/abelloni/c/b574acb3cf75
+[07/15] rtc: ds1307: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/31b5fea399d5
+[08/15] rtc: hym8563: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/394a4b920a72
+[09/15] rtc: m41t80: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/e05d81b75efd
+[10/15] rtc: max31335: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/9e0dfc7962b3
+[11/15] rtc: nct3018y: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/1251d043f764
+[12/15] rtc: pcf85063: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/ad853657d791
+[13/15] rtc: pcf8563: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/e6f1af719ea1
+[14/15] rtc: rv3028: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/c4253b091441
+[15/15] rtc: rv3032: convert from round_rate() to determine_rate()
+        https://git.kernel.org/abelloni/c/35d6aae85b36
 
-Yeah, we shouldn't I'd hope but obviously there could be some use case
-I'm not aware of that results in huge numbers in normal operation.
+Best regards,
 
-> As I understand from the documentation, lock classes are create-only,
-> there's no way of "freeing" them later, so we better not get into a
-> situation where the number of classes steadily increase while the
-> system is running!
-
-There is a free function, and it does actually seem to do something
-useful these days - looking at the code and changelog the documentation
-is bitrotted there, dynamic keys were added in 2019.
-
---clFkggijA/AbTF/J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiLyQEACgkQJNaLcl1U
-h9DYJgf9HyXxQp/PKFSpIu/kHjHTHH7AUt1l/TRWCW2xttVFyKwHKfDzYKgUg6wf
-mTWK0yWAxgu+9dMPsd53kznxbv4FoCvAfkvM4tWCiDbLgAT2b1QxqvQ7Q7IpQED4
-Xhp9SdZpCCjbqNvPkUyXV09IJDmAwEYzANhqUYyUkGtszJUt4HaMoZ3ida2rFE3M
-XCrQNMC3yHVeoPqCKD39ifKmqpaAUA8p31XEq7gtJhpvlr+P1OkuGVyBlb+/u7WN
-LmVcYfPYzOp7tzdA6B4FAFQz1kjKFsidbeEEoQkoaDG+hcSPSgrYa7n4bfY2ZB16
-l0y8yPibF3Lyo1dLOrxSQ+ZMas47BQ==
-=rx6w
------END PGP SIGNATURE-----
-
---clFkggijA/AbTF/J--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
