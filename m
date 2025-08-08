@@ -1,218 +1,203 @@
-Return-Path: <linux-rtc+bounces-4654-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4655-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9477B1EECF
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Aug 2025 21:23:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF3E6B1F0B3
+	for <lists+linux-rtc@lfdr.de>; Sat,  9 Aug 2025 00:37:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EF7A1895B26
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Aug 2025 19:24:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C1E77B64B2
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 Aug 2025 22:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD90B22154B;
-	Fri,  8 Aug 2025 19:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD88828AB1A;
+	Fri,  8 Aug 2025 22:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="plzMRfoK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LcsyL1bK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD61B35948;
-	Fri,  8 Aug 2025 19:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0101E28A73B;
+	Fri,  8 Aug 2025 22:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754681016; cv=none; b=q+4WZixG3/KmjwgpVRj1r1726U/Hcl76AyKeJlfO5rNuX+CbVogwYhOkNIb7rbvA+GaacBE+IyLONfX0Pai3+6DSOybi87KSBy1EcQs7Q1NME0UmeQmW21l2K6WvpkWtKIOuETL6mrwtwoWtZec1XV0JIka3Kg0udyJ7f/w0LAk=
+	t=1754692637; cv=none; b=kxL8C9ThMVlHi3ZZqQcZKTsIZZGHYT4DujH9Z5ZnAUEDq++7mNi/RNIwlQucPcXqeAa8lDM1AZMa/mkBG3Ki4Oa+AxV4cIWOE+RNYNLSuQaZadtzWqbUCmUF3om29GEOrj2BSDnjKoAi8Sm/+dXIdIz8Xj73y6QLege3YEG+/bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754681016; c=relaxed/simple;
-	bh=6Ofhmtq8iEsDzcVOKThUvKTpA7BPiY9F0Z4vOfmDs2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ERExv9z7O6cRMp8lFGZFD8CY43y9MWTSBIeoXD7F+LMdf4QfN+GjUvBk4RJMDn9teNRIpgHddE5+P+V2DLsUdmJtPq1C6hG0WjQGhNAe5giWVFdBdoBSzoCZDhAutUQHj+1AIm525NafxYspMk6vEAeyVoXAIikpEGP0aBtV/N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=plzMRfoK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD915C4CEED;
-	Fri,  8 Aug 2025 19:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754681016;
-	bh=6Ofhmtq8iEsDzcVOKThUvKTpA7BPiY9F0Z4vOfmDs2A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=plzMRfoKKj00EHCjizTYsC0QXluoZRkzypvA7ufuitDfDkZ6MGRkC7gOi3AXjBoas
-	 eEApQWJjhzAioABwm7WoQlqDhXwbDQQ7ryUBVmTrq2UamZ5gJtf1ohYIh2Il8qxTyU
-	 114plSjiThETFJqoN2ERa/x2v/Yj5q3M1eRMq9PHqZQ7Rof/JUrprBsngnGCBBadq5
-	 qNtu1kdm26HoxIRJ99herUmnwGqx4T+WQNFiKRdTNwmPrYcacXydZSGwgdOOoQN/24
-	 HxVzdeXhtZsUZ/4xJLOmzkU5+/LUO85ym4ChIRfyGXMh0t9UIkJhXnenugWniH4l26
-	 qgP3FhvwPNayA==
-Date: Fri, 8 Aug 2025 14:23:34 -0500
-From: Rob Herring <robh@kernel.org>
-To: Lakshay Piplani <lakshay.piplani@nxp.com>
-Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org,
-	vikash.bansal@nxp.com, priyanka.jain@nxp.com,
-	shashank.rebbapragada@nxp.com
-Subject: Re: [PATCH 1/2] rtc: pcf85363: add support for timestamp and watchdog
-Message-ID: <20250808152900.GA125413-robh@kernel.org>
-References: <20250808112246.4169280-1-lakshay.piplani@nxp.com>
+	s=arc-20240116; t=1754692637; c=relaxed/simple;
+	bh=eyTpBn+/UsLCK9d42tdanu30au/6f7TC4NaT+cwdwaY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IvhYPKGOV0ISDc2o5nlERGwrZ8DSPgpfLnWgZHuXygL560EBOmQRFSDkhtg9ecyU8eqAetVqUd9gj4n46ezD288TDIPXtbVnQygQ+OcjXp5hkaUJeDnyTJHoUjRdGDmIhZdU+/B5ZDa6+7ma5f7cuptkLDI+wtfDEdDpxITiq2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LcsyL1bK; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e8fed231c24so418216276.3;
+        Fri, 08 Aug 2025 15:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754692635; x=1755297435; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u8PcdViVM9JE8IbZsZm/xllXdMrlzsbljuByQCZPh34=;
+        b=LcsyL1bKiuZa3/d7fTIB0WXeFYJ3fq3Yj5XCqNrp/t4H05cHoSHflRVoD+UOSVbGok
+         Ne2H3L3d0HBIOtCVzct2ZvldMc7VlZqjeigPa1ORwoLpjbsgKYLT6J9M6SuBvLBR/Lml
+         V4P5WWPWnxcPck+2b+RG+z7szR3vJQBsEBnMuRhL0hrWI6ZhFi4RebKgUnMCkMq3CKeF
+         YNlmzNf6kVbHqUSAVALFYKCrhmPCASHNownl2UB7FhUat6T/hSClXlwK33td1W3MzbdM
+         afjl2p62w6koyIsBFNALu8ZYDVGAuV9R1CjE9aHIgoc29SWKAVpjlRy4scTMUydWtODN
+         o4Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754692635; x=1755297435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u8PcdViVM9JE8IbZsZm/xllXdMrlzsbljuByQCZPh34=;
+        b=aRUcywmf1Qc+b6twWJx0291LuJiAwDL00NIJyP+KRxUex7dpcR6gDQdmC5EBrTrwJX
+         59kQFCIM4bimY8ZsKNYelfVFc0dE2qCKH2c7lHxKx519gHavhiOB82GnWcPI+Gj5WaNR
+         2fsJLdXD+WLWS7WmJgYcys3laNn2CkQEjv/GPvo5u+v7sU2YrZqgH+9mfU0/cnKwtgwE
+         XRIhQ+ASdfL/cxgOIHKkw1uto/cu3VhBh3fJ7oEWy2ShTf1jU17itg77V1Hy33n8zkfF
+         gIzme83nB1yVCAVKj+L3L+EwYmPiJk7BbGMKT4rvgUFMXA740WQyOc8ceuUqJFKoSQX2
+         HWCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ2pi1clbgwuu0hYVMgeGFa/4/uOxnL4Hvf3yredZ9yeBbmcG3Nw27hA6tBQ2QxB/nttKE47l2ALEcZm4=@vger.kernel.org, AJvYcCVHfChcQGNHqLUZO/vbsZRswfEyxGi0dZFLYFshWO8IDdO68vEDmVLYy04qroRi39CG+wCaBeRq2NzO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz17q0bbxnUIhTqKp+17FplAJ4pcZ/auAIbxZx2MgInZxdYxp8K
+	cX5iRJr7eH0enn0WG34ZllS55rT17HEYNVUB57DMxhFHljZo9sjn2LQKlugZQb1zzZjeBqQfOC9
+	r635NnFsWcTii/cCs6P+QXORDvBXcw5w=
+X-Gm-Gg: ASbGncvyVuS4WnaEK0Z1kIqx1F+bmRVo6wt+d+xZkY0ku0RXnzuVSqznsRMjWDJ7Nv1
+	jAOh59Uc4SzpW9sozpa2Gx7fHDG1E+GRmsrOcvICiIx+o2oV1qbYaXqa0cbbc8id8OVEDaEGpBV
+	PZP5inZlGER4hOd2wqs/tbETkT5s3ewCgFUGsB/2qPl7dQnI9SOuOMAcpYFENm+J74jSMWsFC/k
+	0ZrdEo=
+X-Google-Smtp-Source: AGHT+IH/XOBhWDGZF7tzd1bJiHZgTVQajMTE0Df6YY0Q1oHeFqhiksv2ysGW44ElsIxDlyJzzEz12bHe8e1R0ERq4zA=
+X-Received: by 2002:a05:690c:6c87:b0:71a:2d5f:49d8 with SMTP id
+ 00721157ae682-71c0830fb07mr3640127b3.3.1754692634671; Fri, 08 Aug 2025
+ 15:37:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250808112246.4169280-1-lakshay.piplani@nxp.com>
+References: <20250804154750.28249-1-l.rubusch@gmail.com> <20250804154750.28249-2-l.rubusch@gmail.com>
+ <20250804213213d4844d4e@mail.local> <CAFXKEHZn0XQMe6RBHDJzcGZy+JPpNpfidD1mT2MBmZ_WamFQKQ@mail.gmail.com>
+ <202508052224366c9bb920@mail.local>
+In-Reply-To: <202508052224366c9bb920@mail.local>
+From: Lothar Rubusch <l.rubusch@gmail.com>
+Date: Sat, 9 Aug 2025 00:36:38 +0200
+X-Gm-Features: Ac12FXwrj9u2mr9B3E8JKtkTjq0XV8wLc19QmZz6-lCwcXpxcioBMrR874zHxXU
+Message-ID: <CAFXKEHZee0c4=ETwA=P_MP2+O+01s0dwS=5EjeK1Gkk3PRDNHg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] rtc: zynqmp: ensure correct RTC calibration
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: michal.simek@amd.com, srinivas.neeli@xilinx.com, linux-rtc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Ivan Vera <ivan.vera@enclustra.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 08, 2025 at 04:52:45PM +0530, Lakshay Piplani wrote:
-> Extend the device tree binding for NXP PCF85263/PCF85363 RTC with:
-> - Timestamp mode configuration
-> - Watchdog timer configuration
+On Wed, Aug 6, 2025 at 12:24=E2=80=AFAM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 05/08/2025 23:56:46+0200, Lothar Rubusch wrote:
+> > On Mon, Aug 4, 2025 at 11:32=E2=80=AFPM Alexandre Belloni
+> > <alexandre.belloni@bootlin.com> wrote:
+> > >
+> > > On 04/08/2025 15:47:50+0000, Lothar Rubusch wrote:
+> > > > From: Ivan Vera <ivan.vera@enclustra.com>
+> > (...)
+> > > > diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+> > > > index f39102b66eac..0c063c3fae52 100644
+> > > > --- a/drivers/rtc/rtc-zynqmp.c
+> > > > +++ b/drivers/rtc/rtc-zynqmp.c
+> > > > @@ -331,9 +331,9 @@ static int xlnx_rtc_probe(struct platform_devic=
+e *pdev)
+> > > >               if (ret)
+> > > >                       xrtcdev->freq =3D RTC_CALIB_DEF;
+> > > >       }
+> > > > -     ret =3D readl(xrtcdev->reg_base + RTC_CALIB_RD);
+> > > > -     if (!ret)
+> > > > -             writel(xrtcdev->freq, (xrtcdev->reg_base + RTC_CALIB_=
+WR));
+> > > > +
+> > > > +     /* Enable unconditional re-calibration to RTC_CALIB_DEF or DT=
+B entry. */
+> > > > +     writel(xrtcdev->freq, xrtcdev->reg_base + RTC_CALIB_WR);
+> > >
+> > > Doesn't this forcefully overwrite the proper value that has been set
+> > > from userspace and so trashes the time at each reboot?
+> > >
+> > Yes, it overwrites the calibration, i.e. counting 1sec in about 1sec.
+> > No, the time/date is not actually "trashed" (I double-checked that
+> > with timesyncd disabled, having and not having register content and
+> > over several reboots keeping a bogus date/time - it psersistet in the
+> > same time space. The current patch always overwrites the calib
+> > register content. So, a manual userspace setting will be lost after
+> > reboot. That's true.
+>
+> It is about 1sec on your platform because it didn't deviate too much
+> from the expected value but what if another platform needs a way
+> different value? Then you are introducing the same issue as the one you
+> are trying to fix but it will have it at each reboot.
+>
+I guess you missunderstood me here a bit. I understand that every
+scenario will need individual calibration especially over time.
 
-The subject should match the subsystem. So:
+> >
+> > Would it rather make sense to extend it, say, instead of merely
+> > checking whether the calibration register contains any data - which
+> > could potentially be incorrect - also check for the presence of a
+> > calibration property in the devicetree (or a similar property, since
+> > 'calibration' may be deprecated)? If such a property exists, perform a
+> > re-calibration based on the devicetree at every reboot. Otherwise,
+> > retain the current behavior of checking whether the register is empty?
+> >
+> > > Isn't the proper way to reset it to simply set the offset from usersp=
+ace
+> > > again?
+> > >
+> > Hm.. I'm unsure if I understood you correctly. You mean the way as
+> > described in AMD's link to perform the reset by executing the devmem
+> > from Linux manually? If so, why is it preferable to adjust the RTC
+> > calibration manually every time this happens, rather than to simply
+> > put a correction value into the devicetree properties for problematic
+> > setups? Or do I miss something, is there a config file for RTC
+> > calibration for doing this persistently from Linux, that I'm not aware
+> > of?
+> >
+> > Before, the devicetree properties seemed to have generally priority
+> > over userspace settings. Now, after the calibration rework, this
+> > priorization seems to have changed and a devicetree calib correction
+> > for such problematic cases will generally be ignored, with a
+> > recommendation by Xilinx/AMD (see link in cover letter) to execute a
+> > devmem command from off Linux (...). I mean, can't this be elaborated
+> > a bit more to allow for a persistent correction method?
+>
+> The value depends on each manufactured machine/board as it is supposed
+> to correct for imprecision on the input clock which is either a crystal
+> or derived from a crystal. This crystal may be more or less accurate and
+> its accuracy will change over time notably because of temperature
+> changes or simply because it is aging. Having the value in the device
+> tree is as good as having it hardcoded in the driver which is not far
+> from what your are doing here. It makes the feature useless.
+>
+Yes, I see your point.
 
-"dt-bindings: rtc: nxp,pcf85363: ..."
+> What I was suggesting is simply to do the right thing, compute the
+> inaccuracy and correct it from userspace, using the proper interface
+> that is sysfs or the RTC_PARAM_SET ioctl for RTC_PARAM_CORRECTION
+> This has to be done regularly anyway so I guess it would catch and
+> correct any corrupted value in the register.
+>
+The degradation over time and or temperature does not match the static
+approach we took of our v1 patch. I modified it still a bit to keep userspa=
+ce
+configurations, and use the optional devicetree property for a correction. =
+But
+this does not cancel out your argumentation, since the approach is still st=
+atic.
+So, I have to agree, thanks.
 
-> 
-> Also introduce a new header 'pcf85363-tsr.h' to expose
-> macros for timestamp mode fields, improving readability
-> of device tree file.
-> 
-> Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
-> ---
->  .../devicetree/bindings/rtc/nxp,pcf85363.yaml | 44 ++++++++++++++++++-
->  include/dt-bindings/rtc/pcf85363-tsr.h        | 28 ++++++++++++
->  2 files changed, 71 insertions(+), 1 deletion(-)
->  create mode 100644 include/dt-bindings/rtc/pcf85363-tsr.h
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
-> index 52aa3e2091e9..2d2b52f7a9ba 100644
-> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/rtc/nxp,pcf85363.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Philips PCF85263/PCF85363 Real Time Clock
-> +title: NXP PCF85263/PCF85363 Real Time Clock
->  
->  maintainers:
->    - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> @@ -39,6 +39,41 @@ properties:
->    start-year: true
->    wakeup-source: true
->  
-> +  nxp,timestamp-mode:
-> +    description: |
-> +      Defines timestamp modes for TSR1, TSR2, and TSR3.
+Best,
+L
 
-You need to define what timestamp mode is.
-
-> +      Use macros from `dt-bindings/rtc/pcf85363-tsr.h`.
-> +    items:
-> +      - description: TSR1 mode (e.g., PCF85363_TSR1_FE)
-> +      - description: TSR2 mode (e.g., PCF85363_TSR2_LB)
-> +      - description: TSR3 mode (e.g., PCF85363_TSR3_LV)
-> +
-> +  nxp,enable-watchdog:
-> +    type: boolean
-> +    description: |
-> +      If present, the RTC watchdog timer is enabled and integrated with Linux watchdog subsystem.
-
-This is OS policy and doesn't belong in DT. If it did, nothing NXP 
-specific about it.
-
-You don't need '|' when there is no formatting to preserve, and lines 
-should wrap at 80 char.
-
-> +
-> +  nxp,watchdog-timeout:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 31
-> +    default: 10
-> +    description: |
-> +      Watchdog timeout value in seconds. Allowed values range from 1 to 31.
-
-There's already a standard property for this.
-
-> +
-> +  nxp,watchdog-stepsize:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 3
-> +    default: 0
-> +    description: |
-> +      Watchdog step size select: 0=0.25Hz, 1=1Hz, 2=4Hz, 3=16Hz.
-
-What's step size? This is counter resolution. Shouldn't this just be the 
-best value based on the timeout period.
-
-> +
-> +  nxp,watchdog-repeat:
-> +    type: boolean
-> +    description: |
-> +      If present, sets the watchdog to repeat mode. If omitted, watchdog runs in one-shot mode.
-
-Also seems like OS policy.
-
-> +
->  required:
->    - compatible
->    - reg
-> @@ -47,6 +82,7 @@ additionalProperties: false
->  
->  examples:
->    - |
-> +    #include <dt-bindings/rtc/pcf85363-tsr.h>
->      i2c {
->          #address-cells = <1>;
->          #size-cells = <0>;
-> @@ -56,5 +92,11 @@ examples:
->              reg = <0x51>;
->              #clock-cells = <0>;
->              quartz-load-femtofarads = <12500>;
-> +            wakeup-source;
-> +            nxp,timestamp-mode = <PCF85363_TSR1_FE PCF85363_TSR2_LB PCF85363_TSR3_LV>;
-> +            nxp,enable-watchdog;
-> +            nxp,watchdog-timeout = <10>;
-> +            nxp,watchdog-stepsize = <0>;
-> +            nxp,watchdog-repeat;
->          };
->      };
-> diff --git a/include/dt-bindings/rtc/pcf85363-tsr.h b/include/dt-bindings/rtc/pcf85363-tsr.h
-> new file mode 100644
-> index 000000000000..1fb5b9b3601e
-> --- /dev/null
-> +++ b/include/dt-bindings/rtc/pcf85363-tsr.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-> +/*
-> + * Copyright 2025 NXP
-> + */
-> +
-> +#ifndef _DT_BINDINGS_RTC_PCF85363_TSR_H
-> +#define _DT_BINDINGS_RTC_PCF85363_TSR_H
-> +
-> +/* TSR1 modes */
-> +#define PCF85363_TSR1_NONE 0x00
-> +#define PCF85363_TSR1_FE 0x01
-> +#define PCF85363_TSR1_LE 0x02
-> +
-> +/* TSR2 modes */
-> +#define PCF85363_TSR2_NONE 0x00
-> +#define PCF85363_TSR2_FB 0x01
-> +#define PCF85363_TSR2_LB 0x02
-> +#define PCF85363_TSR2_LV 0x03
-> +#define PCF85363_TSR2_FE 0x04
-> +#define PCF85363_TSR2_LE 0x05
-> +
-> +/* TSR3 modes */
-> +#define PCF85363_TSR3_NONE 0x00
-> +#define PCF85363_TSR3_FB 0x01
-> +#define PCF85363_TSR3_LB 0x02
-> +#define PCF85363_TSR3_LV 0x03
-> +
-> +#endif /* _DT_BINDINGS_RTC_PCF85363_TSR_H */
-> -- 
-> 2.25.1
-> 
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
