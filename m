@@ -1,188 +1,234 @@
-Return-Path: <linux-rtc+bounces-4656-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4657-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 465D7B1F21B
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Aug 2025 06:40:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC22FB1F727
+	for <lists+linux-rtc@lfdr.de>; Sun, 10 Aug 2025 01:03:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60B79562643
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Aug 2025 04:40:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F09317DE4C
+	for <lists+linux-rtc@lfdr.de>; Sat,  9 Aug 2025 23:03:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28682275AE4;
-	Sat,  9 Aug 2025 04:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C6224A047;
+	Sat,  9 Aug 2025 23:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lrJ0oIWr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3ho4kiw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AC41AF0A4;
-	Sat,  9 Aug 2025 04:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED77186294;
+	Sat,  9 Aug 2025 23:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754714399; cv=none; b=RlST0/TeQObbGx/TXTgCCk4frP+cCisZ3gVBa5UHMDYrToCmdcaySwbGWk6cBjDkWSu3skxUl8aNY7FsjtsjnPdxOqdZkrEN81NcSTHYAeZhyFhlTJagaZlRoYiSQnV1ySeHywnSNMU28uOatRRWiOlUceiY17LkhyO3Y01CiZk=
+	t=1754780583; cv=none; b=FiMXCF8M/+CyASZkDUG+G0XnemQPtAbUQofbLkCVi9wLuQFszSA1IqfLvCKUje/FGdxPFRlVoWGqAsLJfis1O/p3gRYsj2APEtMbug1NxnEngRtAlZ4m2QHNWLqKhvpNJw6hjb9LbXuQify6+nU6AOEPDLhR2zzq2iMzY/S0nMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754714399; c=relaxed/simple;
-	bh=aktR+zqoUBKL88FfPK91CV2ljisZF5QnSbMYDGZBrSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TYgM0r3cE+nYOV4w6MjVJ71lGOc4cWq5+NY5s8H0UVBGF/6tSwAlSDGYOqgG9B48dBLe3lQ0xLWgMGRKJJhQcMV1+S1eAchJLYEyL3bau5rAUmeIqak8BpwJexEqh31sBgYWss/kgzGmJwPyHcNYdBIVWXnUT7GCP21XOnC1n+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lrJ0oIWr; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754714397; x=1786250397;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aktR+zqoUBKL88FfPK91CV2ljisZF5QnSbMYDGZBrSQ=;
-  b=lrJ0oIWrPK+S5L8sDXTjaUZtgrsnBsyTFbYtRoOKmLWopXMH0xuBiF3O
-   wUXh6gKkpZBoaWrM7h0EImE7orEchtRvtd8K1qHZOHs+/f/TbaEZ5OMX+
-   Mh02Mua3mQW0LbDzPCd4lHrgbXVuOldR/MfZVyCmbRig9UoXV199KmjTX
-   Yf+8dn7L176Zwrwzdhc3L8a/TxAOm6Q0XsSdsW82LM+w93eygSgwCso/m
-   UrmJAY2poTT7NGc6F1a1rqnb3i0V61ynryrxxE2bj0RX3eQh8x1z40Xke
-   tWnMXrjLmaG20xnHS6/0WckOTwrABDbhor1x2gFRViueUpkuW/hESBkTg
-   w==;
-X-CSE-ConnectionGUID: ZsGA/tmeShqyeHA7nITZpA==
-X-CSE-MsgGUID: lSSypvXVRsKbXhHCw/eueA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11515"; a="68424482"
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="68424482"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2025 21:39:56 -0700
-X-CSE-ConnectionGUID: MW4DmiqqT4aMrhIJXAZMhw==
-X-CSE-MsgGUID: +0Xow/ybQv64NhbkOzNNrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="196299599"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Aug 2025 21:39:53 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ukbN0-0004Vg-2g;
-	Sat, 09 Aug 2025 04:39:50 +0000
-Date: Sat, 9 Aug 2025 12:39:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lakshay Piplani <lakshay.piplani@nxp.com>,
-	alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	vikash.bansal@nxp.com, priyanka.jain@nxp.com,
-	shashank.rebbapragada@nxp.com,
-	Lakshay Piplani <lakshay.piplani@nxp.com>
-Subject: Re: [PATCH 2/2] rtc: pcf85363: add support for additional features
-Message-ID: <202508091247.3Kc8Wms3-lkp@intel.com>
-References: <20250808112246.4169280-2-lakshay.piplani@nxp.com>
+	s=arc-20240116; t=1754780583; c=relaxed/simple;
+	bh=st/eweHiwV92mUXCvAGpIiPGkvX3rErOBfHnwy2GSps=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u1AOEGdLVJCZ5OQoH4VGADtZqqhhkOwMlhPRAcrpTF38jSL3QUqxqlJWgmyAuFpx5iwxK+5A4NSLSBDtiJPMiKzsVzPTpswpIXBfvmAeHRFGtEwZ213WxtNHLH5WosMwWpLt4seUfGoEtwBuONusEn8HrEkGRNnHS7ljI4746M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3ho4kiw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7401C4CEF7;
+	Sat,  9 Aug 2025 23:03:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754780582;
+	bh=st/eweHiwV92mUXCvAGpIiPGkvX3rErOBfHnwy2GSps=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=J3ho4kiwrH7rHSL79nbnLEr8Fi7+3PMWKaPF++iz6+hi+MdR9KEEzcVlLj8ka0pf8
+	 8ghHe6EwgDyqH/6MV9E7RSlM3Xis2bC0eXh7XcwncUYg4cyhRzZRzt4ng/01hji6ic
+	 z65whu1Kmp7Ovfvwvh5erXF+18ebGI5bDc9aCuD93E8d9YhJshoNIwWGXbxU9QDWKF
+	 T6zvn7zjM3jiH2oit4GZPg9RFmtdfjbbGuqabHV6PdIu87V7pgvTwqzOXruVNSYlSb
+	 mHqfQnZ7Pc/teaw4LYKyETrSoV1BFexfdIKEwp7BhRQebwXFhy3xHesvJQdBdZXBTD
+	 JafFkKw/Bf4iQ==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-32e14ce168eso37200951fa.1;
+        Sat, 09 Aug 2025 16:03:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX5KeVL2w6VzdSiCBiLb0GBmu7Tgkwv2k1MZUMqnN2ixtBX4NbZajlDkF10sqh80e5+iaTEp/TLdxxoVT/Z@vger.kernel.org, AJvYcCXHvgNcIaDr5pKniLlw+Uwekrsizm6Go42VcA7K9vyEVTdl+5p1rbzHh4Fdx+PztHkKsFn+BjZBIA4=@vger.kernel.org, AJvYcCXuvTJk37s7WICGylZS3ReB4be66lT7Hy0Zo2z7uUzRLnNDfTfvaofD9wtuXYWYsEBGMHUaw0M9/suX@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWKrgpsSjHRu9EpsEpyX7F9E6OzE9MoAsM7Ty45zt8sWUcXOSt
+	zpMHZSnKz5aqeDxAk05u3QDHdHYN2lxhNwM6+ea42Pxrj/kslIMgwf2brAs9LeU6vpgux61FsRL
+	+Q6vDOqaorhF72wfUu1TiZKY3p33cJdM=
+X-Google-Smtp-Source: AGHT+IHacj93S4TAyJS2Y33dq5fDEf3fw3H8pVieqGYKOrts0lqIXyoZID+Z9tXd8YeI87NlNCl9WjBC2eK/6u6auvE=
+X-Received: by 2002:a05:651c:3799:b0:32a:7270:5c29 with SMTP id
+ 38308e7fff4ca-333a213e262mr13218821fa.2.1754780581250; Sat, 09 Aug 2025
+ 16:03:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250808112246.4169280-2-lakshay.piplani@nxp.com>
+References: <20250714060843.4029171-5-ardb+git@google.com> <20250714060843.4029171-6-ardb+git@google.com>
+ <20250803010449df1f5cfb@mail.local>
+In-Reply-To: <20250803010449df1f5cfb@mail.local>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Sun, 10 Aug 2025 09:02:49 +1000
+X-Gmail-Original-Message-ID: <CAMj1kXGQyLXwk9Bq24xhPPsB1nO9RcSkvh=0p8aNP=Q=Az8V7w@mail.gmail.com>
+X-Gm-Features: Ac12FXyxSfM9EC_oe23LQ4fW6u1l84sRZB4iGnVNSBFl1E9opWCoKNhC-oXMcUQ
+Message-ID: <CAMj1kXGQyLXwk9Bq24xhPPsB1nO9RcSkvh=0p8aNP=Q=Az8V7w@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] efi-rtc: Remove wakeup functionality
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
+	Juergen Gross <jgross@suse.com>, Stefano Stabellini <sstabellini@kernel.org>, 
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Sunil V L <sunilvl@ventanamicro.com>, 
+	Bibo Mao <maobibo@loongson.cn>, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, x86@kernel.org, 
+	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Lakshay,
+On Sun, 3 Aug 2025 at 11:05, Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Apart from the topic that should be "rtc: efi:...", I'm ready to apply
+> this patch.
+>
 
-kernel test robot noticed the following build warnings:
+Thanks, please go ahead.
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on linus/master v6.16 next-20250808]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lakshay-Piplani/rtc-pcf85363-add-support-for-additional-features/20250808-192449
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20250808112246.4169280-2-lakshay.piplani%40nxp.com
-patch subject: [PATCH 2/2] rtc: pcf85363: add support for additional features
-config: i386-buildonly-randconfig-005-20250809 (https://download.01.org/0day-ci/archive/20250809/202508091247.3Kc8Wms3-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250809/202508091247.3Kc8Wms3-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508091247.3Kc8Wms3-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/rtc/rtc-pcf85363.c:634:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     634 |         if (ret)
-         |             ^~~
-   drivers/rtc/rtc-pcf85363.c:614:9: note: initialize the variable 'ret' to silence this warning
-     614 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-
-vim +/ret +634 drivers/rtc/rtc-pcf85363.c
-
-   605	
-   606	/*
-   607	 * Parses watchdog configuration from device tree and registers the
-   608	 * watchdog with the Linux watchdog subsystem.
-   609	 */
-   610	static int pcf85363_watchdog_init(struct device *dev, struct regmap *regmap)
-   611	{
-   612		struct pcf85363_watchdog *wd;
-   613		u32 timeout = 10, clock = 0;
-   614		int ret;
-   615	
-   616		if (!IS_ENABLED(CONFIG_WATCHDOG) || !device_property_read_bool(dev, "nxp,enable-watchdog"))
-   617			return 0;
-   618	
-   619		wd = devm_kzalloc(dev, sizeof(*wd), GFP_KERNEL);
-   620		if (!wd)
-   621			return -ENOMEM;
-   622	
-   623		wd->regmap = regmap;
-   624		wd->dev = dev;
-   625	
-   626		device_property_read_u32(dev, "nxp,watchdog-timeout", &timeout);
-   627		wd->timeout_val = clamp(timeout, WD_TIMEOUT_MIN, WD_TIMEOUT_MAX);
-   628	
-   629		device_property_read_u32(dev, "nxp,watchdog-stepsize", &clock);
-   630		wd->clock_sel = clock & WD_CLKSEL_MASK;
-   631	
-   632		wd->repeat = device_property_read_bool(dev, "nxp,watchdog-repeat");
-   633	
- > 634		if (ret)
-   635			return ret;
-   636	
-   637		/* Clear any stale WDF flag */
-   638		regmap_update_bits(regmap, CTRL_FLAGS, FLAGS_WDF, 0);
-   639	
-   640		/* Register the watchdog device */
-   641		wd->wdd.info = &pcf85363_wdt_info;
-   642		wd->wdd.ops = &pcf85363_wdt_ops;
-   643		wd->wdd.min_timeout = WD_TIMEOUT_MIN;
-   644		wd->wdd.max_timeout = WD_TIMEOUT_MAX;
-   645		wd->wdd.timeout = wd->timeout_val;
-   646		wd->wdd.parent = dev;
-   647	
-   648		/*
-   649		 * For testing purposes, it's recommended to enable CONFIG_WATCHDOG_NOWAYOUT
-   650		 * in the kernel configuration. If this option is not set, the watchdog may stop
-   651		 * immediately after being started, especially if the user-space daemon closes
-   652		 * /dev/watchdog without keeping it alive. Enabling NOWAYOUT ensures the watchdog
-   653		 * remains active and can properly test system reset behavior.
-   654		 */
-   655		wd->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
-   656	
-   657		watchdog_set_drvdata(&wd->wdd, wd);
-   658	
-   659		dev_info(dev, "pcf85363: watchdog initialized successfully\n");
-   660	
-   661		return devm_watchdog_register_device(dev, &wd->wdd);
-   662	}
-   663	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> On 14/07/2025 08:08:45+0200, Ard Biesheuvel wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > The EFI rtc driver is used by non-x86 architectures only, and exposes
+> > the get/set wakeup time functionality provided by the underlying
+> > platform. This is usually broken on most platforms, and not widely used
+> > to begin with [if at all], so let's just remove it.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >  drivers/rtc/rtc-efi.c | 76 +-------------------
+> >  1 file changed, 2 insertions(+), 74 deletions(-)
+> >
+> > diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
+> > index fa8bf82df948..b4f44999ef0f 100644
+> > --- a/drivers/rtc/rtc-efi.c
+> > +++ b/drivers/rtc/rtc-efi.c
+> > @@ -112,48 +112,6 @@ convert_from_efi_time(efi_time_t *eft, struct rtc_time *wtime)
+> >       return true;
+> >  }
+> >
+> > -static int efi_read_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+> > -{
+> > -     efi_time_t eft;
+> > -     efi_status_t status;
+> > -
+> > -     /*
+> > -      * As of EFI v1.10, this call always returns an unsupported status
+> > -      */
+> > -     status = efi.get_wakeup_time((efi_bool_t *)&wkalrm->enabled,
+> > -                                  (efi_bool_t *)&wkalrm->pending, &eft);
+> > -
+> > -     if (status != EFI_SUCCESS)
+> > -             return -EINVAL;
+> > -
+> > -     if (!convert_from_efi_time(&eft, &wkalrm->time))
+> > -             return -EIO;
+> > -
+> > -     return rtc_valid_tm(&wkalrm->time);
+> > -}
+> > -
+> > -static int efi_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+> > -{
+> > -     efi_time_t eft;
+> > -     efi_status_t status;
+> > -
+> > -     convert_to_efi_time(&wkalrm->time, &eft);
+> > -
+> > -     /*
+> > -      * XXX Fixme:
+> > -      * As of EFI 0.92 with the firmware I have on my
+> > -      * machine this call does not seem to work quite
+> > -      * right
+> > -      *
+> > -      * As of v1.10, this call always returns an unsupported status
+> > -      */
+> > -     status = efi.set_wakeup_time((efi_bool_t)wkalrm->enabled, &eft);
+> > -
+> > -     dev_warn(dev, "write status is %d\n", (int)status);
+> > -
+> > -     return status == EFI_SUCCESS ? 0 : -EINVAL;
+> > -}
+> > -
+> >  static int efi_read_time(struct device *dev, struct rtc_time *tm)
+> >  {
+> >       efi_status_t status;
+> > @@ -188,17 +146,13 @@ static int efi_set_time(struct device *dev, struct rtc_time *tm)
+> >
+> >  static int efi_procfs(struct device *dev, struct seq_file *seq)
+> >  {
+> > -     efi_time_t        eft, alm;
+> > +     efi_time_t        eft;
+> >       efi_time_cap_t    cap;
+> > -     efi_bool_t        enabled, pending;
+> > -     struct rtc_device *rtc = dev_get_drvdata(dev);
+> >
+> >       memset(&eft, 0, sizeof(eft));
+> > -     memset(&alm, 0, sizeof(alm));
+> >       memset(&cap, 0, sizeof(cap));
+> >
+> >       efi.get_time(&eft, &cap);
+> > -     efi.get_wakeup_time(&enabled, &pending, &alm);
+> >
+> >       seq_printf(seq,
+> >                  "Time\t\t: %u:%u:%u.%09u\n"
+> > @@ -214,26 +168,6 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+> >               /* XXX fixme: convert to string? */
+> >               seq_printf(seq, "Timezone\t: %u\n", eft.timezone);
+> >
+> > -     if (test_bit(RTC_FEATURE_ALARM, rtc->features)) {
+> > -             seq_printf(seq,
+> > -                        "Alarm Time\t: %u:%u:%u.%09u\n"
+> > -                        "Alarm Date\t: %u-%u-%u\n"
+> > -                        "Alarm Daylight\t: %u\n"
+> > -                        "Enabled\t\t: %s\n"
+> > -                        "Pending\t\t: %s\n",
+> > -                        alm.hour, alm.minute, alm.second, alm.nanosecond,
+> > -                        alm.year, alm.month, alm.day,
+> > -                        alm.daylight,
+> > -                        enabled == 1 ? "yes" : "no",
+> > -                        pending == 1 ? "yes" : "no");
+> > -
+> > -             if (alm.timezone == EFI_UNSPECIFIED_TIMEZONE)
+> > -                     seq_puts(seq, "Timezone\t: unspecified\n");
+> > -             else
+> > -                     /* XXX fixme: convert to string? */
+> > -                     seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
+> > -     }
+> > -
+> >       /*
+> >        * now prints the capabilities
+> >        */
+> > @@ -249,8 +183,6 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
+> >  static const struct rtc_class_ops efi_rtc_ops = {
+> >       .read_time      = efi_read_time,
+> >       .set_time       = efi_set_time,
+> > -     .read_alarm     = efi_read_alarm,
+> > -     .set_alarm      = efi_set_alarm,
+> >       .proc           = efi_procfs,
+> >  };
+> >
+> > @@ -271,11 +203,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
+> >       platform_set_drvdata(dev, rtc);
+> >
+> >       rtc->ops = &efi_rtc_ops;
+> > -     clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
+> > -     if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
+> > -             set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
+> > -     else
+> > -             clear_bit(RTC_FEATURE_ALARM, rtc->features);
+> > +     clear_bit(RTC_FEATURE_ALARM, rtc->features);
+> >
+> >       device_init_wakeup(&dev->dev, true);
+> >
+> > --
+> > 2.50.0.727.gbf7dc18ff4-goog
+> >
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
