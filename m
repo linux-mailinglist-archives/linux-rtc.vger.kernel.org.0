@@ -1,168 +1,175 @@
-Return-Path: <linux-rtc+bounces-4665-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4666-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC885B20771
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 13:21:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 706DFB209AD
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 15:10:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB42B188DD9C
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 11:22:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 46D687B0C93
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 13:08:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BCC2C3240;
-	Mon, 11 Aug 2025 11:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B252DCBFB;
+	Mon, 11 Aug 2025 13:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXFujpC/"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ha0LJNSf"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852B62874E9;
-	Mon, 11 Aug 2025 11:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392F12DCBE0;
+	Mon, 11 Aug 2025 13:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754911307; cv=none; b=By9ZAhzlA5L2mZZVnbgYzMvFWxrOISt63NGoNPyhC+6IggjR7GKjOnPjttw2ZpS36WvQYEm6q+690PhodZONCPfj9HqXu3DQ/zit6l6/heZRRNbdNB2CwRWWDnxVSmC+CWjLX5uQij+FNMqyFnkMo4lUZPPepVpHj6Lm85jVBYg=
+	t=1754917752; cv=none; b=O0u+xCWlhOImLf0YRiaKSQ8YvgEye38BhyLslMxH2FvQ5sNJupl5Ahv90JyfxQ4ut5SSaxd/kFVB+DOQTbMPX/QpzqF5MbiNnYYdJ7zaFXfiptWTTfpqSNzHHuDITZkhN1xqOi1ASWaHBy82l4LJmn3xO34uTATB9JfQ18K8GI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754911307; c=relaxed/simple;
-	bh=fJBQEdPBD8Fj/DZRBtUbIqsLDInvdTBnfhxQ/d5rsZ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qQWDxVdf3FvU9h6fUgqHVuAG6uVvmjFkATxc771j7zjmpsWT27r6Wk5RH5xutizr7+M1Vgc3YQmonh0pq99Up/zMIVwKwNyJAgGyrtYT2axiSzMUBAr9XXzFMOduCXlWAxRg69mbnZtmBoV83SWojRwogRchLRCbahysI94hZhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXFujpC/; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e91729232d9so55205276.1;
-        Mon, 11 Aug 2025 04:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754911304; x=1755516104; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oua6uu1FsiEG+FbQxDQznAhdN0yrac6Ee4wtUSAb7QQ=;
-        b=VXFujpC/DO2tWty6bkh/3Y6pxPm6j4WwMDuIlYGF/E6NR2CRUDarcZybuQyzLrTsO0
-         h9wh5PFmEhqpWi4OLhBOSVOdDFumRpdnQoHBG9RCstChaoTYD7JX7YE3PDUlMBSL7TfI
-         Uf6urqE2iDP8tLvgdoD7MYbrsBZJEzgOAuw+1m/BseTgWBvc7NgEzQMbQBYlKRJg07UK
-         xEORWp9PFGg1X95KVCI5GsWlV/7lA7CjRYo/JrL1JpEr4F4ohOlzfRyGzKABedzViQ9a
-         RSso/dbTpZjozCIEmidBfJxhQQcABftil2WRSdr7lK79QQmOIRlK9AKBRcdgKbzs+s5F
-         bmEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754911304; x=1755516104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Oua6uu1FsiEG+FbQxDQznAhdN0yrac6Ee4wtUSAb7QQ=;
-        b=bebQBPzd8IjBwHThrRbj117RVqVzKdyib205VWvZOHR8iFmGJjQK7YPl+1SNb/GT9N
-         rLx3lSX3Q/ROsT9a7dqZzJ5V5q0Xp1tZEt/L0to06h6k3zo0QwxQF3+XVb2IE8VuthJx
-         Q5QlLhfbJNoJfQMnB7cHFntRx5eQHr0Q94kMkdaMFiLLZtcVhMIfLL1KqILbwuLhgNnt
-         G3hVuhk6Ul68+WQCd0kAVvus0NhCNjLhb8lxPcrjJBR/wPI111zntqLtNL1cbVjnsVXw
-         tqiAiJWgfghJ01U/iYTFSvfvqxqLv4tWRB4DUZod3daSik/cSmi6MLldwfDkdWDB4LEb
-         c2IA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKDXM+ShDDcHKQdVVETy/4ezvza1CtsOHLMZmifrYrDNmX4ok8Bvyuo1ybMJ8gWZ33xby2rPSEl8iD@vger.kernel.org, AJvYcCVz+mPUn1vgayIth5fe+7cgqb82zOqua3ejkOlCJ2JsaHBPTnn5Hzxlewh40zAxutCazmNkuFcQceS3VGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOOlnwbDBi8LncTw29vexjnmS/+HIYqIZ6R2WT8BbXdV4ifrHn
-	RgLR7jbEAV65zgdcOhVVO6oIgsF16KNqnQKijOcS+Qw4bTH6aEOY2AR9TZZXr20jlU3L2FuNiKV
-	IRmLpjHOohnpN+4tNeeAnLANAgLJh/ZU=
-X-Gm-Gg: ASbGncs/O2EuYCF8sOqA8N1/SvwTc1PuIg9VV512j+9poJeSI0ONV4gFxD9Di9uCCwh
-	KEpqY3Mm0haj+jyAp3tlR0owhWPds6dfcrG3vS7xOXpyuLEWt98v3RJTsH46pL5uPYVro9HTh9v
-	EcC753umtdh3OuPKWdZXMlo2RKrGSZrBOirA6PmNrHQSqxXHgANpW0+1Sldkg5HMDMl6AwKhyZI
-	iW5
-X-Google-Smtp-Source: AGHT+IFal31QTX372Rt1MAx31/CoJRJqKRAhiiSHSEoIDYyMcyqwKzlo0opbeNHOvKi39NcCyTZhsFoMxqBqcu6XHeU=
-X-Received: by 2002:a05:690c:630b:b0:71a:2130:a8ef with SMTP id
- 00721157ae682-71c083d4aa4mr54748447b3.7.1754911304256; Mon, 11 Aug 2025
- 04:21:44 -0700 (PDT)
+	s=arc-20240116; t=1754917752; c=relaxed/simple;
+	bh=ffEAA1BYqRjEeT/y5IgqfC7xY5imc29KSXjgntGj8ws=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=amjifL+U7wooFAmY3Jj8Wtu+BL0LabO7mXY3CyLOetLz+RSziPYBroB3w64vNqgkxAVyAvn0wAk0Kym17HsgPgXZZRwLP8SIfOF5e6go1eF1a/APIletMC19CDZf15fqNpr86UcKd+qLhLT54EDkeCzz8HPo8E+pVlOH+Qry1+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ha0LJNSf; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2794F43A15;
+	Mon, 11 Aug 2025 13:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1754917748;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YmlXeyOWfKWSje0Td8DQAPRRqN2xhLGJ9irnz2oty0I=;
+	b=ha0LJNSfZWuWdNA1z8Nq7Dwl77fZGwmujhb/DcMHJwWCo3WCIJaGWAxDRqO5yx1aLxoil9
+	1cuXIqiQoX1OyrfXP6qoEZGBUJD+AbHGw4InLLM1xBhXR7vHmsp52RAlQ/rXZXuR1tJAs7
+	o1HpE/yrhIilPMyWiZspJdXNLBSNmgCIUlPmhUUxcRvf/dWIHUiBj0R9RiuNdGB5Di0F4f
+	pTa6F9GO9EyjF21LkSW9M1D240Bc17zC04BCgkOpOInAyex7XG+vz1vr97UHEguyPsyniE
+	inU3b1EsUc1zTTWao0P6slM1nVa+TyfE0vmJpPT9fc7v2SZUcJcx/u32neKPWw==
+Date: Mon, 11 Aug 2025 15:09:07 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: ot_shunxi.zhang@mediatek.com
+Cc: Eddie Huang <eddie.huang@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Lee Jones <lee@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, sirius.wang@mediatek.com,
+	vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
+Subject: Re: [PATCH v1 2/2] rtc: mt6397: Add BBPU alarm status reset and
+ shutdown handling
+Message-ID: <2025081113090716407d59@mail.local>
+References: <20250811081543.4377-1-ot_shunxi.zhang@mediatek.com>
+ <20250811081543.4377-3-ot_shunxi.zhang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250811081543.4377-1-ot_shunxi.zhang@mediatek.com>
- <20250811081543.4377-2-ot_shunxi.zhang@mediatek.com> <b41749ae-640b-4911-976f-8aa36d40ed6b@kernel.org>
-In-Reply-To: <b41749ae-640b-4911-976f-8aa36d40ed6b@kernel.org>
-From: Giorgi Tchankvetadze <giorgitchankvetadze1997@gmail.com>
-Date: Mon, 11 Aug 2025 15:21:25 +0400
-X-Gm-Features: Ac12FXz5R8bUd6DGN4oYRK6orLAYYfuyZ4YZlmfC6PZBO9X7PAQ1xeup1WjaCmM
-Message-ID: <CAE7dp2rxfgj6FKoM-kesX8632t3AA7Lk5rC-uasyQUS2hQuUfQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] mfd: mt6397: Add new bit definitions for RTC_BBPU register
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: ot_shunxi.zhang@mediatek.com, Eddie Huang <eddie.huang@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Lee Jones <lee@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	sirius.wang@mediatek.com, vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811081543.4377-3-ot_shunxi.zhang@mediatek.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufedvheegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeeiudeuteehhfekgeejveefhfeiudejuefhgfeljefgjeegkeeujeeugfehgefgnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemudgvfeefmehfledvleemhegvsgekmeduudegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemudgvfeefmehfledvleemhegvsgekmeduudegfedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddvpdhrtghpthhtohepohhtpghshhhunhigihdriihhrghnghesmhgvughirghtvghkrdgtohhmpdhrtghpthhtohepvgguughivgdrhhhurghnghesmhgvughirghtvghkrdgtohhmpdhrtghpt
+ hhtohepshgvrghnrdifrghnghesmhgvughirghtvghkrdgtohhmpdhrtghpthhtohepmhgrthhthhhirghsrdgsghhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqmhgvughirghtvghksehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-    linux-mediatek@lists.infradead.org,
-    linux-rtc@vger.kernel.org,
-    linux-kernel@vger.kernel.org
+On 11/08/2025 16:15:34+0800, ot_shunxi.zhang@mediatek.com wrote:
+> From: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>
+> 
+> This patch introduces a new function, mtk_rtc_reset_bbpu_alarm_status,
+> to reset the BBPU alarm status in the MT6397 RTC driver. This function
+> writes the necessary bits to the RTC_BBPU register to clear the alarm
+> status and ensure proper operation.
+> 
+> Additionally, the mtk_rtc_shutdown function is added to handle RTC
+> shutdown events. It resets the BBPU alarm status and updates the
+> RTC_IRQ_EN register to disable the one-shot alarm interrupt,
+> ensuring a clean shutdown process.
+> 
+> Signed-off-by: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>
+> ---
+>  drivers/rtc/rtc-mt6397.c | 36 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 35 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+> index 692c00ff544b..063bd399de8c 100644
+> --- a/drivers/rtc/rtc-mt6397.c
+> +++ b/drivers/rtc/rtc-mt6397.c
+> @@ -37,6 +37,21 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
+>  	return ret;
+>  }
+>  
+> +static void mtk_rtc_reset_bbpu_alarm_status(struct mt6397_rtc *rtc)
+> +{
+> +	u32 bbpu = RTC_BBPU_KEY | RTC_BBPU_PWREN | RTC_BBPU_RESET_AL;
+> +	int ret;
+> +
+> +	ret = regmap_write(rtc->regmap, rtc->addr_base + RTC_BBPU, bbpu);
+> +	if (ret < 0) {
+> +		dev_err(rtc->rtc_dev->dev.parent, "%s: write rtc bbpu error\n",
+> +			__func__);
+> +		return;
+> +	}
+> +
+> +	mtk_rtc_write_trigger(rtc);
+> +}
+> +
+>  static irqreturn_t mtk_rtc_irq_handler_thread(int irq, void *data)
+>  {
+>  	struct mt6397_rtc *rtc = data;
+> @@ -51,6 +66,8 @@ static irqreturn_t mtk_rtc_irq_handler_thread(int irq, void *data)
+>  		if (regmap_write(rtc->regmap, rtc->addr_base + RTC_IRQ_EN,
+>  				 irqen) == 0)
+>  			mtk_rtc_write_trigger(rtc);
+> +
+> +		mtk_rtc_reset_bbpu_alarm_status(rtc);
+>  		mutex_unlock(&rtc->lock);
+>  
+>  		return IRQ_HANDLED;
+> @@ -297,6 +314,22 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+>  	return devm_rtc_register_device(rtc->rtc_dev);
+>  }
+>  
+> +static void mtk_rtc_shutdown(struct platform_device *pdev)
+> +{
+> +	struct mt6397_rtc *rtc = platform_get_drvdata(pdev);
+> +	int ret = 0;
+> +
+> +	mtk_rtc_reset_bbpu_alarm_status(rtc);
+> +
+> +	ret = regmap_update_bits(rtc->regmap,
+> +				 rtc->addr_base + RTC_IRQ_EN,
+> +				 RTC_IRQ_EN_ONESHOT_AL, 0);
+> +	if (ret < 0)
+> +		return;
+> +
+> +	mtk_rtc_write_trigger(rtc);
 
-Shunxi,
+The whole goal of the RTC is to wakeup the system, why would you disable
+the alarm on shutdown?
 
-Can you confirm whether `RTC_BBPU_PWREN` (bit 0),
-`RTC_BBPU_CLR` (bit 1) and `RTC_BBPU_RESET_AL` (bit 3) are documented
-in the MT6397 datasheet (please cite section/page)? They look like
-standard RTC controls (power enable, clear/reset, alarm reset) and
-might be useful to include, but I agree with Krzysztof that adding
-definitions with no users can accumulate technical debt.
+> +}
+> +
+>  #ifdef CONFIG_PM_SLEEP
+>  static int mt6397_rtc_suspend(struct device *dev)
+>  {
+> @@ -345,7 +378,8 @@ static struct platform_driver mtk_rtc_driver = {
+>  		.of_match_table = mt6397_rtc_of_match,
+>  		.pm = &mt6397_pm_ops,
+>  	},
+> -	.probe	= mtk_rtc_probe,
+> +	.probe = mtk_rtc_probe,
+> +	.shutdown = mtk_rtc_shutdown,
+>  };
+>  
+>  module_platform_driver(mtk_rtc_driver);
+> -- 
+> 2.46.0
+> 
 
-Suggestion: either
-- add the definitions when a driver actually needs them, or
-- keep them now but add a short rationale in the commit message
-  (datasheet reference + intended use) so future reviewers understand
-  why they exist.
-
-Also: please split cosmetic whitespace fixes (RTC_BBPU_KEY) into a
-separate patch to make review/merge easier.
-
-Thanks for the patch; I=E2=80=99m following the thread.
-
-=E2=80=94 Giorgi
-
-
-On Mon, Aug 11, 2025 at 3:03=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 11/08/2025 10:15, ot_shunxi.zhang@mediatek.com wrote:
-> > From: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>
-> >
-> > This patch adds new bit definitions for the RTC_BBPU register in the
->
-> Why? There is no user of these. Don't add useless defines.
->
-> > mt6397 RTC header file. The following bit definitions are introduced:
->
-> Hm?
->
-> >
-> > Signed-off-by: Shunxi Zhang <ot_shunxi.zhang@mediatek.com>
-> > ---
-> >  include/linux/mfd/mt6397/rtc.h | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/=
-rtc.h
-> > index 27883af44f87..001cef6b7302 100644
-> > --- a/include/linux/mfd/mt6397/rtc.h
-> > +++ b/include/linux/mfd/mt6397/rtc.h
-> > @@ -15,8 +15,11 @@
-> >  #include <linux/rtc.h>
-> >
-> >  #define RTC_BBPU               0x0000
-> > +#define RTC_BBPU_PWREN         BIT(0)
-> > +#define RTC_BBPU_CLR           BIT(1)
-> > +#define RTC_BBPU_RESET_AL      BIT(3)
-> >  #define RTC_BBPU_CBUSY         BIT(6)
-> > -#define RTC_BBPU_KEY            (0x43 << 8)
-> > +#define RTC_BBPU_KEY           (0x43 << 8)
->
->
-> Why?
->
->
->
-> Best regards,
-> Krzysztof
->
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
