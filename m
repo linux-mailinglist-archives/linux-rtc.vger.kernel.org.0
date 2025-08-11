@@ -1,190 +1,112 @@
-Return-Path: <linux-rtc+bounces-4667-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4668-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20E73B2128A
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 18:48:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75909B218F4
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Aug 2025 01:10:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55DD61886D00
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 16:46:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 823857A6314
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 23:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF992262FC2;
-	Mon, 11 Aug 2025 16:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99425238174;
+	Mon, 11 Aug 2025 23:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="IzINKJcA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWDyZqAu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD0033D8;
-	Mon, 11 Aug 2025 16:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A32B2581;
+	Mon, 11 Aug 2025 23:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754930773; cv=none; b=jLlwVX12mKV18tSe1gAIdT/q99NHUsZDol0EuYxBm3iZi9cmgS9vO0eZbs0LOJj5pSWBg8qZXYPDmFYoV88UaKh8vCv+edvSCuH2qnGIG7TFxPq4YxJe0PkE/w1/YD3x/Ive3fn+WKNhkaH0DlL0KkL8u+9bQ+2vTefGJVDRJ+I=
+	t=1754953848; cv=none; b=uTqF9giciuJ+ZK0MZpaSpvfE+K2Thjjk84mHh1yXXsDEjXYUaPW7Wl1sVQJFMsKMmbdiiTYVVUs0u6ltIuJTKEH7Vcj8RMbKBrUyXpDJQHH6wpjItQV+DAoyUPtFYgAwcFbJdSPg1Ll9AiPexc29H2ZIEwsQERzy6NUovTJV1sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754930773; c=relaxed/simple;
-	bh=TojhoG5KQm0Zil3KXj/3MOaNIR3JBkiN+pJfmevoilM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lm0T5vngvbInYmdlwNWodTDMzQPiSPM3EOmeHZJ7c4zSLrkXng+CUqf0PTG7bZur01GYAkGx0KBeUuLTj7h7XR2/OWzXBzt1QFZ0f22XGgTlNe7PPTlZ4erYDNWpqIcaQQv7SCIgWFFI9yyGrZtoqq1gScRwMdsb7AodGvOgzWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=IzINKJcA; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.64.136] (unknown [20.236.11.69])
-	by linux.microsoft.com (Postfix) with ESMTPSA id D2938211826D;
-	Mon, 11 Aug 2025 09:46:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D2938211826D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1754930768;
-	bh=5t1P3VptPd0i00bkc3V2cUTaDzWFAwGZvBlqZNNm6/E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IzINKJcA+veFAgczYNDsuMmCg/WXyQU8ibzIkFmrqHx4oBH7KHea9Jocl85CohfTu
-	 lBOQ4BOzX2v3V/TnM6ws1tfXQX7VRvjJDX7UfUQd9MIcrCVF41MYpq7RQErNd1N7TM
-	 0i4G/li+2rCMZnS2hxMtaA7iATJt4yNJlofCTzks=
-Message-ID: <51eda58a-0c5e-4e0f-ae1f-87147fd8453c@linux.microsoft.com>
-Date: Mon, 11 Aug 2025 09:46:07 -0700
+	s=arc-20240116; t=1754953848; c=relaxed/simple;
+	bh=hJhF3vz1ZbMIJpYyVzhoCNKNryELOvUsF6C0wXSQkj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ayJthyP80+yV5ODdfovuJWTehsIrBUg27ek8OewVZvLguBHAjs/5spKkioh7lCfuHpzXmVFj1zc7wsEUh8ujPu3x365DxuvHLnSYlAs83KL3gQ73G6YbeBTZlFSpn7El2CPaCAVENk/sEbOsR8Z/V1a7d5Yol/wfrXUzHsruFBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWDyZqAu; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-76bc61152d8so4166011b3a.2;
+        Mon, 11 Aug 2025 16:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754953846; x=1755558646; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2r5LP7p8fx7sMIIvJvK7d+YBWuoiJU3wHXi53/Boo0=;
+        b=dWDyZqAuR+R4DB/h5bZGbUyadCiT6BYNioEv7hmj9kNzDxNVk1amHOMFbvV9cE/aSf
+         Q63BLiS9OOtXCPAnFD6BL9WZS7zEnwjlfoS6VBVAvvDksTfhYLhrbgC47V7RYK8thqic
+         jCNg6OTodmPQkNkiqMNgNTiAZlFy2eWiL7rfydtaqm6YC3mA/oAYQ1RcX+I3HMvet8Fi
+         9v5AmVCzRTxRZnDXJztZt4Xc43yc/D3SYI9FJ+CVf1XHT98zBEYAQUHL3hu5DBLi6pr4
+         VXaFr/E7h0uUw3e6jwLvN455cWtsG9f0AuqZRRT3lcpU+MInkJbFxU8Sg3/U5ThitK4R
+         iCsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754953846; x=1755558646;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v2r5LP7p8fx7sMIIvJvK7d+YBWuoiJU3wHXi53/Boo0=;
+        b=TdDgOx8b10qrq5iAcTvhgh62VoKB3b6AOFTo7Wjwh7oF6FdN3bAG1xHlz1svU4EZXi
+         TQdAymmYEHs3tV+d6ux/l36dflxqSSQOQMQ4dNVPJRZ74ZylTaIFEXxlYT4qjRLpqqsP
+         DN7BnBAMwHK9Eozn5cTZm6hEUKG+lwcYHoRGRGTtBFEdQCi3Ru8/Do/KYQMrKVPRVqzl
+         rId2gaYxp+xVwLSsGVwVFvY/fMqugz3FkmdAfoI3SaykYa3oI4ihiC0Lo3EOOn4SrV5P
+         LVrGQ3XGZ3m+GX6AzJk7Z+p3ponOcz3O4fbmhNC8RcR3D/uq1rQt7PDyMuC5/4AWeCni
+         XIhA==
+X-Forwarded-Encrypted: i=1; AJvYcCXv+gl1zNbcvCDphcw9sg6szSDFPSEIBjRP6H3VqCH8FKsURZLO3LJaUGPj4GAnxyY/Jx5kf/8l7SE0@vger.kernel.org, AJvYcCXxmWKacOiqLP3jf8jte8zOQB20Ij5bL4m9vXB0HTGjj51Qcod6DoZcKHYpb1aD0fSr5m9H7H8nLKRLIgE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrKwKT+u4RfRWxrhGq6v5UOe5ygH5SSs5ii45fxP0BoY8Y2cig
+	i8ZNe5SNlSdKeZ4znOB+ChloAKlY/CH11ad+526hXL5iagLn4VqxmR9z
+X-Gm-Gg: ASbGncsmqpHF5uvFsy+AZB0VfbDR68A8tdXz2Wa+um0CmwwfjbKGTPEZdL+o1J2hTmY
+	VK0bDZmBWFeen5LGupTt0dutkSDxlw/J6VeU4x/jutbmOmX4DirauQdDVLHFwDAO+6DPXcS6vZ/
+	fHATwzoHy+opSkaEUki7S8r9lgfxpgM82V6oHEJAUNfWcM0YmBQvMvkDY6/KKM3G0jbDZ56oS6i
+	nm8107afDuNfS557c0GiGCAk8RrtCisMHiJ22I4FVLGISKXA9lHUGQdz3McVLp+PpTbzov7akej
+	QHjakhLSyeMY59qEn5Gm2jaUvkdzx1ijg3keRDX7BQSyfCKTBfShrQOUs7QdFKZHwJ4NocX2J99
+	J+tvsJbxJJJPjEAY/Lv6HIeE=
+X-Google-Smtp-Source: AGHT+IHGq7+wu8pe/YIzW6MTFw2duGEpgbfhIXnVmh4uofRtpy7+R4rKjB7+yphwipnlFSKNdaOsww==
+X-Received: by 2002:a05:6a20:7f9a:b0:23d:f987:b033 with SMTP id adf61e73a8af0-2409a9ed674mr2098895637.40.1754953846275;
+        Mon, 11 Aug 2025 16:10:46 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:7933:7499:67d8:279a])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b46f5a69087sm340210a12.62.2025.08.11.16.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Aug 2025 16:10:45 -0700 (PDT)
+Date: Mon, 11 Aug 2025 16:10:43 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Alexander Kurz <akurz@blala.de>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Lee Jones <lee@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	linux-input@vger.kernel.or, linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] Drivers: mc13783: remove deprecated mc13xxx_irq_ack()
+Message-ID: <qslimcdueyseyki2uon7igq5hwborupastnilmrzrpz2annkfs@qhjxydowdnmw>
+References: <20250811064358.1659-1-akurz@blala.de>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH AUTOSEL 6.16-5.10] rtc: ds1307: handle oscillator stop
- flag (OSF) for ds1341
-To: Sasha Levin <sashal@kernel.org>, patches@lists.linux.dev,
- stable@vger.kernel.org
-Cc: Tyler Hicks <code@tyhicks.com>, Rodolfo Giometti <giometti@enneenne.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
-References: <20250808153054.1250675-1-sashal@kernel.org>
- <20250808153054.1250675-5-sashal@kernel.org>
-Content-Language: en-US
-From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-In-Reply-To: <20250808153054.1250675-5-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250811064358.1659-1-akurz@blala.de>
 
-On 8/8/2025 8:30 AM, Sasha Levin wrote:
-> From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
->
-> [ Upstream commit 523923cfd5d622b8f4ba893fdaf29fa6adeb8c3e ]
-
-Hi Sasha,
-
-Without the first patch of the series, the OSF bit will get cleared in probe, so for it to meaningfully handle an invalid RTC, we'll need to take the first patch too.
-
-The upstream commit is 48458654659c9c2e149c211d86637f1592470da5
-
-https://lore.kernel.org/r/1749665656-30108-2-git-send-email-meaganlloyd@linux.microsoft.com
-
-It removes the clear of the OSF status flag in probe in the shared ds_1337, ds_1339, ds_1341, ds_3231 switch case block.
-
-Thank you,
-
-Meagan
-
->
-> In using CONFIG_RTC_HCTOSYS, rtc_hctosys() will sync the RTC time to the
-> kernel time as long as rtc_read_time() succeeds. In some power loss
-> situations, our supercapacitor-backed DS1342 RTC comes up with either an
-> unpredictable future time or the default 01/01/00 from the datasheet.
-> The oscillator stop flag (OSF) is set in these scenarios due to the
-> power loss and can be used to determine the validity of the RTC data.
->
-> This change expands the oscillator stop flag (OSF) handling that has
-> already been implemented for some chips to the ds1341 chip (DS1341 and
-> DS1342 share a datasheet). This handling manages the validity of the RTC
-> data in .read_time and .set_time based on the OSF.
->
-> Signed-off-by: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-> Reviewed-by: Tyler Hicks <code@tyhicks.com>
-> Acked-by: Rodolfo Giometti <giometti@enneenne.com>
-> Link: https://lore.kernel.org/r/1749665656-30108-3-git-send-email-meaganlloyd@linux.microsoft.com
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Mon, Aug 11, 2025 at 06:43:58AM +0000, Alexander Kurz wrote:
+> mc13xxx_irq_ack() got deprecated and became dead code with commit
+> 10f9edaeaa30 ("mfd: mc13xxx: Use regmap irq framework for interrupts").
+> It should be safe to remove it now.
+> 
+> Signed-off-by: Alexander Kurz <akurz@blala.de>
 > ---
->
-> LLM Generated explanations, may be completely bogus:
->
-> **Backport Status: YES**
->
-> This commit should be backported to stable kernel trees for the
-> following reasons:
->
-> 1. **Bug Fix**: This commit fixes a real bug where the DS1341/DS1342 RTC
->    can report invalid time data after power loss without properly
->    checking the oscillator stop flag (OSF). The commit message clearly
->    describes the problem: "In some power loss situations, our
->    supercapacitor-backed DS1342 RTC comes up with either an
->    unpredictable future time or the default 01/01/00."
->
-> 2. **Data Corruption Prevention**: Without this fix, systems using
->    DS1341/DS1342 RTCs can have incorrect system time after power loss,
->    which could lead to data corruption, incorrect timestamps, or system
->    malfunction. This is particularly critical for systems using
->    CONFIG_RTC_HCTOSYS.
->
-> 3. **Minimal Risk**: The change is very small and contained - it only
->    adds OSF handling for the ds1341 chip type in two switch statements
->    (ds1307_get_time:282-287 and ds1307_set_time:380-383). The pattern
->    exactly follows the existing OSF handling already implemented for
->    ds_1338, ds_1340, and ds_1388 chips.
->
-> 4. **Established Pattern**: The commit follows an established pattern in
->    the driver. Looking at the code, OSF handling is already implemented
->    for:
->    - ds_1338: Uses DS1338_BIT_OSF in DS1307_REG_CONTROL
->    - ds_1340: Uses DS1340_BIT_OSF in DS1340_REG_FLAG
->    - ds_1388: Uses DS1388_BIT_OSF in DS1388_REG_FLAG
->    - And now ds_1341: Uses DS1337_BIT_OSF in DS1337_REG_STATUS
->
-> 5. **No New Features**: This is purely a bug fix - it doesn't add any
->    new functionality, just ensures existing functionality (reading valid
->    time) works correctly after power loss.
->
-> 6. **Previous Similar Fixes**: The git history shows similar OSF fixes
->    have been made before, such as commit f471b05f76e4 ("rtc: ds1307:
->    Clear OSF flag on DS1388 when setting time"), indicating this is a
->    known class of issues that needs fixing.
->
-> 7. **Hardware-Specific Fix**: This only affects systems with
->    DS1341/DS1342 RTCs, so there's no risk to systems using other RTC
->    chips. The change is guarded by the chip type check.
->
-> The commit meets all the criteria for stable backporting: it fixes a
-> real bug that affects users, the fix is small and self-contained, it
-> doesn't introduce new features or architectural changes, and follows
-> established patterns in the codebase.
->
->  drivers/rtc/rtc-ds1307.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-> index 5efbe69bf5ca..7a60e5ca2b8a 100644
-> --- a/drivers/rtc/rtc-ds1307.c
-> +++ b/drivers/rtc/rtc-ds1307.c
-> @@ -279,6 +279,13 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
->  		if (tmp & DS1340_BIT_OSF)
->  			return -EINVAL;
->  		break;
-> +	case ds_1341:
-> +		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
-> +		if (ret)
-> +			return ret;
-> +		if (tmp & DS1337_BIT_OSF)
-> +			return -EINVAL;
-> +		break;
->  	case ds_1388:
->  		ret = regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
->  		if (ret)
-> @@ -377,6 +384,10 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
->  		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
->  				   DS1340_BIT_OSF, 0);
->  		break;
-> +	case ds_1341:
-> +		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
-> +				   DS1337_BIT_OSF, 0);
-> +		break;
->  	case ds_1388:
->  		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
->  				   DS1388_BIT_OSF, 0);
+>  drivers/input/misc/mc13783-pwrbutton.c |  1 -
+>  drivers/input/touchscreen/mc13783_ts.c |  4 ----
+
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
+
+I assume this will go through MFD?
+
+Thanks.
+
+-- 
+Dmitry
 
