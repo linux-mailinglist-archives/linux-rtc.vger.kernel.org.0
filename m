@@ -1,234 +1,170 @@
-Return-Path: <linux-rtc+bounces-4657-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4658-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC22FB1F727
-	for <lists+linux-rtc@lfdr.de>; Sun, 10 Aug 2025 01:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 203F6B1FF7F
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 08:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F09317DE4C
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Aug 2025 23:03:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F65D165FD2
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Aug 2025 06:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C6224A047;
-	Sat,  9 Aug 2025 23:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3ho4kiw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB3F26B2D5;
+	Mon, 11 Aug 2025 06:46:00 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vs81.iboxed.net (vs10.datenmanufaktur-hosting.net [213.160.73.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED77186294;
-	Sat,  9 Aug 2025 23:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B91E29CEB;
+	Mon, 11 Aug 2025 06:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.160.73.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754780583; cv=none; b=FiMXCF8M/+CyASZkDUG+G0XnemQPtAbUQofbLkCVi9wLuQFszSA1IqfLvCKUje/FGdxPFRlVoWGqAsLJfis1O/p3gRYsj2APEtMbug1NxnEngRtAlZ4m2QHNWLqKhvpNJw6hjb9LbXuQify6+nU6AOEPDLhR2zzq2iMzY/S0nMs=
+	t=1754894760; cv=none; b=AoWw31alqXohqoDRqaH4EX+7sbdUzH20CsXxTGPnyI+ZWaVvYjYdZdGdx0GkhmwKBbtVx7mOyYSV3hoUeoj+k52zW4tDq/deD8SaNXhxSh2BpVNtC21eqmmkYjUTgsLfFe4QtDANIkhwoeuFkEMjBU8mLH0lfr7l+zznzap8Sck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754780583; c=relaxed/simple;
-	bh=st/eweHiwV92mUXCvAGpIiPGkvX3rErOBfHnwy2GSps=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u1AOEGdLVJCZ5OQoH4VGADtZqqhhkOwMlhPRAcrpTF38jSL3QUqxqlJWgmyAuFpx5iwxK+5A4NSLSBDtiJPMiKzsVzPTpswpIXBfvmAeHRFGtEwZ213WxtNHLH5WosMwWpLt4seUfGoEtwBuONusEn8HrEkGRNnHS7ljI4746M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3ho4kiw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7401C4CEF7;
-	Sat,  9 Aug 2025 23:03:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754780582;
-	bh=st/eweHiwV92mUXCvAGpIiPGkvX3rErOBfHnwy2GSps=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=J3ho4kiwrH7rHSL79nbnLEr8Fi7+3PMWKaPF++iz6+hi+MdR9KEEzcVlLj8ka0pf8
-	 8ghHe6EwgDyqH/6MV9E7RSlM3Xis2bC0eXh7XcwncUYg4cyhRzZRzt4ng/01hji6ic
-	 z65whu1Kmp7Ovfvwvh5erXF+18ebGI5bDc9aCuD93E8d9YhJshoNIwWGXbxU9QDWKF
-	 T6zvn7zjM3jiH2oit4GZPg9RFmtdfjbbGuqabHV6PdIu87V7pgvTwqzOXruVNSYlSb
-	 mHqfQnZ7Pc/teaw4LYKyETrSoV1BFexfdIKEwp7BhRQebwXFhy3xHesvJQdBdZXBTD
-	 JafFkKw/Bf4iQ==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-32e14ce168eso37200951fa.1;
-        Sat, 09 Aug 2025 16:03:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX5KeVL2w6VzdSiCBiLb0GBmu7Tgkwv2k1MZUMqnN2ixtBX4NbZajlDkF10sqh80e5+iaTEp/TLdxxoVT/Z@vger.kernel.org, AJvYcCXHvgNcIaDr5pKniLlw+Uwekrsizm6Go42VcA7K9vyEVTdl+5p1rbzHh4Fdx+PztHkKsFn+BjZBIA4=@vger.kernel.org, AJvYcCXuvTJk37s7WICGylZS3ReB4be66lT7Hy0Zo2z7uUzRLnNDfTfvaofD9wtuXYWYsEBGMHUaw0M9/suX@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWKrgpsSjHRu9EpsEpyX7F9E6OzE9MoAsM7Ty45zt8sWUcXOSt
-	zpMHZSnKz5aqeDxAk05u3QDHdHYN2lxhNwM6+ea42Pxrj/kslIMgwf2brAs9LeU6vpgux61FsRL
-	+Q6vDOqaorhF72wfUu1TiZKY3p33cJdM=
-X-Google-Smtp-Source: AGHT+IHacj93S4TAyJS2Y33dq5fDEf3fw3H8pVieqGYKOrts0lqIXyoZID+Z9tXd8YeI87NlNCl9WjBC2eK/6u6auvE=
-X-Received: by 2002:a05:651c:3799:b0:32a:7270:5c29 with SMTP id
- 38308e7fff4ca-333a213e262mr13218821fa.2.1754780581250; Sat, 09 Aug 2025
- 16:03:01 -0700 (PDT)
+	s=arc-20240116; t=1754894760; c=relaxed/simple;
+	bh=+fzJxtFZICNlOTaShUCCSdZQ98cKC6NPiRTRpgHgNb0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OLfoDRSNg1hA9jvMCyAu3+INEAEsmFHAYvvhgG/ZCbTltVTKmqJCcuea6pevKnZJ6uZxKoZ2ycCPxFRK3PaVqf/TsNttjACY1c+4Vrnqmif18ZXerdimucdQZg1VSkQF0v1sBzGiFknbM3vUY7wqqrnj91Yf0/shw38sh1UhnyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blala.de; spf=pass smtp.mailfrom=blala.de; arc=none smtp.client-ip=213.160.73.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blala.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blala.de
+Received: from blala.de (localhost [127.0.0.1])
+	by vs81.iboxed.net (8.15.2/8.15.2/Debian-14~deb10u1) with ESMTP id 57B6iF0X001704;
+	Mon, 11 Aug 2025 06:44:15 GMT
+Received: (from akurz@localhost)
+	by blala.de (8.15.2/8.15.2/Submit) id 57B6iFQD001703;
+	Mon, 11 Aug 2025 06:44:15 GMT
+From: Alexander Kurz <akurz@blala.de>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee@kernel.org>
+Cc: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+        linux-input@vger.kernel.or, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alexander Kurz <akurz@blala.de>
+Subject: [PATCH] Drivers: mc13783: remove deprecated mc13xxx_irq_ack()
+Date: Mon, 11 Aug 2025 06:43:58 +0000
+Message-Id: <20250811064358.1659-1-akurz@blala.de>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714060843.4029171-5-ardb+git@google.com> <20250714060843.4029171-6-ardb+git@google.com>
- <20250803010449df1f5cfb@mail.local>
-In-Reply-To: <20250803010449df1f5cfb@mail.local>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sun, 10 Aug 2025 09:02:49 +1000
-X-Gmail-Original-Message-ID: <CAMj1kXGQyLXwk9Bq24xhPPsB1nO9RcSkvh=0p8aNP=Q=Az8V7w@mail.gmail.com>
-X-Gm-Features: Ac12FXyxSfM9EC_oe23LQ4fW6u1l84sRZB4iGnVNSBFl1E9opWCoKNhC-oXMcUQ
-Message-ID: <CAMj1kXGQyLXwk9Bq24xhPPsB1nO9RcSkvh=0p8aNP=Q=Az8V7w@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/3] efi-rtc: Remove wakeup functionality
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, 
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Juergen Gross <jgross@suse.com>, Stefano Stabellini <sstabellini@kernel.org>, 
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Sunil V L <sunilvl@ventanamicro.com>, 
-	Bibo Mao <maobibo@loongson.cn>, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, x86@kernel.org, 
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sun, 3 Aug 2025 at 11:05, Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Hello,
->
-> Apart from the topic that should be "rtc: efi:...", I'm ready to apply
-> this patch.
->
+mc13xxx_irq_ack() got deprecated and became dead code with commit
+10f9edaeaa30 ("mfd: mc13xxx: Use regmap irq framework for interrupts").
+It should be safe to remove it now.
 
-Thanks, please go ahead.
+Signed-off-by: Alexander Kurz <akurz@blala.de>
+---
+ drivers/input/misc/mc13783-pwrbutton.c |  1 -
+ drivers/input/touchscreen/mc13783_ts.c |  4 ----
+ drivers/rtc/rtc-mc13xxx.c              | 13 -------------
+ include/linux/mfd/mc13xxx.h            |  6 ------
+ 4 files changed, 24 deletions(-)
 
-> On 14/07/2025 08:08:45+0200, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > The EFI rtc driver is used by non-x86 architectures only, and exposes
-> > the get/set wakeup time functionality provided by the underlying
-> > platform. This is usually broken on most platforms, and not widely used
-> > to begin with [if at all], so let's just remove it.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  drivers/rtc/rtc-efi.c | 76 +-------------------
-> >  1 file changed, 2 insertions(+), 74 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-efi.c b/drivers/rtc/rtc-efi.c
-> > index fa8bf82df948..b4f44999ef0f 100644
-> > --- a/drivers/rtc/rtc-efi.c
-> > +++ b/drivers/rtc/rtc-efi.c
-> > @@ -112,48 +112,6 @@ convert_from_efi_time(efi_time_t *eft, struct rtc_time *wtime)
-> >       return true;
-> >  }
-> >
-> > -static int efi_read_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
-> > -{
-> > -     efi_time_t eft;
-> > -     efi_status_t status;
-> > -
-> > -     /*
-> > -      * As of EFI v1.10, this call always returns an unsupported status
-> > -      */
-> > -     status = efi.get_wakeup_time((efi_bool_t *)&wkalrm->enabled,
-> > -                                  (efi_bool_t *)&wkalrm->pending, &eft);
-> > -
-> > -     if (status != EFI_SUCCESS)
-> > -             return -EINVAL;
-> > -
-> > -     if (!convert_from_efi_time(&eft, &wkalrm->time))
-> > -             return -EIO;
-> > -
-> > -     return rtc_valid_tm(&wkalrm->time);
-> > -}
-> > -
-> > -static int efi_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
-> > -{
-> > -     efi_time_t eft;
-> > -     efi_status_t status;
-> > -
-> > -     convert_to_efi_time(&wkalrm->time, &eft);
-> > -
-> > -     /*
-> > -      * XXX Fixme:
-> > -      * As of EFI 0.92 with the firmware I have on my
-> > -      * machine this call does not seem to work quite
-> > -      * right
-> > -      *
-> > -      * As of v1.10, this call always returns an unsupported status
-> > -      */
-> > -     status = efi.set_wakeup_time((efi_bool_t)wkalrm->enabled, &eft);
-> > -
-> > -     dev_warn(dev, "write status is %d\n", (int)status);
-> > -
-> > -     return status == EFI_SUCCESS ? 0 : -EINVAL;
-> > -}
-> > -
-> >  static int efi_read_time(struct device *dev, struct rtc_time *tm)
-> >  {
-> >       efi_status_t status;
-> > @@ -188,17 +146,13 @@ static int efi_set_time(struct device *dev, struct rtc_time *tm)
-> >
-> >  static int efi_procfs(struct device *dev, struct seq_file *seq)
-> >  {
-> > -     efi_time_t        eft, alm;
-> > +     efi_time_t        eft;
-> >       efi_time_cap_t    cap;
-> > -     efi_bool_t        enabled, pending;
-> > -     struct rtc_device *rtc = dev_get_drvdata(dev);
-> >
-> >       memset(&eft, 0, sizeof(eft));
-> > -     memset(&alm, 0, sizeof(alm));
-> >       memset(&cap, 0, sizeof(cap));
-> >
-> >       efi.get_time(&eft, &cap);
-> > -     efi.get_wakeup_time(&enabled, &pending, &alm);
-> >
-> >       seq_printf(seq,
-> >                  "Time\t\t: %u:%u:%u.%09u\n"
-> > @@ -214,26 +168,6 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
-> >               /* XXX fixme: convert to string? */
-> >               seq_printf(seq, "Timezone\t: %u\n", eft.timezone);
-> >
-> > -     if (test_bit(RTC_FEATURE_ALARM, rtc->features)) {
-> > -             seq_printf(seq,
-> > -                        "Alarm Time\t: %u:%u:%u.%09u\n"
-> > -                        "Alarm Date\t: %u-%u-%u\n"
-> > -                        "Alarm Daylight\t: %u\n"
-> > -                        "Enabled\t\t: %s\n"
-> > -                        "Pending\t\t: %s\n",
-> > -                        alm.hour, alm.minute, alm.second, alm.nanosecond,
-> > -                        alm.year, alm.month, alm.day,
-> > -                        alm.daylight,
-> > -                        enabled == 1 ? "yes" : "no",
-> > -                        pending == 1 ? "yes" : "no");
-> > -
-> > -             if (alm.timezone == EFI_UNSPECIFIED_TIMEZONE)
-> > -                     seq_puts(seq, "Timezone\t: unspecified\n");
-> > -             else
-> > -                     /* XXX fixme: convert to string? */
-> > -                     seq_printf(seq, "Timezone\t: %u\n", alm.timezone);
-> > -     }
-> > -
-> >       /*
-> >        * now prints the capabilities
-> >        */
-> > @@ -249,8 +183,6 @@ static int efi_procfs(struct device *dev, struct seq_file *seq)
-> >  static const struct rtc_class_ops efi_rtc_ops = {
-> >       .read_time      = efi_read_time,
-> >       .set_time       = efi_set_time,
-> > -     .read_alarm     = efi_read_alarm,
-> > -     .set_alarm      = efi_set_alarm,
-> >       .proc           = efi_procfs,
-> >  };
-> >
-> > @@ -271,11 +203,7 @@ static int __init efi_rtc_probe(struct platform_device *dev)
-> >       platform_set_drvdata(dev, rtc);
-> >
-> >       rtc->ops = &efi_rtc_ops;
-> > -     clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
-> > -     if (efi_rt_services_supported(EFI_RT_SUPPORTED_WAKEUP_SERVICES))
-> > -             set_bit(RTC_FEATURE_ALARM_WAKEUP_ONLY, rtc->features);
-> > -     else
-> > -             clear_bit(RTC_FEATURE_ALARM, rtc->features);
-> > +     clear_bit(RTC_FEATURE_ALARM, rtc->features);
-> >
-> >       device_init_wakeup(&dev->dev, true);
-> >
-> > --
-> > 2.50.0.727.gbf7dc18ff4-goog
-> >
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+diff --git a/drivers/input/misc/mc13783-pwrbutton.c b/drivers/input/misc/mc13783-pwrbutton.c
+index 1c7faa9b7afe..b83d762ae2e9 100644
+--- a/drivers/input/misc/mc13783-pwrbutton.c
++++ b/drivers/input/misc/mc13783-pwrbutton.c
+@@ -57,7 +57,6 @@ static irqreturn_t button_irq(int irq, void *_priv)
+ 	struct mc13783_pwrb *priv = _priv;
+ 	int val;
+ 
+-	mc13xxx_irq_ack(priv->mc13783, irq);
+ 	mc13xxx_reg_read(priv->mc13783, MC13783_REG_INTERRUPT_SENSE_1, &val);
+ 
+ 	switch (irq) {
+diff --git a/drivers/input/touchscreen/mc13783_ts.c b/drivers/input/touchscreen/mc13783_ts.c
+index 33635da85079..47b8da00027f 100644
+--- a/drivers/input/touchscreen/mc13783_ts.c
++++ b/drivers/input/touchscreen/mc13783_ts.c
+@@ -42,8 +42,6 @@ static irqreturn_t mc13783_ts_handler(int irq, void *data)
+ {
+ 	struct mc13783_ts_priv *priv = data;
+ 
+-	mc13xxx_irq_ack(priv->mc13xxx, irq);
+-
+ 	/*
+ 	 * Kick off reading coordinates. Note that if work happens already
+ 	 * be queued for future execution (it rearms itself) it will not
+@@ -137,8 +135,6 @@ static int mc13783_ts_open(struct input_dev *dev)
+ 
+ 	mc13xxx_lock(priv->mc13xxx);
+ 
+-	mc13xxx_irq_ack(priv->mc13xxx, MC13XXX_IRQ_TS);
+-
+ 	ret = mc13xxx_irq_request(priv->mc13xxx, MC13XXX_IRQ_TS,
+ 		mc13783_ts_handler, MC13783_TS_NAME, priv);
+ 	if (ret)
+diff --git a/drivers/rtc/rtc-mc13xxx.c b/drivers/rtc/rtc-mc13xxx.c
+index e7b87130e624..2494d13fd767 100644
+--- a/drivers/rtc/rtc-mc13xxx.c
++++ b/drivers/rtc/rtc-mc13xxx.c
+@@ -137,10 +137,6 @@ static int mc13xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	}
+ 
+ 	if (!priv->valid) {
+-		ret = mc13xxx_irq_ack(priv->mc13xxx, MC13XXX_IRQ_RTCRST);
+-		if (unlikely(ret))
+-			goto out;
+-
+ 		ret = mc13xxx_irq_unmask(priv->mc13xxx, MC13XXX_IRQ_RTCRST);
+ 	}
+ 
+@@ -208,10 +204,6 @@ static int mc13xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	if (unlikely(ret))
+ 		goto out;
+ 
+-	ret = mc13xxx_irq_ack(priv->mc13xxx, MC13XXX_IRQ_TODA);
+-	if (unlikely(ret))
+-		goto out;
+-
+ 	s1970 = rtc_tm_to_time64(&alarm->time);
+ 
+ 	dev_dbg(dev, "%s: %s %lld\n", __func__, alarm->enabled ? "on" : "off",
+@@ -239,12 +231,9 @@ static int mc13xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ static irqreturn_t mc13xxx_rtc_alarm_handler(int irq, void *dev)
+ {
+ 	struct mc13xxx_rtc *priv = dev;
+-	struct mc13xxx *mc13xxx = priv->mc13xxx;
+ 
+ 	rtc_update_irq(priv->rtc, 1, RTC_IRQF | RTC_AF);
+ 
+-	mc13xxx_irq_ack(mc13xxx, irq);
+-
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -293,8 +282,6 @@ static int __init mc13xxx_rtc_probe(struct platform_device *pdev)
+ 
+ 	mc13xxx_lock(mc13xxx);
+ 
+-	mc13xxx_irq_ack(mc13xxx, MC13XXX_IRQ_RTCRST);
+-
+ 	ret = mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_RTCRST,
+ 			mc13xxx_rtc_reset_handler, DRIVER_NAME, priv);
+ 	if (ret)
+diff --git a/include/linux/mfd/mc13xxx.h b/include/linux/mfd/mc13xxx.h
+index f372926d5894..dd46fe424a80 100644
+--- a/include/linux/mfd/mc13xxx.h
++++ b/include/linux/mfd/mc13xxx.h
+@@ -31,12 +31,6 @@ int mc13xxx_adc_do_conversion(struct mc13xxx *mc13xxx,
+ 		unsigned int mode, unsigned int channel,
+ 		u8 ato, bool atox, unsigned int *sample);
+ 
+-/* Deprecated calls */
+-static inline int mc13xxx_irq_ack(struct mc13xxx *mc13xxx, int irq)
+-{
+-	return 0;
+-}
+-
+ static inline int mc13xxx_irq_request_nounmask(struct mc13xxx *mc13xxx, int irq,
+ 					       irq_handler_t handler,
+ 					       const char *name, void *dev)
+-- 
+2.39.5
+
 
