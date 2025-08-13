@@ -1,238 +1,148 @@
-Return-Path: <linux-rtc+bounces-4683-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4684-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72FC1B23E68
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Aug 2025 04:47:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 007B2B24135
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Aug 2025 08:15:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28FC01B641BC
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Aug 2025 02:47:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7A1B3A8744
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Aug 2025 06:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D25A1F2382;
-	Wed, 13 Aug 2025 02:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E09C2C159C;
+	Wed, 13 Aug 2025 06:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="MyKWcV3Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O33T+d1J"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5F0215767
-	for <linux-rtc@vger.kernel.org>; Wed, 13 Aug 2025 02:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05F72C1585;
+	Wed, 13 Aug 2025 06:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755053129; cv=none; b=Au1Au9e5nuJOOKOuIHgnBQWNNEo5r45Gomkh/j77HbcnYOtQdkyO8SplWXo2zcxjLMiOZcKV3ulCFFGtODQIyFYqfXOR1+F53mbDZuqMNyWjc+5QVnigFxO+dv4nTgui9I5zcotlbvMAFsWd3TibZJV/gaBjvdOJFEKMv7lG16E=
+	t=1755065696; cv=none; b=WGfzHyq1tNKj+BftAjLqp6WIDmrAgf+EFgGxUNsD68CE9HnNaoim5tlJEZUEzDydPlk95RKVUL+0+8fztMdtHmyik+9uRu9sAQq8bEgAlkrl365Aj6/vhz+qSHiMpQxhLj8M0x+yeOEHjqsWxBgQuNWLdpaeVgg3HGkCZKTYuQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755053129; c=relaxed/simple;
-	bh=D00Agu9o5lMwHglRF8JEmN9Mz2SwGM8gIpQ2brQAJHQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZYy6ts6pKMku0Uusvsb9Dwws+K+UyiuVbW3r+2eUI3pWgvEHYx/yZGUKbhjN/HRFP/7mkCxpCLxEKvbbHIGNX8Tn8EEDJrunBeaMuk7aaYoJUdjp/U2L+xFIjD64J4KgpQ7JYT6RTAgZuGTj2iM3f1RYgJoAhSoVAXRpIMG45GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=MyKWcV3Z; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3e3f152700fso31014975ab.0
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Aug 2025 19:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1755053127; x=1755657927; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RmHcfUIrXFFWAxyqlPf+YQqXo4C+Q0QbA66Hg5xFlzs=;
-        b=MyKWcV3Z0g4HxbJYAQ796VKO0GuPmAXSO0Cjt4wEzjCOhkePS31NTCLtaVsvMqfrgz
-         6pCXJMBTjtN1+TkyFgt8yDEK5jLOQ8fcw7lMoVaFYWAAAKsO1JloKJB5nNcza2JR97HD
-         sTF0WKz0Nu6rltjPPhVlWhOKqF4pcqgzyrN8J8cx9ZMQiq3BcUi6KDdM5EtbCx/clucM
-         eaSjyJdUHygYpvrIfcnVhE4PkpaZP51X90kVxkGm5qHeG7vE+BqqsCgmaVIqizq7N8Tw
-         Faj8gSIu/Ju6rmQLxqA+g+ENh5UQwjcs53exVYiixG6m0YA1k0/aaw7+Y5lBzZK1nOXZ
-         0OmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755053127; x=1755657927;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RmHcfUIrXFFWAxyqlPf+YQqXo4C+Q0QbA66Hg5xFlzs=;
-        b=Fm2164kQ1BUInvpvAudsdIa5Hth+b5tYnRNayHTX4Sk7IOd4DohjpUS4sdzEiAKKs9
-         kOqhGXEf8T2y85Yks2a9KTAk7Jy915BT+w28lIsD5u0xFp+cR9ZqGXb62ULFO2oe06dM
-         aJTEOxWjTDl/IUsCYK295qHrcWx4Sux1O1S09uF/ZCNBol4X6Zx2+gwBWnhwSEcTY4NV
-         15kUyiA+gBSMK9qgyeIUGQlXeDEg+03VMmZkG+4HCXLuD/PHvxYfby/dceNMODxqlvVl
-         E4J8i/1WI9K5B7GtqlPftCUw2V//+sBLMZPclXgoDUobGBrEPmneXu5no0x2mzlUmNeT
-         HqfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXgLrAivci9XpeKrmlZLw6DY2mVEvqQLuGqSRs5rTDd4GPae7egm58gws3RvusI/GhydMQV4Ebvj8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyt3RV+FQxflwqZYNNlnMqWvd6PcNshy6BnJe8sXVEuQDqRSLJf
-	t8JpWy02V26xxph94r7Iw/X4DJ6UShiJlihWvz0clfivvLmXa4fwhrSIdjs61IYUfKo=
-X-Gm-Gg: ASbGnctJku8ibvKA9+0Zb4X/6WYScQjFJe/Dxd9n5RJmuTNY6t82yMrtfwx6IB1TpWH
-	VGJsotywzhSZLHUq+CxLmv8H45E2j0JtXzYNTvXTCSnrSn0HloTE0ykmvWXOl/l18n4gvUHMLm1
-	/e9tGg4FULCivyj6N+dcRyn15vKg/plq4AabJwCJpWS33YvV9lR/CqD04ta48GsMt09BlTmue8C
-	gPXl9vXOW3U4c4zR/3ic/iE+Xv9AsHtlv4bNN0EA67DnwVE+vZGWMPZL7ORctf8vXu1oOGqLyNJ
-	MUvB4jNDG2hTJkA0RtKcg/BlriH4A1qaM43bipFGh/BwNeMHb+LLZiPmyoY3afKNyH+G4r6bQcw
-	nEKNxHLlvusWNYc3tSqyYnLBiCJlVubD36yvEAJSix2sagm7otfSy2Nx8cKfB7S+Kdg==
-X-Google-Smtp-Source: AGHT+IFoJ7UdDYgWZatV5u4GKDu3Y3U3FYyZUg9TQH+UAQsNUabAIk5nOGAMecrX5f7XD0yGFSpmTg==
-X-Received: by 2002:a05:6e02:170b:b0:3e5:504b:420c with SMTP id e9e14a558f8ab-3e5674a2d6amr25649635ab.18.1755053126723;
-        Tue, 12 Aug 2025 19:45:26 -0700 (PDT)
-Received: from zippy.localdomain (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50ae9bcfbf6sm3430829173.54.2025.08.12.19.45.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Aug 2025 19:45:26 -0700 (PDT)
-From: Alex Elder <elder@riscstar.com>
-To: lee@kernel.org,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	alexandre.belloni@bootlin.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: mat.jonczyk@o2.pl,
-	dlan@gentoo.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	linux.amoon@gmail.com,
-	troymitchell988@gmail.com,
-	guodong@riscstar.com,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v12 7/7] riscv: dts: spacemit: define regulator constraints
-Date: Tue, 12 Aug 2025 21:45:08 -0500
-Message-ID: <20250813024509.2325988-8-elder@riscstar.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250813024509.2325988-1-elder@riscstar.com>
-References: <20250813024509.2325988-1-elder@riscstar.com>
+	s=arc-20240116; t=1755065696; c=relaxed/simple;
+	bh=zzBXjnqtqb37/MzYYMO6Uyf3zcc5YvizBUv3VzMi2Us=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C9ZtgSAHKtLt0gqoAFEzdmanmhOoVjNaScu1YipK8RzJn0Dq04fL5z/BolT/+00Qdj2EAUxqbVaMcphsLjfXE6Zu9m6GVvJSA06wSrZ+iheS+Dwd5F0opSHIo1ClUAxEBha+RhAs0eFoLfZE7+B0511aXatrRHgg60B57BNjBQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O33T+d1J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91660C4CEED;
+	Wed, 13 Aug 2025 06:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755065696;
+	bh=zzBXjnqtqb37/MzYYMO6Uyf3zcc5YvizBUv3VzMi2Us=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=O33T+d1JsC78QxBBvqf9ksBCOSsxHSE2PurdBROZFAsOR5zXHxoDnYCgsACUitmUN
+	 6eeMPIMcHGZIRCOSyazKNuA+ZkfHPzPgfhtJO5UNSEtX2+LNL5uEmahTf8SNJBrT4s
+	 AR6fY8oUVNpa6cIeMZZHSs+H1Qe29xyPgUmLzA5pTLilCQ77lgXuxpjuV6WgDNqdr/
+	 alwfOZuzkGTCq9CAUXwzZbgTkmnUOUPylHBr6A+CDR4O2D4VM6Sc1mrpmcDkOQTnxx
+	 M1RY5GYsYHI7GM+b8QXuDq+TfEs6yFpdZV4jAT0Eki0Z//d1ztXPtKdBLaJ4qmlsj7
+	 xTi+86Abt+U1g==
+Message-ID: <074fcd4c-0da8-42c4-a567-64fa7e173894@kernel.org>
+Date: Wed, 13 Aug 2025 08:14:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: rtc: Add Apple SMC RTC
+To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org
+References: <20250812-wip-smc-rtc-v1-0-66a8e96dad60@kernel.org>
+ <20250812-wip-smc-rtc-v1-1-66a8e96dad60@kernel.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250812-wip-smc-rtc-v1-1-66a8e96dad60@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Define basic constraints for the regulators in the SpacemiT P1 PMIC,
-as implemented in the Banana Pi BPI-F3.
+On 12/08/2025 20:25, Sven Peter wrote:
+> +maintainers:
+> +  - Sven Peter <sven@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: apple,smc-rtc
+> +
 
-Signed-off-by: Alex Elder <elder@riscstar.com>
----
- .../boot/dts/spacemit/k1-bananapi-f3.dts      | 104 ++++++++++++++++++
- 1 file changed, 104 insertions(+)
+No resources except nvmem? This should be folded into the parent. Don't
+create device node to instantiate drivers.
 
-diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-index a11a60b9f369b..a9a2596a94e89 100644
---- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-@@ -68,6 +68,110 @@ pmic@41 {
- 		compatible = "spacemit,p1";
- 		reg = <0x41>;
- 		interrupts = <64>;
-+		vin-supply = <&reg_vcc_4v>;
-+
-+		regulators {
-+			buck1 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck2 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck3 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck4 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck5 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			buck6 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3450000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-always-on;
-+			};
-+
-+			aldo1 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-boot-on;
-+			};
-+
-+			aldo2 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			aldo3 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			aldo4 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo1 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-boot-on;
-+			};
-+
-+			dldo2 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo3 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo4 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-always-on;
-+			};
-+
-+			dldo5 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+
-+			dldo6 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-always-on;
-+			};
-+
-+			dldo7 {
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+			};
-+		};
- 	};
- };
- 
--- 
-2.48.1
+> +  nvmem-cells:
+> +    items:
+> +      - description: 48bit RTC offset, specified in 32768 (2^15) Hz clock ticks
+> +
+> +  nvmem-cell-names:
+> +    items:
+> +      - const: rtc_offset
+> +
+> +required:
+> +  - compatible
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
 
+Missing example. If this is part of other device (like MFD), then the
+one there should be extended here.
+
+> 
+
+
+Best regards,
+Krzysztof
 
