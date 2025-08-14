@@ -1,124 +1,92 @@
-Return-Path: <linux-rtc+bounces-4697-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4700-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D18B26DD0
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Aug 2025 19:37:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0132B270BB
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Aug 2025 23:20:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F2CE5879B4
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Aug 2025 17:37:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BEF6AA5792
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Aug 2025 21:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C8AF30BF5E;
-	Thu, 14 Aug 2025 17:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E51273810;
+	Thu, 14 Aug 2025 21:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jxM4JA7F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+rQbFKV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400A9212561;
-	Thu, 14 Aug 2025 17:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558FC2550D8;
+	Thu, 14 Aug 2025 21:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755193016; cv=none; b=VkB7XuOThv9PGoJDwzwtA0VQKEOBgq10JAJcw2e/pgAEKUUOn+xdY3D0IRdSsU74app/aaMIANvoCqj2H0l9Wp03AVpkdplm4GQdDmSC8q/YYzsQCEiiot1q1zdtLs2X4o7gMQmf/9+xyNfUftdYeX3e/BdNSkXANyw2e720Qok=
+	t=1755206370; cv=none; b=VHGq1lluj5waUAcI2Sf4K4bi5UNNpnsracZBuoGhRB+kKCqIAXvK9rNR3CrqM0fD6X17fbhr9vSo4WObcERbH6x8J7KC/mHwxx5Qm7PoihQ4xX6mmhw4jUTOqwt8rl8R6+ZTDRMnhANAepePD5eB9oNSf4kQIinNZPERs1TlpQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755193016; c=relaxed/simple;
-	bh=jS1gOZa6ApqbMJWfFq7gcaTf5sA1unmgxlahA120ZTE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sJ25Q4YBF4pdHm3L5AlUgzpVaI1v7Fy7LcKk87HiNmOrDQSV7XuyXrrgbYnkmMKtJxbveFiccA1E/Bfr0MqxQKVG0/3TtIMpcTfUgeAMcFsaiHAgl2D1vD4VomngEy8mM5oPh/FradZGhTYvA/tkd4iFR17ZcndeKeuOS9U+SdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=jxM4JA7F; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57EHao1p2354218;
-	Thu, 14 Aug 2025 12:36:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1755193010;
-	bh=tu4W1iTqZjh9OuBPLiuUZicGOkCTX1JM20XSWzfs8i8=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=jxM4JA7Fz0kJ8s5hpbNxvAyM2CBoj8F1ffOnwigJqNx6r/3UjXh7I8n39vM2RpSzt
-	 T+NT857ywW03r6cNTLb8rqcgdZ6/bWw5jZPIqilANvfAd0GdGQ4wnGFIX943zcjrD6
-	 +VMm0D1T+lrmgCRObsPJYKRPxwPIpkaoRXw+v7IE=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57EHao3E1310465
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Thu, 14 Aug 2025 12:36:50 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 14
- Aug 2025 12:36:49 -0500
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Thu, 14 Aug 2025 12:36:49 -0500
-Received: from lelvem-mr05.itg.ti.com ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57EHamWf075711;
-	Thu, 14 Aug 2025 12:36:49 -0500
-From: Andrew Davis <afd@ti.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>
-Subject: [PATCH 6/6] rtc: rx8025: Remove use of i2c_match_id()
-Date: Thu, 14 Aug 2025 12:36:47 -0500
-Message-ID: <20250814173647.712768-6-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20250814173647.712768-1-afd@ti.com>
-References: <20250814173647.712768-1-afd@ti.com>
+	s=arc-20240116; t=1755206370; c=relaxed/simple;
+	bh=Rp5HHClNCs4aOkUL7sssHUYQCKwZAsLIt4TkTxZMYCE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KsH5y2wfaz7w2jW90hB+Lv4HAEvKcG8TQEKtoNK/+8IRjN5lUikpECf+VVhFpww14GiC8sLl5R2Z51mF2rOFcdXHIenmoS0udRjsKGb0bYY2xter0wfjxgDPpxlik63hY3totGdo7QJdwFmyGvyFu0zj6R9m/9u3QTIOzefHZdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+rQbFKV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942BEC4CEED;
+	Thu, 14 Aug 2025 21:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755206369;
+	bh=Rp5HHClNCs4aOkUL7sssHUYQCKwZAsLIt4TkTxZMYCE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V+rQbFKVXCy3Sn8DBpesxLjl6NFd1ScybynS/VPY7zsautaMPzoRADvFhi9FNFQJY
+	 TajrqgMT0GWizoOGGVulu1WBdho5MadPbUiaGFxUgn1A07BooZCYtZpoB6jo4IioYm
+	 zaPWxltuzg9r9dsujVY0P7Z3V5UQGO6h4PAd0drh9OGiZh+Zu9wxlcJQe/LhF0wBeG
+	 58pgSRfIKRs4U48cEwkfqqNLdVNz9oy2gTjrINuyiiluHIJiTjBcwIF0T3+LcF0pH+
+	 eEDx9sZg1+uchZpXOqP0yxPOWPmxdsLXx3X58wQq/V62JB4eAAhGgUA8tpsDe8lwif
+	 12xBuCBuPxd+Q==
+Date: Thu, 14 Aug 2025 16:19:28 -0500
+From: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: rtc: Add Apple SMC RTC
+Message-ID: <20250814211928.GA3922106-robh@kernel.org>
+References: <20250812-wip-smc-rtc-v1-0-66a8e96dad60@kernel.org>
+ <20250812-wip-smc-rtc-v1-1-66a8e96dad60@kernel.org>
+ <074fcd4c-0da8-42c4-a567-64fa7e173894@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <074fcd4c-0da8-42c4-a567-64fa7e173894@kernel.org>
 
-The function i2c_match_id() is used to fetch the matching ID from
-the i2c_device_id table. This is often used to then retrieve the
-matching driver_data. This can be done in one step with the helper
-i2c_get_match_data().
+On Wed, Aug 13, 2025 at 08:14:51AM +0200, Krzysztof Kozlowski wrote:
+> On 12/08/2025 20:25, Sven Peter wrote:
+> > +maintainers:
+> > +  - Sven Peter <sven@kernel.org>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: apple,smc-rtc
+> > +
+> 
+> No resources except nvmem? This should be folded into the parent. Don't
+> create device node to instantiate drivers.
 
-This helper has a couple other benefits:
- * It doesn't need the i2c_device_id passed in so we do not need
-   to have that forward declared, allowing us to remove those or
-   move the i2c_device_id table down to its more natural spot
-   with the other module info.
- * It also checks for device match data, which allows for OF and
-   ACPI based probing. That means we do not have to manually check
-   those first and can remove those checks.
+Well, the reboot node has nvmem entries too, so probably better to keep 
+this as child node.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/rtc/rtc-rx8025.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Is there more functionality planned/needed here (for the mfd)? If so, 
+please send it all at once. One child node at a time makes DT 
+maintainers grumpy.
 
-diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
-index aabe62c283a15..397c647a95375 100644
---- a/drivers/rtc/rtc-rx8025.c
-+++ b/drivers/rtc/rtc-rx8025.c
-@@ -522,7 +522,6 @@ static const struct attribute_group rx8025_attr_group = {
- 
- static int rx8025_probe(struct i2c_client *client)
- {
--	const struct i2c_device_id *id = i2c_match_id(rx8025_id, client);
- 	struct i2c_adapter *adapter = client->adapter;
- 	struct rx8025_data *rx8025;
- 	int err = 0;
-@@ -540,8 +539,7 @@ static int rx8025_probe(struct i2c_client *client)
- 
- 	i2c_set_clientdata(client, rx8025);
- 
--	if (id)
--		rx8025->model = id->driver_data;
-+	rx8025->model = (uintptr_t)i2c_get_match_data(client);
- 
- 	err = rx8025_init_client(client);
- 	if (err)
--- 
-2.39.2
-
+Rob
 
