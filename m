@@ -1,46 +1,46 @@
-Return-Path: <linux-rtc+bounces-4689-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4690-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB500B25566
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Aug 2025 23:29:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94DC9B263F1
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Aug 2025 13:15:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21C3A886999
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Aug 2025 21:28:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 893955C8797
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Aug 2025 11:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83252FFDD4;
-	Wed, 13 Aug 2025 21:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 445A02F999E;
+	Thu, 14 Aug 2025 11:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tW0weATX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNpjrfeQ"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32656188715;
-	Wed, 13 Aug 2025 21:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D472F39B2;
+	Thu, 14 Aug 2025 11:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755120528; cv=none; b=MUrWzpq/VQ83gThSSOaSPq2EsyiUZ3WXKJdR2OZJ4sXuDRbmpuY/f5tL9UjH9mi0Zyf+EHmMcTHfPDdcZOf5nnYU21AsxBOhsopFiKoFgef0O7oZz8XWgNer8ly8we5ZYTQGTd1jE1AtmxP9stT2YyMLP7zVA79C2kaksmtbMK8=
+	t=1755170054; cv=none; b=Ut15ndK9suyWTvlPi7DRjKmO94cmLLVDWMaRypWKxuWA8pHu+VadjJ6yv6l6yEZp82zCdcyPcg7J2QmL6NLM/Mn/GPL9gb4POPCN2yXj2gwqSWNVcr1EyFTdvAOID7POMYFRvLQ3eEjz5vah/gFkgjO6Bm6y49ViemAkEAi2Xws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755120528; c=relaxed/simple;
-	bh=w6o+Mcmx0kfk0qJVojOnLq3WRRaroXEK6NqPwh8WeEA=;
+	s=arc-20240116; t=1755170054; c=relaxed/simple;
+	bh=tEQmYgzbbnDyqDEJWRtGvNd+F5EzBR/vQBdSyaJQhYo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=XYhyREiK/tvyMHw8zKkd/GmTE6N29YbHwQnyGP8p5dah4Hw96Qu7yS9KmDOclv0wuOuxMwH47DJeoN89gKFIzCxyoF425HNJu70plRPCmmi0Ab7Yvhi4EcaIU1O+x8p+yTZiiFcFYkvotXma12djaFwiencBflh0ghikQMgT5YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tW0weATX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038F0C4CEEB;
-	Wed, 13 Aug 2025 21:28:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=f8zoWRljDaUtkBEG9jh9Akue/JgQHMQF2UYUfm6gU4hT/joe+akAkfpcd0ZHLLYz2KzJli0+FGfjLaIpZN4Vt1/8xS3graQCyQD/V4f92xGOE0q/i4rZPBfKTyrijFZMf6hOgat7utoV3U51SBti+RH3jtwtejtHqLftwZnUyC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNpjrfeQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF02C4CEED;
+	Thu, 14 Aug 2025 11:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755120527;
-	bh=w6o+Mcmx0kfk0qJVojOnLq3WRRaroXEK6NqPwh8WeEA=;
+	s=k20201202; t=1755170053;
+	bh=tEQmYgzbbnDyqDEJWRtGvNd+F5EzBR/vQBdSyaJQhYo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=tW0weATX4jZ11jXl3He1Ule5FSJuMatBGd51oT3bMN01eb3cT3/18BB0KpS64oSbV
-	 6A4QDHJDbE2i5JqtnfsyVBALsh6Bm5ABrlcwIeEaVVJKF8Ys4lmXD08V4Cf547I5mm
-	 6sCZgBGCfMRs6QPVrGxU4nTnD7f31+rWw2qkW80zdobtK+0W0QNMcTpZiJJZuxp3e3
-	 f72jB75x9bqVrnObcwmG+vOT476m4B3xoHJM2Tk0dvct2jHtt8v2WNoP/JeukhjYFa
-	 P4b7UnXzBQig+oKbLe5NjU5NaUCh5y3uOUysgIl6JhmCWTjHv+RyKuGvEMG/hhDxtg
-	 oUrRFt19OPnjQ==
+	b=nNpjrfeQtIacQG0WEX7mhSYTd7hQlnB7xgoGgJ3v0sCDCZTw/gWywOLfqOYZY4LEw
+	 5E1vCRzlD1L7yPW24oE8hMcbLDvBgKF7UglcpNWQtk+d21igAN/jkLiw4vfw95mmaO
+	 Wy7Aqpr6pD43wwMPVYuuHLtW+Bl/6xetkfjwBZUQFNWFgaJ0eeIdJk6JAFWM+nmE53
+	 +kHohC9FP8zxW9RrnA7dkwqqcgSuN4MKh4R6jlzu+aBiOCgoS1PQtvycwFenFDAKSf
+	 8NGwtU+raJOCaLGmFHJD4RvJXWWS3gsAOxCpMzRtcOJrdMPkcN8DQ2NiQbSAuAjRLj
+	 ccmAEOd0wNzVg==
 From: Mark Brown <broonie@kernel.org>
 To: linux-kernel@vger.kernel.org, 
  Wolfram Sang <wsa+renesas@sang-engineering.com>
@@ -118,8 +118,8 @@ In-Reply-To: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
 References: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
 Subject: Re: (subset) [PATCH 00/21] treewide: remove unneeded 'fast_io'
  parameter in regmap_config
-Message-Id: <175512050873.352044.97744864083041762.b4-ty@kernel.org>
-Date: Wed, 13 Aug 2025 22:28:28 +0100
+Message-Id: <175517003454.17441.365944262533574232.b4-ty@kernel.org>
+Date: Thu, 14 Aug 2025 12:13:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -143,12 +143,12 @@ On Wed, 13 Aug 2025 18:14:46 +0200, Wolfram Sang wrote:
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[15/21] regulator: remove unneeded 'fast_io' parameter in regmap_config
-        commit: 37533933bfe92cd5a99ef4743f31dac62ccc8de0
+[19/21] spi: remove unneeded 'fast_io' parameter in regmap_config
+        commit: 48124569bbc6bfda1df3e9ee17b19d559f4b1aa3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
