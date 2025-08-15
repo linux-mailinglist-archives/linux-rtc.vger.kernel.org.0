@@ -1,188 +1,188 @@
-Return-Path: <linux-rtc+bounces-4701-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4702-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9A6CB275CF
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Aug 2025 04:32:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCE62B2822F
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Aug 2025 16:42:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78D217B81CF
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Aug 2025 02:30:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9699117C3BB
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Aug 2025 14:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9B029D296;
-	Fri, 15 Aug 2025 02:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD00F22C32D;
+	Fri, 15 Aug 2025 14:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="n3pke1/m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QGhHpuiS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AACD29D278;
-	Fri, 15 Aug 2025 02:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DDD1DD9AC;
+	Fri, 15 Aug 2025 14:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755224907; cv=none; b=foaCc7P3prVjMni7kmn//VT5RLBI4J2we9uKwhgv9zbWng9/w6f3rwhAracJYJ22SzLC0zR1tFDdpyY8bJg5sm1B+Qc6CC2pKE42vtJsUqDc4wYsGSyIBbhmepR5IvU5EX/kZR2XhRyy8+9bgbEc4TQjZlJsy8+Twz5qEODN/7Y=
+	t=1755268932; cv=none; b=SNhpiggnkyeE9A40sTIS95MDv1GE+NrbqcxwEUJI6oJej7AM2cdvzeCFScha1rZK+f/f/Z3Vto/lRpVbPEEb0uvlbXjXrtna2B3INUDpqC6zffP78GwWZK+tg8NEm3lZorToO1CTgrz2utfyFe82d9NHJiBDnmdFLOYya1vf9As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755224907; c=relaxed/simple;
-	bh=gmXz+McnzyPjXPi6OUhiohI/xUC56gZuLS5gnq0kbxc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PInhJ1JvMTh2cNLUQxbw09HyoOaJv26ztg5leLf1JViClfliRRLk6NMeCkfR3V35WkEpM9nBKaNyhOxdGspe+nK+J59YTpNIcdFTkn+1vatlA90PfYIeL+NGehN9AZE6bZgDKNfLyMpgMFAz2E9ekduFaNTHutbC2VqdK/p+bAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=n3pke1/m; arc=none smtp.client-ip=54.204.34.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1755224898;
-	bh=C8FPcDjjyvmDVFKC1++BAFYe4RVNG4mt5PvVSNaRksk=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=n3pke1/mkxzRIkDkrumzt+gmCCpCKLLz/4I/G+Mc2oz3ar9f6IerMyX3tWAvdHHUd
-	 otTWeizsuzET1sx3uGqDQpNPVFKHnnpSDgMfSR0+BLLqEWAld7yG2ORwvKdBFAVTFX
-	 SbOKOSOan6PPqIOOlgvv3+U/Bk0WKw4DwpTBHcmg=
-X-QQ-mid: zesmtpgz5t1755224896tbd303590
-X-QQ-Originating-IP: jlBHOZ+VAUej3deF8SZeiYt46tnagK7aAe41l0Xfo84=
-Received: from = ( [61.145.255.150])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 15 Aug 2025 10:28:15 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14352481301099076382
-EX-QQ-RecipientCnt: 23
-Date: Fri, 15 Aug 2025 10:28:14 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Alex Elder <elder@riscstar.com>, lee@kernel.org, lgirdwood@gmail.com,
-	broonie@kernel.org, alexandre.belloni@bootlin.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux.amoon@gmail.com, troymitchell988@gmail.com,
-	guodong@riscstar.com, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Subject: Re: [PATCH v12 2/7] mfd: simple-mfd-i2c: add SpacemiT P1 support
-Message-ID: <089D29348F246F2C+aJ6bPgJsp5GjhDs5@LT-Guozexi>
-References: <20250813024509.2325988-1-elder@riscstar.com>
- <20250813024509.2325988-3-elder@riscstar.com>
+	s=arc-20240116; t=1755268932; c=relaxed/simple;
+	bh=3eUf4UXirGpUX0gw3VvalDgnQQxUYuzOa7d+Bn86Fb0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uoFmnoQUiiydNZvBSIwjw1eFMinxeq2dGKl6YT05B4duAUcyXIcx+CZ7jQuJ5taxR7mj7ziRg1uLszZAQ4/r/WbMrgUwP7rVOSMDZcEBij0JMWC0f41d7cXPPdoszmT7Q+eNY2Dl1gb2xUtotHKAg+E5n1JbABVeQWDAIsFn52o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QGhHpuiS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B35C4CEEB;
+	Fri, 15 Aug 2025 14:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755268931;
+	bh=3eUf4UXirGpUX0gw3VvalDgnQQxUYuzOa7d+Bn86Fb0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=QGhHpuiSTtGAbt/6dlTCnnoTA4ZplxFC8Tro0GJAdbAh12tMNEUSLu07z11OvQBvk
+	 oHTf5TJS/YKStrrrPHeWRzwJ0jGE6j5AZ1tbRvaZy3dDmEE9KCuVb15MPpzSH6J/gw
+	 2nlRciQR5ILTUmZcjfPb8Wftcr9/dguuRdUZKw9cWJDeaG76YAPPH1GvTVv9P/kSEx
+	 wLYcS3eJZ7unChNgWOYh7wQNPjdRjal2zeZDCWKyPnLkisSlJQ+WGVCBgVhn2LIrAt
+	 +qG7XHhqCY/zS15DuM72YtrsT2tpKSGGxqzGtUU2p/oH3AF5g3+H8o04kc5YGhgMBJ
+	 knwp+/59e078g==
+From: Bjorn Andersson <andersson@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Avi Fishman <avifishman70@gmail.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Benjamin Fair <benjaminfair@google.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	David Airlie <airlied@gmail.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Drew Fustini <fustini@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	Fabio Estevam <festevam@gmail.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Fu Wei <wefu@redhat.com>,
+	Guo Ren <guoren@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	=?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+	imx@lists.linux.dev,
+	Iwona Winiarska <iwona.winiarska@intel.com>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Lee Jones <lee@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-actions@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-pwm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev,
+	Liu Ying <victor.liu@nxp.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Nancy Yuen <yuenn@google.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Nicolin Chen <nicoleotsuka@gmail.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	openbmc@lists.ozlabs.org,
+	Patrick Venture <venture@google.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Sandy Huang <hjc@rock-chips.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Shengjiu Wang <shengjiu.wang@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Takashi Iwai <tiwai@suse.com>,
+	Tali Perry <tali.perry1@gmail.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Tomer Maimon <tmaimon77@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Vasily Khoruzhick <anarsoul@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Xiubo Li <Xiubo.Lee@gmail.com>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	Zhang Rui <rui.zhang@intel.com>
+Subject: Re: (subset) [PATCH 00/21] treewide: remove unneeded 'fast_io' parameter in regmap_config
+Date: Fri, 15 Aug 2025 09:42:02 -0500
+Message-ID: <175526892008.370600.8859545110801188375.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
+References: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250813024509.2325988-3-elder@riscstar.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: Nc4Sv39/e83W4tor1UZ0MMaqxN5N6dzek1YXRT7J2xQvpJbhgtQbR8EX
-	jh/WyY992HCnuPuemFj2BLr9OABrESwdZl91+eg2t3xFHpYmNXqe4GhT1e8zCL9mNkfQcBP
-	hZlaCESZGIe8rPdfXr4EmxTiMyNN+gjmSDvwWz0vqhOe7sRhryybu+Ioubl86PBq8G+JAVR
-	leqYt5eAXQ1ERLJ023cxz80rSQ6zOTXsn2IDUF0SwHqrLhJfljRYQsg9rf0w9wJxu4NAenS
-	0FtZgds3eA/Cu+WoSrgKLnhipIcf2Ay8BOmttgEO/1kv12CsUJEnraQ6gpNgJqePeYWuDBO
-	RVfC7IYk3BUulU5EQ45xtyzxFRTdfunQ2C2JlO+u1zH7oYbkpTZN/dP5i3Js53zlKeDABLU
-	dY6GtUtzOdZEYVeTyVDkzWUZD1Dfh0qPFlImT0g7kADGjw26VsJfG17cWo+B3BhUkOn9eb+
-	e7hF8GfDxwZpuvc60WWAEhvY+u0tB8UMZU4LivD0Ev/hQNktYElxeB2R9KxV/MNK1CPRfSv
-	7GpJ9yjdZpMOLo+B4W3w2fhcbn7l9rKWT5iqpxOoK73v2cuc8bCv8mMXLrI34Hus2n8Inan
-	coiV8T8B9+lE3JqiItoYho8LcVDtNfsBp46BdLCv6WWrAFOqkAYOrYpwjWo3yrFvqEjPuxJ
-	IGgPddazQVKmmOIA2CVTf/meTQAJxO9ldCr2agzCk/EgTWT4bf/FajxEPWYWcTuwxuBdf39
-	wPJ16kMp+ncJ9wqel7OymZAI1ouSGC1YHslNsKztQ1YCBi28fD0z432BtwiTAT9RTMkdGzA
-	A8DpNea8f9i9TouGL5MhOqHO2ZOWyLQyZAC7vdnz+7qM68I9/EXx4L3Y5DdaDh4eX3arb4S
-	TU4iwuvni46ZFydiT3YYeUNuoQXamVRBVQbY/jXxu+kAhhDMa+18JCYCWBpaqN3J0BdNIAM
-	mfGtFgPqdYtSHNcZBW0Cg3RMHvTTUg2SUJH+m6ElQWBn2pZ2YSPYt2tle3eTvaMUCVVjwS8
-	FI1ZpzeB8W2hH6DntPK42WQf0lIbn1yVPui1/YofVBoEXdudCu7EXOqlx7xnz+jinICBnqA
-	bPOiAQytaZY
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi, Alex,
 
-I did not find any accesses to the P1 shutdown or reboot registers here.
-Does this mean that the current series does not support reboot or shutdown?
-If so, do you have any plans to support this functionality?
-If I have misunderstood, please correct me.
+On Wed, 13 Aug 2025 18:14:46 +0200, Wolfram Sang wrote:
+> While working on a driver using regmap with MMIO, I wondered if I need
+> to set 'fast_io' in the config. Turned out I don't need to, so I added
+> documentation for it with commit ffc72771ff6e ("regmap: Annotate that
+> MMIO implies fast IO").
+> 
+> This series fixes the existing users in the tree which needlessly set
+> the flag. They have been found using this coccinelle script:
+> 
+> [...]
+
+Applied, thanks!
+
+[18/21] soc: remove unneeded 'fast_io' parameter in regmap_config
+        commit: 5d8a9c8401648d338d072a488d455ed4611c5d4b
 
 Best regards,
-Troy
-
-
-On Tue, Aug 12, 2025 at 09:45:03PM -0500, Alex Elder wrote:
-> Enable support for the RTC and regulators found in the SpacemiT P1
-> PMIC.  Support is implemented by the simple I2C MFD driver.
-> 
-> The P1 PMIC is normally implemented with the SpacemiT K1 SoC.  This
-> PMIC provides 6 buck converters and 12 LDO regulators.  It also
-> implements a switch, watchdog timer, real-time clock, and more.
-> Initially its RTC and regulators are supported.
-> 
-> Signed-off-by: Alex Elder <elder@riscstar.com>
-> ---
->  drivers/mfd/Kconfig          | 11 +++++++++++
->  drivers/mfd/simple-mfd-i2c.c | 18 ++++++++++++++++++
->  2 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 425c5fba6cb1e..4d6a5a3a27220 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1238,6 +1238,17 @@ config MFD_QCOM_RPM
->  	  Say M here if you want to include support for the Qualcomm RPM as a
->  	  module. This will build a module called "qcom_rpm".
->  
-> +config MFD_SPACEMIT_P1
-> +	tristate "SpacemiT P1 PMIC"
-> +	depends on I2C
-> +	select MFD_SIMPLE_MFD_I2C
-> +	help
-> +	  This option supports the I2C-based SpacemiT P1 PMIC, which
-> +	  contains regulators, a power switch, GPIOs, an RTC, and more.
-> +	  This option is selected when any of the supported sub-devices
-> +	  is configured.  The basic functionality is implemented by the
-> +	  simple MFD I2C driver.
-> +
->  config MFD_SPMI_PMIC
->  	tristate "Qualcomm SPMI PMICs"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> index 22159913bea03..47ffaac035cae 100644
-> --- a/drivers/mfd/simple-mfd-i2c.c
-> +++ b/drivers/mfd/simple-mfd-i2c.c
-> @@ -93,12 +93,30 @@ static const struct simple_mfd_data maxim_mon_max77705 = {
->  	.mfd_cell_size = ARRAY_SIZE(max77705_sensor_cells),
->  };
->  
-> +
-> +static const struct regmap_config spacemit_p1_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +};
-> +
-> +static const struct mfd_cell spacemit_p1_cells[] = {
-> +	{ .name = "spacemit-p1-regulator", },
-> +	{ .name = "spacemit-p1-rtc", },
-> +};
-> +
-> +static const struct simple_mfd_data spacemit_p1 = {
-> +	.regmap_config = &spacemit_p1_regmap_config,
-> +	.mfd_cell = spacemit_p1_cells,
-> +	.mfd_cell_size = ARRAY_SIZE(spacemit_p1_cells),
-> +};
-> +
->  static const struct of_device_id simple_mfd_i2c_of_match[] = {
->  	{ .compatible = "kontron,sl28cpld" },
->  	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
->  	{ .compatible = "maxim,max5970", .data = &maxim_max5970},
->  	{ .compatible = "maxim,max5978", .data = &maxim_max5970},
->  	{ .compatible = "maxim,max77705-battery", .data = &maxim_mon_max77705},
-> +	{ .compatible = "spacemit,p1", .data = &spacemit_p1, },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-> -- 
-> 2.48.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
