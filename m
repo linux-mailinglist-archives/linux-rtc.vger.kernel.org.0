@@ -1,82 +1,83 @@
-Return-Path: <linux-rtc+bounces-4768-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4769-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E03B380C3
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 13:23:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86896B380C8
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 13:23:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16E773B3C56
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 11:23:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28B5E16EAAE
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 11:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E303134F49A;
-	Wed, 27 Aug 2025 11:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BE6350D47;
+	Wed, 27 Aug 2025 11:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8lQZt1y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="diQIRR9g"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8D1343D75;
-	Wed, 27 Aug 2025 11:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5C034F468;
+	Wed, 27 Aug 2025 11:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756293780; cv=none; b=FU2bsl1EoM1WfDDFoKbMyeiNZF4PuZlorW32WcItIgOEye/JvtuCy50xk6z6+Sk/QSxGXbCOEp3yI+Y+tuS6oyT4c11atj4xTz1ed2DDvTwXWxBJ4lb2ccEjSqHQZQPiPo06UMVxgUkua65v4Xz1yxOlwPpNarFjarOiW9ckNTM=
+	t=1756293787; cv=none; b=hdSyPRzPskr36rkv5smw1G5M41ZsCB7tF1geUNMb9O/SP+spni18QEYgGCsVJUGGtQrJwMMLnhYT6FaTjCqQbw/c7bJQ2ifa+tbO+dC7J4J9qr0hHr+Nn8AT0QruyVfLcMuup+f3cx5oe6P5TPL6GyRcyodZ7sq7XP1t3NAYJ3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756293780; c=relaxed/simple;
-	bh=xomdpeLOMSZJEhkz965+CaS+Vdhm+5amA+tX9TAShNo=;
+	s=arc-20240116; t=1756293787; c=relaxed/simple;
+	bh=pxcU2aOREOtRRxzuCcs3ZxRurRuImy+zjNoj2CEiGZs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mB21+TiPmO7ly34qfnuyQ6Vjo57ak8PC7Zi+62mtCQ1pEviIVNsdnSFVoaA6zY+sypvroHen1iTnlL/Vepvt/GlgI4ggsMHPXQ/5E3JN0K3ck18xkH/OTqLOXfux40rFs4XToRVvDJvNTsIVY3k2x4/4ov7ce+DgzU/169NMCIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8lQZt1y; arc=none smtp.client-ip=209.85.215.173
+	 In-Reply-To:To:Cc; b=CfC2pUnHJYY5BabK2a8o/Dj/VzoxTlxFshOB/7xzoeh7Z6vH99yibkb4QnJyUgYhOzhkLMZQP+x1jcPkwjZ9m+2vpR6niJ9ShsaDS/MC2rZKbNvajIfC33ukS5IJAFtq7BT3Y6hgXwRm6uMwssQV3+dhYla1S0378WARYfHLNpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=diQIRR9g; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-b474d0f1d5eso4373264a12.2;
-        Wed, 27 Aug 2025 04:22:59 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-248a638dbbeso2899675ad.2;
+        Wed, 27 Aug 2025 04:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756293778; x=1756898578; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756293785; x=1756898585; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tScKS+WzB6dufhL5mNK+c/AStzi+5Gn3nlm3LBGIbwI=;
-        b=M8lQZt1yPyZKma1SspHWAdbFF/xof4uUrfuJgkZgO2iYZcCdJg/0LG4LZVfrBPT4O5
-         Rb8lP5JwtS0Cmy/O1xe8upUD7fohjB8RwPb3F9LzrEqVn7pXrz3b3n1MiG0bJ9V8kYgC
-         6zB8udDrYtLjU+INpmsu9K1jYeHUnkbTQk1+j8lFm9kqCZ4+2+HMPTszlD7XmxL7NEDv
-         n4rghPSIS2qLmK601y3rb4tKSpiae+/sbcp0KbkxEw/C08+QDi83ghcLTDnVhSV9NlmK
-         Wk+qJ7DvGcT25Ai+QtnxWB8hZW9AAvQI0sCdlIa5/LuGit+wUY/i78XINEFFktpixFN9
-         wnZw==
+        bh=lMx7ge5RX0V+OLlOISVXfqktk6COWSxJMAbdSdyPV+w=;
+        b=diQIRR9gkNYYba+bFr+4X+7X949wPomuNK5k8cJRCsL4MbetDlo07WpRoxowQjIrzW
+         9OBom3zKBMMuJG3VjtHHq87OpVjteuTTDuj7tyUrRU5yQeiNTj/XdiVPs969M9A93TCM
+         tIEhCbpZ5ZegWRkmnAGqKV91A5lJ7wsQ/WM1E81P6jsTCf13Jd4ggPqAb4ZUScBUz8Yz
+         ljJw7XIuJUjhRvKG6UZH59HtE6IyZBeaxc1a1r9pFLYeaMfy8WRHe9wIyCDOmPHNz9bC
+         Sd+CsHCAc0cdp8tBClv+fQ1qbS0/TN6beyQGFLZ5lKnFTd1c63J+RwVf/ywHJOaB5a+b
+         AxQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756293778; x=1756898578;
+        d=1e100.net; s=20230601; t=1756293785; x=1756898585;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tScKS+WzB6dufhL5mNK+c/AStzi+5Gn3nlm3LBGIbwI=;
-        b=WRhXGWqP6wLHCSdoPFtG+XARKC2XrcA5jtKbAC5NeJhYVc9wt+9uhw4jMKyEG7BiHG
-         2Lk3MO7F3dp/uL1XDjjMHa19zysI5SsXeFJgOimPA+pzTZGbpCC1K+Lcuo56kpcIY2oA
-         YAdT3YiLS+H2rWppbdV21qxe8w784AEhvGH9dyp0a3a2vlH+HLOPp1UHFjxTa/LxHN/y
-         bQoAwcz3DeID1vNrU5gO897MFL5i/SoMLHRAP825ZbJRzk8G8b0lnfGlnLjcUgoyQyOR
-         eAPyggDeIVTzO4svJb+RxBwNZDQ6OjYje69vcToSBjtklkpiTCdIMYMX0c/gGKiMIngJ
-         Mp6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUKxdibOicQwTFXXINnbrVE4jdLWqhha9UQtfRmL1ouX5aHrAcdI9XWFFI5hdQzFporjEr1OWozEI14nM4R@vger.kernel.org, AJvYcCVxpjNGqmC9Ucqjx7PamFn+B0GwP8neGjtlGPLN/ohydTmGKDzaDWaRDG6nFSA48NISXsx/rHhFTF1U@vger.kernel.org, AJvYcCW5nLOzTORefPM1v1XeNHw7U5leQ+4Vj9el7WbPrY/SEfA/dxm8iH/dl+ry+BGAYPm5nq+FWb0dQ7ELe8w=@vger.kernel.org, AJvYcCWUzFgToI5efpqwqzxiUCgLTYPaEfP9QIVBW+533Yjw7h/JBiBrz6aTkeXpLWqv4i8JdLUnWZy9rWmq@vger.kernel.org, AJvYcCWhsH3et2XVUgO5FklBpbBLHh9L1LmMx8J0ojj4QZdvTe76TWVnn5HYWo9NiU4qeY4fllaOJy9rK42SlhE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC4GuvP3V0gZGaJ0/5nGMZsB2JDfYCRN3n6j7c83BfUPA3EsDO
-	VPGbrfuAE5fcKs/UGQDLvqlebZUcwwBlBc7N1c9SQJgH9LpHSK4pv9mn
-X-Gm-Gg: ASbGncthH51NE2QKG0aF7KIOq54TeflqEJjWjiA5RDO5cjicPFoY0efUYo6Ar4EmnnA
-	0qtKlHhju6VmR6WP0FWBtqibEEn8Crew+u5xekni22sc3Pt554dhExZrB1na8ZIPr6lx8OyHpYU
-	UcpK3+F3KOtfmfNq9WCMoB+fJHnu5i7SGKygkXzUgB++e/W+qjkDv4WQEdG8At6C9G5QF/XJI3n
-	JA8dDnaK2b4iWqmfaMDE1ky34wZfIuSu1Hsrv/uLjm7suJseSDH8VuC4c0dxKL6An0MzJftYJHW
-	xrLBxCMT8dNwcjr202xnDLjO7z9+eqW7lGZKBZSqs4qCKwj2y0nTzAyvsuiExxWhy+LDvIhYfqz
-	fs0xbqg0TOMsHIYeD70MflMQ/U+KAlfoktWAe2VBxtpAI7mQVsdShSJ7HTOzh2APaJRQXsLRoCP
-	GYkIQqQyym6UoKxD3W
-X-Google-Smtp-Source: AGHT+IEHQ8zv3Iwk3K5n+Debu6cIiDOuY8nhm+ii5lcJ3ZyQ2oPc2V5kSWO6f+JtCHeV333/NyZa4Q==
-X-Received: by 2002:a17:902:d603:b0:246:a42b:a31d with SMTP id d9443c01a7336-246a42ba453mr172730475ad.44.1756293778541;
-        Wed, 27 Aug 2025 04:22:58 -0700 (PDT)
+        bh=lMx7ge5RX0V+OLlOISVXfqktk6COWSxJMAbdSdyPV+w=;
+        b=JXQWdM20heibQC63S5+RHiX6PkhxaeTsiBtRsYcg+gZbrf2E2o2WOYI2EOJTvXopLF
+         xe+iVRZ3peUGQ7bz4BaYcz4sD5nb5x95tk5etceEun1WSA7tcVll8MQ+F0Cd/kZ+d4Yk
+         mLXDKBjpwoNy9NFY/yQ/u5qQi8W4xnY7bI+JJWXbGrlMce2+CD/Nm9QGizTDVzq9s1HO
+         3VllLAUzJ9GVyoRYOARsF5L1GIMRDDtkI5U1EWGMFnTymKKruAiNDEBXBXB85HJBeRZO
+         uuZFXQryTyryuVgtiq0TTthVWtjKxAFUnXfxnsFRewWtfpDeWPtB4XQdDI/sqG0e7tbF
+         vkGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBOi8rxlPXiuAas0wfCqOwwznHqx8I9V8pheCSiW4zM3I22gTBWVSA9r7u8zKl1gKJpKO8VrOoWZuy@vger.kernel.org, AJvYcCVhsZzL5P1UcTiwIwq14fXb2CT6ZwL+SAH6flDZ7m+PJdsvoFpAOq6gmBuJ66KTTel6SVwWxK0zT2yX@vger.kernel.org, AJvYcCWBVmQXTAHw18hJ4c2vo3vxAqAhoDoSgC6qng0adPkfbFjOYfRRmxTBBrWgpT3CQvKHl4L/OSX33UQTIXU=@vger.kernel.org, AJvYcCWTlTHfCrTEVyBO7Nq1ZPDPYb+k9vrdzWQA58l8tuPnHSt/ggg51Jgzxql60I1u7n8Dsrsbv4KbebkrQec=@vger.kernel.org, AJvYcCXo21MM5AzH1hDxP56mUPCcaUftcosg630r2N5fVyR4jXFtlcdmCxY3M44JRa5TJy+9SpvcEsHUUmiAd6Kk@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPZpAAZ0cXVE4/Sah+Z4cBLZITaJSRfkx3qLCBlrN2MzlSBS3e
+	WFxxRvmSrKcT6wdXzmhoPRduUfgcVrSd3w/l5EnD3LgfRVDwgmpYOc/sujvnbyiT
+X-Gm-Gg: ASbGnctRUirsZ/qyufhb3g8v997yLNfcS0b6/BP40Iptz9EhRz5yPmJ8svGkWXFHic3
+	oW5l/IK6mJAQELiYrMp1tfioYjCPP+HuY9Dwu6bbMf9huywaVpkHfAjMBe1TUW81a7P/EIANW9o
+	xtfnid97XMCclrsLM63Za9MeRZChGQWmRO1Ph6C8inEt2U3JrtHuNON1Bwhzqv2zVttHVFpDp13
+	kOM49Vq2//C0kn7jYOCMjTllTpJP56K2aa2WnvJcVFnvoh6pMK4bmC5D0t/dFuDP4jhkKW2gN7F
+	4yaTVaUtktUlcS6orCrRXSaLMOT/q4pJk3bPcqqE6HhSoeUjaKgeSt+y3w2RaUDFqpe0KC9i+Hk
+	OxA3gKpuQy5aj0HkEDHp7wgvA5EoBMrujXZmteywGM4w7oBnTMvo37uD4WZPeGRcXXQ5cN405AM
+	jSm6/g2peejP7wmkcj
+X-Google-Smtp-Source: AGHT+IF96nOBV89XAjJ4kjuERk9/bHO1FA/Ey9YMo6wYm4uiasLB6ej7p9n24uxKX3zXTXWR9yC0Sg==
+X-Received: by 2002:a17:903:943:b0:242:fbc6:6a83 with SMTP id d9443c01a7336-2462eb56b82mr242150185ad.0.1756293785286;
+        Wed, 27 Aug 2025 04:23:05 -0700 (PDT)
 Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276fcd6232sm1819708a91.16.2025.08.27.04.22.51
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276fcd6232sm1819708a91.16.2025.08.27.04.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 04:22:58 -0700 (PDT)
+        Wed, 27 Aug 2025 04:23:04 -0700 (PDT)
 From: James Calligeros <jcalligeros99@gmail.com>
-Date: Wed, 27 Aug 2025 21:22:35 +1000
-Subject: [PATCH v2 01/11] dt-bindings: rtc: Add Apple SMC RTC
+Date: Wed, 27 Aug 2025 21:22:36 +1000
+Subject: [PATCH v2 02/11] dt-bindings: hwmon: Add Apple System Management
+ Controller hwmon schema
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -85,7 +86,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250827-macsmc-subdevs-v2-1-ce5e99d54c28@gmail.com>
+Message-Id: <20250827-macsmc-subdevs-v2-2-ce5e99d54c28@gmail.com>
 References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
 In-Reply-To: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
 To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
@@ -99,116 +100,249 @@ To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
 Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-input@vger.kernel.org, James Calligeros <jcalligeros99@gmail.com>, 
- Mark Kettenis <kettenis@openbsd.org>
+ linux-input@vger.kernel.org, James Calligeros <jcalligeros99@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3520;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7585;
  i=jcalligeros99@gmail.com; h=from:subject:message-id;
- bh=QnTrhwUPyGjBEFWqrKCYz13PtbjM0UoOPM4Jc23FSf0=;
- b=owGbwMvMwCV2xczoYuD3ygTG02pJDBnrXjUla00QuHr05soLs1Lerqr6uSjCZgdr0LsnPitOs
- Rm8fr9EpKOUhUGMi0FWTJFlQ5OQx2wjtpv9IpV7YeawMoEMYeDiFICJrFjFyLA7dNKavG3hfy8K
- 1/jqHtylvSDV8LBG+peNm92rq4VWb7/PyPDT4NCpQ2YVrF+W8EzKfXL+yNML10+VcnG+/Fr57xs
- D50x+AA==
+ bh=pxcU2aOREOtRRxzuCcs3ZxRurRuImy+zjNoj2CEiGZs=;
+ b=owGbwMvMwCV2xczoYuD3ygTG02pJDBnrXjUZue70sF8b25USLiK50JO1tt/Q0n7atllVx7s/v
+ T3Yrh3QUcrCIMbFICumyLKhSchjthHbzX6Ryr0wc1iZQIYwcHEKwEQ8ghn+V3EcFdQ3q5f7I/Zd
+ /jeTzeK3CfIHP5y9/bXQ/601n92GCwz/bEKOW5/oyp48Iehb/S+Hbx/eOO1unsWgb2i71S9ie+9
+ mLgA=
 X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
  fpr=B08212489B3206D98F1479BDD43632D151F77960
 
-From: Sven Peter <sven@kernel.org>
+Apple Silicon devices integrate a vast array of sensors, monitoring
+current, power, temperature, and voltage across almost every part of
+the system. The sensors themselves are all connected to the System
+Management Controller (SMC). The SMC firmware exposes the data
+reported by these sensors via its standard FourCC-based key-value
+API. The SMC is also responsible for monitoring and controlling any
+fans connected to the system, exposing them in the same way.
 
-Apple Silicon Macs (M1, etc.) have an RTC that is part of the PMU IC,
-but most of the PMU functionality is abstracted out by the SMC.
-An additional RTC offset stored inside NVMEM is required to compute
-the current date/time.
+For reasons known only to Apple, each device exposes its sensors with
+an almost totally unique set of keys. This is true even for devices
+which share an SoC. An M1 Mac mini, for example, will report its core
+temperatures on different keys to an M1 MacBook Pro. Worse still, the
+SMC does not provide a way to enumerate the available keys at runtime,
+nor do the keys follow any sort of reasonable or consistent naming
+rules that could be used to deduce their purpose. We must therefore
+know which keys are present on any given device, and which function
+they serve, ahead of time.
 
-Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-Signed-off-by: Sven Peter <sven@kernel.org>
+Add a schema so that we can describe the available sensors for a given
+Apple Silicon device in the Devicetree.
+
 Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 ---
- .../bindings/mfd/apple,smc.yaml          |  9 +++++++
- .../bindings/rtc/apple,smc-rtc.yaml      | 35 +++++++++++++++++++++++++
- MAINTAINERS                              |  1 +
- 3 files changed, 45 insertions(+)
+ .../bindings/hwmon/apple,smc-hwmon.yaml  | 132 +++++++++++++++++++++++++
+ .../bindings/mfd/apple,smc.yaml          |  36 +++++++
+ MAINTAINERS                              |   1 +
+ 3 files changed, 169 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..08cc4f55f3a41ca8b3b428088f96240266fa42e8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
+@@ -0,0 +1,132 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/apple,smc-hwmon.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple SMC Hardware Monitoring
++
++description:
++  Apple's System Management Controller (SMC) exposes a vast array of
++  hardware monitoring sensors, including temperature probes, current and
++  voltage sense, power meters, and fan speeds. It also provides endpoints
++  to manually control the speed of each fan individually. Each Apple
++  Silicon device exposes a different set of endpoints via SMC keys. This
++  is true even when two machines share an SoC. The CPU core temperature
++  sensor keys on an M1 Mac mini are different to those on an M1 MacBook
++  Pro, for example.
++
++maintainers:
++  - James Calligeros <jcalligeros99@gmail.com>
++
++definitions:
++  apple,key-id:
++    $ref: /schemas/types.yaml#/definitions/string
++    pattern: "^[A-Za-z0-9]{4}$"
++    description: The SMC FourCC key of the desired sensor.
++      Must match the node's suffix.
++
++  label:
++    description: Human-readable name for the sensor
++
++properties:
++  compatible:
++    const: apple,smc-hwmon
++
++patternProperties:
++  "^current-[A-Za-z0-9]{4}$":
++    type: object
++    additionalProperties: false
++
++    properties:
++      apple,key-id:
++        $ref: "#/definitions/apple,key-id"
++
++      label:
++        $ref: "#/definitions/label"
++
++    required:
++      - apple,key-id
++      - label
++
++  "^fan-[A-Za-z0-9]{4}$":
++    type: object
++    additionalProperties: false
++
++    properties:
++      apple,key-id:
++        $ref: "#/definitions/apple,key-id"
++
++      apple,fan-minimum:
++        $ref: /schemas/types.yaml#/definitions/string
++        pattern: "^[A-Za-z0-9]{4}$"
++        description: SMC key containing the fan's minimum speed
++
++      apple,fan-maximum:
++        $ref: /schemas/types.yaml#/definitions/string
++        pattern: "^[A-Za-z0-9]{4}$"
++        description: SMC key containing the fan's maximum speed
++
++      apple,fan-target:
++        $ref: /schemas/types.yaml#/definitions/string
++        pattern: "^[A-Za-z0-9]{4}$"
++        description: Writeable endpoint for setting desired fan speed
++
++      apple,fan-mode:
++        $ref: /schemas/types.yaml#/definitions/string
++        pattern: "^[A-Za-z0-9]{4}$"
++        description: Writeable key to enable/disable manual fan control
++
++      label:
++        $ref: "#/definitions/label"
++
++    required:
++      - apple,key-id
++      - label
++
++  "^power-[A-Za-z0-9]{4}$":
++    type: object
++    additionalProperties: false
++
++    properties:
++      apple,key-id:
++        $ref: "#/definitions/apple,key-id"
++
++      label:
++        $ref: "#/definitions/label"
++
++    required:
++      - apple,key-id
++      - label
++
++  "^temperature-[A-Za-z0-9]{4}$":
++    type: object
++    additionalProperties: false
++
++    properties:
++      apple,key-id:
++        $ref: "#/definitions/apple,key-id"
++
++      label:
++        $ref: "#/definitions/label"
++
++    required:
++      - apple,key-id
++      - label
++
++  "^voltage-[A-Za-z0-9]{4}$":
++    type: object
++    additionalProperties: false
++
++    properties:
++      apple,key-id:
++        $ref: "#/definitions/apple,key-id"
++
++      label:
++        $ref: "#/definitions/label"
++
++    required:
++      - apple,key-id
++      - label
++
++additionalProperties: false
 diff --git a/Documentation/devicetree/bindings/mfd/apple,smc.yaml b/Documentation/devicetree/bindings/mfd/apple,smc.yaml
-index 8a10e270d421ecd703848f64af597de351fcfd74..38f077867bdeedba8a486a63e366e9c943a75681 100644
+index 38f077867bdeedba8a486a63e366e9c943a75681..3fc4aa39292395f27b5694550858c6b34d18308d 100644
 --- a/Documentation/devicetree/bindings/mfd/apple,smc.yaml
 +++ b/Documentation/devicetree/bindings/mfd/apple,smc.yaml
-@@ -41,6 +41,9 @@ properties:
-   reboot:
-     $ref: /schemas/power/reset/apple,smc-reboot.yaml
+@@ -44,6 +44,9 @@ properties:
+   rtc:
+     $ref: /schemas/rtc/apple,smc-rtc.yaml
  
-+  rtc:
-+    $ref: /schemas/rtc/apple,smc-rtc.yaml
++  hwmon:
++    $ref: /schemas/hwmon/apple,smc-hwmon.yaml
 +
  additionalProperties: false
  
  required:
-@@ -75,5 +78,11 @@ examples:
-           nvmem-cell-names = "shutdown_flag", "boot_stage",
-                              "boot_error_count", "panic_count";
-         };
+@@ -84,5 +87,38 @@ examples:
+           nvmem-cells = <&rtc_offset>;
+           nvmem-cell-names = "rtc_offset";
+        };
 +
-+        rtc {
-+          compatible = "apple,smc-rtc";
-+          nvmem-cells = <&rtc_offset>;
-+          nvmem-cell-names = "rtc_offset";
-+       };
++        hwmon {
++          compatible = "apple,smc-hwmon";
++
++          current-ID0R {
++            apple,key-id = "ID0R";
++            label = "AC Input Current";
++          };
++
++          fan-F0Ac {
++            apple,key-id = "F0Ac";
++            apple,fan-minimum = "F0Mn";
++            apple,fan-maximum = "F0Mx";
++            apple,fan-target = "F0Tg";
++            apple,fan-mode = "F0Md";
++            label = "Fan 1";
++          };
++
++          power-PSTR {
++            apple,key-id = "PSTR";
++            label = "Total System Power";
++          };
++
++          temperature-TW0P {
++            apple,key-id = "TW0P";
++            label = "WiFi/BT Module Temperature";
++          };
++
++          voltage-VD0R {
++            apple,key-id = "VD0R";
++            label = "AC Input Voltage";
++          };
++        };
        };
      };
-diff --git a/Documentation/devicetree/bindings/rtc/apple,smc-rtc.yaml b/Documentation/devicetree/bindings/rtc/apple,smc-rtc.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..607b610665a28b3ea2e86bd90cb5f3f28ebac726
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/apple,smc-rtc.yaml
-@@ -0,0 +1,35 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/apple,smc-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple SMC RTC
-+
-+description:
-+  Apple Silicon Macs (M1, etc.) have an RTC that is part of the PMU IC,
-+  but most of the PMU functionality is abstracted out by the SMC.
-+  An additional RTC offset stored inside NVMEM is required to compute
-+  the current date/time.
-+
-+maintainers:
-+  - Sven Peter <sven@kernel.org>
-+
-+properties:
-+  compatible:
-+    const: apple,smc-rtc
-+
-+  nvmem-cells:
-+    items:
-+      - description: 48bit RTC offset, specified in 32768 (2^15) Hz clock ticks
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: rtc_offset
-+
-+required:
-+  - compatible
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
 diff --git a/MAINTAINERS b/MAINTAINERS
-index fe168477caa45799dfe07de2f54de6d6a1ce0615..aaef8634985b35f54de1123ebb4176602066d177 100644
+index aaef8634985b35f54de1123ebb4176602066d177..56aabfbc2520749beb9dba235f8e86c15e17b7b6 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2397,6 +2397,7 @@ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
- F:	Documentation/devicetree/bindings/power/reset/apple,smc-reboot.yaml
- F:	Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
-+F:	Documentation/devicetree/bindings/rtc/apple,smc-rtc.yaml
- F:	Documentation/devicetree/bindings/spi/apple,spi.yaml
- F:	Documentation/devicetree/bindings/spmi/apple,spmi.yaml
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+@@ -2380,6 +2380,7 @@ F:	Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+ F:	Documentation/devicetree/bindings/dma/apple,admac.yaml
+ F:	Documentation/devicetree/bindings/gpio/apple,smc-gpio.yaml
+ F:	Documentation/devicetree/bindings/gpu/apple,agx.yaml
++F:	Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml
+ F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+ F:	Documentation/devicetree/bindings/input/touchscreen/apple,z2-multitouch.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
 
 -- 
 2.51.0
