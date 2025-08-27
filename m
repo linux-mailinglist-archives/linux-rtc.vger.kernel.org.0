@@ -1,216 +1,230 @@
-Return-Path: <linux-rtc+bounces-4766-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4767-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CA69B37EE3
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 11:33:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ABC8B380BE
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 13:22:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1006B7C7899
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 09:33:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4441916B155
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 11:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F31D2877FE;
-	Wed, 27 Aug 2025 09:33:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F9034DCD7;
+	Wed, 27 Aug 2025 11:22:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="o2u1ajVw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B5Iv5fLZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993E0278768;
-	Wed, 27 Aug 2025 09:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26561C860B;
+	Wed, 27 Aug 2025 11:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756287223; cv=none; b=dl2BUhA8xeDQJodQjI9/B4Fg2J5AmzS634l0bj3u+4azi3ofghxSlasL8S86AaEapr1BwwExrom8HPPeY5DtJGBS/n5wvj7VYu/ScL0vojB/9GqLpCqiuYgHmFK3L3vNrti2nEWp0LYm7+Eo83xKdBT6LMvH5ROxwvZEs0PrEUk=
+	t=1756293773; cv=none; b=IEKA/greM3W7qEzaLnHikcrMUR4MTVt8qnRPjSC9l3OGSr+DX96vIPuX5Sw2fSWmzfJiVX6FOi5rjezGDRZ/z1TdQ6rcUF5hoL8hPDyBIrOKRctm+2XSGvSBgZ2yiFYvqEP7WQPsz8+/hqng7OAuqbEai0IyIr9yFGxSyKXMF2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756287223; c=relaxed/simple;
-	bh=MQvBfl4kkV2fXT2490Fr950aKJNNuYgYUNBa7ER+5W8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kScvR8DEsnzWiSc99irbkJyAMtN7YHPnQwbJjAIoJQuGZigX/yH+D9S5lNIZVAjrBIx20NQxOi/J64eamHUV0hIUvTuuL0W/p1f6wfQ1VjLKCclXH5iltlmleyQEYHmfHDYzLywCGmc0eeP3+Ph4wA0ommMRRA5GuT5CgmOkosQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=o2u1ajVw; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1756287214;
-	bh=3fghkl2yk9rz5bIVyEjDjhowSDJcsJYAqStEl1qbPDU=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=o2u1ajVw6J8byKXyvsA4FI5Na1IjmNbpaaewruGecnAxeLfYYxruTzppuTWq6elVW
-	 dX/JrJ5fYSxsz7Pet0fOUoxnv9u03jMfQHMEnpDG8T9Co8Lb9H+2DnIMIAoARP9vye
-	 /ys8vQmcK+qHSTJLCuzBu+1Q2THmFupWOjReEP/U=
-X-QQ-mid: zesmtpgz8t1756287213t979e8db4
-X-QQ-Originating-IP: +p5Udl5pLkD5rldse5I0GLOWxX+xPdjNmzEYXYfq1hY=
-Received: from = ( [61.145.255.150])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 27 Aug 2025 17:33:31 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 295757120406263004
-EX-QQ-RecipientCnt: 23
-Date: Wed, 27 Aug 2025 17:33:31 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Alex Elder <elder@riscstar.com>,
-	Troy Mitchell <troy.mitchell@linux.spacemit.com>, lee@kernel.org,
-	lgirdwood@gmail.com, broonie@kernel.org,
-	alexandre.belloni@bootlin.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	linux.amoon@gmail.com, troymitchell988@gmail.com,
-	guodong@riscstar.com, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/7] mfd: simple-mfd-i2c: add SpacemiT P1 support
-Message-ID: <1D7078ABFE5E7BF8+aK7Q60w5Vhy1Wreg@LT-Guozexi>
-References: <20250813024509.2325988-1-elder@riscstar.com>
- <20250813024509.2325988-3-elder@riscstar.com>
- <089D29348F246F2C+aJ6bPgJsp5GjhDs5@LT-Guozexi>
- <b387ebdd-ae5d-4711-9e10-c61cb06f4b5b@riscstar.com>
+	s=arc-20240116; t=1756293773; c=relaxed/simple;
+	bh=BRAiQU0QVsPGvQQPoR9GAHwaWmPsrjb1BHI7yNFZ8XM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sqOiqnVZuFSNqXUnJawrXRHJdQikLfFLJ3efAWrS1Vw4IbaB5RiSbuEc16t+2DAqD3gWc8wczwIEyz9ctdKD6BDM7CgYQdcR5JfvwjZdjO0sWrH43o4zXrCnKwS2H7JBJIeRnbQ58dV3W0+oa43HeAqlMl3hZZF9VXTPgpSgYlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B5Iv5fLZ; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7720f23123dso166087b3a.2;
+        Wed, 27 Aug 2025 04:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756293771; x=1756898571; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WsykdY4oidUQ2ahSl97Uv13s0w5qEG0f4eM1c++CGE=;
+        b=B5Iv5fLZf8c7PRMWelGXFCm9TfBs7IV2ww4L/Y/UR8v2D7Mo5ZjwT2PGa9fDOTknv+
+         wyPuhWttbUNdRFWOMRXFnb7SWud2a9tly2xNuHYLU5vekdDlPLZotDiztVNx/woTEMYE
+         KLdJ5IvkFndOpB9TYSbMKIkh3YaxOzzb16ZKqH7rVM4y2pv8pSU0VcRfihIUty6dVoGp
+         axKkDMMBedDdmvkpxBUP2Dsi5zCsdtiK9vZJciJ8/Sg8E7wVB1BblbgPVOFRy9q7ZbMf
+         X4ZE0/+cA0XEWO4yYmztlV7hco06sDac7QF6YiTBZPsC0mdlDOIlaPjR3j56T+itHoa8
+         EN+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756293771; x=1756898571;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5WsykdY4oidUQ2ahSl97Uv13s0w5qEG0f4eM1c++CGE=;
+        b=pKTOx+/N2qixRgnqYbLg9pXJAYSECex5c7+KpgQXI4YOFu9gTd9BXFzp1JxnLMvbaa
+         tNkI1Nt36Dw5Ub3iQt0tZLEYvVuwbCcI3JITyBQSnKCUeOiBUAmrpAB27mBUfMfkFmOA
+         7JPuseZFbU3bJ7cyJLAXKwAJtkncpGybQdCMn5cfUbOXm1/WZSvK5CjywM6qtEruyIZd
+         bvaJ171vsDG090H7kzB73+FpsLEkKmdCQ09T0Of3PoYgMG4YHAcmRX3trWjvoxZoEX+H
+         2d0f4XvXWKVmNplpgGH6cPjUiy9Vks3pST1/O3ytJ+1rxzwFejwHr5mTuVkHYoFXYyhb
+         tkMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV586yYjpqKP9SSs9BefqUInv20P6g6QFdAMbh8vCQo0yuguupeftkBNyGyyZh9D+AHf2TF86+O0Ljuli8=@vger.kernel.org, AJvYcCVcMOOdC40W4E7pUB+mf82DB2xKYFyzZIT4Id3+8jkuFYsdqxkak5CbD3gk8HlmQ7RoKSd7fo6qVVj8Apg=@vger.kernel.org, AJvYcCVs3NTZBqy3Pb+h2upwupfs2BJbIPeoV/xwXAXE0N/9fsi9lM6HRxiPCOJ9MaMQaZP5+PET2LcuEleZ@vger.kernel.org, AJvYcCWQSVNibTdat31gFi7c8VStAwN9oB3Yy//icfdFk4f4vuffZYWYQJPtsa/HWNANebVoIHGPfCGTLxIxhDtg@vger.kernel.org, AJvYcCWzkAtyTQ/8VB3DqjO1cZY9zzqsasqvGyZSp2vTgK6SuyBfdRkuHVdAHy6EyqJJgeFN+czZ0SgSAuJb@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyUsJp5AF+FD8Z1ze+Wg+CbEpN1WY5xEiikxv4t4tufPLM6hBP
+	In3fZjKv/7YgC8i2y02at5QXB+HX+GrQPOI7apqXrWdsmyGdkgFtQqfV
+X-Gm-Gg: ASbGnctEaJs/U47OzkRgUL3zYxbSrNTV4xoTId+DYy7sqbBswQfJRVcpJK3gOWNn8uU
+	ad6pbIUPIV43hoRILXvgow0Ki9p05OM7JpnqTQ6nE9XXGrLJoNrhEfC1U5uwMeHQhtUMvrQ9x69
+	DiSDWNvvXNOxeoGeNYcprmkJKmdG9MC4lPC0QFyrnnNi74Hqb+1SXAaUJtCzegkdR8jmSCzjSkr
+	Uzb8j3YFgMBYAeA77gDR78w/Z2Y485ZTRwFFdN8ukkZFYjAeKEjWCcGDwDC8yAub0OoNtGuoUUY
+	s1DrJdTl1jgifWpnMJh45npOX2m3SjTnADboF5HNfhwMFdVdxP0za3mfb/k8ziPqEyhoxNKag/p
+	JeN9LAkW1ilLigKuhfnfFj7Uhf+IS9B1tn96CJQG9AxCSYfl3sVA7MEvPdNcGZ0QIoVcx3GrL76
+	4HI3937ubzH0+8YDdh
+X-Google-Smtp-Source: AGHT+IElvLvJjhBIATwNxcehv3S3PxbMPKCGvTN/sn1Ljet+JleEGuW/z9D2QKJBapZe81dScV+ejg==
+X-Received: by 2002:a17:903:380b:b0:240:6ae4:3695 with SMTP id d9443c01a7336-2462ee0cf11mr236066195ad.4.1756293771130;
+        Wed, 27 Aug 2025 04:22:51 -0700 (PDT)
+Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276fcd6232sm1819708a91.16.2025.08.27.04.22.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 04:22:50 -0700 (PDT)
+From: James Calligeros <jcalligeros99@gmail.com>
+Subject: [PATCH v2 00/11] mfd: macsmc: add rtc, hwmon and hid subdevices
+Date: Wed, 27 Aug 2025 21:22:34 +1000
+Message-Id: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b387ebdd-ae5d-4711-9e10-c61cb06f4b5b@riscstar.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: M1tjFO1fqc+0+dhe15nsbY28Re8PVWeceyCs+6WGmafZxIfQhURiu9AZ
-	jfZtxllCZ3Kzu25i/WVJGenUwi8Q5QBv5BnithHdqpR86K5vaA2ju9ryi6pNI3lC3Mgrx4G
-	jN+uH2BYzWswIWpbrWjcVuXkUanvGwmQTN2amtsk4TYGDOYv5cOVshz0dQChxXEf5jav8PP
-	oa9pPw6Rs0JqmW20bLV6UmbwIdHo1E7YDENj7rVMEa43wOQsTJVnmJ3nO61dpTGHZEZUySQ
-	AymQE2k0Q5X6cldch/4y9L4bRbDuXAMLMVJTbfBoannxaKSpFY+wZyjemPDom8AWExrdayK
-	gXTZDVDyKajkjKl+FAWFCgqbySlsL7fv8Q9bEWU5mckwtHD4lUZYYJfQQBxKRX0r0/JzdHS
-	Z/gnFeNzji1rNGXyabCxoUVyXz66pvG6O7t8Gw7Bp40j4WEPjjj2b2bVJao9BhD178PBuB3
-	PhWzv896bLJU7NYNI5xrGb0WubtxbgO4MJQ5c7u2xT6HQWWdmKv2V9Ba5K6WwyTO4QGrqhd
-	zqArb5w7x4OX8J3v7piEpfo5ZqfTwKl5WMuOVmWkpLRRYU8mSGywpDaM7vOUWVLNXwwRHuX
-	Y/lKsffgqfADUDcBulpXfK26P0P+nrMRB5Appq31mUyRppSB0WAeSUpddpZ99lInMY86uhJ
-	v1pdvbGSJW0WyGbVujWOj22u3LhWDvIGtknwpwS88meT5fipUcPw3S1wCqgPqq9f5rR1/9p
-	lfJYZDgwZ7LVZuhWdY3OgNUvW9R+Oj2jFkPycfMoaMnuHmD9YAWooa1wM7tRqSKjJFfoNj3
-	/ErW//PpYbcvRbvUYFKRwjuAo/hlStOgxVulyUNiaYWEXjdSj0lHMv6y5PVaUAjE0mrfLH8
-	wNulUmm92TDa1fJL9/vFfCSmQx37Gza16qc90ZK1kQXV/LEIDot/RtAt6GK2xBBbKoKlNkb
-	HqmPLlggGAZC2n+ECEiphHKyAbK92mj7PKB809aQDOqv1jUNYAYB+75Egh5OyFVOsLYZqXI
-	ZYM1+3vfRusDlJ/J0IRY/N0Fwd1ZsQ4zfwEk+89aoFg6SgHDUuHMqAC3XNZi9dSw3b1SPjr
-	Hp/VB2npeVQ
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHvqrmgC/13MywrCMBCF4VcpszaSpPTmyveQLupk2g6YVjIal
+ JJ3NxbcuPwPnG8DocAkcCo2CBRZeF1y2EMBOA/LRIpdbrDaVro1tfIDikclz6ujKKptdGlRm8Z
+ phHy6Bxr5tYOXPvfM8ljDe/ej+a4/qvunolFaVY0bayypGk13nvzAtyOuHvqU0gdx1TXurAAAA
+ A==
+X-Change-ID: 20250816-macsmc-subdevs-87032c017d0c
+To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-input@vger.kernel.org, James Calligeros <jcalligeros99@gmail.com>, 
+ Mark Kettenis <kettenis@openbsd.org>, Hector Martin <marcan@marcan.st>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5218;
+ i=jcalligeros99@gmail.com; h=from:subject:message-id;
+ bh=BRAiQU0QVsPGvQQPoR9GAHwaWmPsrjb1BHI7yNFZ8XM=;
+ b=owGbwMvMwCV2xczoYuD3ygTG02pJDBnrXtXPmfh44oNsI75FYa69a2LmLVpXs22bxyzjG1XfX
+ vBIevP6dJSyMIhxMciKKbJsaBLymG3EdrNfpHIvzBxWJpAhDFycAjARz0eMDH9D9etqFb/Pq/9+
+ 9NDe/Y7aZluOHnPIYq75E8T69+PBij2MDFukv3kcfiUwLW+ZnY/gx7Ctp0O5mFr+Zn3w470/Rbn
+ mDisA
+X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
+ fpr=B08212489B3206D98F1479BDD43632D151F77960
 
-On Mon, Aug 25, 2025 at 11:08:45AM -0500, Alex Elder wrote:
-> On 8/14/25 9:28 PM, Troy Mitchell wrote:
-> > Hi, Alex,
-> > 
-> > I did not find any accesses to the P1 shutdown or reboot registers here.
-> > Does this mean that the current series does not support reboot or shutdown?
-> 
-> Yes, that is correct.
-> 
-> > If so, do you have any plans to support this functionality?
-> 
-> At this time I personally don't have any plans to add this, but
-> it could be added later (by anyone).
-> 
-> I actually attempted to do this initially, but gave up.  The PMIC
-> is accessed via I2C, and I needed to implement a non-blocking
-> version of the I2C register write operation.  I tried that, but
-I have implemented a non-blocking version of the I2C driver [1]
+Hi all,
 
-Link: 
-https://lore.kernel.org/all/20250827-k1-i2c-atomic-v1-0-e59bea02d680@linux.spacemit.com/
-[1]
+This series adds support for the remaining SMC subdevices. These are the
+RTC, hwmon, and HID devices. They are being submitted together as the RTC
+and hwmon drivers both require changes to the SMC DT schema.
 
-                - Troy
-> then found that the shutdown or reboot still did not work reliably.
-> As it was, this was more than I originally planned to do, so I just
-> implemented the simple RTC operations instead.
-> 
-> 					-Alex
-> 
-> > If I have misunderstood, please correct me.
-> > 
-> > Best regards,
-> > Troy
-> > 
-> > 
-> > On Tue, Aug 12, 2025 at 09:45:03PM -0500, Alex Elder wrote:
-> > > Enable support for the RTC and regulators found in the SpacemiT P1
-> > > PMIC.  Support is implemented by the simple I2C MFD driver.
-> > > 
-> > > The P1 PMIC is normally implemented with the SpacemiT K1 SoC.  This
-> > > PMIC provides 6 buck converters and 12 LDO regulators.  It also
-> > > implements a switch, watchdog timer, real-time clock, and more.
-> > > Initially its RTC and regulators are supported.
-> > > 
-> > > Signed-off-by: Alex Elder <elder@riscstar.com>
-> > > ---
-> > >   drivers/mfd/Kconfig          | 11 +++++++++++
-> > >   drivers/mfd/simple-mfd-i2c.c | 18 ++++++++++++++++++
-> > >   2 files changed, 29 insertions(+)
-> > > 
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index 425c5fba6cb1e..4d6a5a3a27220 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1238,6 +1238,17 @@ config MFD_QCOM_RPM
-> > >   	  Say M here if you want to include support for the Qualcomm RPM as a
-> > >   	  module. This will build a module called "qcom_rpm".
-> > > +config MFD_SPACEMIT_P1
-> > > +	tristate "SpacemiT P1 PMIC"
-> > > +	depends on I2C
-> > > +	select MFD_SIMPLE_MFD_I2C
-> > > +	help
-> > > +	  This option supports the I2C-based SpacemiT P1 PMIC, which
-> > > +	  contains regulators, a power switch, GPIOs, an RTC, and more.
-> > > +	  This option is selected when any of the supported sub-devices
-> > > +	  is configured.  The basic functionality is implemented by the
-> > > +	  simple MFD I2C driver.
-> > > +
-> > >   config MFD_SPMI_PMIC
-> > >   	tristate "Qualcomm SPMI PMICs"
-> > >   	depends on ARCH_QCOM || COMPILE_TEST
-> > > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> > > index 22159913bea03..47ffaac035cae 100644
-> > > --- a/drivers/mfd/simple-mfd-i2c.c
-> > > +++ b/drivers/mfd/simple-mfd-i2c.c
-> > > @@ -93,12 +93,30 @@ static const struct simple_mfd_data maxim_mon_max77705 = {
-> > >   	.mfd_cell_size = ARRAY_SIZE(max77705_sensor_cells),
-> > >   };
-> > > +
-> > > +static const struct regmap_config spacemit_p1_regmap_config = {
-> > > +	.reg_bits = 8,
-> > > +	.val_bits = 8,
-> > > +};
-> > > +
-> > > +static const struct mfd_cell spacemit_p1_cells[] = {
-> > > +	{ .name = "spacemit-p1-regulator", },
-> > > +	{ .name = "spacemit-p1-rtc", },
-> > > +};
-> > > +
-> > > +static const struct simple_mfd_data spacemit_p1 = {
-> > > +	.regmap_config = &spacemit_p1_regmap_config,
-> > > +	.mfd_cell = spacemit_p1_cells,
-> > > +	.mfd_cell_size = ARRAY_SIZE(spacemit_p1_cells),
-> > > +};
-> > > +
-> > >   static const struct of_device_id simple_mfd_i2c_of_match[] = {
-> > >   	{ .compatible = "kontron,sl28cpld" },
-> > >   	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
-> > >   	{ .compatible = "maxim,max5970", .data = &maxim_max5970},
-> > >   	{ .compatible = "maxim,max5978", .data = &maxim_max5970},
-> > >   	{ .compatible = "maxim,max77705-battery", .data = &maxim_mon_max77705},
-> > > +	{ .compatible = "spacemit,p1", .data = &spacemit_p1, },
-> > >   	{}
-> > >   };
-> > >   MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-> > > -- 
-> > > 2.48.1
-> > > 
-> > > 
-> > > _______________________________________________
-> > > linux-riscv mailing list
-> > > linux-riscv@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
-> 
+The RTC driver is responsible for getting and setting the system clock,
+and requires an NVMEM cell. This series replaces Sven's original RTC driver
+submission [1].
+
+The hwmon function is an interesting one. While each Apple Silicon device
+exposes pretty similar sets of sensors, these all seem to be paired to
+different SMC keys in the firmware interface. This is true even when the
+sensors are on the SoC. For example, an M1 MacBook Pro will use different
+keys to access the LITTLE core temperature sensors to an M1 Mac mini. This
+necessitates describing which keys correspond to which sensors for each
+device individually, and populating the hwmon structs at runtime. We do
+this with a node in the device tree. This series includes only the keys
+for sensors which we know to be common to all devices. The SMC is also
+responsible for monitoring and controlling fan speeds on systems with fans,
+which we expose via the hwmon driver.
+
+The SMC also handles the hardware power button and lid switch. Power
+button presses and lid opening/closing are emitted as HID events, so we
+add a HID subdevice to handle them.
+
+Note that this series is based on a branch with three additional commits
+applied to add the parent SMC nodes to the relevant Devicetrees. This
+was done to silence build errors. The series applies cleanly to 6.17-rc1.
+
+Regards,
+
+James
+
+[1] https://lore.kernel.org/asahi/CAEg-Je84XxLWH7vznQmPRfjf6GxWOu75ZetwN7AdseAwfMLLrQ@mail.gmail.com/T/#t
+
+Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+---
+Changes in v2:
+- Added Rob's R-b tag to RTC DT binding
+- Removed redundant nesting from hwmon DT binding
+- Dedpulicated property definitions in hwmon DT schema
+- Made label a required property for hwmon DT nodes
+- Clarified semantics in hwmon DT schema definitions
+- Split mfd tree changes into separate commits
+- Fixed numerous style errors in hwmon driver
+- Addressed Guenter's initial feedback on the hwmon driver
+- Modified hwmon driver to reflect DT schema changes
+- Added compatible property to hwmon node
+- Link to v1: https://lore.kernel.org/r/20250819-macsmc-subdevs-v1-0-57df6c3e5f19@gmail.com
+
+---
+Hector Martin (2):
+      rtc: Add new rtc-macsmc driver for Apple Silicon Macs
+      input: macsmc-hid: New driver to handle the Apple Mac SMC buttons/lid
+
+James Calligeros (7):
+      dt-bindings: hwmon: Add Apple System Management Controller hwmon schema
+      mfd: macsmc: Wire up Apple SMC RTC subdevice
+      hwmon: Add Apple Silicon SMC hwmon driver
+      mfd: macsmc: Wire up Apple SMC hwmon subdevice
+      mfd: macsmc: Wire up Apple SMC HID subdevice
+      arm64: dts: apple: Add common hwmon sensors and fans
+      arm64: dts: apple: t8103, t600x, t8112: Add common hwmon nodes to devices
+
+Sven Peter (2):
+      dt-bindings: rtc: Add Apple SMC RTC
+      arm64: dts: apple: t8103,t600x,t8112: Add SMC RTC node
+
+ .../bindings/hwmon/apple,smc-hwmon.yaml  | 132 ++++
+ .../bindings/mfd/apple,smc.yaml          |  45 ++
+ .../bindings/rtc/apple,smc-rtc.yaml      |  35 +
+ MAINTAINERS                              |   5 +
+ .../boot/dts/apple/hwmon-common.dtsi     |  37 ++
+ .../boot/dts/apple/hwmon-fan-dual.dtsi   |  24 +
+ arch/arm64/boot/dts/apple/hwmon-fan.dtsi |  19 +
+ .../boot/dts/apple/hwmon-laptop.dtsi     |  35 +
+ .../boot/dts/apple/hwmon-mac-mini.dtsi   |  17 +
+ .../arm64/boot/dts/apple/t6001-j375c.dts |   2 +
+ .../arm64/boot/dts/apple/t6002-j375d.dts |   2 +
+ .../arm64/boot/dts/apple/t600x-die0.dtsi |   6 +
+ .../boot/dts/apple/t600x-j314-j316.dtsi  |   4 +
+ .../arm64/boot/dts/apple/t600x-j375.dtsi |   2 +
+ arch/arm64/boot/dts/apple/t8103-j274.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103-j293.dts |   3 +
+ arch/arm64/boot/dts/apple/t8103-j313.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103-j456.dts |   2 +
+ arch/arm64/boot/dts/apple/t8103-j457.dts |   2 +
+ .../arm64/boot/dts/apple/t8103-jxxx.dtsi |   2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi     |   6 +
+ arch/arm64/boot/dts/apple/t8112-j413.dts |   2 +
+ arch/arm64/boot/dts/apple/t8112-j473.dts |   2 +
+ arch/arm64/boot/dts/apple/t8112-j493.dts |   3 +
+ .../arm64/boot/dts/apple/t8112-jxxx.dtsi |   2 +
+ arch/arm64/boot/dts/apple/t8112.dtsi     |   6 +
+ drivers/hwmon/Kconfig                    |  12 +
+ drivers/hwmon/Makefile                   |   1 +
+ drivers/hwmon/macsmc_hwmon.c             | 848 +++++++++++++++++++++++++
+ drivers/input/misc/Kconfig               |  11 +
+ drivers/input/misc/Makefile              |   1 +
+ drivers/input/misc/macsmc-hid.c          | 209 ++++++
+ drivers/mfd/macsmc.c                     |   3 +
+ drivers/rtc/Kconfig                      |  11 +
+ drivers/rtc/Makefile                     |   1 +
+ drivers/rtc/rtc-macsmc.c                 | 141 ++++
+ 36 files changed, 1637 insertions(+)
+---
+base-commit: 876d6a70b24869f96ebc8672caf86cb4bae72927
+change-id: 20250816-macsmc-subdevs-87032c017d0c
+
+Best regards,
+-- 
+James Calligeros <jcalligeros99@gmail.com>
+
 
