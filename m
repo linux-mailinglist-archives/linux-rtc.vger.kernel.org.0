@@ -1,53 +1,53 @@
-Return-Path: <linux-rtc+bounces-4765-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4766-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FCDDB350B4
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Aug 2025 03:04:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CA69B37EE3
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 11:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB357244B86
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Aug 2025 01:04:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1006B7C7899
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Aug 2025 09:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 434E71FF1C7;
-	Tue, 26 Aug 2025 01:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F31D2877FE;
+	Wed, 27 Aug 2025 09:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="NJIULm2I"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="o2u1ajVw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663B31BD9F0;
-	Tue, 26 Aug 2025 01:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993E0278768;
+	Wed, 27 Aug 2025 09:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756170274; cv=none; b=qcz2bMoAgL32cR13cepnJHOcreK04DlQyDROXUe7HIISyACSsIuq2z2SYv5xDVLxU3bKX8PlnEGs0Viwu6SU/0Tq4OKELQte6KsxVpRjnj1URibxswKNwcXIad0uk3xueEqPEg7lw5n/61qdt0v7TsAbFK9UyXjDM6bXmMrNVug=
+	t=1756287223; cv=none; b=dl2BUhA8xeDQJodQjI9/B4Fg2J5AmzS634l0bj3u+4azi3ofghxSlasL8S86AaEapr1BwwExrom8HPPeY5DtJGBS/n5wvj7VYu/ScL0vojB/9GqLpCqiuYgHmFK3L3vNrti2nEWp0LYm7+Eo83xKdBT6LMvH5ROxwvZEs0PrEUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756170274; c=relaxed/simple;
-	bh=tB6fppnw+UcRDBN5lEThQWkSnIFpbnjuO084/tD3bU8=;
+	s=arc-20240116; t=1756287223; c=relaxed/simple;
+	bh=MQvBfl4kkV2fXT2490Fr950aKJNNuYgYUNBa7ER+5W8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YsQzjMmPbEsJ8s0qJVYwqk0ZKe0wGQkqLrgmO/uMG0RBLJIpIsCjNDNtGIr5ZGmeWv30eYVWxsFD6C3RF2WCqCzZ20zSKngRnuofjz8mYziS0I26R+9kZcdLGMFAIzmJTbJ6bI0OZ7JCplgKVVdY5Ct7jUS4sFG1fAOPxSptGEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=NJIULm2I; arc=none smtp.client-ip=52.59.177.22
+	 Content-Type:Content-Disposition:In-Reply-To; b=kScvR8DEsnzWiSc99irbkJyAMtN7YHPnQwbJjAIoJQuGZigX/yH+D9S5lNIZVAjrBIx20NQxOi/J64eamHUV0hIUvTuuL0W/p1f6wfQ1VjLKCclXH5iltlmleyQEYHmfHDYzLywCGmc0eeP3+Ph4wA0ommMRRA5GuT5CgmOkosQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=o2u1ajVw; arc=none smtp.client-ip=18.194.254.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1756170260;
-	bh=YFNm4O+HT++w/XhGn19PpWttVXNF4FCXA5kWvgTYm9Y=;
+	s=mxsw2412; t=1756287214;
+	bh=3fghkl2yk9rz5bIVyEjDjhowSDJcsJYAqStEl1qbPDU=;
 	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=NJIULm2ITw00OlVySf0zjkJbhgXaJ7GfGuEYcZmo4LgA80CpXz+50mmE34KHqy6rp
-	 fBf7RQH6ANXyy2zZIULBEkJ3aAIVHiJQ4ZN1TBDJ6K8wVgPVlroNtlGKXj1Is0+gGx
-	 T3Pp0orsc1ZgJADzSx8nYsZLCmOvuvLjpUhOopks=
-X-QQ-mid: zesmtpsz5t1756170257t506bec28
-X-QQ-Originating-IP: Z9Hix52xyLw0E0FxPAVbErXQgqX6aadOjoYB/9fqoi4=
-Received: from = ( [14.123.253.26])
+	b=o2u1ajVw6J8byKXyvsA4FI5Na1IjmNbpaaewruGecnAxeLfYYxruTzppuTWq6elVW
+	 dX/JrJ5fYSxsz7Pet0fOUoxnv9u03jMfQHMEnpDG8T9Co8Lb9H+2DnIMIAoARP9vye
+	 /ys8vQmcK+qHSTJLCuzBu+1Q2THmFupWOjReEP/U=
+X-QQ-mid: zesmtpgz8t1756287213t979e8db4
+X-QQ-Originating-IP: +p5Udl5pLkD5rldse5I0GLOWxX+xPdjNmzEYXYfq1hY=
+Received: from = ( [61.145.255.150])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 26 Aug 2025 09:04:15 +0800 (CST)
+	id ; Wed, 27 Aug 2025 17:33:31 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6597786748243803849
+X-BIZMAIL-ID: 295757120406263004
 EX-QQ-RecipientCnt: 23
-Date: Tue, 26 Aug 2025 09:04:15 +0800
+Date: Wed, 27 Aug 2025 17:33:31 +0800
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 To: Alex Elder <elder@riscstar.com>,
 	Troy Mitchell <troy.mitchell@linux.spacemit.com>, lee@kernel.org,
@@ -61,7 +61,7 @@ Cc: mat.jonczyk@o2.pl, dlan@gentoo.org, paul.walmsley@sifive.com,
 	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
 	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v12 2/7] mfd: simple-mfd-i2c: add SpacemiT P1 support
-Message-ID: <A90BFF97E4869C5B+aK0ID3oyoCtco3m5@LT-Guozexi>
+Message-ID: <1D7078ABFE5E7BF8+aK7Q60w5Vhy1Wreg@LT-Guozexi>
 References: <20250813024509.2325988-1-elder@riscstar.com>
  <20250813024509.2325988-3-elder@riscstar.com>
  <089D29348F246F2C+aJ6bPgJsp5GjhDs5@LT-Guozexi>
@@ -76,25 +76,25 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <b387ebdd-ae5d-4711-9e10-c61cb06f4b5b@riscstar.com>
 X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: M9Bxf819/8YCxgr5E0eCTLJr0bZlmzJWwDmRH2FZekU0xn6PD6v6rNoe
-	dP3FI+l5Y2TabLIuZ+pXMq7AqSls/Kb0pqyd/2lP12ecRF5IFegdolFYmdAFGAL5cC7pYtm
-	unYTaEl3D9lb0pvw/2e0yoIvivn8EtqMJivGWgMLbERMQMWAPOX2tJF3FnvzI+dOuhGGVSe
-	FFIKrApyUSVtGNuW+vfBx4GbdryHB4xbh3zbfAskp0+bI/r6lfhzvip9ax1wIPO3EHYa5An
-	cQ/TN3v+wTVK82+Ue5a8wus6wWEXd9y3LU3YmvvCbclID3qa/shf0oF2qd/CeUNez7Tc0cR
-	2bgE55pXaKoFFdcQnMbFURCCoQl4nnNIyF4whrRjnrtjzo14ht2sXoS0MEyn3AfJD8IvZ7T
-	7/GYrSzY75y3IileD8IexRT1UhWqgZs8/7Sb/PLw2K1NZIrMXSrj7+wlXZs//ghHZn8hE5J
-	JU0xiLzXvku3iXb3cOoK06ZYOLhXDl8uNoN45UiJicDXx2a/zMI5HKkRVnqE0yz+VxOb04H
-	nZtAUuTb7Z0lExVKjUPbbvRfZwwc0W3NUDWo1pUvikqZM95ska4ny2w9Qry2/kzt+GBAL23
-	EwSvxYdDp2dZr0E8WopDPOQxqoDu/bQoXpdk5V5PX22VELzEnhDYuY+fM2EQdFOPKDaoA08
-	xQcyiBEfWBpcVJy23BguuauVJNUmUfIbTW2wd0CTtM9RCQKzN/HUPSdv0dSJGDcXkJH0v+D
-	ENtaTttTz/h1RsNYoKQo+PsO/dtZs4wmCFtpfMAgveBSUCdyOq1TGMHKJTmCcHUKR7Ju2f+
-	2Y8C6JHoIerlxI+IH4p8X2VAh4oroH7PHkCDSB4rmDv+b5RMRUtBzH0CIen2DVZZHq7pAes
-	Dhed/+pMY+otrlh/bmSynVv3qpNbqGW6ZI/x8TOvQ/VEDReJUmayesfytyAStECNklmSQd/
-	nF6Z3hNBmH1MZkDjw7PEBAfbsnBybB0e7MwrljOLvmZA4HiGBbbPU+sMzPxLJcGxfr70HYU
-	RwHxLeTDqapmWrajBZ9Xx7JvLV/R7idTrBGlKoY40C8Xw8nsMDvXIpCpV2byc4ZUkKR5roI
-	fObJKo2BPe7i0xC8CsWnmRKvBOLbqqE+g==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+Feedback-ID: zesmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: M1tjFO1fqc+0+dhe15nsbY28Re8PVWeceyCs+6WGmafZxIfQhURiu9AZ
+	jfZtxllCZ3Kzu25i/WVJGenUwi8Q5QBv5BnithHdqpR86K5vaA2ju9ryi6pNI3lC3Mgrx4G
+	jN+uH2BYzWswIWpbrWjcVuXkUanvGwmQTN2amtsk4TYGDOYv5cOVshz0dQChxXEf5jav8PP
+	oa9pPw6Rs0JqmW20bLV6UmbwIdHo1E7YDENj7rVMEa43wOQsTJVnmJ3nO61dpTGHZEZUySQ
+	AymQE2k0Q5X6cldch/4y9L4bRbDuXAMLMVJTbfBoannxaKSpFY+wZyjemPDom8AWExrdayK
+	gXTZDVDyKajkjKl+FAWFCgqbySlsL7fv8Q9bEWU5mckwtHD4lUZYYJfQQBxKRX0r0/JzdHS
+	Z/gnFeNzji1rNGXyabCxoUVyXz66pvG6O7t8Gw7Bp40j4WEPjjj2b2bVJao9BhD178PBuB3
+	PhWzv896bLJU7NYNI5xrGb0WubtxbgO4MJQ5c7u2xT6HQWWdmKv2V9Ba5K6WwyTO4QGrqhd
+	zqArb5w7x4OX8J3v7piEpfo5ZqfTwKl5WMuOVmWkpLRRYU8mSGywpDaM7vOUWVLNXwwRHuX
+	Y/lKsffgqfADUDcBulpXfK26P0P+nrMRB5Appq31mUyRppSB0WAeSUpddpZ99lInMY86uhJ
+	v1pdvbGSJW0WyGbVujWOj22u3LhWDvIGtknwpwS88meT5fipUcPw3S1wCqgPqq9f5rR1/9p
+	lfJYZDgwZ7LVZuhWdY3OgNUvW9R+Oj2jFkPycfMoaMnuHmD9YAWooa1wM7tRqSKjJFfoNj3
+	/ErW//PpYbcvRbvUYFKRwjuAo/hlStOgxVulyUNiaYWEXjdSj0lHMv6y5PVaUAjE0mrfLH8
+	wNulUmm92TDa1fJL9/vFfCSmQx37Gza16qc90ZK1kQXV/LEIDot/RtAt6GK2xBBbKoKlNkb
+	HqmPLlggGAZC2n+ECEiphHKyAbK92mj7PKB809aQDOqv1jUNYAYB+75Egh5OyFVOsLYZqXI
+	ZYM1+3vfRusDlJ/J0IRY/N0Fwd1ZsQ4zfwEk+89aoFg6SgHDUuHMqAC3XNZi9dSw3b1SPjr
+	Hp/VB2npeVQ
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
 X-QQ-RECHKSPAM: 0
 
 On Mon, Aug 25, 2025 at 11:08:45AM -0500, Alex Elder wrote:
@@ -113,16 +113,15 @@ On Mon, Aug 25, 2025 at 11:08:45AM -0500, Alex Elder wrote:
 > 
 > I actually attempted to do this initially, but gave up.  The PMIC
 > is accessed via I2C, and I needed to implement a non-blocking
-> version of the I2C register write operation.  I tried that,
-You tried that? so that means you have implemented a non-blocking version
-of the I2C?
-If so, can you give me a source tree to test it?
-> but
-> then found that the shutdown or reboot still did not work reliably.
-ditto.
+> version of the I2C register write operation.  I tried that, but
+I have implemented a non-blocking version of the I2C driver [1]
+
+Link: 
+https://lore.kernel.org/all/20250827-k1-i2c-atomic-v1-0-e59bea02d680@linux.spacemit.com/
+[1]
 
                 - Troy
-
+> then found that the shutdown or reboot still did not work reliably.
 > As it was, this was more than I originally planned to do, so I just
 > implemented the simple RTC operations instead.
 > 
