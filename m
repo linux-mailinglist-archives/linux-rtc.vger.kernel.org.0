@@ -1,189 +1,133 @@
-Return-Path: <linux-rtc+bounces-4794-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4795-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A315B3FC19
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Sep 2025 12:20:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE525B40D14
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Sep 2025 20:22:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2592C2C345A
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Sep 2025 10:20:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FA081B63808
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Sep 2025 18:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8877280035;
-	Tue,  2 Sep 2025 10:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7ADB342CB8;
+	Tue,  2 Sep 2025 18:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="saf5HSS1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gz0HmcV3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0E916F265;
-	Tue,  2 Sep 2025 10:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0250334AAE1;
+	Tue,  2 Sep 2025 18:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756808441; cv=none; b=lxbadKfEZdUsswLk56qwzOb/eJvLYetnsJHjOTbQU5GLl+odVqLgg4PrGwL9Ixd1ktsKychpu92Vbbq01whP9JchQPDTyGzjEfktwfIpR/o8ObU4yzJEGD/nX1IxMZUv2BBvcqEuV3gV4mcGTZk7RCkfvTuJ0zuiR8rN3HyRDrw=
+	t=1756837374; cv=none; b=gWf8/+QJMWI7YIQeSj8dENcpFqiyj5ZNiuFawxSIk0MWsTm0TW/I/LHFHQwFdC/P0KJ4tg9D++D3zY0hn8ZHHkw/w169X8I79T+LleXP1hWSWU3KxljaCOmUgYQ9Nj8lMBH2PCqPItrLEx9g+lr/HmA6gS7fiGr/MRWkplpgUXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756808441; c=relaxed/simple;
-	bh=cKYY4/cnGdSxn6qpOUZOPp0+KPQ/VT0Yziv6NOtZK0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HWV6Ft05FoiA7AMm94vXPQjCT2x2tjWmKh5cjDPacYdn7yDhoSjzLruJO8dFamnmHhSbId555z7K85ZafFwtczPyQfsVW0umuGMCmKewGI82asSAOp3FsA+nfZ7CHg58RtkOnOEVHtniJlFCKREyhxOgraOJ0MEzJOB0W4OJ+ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=saf5HSS1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBB4C4CEF5;
-	Tue,  2 Sep 2025 10:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756808441;
-	bh=cKYY4/cnGdSxn6qpOUZOPp0+KPQ/VT0Yziv6NOtZK0c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=saf5HSS1u3W7YVadb9lNs7hBvFfHkmwEIZCsnq+VSLREzpGCL+JNG/jiGhct2MSik
-	 6Smur6hyPC2wAaEjcvpYg28jGBMTLjtfXsbaEsQel44sMeJGiJiodTQSXFWMNH89aZ
-	 zYYKoiizs0fIyDN72ke2BuFsztFoVTs32Ej8RZzPumEmQX0djdrbpIOB5rAk9RFN79
-	 3xkCSSpPigKjPDNOF9tVqQC1M+qBkYInhPfEi3KKJSTg914LCnUkSK029wkkj1+gfl
-	 QkRWEk5Ff8qGkQtw0evPKUeoXzjBK3krnM/42sYYMilrOVOWlMwzjh2a1Ri8nYbDSb
-	 xrLW9nm503hqQ==
-Date: Tue, 2 Sep 2025 11:20:36 +0100
-From: Lee Jones <lee@kernel.org>
-To: Alexander Kurz <akurz@blala.de>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	linux-input@vger.kernel.or, linux-kernel@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] Drivers: mc13783: remove deprecated mc13xxx_irq_ack()
-Message-ID: <20250902102036.GE2163762@google.com>
-References: <20250811064358.1659-1-akurz@blala.de>
+	s=arc-20240116; t=1756837374; c=relaxed/simple;
+	bh=zeeWJadlJgHk14gsEbJSMLNQQhZLpoRRUKtz+/TtcZE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NzaOp1aa7ivw47DIhiRMLGLy6VYiZ3QnFPo9tcq9p5RrKsezEZWi+Buh2KdonOTwnNGlCgzkOveYSMyOLeV//6mdWaHimHgiiy0DWb1Mg9N8HUSJK3fB0KKINZuhpEFnL1bnkTVYH3jTN4YruYX5peLWw6+BQo+rIWsaaUKTtSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gz0HmcV3; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b0454d63802so170718966b.2;
+        Tue, 02 Sep 2025 11:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756837369; x=1757442169; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=onxf7BI9Q6nHuy72iBEoPKHI9kMyhZuYmF6ufjTnpI4=;
+        b=Gz0HmcV3LuRp06HYRCvTu5mj6ojGaKIlq6qAn0Z7320DpNzx/bjeBAX/Z/usLHutHY
+         sISlVNBfNb9gX6eNUgVz6ULVGRRsmamu5eJobcuWi9D/aiCifILm4RzZe/+ecq+UJOcj
+         m5wCrB6bUCB/ZGlVCbNhaWga5O9upsB3+tg/rodZQfhlZg2MAqdUvPMjbK1EN4OODWfo
+         hAPq2RThqUCKhMvZG9GLZ/vxhOvTurDL90XtPP/KmOkzeTNUUVgDY5oXiSRTCG8uzDnk
+         jsIIj79SW0iyNmPVwf/pg+APh+PPlycrUGDe8+T5FVYQ8t4EUzL4LvIzfRTJUotD8HU9
+         TvMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756837369; x=1757442169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=onxf7BI9Q6nHuy72iBEoPKHI9kMyhZuYmF6ufjTnpI4=;
+        b=N1DXVBkGA0DkF3To+WENlOaVtOAsl2AU+Fvoj2swz/pqK8ALShWllwE02Yq4kDcGaC
+         sF7RrRhG2cAHQdIqPAl4+7CNgEEkhhcv0dzz2DlTR1KhgNkGXHmlJhWEESgbypkMmPzr
+         TfpOQ/q/CyYYeV6wTvzGpfC0Hc66xzdN9I2eGzZdvQFDK/yqB8nO9JqZF3bzG8K8FLIA
+         4ORdnG8tHQGzq8J1lz9wEemfIUrbIJ0EQ6jfY6nl8UC+ekQgLz4Twi+KYkGBMi0/gPEI
+         9Jya6h5oIbfgb4ON6iaNG0bW9LKDN/cSad5aUOHM7iHMTQej0zZD+FUNSOdhfgBseN28
+         Jfsw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2dUVKevSzx5al3vZT0koRgcagF7STxWbNnpjbjfXY9bKPddOeQyXy+TFdnrCsG4pp+lXM5aaMFkvFCxE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDBm+Qu2nbLuxJyjclC48uDNwQvmF8YVL+IFtPfYQOOibWFT3b
+	7VAo9ApTrUhFZ0xqOUkPupS3wBWPBobhgHUC55jQ1vXO9OrkuSf7jgzwsLJVLN1/
+X-Gm-Gg: ASbGncuU/jKM29v6J6qrEISLGfTttNXkZGatpwMNFsqQ7vnutvBggPb/N60sih52FVM
+	GUxXX7vWl9c6U0ggKdZu1v4IS5ZuWGvr6UkpHZ5ukXLAFw26HxJFpAySE9yK/AuJPov3TBz+IQn
+	tvQUjvFp8JEzQMEIjR/wi4KWtPTGU2GNWak46ehBsgYsoncQ8kJyqR+6QmRHvQZnBTWGAk92q/d
+	ut1Lx4X9MTQ5ztNuAJaE0ds9yZXr4Ww7kQYZqYpv0h9vQIBKkywu+CcnE82MJoQECivJaftLbwP
+	DK/kpKlxyvE6PpiVzjaGXim37zHm9qjQSz3dxIqRgyR7rDpudkZdy9OTyu73sNWa3ZnWUkJBA5u
+	oUh1LYVK2hE5H3OJuM4ptSezHh9VGJH7K4xgqZRSWuS74aK4RJCmXuDvntNy/6BmwTTB4bZpan9
+	5fFiYYzwHSxLQqQfM=
+X-Google-Smtp-Source: AGHT+IE0w2MWQc5FwmPMrX4rJdQL1Gz7NjcCAmW2jRw68pZqSc5/YgWEliZISbDzH8p7+CxyvjDYSQ==
+X-Received: by 2002:a17:907:bb8b:b0:b04:1d07:40de with SMTP id a640c23a62f3a-b041d074816mr875843566b.23.1756837368690;
+        Tue, 02 Sep 2025 11:22:48 -0700 (PDT)
+Received: from fedora.tux.internal (85.191.71.118.dynamic.dhcp.aura-net.dk. [85.191.71.118])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b041cef6b4dsm662698566b.65.2025.09.02.11.22.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Sep 2025 11:22:48 -0700 (PDT)
+From: Bruno Thomsen <bruno.thomsen@gmail.com>
+To: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Bruno Thomsen <bruno.thomsen@gmail.com>
+Subject: [PATCH] rtc: pcf2127: fix watchdog interrupt mask on pcf2131
+Date: Tue,  2 Sep 2025 20:22:35 +0200
+Message-ID: <20250902182235.6825-1-bruno.thomsen@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250811064358.1659-1-akurz@blala.de>
 
-On Mon, 11 Aug 2025, Alexander Kurz wrote:
+When using interrupt pin (INT A) as watchdog output all other
+interrupt sources need to be disabled to avoid additional
+resets. Resulting INT_A_MASK1 value is 55 (0x37).
 
-> mc13xxx_irq_ack() got deprecated and became dead code with commit
-> 10f9edaeaa30 ("mfd: mc13xxx: Use regmap irq framework for interrupts").
-> It should be safe to remove it now.
-> 
-> Signed-off-by: Alexander Kurz <akurz@blala.de>
-> ---
->  drivers/input/misc/mc13783-pwrbutton.c |  1 -
->  drivers/input/touchscreen/mc13783_ts.c |  4 ----
+Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
->  drivers/rtc/rtc-mc13xxx.c              | 13 -------------
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 2e1ac0c42e93..5a39c227203a 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -606,6 +606,21 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
+ 			set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
+ 	}
+ 
++	/*
++	 * When using interrupt pin (INT A) as watchdog output, only allow
++	 * watchdog interrupt (PCF2131_BIT_INT_WD_CD) and disable (mask) all
++	 * other interrupts.
++	 */
++	if (pcf2127->cfg->type == PCF2131) {
++		ret = regmap_write(pcf2127->regmap,
++				   PCF2131_REG_INT_A_MASK1,
++				   PCF2131_BIT_INT_BLIE |
++				   PCF2131_BIT_INT_BIE |
++				   PCF2131_BIT_INT_AIE |
++				   PCF2131_BIT_INT_SI |
++				   PCF2131_BIT_INT_MI);
++	}
++
+ 	return devm_watchdog_register_device(dev, &pcf2127->wdd);
+ }
+ 
 
-RTC review / Ack please.
-
->  include/linux/mfd/mc13xxx.h            |  6 ------
->  4 files changed, 24 deletions(-)
-> 
-> diff --git a/drivers/input/misc/mc13783-pwrbutton.c b/drivers/input/misc/mc13783-pwrbutton.c
-> index 1c7faa9b7afe..b83d762ae2e9 100644
-> --- a/drivers/input/misc/mc13783-pwrbutton.c
-> +++ b/drivers/input/misc/mc13783-pwrbutton.c
-> @@ -57,7 +57,6 @@ static irqreturn_t button_irq(int irq, void *_priv)
->  	struct mc13783_pwrb *priv = _priv;
->  	int val;
->  
-> -	mc13xxx_irq_ack(priv->mc13783, irq);
->  	mc13xxx_reg_read(priv->mc13783, MC13783_REG_INTERRUPT_SENSE_1, &val);
->  
->  	switch (irq) {
-> diff --git a/drivers/input/touchscreen/mc13783_ts.c b/drivers/input/touchscreen/mc13783_ts.c
-> index 33635da85079..47b8da00027f 100644
-> --- a/drivers/input/touchscreen/mc13783_ts.c
-> +++ b/drivers/input/touchscreen/mc13783_ts.c
-> @@ -42,8 +42,6 @@ static irqreturn_t mc13783_ts_handler(int irq, void *data)
->  {
->  	struct mc13783_ts_priv *priv = data;
->  
-> -	mc13xxx_irq_ack(priv->mc13xxx, irq);
-> -
->  	/*
->  	 * Kick off reading coordinates. Note that if work happens already
->  	 * be queued for future execution (it rearms itself) it will not
-> @@ -137,8 +135,6 @@ static int mc13783_ts_open(struct input_dev *dev)
->  
->  	mc13xxx_lock(priv->mc13xxx);
->  
-> -	mc13xxx_irq_ack(priv->mc13xxx, MC13XXX_IRQ_TS);
-> -
->  	ret = mc13xxx_irq_request(priv->mc13xxx, MC13XXX_IRQ_TS,
->  		mc13783_ts_handler, MC13783_TS_NAME, priv);
->  	if (ret)
-> diff --git a/drivers/rtc/rtc-mc13xxx.c b/drivers/rtc/rtc-mc13xxx.c
-> index e7b87130e624..2494d13fd767 100644
-> --- a/drivers/rtc/rtc-mc13xxx.c
-> +++ b/drivers/rtc/rtc-mc13xxx.c
-> @@ -137,10 +137,6 @@ static int mc13xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  	}
->  
->  	if (!priv->valid) {
-> -		ret = mc13xxx_irq_ack(priv->mc13xxx, MC13XXX_IRQ_RTCRST);
-> -		if (unlikely(ret))
-> -			goto out;
-> -
->  		ret = mc13xxx_irq_unmask(priv->mc13xxx, MC13XXX_IRQ_RTCRST);
->  	}
->  
-> @@ -208,10 +204,6 @@ static int mc13xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
->  	if (unlikely(ret))
->  		goto out;
->  
-> -	ret = mc13xxx_irq_ack(priv->mc13xxx, MC13XXX_IRQ_TODA);
-> -	if (unlikely(ret))
-> -		goto out;
-> -
->  	s1970 = rtc_tm_to_time64(&alarm->time);
->  
->  	dev_dbg(dev, "%s: %s %lld\n", __func__, alarm->enabled ? "on" : "off",
-> @@ -239,12 +231,9 @@ static int mc13xxx_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
->  static irqreturn_t mc13xxx_rtc_alarm_handler(int irq, void *dev)
->  {
->  	struct mc13xxx_rtc *priv = dev;
-> -	struct mc13xxx *mc13xxx = priv->mc13xxx;
->  
->  	rtc_update_irq(priv->rtc, 1, RTC_IRQF | RTC_AF);
->  
-> -	mc13xxx_irq_ack(mc13xxx, irq);
-> -
->  	return IRQ_HANDLED;
->  }
->  
-> @@ -293,8 +282,6 @@ static int __init mc13xxx_rtc_probe(struct platform_device *pdev)
->  
->  	mc13xxx_lock(mc13xxx);
->  
-> -	mc13xxx_irq_ack(mc13xxx, MC13XXX_IRQ_RTCRST);
-> -
->  	ret = mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_RTCRST,
->  			mc13xxx_rtc_reset_handler, DRIVER_NAME, priv);
->  	if (ret)
-> diff --git a/include/linux/mfd/mc13xxx.h b/include/linux/mfd/mc13xxx.h
-> index f372926d5894..dd46fe424a80 100644
-> --- a/include/linux/mfd/mc13xxx.h
-> +++ b/include/linux/mfd/mc13xxx.h
-> @@ -31,12 +31,6 @@ int mc13xxx_adc_do_conversion(struct mc13xxx *mc13xxx,
->  		unsigned int mode, unsigned int channel,
->  		u8 ato, bool atox, unsigned int *sample);
->  
-> -/* Deprecated calls */
-> -static inline int mc13xxx_irq_ack(struct mc13xxx *mc13xxx, int irq)
-> -{
-> -	return 0;
-> -}
-> -
->  static inline int mc13xxx_irq_request_nounmask(struct mc13xxx *mc13xxx, int irq,
->  					       irq_handler_t handler,
->  					       const char *name, void *dev)
-> -- 
-> 2.39.5
-> 
-
+base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
 -- 
-Lee Jones [李琼斯]
+2.51.0
+
 
