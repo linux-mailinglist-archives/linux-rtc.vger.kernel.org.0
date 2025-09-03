@@ -1,115 +1,101 @@
-Return-Path: <linux-rtc+bounces-4818-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4819-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4432CB429D1
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 21:24:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67056B42B02
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 22:33:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15AC41883D0C
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 19:25:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED0B520768A
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 20:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D237A35CED8;
-	Wed,  3 Sep 2025 19:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA842DECBF;
+	Wed,  3 Sep 2025 20:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UVhtq/7C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlwZDffg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E092D9789;
-	Wed,  3 Sep 2025 19:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B180C2D7DDC;
+	Wed,  3 Sep 2025 20:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756927487; cv=none; b=gtUvLbZ0HwjPzj0NolwL1tvNXYxAJ7OGAdGkUN7bdzNcJ1JdpvWz8rUP8VH+JlgD4RMN3or6EaCX029h6y4V6l3PWwbV45rYckJyS9cDv0K2Kh9OFXrRKCS7GA8Rk/PCbOLljd9MLqfXgQZqoOSNF2a9Ah49L6NnrLvK2yhdFcw=
+	t=1756931591; cv=none; b=A4gBlZEKseKeweH6m+k6jNYKkpA20ZLv9HIPvq6ew9Od2QU/CBLERdctAJneM1JZksBUtdaVsilHgb1FwV20ssnew4B0LQtB4v+Y8cxdWtKqIIoch7uZQEg7DdqP6c789nwJ3IcXp+nILbHSBxZMgc1Kaqy4pibw0PKbGJPcfjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756927487; c=relaxed/simple;
-	bh=aj6l4uBc11YzSUw1ssIkh2HS2puMZvUKoYHbWxcVsBU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c+GVVigWzxYkrAsKWuQRIz/jCLGStzi2SjneY8YZW7Jb2r36nVRTmjKU3YjkVyfGwZZNK7JMxhz2Bytrciak/fE2de9STUAHfAIFip7TfeX2ULOxzOUVpNOKr1+kXX+grtPalN4SaUVZWuNB7cMcz0zJ6n5HaLnAjZgpTgMk4Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UVhtq/7C; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id F3F604E40BDB;
-	Wed,  3 Sep 2025 19:24:42 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id ACA49606C3;
-	Wed,  3 Sep 2025 19:24:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7089A1C228983;
-	Wed,  3 Sep 2025 21:24:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756927480; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=CSX67n2NDl4x2gypHsejx6bRhDLoEx00lnRe9Ruo/QA=;
-	b=UVhtq/7C8Fm6tWWV/f/tmd+4uZX8q9RVUT7HWX0Ud2YKLuTolRlvPRND4pYmafLLI/LozF
-	ypGykVZ3uCwzI3lgKA6yCS+YejpDcwPpPqbWgcu6y6VbVF7scfUFpib8HvktgBTeoVoeK6
-	Uo+/DbjAh+TDwPtp2kQU6b9nZxPuk1K/fyW+16vNyl+USqyG7o3e6rVYZhxmFh+dqwYX+W
-	DwDQjt0Zo6IDoVCW8mmJ+77QISNdlc7+0YLjXkK3pHNmme6oS1xBIAPKyjr1KZ+nmEjBL0
-	pJ71x+7qZQ1FTnTzoY67zac6obqi3osT5qukjfTJp+UqtpzM18PZiQ/aaWFUzw==
-Date: Wed, 3 Sep 2025 21:24:36 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 1/1] dt-bindings: rtc: pcf2127: add compatible string
- nxp,rtc-pcf2123
-Message-ID: <202509031924363f3ca29e@mail.local>
-References: <20250903165536.431586-1-Frank.Li@nxp.com>
- <202509031658298690ab12@mail.local>
- <aLiHyoI6orsalmyJ@lizhi-Precision-Tower-5810>
+	s=arc-20240116; t=1756931591; c=relaxed/simple;
+	bh=2f9tKcsMKp0gciepEFUNwE/NuRRBuswExnDtz+quojg=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=lV1ncaO34bf3xV3zkZRCS1gDDFnp2h8Laa30ljI9z4upKF3JAPK856WSGTq1+aoiANyerrPBuKDC4Fe1LvW4OqnUyeAjohsTDuulegmirL76FqRl6mzcniZuTR9rTRepYyrdkhM6pzNmDoXjvxP7ea3F7vV1kRGo6DftcnBCm1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlwZDffg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1209AC4CEE7;
+	Wed,  3 Sep 2025 20:33:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756931591;
+	bh=2f9tKcsMKp0gciepEFUNwE/NuRRBuswExnDtz+quojg=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=NlwZDffgn/uyHsx5R1Rd/uEKJO8qLBGp591R06JNfPTd0e8mVkrkT7z8nyW7UMYaE
+	 lg15pZ72vnzJYHpKarZj5foxwoWAHHQz//yQVqyxRip8reHw9g9PqqkGMMb2/CsMnj
+	 TU8Y/gBqM5dCp16QwMgULs9umMoSoT/y+X3gG32jf7jBhpVoNOb2xwVq9Rl9L4soVB
+	 FQwHMLNWj62RxkFAMfmmVKKw3xJpX4mgIt9J2TD4K3iOn1vDMgSVbOYBn/+dhGjZA2
+	 1X5cBZO4EobCjEpxQiZlnJqEeqZZmkkxh4Tc7Z30omCVVUwP6Vv0pHWr15z0xho945
+	 2/FgB5pHH39ww==
+Date: Wed, 03 Sep 2025 15:33:09 -0500
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aLiHyoI6orsalmyJ@lizhi-Precision-Tower-5810>
-X-Last-TLS-Session-Version: TLSv1.3
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: conor+dt@kernel.org, akhileshpatilvnit@gmail.com, 
+ alexandre.belloni@bootlin.com, devicetree@vger.kernel.org, 
+ skhan@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, krzk+dt@kernel.org
+To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+In-Reply-To: <40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in>
+References: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
+ <40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in>
+Message-Id: <175693109106.2632657.7210111562609341656.robh@kernel.org>
+Subject: Re: [PATCH 2/7] dt-bindings: rtc: add bindings for m41t93
 
-On 03/09/2025 14:24:10-0400, Frank Li wrote:
-> On Wed, Sep 03, 2025 at 06:58:29PM +0200, Alexandre Belloni wrote:
-> > On 03/09/2025 12:55:36-0400, Frank Li wrote:
-> > > Add compatible string nxp,rtc-pcf2123, which style is not consistent with
-> > > existed compatible string because existed driver and dts use
-> > > nxp,rtc-pcf2123.
-> > >
-> > > Fix below CHECK_DTBS warning:
-> > > arch/arm/boot/dts/nxp/imx/imx6q-evi.dtb: /soc/bus@2000000/spba-bus@2000000/spi@2018000/rtc@3: failed to match any schema with compatible: ['nxp,rtc-pcf2123']
-> > >
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > index 11fcf0ca1ae07..595c20df6a411 100644
-> > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > @@ -20,6 +20,7 @@ properties:
-> > >        - nxp,pcf2127
-> > >        - nxp,pcf2129
-> > >        - nxp,pcf2131
-> > > +      - nxp,rtc-pcf2123
-> >
-> > Nope, you need to fix the devicetree.
+
+On Wed, 03 Sep 2025 19:55:59 +0530, Akhilesh Patil wrote:
+> add DT bindings for m41t93 rtc in YAML format.
 > 
-> Oh, driver drivers/rtc/rtc-pcf2123.c also use nxp,rtc-pcf2123. For such old
-> devices, generally keep it as it.
+> Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+> ---
+>  .../devicetree/bindings/rtc/st,m41t93.yaml    | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/st,m41t93.yaml
 > 
-> Maybe DT team members provide more professional comments for it.
 
-It is there for DT ABI compatibility, we don't need to advertise its
-existence in the doc, you must fix the device tree.
+My bot found errors running 'make dt_binding_check' on your patch:
 
+yamllint warnings/errors:
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/rtc/st,m41t93.example.dtb: rtc@0 (st,m41t93): Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
+	from schema $id: http://devicetree.org/schemas/rtc/st,m41t93.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
