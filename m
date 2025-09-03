@@ -1,229 +1,195 @@
-Return-Path: <linux-rtc+bounces-4808-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4810-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D428B423AC
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 16:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE9BEB423C0
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 16:31:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 416271BC1F89
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 14:29:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DD101BC12BD
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 14:31:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A233126C7;
-	Wed,  3 Sep 2025 14:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74F21F1302;
+	Wed,  3 Sep 2025 14:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="pCQMjQNM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBniE41O"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADCE31065C
-	for <linux-rtc@vger.kernel.org>; Wed,  3 Sep 2025 14:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777FF1EE03B;
+	Wed,  3 Sep 2025 14:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756909706; cv=none; b=Y1UPcnJ1HGHsEYZzbH6V8a7I1zf5vYF4COqsJVSD0aVgL6/HPAMiLP43eeeS56XTxhA2ZrdGi3p9ozbSl6Rz4sYGVOgs5fTkUSez0I5mcc85HL2R9CKByZpsmu4RNW+flEhHuQIaQAD5avwctaQP/McKjGUGBSc2Aj9lBhfdrCI=
+	t=1756909857; cv=none; b=JJyHcXh8eg0XtUm4A8wX3M6TejyYfZxPAkShLTDiNzYeUs1kDDjgtuy0RXvr6chgKwlV7TDOxhe2gQMFyGpwbc0xZcuCFNrg9XkzDHeyrLR536JIRMenTxt0NgkdjsHl+rkVWlxzPG1lgikAMCU7Wa04x75h9CiGINWozLdgbqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756909706; c=relaxed/simple;
-	bh=01fhlad7Sny1+XuY2/4ETk3iQQ94e+mlkjWPm0k07Ng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZTYdkU4iMIf7EecLeje/SuhbOMRgCp1AGilUVkhRi22SFZaLwzO/4ZkpeFC7menexQZ6kdaUEMUI5FymVglA0lxN1bwrJo9hAOk/mhnLf47y51XyWhgJEn+PKVgqV5cdJx/oC0+FJ5H+njcXKWZdYi0D+MRGn6TtumhiGOUw9aY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=pCQMjQNM; arc=none smtp.client-ip=103.21.126.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
-Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
-	by smtp1.iitb.ac.in (Postfix) with SMTP id 64A8E1015C6C
-	for <linux-rtc@vger.kernel.org>; Wed,  3 Sep 2025 19:58:21 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in 64A8E1015C6C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
-	t=1756909701; bh=01fhlad7Sny1+XuY2/4ETk3iQQ94e+mlkjWPm0k07Ng=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pCQMjQNMs1JXU/yElscJEHgWtFni9y5lBozutFrQ55H65Z9snI6UvY51ywN6UqQum
-	 J+0g8suZBXBHl9S6CwoMMHr7WmR5F84G875DSg0PxMaixg25Kb6itu7frp/3nbjSNr
-	 RhbTMvUG6aBChVkzKqojebZUclIDOF299+nC38Fc=
-Received: (qmail 741 invoked by uid 510); 3 Sep 2025 19:58:21 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/26337} 
- Clear:RC:1(10.200.1.25):SA:0(0.8/7.0):. Processed in 3.493614 secs; 03 Sep 2025 19:58:21 +0530
-X-Spam-Level: 
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: akhilesh@ee.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
-  by ldns2.iitb.ac.in with SMTP; 3 Sep 2025 19:58:17 +0530
-Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	by ldns2.iitb.ac.in (Postfix) with ESMTP id 30DDB3414F0;
-	Wed,  3 Sep 2025 19:58:17 +0530 (IST)
-Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	(Authenticated sender: akhilesh)
-	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id BFFCD1E8143E;
-	Wed,  3 Sep 2025 19:58:16 +0530 (IST)
-Date: Wed, 3 Sep 2025 19:58:11 +0530
-From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-To: alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org,
-	conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akhileshpatilvnit@gmail.com
-Subject: [PATCH 7/7] rtc: m41t93: Add watchdog support
-Message-ID: <694706ad8577a36ef8948e0d9ca7ea561900fbc2.1756908788.git.akhilesh@ee.iitb.ac.in>
-References: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
+	s=arc-20240116; t=1756909857; c=relaxed/simple;
+	bh=J8Sjjdy0rK30EOTwKDFN3lWOr0OpvxOepCHOkkg7Udw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=no2DnZH5bRMu3+pqaWLViPtk9xrlUfgWmkHxm/e2aqTioqHxei5UXtaUQelodVcycjh1o2mUJ5UlwRBBJLnV+n9XkxneLk9ntfJM7U/rrEy5zuWLe6TXgC9w2+LOAq7Wb30pEbb8I4pZQdGtNKNdqG6rVZJf+0hF5z9BZjUPTC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBniE41O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA721C4CEE7;
+	Wed,  3 Sep 2025 14:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756909857;
+	bh=J8Sjjdy0rK30EOTwKDFN3lWOr0OpvxOepCHOkkg7Udw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IBniE41OHVP87GuzsaoqxfHcQWCSqEtS4J1iikE74s86x60XUS5EdKJKVKSTNaFOE
+	 q7wIyX3Xx/L+eUezUJ1vLyW8lbDeoL8eLIUfS+YTOVLsP7F5NG2CbSOTstH3j6//T1
+	 j6dhTmz4aZg3QbsYFdSazDf7fRbgQnrjnypnLFOqJlFB/Eh9L5/8mhxwstqSD1JIl0
+	 ZNE7mn6XoVIvF8Qvy9TlLSNGBFg2Bp5zS5VykLkf618Y73vLwXQ3cYPUWDrmDEsjCc
+	 19LR93nh5SqfunUAHlTj2Y0aWN3jtoVBIkGyRqb73e5pTSUpdpP9H0i/aEepnYDjbA
+	 IxeZG7u8FOZVg==
+Message-ID: <9094d792-c20a-48fa-b769-5824e1f451eb@kernel.org>
+Date: Wed, 3 Sep 2025 16:30:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/7] dt-bindings: rtc: add bindings for m41t93
+To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>, alexandre.belloni@bootlin.com,
+ krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
+Cc: skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ akhileshpatilvnit@gmail.com
+References: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
+ <40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Implement watchdog feature driver for m41t93 rtc with 1s resolution and
-alarm only mode. Define start, stop, ping, and set_timeout callbacks
-as needed by watchdog framework.
+On 03/09/2025 16:25, Akhilesh Patil wrote:
+> add DT bindings for m41t93 rtc in YAML format.
 
-Tested by observing IRQ pin(12) going low after intentionally not pinging
-watchdog.
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
 
-Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
----
- drivers/rtc/rtc-m41t93.c | 93 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
 
-diff --git a/drivers/rtc/rtc-m41t93.c b/drivers/rtc/rtc-m41t93.c
-index 83cc34c4baae..e549c5f1e11a 100644
---- a/drivers/rtc/rtc-m41t93.c
-+++ b/drivers/rtc/rtc-m41t93.c
-@@ -14,6 +14,7 @@
- #include <linux/spi/spi.h>
- #include <linux/regmap.h>
- #include <linux/clk-provider.h>
-+#include <linux/watchdog.h>
- 
- #define M41T93_REG_SSEC			0
- #define M41T93_REG_ST_SEC		1
-@@ -36,6 +37,10 @@
- #define M41T93_SQW_RS_MASK		0xf0
- #define M41T93_SQW_RS_SHIFT		4
- #define M41T93_BIT_SQWE			BIT(6)
-+#define M41T93_REG_WATCHDOG		0x9
-+#define M41T93_WDT_RB_MASK		0x3
-+#define M41T93_WDT_BMB_MASK		0x7c
-+#define M41T93_WDT_BMB_SHIFT		2
- 
- 
- #define M41T93_REG_ALM_HOUR_HT		0xc
-@@ -52,6 +57,7 @@ struct m41t93_data {
- #ifdef CONFIG_COMMON_CLK
- 	struct clk_hw clks;
- #endif
-+	struct watchdog_device wdd;
- };
- 
- static int m41t93_set_time(struct device *dev, struct rtc_time *tm)
-@@ -409,6 +415,90 @@ static int rtc_m41t93_clks_register(struct device *dev, struct m41t93_data *m41t
- }
- #endif
- 
-+static int m41t93_wdt_ping(struct watchdog_device *wdd)
-+{
-+	u8 resolution, mult;
-+	u8 val = 0;
-+	int ret;
-+	struct m41t93_data *m41t93 = watchdog_get_drvdata(wdd);
-+
-+	/*  Resolution supported by hardware
-+	 *  0b00 : 1/16 seconds
-+	 *  0b01 : 1/4 second
-+	 *  0b10 : 1 second
-+	 *  0b11 : 4 seconds
-+	 */
-+	resolution = 0x2; /* hardcode resolution to 1s */
-+	mult = wdd->timeout;
-+	val = resolution | (mult << M41T93_WDT_BMB_SHIFT &  M41T93_WDT_BMB_MASK);
-+
-+	ret = regmap_write_bits(m41t93->regmap, M41T93_REG_WATCHDOG,
-+				 M41T93_WDT_RB_MASK | M41T93_WDT_BMB_MASK, val);
-+
-+	return ret;
-+}
-+
-+static int m41t93_wdt_start(struct watchdog_device *wdd)
-+{
-+	return m41t93_wdt_ping(wdd);
-+}
-+
-+static int m41t93_wdt_stop(struct watchdog_device *wdd)
-+{
-+	struct m41t93_data *m41t93 = watchdog_get_drvdata(wdd);
-+
-+	/* Write 0 to watchdog register */
-+	return regmap_write_bits(m41t93->regmap, M41T93_REG_WATCHDOG,
-+				  M41T93_WDT_RB_MASK | M41T93_WDT_BMB_MASK, 0);
-+}
-+
-+static int m41t93_wdt_set_timeout(struct watchdog_device *wdd,
-+				   unsigned int new_timeout)
-+{
-+	wdd->timeout = new_timeout;
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info m41t93_wdt_info = {
-+	.identity = "m41t93 rtc Watchdog",
-+	.options = WDIOF_ALARMONLY,
-+};
-+
-+static const struct watchdog_ops m41t93_watchdog_ops = {
-+	.owner = THIS_MODULE,
-+	.start = m41t93_wdt_start,
-+	.stop = m41t93_wdt_stop,
-+	.ping = m41t93_wdt_ping,
-+	.set_timeout = m41t93_wdt_set_timeout,
-+};
-+
-+static int m41t93_watchdog_register(struct device *dev, struct m41t93_data *m41t93)
-+{
-+	int ret;
-+
-+	m41t93->wdd.parent = dev;
-+	m41t93->wdd.info = &m41t93_wdt_info;
-+	m41t93->wdd.ops = &m41t93_watchdog_ops;
-+	m41t93->wdd.min_timeout = 0;
-+	m41t93->wdd.max_timeout = 10;
-+	m41t93->wdd.timeout = 3; /* Default timeout is 3 sec */
-+	m41t93->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
-+
-+	watchdog_set_drvdata(&m41t93->wdd, m41t93);
-+
-+	ret = devm_watchdog_register_device(dev, &m41t93->wdd);
-+	if (ret) {
-+		dev_warn(dev, "Failed to register watchdog\n");
-+		return ret;
-+	}
-+
-+	/* Disable watchdog at start */
-+	ret = m41t93_wdt_stop(&m41t93->wdd);
-+
-+	return ret;
-+}
-+
- static struct spi_driver m41t93_driver;
- 
- static const struct regmap_config regmap_config = {
-@@ -470,6 +560,9 @@ static int m41t93_probe(struct spi_device *spi)
- 	if (ret)
- 		dev_warn(&spi->dev, "Unable to register clock\n");
- #endif
-+	ret = m41t93_watchdog_register(&spi->dev, m41t93);
-+	if (ret)
-+		dev_warn(&spi->dev, "Unable to register watchdog\n");
- 
- 	return 0;
- }
--- 
-2.34.1
+Please organize the patch documenting compatible (DT bindings) before
+their user.
+See also:
+https://elixir.bootlin.com/linux/v6.14-rc6/source/Documentation/devicetree/bindings/submitting-patches.rst#L46
 
+> 
+> Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+> ---
+>  .../devicetree/bindings/rtc/st,m41t93.yaml    | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/st,m41t93.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/st,m41t93.yaml b/Documentation/devicetree/bindings/rtc/st,m41t93.yaml
+> new file mode 100644
+> index 000000000000..03673adc79db
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/st,m41t93.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/st,m41t93.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ST M41T93 RTC and compatible
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+This should not be subsystem maintainer.
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,m41t93
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+
+Hm? Are you sure? Nothing in the driver nor commit msg suggests that.
+
+> +    const: 1
+> +
+> +allOf:
+> +  - $ref: rtc.yaml
+> +
+> +unevaluatedProperties: false
+
+This goes after required. See example schema.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      rtc@0 {
+> +        spi-max-frequency = <2000000>;
+
+Does not look tested.
+
+> +        compatible = "st,m41t93";
+> +        reg = <0>;
+
+Please follow DTS coding style. Which property is the first in the
+coding style?
+
+Best regards,
+Krzysztof
 
