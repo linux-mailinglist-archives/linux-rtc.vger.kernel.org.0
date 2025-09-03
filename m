@@ -1,195 +1,149 @@
-Return-Path: <linux-rtc+bounces-4810-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4811-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE9BEB423C0
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 16:31:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EDE7B423FB
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 16:47:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DD101BC12BD
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 14:31:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4F903BCA76
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Sep 2025 14:47:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74F21F1302;
-	Wed,  3 Sep 2025 14:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81B92E92D1;
+	Wed,  3 Sep 2025 14:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBniE41O"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RpoJeYYf"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777FF1EE03B;
-	Wed,  3 Sep 2025 14:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FFD1EA7E4
+	for <linux-rtc@vger.kernel.org>; Wed,  3 Sep 2025 14:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756909857; cv=none; b=JJyHcXh8eg0XtUm4A8wX3M6TejyYfZxPAkShLTDiNzYeUs1kDDjgtuy0RXvr6chgKwlV7TDOxhe2gQMFyGpwbc0xZcuCFNrg9XkzDHeyrLR536JIRMenTxt0NgkdjsHl+rkVWlxzPG1lgikAMCU7Wa04x75h9CiGINWozLdgbqU=
+	t=1756910861; cv=none; b=lmy4OyHhh2f3FS79Xpqg/+Ye8HZdjMstREAleUVI5oOCw1wcTklO1yBFKk91FAH6hHDA2+mcP19V8Oe4Gb/glfhlrkE7tUbKgRlN1orvx8IJTsLnCrSEQSVZG7yH5rH24VWesR09JxKGfXRjTgY3afALpdKLrrsN9LFCEakh934=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756909857; c=relaxed/simple;
-	bh=J8Sjjdy0rK30EOTwKDFN3lWOr0OpvxOepCHOkkg7Udw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=no2DnZH5bRMu3+pqaWLViPtk9xrlUfgWmkHxm/e2aqTioqHxei5UXtaUQelodVcycjh1o2mUJ5UlwRBBJLnV+n9XkxneLk9ntfJM7U/rrEy5zuWLe6TXgC9w2+LOAq7Wb30pEbb8I4pZQdGtNKNdqG6rVZJf+0hF5z9BZjUPTC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBniE41O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA721C4CEE7;
-	Wed,  3 Sep 2025 14:30:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756909857;
-	bh=J8Sjjdy0rK30EOTwKDFN3lWOr0OpvxOepCHOkkg7Udw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IBniE41OHVP87GuzsaoqxfHcQWCSqEtS4J1iikE74s86x60XUS5EdKJKVKSTNaFOE
-	 q7wIyX3Xx/L+eUezUJ1vLyW8lbDeoL8eLIUfS+YTOVLsP7F5NG2CbSOTstH3j6//T1
-	 j6dhTmz4aZg3QbsYFdSazDf7fRbgQnrjnypnLFOqJlFB/Eh9L5/8mhxwstqSD1JIl0
-	 ZNE7mn6XoVIvF8Qvy9TlLSNGBFg2Bp5zS5VykLkf618Y73vLwXQ3cYPUWDrmDEsjCc
-	 19LR93nh5SqfunUAHlTj2Y0aWN3jtoVBIkGyRqb73e5pTSUpdpP9H0i/aEepnYDjbA
-	 IxeZG7u8FOZVg==
-Message-ID: <9094d792-c20a-48fa-b769-5824e1f451eb@kernel.org>
-Date: Wed, 3 Sep 2025 16:30:53 +0200
+	s=arc-20240116; t=1756910861; c=relaxed/simple;
+	bh=uIiHVfgXcBHll4tp5RO1iUvvwxGAS287ADmVmicJIzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kPuuVsBh6P2mj/sO1X3Gt8SFdH+uvRcgBWcXpd5D6zoW2b5m2w6PZ9Jxn4cCz5GaUDgX53zvwiWxBNm54TJO1o5ktgdKsGtMQ6hWgtSIAfIzfLFR8XYwNjzSoyBJSZPhh6ylEG/z5Nt6q/oCGdC/epSz0YT8HGKPGJICGE7x/Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RpoJeYYf; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id A936B4E40C09;
+	Wed,  3 Sep 2025 14:47:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 80808606C3;
+	Wed,  3 Sep 2025 14:47:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1BC6A1C22D933;
+	Wed,  3 Sep 2025 16:47:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1756910855; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=ujR0yYZ5vFQl06mtsamsbnkJePIHaLtqM3Tp5y6BL2U=;
+	b=RpoJeYYf/ZHQRw1WFqCDTpBR6Tqg5/1v1LPVh9t0KkpFMj6ZUT+1o1EB987g4ZG6jaF5NZ
+	Dm0I6Cdw8RRBspPKZ+ihoaeGMqbkoLI26dcFg6h9Y+3IAMpgrMUPipQnHNPRy+qfKbf42O
+	wksiz8pIqvPkYuIz67rDkTvvUZMqu62Drro8GVFdbJhSo8DasJhqHsWE+DQ68I8pFNT6zT
+	HbSjAJqnVcpPP5MMY5rLxU8dm+GBQewjQ2ClnRzN8B8NxkYNdjyT3XjoONXIS2d3TyyN8z
+	cq3jekRx+zTS95mLK+Y8UY5pk4/XqCSXhRhZuhOqLiH5Yd1+/cG/tILaT4om7Q==
+Date: Wed, 3 Sep 2025 16:47:23 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+Cc: krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org,
+	skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	akhileshpatilvnit@gmail.com
+Subject: Re: [PATCH 5/7] rtc: m41t93: fix device connection/detection logic
+ during probe
+Message-ID: <2025090314472377b79cdf@mail.local>
+References: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
+ <c3deec9e679cd4e4a49a2cc1cba340c552faefdc.1756908788.git.akhilesh@ee.iitb.ac.in>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/7] dt-bindings: rtc: add bindings for m41t93
-To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>, alexandre.belloni@bootlin.com,
- krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- akhileshpatilvnit@gmail.com
-References: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
- <40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <40c91cbb07140ecdf4f91afc118c2518e85041c3.1756908788.git.akhilesh@ee.iitb.ac.in>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3deec9e679cd4e4a49a2cc1cba340c552faefdc.1756908788.git.akhilesh@ee.iitb.ac.in>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 03/09/2025 16:25, Akhilesh Patil wrote:
-> add DT bindings for m41t93 rtc in YAML format.
-
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
-See also:
-https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-
-
-Please organize the patch documenting compatible (DT bindings) before
-their user.
-See also:
-https://elixir.bootlin.com/linux/v6.14-rc6/source/Documentation/devicetree/bindings/submitting-patches.rst#L46
-
+On 03/09/2025 19:57:21+0530, Akhilesh Patil wrote:
+> Fix the incorrect assumption about WDAY register (0x4) bits 3 to 7
+> being 0 after initial power-on to test response from device during probe
+> 
+> Do not expect these bits to be 0 after power on as datasheet does not
+> explicitly mention these power on defaults but recommends software to
+> clear these bits during operation. Refer section 3.15 for initial
+> power-on default bits.
+> 
+> Fix the random probe failures after power on by removing this condition
+> check. Add alternate response check logic which performs write, read,
+> compare check on device SRAM register to check device connection.
 > 
 > Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
 > ---
->  .../devicetree/bindings/rtc/st,m41t93.yaml    | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/st,m41t93.yaml
+>  drivers/rtc/rtc-m41t93.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/rtc/st,m41t93.yaml b/Documentation/devicetree/bindings/rtc/st,m41t93.yaml
-> new file mode 100644
-> index 000000000000..03673adc79db
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/st,m41t93.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/st,m41t93.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/rtc/rtc-m41t93.c b/drivers/rtc/rtc-m41t93.c
+> index 8cc179e08a4a..902797070246 100644
+> --- a/drivers/rtc/rtc-m41t93.c
+> +++ b/drivers/rtc/rtc-m41t93.c
+> @@ -30,6 +30,7 @@
+>  #define M41T93_BIT_A1IE                 BIT(7)
+>  #define M41T93_BIT_ABE			BIT(5)
+>  #define M41T93_FLAG_AF1                 BIT(6)
+> +#define M41T93_SRAM_BASE		0x19
+>  
+>  
+>  #define M41T93_REG_ALM_HOUR_HT		0xc
+> @@ -290,17 +291,25 @@ static int m41t93_probe(struct spi_device *spi)
+>  		return PTR_ERR(m41t93->regmap);
+>  	}
+>  
+> -	ret = regmap_read(m41t93->regmap, M41T93_REG_WDAY, &res);
+> -	if (ret < 0) {
+> +	ret = regmap_write(m41t93->regmap, M41T93_SRAM_BASE, 0xA5);
+
+Nope, probe is not called at RTC power on but when linux starts. The
+whole point of the RTC is to survive Linux. Writing to this register is
+breaking functionnality.
+
+> +	if (ret) {
+>  		dev_err(&spi->dev, "IO error\n");
+>  		return -EIO;
+>  	}
+>  
+> -	if (res < 0 || (res & 0xf8) != 0) {
+> -		dev_err(&spi->dev, "not found 0x%x.\n", res);
+> +	ret = regmap_read(m41t93->regmap, M41T93_SRAM_BASE, &res);
+> +	if (ret) {
+> +		dev_err(&spi->dev, "IO error\n");
+> +		return -EIO;
+> +	}
 > +
-> +title: ST M41T93 RTC and compatible
+> +	if (res != 0xA5) {
+> +		dev_err(&spi->dev, "No valid response from device 0x%x.\n", res);
+>  		return -ENODEV;
+>  	}
+>  
+> +	dev_notice(&spi->dev, "m41t93 device response success\n");
 > +
-> +maintainers:
-> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-This should not be subsystem maintainer.
+This is too verbose.
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,m41t93
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#clock-cells":
+>  	spi_set_drvdata(spi, m41t93);
+>  
+>  	m41t93->rtc = devm_rtc_device_register(&spi->dev, m41t93_driver.driver.name,
+> -- 
+> 2.34.1
+> 
 
-Hm? Are you sure? Nothing in the driver nor commit msg suggests that.
-
-> +    const: 1
-> +
-> +allOf:
-> +  - $ref: rtc.yaml
-> +
-> +unevaluatedProperties: false
-
-This goes after required. See example schema.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    spi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      rtc@0 {
-> +        spi-max-frequency = <2000000>;
-
-Does not look tested.
-
-> +        compatible = "st,m41t93";
-> +        reg = <0>;
-
-Please follow DTS coding style. Which property is the first in the
-coding style?
-
-Best regards,
-Krzysztof
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
