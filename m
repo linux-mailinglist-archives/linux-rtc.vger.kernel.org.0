@@ -1,138 +1,138 @@
-Return-Path: <linux-rtc+bounces-4834-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4835-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9086B43CA3
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Sep 2025 15:09:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C7EBB43D2D
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Sep 2025 15:28:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91E433AA25A
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Sep 2025 13:09:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C55661882E48
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Sep 2025 13:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99F1301462;
-	Thu,  4 Sep 2025 13:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852D0302CC3;
+	Thu,  4 Sep 2025 13:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/n36qtu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wqmGvf53"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B778D301032;
-	Thu,  4 Sep 2025 13:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3F43019D9
+	for <linux-rtc@vger.kernel.org>; Thu,  4 Sep 2025 13:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756991370; cv=none; b=I2Jg+7rQVfyMrPqoKTsubGIs4GZV929Vmn+dvbZm2ruMohRflQBjIiEeZbNbnDaW9S+tcacfS4DUWtWmDbvu0DsQgqpLGdNVkdDraQqM0G+1IguDs3ARFgFAnPJnw6+u/axr/PAcuhJ8Ne5UOW7ii0BMM9gmueVq1+Ymr6ciDSo=
+	t=1756992513; cv=none; b=YanbyWz2iB5DfT3NFeG2mVGtJwUIm1Ii3lmYTYKpG5ZxsLxeWKVoUUzfv2v70lhX3ALNY+Vz011O+kHsu6nE5S1FXAdTyInjbYNbP1upVCgULUPNue719H3RE3DHMI1VbAF1DU+n09SsDzJKiERZ5v9ZUrpvkj5pHp5bD2dvuRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756991370; c=relaxed/simple;
-	bh=NX0Y2aLY3EztqYcYAvgXwVIeYOSA24U07+fSm8VyCaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qo3TUOGxJLB+K9wX/OUAWPAbm+ziiM+adJa3FRgnMkdPfu04cYgcnGuIbfR3Ou6shKqH/yT1FQdOAlYVIwa940Bx56ZpVWK3YxCnCCRIeulp/aO9CyZ2TTdMEhnx+p5JLsY19hbq5aJGEZzC26XkPYqPCtKnfQurm521B408lmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/n36qtu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F147CC4CEF0;
-	Thu,  4 Sep 2025 13:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756991370;
-	bh=NX0Y2aLY3EztqYcYAvgXwVIeYOSA24U07+fSm8VyCaI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=N/n36qtuLo/wAxvBJqchvqmrJkdw6/FqSMcUViB7X0LIAR/ni9AadHOq7KwWiWVT1
-	 kMS0fplKxJVKQIEmR3El4B2/Ke2U8HFCnXQRYfbyDBulUwkUqRRTOs4AQ/5RprJxtc
-	 UwqkuFASY4NVHy08ID7MrzHXvjYethFaCzMf1hn9RUKacXZ0EZp+b1eAEfuyvF8jMJ
-	 YQzu9Xdn8KTBpPLCO7PLDBwxM2loMcn1sMGQV32DgIil90tOH7kcCJzfN0wx5zFzhs
-	 ytBG5XYWFL9LrNRBgyrXfT1WKs7BiFMcXaWoL9sVgOpVLrSnl1YGUi8bwIIBqQSI72
-	 aUqdsVA2100Ag==
-Message-ID: <dbf8e04a-724c-455a-9b4e-865bf5192a8a@kernel.org>
-Date: Thu, 4 Sep 2025 15:09:26 +0200
+	s=arc-20240116; t=1756992513; c=relaxed/simple;
+	bh=ScXnF6zPN2urQTV2s9IF2aE1owi1if90/n87/FgC/yI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=aKQ5NqmXRGhnP5y4rcgDIcQQMvzg5nZlXwQtfQjdQHt+CDxkuoKn7N+r7NXiU8dB84DLwrTFUp0b+CugCyXvCBfr7LzLlC9F6WOW5n3e2iRODlBBZ8X/0hl9E/KyuWQLAtTxkXnJtp6Tfry41aM8oMQghi7Knrt992AFk09btwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wqmGvf53; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-45b7722ea37so5227985e9.1
+        for <linux-rtc@vger.kernel.org>; Thu, 04 Sep 2025 06:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756992510; x=1757597310; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wg9RQ81pLZ+ciihaHbHh+VHe51/1jd/flpRJCWP5vTY=;
+        b=wqmGvf53RXEbz5cHRxj8MEPL2DvWA+VFmMQjACA+J1kI9BBnJXNB6fK1ztSP7jL83k
+         LIKMWSGr4+RfkAy8VMvZg4bFEnlREE4TkMCRNQCsOXseW0MuJ03KZbvXCzFxIFxYutZ2
+         gafSmON3AbjveNOla3UzstA/VJJK+pbD0PGWFsBIiWJrOWwxmcqih8zRi+VPvy1sGCXS
+         3i2+M1qx0VU9PefM8oocRSHXFv8/fw7+OR04FZX/x/VDQj9S5Q2Ip0voJ1EQA6/NqwFE
+         td8E9wnmMrhLXAja0i8jsmi+FGT1gXobc0iUxYM6c6Np38SQnNl0yY10m5pED7HotDKj
+         6JRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756992510; x=1757597310;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wg9RQ81pLZ+ciihaHbHh+VHe51/1jd/flpRJCWP5vTY=;
+        b=d5Zsohs3KiM92S4WAI8Q6sTVTFxQaC2tDZWO+6Qk+ATuFqNbMlS+DdrLin6T64/cwL
+         iE335AbfOle41JLyPa5SMlfFBTHFqPRIfUiLPk1aBvmZJJ0z0U3rUOpec++YLvS62ZjN
+         HNQa97aRZEJyA3cRqPPkDjOH1ef5pDPObxXFMT4jNunJOBxvw0DDCSv68Z1kxzBW+lEx
+         /aK/+yTjerw5gcsU2HQzJs+LGOdtztnWQBigsop+W3DLadc3bBUND88PUSiGIlvHBM86
+         YDFkSbi8mnwYXdElzbqHhHVSI0FTFS96uJt6YEUnFH/H8oCpFqOhk51R8208ryYPwLO2
+         ut4A==
+X-Forwarded-Encrypted: i=1; AJvYcCV4MiSyy6MFDxKBbr7CXvY5Fc89HEBgQGBAaCL+OG+O0V2hJwNxnd6U3TZzYU40bWWfC4dmwIAkTC0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSI2zQ8PEIChap0BeqCk3S9p0+d4+5CyrrAY8Yuuw3kzCE16A8
+	JvFfw1JUmhjWJ7cTFW5LMa7m5YTZ884ulC1SvO9xPdI8s4MgTH52Y523G1Jh5d0sMuc=
+X-Gm-Gg: ASbGncvNw9UQwW6WYG3N0QSCMu1VCx3MyRq8ldO8PShVQEegGo58lMsvrzS7KPOb0Mt
+	LMS5NY5ahAlQsOuAixxrDGUkgz080+vJ3rDEVyIk+CD9X5UiybPW0x2WoJ6r/xXzRZU+7IfnThb
+	PFElaG3b7gPno6+jXvvIJkKsXo8rvslG+9N31173EnvP2lFaI/EpVyjVp8MWI+7u3sCtzvpTlFa
+	BnjY+5dsbhvr56bEmbssI7jzPn7Imm87m7HpvUsT6weZdNrxxSPoLNK2Jz8XuBNzijfAsXKDG71
+	Q99U42hNjoyWFZulNx1mzQfVPYTA31OrNIcZvFcQnamNXAwbgCiYDTfsVOo4dnLI6QQRHy5j9Yi
+	bV96hG0aSCJ+eqVlm4y/yCQsNFsadVsLDXnuQU7ivt+M=
+X-Google-Smtp-Source: AGHT+IEqR0+n4/kIxFH+iZ1e8ctE7JnfjyeZG2z9hWnY3yB50qjsaKmYnmnDkhp/9C/R0KCDPHIUFw==
+X-Received: by 2002:a05:600c:331b:b0:45c:b501:795c with SMTP id 5b1f17b1804b1-45cb50179cemr38578945e9.10.1756992509525;
+        Thu, 04 Sep 2025 06:28:29 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:3d9:2080:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7e8879cesm286165305e9.12.2025.09.04.06.28.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Sep 2025 06:28:29 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+To: Yiting Deng <yiting.deng@amlogic.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20250717-rtc-c3-node-v1-0-4f9ae059b8e6@amlogic.com>
+References: <20250717-rtc-c3-node-v1-0-4f9ae059b8e6@amlogic.com>
+Subject: Re: (subset) [PATCH 0/2] rtc: add amlogic C3 RTC node
+Message-Id: <175699250880.3374853.13696019102809895067.b4-ty@linaro.org>
+Date: Thu, 04 Sep 2025 15:28:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] dt-bindings: rtc: pcf2127: add compatible string
- nxp,rtc-pcf2123
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Frank Li <Frank.li@nxp.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>,
- "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- imx@lists.linux.dev
-References: <20250903165536.431586-1-Frank.Li@nxp.com>
- <202509031658298690ab12@mail.local>
- <aLiHyoI6orsalmyJ@lizhi-Precision-Tower-5810>
- <202509031924363f3ca29e@mail.local>
- <20250904-mustard-lion-of-downpour-f07cea@kuoka>
- <20250904120626554f89c7@mail.local>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250904120626554f89c7@mail.local>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-On 04/09/2025 14:06, Alexandre Belloni wrote:
->>>>
->>>> Oh, driver drivers/rtc/rtc-pcf2123.c also use nxp,rtc-pcf2123. For such old
->>>> devices, generally keep it as it.
->>>>
->>>> Maybe DT team members provide more professional comments for it.
->>>
->>> It is there for DT ABI compatibility, we don't need to advertise its
->>> existence in the doc, you must fix the device tree.
->>
->> In-tree compatibles should be documented anyway (as "deprecated: true").
->>
+Hi,
+
+On Thu, 17 Jul 2025 17:38:36 +0800, Xianwei Zhao wrote:
+> Add C3 rtc compatible string and device node.
 > 
-> There is one device tree to fix, then we won't have any occurrence
-> in-tree anymore.
+> 
 
-The driver is, unless there is patch dropping it somewhere...
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.18/arm64-dt)
 
-Best regards,
-Krzysztof
+[2/2] arm64: dts: amlogic: C3: Add RTC controller node
+      https://git.kernel.org/amlogic/c/59b4c260582a74e641c973d016725e5dca32f300
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.18/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil
+
 
