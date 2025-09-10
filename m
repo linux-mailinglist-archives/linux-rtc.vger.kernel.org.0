@@ -1,187 +1,142 @@
-Return-Path: <linux-rtc+bounces-4849-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4850-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8521CB4FA0D
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Sep 2025 14:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68159B509FE
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Sep 2025 02:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2E774E4123
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Sep 2025 12:13:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A4ED172C86
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Sep 2025 00:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508C232CF9D;
-	Tue,  9 Sep 2025 12:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="l504Y8J+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDCC1C1F05;
+	Wed, 10 Sep 2025 00:51:43 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
+Received: from r9221.ps.combzmail.jp (r9221.ps.combzmail.jp [160.16.65.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA47A32BF4B
-	for <linux-rtc@vger.kernel.org>; Tue,  9 Sep 2025 12:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9044013AD1C
+	for <linux-rtc@vger.kernel.org>; Wed, 10 Sep 2025 00:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.16.65.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757419973; cv=none; b=MvlLj+vBNlp9VmYQ3sTWjOiBzvasAAs32AeF9dzsFWfy3H5SqusWXUvlcvoRzPhYJFZCTEcuge3j71gsfMgNmAlIpfo/ZgRNJYhSdwwbTRTHGyMmKiGwsmUI25SYyiPUdwBZNAM9vuFRaHr40a70CEKf+HsLJwRuNS4laPQYfN4=
+	t=1757465503; cv=none; b=iWs6KZomqRd/c9Sl4BOjHyoVLVYeteditWedo2eIj8Kdrp4vrcC6DYY7+1vIZ92lkBDFGHdOKn/ERhpM/biJjJT+OEZ7FfygSqeO2NOtFGoJH8RxQ7AOPgA+tzOIKdR3lyt5+TU4T7UlZFLOjhs5gjN6GQUZjgCZscKvZjgCO+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757419973; c=relaxed/simple;
-	bh=XavOBPWoiohB/KH7IvM7lBCug9BbrbJbY6t4BbKWmTE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tNEZrh/zxNXcJJ/6TH7Fm13DmVZm99Gkq3wA1sRf+CFuyNzQF7tz3GiUKikR99kyOqXejtkDou3TkUyyEPNW7pv0YvMFhZiQvxtedvr9KJ0Z8xlb41Slb30ZOjat7O0n5QtGlHF+op/pEBN6wvJR3qcS0MBYrwLiZNb+V+4KjeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=l504Y8J+; arc=none smtp.client-ip=103.21.126.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
-Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
-	by smtp1.iitb.ac.in (Postfix) with SMTP id D0F8A1010F7A
-	for <linux-rtc@vger.kernel.org>; Tue,  9 Sep 2025 17:42:45 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in D0F8A1010F7A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
-	t=1757419965; bh=XavOBPWoiohB/KH7IvM7lBCug9BbrbJbY6t4BbKWmTE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l504Y8J+oTgcJ/mahb1ga8FRsGlshm+DRiCzJhK0A3aOELk2re+wMUvs8AeOnt45y
-	 jDSNipkHX1f/HEWeD9/GT7NvUvIj9pqmbEepcxGUQR80Xgf88qz6QW0ATaGACq+HGr
-	 ZAB8YZHjvKhO4lyNh1AIhSKsB4hw9WUVT6lzskKo=
-Received: (qmail 1161 invoked by uid 510); 9 Sep 2025 17:42:45 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.101.4/26439} 
- Clear:RC:1(10.200.1.25):SA:0(0.2/7.0):. Processed in 5.151824 secs; 09 Sep 2025 17:42:45 +0530
-X-Spam-Level: 
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: akhilesh@ee.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
-  by ldns1.iitb.ac.in with SMTP; 9 Sep 2025 17:42:40 +0530
-Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	by ldns1.iitb.ac.in (Postfix) with ESMTP id 229F7360047;
-	Tue,  9 Sep 2025 17:42:40 +0530 (IST)
-Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	(Authenticated sender: akhilesh)
-	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id EDD751E8138D;
-	Tue,  9 Sep 2025 17:42:39 +0530 (IST)
-Date: Tue, 9 Sep 2025 17:42:35 +0530
-From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org,
-	skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akhileshpatilvnit@gmail.com
-Subject: Re: [PATCH 5/7] rtc: m41t93: fix device connection/detection logic
- during probe
-Message-ID: <20250909121235.GA2071423@bhairav-test.ee.iitb.ac.in>
-References: <cover.1756908788.git.akhilesh@ee.iitb.ac.in>
- <c3deec9e679cd4e4a49a2cc1cba340c552faefdc.1756908788.git.akhilesh@ee.iitb.ac.in>
- <2025090314472377b79cdf@mail.local>
+	s=arc-20240116; t=1757465503; c=relaxed/simple;
+	bh=gwtGjyr406Kn0MilPO/CQtMGSbMz8EqNSwd5sp3GouM=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=GxiIVHDkwWA/ApuckJihCBo5jYMBnt1ELvAeCc+Ti2CKEhkNKqQNFOs9N5usCmNDjXD+0fYx6xQl3x3U2D997sPI7UyTVgvFdCUEZO+sISSWKnAxJlJcVmGAfRAKpiL8A9lN7XyMiIHN7k6zKStL2Ev6zTPuyeyWq3JhoqUA4p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=knowledgelink-corp.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=160.16.65.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=knowledgelink-corp.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
+Received: by r9221.ps.combzmail.jp (Postfix, from userid 99)
+	id 90FB6E3F4A; Wed, 10 Sep 2025 09:39:54 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9221.ps.combzmail.jp 90FB6E3F4A
+To: linux-rtc@vger.kernel.org
+From: =?ISO-2022-JP?B?GyRCP0BFRCFDJUolbCVDJTglaiVzJS8bKEI=?= <info@knowledgelink-corp.jp>
+X-Ip: 2471891803360534
+X-Ip-source: k85gj73p48dnsa9wu0p6gd
+Precedence: bulk
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Subject: =?ISO-2022-JP?B?GyRCPT42SDB3JE41a00/JE43aCRhSn0bKEI=?=
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025090314472377b79cdf@mail.local>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-MagazineId: 3p9w
+X-uId: 6763304837485965624884461045
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20250910004032.90FB6E3F4A@r9221.ps.combzmail.jp>
+Date: Wed, 10 Sep 2025 09:39:54 +0900 (JST)
 
-On Wed, Sep 03, 2025 at 04:47:23PM +0200, Alexandre Belloni wrote:
-> On 03/09/2025 19:57:21+0530, Akhilesh Patil wrote:
-> > Fix the incorrect assumption about WDAY register (0x4) bits 3 to 7
-> > being 0 after initial power-on to test response from device during probe
-> > 
-> > Do not expect these bits to be 0 after power on as datasheet does not
-> > explicitly mention these power on defaults but recommends software to
-> > clear these bits during operation. Refer section 3.15 for initial
-> > power-on default bits.
-> > 
-> > Fix the random probe failures after power on by removing this condition
-> > check. Add alternate response check logic which performs write, read,
-> > compare check on device SRAM register to check device connection.
-> > 
-> > Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-> > ---
-> >  drivers/rtc/rtc-m41t93.c | 17 +++++++++++++----
-> >  1 file changed, 13 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-m41t93.c b/drivers/rtc/rtc-m41t93.c
-> > index 8cc179e08a4a..902797070246 100644
-> > --- a/drivers/rtc/rtc-m41t93.c
-> > +++ b/drivers/rtc/rtc-m41t93.c
-> > @@ -30,6 +30,7 @@
-> >  #define M41T93_BIT_A1IE                 BIT(7)
-> >  #define M41T93_BIT_ABE			BIT(5)
-> >  #define M41T93_FLAG_AF1                 BIT(6)
-> > +#define M41T93_SRAM_BASE		0x19
-> >  
-> >  
-> >  #define M41T93_REG_ALM_HOUR_HT		0xc
-> > @@ -290,17 +291,25 @@ static int m41t93_probe(struct spi_device *spi)
-> >  		return PTR_ERR(m41t93->regmap);
-> >  	}
-> >  
-> > -	ret = regmap_read(m41t93->regmap, M41T93_REG_WDAY, &res);
-> > -	if (ret < 0) {
-> > +	ret = regmap_write(m41t93->regmap, M41T93_SRAM_BASE, 0xA5);
-> 
-> Nope, probe is not called at RTC power on but when linux starts. The
-> whole point of the RTC is to survive Linux. Writing to this register is
-> breaking functionnality.
+　
+　
+　ある日突然、
+　社長 ちょっとご相談が・・と、ならないために。
+　
+　査定が引き金でキーパーソンが離職し、業績が落ちる
+　そんな失敗を防ぐ、4,300人の経営者が共感した
+　　「従業員の給与の決め方」を知る、ウェビナーのご案内です。
+　
+　
+　>> ご視聴予約はこちら
+　　 https://fc-knowledgelink-corp.jp/seminar_25/
+　
+--------------------------------------------　
 
-Okay. 
-I did not get the intent of original author to read WDAY register
-and check bits 3 to 7 to be 0 (as per datasheet, these are reserved bits
-and it does not explicitly say these are 0). I assume it is checking if
-device is connected, but IMO this check can be skipped altogether.
-Anaways, I would like to take this seperately and focus this series only
-on features, hence will skip this patch in v2.
+　テーマ： 労使共に納得できる。
+　　　　　 失敗しない、「給与の決め方」
+　
+　日程　： 9月17日（水）13:00〜15:00
+　　　 　　10月1日（水）13:00〜15:00
+　会場　： Zoom開催
+　定員　： 150名　※経営層の方限定です
+　費用　： 無料
+　特典　： セミナー資料を進呈
+　備考　： 両日内容は同じです
+--------------------------------------------
 
-> 
-> > +	if (ret) {
-> >  		dev_err(&spi->dev, "IO error\n");
-> >  		return -EIO;
-> >  	}
-> >  
-> > -	if (res < 0 || (res & 0xf8) != 0) {
-> > -		dev_err(&spi->dev, "not found 0x%x.\n", res);
+　本セミナーは4,300人以上の経営層が受講した
+　マネジメント理論：識学の「給与の決め方」を
+　
+　ビジネスの実務家として実体験をベースに
+　経営者目線でお伝えいたします。
+　
+　多くの部分で共感いただけるセミナーと
+　なっておりますのでぜひご参加ください。
+　
+　［ 内 容 ］
+　　1．評価と査定と連動させる方法
+　　2．絶対に押さえるべきポイント
+　　3．間違った評価制度
+　　4．導入企業の事例
+　　5．質疑応答
+　
+　
+　昇給・昇格に対する納得感を得られず、
+　組織パフォーマンスが低調になっていませんか？
+　
+　　昇給、昇格、賃金テーブルの要件が曖昧で
+　　労使共に納得できる状態とは言い難い。
 
-motivation for this change was - I was hitting this with res = 0x77
-ocassionally after soft reboot on my setup (am62x SK + m41t93 chip on spi0).
-I will confirm if it is any setup issue before taking up this code fix
-seperately.
-
-> > +	ret = regmap_read(m41t93->regmap, M41T93_SRAM_BASE, &res);
-> > +	if (ret) {
-> > +		dev_err(&spi->dev, "IO error\n");
-> > +		return -EIO;
-> > +	}
-> > +
-> > +	if (res != 0xA5) {
-> > +		dev_err(&spi->dev, "No valid response from device 0x%x.\n", res);
-> >  		return -ENODEV;
-> >  	}
-> >  
-> > +	dev_notice(&spi->dev, "m41t93 device response success\n");
-> > +
-> 
-> This is too verbose.
-
-Sure. will remove this.
-
-> 
-> >  	spi_set_drvdata(spi, m41t93);
-> >  
-> >  	m41t93->rtc = devm_rtc_device_register(&spi->dev, m41t93_driver.driver.name,
-> > -- 
-> > 2.34.1
-> > 
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Thanks for the review, 
-
-Regards,
-Akhilesh
+　これらは、「給与の決め方」の問題かもしれません。
+　
+　給与制度が機能不全に陥ると、公平性・透明性に疑義が生じ、
+　人事評価に対する不信やモチベーションの低下、
+　ひいては優秀人材の流出といった深刻なリスクにつながりかねません。
+　
+　
+　一方で、自社に最適化された給与制度をゼロから
+　設計することは容易ではなく、高度な知見と実行力が求められます。
+　
+　
+　そこで本セミナーでは、ビジネス組織からスポーツチームまで
+　幅広く応用可能な、汎用性の高い
+　「給与の決め方」フレームワークをご紹介いたします。
 
 
+　このセミナーが、最適な給与制度を考える
+　機会となれば幸いです。
+　
+　>> ご視聴予約はこちら
+　　 https://fc-knowledgelink-corp.jp/seminar_25/
+　
+　
+　ご興味をお持ちいただけましたら、
+　ご参加のお申込みを頂けますと幸いです。
+-----------------------
+　一般社団法人 ナレッジリンク
+　東京都千代田区神田小川町1-8-3
+　電話：03-5256-7638
+
+　配信が不要な方は大変残念ではございますが、
+　下記URLより手続き下さいませ。
+　
+　メールの停止はこちら
+　https://fc-knowledgelink-corp.jp/mail/
+　
 
