@@ -1,43 +1,46 @@
-Return-Path: <linux-rtc+bounces-4850-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4851-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68159B509FE
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Sep 2025 02:51:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D981FB50ADF
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Sep 2025 04:12:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A4ED172C86
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Sep 2025 00:51:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 995573A997F
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Sep 2025 02:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDCC1C1F05;
-	Wed, 10 Sep 2025 00:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BD723536C;
+	Wed, 10 Sep 2025 02:12:15 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from r9221.ps.combzmail.jp (r9221.ps.combzmail.jp [160.16.65.130])
+Received: from r9204.ps.combzmail.jp (r9204.ps.combzmail.jp [160.16.62.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9044013AD1C
-	for <linux-rtc@vger.kernel.org>; Wed, 10 Sep 2025 00:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.16.65.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725271A9FBA
+	for <linux-rtc@vger.kernel.org>; Wed, 10 Sep 2025 02:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.16.62.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757465503; cv=none; b=iWs6KZomqRd/c9Sl4BOjHyoVLVYeteditWedo2eIj8Kdrp4vrcC6DYY7+1vIZ92lkBDFGHdOKn/ERhpM/biJjJT+OEZ7FfygSqeO2NOtFGoJH8RxQ7AOPgA+tzOIKdR3lyt5+TU4T7UlZFLOjhs5gjN6GQUZjgCZscKvZjgCO+g=
+	t=1757470335; cv=none; b=r+rdfZ7m1wEbwfchhlMbeWLZhxHdAABndn23YlxHsSUnctQDca9jeI0NHobFmhCUl1BmKLYpM/mxNW5J6ul3Y9bPUpSogdKeS4zzwYtt/fQU9+QBPPbHFPAEN2OoQlgfeHs9qy+E1+Dw7wntfiHCFnurUZAUPLP6PXqZGzlJDOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757465503; c=relaxed/simple;
-	bh=gwtGjyr406Kn0MilPO/CQtMGSbMz8EqNSwd5sp3GouM=;
-	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=GxiIVHDkwWA/ApuckJihCBo5jYMBnt1ELvAeCc+Ti2CKEhkNKqQNFOs9N5usCmNDjXD+0fYx6xQl3x3U2D997sPI7UyTVgvFdCUEZO+sISSWKnAxJlJcVmGAfRAKpiL8A9lN7XyMiIHN7k6zKStL2Ev6zTPuyeyWq3JhoqUA4p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=knowledgelink-corp.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=160.16.65.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=knowledgelink-corp.jp
+	s=arc-20240116; t=1757470335; c=relaxed/simple;
+	bh=H7skry00/cVP0ZAaAZkvJJjqgZu6ph1kst5FtLNTm8g=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=QuDsDb00i7n11Oy2mCJ6wAa7Hob8tCse4r+hCWoNvUhu7/7aEMQ0E//7cwFRuiwOqzrWfiZAKBo/1YP2TRVmHM33swYTs/8oMT98l5zxhFkn5Iutv3O+qGiLeUmN4tzqubEaXFlAeFMUB4GvO7hbM7jAINAfoNTfBZHVut3S9H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fc-seminar-online.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=160.16.62.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fc-seminar-online.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
-Received: by r9221.ps.combzmail.jp (Postfix, from userid 99)
-	id 90FB6E3F4A; Wed, 10 Sep 2025 09:39:54 +0900 (JST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 r9221.ps.combzmail.jp 90FB6E3F4A
+Received: by r9204.ps.combzmail.jp (Postfix, from userid 99)
+	id 65CF7103C09; Wed, 10 Sep 2025 10:57:59 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9204.ps.combzmail.jp 65CF7103C09
 To: linux-rtc@vger.kernel.org
-From: =?ISO-2022-JP?B?GyRCP0BFRCFDJUolbCVDJTglaiVzJS8bKEI=?= <info@knowledgelink-corp.jp>
-X-Ip: 2471891803360534
-X-Ip-source: k85gj73p48dnsa9wu0p6gd
+From: =?ISO-2022-JP?B?GyRCPSJPKzBcOVQ7WTFnO3Y2SBsoQg==?= 
+ =?ISO-2022-JP?B?GyRCQGJMQDJxGyhC?= <info@fc-seminar-online.jp>
+X-Ip: 5790563803959527
+X-Ip-source: k85gj7o648dnsaq5u0p6gd
 Precedence: bulk
 List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Subject: =?ISO-2022-JP?B?GyRCPT42SDB3JE41a00/JE43aCRhSn0bKEI=?=
+Subject: =?ISO-2022-JP?B?GyRCPmMzMjxUJE49Ik8rJHI7WTFnJDkkazt2GyhC?=
+ =?ISO-2022-JP?B?GyRCNkgbKEIgGyRCPzc1LDMrNkglUSE8JUglSiE8GyhC?=
+ =?ISO-2022-JP?B?GyRCSmc9OBsoQg==?=
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -46,97 +49,74 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=iso-2022-jp
 Content-Transfer-Encoding: 7bit
-X-MagazineId: 3p9w
-X-uId: 6763304837485965624884461045
+X-MagazineId: o6q5
+X-uId: 6763304839485965624936221054
 X-Sender: CombzMailSender
 X-Url: http://www.combzmail.jp/
-Message-Id: <20250910004032.90FB6E3F4A@r9221.ps.combzmail.jp>
-Date: Wed, 10 Sep 2025 09:39:54 +0900 (JST)
+Message-Id: <20250910020103.65CF7103C09@r9204.ps.combzmail.jp>
+Date: Wed, 10 Sep 2025 10:57:59 +0900 (JST)
 
 　
-　
-　ある日突然、
-　社長 ちょっとご相談が・・と、ならないために。
-　
-　査定が引き金でキーパーソンが離職し、業績が落ちる
-　そんな失敗を防ぐ、4,300人の経営者が共感した
-　　「従業員の給与の決め方」を知る、ウェビナーのご案内です。
+　下記エリアにおいて、大人の発達障害の方が働くことを支援する、
+　「厚労省許認可」の就労移行支援事業の新規開業パートナーを募集しています。
 　
 　
-　>> ご視聴予約はこちら
-　　 https://fc-knowledgelink-corp.jp/seminar_25/
-　
---------------------------------------------　
-
-　テーマ： 労使共に納得できる。
-　　　　　 失敗しない、「給与の決め方」
-　
-　日程　： 9月17日（水）13:00〜15:00
-　　　 　　10月1日（水）13:00〜15:00
-　会場　： Zoom開催
-　定員　： 150名　※経営層の方限定です
-　費用　： 無料
-　特典　： セミナー資料を進呈
-　備考　： 両日内容は同じです
---------------------------------------------
-
-　本セミナーは4,300人以上の経営層が受講した
-　マネジメント理論：識学の「給与の決め方」を
-　
-　ビジネスの実務家として実体験をベースに
-　経営者目線でお伝えいたします。
-　
-　多くの部分で共感いただけるセミナーと
-　なっておりますのでぜひご参加ください。
-　
-　［ 内 容 ］
-　　1．評価と査定と連動させる方法
-　　2．絶対に押さえるべきポイント
-　　3．間違った評価制度
-　　4．導入企業の事例
-　　5．質疑応答
-　
-　
-　昇給・昇格に対する納得感を得られず、
-　組織パフォーマンスが低調になっていませんか？
-　
-　　昇給、昇格、賃金テーブルの要件が曖昧で
-　　労使共に納得できる状態とは言い難い。
-
-　これらは、「給与の決め方」の問題かもしれません。
-　
-　給与制度が機能不全に陥ると、公平性・透明性に疑義が生じ、
-　人事評価に対する不信やモチベーションの低下、
-　ひいては優秀人材の流出といった深刻なリスクにつながりかねません。
-　
-　
-　一方で、自社に最適化された給与制度をゼロから
-　設計することは容易ではなく、高度な知見と実行力が求められます。
-　
-　
-　そこで本セミナーでは、ビジネス組織からスポーツチームまで
-　幅広く応用可能な、汎用性の高い
-　「給与の決め方」フレームワークをご紹介いたします。
+　◇１エリア１企業様限定のエリアパートナー制となります◇
 
 
-　このセミナーが、最適な給与制度を考える
-　機会となれば幸いです。
+　　　　　　　　　　　〜募集エリア〜
+　　　　　北海道／青森県／福島県／茨城県／群馬県
+　　　　　埼玉県／千葉県／東京都／神奈川県
 　
-　>> ご視聴予約はこちら
-　　 https://fc-knowledgelink-corp.jp/seminar_25/
+　　　　　新潟県／福井県／長野県
+　　　　　愛知県／三重県／大阪府／兵庫県
 　
+　　　　　鳥取県／山口県／徳島県／高知県
+　　　　　長崎県／宮崎県／鹿児島県／沖縄県
 　
-　ご興味をお持ちいただけましたら、
-　ご参加のお申込みを頂けますと幸いです。
------------------------
-　一般社団法人 ナレッジリンク
-　東京都千代田区神田小川町1-8-3
-　電話：03-5256-7638
+　9月16日（火）　16:00-17:00　オンライン開催
+----------------------------------------------------------
+　
+　　　　　    −　１エリア１企業 限定　−
+　　　　　　　　
+　　　　 大人の発達障害の方が働くことを支援する
+　　　　　 就労移行支援事業　「ディーキャリア」
+　　　　　　　新規開業パートナー募集説明会
 
-　配信が不要な方は大変残念ではございますが、
-　下記URLより手続き下さいませ。
+　　　　　　　　　>>詳細・申込<<
+　　　   　　https://decoboco-fc.jp/25m/
+
+
+　  　　　　　　　◆　 　提供　　 ◆
+　　　　　　　　デコボコベース株式会社
+ 　　　　　　（ディーキャリア FC運営本部）
+
+----------------------------------------------------------
 　
-　メールの停止はこちら
-　https://fc-knowledgelink-corp.jp/mail/
+　いつもお世話になります。
 　
+　
+　厚労省認可の「就労移行支援事業」の新規開業パートナーを
+　募集するオンライン説明会のご案内につきご連絡差し上げました。
+　
+　
+　本事業は業界未経験からスタートができ、地域社会への貢献と
+　ストック型の安定した収益を実現することが可能です。
+　
+　
+　新たなビジネスの展開をご検討でしたら、
+　この機会にまずは本説明会へご参加くださいませ。
+　
+　
+　よろしくお願いします。
+　
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+　就労移行支援事業　FC説明会事務局
+　電話：0120-891-893
+　住所：東京都中央区銀座7-13-6
+―――――――――――――――――――――――――――――――
+　本メールのご不要な方には大変ご迷惑をおかけいたしました。
+　下記アドレスより、お手続きをお願いいたします。
+　┗　https://decoboco-fc.jp/mail/
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
