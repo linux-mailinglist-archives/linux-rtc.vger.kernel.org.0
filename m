@@ -1,95 +1,86 @@
-Return-Path: <linux-rtc+bounces-4898-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4899-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB62B56CEB
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Sep 2025 01:18:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F7ECB56CED
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Sep 2025 01:18:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9B7F1726D2
-	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 23:18:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C5CB189A8C8
+	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 23:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FBDA1E1DEC;
-	Sun, 14 Sep 2025 23:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACBF21C84B2;
+	Sun, 14 Sep 2025 23:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RwI7gf0f"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mOY4mIDB"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E28DDDAB
-	for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 23:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4FD245012;
+	Sun, 14 Sep 2025 23:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757891911; cv=none; b=kv4xCYRWdz/egctbc5J8denVxXG1aT5XugedZorKSAeAmLDZY7jApJeOmWzj4HZWzixIo5OxCpSuhL6hY4kti19ek0K/5Z3u5yyMiIXQWlfKNbVt2ePCHSbl64aMAaOXVDBkJ1yTm7vhZupy5p6ZboKx8pJSyQVztePD5hnyDgw=
+	t=1757891916; cv=none; b=soG25ti9gJSR0gWWmBpTk/4bfJeATTC1dzBKGpNJoI85gdOhWYPsx5fQqKQ/lGeWugSAZhB+SgLL0ZFdtZMg70jdiGh9iCPSXaRRtLJTmM+O2lKbWnMW71X/NIKKqAvveVWdd4g6ljsQwbpC2jV8DPb2pLb1aSYqGzC0QD29fj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757891911; c=relaxed/simple;
-	bh=Ghe+ZTzrLc83+6xGM+du+rMtQ2wLW8ri3LY6XLqTaKY=;
+	s=arc-20240116; t=1757891916; c=relaxed/simple;
+	bh=2IWg//jCjtsX9qHw0VjDSYx8k19/PSkdXOb66HtGiWM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K23oUE5VuXSHQ9R5QFSUebkdOdyP4ysDE0YngoXX+kOuQxpK/q8qc8ngfqDu04req13LmFWY59vYT2X20k9TvWpI5c2b/7iY+W6B70sihFFZaL8mzBXln1VVYif5b4PiNrOupz33Ar6hvqs/1J+kCc8IV7kbRsxpnTgYnWb2Q40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RwI7gf0f; arc=none smtp.client-ip=185.171.202.116
+	 Content-Type:Content-Disposition:In-Reply-To; b=QqIpXw0axmdFHtduZdVFwl+e+ypRxeH2m3Cl74NLNnvNv2BAZPaVH0eg5GlfC4H+hZ8W6jNl//t97MXbc0zZ+DM8NFWRqEgxtVp/Oj1JDjLwbhXOHVLRhyZVqjrOavUc9i5uVsN6pCfTqmuc3t1YJ90fRcE33C+b5MRqSqd1PAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mOY4mIDB; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 51D39C6B39E;
-	Sun, 14 Sep 2025 23:18:10 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id A74A9C6B39E;
+	Sun, 14 Sep 2025 23:18:16 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 653056063F;
-	Sun, 14 Sep 2025 23:18:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 627AD102F2A7F;
-	Mon, 15 Sep 2025 01:18:15 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id DFF056063F;
+	Sun, 14 Sep 2025 23:18:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AA37E102F2A84;
+	Mon, 15 Sep 2025 01:18:31 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1757891905; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=5F+Y5lsj2A4Q4W4/06tcxUBfMPFqb0LZREUynVIORa8=;
-	b=RwI7gf0f8Yo01366R0vgOnbcnRt3sFACYDElP65fQCY6yRFjMVFh21QOsEWo9W0GRE2sMr
-	jtTP1ygS6eDB4QySjm+cYfs9Iz2U5i7UjCOSXhWaTWkORXALKtNOWSBwGR43fPOTXxAWKH
-	yL2D2l798C+RSazWUjl9OjP4XmPW+pm6NBZH6dPQZY9PhBDE3qLX12RQZrcjNJQDOKxO/t
-	8nyRKNA3+rb1es7fAK3RRVozOKZqjIFY7c5xYoIsq3veiAfATBFNyJWAtIBqTA5DmFgzuS
-	qUqw14p4oNTYIzpUrkDbH1x60aA5tqLUXro6MgfabHFOFomfannmH1Qm5WKw9A==
-Date: Mon, 15 Sep 2025 01:18:15 +0200
+	t=1757891912; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=72rkRSHnXrDfVGpJtg8XpXzUfH4idTJGntMTFwn8mv0=;
+	b=mOY4mIDBtBP1Pj0aSq/qstAqjLq5DeYuPIZL0F4753ZAGBV6kF9TOlBQ0HhqQ0ffV86vxl
+	lhPU6ImHSKeCOeRF0ypT6ZLplYIVCqAPBkcV5eQzBF3SxOo/zP1VNuOA3ka5Q+sDYDTGp4
+	l2fsXZphuiBKMk4HJYehB8aTi3kbq6ApGDCys8WrHDKDCcSo4mSoZTPnNS/Slx6ac5y9Pq
+	z6iPzKnEsVoFNaMEA3FTdvugfoXx8xIHPGprgvL9FDIzzVfxmzV7e+3XYgUxYZHlPlTMQ3
+	3x2h9DDARW4ecf41xHz9f/UE43YshBopQ8J/vQ6cuSx7e1MjNNM/8DZD5HFvHw==
+Date: Mon, 15 Sep 2025 01:18:31 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	=?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 0/3] Add alarm operation to the rtc-optee driver
-Message-ID: <175789183744.411954.8980801689836032350.b4-ty@bootlin.com>
-References: <20250715-upstream-optee-rtc-v1-0-e0fdf8aae545@foss.st.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: rtc: Fix Xicor X1205 vendor prefix
+Message-ID: <175789183742.411954.3595794825615282645.b4-ty@bootlin.com>
+References: <20250821215703.869628-1-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250715-upstream-optee-rtc-v1-0-e0fdf8aae545@foss.st.com>
+In-Reply-To: <20250821215703.869628-1-robh@kernel.org>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, 15 Jul 2025 16:07:12 +0200, Clément Le Goffic wrote:
-> The optee-rtc driver is used to query the rtc handled by OP-TEE OS
-> through PTA (Pseudo Trusted Application) call.
-> This serie fixes memory concerns and add alarm operations for the
-> rtc-optee driver as the RTC PTA now support them [1].
+On Thu, 21 Aug 2025 16:57:01 -0500, Rob Herring (Arm) wrote:
+> The vendor for the Xircom X1205 RTC is not Xircom, but Xicor which was
+> acquired by Intersil.
 > 
-> For the alarm notification, the OP-TEE OS secure world will be
-> able to inform the kernel when a secured alarm will occured
-> through a notification sent to a kernel thread waiting in OP-TEE OS.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/3] rtc: rtc-optee: fix memory leak on driver removal
-      https://git.kernel.org/abelloni/c/3e044fa26038
-[2/3] rtc: optee: remove unnecessary memory operations
-      https://git.kernel.org/abelloni/c/9b9f352d5b02
-[3/3] rtc: optee: add alarm related rtc ops to optee rtc driver
-      https://git.kernel.org/abelloni/c/96e8fe5b8a88
+[1/2] dt-bindings: rtc: Fix Xicor X1205 vendor prefix
+      https://git.kernel.org/abelloni/c/0552f7c67469
+[2/2] rtc: x1205: Fix Xicor X1205 vendor prefix
+      https://git.kernel.org/abelloni/c/14552d291e50
 
 Best regards,
 
