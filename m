@@ -1,77 +1,79 @@
-Return-Path: <linux-rtc+bounces-4883-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4884-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDB01B568B7
-	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 14:42:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8469AB568BC
+	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 14:42:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61F201894A51
-	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 12:43:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D5523A81B5
+	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 12:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F4026657D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E5226A1B5;
 	Sun, 14 Sep 2025 12:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPnGWKqi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LHpsT/Hc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C57C25F973
-	for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 12:42:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CAC264614
+	for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 12:42:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757853761; cv=none; b=R5gIScFYTH7MquPwFAH96xZhdFxNYdpFUutLtjXp/UklGnxMio9HfpeBHW/s/jJHK5S5m9zw/ACTV25bg4AtXoMfqNPp57uTfXfF7q5YiuwHpqyzKk+RtDbskkLMCQm4Un0LUFvhukkr9NrCG356+DlH+GzG0AOPC2NKXjTMBnc=
+	t=1757853761; cv=none; b=DVkX8GOV2EtNmrYUJNt9ttoSwodFxo5zGxGCPmcmHGTtVo/gJ62lC7RBjSnBXAx8xB9ypEucsPSV5QVYt/ijTsZLR/APsS9xNrwm9ARqO6RbOqp388W8y8BJUJJjwEvLE1Reo/g10PGpP/WsTqRyEejiRpMSVyeA9aaoQ1Bxe48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1757853761; c=relaxed/simple;
-	bh=a0DS+1ZMlf/0j8PrJ136z6bVlAIog4gQ8+ovr9ZcVgA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F4DTCK4wYjt+Ql6Pt1Aajwn3BaLICXrH5YXyFsbvQGW/NJWgBWinyRTPGBVE/VQrdO07WH8Hi/QvtLgCk6WxMUec8dW648xJ377mXVUioDjAoXhEXJPjfBOuD6wH4xMip5+dsbcF/bij/NZojFu0nCGiokkAzw4SFSYdeKpxwLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mPnGWKqi; arc=none smtp.client-ip=209.85.128.44
+	bh=y0sCz1ox1pdVdqC9lyNwJysTnUl+q01sDp++N8XGWHE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F45vEjjRCUgqA3el+gJ1OypP8S6jETuJDgcoUOJZ3LdrmMP0MXN+DdPSgKOc2ujzsWLSxJD71eBdy6ZkqGTIQDHSvTy3etd6dO/yMjyOY04uNy0gMEo4ZfsGaqyjtaqMZDS0aCcB13r7BNwlofFtfMlyvDUCljVQwXf4kOM+ito=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LHpsT/Hc; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45df7dc1b98so22175065e9.1
-        for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 05:42:38 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3ea7af25f42so95285f8f.0
+        for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 05:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757853757; x=1758458557; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kWkNgc7TTxage7dXNRfg4+5gf5ClKzMP0YRT5Au2R2c=;
-        b=mPnGWKqiR75OXmA8flkhbvdmXevDvOJ585jiVFoHBqmGuEd/Sk7A24/8sfbZ/ReLKa
-         Ui/If56b3x37Q+u4B71ebHek08VRoTyYThBqUNsLqd8frIYO0mSsmkmV8Ezc43IMdSmZ
-         3wJgfu70KctsZSNXBfsslmWk5lBMM2OSLAZibJMN+c3h+JZ/vOdZSz/k3c/uHxFV7YVw
-         xEa5jasI1z3Ult+eP5B0Ap19l/EcGGv9Q5xuxTKPLj5q6HjCMKndWamWW5B8DEzqJkow
-         jnNxqblbjuCh0yWh149LRBS5IqymXlfweAYKRtez4i9ONcRLK2zyF3AzSdH90pB0fp5L
-         jMlQ==
+        d=gmail.com; s=20230601; t=1757853758; x=1758458558; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7YlK8x1e1nNbpl5BkBqgVftDE3O74o0MrUDh59tTEnY=;
+        b=LHpsT/HcJwdMOk1R6v1K7d7gfNZL5c3gCpcFNPMt6d/dhj7g8tpFb1tGLNTj9/Ve/0
+         4Wgp6OMRrhSi5AcxzZGkw4WsmKROi0hKkJnUsuHcASVoKvqIV00p+HLaLFYDBlSOAMQz
+         W8H3vGNWgfeV4j6fc698DcIvqhblHNOAzWZDGOzVuhrOMCBWjj/w6Iyf+9f9i/CpfcUt
+         9LAWiHnpwJampHPy+xoKhT71YUY5H4uAQ7KSk3MRkc++BQQScNwaVDEUIEZmu525vfWm
+         mHNLnXfotArsYxsp5Bu6paQiLgGeCHYoZfQQogcv2CPaKGvt52l9R5zI9wBsPkuNY3X8
+         p8+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757853757; x=1758458557;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kWkNgc7TTxage7dXNRfg4+5gf5ClKzMP0YRT5Au2R2c=;
-        b=pRIqWv7m3AT0hCSOWHmQSIowcBUMYuKG/JJe3lAB/mRvfqPUHj8A7Ly8tRosKqMVuF
-         AB/TGHs34m54F17ax3wQsAacNoIb1p1PG9XyvGAS11oqvPjMCTc9Ug/ogAHx9tWEPuI3
-         q5rYUo/h0A3DxkEu5VCTxhFTJPvd2j3ZagHEU5uHMmVEdJIoCP7ISc0AqYwoPYrehoZR
-         IhXYYkpXR8Ifu0z4X3Ovk6IV8q61WDhbcR8wqVfQjDzscpjShGeAv+lw2vU4WXHVYhSf
-         EU2SZv3uS1coJtb4Mo94e2FdEhejLfg9IWFTy4jVcDwu8BxwKr2tUdFP1vaCjFbnnNmZ
-         Ny4g==
-X-Forwarded-Encrypted: i=1; AJvYcCXcY7kSYPVwoRwFCz6WJO8VCpJsX2ORGVntwKdICJVXT+jryZrOSVF8yRoWCLLlHoL6/9Qf2wi2Zso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBIAu10m0pO5YRx/PibybPc+tEK5TdAdeRLHuGzxZO4xS5xK9a
-	0lmon2kvNirlbmLXemvaFQJdAMe0o4iM0GZjE5JMahlPJoAyRmhEe0G8
-X-Gm-Gg: ASbGncvj47Tya9y712sfQqfHFY39MNyKL05G+82aKbEohpx0NkhA93KSq/qd6fq+E94
-	nxg9TyekjIJ5mpnBPN6/eqY4xkrwuTRggu5O+pdCdi6EfvmpTIk2fl/73xt3u0fkLCm6ccfzESZ
-	9kx6KPQnTc5tdJ0AhAr8+9hU3CfsbKFbt14OY5Bj/lZuJaA4Vd4+iVTPYO0YE4mMfHq/u2rcukY
-	BxWoDri8M6xsLH1sYqQnl8jLLAUxRYIyRqybwr9UVSajwM/GIMUvTkkEfL8RHTuZXfov0wAKPQN
-	6GpWcOS1K4QGb/4IV8lgWutsl4dONH0JY6OAPSlhZM5K63V8fcHb2oNYnq9AfRhTFZ1XRNo1gue
-	9k7+DdOPkdWabjNM/iauwz+W6EG66UgVEhueXHTBTOarjsbmGkV21qE9Kej2WNNChhkLG+0ftZM
-	V8LyKis8PK
-X-Google-Smtp-Source: AGHT+IFD1dzVaPjd75ZW6xF7NbuDRvrlMisxkkeIZupeaMoc65Ne74ve/Yf/Aq5gRDwhZi8axs3xXg==
-X-Received: by 2002:a05:600c:468a:b0:458:be62:dcd3 with SMTP id 5b1f17b1804b1-45f211f2eb5mr109286965e9.17.1757853756463;
-        Sun, 14 Sep 2025 05:42:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757853758; x=1758458558;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7YlK8x1e1nNbpl5BkBqgVftDE3O74o0MrUDh59tTEnY=;
+        b=UkDCzJJU4I2l5kaLqbXzpeHPV+2b3OwBrDuWzqvJ8bga8OJbrW9AiMnLRiUzkCQ/AT
+         SYDYAs3fCg1IW0OZPQAeOFEo28BJv8dwXBmHH+kDUtIzduGb9PLsGpjNHnTmwFcGies/
+         RMs59NQZKsoDaf0aeEbkOT4xS8J7GdAXIGuL8Nf7XPil+dFV6++9Om+BQj3VyW/OC8IH
+         VlOeBia0XQBkomfU4n9lBjECQe45TixTBE3AagUq5laEW5NT29OCLvp3V9Gp4RdR9e7Z
+         t6MzfVrjFk7sLWC5B+2lbUpruvJ/Hfva/4fTpVkH+m5MfGmF7zEym+hZqjwXixeVwOrX
+         CrFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUzDRJxufKuvqtOBHzo1Qg3MrofVsZAbFDWChiOqpp6MLKLUo5j0Wpl22/PcTReefwWIFLDMvGKzGo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOPlmQ7SqmC43rW1rYdaKKzgSPMuTQTmpPk5Y3u8XKguYTAOA+
+	rnR4XMVafr/q48GPouNpH7UigFUVX1JvQ5pJY7A0z+pFtQPvlNmqUk2Z
+X-Gm-Gg: ASbGncvu1koYB+IKRbzJutZ1cGHxatZv8ZVYTUmP1rsiKHPTG4bYaszEiGarxQ0Zgej
+	bw1xVwXVA200nfOdhBpbvdUSjRRedGQkkYdnp/mrMmtIPSWHk4o/GfQxw3AI8fy1LAHvMbIfycr
+	JC0nuOI0bJHrya8jph606K/SIF+oW7RYYyS79u8IdWjNfofcltZ2iCwHJLEhhGlWWMLTM15Jvc+
+	2EPE7BBW2evG1mS9Cokup9Nrnb8Jabml6mbjz/+nq/jDYP1LPH1sVyLNsQayuYK9ItRgtQ3OnJE
+	tfbEvT0IKp8HvVuFRvOpwYX3IuvUgFPImFzALlVnI1b/oyDD7JGqgWEsY5fjTUbuISVItL/N3Ei
+	S23PsA02rtC1VXrM371eO0z5RfwAnC0VGuUAeMs/AkpnGqtKZQpVfVmHLx5tOFE6NLmdHiAs0zT
+	1t672KxqM9
+X-Google-Smtp-Source: AGHT+IELVFIlesJEmaJQpWXNNvn35JfGIecuwQDqOHfPhALJRBcTy5rG9hu4+nxlOgJqxNq0ak5Xxw==
+X-Received: by 2002:a05:6000:178c:b0:3de:78c8:120c with SMTP id ffacd0b85a97d-3e765a139bdmr7119284f8f.38.1757853757902;
+        Sun, 14 Sep 2025 05:42:37 -0700 (PDT)
 Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e9511abbccsm3727773f8f.9.2025.09.14.05.42.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e9511abbccsm3727773f8f.9.2025.09.14.05.42.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Sep 2025 05:42:36 -0700 (PDT)
+        Sun, 14 Sep 2025 05:42:37 -0700 (PDT)
 From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>,
 	=?UTF-8?q?Andr=C3=A9=20Draszik?= <andre.draszik@linaro.org>,
@@ -91,10 +93,12 @@ Cc: linux-samsung-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/7] mfd: sec: add support for s2mps16 pmic
-Date: Sun, 14 Sep 2025 15:42:20 +0300
-Message-ID: <20250914124227.2619925-1-ivo.ivanov.ivanov1@gmail.com>
+Subject: [PATCH v1 1/7] regulator: dt-bindings: add documentation for s2mps16-pmic regulators
+Date: Sun, 14 Sep 2025 15:42:21 +0300
+Message-ID: <20250914124227.2619925-2-ivo.ivanov.ivanov1@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250914124227.2619925-1-ivo.ivanov.ivanov1@gmail.com>
+References: <20250914124227.2619925-1-ivo.ivanov.ivanov1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -103,48 +107,73 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hey folks,
+The S2MPS16 is a PMIC found in exynos8890 devices, which controls voltage
+regulators - 38 LDOs, of which 11 are used for CP, and 11 BUCKs, of which
+1 is used for CP. Provide documentation for devicetree definitions,
+regulator naming patterns, etc.
 
-This patchset adds support for the s2mps16 pmic, used on devices like
-the Samsung Galaxy S7, S7 edge and the Note 7. It is still wired over
-I2C, unlike newer exynoses, but also can be communicated with via APM,
-support for which is not done (and probably will never be, as it's
-pretty much useless).
-
-The order of patches is important, hence why I've not split it into
-subsystems. Patch 1/7 should go before patch 2/7, as 2/7 includes the
-file made at 1/7. The rest can be applied without a specific order.
-Thanks!
-
-Best regards,
-Ivaylo
-
-Ivaylo Ivanov (7):
-  regulator: dt-bindings: add documentation for s2mps16-pmic regulators
-  dt-bindings: mfd: samsung,s2mps11: add compatible for s2mps16-pmic
-  dt-bindings: clock: samsung,s2mps11: document the S2MPS16 compatible
-  mfd: sec: add support for s2mps16 pmic
-  clk: s2mps11: add the support for S2MPS16 PMIC clock
-  rtc: s5m: add support for S2MPS16 RTC
-  regulator: s2mps11: add support for S2MPS16 regulators
-
- .../bindings/clock/samsung,s2mps11.yaml       |   3 +-
- .../bindings/mfd/samsung,s2mps11.yaml         |  17 +-
- .../bindings/regulator/samsung,s2mps16.yaml   |  50 +++++
- drivers/clk/clk-s2mps11.c                     |   8 +
- drivers/mfd/sec-common.c                      |  10 +
- drivers/mfd/sec-i2c.c                         |  16 ++
- drivers/mfd/sec-irq.c                         |  46 +++++
- drivers/regulator/Kconfig                     |   4 +-
- drivers/regulator/s2mps11.c                   | 147 +++++++++++++
- drivers/rtc/rtc-s5m.c                         |  16 ++
- include/linux/mfd/samsung/core.h              |   1 +
- include/linux/mfd/samsung/irq.h               |  66 ++++++
- include/linux/mfd/samsung/s2mps16.h           | 195 ++++++++++++++++++
- 13 files changed, 574 insertions(+), 5 deletions(-)
+Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+---
+ .../bindings/regulator/samsung,s2mps16.yaml   | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mps16.yaml
- create mode 100644 include/linux/mfd/samsung/s2mps16.h
 
+diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps16.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps16.yaml
+new file mode 100644
+index 000000000..ede87d3b9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps16.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/samsung,s2mps16.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Samsung S2MPS16 Power Management IC regulators
++
++maintainers:
++  - Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
++
++description: |
++  This is a part of device tree bindings for S2M and S5M family of Power
++  Management IC (PMIC).
++
++  The S2MPS16 provides buck and LDO regulators.
++
++  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
++  additional information and example.
++
++patternProperties:
++  # 27 LDOs
++  "^ldo([1-9]|1[0-3]|2[5-9]|3[0-8])$":
++    type: object
++    $ref: regulator.yaml#
++    unevaluatedProperties: false
++    description:
++      Properties for single LDO regulator.
++
++      LDOs 14-24 are used for CP, and they're left unimplemented due to lack
++      of documentation on them.
++
++    required:
++      - regulator-name
++
++  # 10 bucks
++  "^buck([1-9]|1[0-1])$":
++    type: object
++    $ref: regulator.yaml#
++    unevaluatedProperties: false
++    description:
++      Properties for single BUCK regulator.
++
++      BUCK 10 is used for CP, and it's left unimplemented due to lack of
++      documentation on it.
++
++    required:
++      - regulator-name
++
++additionalProperties: false
 -- 
 2.43.0
 
