@@ -1,132 +1,97 @@
-Return-Path: <linux-rtc+bounces-4897-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4898-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E5C1B56CE6
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Sep 2025 00:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB62B56CEB
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Sep 2025 01:18:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3BE3176012
-	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 22:35:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9B7F1726D2
+	for <lists+linux-rtc@lfdr.de>; Sun, 14 Sep 2025 23:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7560421B192;
-	Sun, 14 Sep 2025 22:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FBDA1E1DEC;
+	Sun, 14 Sep 2025 23:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LJyyPdZh"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RwI7gf0f"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9261E9B31
-	for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 22:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E28DDDAB
+	for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 23:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757889350; cv=none; b=Y/xHxaTYGlaQAHcArNFZFAn7D7/O+7ZpNyw2ofPq/11KK2S+g/whrtzsGPgrAzCuIT5dXobXNRh/YL8SM1+ffkW6auGGCjjtvA/9ewEIQcHoTt3b3RspmZMqQI5lPo3rubsTVXVm655/C8kt4YPJjyxa25BGLgOi0aPKsRkoryI=
+	t=1757891911; cv=none; b=kv4xCYRWdz/egctbc5J8denVxXG1aT5XugedZorKSAeAmLDZY7jApJeOmWzj4HZWzixIo5OxCpSuhL6hY4kti19ek0K/5Z3u5yyMiIXQWlfKNbVt2ePCHSbl64aMAaOXVDBkJ1yTm7vhZupy5p6ZboKx8pJSyQVztePD5hnyDgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757889350; c=relaxed/simple;
-	bh=SHRqWZStk4jjsfVvVO8cy3nO5bV41blXrDgUeD33Ejw=;
+	s=arc-20240116; t=1757891911; c=relaxed/simple;
+	bh=Ghe+ZTzrLc83+6xGM+du+rMtQ2wLW8ri3LY6XLqTaKY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O5k+I9EBeb5v5oEzNjcWowK5zdqy6aHDeRnCbWLpHmE0f7PgS9r/kJDSz5316NKsPSoEpmnlLdbTZZCO2Auwhy04gqEnv3OC5LO4C3CapaQ27q7rJUmc61ZsEPBHfjYc648UN2Z1XHmG5akX6M5ug3e0AHbxYIAnO/Y0K5ubThM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LJyyPdZh; arc=none smtp.client-ip=185.246.85.4
+	 Content-Type:Content-Disposition:In-Reply-To; b=K23oUE5VuXSHQ9R5QFSUebkdOdyP4ysDE0YngoXX+kOuQxpK/q8qc8ngfqDu04req13LmFWY59vYT2X20k9TvWpI5c2b/7iY+W6B70sihFFZaL8mzBXln1VVYif5b4PiNrOupz33Ar6hvqs/1J+kCc8IV7kbRsxpnTgYnWb2Q40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RwI7gf0f; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id B74F74E40BA1
-	for <linux-rtc@vger.kernel.org>; Sun, 14 Sep 2025 22:35:43 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 51D39C6B39E;
+	Sun, 14 Sep 2025 23:18:10 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7C9C46063F;
-	Sun, 14 Sep 2025 22:35:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3DCA7102F2A7F;
-	Mon, 15 Sep 2025 00:35:38 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 653056063F;
+	Sun, 14 Sep 2025 23:18:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 627AD102F2A7F;
+	Mon, 15 Sep 2025 01:18:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1757889342; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=uS+VvMqb+a9u8UaM1CIJlh7p5HYzlaJPl5trvc+YJcQ=;
-	b=LJyyPdZhcMlBCqhzaVq9bSNCh0bh0BqoF13nVbahmwH8z73aKoDNGvGZZ14i3pWBtjPNGj
-	jDfQ4a+2GysGbCzvk+WyKg0W7Zd+dnpeFROpP7ybLemlREvOpXYWqW38IgFIjtm3hbKk1X
-	BtWcYCdq6XhH67Q1h9AT6ajphZTUvw272GXwGSwSSJgdcAUqBBtpWOWYEe8qtSoarwEGl4
-	QQiYUOPIWUwvEUZoTN0KJhRIX/D53VDeJeZUDWfojg27BOGc8ZgiELC3KIleJWrnn8DjVX
-	GnPkCAhN41ytZPMspY2CAMz+4qEOR+JOqTZGBUYRtIKseQBGg0aCPF4WWe9uag==
-Date: Mon, 15 Sep 2025 00:35:37 +0200
+	t=1757891905; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=5F+Y5lsj2A4Q4W4/06tcxUBfMPFqb0LZREUynVIORa8=;
+	b=RwI7gf0f8Yo01366R0vgOnbcnRt3sFACYDElP65fQCY6yRFjMVFh21QOsEWo9W0GRE2sMr
+	jtTP1ygS6eDB4QySjm+cYfs9Iz2U5i7UjCOSXhWaTWkORXALKtNOWSBwGR43fPOTXxAWKH
+	yL2D2l798C+RSazWUjl9OjP4XmPW+pm6NBZH6dPQZY9PhBDE3qLX12RQZrcjNJQDOKxO/t
+	8nyRKNA3+rb1es7fAK3RRVozOKZqjIFY7c5xYoIsq3veiAfATBFNyJWAtIBqTA5DmFgzuS
+	qUqw14p4oNTYIzpUrkDbH1x60aA5tqLUXro6MgfabHFOFomfannmH1Qm5WKw9A==
+Date: Mon, 15 Sep 2025 01:18:15 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc: linux-rtc@vger.kernel.org, stable@vger.kernel.org,
-	Elena Popa <elena.popa@nxp.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH] rtc: pcf2127: fix SPI command byte for PCF2131 backport
-Message-ID: <2025091422353715503104@mail.local>
-References: <20250820193016.7987-1-bruno.thomsen@gmail.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	=?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 0/3] Add alarm operation to the rtc-optee driver
+Message-ID: <175789183744.411954.8980801689836032350.b4-ty@bootlin.com>
+References: <20250715-upstream-optee-rtc-v1-0-e0fdf8aae545@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250820193016.7987-1-bruno.thomsen@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250715-upstream-optee-rtc-v1-0-e0fdf8aae545@foss.st.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello Bruno,
+On Tue, 15 Jul 2025 16:07:12 +0200, Clément Le Goffic wrote:
+> The optee-rtc driver is used to query the rtc handled by OP-TEE OS
+> through PTA (Pseudo Trusted Application) call.
+> This serie fixes memory concerns and add alarm operations for the
+> rtc-optee driver as the RTC PTA now support them [1].
+> 
+> For the alarm notification, the OP-TEE OS secure world will be
+> able to inform the kernel when a secured alarm will occured
+> through a notification sent to a kernel thread waiting in OP-TEE OS.
+> 
+> [...]
 
-I guess you'd have to send this directly to stable and gkh so he wll
-notice it.
+Applied, thanks!
 
-On 20/08/2025 21:30:16+0200, Bruno Thomsen wrote:
-> When commit fa78e9b606a472495ef5b6b3d8b45c37f7727f9d upstream was
-> backported to LTS branches linux-6.12.y and linux-6.6.y, the SPI regmap
-> config fix got applied to the I2C regmap config. Most likely due to a new
-> RTC get/set parm feature introduced in 6.14 causing regmap config sections
-> in the buttom of the driver to move. LTS branch linux-6.1.y and earlier
-> does not have PCF2131 device support.
-> 
-> Issue can be seen in buttom of this diff in stable/linux.git tree:
-> git diff master..linux-6.12.y -- drivers/rtc/rtc-pcf2127.c
-> 
-> Fixes: ee61aec8529e ("rtc: pcf2127: fix SPI command byte for PCF2131")
-> Fixes: 5cdd1f73401d ("rtc: pcf2127: fix SPI command byte for PCF2131")
-> Cc: stable@vger.kernel.org
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Elena Popa <elena.popa@nxp.com>
-> Cc: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> ---
->  drivers/rtc/rtc-pcf2127.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index fc079b9dcf71..502571f0c203 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -1383,11 +1383,6 @@ static int pcf2127_i2c_probe(struct i2c_client *client)
->  		variant = &pcf21xx_cfg[type];
->  	}
->  
-> -	if (variant->type == PCF2131) {
-> -		config.read_flag_mask = 0x0;
-> -		config.write_flag_mask = 0x0;
-> -	}
-> -
->  	config.max_register = variant->max_register,
->  
->  	regmap = devm_regmap_init(&client->dev, &pcf2127_i2c_regmap,
-> @@ -1461,6 +1456,11 @@ static int pcf2127_spi_probe(struct spi_device *spi)
->  		variant = &pcf21xx_cfg[type];
->  	}
->  
-> +	if (variant->type == PCF2131) {
-> +		config.read_flag_mask = 0x0;
-> +		config.write_flag_mask = 0x0;
-> +	}
-> +
->  	config.max_register = variant->max_register;
->  
->  	regmap = devm_regmap_init_spi(spi, &config);
-> 
-> base-commit: 880e4ff5d6c8dc6b660f163a0e9b68b898cc6310
-> -- 
-> 2.50.1
-> 
+[1/3] rtc: rtc-optee: fix memory leak on driver removal
+      https://git.kernel.org/abelloni/c/3e044fa26038
+[2/3] rtc: optee: remove unnecessary memory operations
+      https://git.kernel.org/abelloni/c/9b9f352d5b02
+[3/3] rtc: optee: add alarm related rtc ops to optee rtc driver
+      https://git.kernel.org/abelloni/c/96e8fe5b8a88
+
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
