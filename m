@@ -1,164 +1,234 @@
-Return-Path: <linux-rtc+bounces-4970-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4971-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C93B7D8C1
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 14:30:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7798AB801A6
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 16:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33EAC3A76FD
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 10:03:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 439BE3BB375
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 14:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E2C343D92;
-	Wed, 17 Sep 2025 10:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36492F49EF;
+	Wed, 17 Sep 2025 14:39:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9Y0nfAD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Dn3TC6ER"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675CB302770;
-	Wed, 17 Sep 2025 10:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9120E2F28EA
+	for <linux-rtc@vger.kernel.org>; Wed, 17 Sep 2025 14:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758103417; cv=none; b=ITsH/XO89vfX3AkL+3b79qtHV4Uw9Lfl/dtkI/1fctr5x7yOs8hPKeGL40aunsKeZPZ0UT767Ooz/owdNOzEoP3R6qn82j7M/lR3DBS+f1YmN3yXx9jFu6mKQ0WPxCXxgfTLKLhoR/sfARTpjGi2tPy53l32TuZIogsPIC1V53o=
+	t=1758119983; cv=none; b=o5yEgCYxaJ01A3ATRD81GRdtg38SCBuDZrorHVM1eKy8c7Bb5/gU9ATLi46i78D3nNrYe/96dCxEROctd5RQBkg0se5E075TEqjPYd5yQIYHcdUDlHUCX5mFILq0X/iG9lCZeWdEfrmh8niTz8WcNzF8jmej6kYjs1mbHrs6RFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758103417; c=relaxed/simple;
-	bh=nNlilHjh09UBY7rPl6XW3+rKwLzxl/XA9okrB109O1c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NJDcS00zmTTRoXhU0aCTXg8f1UnMpCzcesaPTYA4tJ6s9fq/17MX2YbSjZUK7NC1ZqKYPJaPXK1K7kalAjVGbASJ5/vzqgVOrvAE/ilQRzuGedv0a8X13gqpbGyrvVjadw52lwy1mSd/iOqi6ufDyQWA6L+0jsaUIVcdBaO5kTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9Y0nfAD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429F6C4CEF0;
-	Wed, 17 Sep 2025 10:03:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758103417;
-	bh=nNlilHjh09UBY7rPl6XW3+rKwLzxl/XA9okrB109O1c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B9Y0nfADZvNHly1cC+7nuDT0d/oTq9ziRK04kv1w1BF/BHhB5Xn0fiBbI0/UEecCV
-	 Jgfp0Qr3MqeK4/IlBzjJBUmHnx5pt1iVtl+Of1wkezd6WDc+IA/jvJ55WlzYfsS8nU
-	 GlOvOEc5T+rMEM1daFnDSK5IiYY4xJjJYth9BdXysxjB3CLYozkCtQecbSEQIlO86I
-	 TlfVla0IwqYaoS6wTPwZxzKj9uyGujA4XWYEuhUot/r6Hdefu7hbiz2HhoSqrPqgNf
-	 yf5mgQmqWgUVN5yPotT6+fV64FGqGLfxWPfsp136Spi+UEUH80ZpjCppqgefz6djDH
-	 z9q04unFly53w==
-Date: Wed, 17 Sep 2025 15:33:22 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: dang.huynh@mainlining.org
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: Re: [PATCH 00/25] RDA8810PL Clock, RTC and MMC driver
-Message-ID: <lnfervvwctvemjdmyue2aohlsqpfd5gsuzjho3u6mtdtewl4vr@saqnionh72am>
-References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
+	s=arc-20240116; t=1758119983; c=relaxed/simple;
+	bh=JQvshfvimgHfM0RiZnHUyLwR4iIsBOC1lbymHIY70KQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=C7r0jH6gwBgo9VoQHGE4J78Z+0H+WHAbRTssN3rw07YxIzRAQDNg+AGSXhrd9tq5oZfpZRib/eBnRaaIDc/DJ1EQoea2hWe4u3dVOJpJCVkx27sWkW1qAwECjtFfPRBBXRW8ShrF+fIeRB0QyswYiqORCjMwgvcPb4YLUnzvOak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Dn3TC6ER; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-61cc281171cso11417075a12.0
+        for <linux-rtc@vger.kernel.org>; Wed, 17 Sep 2025 07:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758119980; x=1758724780; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ign5Rvn1nrFDYbDVfbmxV7M+H+jM3AW8cIlkron9MVw=;
+        b=Dn3TC6ERkVkuH0TCOdsDTLxTsCKp6ENyTln2iSx5Y/5INH004leh+wKLiSC9YCw5xD
+         KrSlNNRxXfVKz5oU3rFo1yjXLbGikamf4KmwKLx7dw+K25hUen3xMMB12BedqNyGx65d
+         bnjjDNoEHRGm0gvmFDmaD/TwxyZatq8G/MHLM6BZiCJOODhnRgOnrHE1h2p0kWaw2PFt
+         f/A2B/Ym8mGTHAYIO93J4/bLeQjR7Z6QNXdwmCO4tFurRhBUgSNz661cNqrVVZTOq4Qe
+         AzHFX29WCHTxjgA7nc3S9nBJK7mxE8++gfVAQRTA8ojQSxDHhA99+2+swzYi56WWNBDk
+         /Dsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758119980; x=1758724780;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ign5Rvn1nrFDYbDVfbmxV7M+H+jM3AW8cIlkron9MVw=;
+        b=p+yhN7Tf6JCpZrPdmHyqAS210cFa8Xn7GUthT1S/q8VHEaHpwTpXi44vuM5vtYQq4+
+         vI3FJzQ9Vfu/TdaDXaJ1AhK3ifJGcV4pbC0axfLSjgBGWASWdytSmShHVXoy4okY/nr/
+         6/PhLy9T3sUcW6GRWzsyQyhYXRNRNUgVyccLD/IHvdvbCdC/GV8+ETy+gu0qoUDp8Eda
+         CB8AG/5tRYC25ttG7gH0bwc0oYpfEdhhHiBlEwzryLOexOK1iJqeHQdVJknHt+kVmVjg
+         NRdsZq9WGP89yDzj6smsvHztlcBAUPs6QxsciLMPHFSEO2xRnI0cY4MHloN7wFj01hR7
+         Uw4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVKpd3smdTnl6btLnr8GPkfEugamEkyc+x610mDC5ir1Ir2pxAU/+smX5ruNNgXRqen94waypbBd50=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBRWDGNEHfkaGHC9qkFXbn5xQSAYQAIuSpGIy6swvuhR+c2fR/
+	UumS2xN78uIy8mVbsWOL2TtCOlA2cLIMTOzSB+qxsEGpg/zmuQBnOdx4Fp3pPdHyyAQ=
+X-Gm-Gg: ASbGncvAyMdjFH2NOTl4fA5Ah5JNGfaWlp9p0Ae35qmzkz9qwvJOPRU79uxh3UFhY2/
+	voUygzgUiU6EeN9wH8OOGXeIb3/D5esc3qQt+ol+L4LkaYa9f1ujjPuSnaAPdyww3KF8hxKA8jB
+	G8kq007zeOyIq355wSRdBKpFzaJ0ub0PplofLsFVT6jK58//TVHQRvxiV3KCoUvA421lmplG369
+	vGElbIem4Xp9WHruzGmjNjpHOj+c4IKWiSkN8JJCJ5qUMwa9xj8VrLrnAq9rhBx08nVLRVL4Lu8
+	XxAgKPaGvqNfVJ14OeSP54wNr12Gh8iToxlrP8olk2jZOsTxWze1fvytFzP7V4jZQb+lRdyvhXP
+	Xf7eVqM19/67eWdRoBaaA72ixyH7XYZCuC6vrhH/VFu2mmdb4tzKcxVt3fo2yIFBjRRZXt6SouW
+	dxv8O+19Ftsqlx
+X-Google-Smtp-Source: AGHT+IFF8kxUes3UFZ/iPcURSxsxpGZGbUCV4rgSf6BC8Nw9XulL9xf8WQpD9qjmrn6KbrUO3AOgrw==
+X-Received: by 2002:a05:6402:23c2:b0:62a:91d5:8844 with SMTP id 4fb4d7f45d1cf-62f84231fcamr2655601a12.21.1758119979856;
+        Wed, 17 Sep 2025 07:39:39 -0700 (PDT)
+Received: from puffmais2.c.googlers.com (224.138.204.35.bc.googleusercontent.com. [35.204.138.224])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-62f317bf9f0sm7112464a12.49.2025.09.17.07.39.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Sep 2025 07:39:39 -0700 (PDT)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Subject: [PATCH RESEND v5 0/2] Samsung S2MPG10 PMIC MFD-based drivers
+Date: Wed, 17 Sep 2025 15:39:31 +0100
+Message-Id: <20250917-s2mpg10-v5-0-9f9c9c4a44d9@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
+ linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
 
-On Wed, Sep 17, 2025 at 03:24:57AM GMT, Dang Huynh via B4 Relay wrote:
-> This patch series aims to add support for Clock/Reset, Real-Time Clock and
-> SDMMC on the RDA Micro RDA8810PL platform.
-> 
-> It also adds Intelligent Flow Controller (IOW, a DMA controller) which is
-> important for working with this MMC IP.
-> 
-> Tested on the Orange Pi 2G-IOT.
-> 
+Original cover letter further down.
 
-Thanks for work! Is it possible to split this patchset logically to ease
-reviewing and also merging? It currently touches different subsystems and has 25
-patches.
+This is a resend of two patches from the original series that haven't
+been merged yet. That series was merged except for the attached two
+patches here. Other than rebasing against next-20250729 there are no
+changes to them.
 
-You could easily split this into different series adding Clock/Reset, RTC, IFC,
-SDMMC and other misc patches in one series.
+Lee, I think Stephen's intention was to get these two merged via the
+MFD tree please.
 
-- Mani
+Original cover letter:
+----------------------
 
-> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> ---
-> Dang Huynh (25):
->       ARM: dts: unisoc: rda8810pl: Add label to GPIO nodes
->       drivers: gpio: rda: Make IRQ optional
->       dt-bindings: gpio: rda: Make interrupts optional
->       rtc: Add timestamp for the end of 2127
->       dt-bindings: rtc: Add RDA Micro RDA8810PL RTC
->       rtc: Add driver for RDA Micro SoC
->       ARM: dts: unisoc: rda8810pl: Enable Real-Time Clock
->       ARM: dts: unisoc: rda8810pl: Enable ARM PMU
->       dt-bindings: clock: Add RDA Micro RDA8810PL clock/reset controller
->       drivers: clk: Add Clock and Reset Driver for RDA Micro RDA8810PL SoC
->       dts: unisoc: rda8810pl: Enable clock/reset driver
->       dts: unisoc: rda8810pl: Add OPP for CPU and define L2 cache
->       dts: unisoc: orangepi: Disable UART with no users
->       dt-bindings: power: reset: Add RDA Micro Modem Reset
->       power: reset: Add basic power reset driver for RDA8810PL
->       dts: unisoc: rda8810pl: Enable modem reset
->       drivers: gpio: rda: Make direction register unreadable
->       dt-bindings: dma: Add RDA IFC DMA
->       dmaengine: Add RDA IFC driver
->       dts: unisoc: rda8810pl: Enable IFC
->       dt-bindings: mmc: Add RDA SDMMC controller
->       mmc: host: Add RDA Micro SD/MMC driver
->       dts: unisoc: rda8810pl: Add SDMMC controllers
->       dts: unisoc: orangepi-2g: Enable SD Card
->       dts: unisoc: orangepi-i96: Enable SD Card
-> 
->  .../bindings/clock/rda,8810pl-apsyscon.yaml        |  44 ++
->  Documentation/devicetree/bindings/dma/rda,ifc.yaml |  42 +
->  .../devicetree/bindings/gpio/gpio-rda.yaml         |   3 -
->  Documentation/devicetree/bindings/mmc/rda,mmc.yaml |  91 +++
->  .../bindings/power/reset/rda,md-reset.yaml         |  36 +
->  .../devicetree/bindings/rtc/rda,8810pl-rtc.yaml    |  30 +
->  MAINTAINERS                                        |  30 +
->  .../boot/dts/unisoc/rda8810pl-orangepi-2g-iot.dts  |  24 +-
->  .../arm/boot/dts/unisoc/rda8810pl-orangepi-i96.dts |  24 +-
->  arch/arm/boot/dts/unisoc/rda8810pl.dtsi            | 115 ++-
->  drivers/clk/Kconfig                                |   1 +
->  drivers/clk/Makefile                               |   1 +
->  drivers/clk/rda/Kconfig                            |  14 +
->  drivers/clk/rda/Makefile                           |   2 +
->  drivers/clk/rda/clk-rda8810.c                      | 770 +++++++++++++++++++
->  drivers/dma/Kconfig                                |  10 +
->  drivers/dma/Makefile                               |   1 +
->  drivers/dma/rda-ifc.c                              | 450 +++++++++++
->  drivers/gpio/gpio-rda.c                            |   4 +-
->  drivers/mmc/host/Kconfig                           |  12 +
->  drivers/mmc/host/Makefile                          |   1 +
->  drivers/mmc/host/rda-mmc.c                         | 853 +++++++++++++++++++++
->  drivers/power/reset/Kconfig                        |   9 +
->  drivers/power/reset/Makefile                       |   1 +
->  drivers/power/reset/rda-reboot.c                   |  58 ++
->  drivers/rtc/Kconfig                                |  11 +
->  drivers/rtc/Makefile                               |   1 +
->  drivers/rtc/rtc-rda.c                              | 356 +++++++++
->  include/dt-bindings/clock/rda,8810pl-apclk.h       |  79 ++
->  include/dt-bindings/dma/rda-ifc.h                  |  28 +
->  include/linux/rtc.h                                |   1 +
->  31 files changed, 3079 insertions(+), 23 deletions(-)
-> ---
-> base-commit: 590b221ed4256fd6c34d3dea77aa5bd6e741bbc1
-> change-id: 20250916-rda8810pl-drivers-9a5271452635
-> 
-> Best regards,
-> -- 
-> Dang Huynh <dang.huynh@mainlining.org>
-> 
-> 
+This series adds initial support for the Samsung S2MPG10 PMIC using the
+MFD framework. This is a PMIC for mobile applications and is used on
+the Google Pixel 6 and 6 Pro (oriole / raven).
 
+*** dependency note ***
+
+To compile, this depends on the Samsung ACPM driver in Linux next with
+the following additional patches:
+https://lore.kernel.org/all/20250324-acpm-atomic-v2-0-7d87746e1765@linaro.org/
+https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.org/
+https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@linaro.org/
+
+*** dependency note end ***
+
++++ Kconfig update +++
+
+There is a Kconfig symbol update in this series, because the existing
+Samsung S2M driver has been split into core and transport (I2C & ACPM)
+parts. CONFIG_MFD_SEC_CORE is now truly a core driver, and
+the I2C code that was part of it is now enabled via CONFIG_MFD_SEC_I2C.
+
+This was necessary because unlike the other S2M PMICs, S2MPG10 doesn't
+talk via I2C, but via the Samsung ACPM firmware.
+
++++ Kconfig update end +++
+
+This series must be applied in-order, due to interdependencies of some
+of the patches. There are also various cleanup patches to the S2M
+drivers. I've kept them ordered as:
+  * DT bindings (patches 1 ... 3)
+  * s2m mfd prep for adding S2MPG10 support (patches 4 ... 7)
+  * split S2M mfd driver into s2m-core and s2m-i2c, including the
+    kconfig symbol update (patch 8)
+  * S2MPG10 core driver (patch 9)
+  * s2m mfd driver cleanup patches (patches 10 ... 23)
+  * S2MPG10 clock driver (patch 24)
+  * s2m RTC prep for adding S2MPG10 (patch 25 ... 26)
+  * S2MPG10 RTC driver (patch 27)
+  * s2m RTC cleanup patches (patches 28 ... 31)
+
+I realise these are many, but since some prep-work was required to be
+able to add S2MPG anyway, I wanted to get the cleanup patches in as
+well :-) Let me know if I should postpone them to a later date instead.
+
+The S2MPG10 includes buck converters, various LDOs, power meters, RTC,
+clock outputs, and additional GPIOs interfaces.
+
+This series adds support in the top-level device driver, and for the
+RTC and clock. Importantly, having the RTC driver allows to do a proper
+reset of the system. Drivers or driver updates for the other components
+will be added in future patches.
+
+This will need a DT update for Oriole / Raven to enable this device. I
+will send that out separately.
+
+Cheers,
+Andre'
+
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
+---
+Changes in v5:
+- just a rebase & resend of the last two remaining patches
+- no other changes
+- Link to v4: https://lore.kernel.org/r/20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org
+
+Changes in v4:
+- various updates to sec-acpm (patch 9, Lee)
+- cache enum type in patch 25 (Krzysztof)
+- collect tags
+- Link to v3: https://lore.kernel.org/r/20250403-s2mpg10-v3-0-b542b3505e68@linaro.org
+
+Changes in v3:
+- Krzysztof:
+  - keep 'regulators' subnode required even for s2mpg10
+  - drop '$ref' and 'unevaluatedProperties' from pmic subnode, use
+    'additionalProperties' instead
+  - add some regulators to examples since s2mpg10 requires them as of
+    v3
+- sec-acpm:
+  - use an enum for struct sec_acpm_bus_context::type
+  - consistent name space for all functions sec_pmic_acpm_... to be
+    similar to i2c and consistent in this file
+- Link to v2: https://lore.kernel.org/r/20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org
+
+Changes in v2:
+- Rob:
+  - make PMIC node a child of ACPM, and all related changes (binding,
+    driver)
+- Krzysztof:
+  - merge defconfig updates into patch changing the symbols (patch 8)
+  - split MODULE_AUTHOR update into a separate patch
+  - better alignment fix (patch 11)
+  - merge two s2dos05/s2mpu05 related patches into one (patch 14)
+- myself:
+  - keep PMIC DT parsing in core, not in transport driver
+  - several updates in sec-acpm.c, see separate entries in patch 9
+  - fix typo in patch 17
+  - collect tags
+- Link to v1: https://lore.kernel.org/r/20250323-s2mpg10-v1-0-d08943702707@linaro.org
+
+---
+André Draszik (2):
+      dt-bindings: clock: samsung,s2mps11: add s2mpg10
+      clk: s2mps11: add support for S2MPG10 PMIC clock
+
+ Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml | 1 +
+ drivers/clk/clk-s2mps11.c                                    | 8 ++++++++
+ 2 files changed, 9 insertions(+)
+---
+base-commit: 54efec8782214652b331c50646013f8526570e8d
+change-id: 20250321-s2mpg10-ef5d1ebd3043
+
+Best regards,
 -- 
-மணிவண்ணன் சதாசிவம்
+André Draszik <andre.draszik@linaro.org>
+
 
