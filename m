@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-4967-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4968-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20E65B7DDA7
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 14:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E002CB7E0C4
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 14:40:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71CF23A98D2
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 00:48:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50E50488033
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Sep 2025 00:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91151DE3DB;
-	Wed, 17 Sep 2025 00:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3C31EA7EC;
+	Wed, 17 Sep 2025 00:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0t/livV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iM+Kng8K"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988613C38;
-	Wed, 17 Sep 2025 00:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D029F1E1C1A;
+	Wed, 17 Sep 2025 00:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758070095; cv=none; b=eHp75BNQ0ZlRrN5eg2HnLjSZd+DTb/2LJpC2lFk5Npk0PhwRK/+DavIrhlXHIAeAc3kBlsV6xedJZKFIfjcRQ9oisgAHMjfN/yC76WxUW8NPxwqHr18iReo55Aw6J0lBc8cGIPNz1ZqYuCsqrOrk9qZu4InSAt3Tpaz1XF3z1PA=
+	t=1758070348; cv=none; b=fJL4tv89P29+AJ4r7pw7FPnwunIg9F2V1pPuJZu7nZp3Xk6u6fsPBFc4LvRbrNONfzAxKGhmvv5yUF1+Ja788QnPpbaGprv2u5qlNJ9b1gfWuUQbw94adFdPl6hksFHRXRnWJm+MV06eWEpfwT+ORIzdV3RBsFR553lyb3BP+YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758070095; c=relaxed/simple;
-	bh=vRAIdXOKpdVJ8Lf99sSrDe0C/XqGhJEXcMlToVAczkw=;
+	s=arc-20240116; t=1758070348; c=relaxed/simple;
+	bh=IQUK4UH6y3UvHRusmYMhZGxdhmU0laY1aNE4fvf9Cgc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mHWwqjYjYeSJcqCkcsAlhMtNTUxt2peMaCxtZn3AmG07jgw8/HogOM0GP8nanbNbk0N289IsvHDy1bj41YsmdYr8KvD0GoyH1Bk8gLYACQwKB/wdb3bxJP12cf6MGIkRXtKdsx2jmoyzCd5S83P0UDNG1EranWb/Twc3gPAe7b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0t/livV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2B4C4CEEB;
-	Wed, 17 Sep 2025 00:48:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=grWbjekAD8W9DM2m5B9V0A1UpkLIuNBgOaxby4ycLmiMpLEKobIK/hpIkto7FqS0mwnSkhkbhYaPs1b3U7RG7AB2B83VoCt8EGxpjKs0ioeF+uyVFs+bLEFYR4FDBEFAZ2buzyk+Md/3889bkyuocuEOFMzJPSvuaJO9TOQ0dE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iM+Kng8K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA44C4CEEB;
+	Wed, 17 Sep 2025 00:52:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758070093;
-	bh=vRAIdXOKpdVJ8Lf99sSrDe0C/XqGhJEXcMlToVAczkw=;
+	s=k20201202; t=1758070347;
+	bh=IQUK4UH6y3UvHRusmYMhZGxdhmU0laY1aNE4fvf9Cgc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K0t/livV7JVeClOD327d/qqH+7bPLmtwCtUAJNyAbwUbdBxrXnNKuIqZ+AwNdd2BV
-	 cQA3K4NJbV7X8PX/wvADs8uoeeOhoZE7q9OazCNkWER+VCC1//CMSVaZxONa2lXbpR
-	 pX428vSOZrA9aUEjFRQmxrfYu0a90uAtjUQYNQhyalHdhpbjxPMeRmZWbydFr6qMlp
-	 v5nfn4927S1ISQ7YbXS7oRU3TSJ0MbdgFYdMqnzG9owOAt/yFvPQgmt8J+EIz6DkY+
-	 Biz2db5mCyl/NN16pk+LfwEsDc4qrnnNfcInhj9lZxmItZjv7gDRjn57U/aCdjrOtM
-	 1uxvsDOVHOLoA==
-Message-ID: <d2f4d539-ebd2-4871-ba76-74b38dd41395@kernel.org>
-Date: Wed, 17 Sep 2025 09:48:06 +0900
+	b=iM+Kng8KInHQg3xdJ6B7yLk4QQZyQVpv+wAYNydEbiBaljhNgvu1IHSg4L4KZl0I1
+	 ThSEBV9dKCbDALIg90u1FUo/cKcbDNXPYnO+WRZZTUT728N+Om92e1oOp/hCWfnAmt
+	 UG2qF+5wW7YIRWsSiovd39rd/lNX0ixe3dJmDN5JAlH+sy5RgN3YkUQYxAVHB+EpFn
+	 vVWpz/1s5R51Y6WAtZhVRkN6iMSD+xCvG6Z60Fh7YKfaT4EvKu8BYjEjXZbYQLTx8R
+	 k/AhWx5dwpoocKxiw0F1zuuGhh7PdFu5NZJW/utE6c7Se4hEijAhHzWy5vHxzA3221
+	 ZTIRNgKISPeYQ==
+Message-ID: <85a46710-64ee-4a21-b95c-d4c18c2f634f@kernel.org>
+Date: Wed, 17 Sep 2025 09:52:24 +0900
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,25 +50,16 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 22/25] mmc: host: Add RDA Micro SD/MMC driver
-To: dang.huynh@mainlining.org, Manivannan Sadhasivam <mani@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-unisoc@lists.infradead.org,
+Subject: Re: [PATCH v2 1/6] dt-bindings: rtc: Add ST m41t93
+To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+Cc: alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org,
+ conor+dt@kernel.org, skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-mmc@vger.kernel.org
-References: <20250917-rda8810pl-drivers-v1-0-9ca9184ca977@mainlining.org>
- <20250917-rda8810pl-drivers-v1-22-9ca9184ca977@mainlining.org>
+ akhileshpatilvnit@gmail.com
+References: <cover.1757510157.git.akhilesh@ee.iitb.ac.in>
+ <3aed714163abc86a18a62f039b285643d9504e64.1757510157.git.akhilesh@ee.iitb.ac.in>
+ <20250911-resolute-translucent-koala-1707dd@kuoka>
+ <20250915141951.GA3239298@bhairav-test.ee.iitb.ac.in>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,93 +105,34 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250917-rda8810pl-drivers-v1-22-9ca9184ca977@mainlining.org>
+In-Reply-To: <20250915141951.GA3239298@bhairav-test.ee.iitb.ac.in>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/09/2025 22:25, Dang Huynh via B4 Relay wrote:
-> From: Dang Huynh <dang.huynh@mainlining.org>
+On 15/09/2025 16:19, Akhilesh Patil wrote:
+>>> +$id: http://devicetree.org/schemas/rtc/st,m41t93.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: ST M41T93 RTC and compatible
+>>> +
+>>> +maintainers:
+>>> +  - linux-rtc@vger.kernel.org
+>>
+>> Not much improved. This should be a person responsible/caring about this
+>> hardware support in the kernel. Why would we want to take the binding if
+>> no one cares about it?
 > 
-> RDA Micro RDA8810PL includes an SD/MMC controller. This controller
-> supports SD/SDIO/MMC interface.
-> 
-> Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
-> ---
->  MAINTAINERS                |   6 +
->  drivers/mmc/host/Kconfig   |  12 +
->  drivers/mmc/host/Makefile  |   1 +
->  drivers/mmc/host/rda-mmc.c | 853 +++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 872 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 91be43782f4ba8aacb629002d357a66704f10b2b..33e04ce35dcc4cbadd715ec9199f2453237b8002 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21417,6 +21417,12 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
->  F:	drivers/rtc/rtc-rda.c
->  
-> +RDA MICRO SECURE DIGITAL AND MULTIMEDIA CARD DRIVER
-> +M:	Dang Huynh <dang.huynh@mainlining.org>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/mmc/rda,mmc.yaml
-> +F:	drivers/mmc/host/rda-mmc.c
-> +
->  RDACM20 Camera Sensor
->  M:	Jacopo Mondi <jacopo+renesas@jmondi.org>
->  M:	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-> index 4afa0130779d97ca9d1c0ed2102b0babdedcaeeb..352a6eb4e30793b7311c7877c238a7fe31121123 100644
-> --- a/drivers/mmc/host/Kconfig
-> +++ b/drivers/mmc/host/Kconfig
-> @@ -1040,6 +1040,18 @@ config MMC_MTK
->  	  This is needed if support for any SD/SDIO/MMC devices is required.
->  	  If unsure, say N.
->  
-> +config MMC_RDA
-> +	tristate "RDA Micro SD/MMC Card Interface support"
-> +	depends on ARCH_RDA
+> Okay. As per get_maintainer.pl, linux driver corresponding to this binding does not have a dedicated
+> maintainer, hence it shows rtc subsystem maintainer (Alexandre Belloni).
 
-Missing compile test
+And what did I express at v1?
 
-> +	depends on COMMON_CLK
-> +	depends on HAS_DMA
-> +	help
-> +	  This selects the RDA Micro Secure digital and Multimedia card interface. The
-> +	  controller supports SD/SDIO/MMC interface.
-> +	  If you have a board with RDA SoC and it uses this interface, say Y or M here.
-> +
-> +	  If unsure, say N.
+> Looking forward for your suggestion here.
+> What do you suggest to keep maintainer as Rob Herring or/and me ? as I see in
+> such cases Rob is the maintainer.
 
-
-...
-
-> +};
-> +MODULE_DEVICE_TABLE(of, rda_mmc_dt_ids);
-> +
-> +static struct platform_driver rda_mmc_driver = {
-> +	.probe		= rda_mmc_probe,
-> +	.remove		= rda_mmc_remove,
-> +	.driver		= {
-> +		.name	= "rda-mmc",
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> +		.of_match_table = rda_mmc_dt_ids,
-> +	},
-> +};
-> +module_platform_driver(rda_mmc_driver);
-> +
-> +MODULE_AUTHOR("Dang Huynh <dang.huynh@mainlining.org>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("MMC/SD driver for RDA platform");
-> +MODULE_ALIAS("platform:rda-mmc");
-
-You should not need MODULE_ALIAS() in normal cases. If you need it,
-usually it means your device ID table is wrong (e.g. misses either
-entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-for incomplete ID table.
-
-
-> 
+No, I really doubt Rob cares about this particular hardware. Neither do
+I, nor Conor.
 
 
 Best regards,
