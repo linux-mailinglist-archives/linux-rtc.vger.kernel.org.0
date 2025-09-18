@@ -1,119 +1,168 @@
-Return-Path: <linux-rtc+bounces-4981-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4982-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB887B83E82
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Sep 2025 11:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F55EB858DC
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Sep 2025 17:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91C0E1B25EBF
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Sep 2025 09:50:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 366E01C0103D
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Sep 2025 15:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D80E29992B;
-	Thu, 18 Sep 2025 09:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7689930CDA6;
+	Thu, 18 Sep 2025 15:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pcEVHo+b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uLi4AGnf"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B6F27AC4C
-	for <linux-rtc@vger.kernel.org>; Thu, 18 Sep 2025 09:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC2922425E;
+	Thu, 18 Sep 2025 15:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758188995; cv=none; b=FyymoL23PPN+J0+EDrOfOhUyYa8Qg88Tp41s+jsODxPShQq53OyyblX3cGLPgbFeqXfaPmRPw28MrgKIQjmifolV+Mhyq9KwHC1Ecfj3nM/xriwrf3RvEps0WHFIVKapPznsHK2YQlWBZCXznJMGNU5OKv4T3feLwJe3RvNT5ic=
+	t=1758208713; cv=none; b=pqezMrWMYN1QBq5RoPsCoOMXE2RJTuduOM+vmclmFdHW8SUe224ap6Ht1vYXcGoefISHJtT3TMWoxzNfQEGQvFYYKJLUtwHhPsaX0LLELaFMakhkfuxsjN6P32uHjv73VYji5G8YLR2wOeQbPGSQ1DOZoXZ2GHxq7Y6ptEy9IAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758188995; c=relaxed/simple;
-	bh=pmKMdMwREhDVJrJVVTTvY6Y6Gzyv37bc8Q/TErqBVNc=;
+	s=arc-20240116; t=1758208713; c=relaxed/simple;
+	bh=T4wS9mTXcpSpv5NeMblAj4UwyO9r3doA7Bdhw2LH3VI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ueOZCt53ryasNWUuPh9ggS7AGNzyb4pdqjKh0iwAc5gG0x9j91sRMgv+madgPLYdxEUMudNCzLjsNS56AqMwLMm+qff8+kQjxPIw5lbVl+ZwyRl87BzQg+Y8IQ+QpHlGtatlZeMhHKNNR0n1j9j2rT5smC/p+B7/s9paGEbhT7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pcEVHo+b; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45f2b062b86so4070785e9.1
-        for <linux-rtc@vger.kernel.org>; Thu, 18 Sep 2025 02:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1758188992; x=1758793792; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/gbtAHMr2GW0/OahgiAYUZjpkj23jMbWY9WrggA8X0=;
-        b=pcEVHo+b5EGJhi6LpZy5k7N10TOe/7p96AWo3+WvaPa0+y9oMMDTYGdvZXdCtM1sZj
-         ofoctBLYOCgCoN4W3vzL8yPM/sDbuyKByQhFfZXe+UDE9BLUPERp8jU2EG3nuYoL2z6G
-         +fvqucKVpv2hqDgo/b4q+4GAPswY4r0HCXL1eykuImDxxiiYMlH/0TOmuCbd84dWyuGI
-         otX/AVLoCb5ayqtLP9mCbY/mpZWP3TIwtaZ/F1W8ifGKJlL/ieSRue1NTVFWMEeFzFVD
-         qTiyR5CnbzIKe7DqJ70NHjXXsTUJkAqzxPJmqrozedifiNSspc4ivqex+YoNscP2gGBI
-         O8xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758188992; x=1758793792;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I/gbtAHMr2GW0/OahgiAYUZjpkj23jMbWY9WrggA8X0=;
-        b=cSgCSA82cB9v8d9Ra3O3a06DkMTkjrMycP1NKn96y7gJOz3q4nNPG694cr9xsKfjMh
-         EzAikBSSgXVSFm1snKNCgnhajHd5W5jqEDsVGXGUWSRVHmzU1GzhQf/CsakouGuzV60a
-         BuxmFKUyYQvPnj9eeT07HeqoQPXEzCGd5811lkQuQK6WinkiH1vzZMhKF8iZoSLXwUFT
-         bAs5fzEzeGKT0K2JbJ/1ko1afApbJB9ozfXv7kmPzliNIpJLzLLLXRiAsr1NXcaNnp8t
-         1Gm7eGrqES89JqV/HZqB4qwQCGkzb3XMDduriQbV9TtWR8nMveV3QR8jsWJtUlF+E/ar
-         S8Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSdylXOc7z3t5ikMNitjRIDptFymEbMz6d880Gs4JBb31ojKys88Cd0A2XqUOYBjHipCwXqKEaipo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqS58MUcIU0Da3lLr9KSpCUA2vzNiwlrnxN1950UcpegezM2Bi
-	KiH9qORrfNIz83Lna4OfZqF6b/fMSleSrmg+lDFmTig772/IcPh7/W28cihvukYlRpQ=
-X-Gm-Gg: ASbGnctBx1cCTRzo/LppamJibqR8y6fRrYEPJg52uLI7mwrkNZYDENtOkqgnT4Q0mIl
-	gfWU2ws+NB0SuJEFeejUh54PJTWnNezxolo7vbii2VU96O++Py3ttW8zBwPTwNDun3G95aIzc37
-	YCGeWe2Te/LcwlIrpJceyk8bD+zcO/irXTluaiO3hpX+WrQ1GDBcRMdZ3voLOQwoavA1D25dC9y
-	JCykoLGnt82IR8WO3vr6SOdRCSSbC7tR3IX2F4kZ0Ph4SQTaRumuAyn0Sc53CO9cV7eiFVKcY4Q
-	yL2543QKgj4Lj/JNc37nVHm6lx+51lJ4m10QzXT9nlXdfkJtN4+fq2uZIbjIAY01qwbqOkq+cbZ
-	ZnQ6Or7K6cEaFMr94rKaELQM6GkxdlLkH8AfPqlAKAf9BCg==
-X-Google-Smtp-Source: AGHT+IGxQiegj2o4mPFmZMrmoIXlBv9b1w/nkqkoOE8IISbZ7wbuT9+6TsbLyb+3Ro80AXibobzQxQ==
-X-Received: by 2002:a05:6000:2284:b0:3ec:de3c:c56 with SMTP id ffacd0b85a97d-3ecdf9ffa65mr4464540f8f.16.1758188991925;
-        Thu, 18 Sep 2025 02:49:51 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3ee0fbc72e6sm2816898f8f.29.2025.09.18.02.49.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Sep 2025 02:49:51 -0700 (PDT)
-Date: Thu, 18 Sep 2025 12:49:48 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
-Cc: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=bBjcA+hLzwamDR8Qxz+zW+D3gPYuOxjy8ibUzhcRM6kwKBd4UesaVHrTwhZpN/EquqkCqdrUTi4AjHD8GI/Pgq2yVpLR0FqUCKj00QAF4iUIaWipgYBjbtudckA3B5+HcoTXf1SfTN2YTGYjVy1sB266xn0B6jxwR3/0BLgcS50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uLi4AGnf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAE5C4CEE7;
+	Thu, 18 Sep 2025 15:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758208712;
+	bh=T4wS9mTXcpSpv5NeMblAj4UwyO9r3doA7Bdhw2LH3VI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uLi4AGnfRF6V6De0JAQgyez9xlUDmOFx461zVUm3XCG3sP4T0+DSxdMQyyFkuOUhV
+	 +Vh0+IHpwVsE1AZMdCz4UjHMuDlwhMrk39tlWhDcGgoEsf0H6LULv5ssc1b5PCpbhd
+	 JdIa4NK88xzdm/0CBrNg88tIE/Fx13gh/UUhVDeR2zvkFOqfwIosu0udNELsXGdBkl
+	 Js0qFWwQZgoA63M3jyhl2eCC8j64ckbBPtWR2RrV6aeDGgTIOkwrsNNEzkg2vc6zCf
+	 TfonVsjS25GolhGQGXBUZ0rgcw0cK/3wgOdylL6W6s1718xsH2XOddKjhMSuq6sr/2
+	 Gdq9xsJAzr/NA==
+Date: Thu, 18 Sep 2025 16:18:25 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Dang Huynh <dang.huynh@mainlining.org>
+Cc: Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] rtc: optee: Fix error code in optee_rtc_read_alarm()
-Message-ID: <9e3718fe1128964907619ad325c0c5f5c1354ace.1758182509.git.dan.carpenter@linaro.org>
-References: <cover.1758182509.git.dan.carpenter@linaro.org>
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH 05/25] dt-bindings: rtc: Add RDA Micro RDA8810PL RTC
+Message-ID: <20250918-unharmed-bloating-8b573513fce6@spud>
+References: <20250917-rda8810pl-drivers-v1-0-74866def1fe3@mainlining.org>
+ <20250917-rda8810pl-drivers-v1-5-74866def1fe3@mainlining.org>
+ <20250917-contort-sassy-df07fd7515a0@spud>
+ <c905fb3ace281280f1ac11c7fbe8e0aa@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qnPPSzmWE/KqIUbp"
+Content-Disposition: inline
+In-Reply-To: <c905fb3ace281280f1ac11c7fbe8e0aa@mainlining.org>
+
+
+--qnPPSzmWE/KqIUbp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1758182509.git.dan.carpenter@linaro.org>
+Content-Transfer-Encoding: quoted-printable
 
-Return "optee_alarm" instead of "alarm".  The "alarm" pointer is a valid
-pointer and not an error pointer.
+On Thu, Sep 18, 2025 at 11:11:10AM +0700, Dang Huynh wrote:
+> On 2025-09-18 03:46, Conor Dooley wrote:
+> > On Wed, Sep 17, 2025 at 03:07:22AM +0700, Dang Huynh wrote:
+> > > Add documentation describing the RTC found in RDA8810PL SoC.
+> > >=20
+> > > Signed-off-by: Dang Huynh <dang.huynh@mainlining.org>
+> > > ---
+> > >  .../devicetree/bindings/rtc/rda,8810pl-rtc.yaml    | 30
+> > > ++++++++++++++++++++++
+> > >  1 file changed, 30 insertions(+)
+> > >=20
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
+> > > b/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
+> > > new file mode 100644
+> > > index 0000000000000000000000000000000000000000..3ceae294921cc3211cd77=
+5d9b3890393196faf82
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/rtc/rda,8810pl-rtc.yaml
+> > > @@ -0,0 +1,30 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/rtc/rda,8810pl-rtc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: RDA Micro RDA8810PL Real Time Clock
+> > > +
+> > > +maintainers:
+> > > +  - Dang Huynh <dang.huynh@mainlining.org>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: rda,8810pl-rtc
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> >=20
+> > Your driver implements functions that turn on an alarm irq, but there is
+> > none mentioned here. What's going on there?
+> The RTC doesn't seem to have an AP IRQ associated. I can't find any
+> reference to it on downstream kernel and the docs.
+>=20
+> >=20
+> > Additionally, there's no clocks property? For an onboard RTC I'd have
+> > expected there to be a clock sourced outside of the block.
 
-Fixes: 6266aea864fa ("rtc: optee: add alarm related rtc ops to optee rtc driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/rtc/rtc-optee.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What about the clock?
 
-diff --git a/drivers/rtc/rtc-optee.c b/drivers/rtc/rtc-optee.c
-index 7b44d7723cae..3d5662aa1bd8 100644
---- a/drivers/rtc/rtc-optee.c
-+++ b/drivers/rtc/rtc-optee.c
-@@ -299,7 +299,7 @@ static int optee_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- 
- 	optee_alarm = tee_shm_get_va(priv->shm, 0);
- 	if (IS_ERR(optee_alarm))
--		return PTR_ERR(alarm);
-+		return PTR_ERR(optee_alarm);
- 
- 	if (param[0].u.memref.size != sizeof(*optee_alarm))
- 		return -EPROTO;
--- 
-2.51.0
+> >=20
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    rtc@1a06000 {
+> > > +      compatible =3D "rda,8810pl-rtc";
+> > > +      reg =3D <0x1a06000 0x1000>;
+> > > +    };
+> > >=20
+> > > --
+> > > 2.51.0
 
+--qnPPSzmWE/KqIUbp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMwiwQAKCRB4tDGHoIJi
+0mfkAP9yS2bi4VD6hutTCOIeT3qJB84qFVZONJYP1wnhQwLGeAD8CFxZvCN6Jv4e
+UC/tOu6vHervFswpc7sqlf9k4hh+qQs=
+=wDJV
+-----END PGP SIGNATURE-----
+
+--qnPPSzmWE/KqIUbp--
 
