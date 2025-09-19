@@ -1,260 +1,237 @@
-Return-Path: <linux-rtc+bounces-4984-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-4985-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34179B89C4F
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A379B89C4E
 	for <lists+linux-rtc@lfdr.de>; Fri, 19 Sep 2025 16:00:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D8E51BC3D84
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Sep 2025 14:00:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9D1F14E1200
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Sep 2025 14:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 065C622256F;
-	Fri, 19 Sep 2025 14:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72F225A2DE;
+	Fri, 19 Sep 2025 14:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="szwD/i+X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IYmZ8UPD"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013020.outbound.protection.outlook.com [40.107.201.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D22C30DD2E;
-	Fri, 19 Sep 2025 14:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758290414; cv=fail; b=k/to0sZGRf6HsotK2VC2LFHAvFpV4WVt9j6QEVB8iwDZiyXaFHhK8TCXWuMDQExMvwfLp6XS/BQg+k069LqzAueGG96pbvgT099lPpOkwB8pK6fYDX3VMwwxWVarSO6Bil/y0QjkvmDv9FHlEFMy1YH5GD7tRdvsc9QEB/SRHEU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758290414; c=relaxed/simple;
-	bh=nZd7ldzpjJ+hvyUUpixQsaKrJ41jKT0NWghzW93QJGo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=o8WfT0Zxf33UwlSQt6QbBTeqz2g/hXYU+722EARYoFlIpBWuqQuhzjvy5P685U3bqRv3H4bGvvlUET87gtFYbHYnRxpAdNLz02OVCXBnm4BHXXAwJYBsV1jmOfuxpIGEfnZTvKoGhtqIWdzXfMM6AO+Xul6/PYlHRa2oF/VjQNM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=szwD/i+X; arc=fail smtp.client-ip=40.107.201.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SPeYMI14VpzGUFh+eylP7CSaY0Nxg303NbNsNZAgzTFLvRl1a2Cm0HhrfH5xqN0I8Gekk8jASvmmUyKyg8iXSiMH0VvzNSjwQ4ik2XEvNbbzRhx0+R5brcsy+rtiXRG22bwghQTpQrKVtg1gabcQC1jcD3qhL+UPiZUqDNT9vIRut1vDGPMQ63su96oAaGkm5D1QzZODmRcxcQ7FCrdroA8HabeYNweQxkiRaG+5lRwyJzSkZnVhoVJjuYfat0jN4BgKE7NdGuOn47GEdTCRYO+OSb634o7/YFtnW7S8fYB+ZN+legNMZSB9C7ZzJ+S6AsnEOGFP5IZaNJWQ/vtcJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EQ5T4+41W/4V7StdUWtOL2Qhltzg655cTeqA6T6LmJs=;
- b=NddNatSTW9vZY6PdZS8/j1cMjo14XnLN+/6EA4y5qGlI8xLFsyAdHEjAYgPmwvQbdu9huz7egRgOiM3UYhKEegM/3p87z0a9M7CqviEJ9pxTETtgTEKYrzSkgwYiPDAqqPj9+nxj8zzNGDMYeOTch7c/FkU5AyD8AjPXXuvep44/qJyUWgTS49wkOE5+UrziI8EirDVPv4mHq5H4O5mHFLgSEaTb/pGrLu38x/+brKVnzL1yf6CEmSa7VbGtwhK/7slh47wzmEPMH9eSjC3Mux9hQMhycUvzUQJfkahOCbok/1e+zmtktvTPHFYqBqZXA26Dr9Z1MA00SAsEDbaCXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EQ5T4+41W/4V7StdUWtOL2Qhltzg655cTeqA6T6LmJs=;
- b=szwD/i+XyJJMHPWmZxLggpqBwfC9JUhF+c7ckcXr1tw3BfPHje2ENFFhJIOfbtHYcSbQWTiGPc0ZHqUvAkZs68N/FWLtlsXBDtxSDdiqAwajvjPDabMNBWnJr6uJ7564g8JGWwRRzAPn7hO3aK+JnkWhP57Ra824gkHfwosS6YuwUGjAMdjF0lHbNxYv0lj8B55BlPA15tWKaLYvFC9jOp8kOVf9r7NiVL2GTrUW1qudgy5jaWzgaG7+LQfqjA66A1fgqxBFfT5m3c0HgtlaEopftAfWHi3lG61ldQi3YukDxidLmc9mllBgNMIU+GED1B0RGb3bCeZ9YZa4tDCrnw==
-Received: from DS7PR05CA0029.namprd05.prod.outlook.com (2603:10b6:5:3b9::34)
- by SA1PR12MB7127.namprd12.prod.outlook.com (2603:10b6:806:29e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Fri, 19 Sep
- 2025 14:00:06 +0000
-Received: from DS1PEPF0001708F.namprd03.prod.outlook.com
- (2603:10b6:5:3b9:cafe::9f) by DS7PR05CA0029.outlook.office365.com
- (2603:10b6:5:3b9::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.15 via Frontend Transport; Fri,
- 19 Sep 2025 14:00:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS1PEPF0001708F.mail.protection.outlook.com (10.167.17.139) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9137.12 via Frontend Transport; Fri, 19 Sep 2025 14:00:06 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Fri, 19 Sep
- 2025 06:59:54 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Fri, 19 Sep
- 2025 06:59:53 -0700
-Received: from build-shgarg-noble-20250919.internal (10.127.8.11) by
- mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.14 via
- Frontend Transport; Fri, 19 Sep 2025 06:59:52 -0700
-From: Shubhi Garg <shgarg@nvidia.com>
-To: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Catalin
- Marinas" <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>, Jonathan Hunter
-	<jonathanh@nvidia.com>
-CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-rtc@vger.kernel.org>, <linux-tegra@vger.kernel.org>, Shubhi Garg
-	<shgarg@nvidia.com>
-Subject: [PATCH v6 1/4] dt-bindings: rtc: Document NVIDIA VRS RTC
-Date: Fri, 19 Sep 2025 13:59:50 +0000
-Message-ID: <20250919135950.10403-1-shgarg@nvidia.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C546246327;
+	Fri, 19 Sep 2025 14:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758290448; cv=none; b=IS4/nKrG6YKn0XwJuXfcjeRn5x8W0Cb5yrVkRVE5SkK/l/qrnHIht5zsJAATMChI7jkbdjgpaqKu8USkWNig9dppVtqO0ZEYFpr/jRDnGII82MHPQ3n8LqxEjN1hSyYB5/PIZeI8t5qqjvRsM/GyoNsACGXeAyGS/RgQHEJ3tUI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758290448; c=relaxed/simple;
+	bh=2Fw6+9wC1pe/2aHJyHIT5pgPlo5xcUmfFXENMUNHfqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NS3/aWbccHvQS3Sj26GPyhlkX7ZS0afffeLQ2Gr+CsdGHELrSVnxEUHc79EX2kB0p0rO3SYkV9q7QfRUQbxCdnDMVO6AKkagItmVwUnyfPMOsBq+0pd7AWjr7xFh7yx7cgywivO60Jj1YtjFcRj//vcxwrFK7EoHynOaIFNaZbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IYmZ8UPD; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758290447; x=1789826447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2Fw6+9wC1pe/2aHJyHIT5pgPlo5xcUmfFXENMUNHfqk=;
+  b=IYmZ8UPDVLRSFePSrHiSKVhVvRIgRs1HU26zTUyYq/t7jWyQKBlILFZR
+   /MY/o1ObMsTXjiihP7MUAF57o/4T0b/xGZrBWfVz1y/4nW+/BWwacx1eC
+   e0gcY2elE5eMXEBefDTPzSXiJIgZLfHTg1SO3uVNgc5HqxwiurbdN2Boz
+   E8KsBX78vdz4kgqBOcay7Rr1U7spdfNR2MEfmkz/48oB/huNYKQpSwxEA
+   sfzOI4FxVcOoqybRQfzVyhYmTX9W91VZ13TumkHQlwRTx6vW9/tRVDqkk
+   ozj2IwGfR/EjlE9AZGi/j3vcJlIMB4GwcJdpcsgY/r6CzkFigxfYS7WX7
+   g==;
+X-CSE-ConnectionGUID: GtM1mu5CR2qhw9j2+YosuQ==
+X-CSE-MsgGUID: 742BhsfcSHqbzEEbxK0uTQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11557"; a="60523789"
+X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
+   d="scan'208";a="60523789"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2025 07:00:45 -0700
+X-CSE-ConnectionGUID: KLjTf8AqQCqudD5ECbxUSQ==
+X-CSE-MsgGUID: 8I+0wv0HRzSTzVRIDmNthQ==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 19 Sep 2025 07:00:39 -0700
+Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uzbfB-0004Ln-1N;
+	Fri, 19 Sep 2025 14:00:37 +0000
+Date: Fri, 19 Sep 2025 21:59:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dang Huynh via B4 Relay <devnull+dang.huynh.mainlining.org@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-mmc@vger.kernel.org,
+	Dang Huynh <dang.huynh@mainlining.org>
+Subject: Re: [PATCH 06/25] rtc: Add driver for RDA Micro SoC
+Message-ID: <202509192152.OXdK6bpd-lkp@intel.com>
+References: <20250917-rda8810pl-drivers-v1-6-9ca9184ca977@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001708F:EE_|SA1PR12MB7127:EE_
-X-MS-Office365-Filtering-Correlation-Id: c444b18d-cb7c-4e56-83b2-08ddf784d68f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|82310400026|376014|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TKq8dtJNuMhNpO0hkWfayLaEvpzGXwXQEp7tujHwg8eeZth982PmyYZ4Z1Yh?=
- =?us-ascii?Q?4Hn4VEcmkTQ5PD+yxQ9OQZxkqxt4BeHY7KIOzRFDUm2rT8QdF4iEudxxXMkb?=
- =?us-ascii?Q?IgZ1Z8N0x+2qcafCIDYIQqBEkTomwJsvK4pzZnV4DoSZQLRKR1Q1FiCk7Tgu?=
- =?us-ascii?Q?4ChlZstrkkR17a3fS9hu0fpC3AYc5mHLUyW2Vgi9KsnjHV8sjpgkEoGEcJ1w?=
- =?us-ascii?Q?qbZ7uJiwegMpNsfmbt3tl4/C6RSzrqjsZLeNAItDW5t8/8Z8Z0GdofaKVucP?=
- =?us-ascii?Q?I/5OaC49UwgMAerEXvqh7jt7JqU7yCnFVdBZrPiw986lYIsUT0LmxFNAfVza?=
- =?us-ascii?Q?USXFeMrfnXU+yauLGLq356gpRmc3FHLdb8RpHOhCZ35i45fxNUUvITNLWicx?=
- =?us-ascii?Q?QebezsmwmFZJ7cluqGNdfYHb4SoGKT/R/PxhGuCNpLuIXqWmQOKK1NAKD7wK?=
- =?us-ascii?Q?zVMPnyR4DWTq5584AbB7+43KlPOPYJV0yDoQuD16ROZsAM1+1Ymk+Roq3Dqq?=
- =?us-ascii?Q?6WjjaJ1hq/1ycbxq0I98atIBSRp2AYs4HeIkOOHfwYFqnjHeVR4S/JuhQBgw?=
- =?us-ascii?Q?pQeIggx+o+GcigOslP+GoT2R8Ya735BXETWyal6WolmtzdaNJUowfIrjJK1i?=
- =?us-ascii?Q?4BSYoxqCqjkt8mGbCugfPMUntlExLbVHk1v/NCVA6FDAEEi2ViKrF9hNltU5?=
- =?us-ascii?Q?9doc1KcOTGD7BZqH63WVqFV1YFGAkyjEYvcQGw5mOFdxtHly7RHfOVFKQvty?=
- =?us-ascii?Q?yV7dbzQp67oO/PMiZBei07/4Rteyx8pf4y7IWIhzhcqwupBZGnsRALzrvz6D?=
- =?us-ascii?Q?pgx2qwe0eIJYuPwtEaLuuiYySj0DQ3SRr9/4V2EkgYL5/WDdmjaAxq6jyPN6?=
- =?us-ascii?Q?K4HPxDIQig2G3lixDNU/0JBNZqr1d8MXoFFL3rLElpSDjp88fHMYQpl8NJ7H?=
- =?us-ascii?Q?OE7meL9cHGbnUxMVNKHW2PBgT153zM51ogS3XiZilScs68LUHKgNcKpRERUn?=
- =?us-ascii?Q?RGQrKAnphfNxJq6nReUX0Y7YGm59ssgis0fL3KhxvSbbUcmQsj+lOZgWwX1i?=
- =?us-ascii?Q?J2TLb+gegnhyK5uszW9jL/EqpRgB9ivYtyyijBlWxegCOWDqGh+02yZC2vfH?=
- =?us-ascii?Q?AYyYN/H56kTbXwJ0uQOjsdG13I+Z4QS2byf/1Chrm0rlH2abyqABE43Ir8WV?=
- =?us-ascii?Q?L9aMBdfxydDvcT1Dqb80KhOsWPxj7M0mTECcjLC6AiRBbsJnkbYtARPhJvBv?=
- =?us-ascii?Q?ZjnrJZOpPsr4pcs9DIANLyWGC/iAp4nLjn5yDmilcZkn/NEaKYVQ4Y+ZCRVs?=
- =?us-ascii?Q?0IPYC5MziwfACljBwufHvBhpxTeMQ2HFfMv9+frgqRaQPBm1fFfI7upg6ADU?=
- =?us-ascii?Q?HjvlCsR8EOhNaGPkGxCoAJbXqrxktBuCaRVHH1xA1IoLaLOrFXLHt95XVlnp?=
- =?us-ascii?Q?+WH4YixndKxL3NgkQ3olPCs3gYVajtj8R4KVrG9lLYPzKNCg7Q+uosQf6kTb?=
- =?us-ascii?Q?9R+VulxxhYxIx0eFxjbkUvUys+cDhLgOpK+4?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2025 14:00:06.1948
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c444b18d-cb7c-4e56-83b2-08ddf784d68f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF0001708F.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7127
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250917-rda8810pl-drivers-v1-6-9ca9184ca977@mainlining.org>
 
-Add device tree bindings for NVIDIA VRS (Voltage Regulator Specification)
-RTC device. NVIDIA VRS is a Power Management IC (PMIC) that implements a
-power sequencing solution with I2C interface. The device includes RTC
-which provides functionality to get/set system time, retain system
-time across boot, wake system from suspend and shutdown state.
+Hi Dang,
 
-Supported platforms:
-- NVIDIA Jetson AGX Orin Developer Kit
-- NVIDIA IGX Orin Development Kit
-- NVIDIA Jetson Orin NX Developer Kit
-- NVIDIA Jetson Orin Nano Developer Kit
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Shubhi Garg <shgarg@nvidia.com>
----
+[auto build test ERROR on 590b221ed4256fd6c34d3dea77aa5bd6e741bbc1]
 
-v6:
-- compatible name fixes to "nvidia,vrs-10"
-- changed dtb node name to pmic@3c
+url:    https://github.com/intel-lab-lkp/linux/commits/Dang-Huynh-via-B4-Relay/ARM-dts-unisoc-rda8810pl-Add-label-to-GPIO-nodes/20250917-043025
+base:   590b221ed4256fd6c34d3dea77aa5bd6e741bbc1
+patch link:    https://lore.kernel.org/r/20250917-rda8810pl-drivers-v1-6-9ca9184ca977%40mainlining.org
+patch subject: [PATCH 06/25] rtc: Add driver for RDA Micro SoC
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20250919/202509192152.OXdK6bpd-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250919/202509192152.OXdK6bpd-lkp@intel.com/reproduce)
 
-v5:
-- moved device tree bindings from mfd to rtc
-- changed dtb node name to rtc@3c
-- changed compatible string to "nvidia,vrs10-rtc"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509192152.OXdK6bpd-lkp@intel.com/
 
-v4:
-- no changes
+All errors (new ones prefixed by >>):
 
-v3:
-- fixed device tree node name to generic "pmic@3c"
-- fixed indentation
+   drivers/rtc/rtc-rda.c: In function 'rda_rtc_settime':
+>> drivers/rtc/rtc-rda.c:67:15: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
+      67 |         low = FIELD_PREP(RDA_SEC_MASK, tm->tm_sec) |
+         |               ^~~~~~~~~~
+   drivers/rtc/rtc-rda.c: In function 'rda_rtc_readtime':
+>> drivers/rtc/rtc-rda.c:128:22: error: implicit declaration of function 'FIELD_GET' [-Wimplicit-function-declaration]
+     128 |         tm->tm_sec = FIELD_GET(RDA_SEC_MASK, low);
+         |                      ^~~~~~~~~
 
-v2:
-- fixed copyrights
-- updated description with RTC information
-- added status node in dtb node example
 
- .../bindings/rtc/nvidia,vrs10-rtc.yaml        | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/nvidia,vrs10-rtc.yaml
+vim +/FIELD_PREP +67 drivers/rtc/rtc-rda.c
 
-diff --git a/Documentation/devicetree/bindings/rtc/nvidia,vrs10-rtc.yaml b/Documentation/devicetree/bindings/rtc/nvidia,vrs10-rtc.yaml
-new file mode 100644
-index 000000000000..e8f3c25607e0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/nvidia,vrs10-rtc.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/nvidia,vrs10-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NVIDIA Voltage Regulator Specification Real Time Clock
-+
-+maintainers:
-+  - Shubhi Garg <shgarg@nvidia.com>
-+
-+description:
-+  NVIDIA VRS-10 (Voltage Regulator Specification) is a Power Management IC
-+  (PMIC) that implements a power sequencing solution with I2C interface.
-+  The device includes a real-time clock (RTC) with 32kHz clock output and
-+  backup battery support, alarm functionality for system wake-up from
-+  suspend and shutdown states, OTP memory for power sequencing configuration,
-+  and an interrupt controller for managing VRS events.
-+
-+properties:
-+  compatible:
-+    const: nvidia,vrs-10
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@3c {
-+            compatible = "nvidia,vrs-10";
-+            reg = <0x3c>;
-+            interrupt-parent = <&pmc>;
-+            interrupts = <24 IRQ_TYPE_LEVEL_LOW>;
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+        };
-+    };
+    50	
+    51	static int rda_rtc_settime(struct device *dev, struct rtc_time *tm)
+    52	{
+    53		struct rda_rtc *rtc = dev_get_drvdata(dev);
+    54		u32 high, low;
+    55		int ret;
+    56	
+    57		ret = rtc_valid_tm(tm);
+    58		if (ret < 0)
+    59			return ret;
+    60	
+    61		/*
+    62		 * The number of years since 1900 in kernel,
+    63		 * but it is defined since 2000 by HW.
+    64		 * The number of mons' range is from 0 to 11 in kernel,
+    65		 * but it is defined from 1 to 12 by HW.
+    66		 */
+  > 67		low = FIELD_PREP(RDA_SEC_MASK, tm->tm_sec) |
+    68			FIELD_PREP(RDA_MIN_MASK, tm->tm_min) |
+    69			FIELD_PREP(RDA_HRS_MASK, tm->tm_hour);
+    70	
+    71		high = FIELD_PREP(RDA_MDAY_MASK, tm->tm_mday) |
+    72			FIELD_PREP(RDA_MON_MASK, tm->tm_mon + 1) |
+    73			FIELD_PREP(RDA_YEAR_MASK, tm->tm_year - 100) |
+    74			FIELD_PREP(RDA_WDAY_MASK, tm->tm_wday);
+    75	
+    76		ret = regmap_write(rtc->regmap, RDA_RTC_CAL_LOAD_LOW_REG, low);
+    77		if (ret < 0) {
+    78			dev_err(dev, "Failed to update RTC low register: %d\n", ret);
+    79			return ret;
+    80		}
+    81	
+    82		ret = regmap_write(rtc->regmap, RDA_RTC_CAL_LOAD_HIGH_REG, high);
+    83		if (ret < 0) {
+    84			dev_err(dev, "Failed to update RTC low register: %d\n", ret);
+    85			return ret;
+    86		}
+    87	
+    88		ret = regmap_update_bits(rtc->regmap, RDA_RTC_CMD_REG, RDA_RTC_CMD_CAL_LOAD, 1);
+    89		if (ret < 0) {
+    90			dev_err(dev, "Failed to update RTC cal load register: %d\n", ret);
+    91			return ret;
+    92		}
+    93	
+    94		return 0;
+    95	}
+    96	
+    97	static int rda_rtc_readtime(struct device *dev, struct rtc_time *tm)
+    98	{
+    99		struct rda_rtc *rtc = dev_get_drvdata(dev);
+   100		unsigned int high, low;
+   101		int ret;
+   102	
+   103		/*
+   104		 * Check if RTC data is valid.
+   105		 *
+   106		 * When this bit is set, it means the data in the RTC is invalid
+   107		 * or not configured.
+   108		 */
+   109		ret = regmap_test_bits(rtc->regmap, RDA_RTC_STA_REG, RDA_RTC_STA_NOT_PROG);
+   110		if (ret < 0) {
+   111			dev_err(dev, "Failed to read RTC status: %d\n", ret);
+   112			return ret;
+   113		} else if (ret > 0)
+   114			return -EINVAL;
+   115	
+   116		ret = regmap_read(rtc->regmap, RDA_RTC_CUR_LOAD_HIGH_REG, &high);
+   117		if (ret) {
+   118			dev_err(dev, "Failed to read RTC high reg: %d\n", ret);
+   119			return ret;
+   120		}
+   121	
+   122		ret = regmap_read(rtc->regmap, RDA_RTC_CUR_LOAD_LOW_REG, &low);
+   123		if (ret) {
+   124			dev_err(dev, "Failed to read RTC low reg: %d\n", ret);
+   125			return ret;
+   126		}
+   127	
+ > 128		tm->tm_sec = FIELD_GET(RDA_SEC_MASK, low);
+   129		tm->tm_min = FIELD_GET(RDA_MIN_MASK, low);
+   130		tm->tm_hour = FIELD_GET(RDA_HRS_MASK, low);
+   131		tm->tm_mday = FIELD_GET(RDA_MDAY_MASK, high);
+   132		tm->tm_mon = FIELD_GET(RDA_MON_MASK, high);
+   133		tm->tm_year = FIELD_GET(RDA_YEAR_MASK, high);
+   134		tm->tm_wday = FIELD_GET(RDA_WDAY_MASK, high);
+   135	
+   136		/*
+   137		 * The number of years since 1900 in kernel,
+   138		 * but it is defined since 2000 by HW.
+   139		 */
+   140		tm->tm_year += 100;
+   141		/*
+   142		 * The number of mons' range is from 0 to 11 in kernel,
+   143		 * but it is defined from 1 to 12 by HW.
+   144		 */
+   145		tm->tm_mon -= 1;
+   146	
+   147		return 0;
+   148	}
+   149	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
