@@ -1,237 +1,197 @@
-Return-Path: <linux-rtc+bounces-5001-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5002-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C306B8CB0F
-	for <lists+linux-rtc@lfdr.de>; Sat, 20 Sep 2025 17:03:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA926B8CE27
+	for <lists+linux-rtc@lfdr.de>; Sat, 20 Sep 2025 19:42:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56F786224C4
-	for <lists+linux-rtc@lfdr.de>; Sat, 20 Sep 2025 15:03:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFFD41BC0C80
+	for <lists+linux-rtc@lfdr.de>; Sat, 20 Sep 2025 17:43:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6762FA0F0;
-	Sat, 20 Sep 2025 15:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69C0D3101D2;
+	Sat, 20 Sep 2025 17:42:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="TYgGREA9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DmvgxtUr"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C166B140E5F
-	for <linux-rtc@vger.kernel.org>; Sat, 20 Sep 2025 15:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54742EA75C
+	for <linux-rtc@vger.kernel.org>; Sat, 20 Sep 2025 17:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758380626; cv=none; b=MQ4f+sfHAt6rjhQ0rTS2MGQ2M5XXgMwtdjWcTPuqXtI4gxeygOhLtCcHXej1y8L3mPpmFdfdHAmMEGyoLMA9WZSQzduFOUG6YDYi2iaA/K+CysN+XWRsBQVDtljKwjJWH3+yNkF80a8JRsXASMR+pjXnxQP0i4hIwcOwJlsjO5Y=
+	t=1758390155; cv=none; b=d05kPlb/84U3kOUkmwFk+HMWBmdWfbrpyWwHrLc6lHEmJVtqeqZVOd+DCm6T9OhuPkriiNmZ7Q2lUGItHoBu1XjYT/kM3N3jOjKcus0sO1FZAqdjkiFsph/HQd86/UyfZQmX7d3lgWvMNN9Ryif3/pHyXaI8Yz3d9f7niOstww0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758380626; c=relaxed/simple;
-	bh=jlDGfIJTKH51uPx7AReL9AXJc2X+y8/8s3NQutHezH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W3EXkgeGzHwSTNzvzeF26lrOt15589AQEezURxL3+gx6e+DoRvvOoWyRoshxyfXetUoZukpmdjcKYvBvg9dM/cL421R84+loCNV7nbDyP3SbKleTEl2vm7ZZeo6DkxyHaWWSGPIR4yDKJ9HqqsY8S9MnRh0k1nkcUTkKzLuK8S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=TYgGREA9; arc=none smtp.client-ip=103.21.126.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
-Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
-	by smtp1.iitb.ac.in (Postfix) with SMTP id 8EBE81080223
-	for <linux-rtc@vger.kernel.org>; Sat, 20 Sep 2025 20:33:42 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in 8EBE81080223
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
-	t=1758380622; bh=jlDGfIJTKH51uPx7AReL9AXJc2X+y8/8s3NQutHezH4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TYgGREA9YAOXib5ObwSEqSi9QrYuiqLwVNoaI/QLj3iGVqb00GNN+JyPrKx9AEIfU
-	 W61LncT6MacKyPWT/+nmNtUzrox/wJixJdcL/ys7vI+m3EsgmdIX/cTykBGLP8te79
-	 i517rKQhSDFeVecKHdomp+jgy4bf86tT7vcsbNTQ=
-Received: (qmail 11127 invoked by uid 510); 20 Sep 2025 20:33:42 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.101.4/26439} 
- Clear:RC:1(10.200.1.25):SA:0(0.8/7.0):. Processed in 2.531245 secs; 20 Sep 2025 20:33:42 +0530
-X-Spam-Level: 
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: akhilesh@ee.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
-  by ldns1.iitb.ac.in with SMTP; 20 Sep 2025 20:33:39 +0530
-Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	by ldns1.iitb.ac.in (Postfix) with ESMTP id 74EAD360036;
-	Sat, 20 Sep 2025 20:33:39 +0530 (IST)
-Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	(Authenticated sender: akhilesh)
-	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id 5BE1B1E814BD;
-	Sat, 20 Sep 2025 20:33:39 +0530 (IST)
-Date: Sat, 20 Sep 2025 20:33:34 +0530
-From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-To: alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org,
-	conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akhileshpatilvnit@gmail.com
-Subject: [PATCH v3 6/6] rtc: m41t93: Add watchdog support
-Message-ID: <77c2e9f4ab0811a919595d7a5476b00abd1c2803.1758379856.git.akhilesh@ee.iitb.ac.in>
-References: <cover.1758379856.git.akhilesh@ee.iitb.ac.in>
+	s=arc-20240116; t=1758390155; c=relaxed/simple;
+	bh=RAQSJApfpP1ypl3NZf562NiE5XnU+hzrNqQWvKoiJPE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SSHtdF1FBFBop7CEGZRoZJQpCF8iDuIEHogN+tr0AKZJl20BY3xRdXag2CyrN4YtKboVQKoH2YGXkBcXWMT0qmtK896MY5Pj3aIrvUCU8EnjZJ5Ec8NY9c5DA5VrIJecaN9s81NgtmrVdi57/0mm/aAMtgLgF8mxePZsRdoxryY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DmvgxtUr; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-271d1305ad7so6146735ad.2
+        for <linux-rtc@vger.kernel.org>; Sat, 20 Sep 2025 10:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758390153; x=1758994953; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wSSCzYAllfZVWovAz8fE8y749DkdyjiFUD0mqKaQ7xM=;
+        b=DmvgxtUr8ks0sVwTepQCbCCXbKGNezcFYcU838AeXAzkzi0VtIM6DJcLoXxaFhOHQ5
+         GEh1OhLq/OfpZtIJIw8NdLEFTtoQdhKWWlOd2kXbchUdsEofc8EdwoQrpIxeUxKFNolG
+         xbbOhOqbQ7h5C+RLHUb7nUAfZgFNSyoa9+92O1QLqyLt+mgqCo4mfXwkP2yJ4F5UHIy7
+         39fQKP8fqNC17dnNeLRsZPcUxjr5PwMdY2hGsKW5UI33OUSXhj1unx1gUIInAY5VwGdf
+         4mB2SirUqdsujQh9dapUOxQBWoMmDdwlq/M8bDMnBOnlDuKQBJjSgei59J+JL/UJwTHn
+         y/kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758390153; x=1758994953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wSSCzYAllfZVWovAz8fE8y749DkdyjiFUD0mqKaQ7xM=;
+        b=qemyFT2JJg/atcRwVGi4Vw5DL5aAu2OvbkHeq46w2YeULulyzt+T6g3rKHI2RDnC32
+         PKM7RpQKY72Bm/YN/2vdUVW7a7aIs8xGdhQdrOFuL7nxnbQ7gYY56Ec+yAx3sMKEOvyz
+         9MXOpi9HaVB6h1c++oMGAZjpxDJc3x5ZxZdQ7F0huuWbNpNN23FUcirgTcft8F0y5+3N
+         meVGm9KHjqDPgj8YZVEqTnzSgn4QBiiomDuw+Bpe8b7bZRKseVzdTvYhDsf5lzxGmP6i
+         Gmdk/rRwJnQkgsTVb6ZZUWXWmSMbN3bEbQx6ykkbQZr675Gyq6CddYyJWCD0aSuVfXDK
+         iTwA==
+X-Gm-Message-State: AOJu0YxSG9POVqZxCZnyUqX8yvPhhU0laxYgDkPSHilFuuOTqVkCe4hl
+	3afxoDso+1rlmT4uSt7mGtyXgWKrz9+K8FeqMG1dNLeP6GBgXSDMmUEc
+X-Gm-Gg: ASbGncsCzU+wnuwUyXRKhCTtkCmcVi8hTPP75LqBQn5+AI5Is1sJA1TKDfPY9d7XViH
+	lXN1GdvZ+mZtYLlab1408eluNKfuYIn8UeZCOEHlRAp34t0Yc6rydgdudPIC4r+6ONh19GW39lu
+	Gxs4xMtnRaeHzjjpyCGISnxXg9lYftvDnZ6sPFOVkz4SBfdMztazPaV8DOEkhLmVT7zCH2BA7Kz
+	LDAQ6HNnSDQm3bLDwka6BrqGh+MQMacX2frNi69lvyHFoR0Ru2klfR0fc+fwc30AeNTticjhFpg
+	1m/ktGFSEOE2nksFzJGK5SXhULruxDuPM/35wcr/9WXDTdnkQ86w7qh8mN894ZkWfvpawqPbkHi
+	oJtINpVG3jZYr1EjT4Lh0QIri7siUVCqOUF/A4/s6rBqF2eDlELxp2UpWTRLzjdKvj69DUZx3n4
+	DKr4M=
+X-Google-Smtp-Source: AGHT+IH6GFLr86ytlJPjrA7tylx0p6RzKs3fGvhV4JpwcYZT+navTHrXD95VS9c+s2XWqM7yvy10NQ==
+X-Received: by 2002:a17:903:90b:b0:263:b8f:77dd with SMTP id d9443c01a7336-269ba568cd3mr111143425ad.57.1758390152964;
+        Sat, 20 Sep 2025 10:42:32 -0700 (PDT)
+Received: from localhost.localdomain (118-169-88-29.dynamic-ip.hinet.net. [118.169.88.29])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-269800530a8sm88229095ad.5.2025.09.20.10.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Sep 2025 10:42:32 -0700 (PDT)
+From: Nick Huang <sef1548@gmail.com>
+To: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kusogame68@gmail.com,
+	byron.bbradley@gmail.com,
+	Nick Huang <sef1548@gmail.com>
+Subject: [PATCH] rtc: s35390a: use u8 instead of char for register buffer
+Date: Sun, 21 Sep 2025 01:42:23 +0800
+Message-ID: <20250920174224.108795-1-sef1548@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1758379856.git.akhilesh@ee.iitb.ac.in>
+Content-Transfer-Encoding: 8bit
 
-Implement watchdog feature for m41t93 rtc with 1s resolution.
-Implement alarm only support (WDIOF_ALARMONLY) in this commit.
-Define start, stop, ping, and set_timeout callbacks as needed
-by the watchdog framework.
+The register buffer in s35390a_get_reg() was previously defined as
+`char *buf`. This is not ideal since register data represents raw
+binary values rather than textual data.
 
-Use selftests/watchdog/watchdog-test kselftest for testing.
-Observed IRQ pin(12) of rtc chip going low after late pinging
-the watchdog.
+Switch the type to `u8 *buf` to better reflect its intended usage and
+to avoid potential issues with sign extension when handling register
+values on platforms where `char` is signed by default.
 
-Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+This change improves type safety and makes the code consistent with
+other RTC drivers that operate on raw register data.
+
+Signed-off-by: Nick Huang <sef1548@gmail.com>
 ---
- drivers/rtc/rtc-m41t93.c | 99 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
+ drivers/rtc/rtc-s35390a.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/rtc/rtc-m41t93.c b/drivers/rtc/rtc-m41t93.c
-index 46703e32f212..483fc6a5ad21 100644
---- a/drivers/rtc/rtc-m41t93.c
-+++ b/drivers/rtc/rtc-m41t93.c
-@@ -14,6 +14,7 @@
- #include <linux/spi/spi.h>
- #include <linux/regmap.h>
- #include <linux/clk-provider.h>
-+#include <linux/watchdog.h>
- 
- #define M41T93_REG_SSEC			0
- #define M41T93_REG_ST_SEC		1
-@@ -36,6 +37,10 @@
- #define M41T93_SQW_RS_MASK		0xf0
- #define M41T93_SQW_RS_SHIFT		4
- #define M41T93_BIT_SQWE                 BIT(6)
-+#define M41T93_REG_WATCHDOG		0x9
-+#define M41T93_WDT_RB_MASK		0x3
-+#define M41T93_WDT_BMB_MASK		0x7c
-+#define M41T93_WDT_BMB_SHIFT		2
- 
- #define M41T93_REG_ALM_HOUR_HT		0xc
- #define M41T93_REG_FLAGS		0xf
-@@ -51,6 +56,9 @@ struct m41t93_data {
- #ifdef CONFIG_COMMON_CLK
- 	struct clk_hw clks;
- #endif
-+#ifdef CONFIG_WATCHDOG
-+	struct watchdog_device wdd;
-+#endif
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index 3408d2ab27..07bd983b56 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -66,7 +66,7 @@ struct s35390a {
+ 	int twentyfourhour;
  };
  
- static int m41t93_set_time(struct device *dev, struct rtc_time *tm)
-@@ -412,6 +420,92 @@ static int rtc_m41t93_clks_register(struct device *dev, struct m41t93_data *m41t
- }
- #endif
- 
-+#ifdef CONFIG_WATCHDOG
-+static int m41t93_wdt_ping(struct watchdog_device *wdd)
-+{
-+	u8 resolution, mult;
-+	u8 val = 0;
-+	int ret;
-+	struct m41t93_data *m41t93 = watchdog_get_drvdata(wdd);
-+
-+	/*  Resolution supported by hardware
-+	 *  0b00 : 1/16 seconds
-+	 *  0b01 : 1/4 second
-+	 *  0b10 : 1 second
-+	 *  0b11 : 4 seconds
-+	 */
-+	resolution = 0x2; /* hardcode resolution to 1s */
-+	mult = wdd->timeout;
-+	val = resolution | (mult << M41T93_WDT_BMB_SHIFT &  M41T93_WDT_BMB_MASK);
-+
-+	ret = regmap_write_bits(m41t93->regmap, M41T93_REG_WATCHDOG,
-+				 M41T93_WDT_RB_MASK | M41T93_WDT_BMB_MASK, val);
-+
-+	return ret;
-+}
-+
-+static int m41t93_wdt_start(struct watchdog_device *wdd)
-+{
-+	return m41t93_wdt_ping(wdd);
-+}
-+
-+static int m41t93_wdt_stop(struct watchdog_device *wdd)
-+{
-+	struct m41t93_data *m41t93 = watchdog_get_drvdata(wdd);
-+
-+	/* Write 0 to watchdog register */
-+	return regmap_write_bits(m41t93->regmap, M41T93_REG_WATCHDOG,
-+				  M41T93_WDT_RB_MASK | M41T93_WDT_BMB_MASK, 0);
-+}
-+
-+static int m41t93_wdt_set_timeout(struct watchdog_device *wdd,
-+				   unsigned int new_timeout)
-+{
-+	wdd->timeout = new_timeout;
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info m41t93_wdt_info = {
-+	.identity = "m41t93 rtc Watchdog",
-+	.options = WDIOF_ALARMONLY | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-+};
-+
-+static const struct watchdog_ops m41t93_watchdog_ops = {
-+	.owner = THIS_MODULE,
-+	.start = m41t93_wdt_start,
-+	.stop = m41t93_wdt_stop,
-+	.ping = m41t93_wdt_ping,
-+	.set_timeout = m41t93_wdt_set_timeout,
-+};
-+
-+static int m41t93_watchdog_register(struct device *dev, struct m41t93_data *m41t93)
-+{
-+	int ret;
-+
-+	m41t93->wdd.parent = dev;
-+	m41t93->wdd.info = &m41t93_wdt_info;
-+	m41t93->wdd.ops = &m41t93_watchdog_ops;
-+	m41t93->wdd.min_timeout = 0;
-+	m41t93->wdd.max_timeout = 10;
-+	m41t93->wdd.timeout = 3; /* Default timeout is 3 sec */
-+	m41t93->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
-+
-+	watchdog_set_drvdata(&m41t93->wdd, m41t93);
-+
-+	ret = devm_watchdog_register_device(dev, &m41t93->wdd);
-+	if (ret) {
-+		dev_warn(dev, "Failed to register watchdog\n");
-+		return ret;
-+	}
-+
-+	/* Disable watchdog at start */
-+	ret = m41t93_wdt_stop(&m41t93->wdd);
-+
-+	return ret;
-+}
-+#endif
-+
- static struct spi_driver m41t93_driver;
- 
- static const struct regmap_config regmap_config = {
-@@ -465,6 +559,11 @@ static int m41t93_probe(struct spi_device *spi)
- 	if (ret)
- 		dev_warn(&spi->dev, "Unable to register clock\n");
- #endif
-+#ifdef CONFIG_WATCHDOG
-+	ret = m41t93_watchdog_register(&spi->dev, m41t93);
-+	if (ret)
-+		dev_warn(&spi->dev, "Unable to register watchdog\n");
-+#endif
- 
+-static int s35390a_set_reg(struct s35390a *s35390a, int reg, char *buf, int len)
++static int s35390a_set_reg(struct s35390a *s35390a, int reg, u8  *buf, int len)
+ {
+ 	struct i2c_client *client = s35390a->client[reg];
+ 	struct i2c_msg msg[] = {
+@@ -83,7 +83,7 @@ static int s35390a_set_reg(struct s35390a *s35390a, int reg, char *buf, int len)
  	return 0;
  }
+ 
+-static int s35390a_get_reg(struct s35390a *s35390a, int reg, char *buf, int len)
++static int s35390a_get_reg(struct s35390a *s35390a, int reg, u8 *buf, int len)
+ {
+ 	struct i2c_client *client = s35390a->client[reg];
+ 	struct i2c_msg msg[] = {
+@@ -168,7 +168,7 @@ static int s35390a_read_status(struct s35390a *s35390a, char *status1)
+ 
+ static int s35390a_disable_test_mode(struct s35390a *s35390a)
+ {
+-	char buf[1];
++	u8 buf[1];
+ 
+ 	if (s35390a_get_reg(s35390a, S35390A_CMD_STATUS2, buf, sizeof(buf)) < 0)
+ 		return -EIO;
+@@ -210,7 +210,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a	*s35390a = i2c_get_clientdata(client);
+ 	int i;
+-	char buf[7], status;
++	u8 buf[7], status;
+ 
+ 	dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d mday=%d, "
+ 		"mon=%d, year=%d, wday=%d\n", __func__, tm->tm_sec,
+@@ -239,7 +239,7 @@ static int s35390a_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a *s35390a = i2c_get_clientdata(client);
+-	char buf[7], status;
++	u8 buf[7], status;
+ 	int i, err;
+ 
+ 	if (s35390a_read_status(s35390a, &status) == 1)
+@@ -273,7 +273,7 @@ static int s35390a_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a *s35390a = i2c_get_clientdata(client);
+-	char buf[3], sts = 0;
++	u8 buf[3], sts = 0;
+ 	int err, i;
+ 
+ 	dev_dbg(&client->dev, "%s: alm is secs=%d, mins=%d, hours=%d mday=%d, "\
+@@ -326,7 +326,7 @@ static int s35390a_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a *s35390a = i2c_get_clientdata(client);
+-	char buf[3], sts;
++	u8 buf[3], sts;
+ 	int i, err;
+ 
+ 	err = s35390a_get_reg(s35390a, S35390A_CMD_STATUS2, &sts, sizeof(sts));
+@@ -383,7 +383,7 @@ static int s35390a_rtc_ioctl(struct device *dev, unsigned int cmd,
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a *s35390a = i2c_get_clientdata(client);
+-	char sts;
++	u8 sts;
+ 	int err;
+ 
+ 	switch (cmd) {
+@@ -422,7 +422,7 @@ static int s35390a_probe(struct i2c_client *client)
+ 	unsigned int i;
+ 	struct s35390a *s35390a;
+ 	struct rtc_device *rtc;
+-	char buf, status1;
++	u8 buf, status1;
+ 	struct device *dev = &client->dev;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
 -- 
-2.34.1
+2.48.1
 
 
