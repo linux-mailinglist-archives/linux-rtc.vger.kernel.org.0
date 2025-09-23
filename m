@@ -1,399 +1,276 @@
-Return-Path: <linux-rtc+bounces-5015-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5016-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B47DB96A0B
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Sep 2025 17:41:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BE22B97411
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Sep 2025 20:57:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4766D19C40F2
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Sep 2025 15:41:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DABD13B3A93
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Sep 2025 18:57:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D806221D3F3;
-	Tue, 23 Sep 2025 15:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF272E0914;
+	Tue, 23 Sep 2025 18:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="D6j4Z0+K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ic+JDID6"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5501B423C
-	for <linux-rtc@vger.kernel.org>; Tue, 23 Sep 2025 15:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB0720A5C4;
+	Tue, 23 Sep 2025 18:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758642058; cv=none; b=WLNU/RUQ+ZBmW+bPDQvnKpXfsK5rJ1VFxh14R4ZeBOcWIgaLe9Cwv+r20ORX4UN4E7EfelCyCNjWxad0ytKdhoNhjMf5EHdnjnoLyuV/VEKF7mfGwjV3Pib9rhcRHc71rsbemT8MZNo5dxFY0N0rIqF9vK7mpLWgyEIaAt57t+4=
+	t=1758653859; cv=none; b=I6hIrS5zxLc3hUzLT3wxYdh6aVx+ICorBShY+VbxNWG0PaSdGN3eT0YoEBs1E3RF/s06WVdvxG2bx1gyEb5CoAsePKKHk0p4JI+b7pbrS+mcoMrNWeYcYCKWTvg5Boyx1RgujU9s4CAmV3DwgXYamLWH+M7dy6p93lp+e3PzgBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758642058; c=relaxed/simple;
-	bh=cACrfqWg25l/iYQSJFhtVnbCEWxiQEtu5DRwgu44ukU=;
+	s=arc-20240116; t=1758653859; c=relaxed/simple;
+	bh=dNT5HGq+/wivsTM0xfWilLF/3cUEjidlwnClb+HJxQ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F2OVm0D/iTtiJ0DKjxlPb5ZfV++A87AViwST0gOixqMKGH8LarNFPm/LqHna4u9oGnLLQLwD1c3kzn0Pwt2lTjl2oEOlimvYLsW6GFhi4hSlBse+R9hOHRn1mw3NzVyyfHGWooWxshCqMhWsWg3NqnC3ADeVk9rOylAu7vaZtLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=D6j4Z0+K; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 1684A1A0EBF;
-	Tue, 23 Sep 2025 15:40:53 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D839960690;
-	Tue, 23 Sep 2025 15:40:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 91187102F1960;
-	Tue, 23 Sep 2025 17:40:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1758642052; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=B8fRR2aJ/eyeHiuDlU1x25moOhg9RitGZKqikYnDMdI=;
-	b=D6j4Z0+KoQ4HRpZjE+nkK2FQivQ1dSRfumFHnpIrO/qWLcALZFBydRIpwqAO2H8bNj+Nvn
-	OZR65wzg7C+RDl9p/BUslV10CHpcuD8F5Wl8hO0T44Npvs5z23qK5vct4S7HAcgQcZpi28
-	1kHuRlj8FA34KXgwNUrRJfbfSdQIGg5J3BVme6lTsbKZafGA4R8Bu9KOo0LV7Mq0q/W2UF
-	9POSnDH2NqAu3kTCnvVtCZs4CScWUZJLOPu196fYHaz8Ya6003pwj5S+P2X8AiWsj8mrCo
-	8+Kw90Pf4Yt+hXuOyzzW9sdkO9MV7l6VhBlATJ+mTOJ+t/lrjDcRySAlrTbddA==
-Date: Tue, 23 Sep 2025 17:40:48 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Shubhi Garg <shgarg@nvidia.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v6 3/4] rtc: nvvrs: add NVIDIA VRS RTC device driver
-Message-ID: <202509231540480daf8b56@mail.local>
-References: <20250919140229.10546-1-shgarg@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=m7Tj3FXj8Zq02lQg4TPd9gmT1sV46oXRO1BHuCjFotNshPGiN2io4iYCnep1JzW75di1GkO2i36GBkR5uXXiW1wDVXytFxITCh230ZmLSEgd/fOdGLciBuC68vJjOS57gDZdn1tYlTOlG1fUH9iuqgJ50NqVZklvrWHFEvKfEOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ic+JDID6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6CDC4CEF5;
+	Tue, 23 Sep 2025 18:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758653858;
+	bh=dNT5HGq+/wivsTM0xfWilLF/3cUEjidlwnClb+HJxQ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ic+JDID6e68RvSFNbqq0MF1glN9NUZtgi4VR7HtOWlB5eeQC3uQr7b/EE+x+OrjBb
+	 sHi7MdnhsRwwu2vnlp+CWXQIKSemlToG0yXjvPsxlURejCqYxWRkTT9Sd4FcBNR4ng
+	 7QGnqWX9n2wlHwr1lGWIInvNnSbGgPDBV+B8ZMbls4YnOWtSef9MBF6j31tZbjWouD
+	 nETuruRIrRQsgWLlwJhv3bq3MePvXjw7lcqD4qtmILCmrZWaRKQxgrM0zaTgIlBnlW
+	 9euBWUo2ML30KFyrUd6ZzllAfc+iL4hzixXFf1JeYwAHwpakZV4r7287WQDNjAzJxV
+	 fW2bFjNvYwtRw==
+Date: Tue, 23 Sep 2025 19:57:34 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Lakshay Piplani <lakshay.piplani@nxp.com>
+Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org,
+	pankit.garg@nxp.com, vikash.bansal@nxp.com, priyanka.jain@nxp.com,
+	shashank.rebbapragada@nxp.com
+Subject: Re: [PATCH v4 1/2] dt-bindings: rtc: Add pcf85053 support
+Message-ID: <20250923-capitol-easter-d0154d967522@spud>
+References: <20250923113441.555284-1-lakshay.piplani@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fY6x4SCrQh3vev97"
+Content-Disposition: inline
+In-Reply-To: <20250923113441.555284-1-lakshay.piplani@nxp.com>
+
+
+--fY6x4SCrQh3vev97
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250919140229.10546-1-shgarg@nvidia.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: quoted-printable
 
-On 19/09/2025 14:02:29+0000, Shubhi Garg wrote:
-> +static int nvvrs_rtc_enable_alarm(struct nvvrs_rtc_info *info)
-> +{
-> +	int ret;
-> +
-> +	/* Set RTC_WAKE bit for autonomous wake from sleep */
-> +	ret = nvvrs_update_bits(info, NVVRS_REG_CTL_2, NVVRS_REG_CTL_2_RTC_WAKE,
-> +				NVVRS_REG_CTL_2_RTC_WAKE);
-> +	if (ret < 0) {
-> +		dev_err(info->dev, "Failed to set RTC_WAKE bit (%d)\n", ret);
-
-This should be either a dev_dbg or removed
-
-> +		return ret;
-> +	}
-> +
-> +	/* Set RTC_PU bit for autonomous wake from shutdown */
-> +	ret = nvvrs_update_bits(info, NVVRS_REG_CTL_2, NVVRS_REG_CTL_2_RTC_PU,
-> +				NVVRS_REG_CTL_2_RTC_PU);
-> +	if (ret < 0) {
-> +		dev_err(info->dev, "Failed to set RTC_PU bit (%d)\n", ret);
-
-Ditto
-
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int nvvrs_rtc_disable_alarm(struct nvvrs_rtc_info *info)
-> +{
-> +	struct i2c_client *client = info->client;
-> +	u8 val[4];
-> +	int ret;
-> +
-> +	/* Clear RTC_WAKE bit */
-> +	ret = nvvrs_update_bits(info, NVVRS_REG_CTL_2, NVVRS_REG_CTL_2_RTC_WAKE,
-> +				0);
-> +	if (ret < 0) {
-> +		dev_err(info->dev, "Failed to clear RTC_WAKE bit (%d)\n", ret);
-
-Ditto
-
-> +		return ret;
-> +	}
-> +
-> +	/* Clear RTC_PU bit */
-> +	ret = nvvrs_update_bits(info, NVVRS_REG_CTL_2, NVVRS_REG_CTL_2_RTC_PU,
-> +				0);
-> +	if (ret < 0) {
-> +		dev_err(info->dev, "Failed to clear RTC_PU bit (%d)\n", ret);
-
-Ditto
-
-> +		return ret;
-> +	}
-> +
-> +	/* Write ALARM_RESET_VAL in RTC Alarm register to disable alarm */
-> +	val[0] = 0xff;
-> +	val[1] = 0xff;
-> +	val[2] = 0xff;
-> +	val[3] = 0xff;
-> +
-> +	ret = nvvrs_rtc_write_alarm(client, val);
-> +	if (ret < 0)
-> +		dev_err(info->dev, "Failed to disable Alarm (%d)\n", ret);
-
-Ditto
-
-> +
-> +	return 0;
-
-Plus it fails but then returns 0
-
-> +}
-> +
-> +static int nvvrs_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct nvvrs_rtc_info *info = dev_get_drvdata(dev);
-> +	time64_t secs = 0;
-> +	int ret;
-> +	u8 val;
-> +
-> +	mutex_lock(&info->lock);
-
-This lock is unnecessary once you use rtc_lock/rtc_unlock in the IRQ
-handler.
-
-> +
-> +	/*
-> +	 * Multi-byte transfers are not supported with PEC enabled
-> +	 * Read MSB first to avoid coherency issues
-> +	 */
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_T3);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	secs |= (time64_t)val << 24;
-> +
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_T2);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	secs |= (time64_t)val << 16;
-> +
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_T1);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	secs |= (time64_t)val << 8;
-> +
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_T0);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	secs |= val;
-> +
-> +	rtc_time64_to_tm(secs, tm);
-> +	ret = 0;
-> +out:
-> +	mutex_unlock(&info->lock);
-> +	return ret;
-> +}
-> +
-> +static int nvvrs_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct nvvrs_rtc_info *info = dev_get_drvdata(dev);
-> +	time64_t secs;
-> +	u8 time[4];
-> +	int ret;
-> +
-> +	mutex_lock(&info->lock);
-
-Ditto
-
-> +
-> +	secs = rtc_tm_to_time64(tm);
-> +	time[0] = secs & 0xff;
-> +	time[1] = (secs >> 8) & 0xff;
-> +	time[2] = (secs >> 16) & 0xff;
-> +	time[3] = (secs >> 24) & 0xff;
-> +
-> +	ret = i2c_smbus_write_byte_data(info->client, NVVRS_REG_RTC_T3, time[3]);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	ret = i2c_smbus_write_byte_data(info->client, NVVRS_REG_RTC_T2, time[2]);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	ret = i2c_smbus_write_byte_data(info->client, NVVRS_REG_RTC_T1, time[1]);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	ret = i2c_smbus_write_byte_data(info->client, NVVRS_REG_RTC_T0, time[0]);
-> +out:
-> +	mutex_unlock(&info->lock);
-> +	return ret;
-> +}
-> +
-> +static int nvvrs_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct nvvrs_rtc_info *info = dev_get_drvdata(dev);
-> +	time64_t alarm_val = 0;
-> +	int ret;
-> +	u8 val;
-> +
-> +	mutex_lock(&info->lock);
-
-Ditto
-
-> +
-> +	/* Multi-byte transfers are not supported with PEC enabled */
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_A3);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	alarm_val |= (time64_t)val << 24;
-> +
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_A2);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	alarm_val |= (time64_t)val << 16;
-> +
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_A1);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	alarm_val |= (time64_t)val << 8;
-> +
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_RTC_A0);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = (u8)ret;
-> +	alarm_val |= val;
-> +
-> +	if (alarm_val == ALARM_RESET_VAL)
-> +		alrm->enabled = 0;
-> +	else
-> +		alrm->enabled = 1;
-> +
-> +	rtc_time64_to_tm(alarm_val, &alrm->time);
-> +	ret = 0;
-> +out:
-> +	mutex_unlock(&info->lock);
-> +	return ret;
-> +}
-> +
-> +static int nvvrs_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct nvvrs_rtc_info *info = dev_get_drvdata(dev);
-> +	time64_t secs;
-> +	u8 time[4];
-> +	int ret;
-> +
-> +	mutex_lock(&info->lock);
-> +
-
-Ditto
-
-> +	if (!alrm->enabled) {
-> +		ret = nvvrs_rtc_disable_alarm(info);
-> +		if (ret < 0)
-> +			goto out;
-> +	}
-> +
-> +	ret = nvvrs_rtc_enable_alarm(info);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	secs = rtc_tm_to_time64(&alrm->time);
-> +	time[0] = secs & 0xff;
-> +	time[1] = (secs >> 8) & 0xff;
-> +	time[2] = (secs >> 16) & 0xff;
-> +	time[3] = (secs >> 24) & 0xff;
-> +
-> +	ret = nvvrs_rtc_write_alarm(info->client, time);
-> +
-> +out:
-> +	mutex_unlock(&info->lock);
-> +	return ret;
-> +}
-> +
-> +static int nvvrs_pseq_irq_clear(struct nvvrs_rtc_info *info)
-> +{
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	for (i = 0; i < NVVRS_IRQ_REG_COUNT; i++) {
-> +		ret = i2c_smbus_read_byte_data(info->client,
-> +					       NVVRS_REG_INT_SRC1 + i);
-> +		if (ret < 0) {
-> +			dev_err(info->dev, "Failed to read INT_SRC%d : %d\n",
-> +				i + 1, ret);
-> +			return ret;
-> +		}
-> +
-> +		ret = i2c_smbus_write_byte_data(info->client,
-> +						NVVRS_REG_INT_SRC1 + i,
-> +						(u8)ret);
-> +		if (ret < 0) {
-> +			dev_err(info->dev, "Failed to clear INT_SRC%d : %d\n",
-> +				i + 1, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t nvvrs_rtc_irq_handler(int irq, void *data)
-> +{
-> +	struct nvvrs_rtc_info *info = data;
-> +	int ret;
-> +
-> +	/* Check for RTC alarm interrupt */
-> +	ret = i2c_smbus_read_byte_data(info->client, NVVRS_REG_INT_SRC1);
-> +	if (ret < 0) {
-> +		dev_err(info->dev, "Failed to read INT_SRC1: %d\n", ret);
-
-dev_dbg or remove
-
-> +		return IRQ_NONE;
-> +	}
-> +
-> +	if (ret & NVVRS_INT_SRC1_RTC_MASK) {
-> +		rtc_lock(info->rtc);
-> +		rtc_update_irq(info->rtc, 1, RTC_IRQF | RTC_AF);
-> +		rtc_unlock(info->rtc);
-> +	}
-> +
-> +	/* Clear all interrupts */
-> +	if (nvvrs_pseq_irq_clear(info) < 0)
-> +		return IRQ_NONE;
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-
-
-> diff --git a/include/linux/rtc/rtc-nvidia-vrs10.h b/include/linux/rtc/rtc-nvidia-vrs10.h
+On Tue, Sep 23, 2025 at 05:04:40PM +0530, Lakshay Piplani wrote:
+> Add device tree bindings for NXP PCF85053 RTC chip.
+>=20
+> Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
+> Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+> ---
+> V3 -> V4: Add dedicated nxp,pcf85053.yaml.
+>           Remove entry from trivial-rtc.yaml.
+> V2 -> V3: Moved MAINTAINERS file changes to the driver patch
+> V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
+>=20
+>  .../devicetree/bindings/rtc/nxp,pcf85053.yaml | 128 ++++++++++++++++++
+>  1 file changed, 128 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053.ya=
+ml
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml b/Do=
+cumentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
 > new file mode 100644
-> index 000000000000..3c9c46abf555
+> index 000000000000..6b1c97358486
 > --- /dev/null
-> +++ b/include/linux/rtc/rtc-nvidia-vrs10.h
+> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
+> @@ -0,0 +1,128 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2025 NXP
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/nxp,pcf85053.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP PCF85053 Real Time Clock
+> +
+> +maintainers:
+> +  - Pankit Garg <pankit.garg@nxp.com>
+> +  - Lakshay Piplani <lakshay.piplani@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,pcf85053
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  nxp,interface:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [ primary, secondary ]
+> +    description: |
+> +      Identifies this host's logical role in a multi-host topology for t=
+he
+> +      PCF85053 RTC. The device exposes a "TWO" ownership bit in the CTRL
+> +      register that gates which host may write time/alarm registers.
+> +        - "primary": Designated host that *may* claim write ownership (s=
+et
+> +          CTRL.TWO=3D1) **if** write-access is explicitly requested.
+> +        - "secondary": Peer host that writes only when CTRL.TWO=3D0 (def=
+ault).
+> +
+> +  nxp,write-access:
+> +    type: boolean
+> +    description: |
+> +      Request the driver to claim write ownership at probe time by setti=
+ng
+> +      CTRL.TWO=3D1. This property is only valid when nxp,interface=3D"pr=
+imary".
+> +      The driver will not modify any other CTRL bits (HF/DM/etc.) and wi=
+ll not
+> +      clear any status/interrupt flags at probe.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nxp,interface
+> +
+> +additionalProperties: false
+> +
+> +# Schema constraints matching driver:
+> +# 1) If nxp,write-access is present, nxp,interface must be "primary".
+> +#    Rationale: only the primary may claim ownership; driver will set TW=
+O=3D1.
+> +# 2) If nxp,interface is "secondary", nxp,write-access must not be prese=
+nt.
+> +#    Rationale: secondary never claims ownership and cannot write CTRL/S=
+T/alarm.
+> +#
+> +# Practical effect:
+> +# - Primary without 'nxp,write-access'; primary is read only; secondary =
+may
+> +#   write time registers.
+> +# - Primary with 'nxp,write-access'; primary owns writes, secondary is r=
+ead only.
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +  - oneOf:
+> +      # Case 1: primary with write-access
+> +      - required: [ "nxp,write-access" ]
+> +        properties:
+> +          nxp,interface:
+> +            const: primary
+> +
+> +      # Case 2: primary without write-access
+> +      - properties:
+> +          nxp,interface:
+> +            const: primary
+> +        not:
+> +          required: [ "nxp,write-access" ]
 
-Just to be sure, do you expect to use this include in another driver?
-Else you should merge it back in the c file.
+Aren't case 1 and case 2 here redundant? All you need to do is block
+interface =3D=3D secondary when nxp,write-access is present, which your case
+3 should be able to be modified to do via
 
+if:
+  properties:
+    nxp,interface:
+      const: secondary
+then:
+  properties:
+   nxp,write-access: false
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I think your description for nxp,write-access gets the point across
+about when it can be used, and the additional commentary is not really
+helpful.
+
+> +
+> +      # Case 3: secondary (must not have write-access)
+> +      - properties:
+> +          nxp,interface:
+> +            const: secondary
+> +        not:
+> +          required: [ "nxp,write-access" ]
+> +
+> +examples:
+> +  # Single host example.
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      rtc@6f {
+> +        compatible =3D "nxp,pcf85053";
+> +        reg =3D <0x6f>;
+> +        nxp,interface =3D "primary";
+> +        nxp,write-access;
+> +        interrupt-parent =3D <&gpio2>;
+> +        interrupts =3D <3 IRQ_TYPE_EDGE_FALLING>;
+> +      };
+> +    };
+> +
+> +  # Dual-host example: one primary that claims writes; one secondary tha=
+t never claims writes.
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c0 {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      rtc@6f {
+> +        compatible =3D "nxp,pcf85053";
+> +        reg =3D <0x6f>;
+> +        nxp,interface =3D "primary";
+> +        nxp,write-access;
+> +        interrupt-parent =3D <&gpio2>;
+> +        interrupts =3D <3 IRQ_TYPE_EDGE_FALLING>;
+> +      };
+> +    };
+> +
+> +    i2c1 {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      rtc@6f {
+> +        compatible =3D "nxp,pcf85053";
+> +        reg =3D <0x6f>;
+> +        nxp,interface =3D "secondary";
+
+Maybe a silly question, but if you have a system that wants to have two
+pairs of RTCs, how would you determine which primary a secondary belongs
+to? I notice you have no link between these devices in dt so I am
+curious. Would it be better to eschew nxp,interface and have a phandle
+=66rom the secondary to the primary?
+
+I don't know anything about your use case or features, so maybe knowing
+the relationship just is not relevant at all, or it can be determined at
+runtime.
+
+Cheers,
+Conor.
+
+--fY6x4SCrQh3vev97
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaNLtnQAKCRB4tDGHoIJi
+0mnSAQD99ZyMCIKJqP3jGlAt1GbM1KDBt6xcMzzGhUWkvkD3ZQEAuum2mONM/NVS
+CejFjUm4FFqZbWbWbNdTTwj5D8aZaA0=
+=mI9+
+-----END PGP SIGNATURE-----
+
+--fY6x4SCrQh3vev97--
 
