@@ -1,69 +1,69 @@
-Return-Path: <linux-rtc+bounces-5028-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5029-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FB4FBA1B2B
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Sep 2025 23:55:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D56E1BA1B93
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Sep 2025 00:03:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFFF1387CF1
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Sep 2025 21:55:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDE711C84040
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Sep 2025 22:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 371C527B356;
-	Thu, 25 Sep 2025 21:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04DBB31B824;
+	Thu, 25 Sep 2025 22:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="mvPiaNjT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="b2do54+v"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="UWGOpYJ6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="G2xnt1E7"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E23E27703C;
-	Thu, 25 Sep 2025 21:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32DD30DD06;
+	Thu, 25 Sep 2025 22:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758837312; cv=none; b=b2A+LmN1M4ZeX5ZIeHKdXp4YrP9PnNxxnGa4ffk4JEtjDD3X0ZTe1eFTX72UQuauvIT0pZg0bNUa4b4clzNalh9u8pNtk2rLlBxT3bRgtdD18RskRh45Qd7mDuIFLqdnjCuUDtF9RRyKIxFeMLw3IagMFswhJ/fUvq3pey7ib9A=
+	t=1758837779; cv=none; b=gf86tJHCLB+TEmZLnfm/5/XFxLnUBqg2qdu5UnR1w4Jma+aocu7rOwoNa7rEpHXKE3/WtqWCiICRj6oQxKOsGzieewAG6oXzLMHcoKmzVrJknisq9EwL36cwkpsbfdN5n6BlyCk8/ZhOcaU7uW18g15yKJT8Z7E4gl9I+kNUQPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758837312; c=relaxed/simple;
-	bh=DyxcNaLeLTAXwCXmaAsOsbORdk3KuM9R8RIrtanTiL4=;
+	s=arc-20240116; t=1758837779; c=relaxed/simple;
+	bh=j4vkRyM73R3SGtlqBTycbcCvNRyGfbUPruoXDGnn8dg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rm4BWNDIwrjrtvui7pX1g/oYFjK17QNrqdRiS0Ztzy3fNW1aTqDZ2tAbWsoXk9BbMQ7e/Jok5WNo4+0aBHElrmF9/wNoNqomFc82GbJ+xml7t+fg+zPzlDvfH2n6NAQQPNMdHlleSKMYTqT9JkVJFmW/lktA49Wiw0hOFuI5PgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=mvPiaNjT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=b2do54+v; arc=none smtp.client-ip=202.12.124.158
+	 Content-Type:Content-Disposition:In-Reply-To; b=MDee14irB6EFzIvhMOSU0L4QLr/DGeS5Cz4UkPY5sMcWXu5KC/nrE2Iy3prsZp5guhzcr4ziFaxWdU4E7IoW3tf5RQJ4M0tAQTYYdDQIMPsnVyhI7j1dB0TfnI9Jj/q5Ph5qV9szeMMXKIBdyRv21zWjg4EzskwZeQxCG3rtOhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=UWGOpYJ6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=G2xnt1E7; arc=none smtp.client-ip=202.12.124.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 53BC67A0101;
-	Thu, 25 Sep 2025 17:55:09 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Thu, 25 Sep 2025 17:55:09 -0400
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 8C48B1D0001C;
+	Thu, 25 Sep 2025 18:02:56 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 18:02:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
 	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1758837309; x=1758923709; bh=bMOAgauWLK
-	cjkb+U/xWaCLqqN4luQqsPYL/lLL4gNZw=; b=mvPiaNjTzrFL+61SkDWbx9SCfv
-	hPTmHAD/hk4It/ATfu8CBaFgzXSH/9mGw0BqyeYbkMQSiDloJxcF14aKhQONsuFs
-	ERditP54PMjXJky0GxtsMnKjKJMEZoT3lPyMmiTcIU7srYAoJXQjluMJkulr4Etj
-	DTpUdAOJLyY6BfQ6R7WXQamyCbyIEzFvVxIt0DApRvHyIZ2wfdwZux9j2Yq213np
-	ZvHkkLOgBl4YN8IwlByGi4TAgFPi85h4Dp9VuvXbDYKLZ9KUphPLdAhFI0wAcnYv
-	rsTyz0U9Fz2ceelQrA0Holm1iH4R7EwpaT7HN3GkH86mzfH+xA6RQv4TbqJg==
+	:subject:to:to; s=fm3; t=1758837776; x=1758924176; bh=45q2RfxgPL
+	2RPs1UTa/vp3a4iK6CtTwGXX+rlUIY7e4=; b=UWGOpYJ6CBLaUH3lP0939qUdp8
+	oIkBJg4b59HUGa+sGLQi5FJeYdcB/G+n+XIEojAEhKKMUIWt0ePF7LvONkYuqZE4
+	IcFMuwW28xRzu3u3d/LcBr4AsEtk8OJocP1B96QSrCY1X1EEUnDEVOdLSJl0tvMH
+	/hW+h3eA19yYRZhslKNEzLZVjbxD2oAelB2mF4ZH0B7GTB54jnGIticrcRSpXXIC
+	VCxMdP8Gb0jmQg5VqpXMT923cSjl/eGlI3fgD3BnQmvZ5ZfbPgelnDhPXZkutynE
+	M5q5hQqWUws4z2DFueDPRkLyMHeDlv+wgocAscFGEgSDluv/hCNNBC5G2JBw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1758837309; x=1758923709; bh=bMOAgauWLKcjkb+U/xWaCLqqN4luQqsPYL/
-	lLL4gNZw=; b=b2do54+vKyq1phrs1mpReDnkQKGpSIam/qC38X8X0CdmicQ9mZt
-	QqFoGpXr4wHmUuqlprfk9SCjcbEXZYVK5TUugt4fAzHnExryPbBUKq4dmRYZ3h/9
-	KyobM08DCGBpSS30vQMOfIJw6boaxDDKFyqTVbfOrM0GtuoRswWJP9bTKwxJaU9r
-	rMaL052wYyC7ihOsAs5i9IF28MpA/Oee83apOgyaNQmdj2tpG9eg50cm3wsvWGG/
-	qnTZZnc5Ouqx0Ic7i8MHu6sIykO0IpAzRpO4EsFwsMtiUBJ1/3rryCEPWdY60OOX
-	dvLgSH7+saVqpOr+G+Md0hJ3KJm25R6wfRQ==
-X-ME-Sender: <xms:PLrVaIrTPmPJ3971omYrZ1pujtgv575cuh3ErpFSUDcX3Xquov6S5A>
-    <xme:PLrVaMX0GWxHI2qoDd_-FPsBOmeKJcHZsnKF72Eh7aH0Fwfqr3njYk4PaXle9NtoX
-    zk58gA0biXvPkHrbFkRkNKUvppuOkK1PUSdQa1hihHR14bbo2mnBW4>
-X-ME-Received: <xmr:PLrVaO8fBShtiuUuD362fc5nJOYNcrlAwoD0J81KXcuCE9sFhPQVy9FQOgAPmoe2jApg1WES2jCYhwyFaZSLMQRMoyqNQLHVGrs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeijeeivdcutefuodetggdotefrod
+	1758837776; x=1758924176; bh=45q2RfxgPL2RPs1UTa/vp3a4iK6CtTwGXX+
+	rlUIY7e4=; b=G2xnt1E7zv+0TEUQksFp5Bb7hUTt/noMfIK6VjGRxfYV08dHOn4
+	kt0lYp9p3mV7sbBdKBr/Ela64eT+uNcK5WABxkJIoKAU0C9JtmVCtkoMtcYQKziu
+	47awA01Co19sIx8Vi063ASKB97zuVe4pa6pjRU600C4aPzSZu9TTw55eM5etri8i
+	skGrF9A0Na8ZQeHu4I9vDuUH/PT4T20iTJep1r/0JNQtO4zM/jFWNZ9rb2Ev+L8/
+	k+GcFs1UP7DgeFDdT2MGvmCQ3aeuh69TNT5ETXV9gQVBhywWZ0yqknaqwbU94cQP
+	4YNT8R51TVIpHDCmxxI9g9f5g+Vst0t/5HA==
+X-ME-Sender: <xms:D7zVaHdDwSU7-i24NUP40ENlshVsImBeqs_TR6P8BTE0nuCf8oPagA>
+    <xme:D7zVaJHynfWtGe2VtM2ux6S9_pVUaGOwYQ07cQ7qDifsTzMwr5kx-KmmAznS1DKEv
+    ZOcokBWhNf05R-8Hzr_us6sGJiVG-ULaMlibZ1L6Xk2ISUTlLkCOms>
+X-ME-Received: <xmr:D7zVaMB07uC71mt2yTVFGE-MSToNSClmWVhJSXWx60Y9nfm6InLvoYASM6Q-TpTF-txdE0bXAXKu1ZQHr5w6zCcu1DA7zw2B9f8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeijeeigecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
     hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeflrghnnhgvucfi
@@ -78,15 +78,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeijeeivdcutefuodetgg
     ohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtth
     hopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrghn
     ughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomh
-X-ME-Proxy: <xmx:PLrVaMYLn9JUJM_ziUL1BOsHZNGsyxVeoQH6kc9Iwfi3657xzVwFxg>
-    <xmx:PLrVaOd9L-EPMtZoFyrRJW7zFxeNKEhwFWdvi6_n8sJg4uKGbTKEpw>
-    <xmx:PLrVaOpGFPl5jC2x7-AQQREcWYLbIAhBQCYXB4c41srp3gCO2pPdoQ>
-    <xmx:PLrVaNAhH1tArwE4HOiEpUZOAH3bFTRjT7vM5DviueEhpRbE5FbZ0g>
-    <xmx:PbrVaKsC1CxH40hlHhVkaoYmnet_8jX5zibwFc8iyMd98aYB4hHwPWlF>
+X-ME-Proxy: <xmx:D7zVaM4f33altnetDoyGCGAuXKPZpJUQzcMCvu3hbliXcsJ2EbMXJQ>
+    <xmx:D7zVaLlX54RiZDd0NVg_pxNK6WcEk5SZ_5iBcd4nnLWqts4MHhKgNA>
+    <xmx:D7zVaF4mOHwi_NKCjr6py86kDM_Oj5AknOBXQgN4scbAEzaMbHkaXw>
+    <xmx:D7zVaJXr0kKu-tI4bL74Wpn-nKWh7XaaJQhRwquku5tnWMJrAS0nNQ>
+    <xmx:ELzVaD-j4wqPauB1cCsZcJESH2PPmoAtWPNuPvIgMz8-jEHql9-jyh3j>
 Feedback-ID: i47b949f6:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 Sep 2025 17:55:07 -0400 (EDT)
-Date: Thu, 25 Sep 2025 23:55:06 +0200
+ 25 Sep 2025 18:02:55 -0400 (EDT)
+Date: Fri, 26 Sep 2025 00:02:54 +0200
 From: Janne Grunau <j@jannau.net>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -101,10 +101,11 @@ Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
 	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
 	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 08/11] mfd: macsmc: Wire up Apple SMC HID subdevice
-Message-ID: <20250925215506.GD637503@robin.jannau.net>
+Subject: Re: [PATCH v2 10/11] arm64: dts: apple: Add common hwmon sensors and
+ fans
+Message-ID: <20250925220254.GE637503@robin.jannau.net>
 References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
- <20250827-macsmc-subdevs-v2-8-ce5e99d54c28@gmail.com>
+ <20250827-macsmc-subdevs-v2-10-ce5e99d54c28@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -113,33 +114,47 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250827-macsmc-subdevs-v2-8-ce5e99d54c28@gmail.com>
+In-Reply-To: <20250827-macsmc-subdevs-v2-10-ce5e99d54c28@gmail.com>
 
-On Wed, Aug 27, 2025 at 09:22:42PM +1000, James Calligeros wrote:
-> Add the new SMC HID function to the mfd device
+On Wed, Aug 27, 2025 at 09:22:44PM +1000, James Calligeros wrote:
+> Each Apple Silicon device exposes a unique set of sensors and fans,
+> however some have been found to be reliably common across devices.
+> 
+> Add these as .dtsi files so that they can be combined with any
+> device-specific sensors without excessive repetition.
 > 
 > Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 > ---
->  drivers/mfd/macsmc.c | 1 +
->  1 file changed, 1 insertion(+)
+>  .../boot/dts/apple/hwmon-common.dtsi     | 37 +++++++++++++++++++++++++
+>  .../boot/dts/apple/hwmon-fan-dual.dtsi   | 24 ++++++++++++++++
+>  arch/arm64/boot/dts/apple/hwmon-fan.dtsi | 19 +++++++++++++
+>  .../boot/dts/apple/hwmon-laptop.dtsi     | 35 +++++++++++++++++++++++
+>  .../boot/dts/apple/hwmon-mac-mini.dtsi   | 17 ++++++++++++
+>  5 files changed, 132 insertions(+)
 > 
-> diff --git a/drivers/mfd/macsmc.c b/drivers/mfd/macsmc.c
-> index 286dc150aa6cfdd6d29f769094278daaddabe7c3..893fc47d62b2c956d966d1841895a3fa2b9a3005 100644
-> --- a/drivers/mfd/macsmc.c
-> +++ b/drivers/mfd/macsmc.c
-> @@ -45,6 +45,7 @@
->  #define SMC_TIMEOUT_MS		500
->  
->  static const struct mfd_cell apple_smc_devs[] = {
-> +	MFD_CELL_NAME("macsmc-hid"),
+> diff --git a/arch/arm64/boot/dts/apple/hwmon-common.dtsi b/arch/arm64/boot/dts/apple/hwmon-common.dtsi
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..bac4e44d3f9892fe8ad04125e47dcccb2bcf57a0
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/apple/hwmon-common.dtsi
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Hardawre monitoring sensors expected to be found on all Apple Silicon devices
 
-I think it would make sense to use MFD_CELL_OF and device nodes for all
-macsmc even though it's in the case of macsmc-input (or -hid) not
-strictly necessary
+typo: "Hardawre"
 
->  	MFD_CELL_OF("macsmc-gpio", NULL, NULL, 0, 0, "apple,smc-gpio"),
->  	MFD_CELL_OF("macsmc_hwmon", NULL, NULL, 0, 0, "apple,smc-hwmon"),
->  	MFD_CELL_OF("macsmc-reboot", NULL, NULL, 0, 0, "apple,smc-reboot"),
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + */
+> +
+> +&smc {
+> +	hwmon {
+> +		compatible = "apple,smc-hwmon";
+
+I think it woiuld make more sense to add the hwmon child node with the
+compatible in the SoC *.dtsi and then only add the sensor nodes to
+"&smc_hwmon" in these hwmon-*.dtsi files
 
 Janne
 
