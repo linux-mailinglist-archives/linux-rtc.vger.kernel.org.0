@@ -1,134 +1,192 @@
-Return-Path: <linux-rtc+bounces-5031-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5032-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90031BA315D
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Sep 2025 11:13:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6CCCBA652A
+	for <lists+linux-rtc@lfdr.de>; Sun, 28 Sep 2025 02:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA5021BC2BAD
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Sep 2025 09:14:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E79A3C03A7
+	for <lists+linux-rtc@lfdr.de>; Sun, 28 Sep 2025 00:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ADD9288C2F;
-	Fri, 26 Sep 2025 09:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E5ED1D8DE1;
+	Sun, 28 Sep 2025 00:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it header.b="Dn2pQUM3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wat8rZcc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2182773FA
-	for <linux-rtc@vger.kernel.org>; Fri, 26 Sep 2025 09:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.149.158.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05B91369B4
+	for <linux-rtc@vger.kernel.org>; Sun, 28 Sep 2025 00:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758878032; cv=none; b=VdLauWS7HiTs6wnc2UeYpc2JoSWOkqxfxoGIR0jA6yJ10h7G2UkIuM4D6OUCEQf8Sn2sMWtyQaT3tx9WZ8sNe6OITkp5E2Jgu8BEpwV/FnQqzcRJbE+CGKI2SLgggYyjlHVvd8fJziTWfvNXkl09xz+8oHgd2aR8nWt8xtGAjE0=
+	t=1759020390; cv=none; b=hRCHAPYAn6f6gtiKPMVWoxmfPl9xv9fQweuaz29oQSm++m+3KU77bokf1a3UIVAkBO4ueUwCpzDxI0Ch5AJ3VP2THWH015C90kIQCyUkzDTzrt1DsY8TgV74xkPguJMgImUX+HKd+gORCXxVBkX3GJjWm2alKh1mtQm/nISTnNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758878032; c=relaxed/simple;
-	bh=S7JgcSwdHpRzzvI7aKcqbxp1YD07m/GRY6L4F5gZFok=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=E6d9gpM/feTlnvC4A74mEaOGhqioru2ufnUtYhFG3fTVPzeU5yInkIIn1o5FVciQT+aOFSZs9phhAbgWf+uPNKBlATlOtVkSmxZxsivUQ7vuXS+uK5kPG6ntwTnERHafUcsN8Th7gZ+KtafayUZEyO4LEsnNy+t7PGUfeDCVIFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com; spf=pass smtp.mailfrom=enneenne.com; dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it header.b=Dn2pQUM3; arc=none smtp.client-ip=62.149.158.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enneenne.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enneenne.com
-Received: from polimar.homenet.telecomitalia.it ([79.0.204.227])
-	by Aruba SMTP with ESMTPSA
-	id 24TPvsM0ploie24TPvAPUK; Fri, 26 Sep 2025 11:10:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-	t=1758877839; bh=S7JgcSwdHpRzzvI7aKcqbxp1YD07m/GRY6L4F5gZFok=;
-	h=From:To:Subject:Date:MIME-Version;
-	b=Dn2pQUM3QpWmPZGRjcnsVG6ZBg0lpKuJDajF6FY96VMai8O1xbKPA4mx0HYyQtoON
-	 L/wapqYGT746eURROdEUmtQAG2+pGeFNWtKZABm4RAm3sX6E0XZNxoAWzjGl8ILxoX
-	 gQZjpxTB3rYTRE2lR56BYYGXT7d5Q+baNoJ6+H0s//u7x4JxmSuTR1V0gU14zHptcV
-	 jiIskj3dhCPBwWg0WhhpD+0iAYbSNp9Muih9UFgAnoJowyPFUaERrltSHICGc0pzWl
-	 H0agEb4YV47mS2OpXTsVQjXO72/ABw641MJVVuNWlPD8Y7R9O3Q+pByfpGlQQBQoHF
-	 v5Z2zFt+PyzMg==
-From: Rodolfo Giometti <giometti@enneenne.com>
-To: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Rodolfo Giometti <giometti@enneenne.com>
-Subject: [PATCH] drivers rtc-pcf8523.c: add "clockout-disable" property
-Date: Fri, 26 Sep 2025 11:10:38 +0200
-Message-Id: <20250926091038.2262571-1-giometti@enneenne.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1759020390; c=relaxed/simple;
+	bh=uFT8DD+GpvmowlrkoMgNzPNeWBkwZV4HRy1OuviWi4M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KH2oxCdxrrM/KRcWiVp6QRKKxzKFrgItk0kBJEizd0AIoSzpgv8o9mPW4ex74h0qltIDCMyoJrgbir8F4XUF6ejPT2mCurdYNuZHmMVcA4kbHVien4hJ+a4U4hRX6Qxq60qkt0OOLT3WaKyhaW/+Y6u9nyQ5Zn7N6JknY24L1Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wat8rZcc; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-271d1305ad7so46441525ad.2
+        for <linux-rtc@vger.kernel.org>; Sat, 27 Sep 2025 17:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759020388; x=1759625188; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R0SQxdo3RLHRiJ7AnzgCm7ZcELugvg2FhH462RqaNN4=;
+        b=Wat8rZcc9wy9u3iZaa1ZEAhmaw7yud0TBejGdtLK4GCW0Ov3lePDWZfN3h/8+9hx9b
+         nED1BT9BjQ116vlCN//ggNlZ/88yRn6NsEEJazSwAJhy20P+OeHQzo/7s5Uv6eeKSprt
+         apcGYm4J7n8URULQFxHr1ebYPFCUqC2H8uq5XLwih+oRQXpN1uUkgTyUkBV0G05vSio6
+         1e6uQbDGdnie6fvD806sy7O8QOpcpSVSQWju8Wbz+PkBBXYuZRANoqZTmdjSrnDF4+My
+         +jyTrUvhZx9urFkmwgaDpPxYqYiqJEYsv/HW5JQ1MVwbuHn2h92f+gQ4SVM5M8XjAzGd
+         wjKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759020388; x=1759625188;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R0SQxdo3RLHRiJ7AnzgCm7ZcELugvg2FhH462RqaNN4=;
+        b=UsR9kjeKIKFS3w+x5UATUKfJLgv0DDRHOh9H7/FudeZh8YJ1J5gIJJEJtt8DLoFU2g
+         Znr4bkztu1Tikpqk9xUAScWId6wfgRZyQOneSwZlNebCs0aFRavEZ53L9tyxUsDN/LnW
+         plwLnUC6du3MXCWZObKfSOHAazAS/Clj7I1Ih6Yd8r5CZ/VXLyPgE9RKBxE+ZFWYqE3r
+         dPMCfXaW/japQ0yxnTFFsiHjGf3ClY9ZcU6FDhNUO6IXdo0+zj8IID0o0CSP2K3wM/dZ
+         YLMQ3odydjP9G6DGhkvmDfMyOHdkaQmX+VGmTItNbrTS3hrnZNV2Z6otog7Qi7ekVTSz
+         gdbA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGiyJR4mrfPsITZKP5ZBLmOfUa/r9UFGUkxE6QJZcdv+F9UxSz9VF4ouEytCZrGotCUWY3AEUB+go=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAwX0OikmLL30a8FfAElE2jWfKZZ8QNn8fDXxh1apQFlFolcm/
+	JqPj7BaSu91cgn14zo5AYoDv6sDtUSGM10ZEgJW25C7rRjcwQsldxPeP
+X-Gm-Gg: ASbGncuLYAJTHnU4AJWwemqf3YyrBxAXw6UGEsx9zOO5LbO0KUr+fJL2+DAjgBfP636
+	QAan/bzNrDzOH6BvSSxA2k7nvAehNpkyoj2ljRfkMO3eh+btMj/J9dUhKeBIHRNnA6SoYjChccw
+	WVJzE5H6DjFYhCfajp+AgF4a0Hk7BIIQZC9JayLDmKH9AqtGbWWFNxcWSBVNCY79EK1PPAkBu8W
+	M2/dOxoIAUU58TaBT8WsIbvLIWY20L3CYOGaSl6anCPOfavCSxEMlDsjCvp4fdChOIiVyd/hFTl
+	7I0IJ2xA6i0f6RWtBtF0zCt+yqKsvxAvErYiCuSq0xhKwnC3pz0LfZaLGb7hLL21jI6q1Dg88DO
+	14uX4G73QL//ltC1bCCHZnvWNOAJ3YlbAih/905/gfRY7pcjCa2wa/dl6qpZh09cPFm827jpFn5
+	psXViHftN2uyJHkOZezRsN8WeDinZSNwKh
+X-Google-Smtp-Source: AGHT+IHh6vp11a5YTPpS7Cpx/YPQS6tq6OUbtGBtN9cobxgvPjCMMdsgzvmVq+T4sqfObnWyrmGxdQ==
+X-Received: by 2002:a17:902:ef03:b0:27e:ef12:6e94 with SMTP id d9443c01a7336-27eef126f60mr78326435ad.55.1759020388025;
+        Sat, 27 Sep 2025 17:46:28 -0700 (PDT)
+Received: from setsuna.localnet (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6ac27d4sm88980475ad.135.2025.09.27.17.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Sep 2025 17:46:27 -0700 (PDT)
+From: James Calligeros <jcalligeros99@gmail.com>
+To: Janne Grunau <j@jannau.net>, Rob Herring <robh@kernel.org>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org
+Subject:
+ Re: [PATCH v2 02/11] dt-bindings: hwmon: Add Apple System Management
+ Controller hwmon schema
+Date: Sun, 28 Sep 2025 10:36:03 +1000
+Message-ID: <2537878.PYKUYFuaPT@setsuna>
+In-Reply-To:
+ <CAL_JsqK-9n3_H6vS80bZuZiSPi9UNuMzHEPFL_EzYTeyNS1cYg@mail.gmail.com>
+References:
+ <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
+ <20250925204925.GA637503@robin.jannau.net>
+ <CAL_JsqK-9n3_H6vS80bZuZiSPi9UNuMzHEPFL_EzYTeyNS1cYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfIEuJ+x7ZsYVtxm0wuNxSzQDfKMg5N5a7LqML/OksRUIgI5z9lW5W0N5/9txtlTXl2+dRI/opvJaezlPW+AHYxHffjxVQe58zZLrzbP5jysg9p5SR6S2
- JGgKSzZyQyc0bUJ7h+t+IEn4xE/m5ekamm6P+suGGtxF9xtesXrIgSYA1QmFA9aBeqqUZ3caBQqLMhQoLfMscnhdwf41j5GOVULwUT1meHklNCDcyurRWEbx
- 5biKEKgg1r+qgQYVaH1Z20WoWSWnM6cNSVxtgCMkbceDuz7ffjQV7Uv2RpPzraJ5dqD6ZMIK1Yt3jFnG3fxikmAwePuww4OTgAM0Oi0cTNyOf9CuoiWIw06A
- En9lWYDHrcADWctkWN3AxRpzISbsFs1XfKDz1MGf61YMrZKBYsuZVQvnsSg4eW0V5xM5aBpR
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-Some systems may require disabling clock generation on the CLKOUT pin
-even if there is no IRQ management.
+Hi Rob,
 
-Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
----
- .../devicetree/bindings/rtc/nxp,pcf8523.yaml        |  5 +++++
- drivers/rtc/rtc-pcf8523.c                           | 13 +++++++++----
- 2 files changed, 14 insertions(+), 4 deletions(-)
+On Friday, 26 September 2025 7:43:23=E2=80=AFam Australian Eastern Standard=
+ Time Rob=20
+Herring wrote:
+> On Thu, Sep 25, 2025 at 3:49=E2=80=AFPM Janne Grunau <j@jannau.net> wrote:
+> > On Fri, Aug 29, 2025 at 11:40:57AM -0500, Rob Herring wrote:
+> > >=20
+> > > This should be something like this:
+> > >=20
+> > > "^current-[A-Za-z0-9]{4}$":
+> > >   $ref: "#/$defs/sensor"
+> > >   unevaluatedProperties: false
+> > >=20
+> > > With the $defs/sensor being:
+> > >=20
+> > > $defs:
+> > >   sensor:
+> > >     type: object
+> > >    =20
+> > >     properties:
+> > >       apple,key-id:
+> > >         $ref: /schemas/types.yaml#/definitions/string
+> > >         pattern: "^[A-Za-z0-9]{4}$"
+> > >        =20
+> > >         description:
+> > >           The SMC FourCC key of the desired sensor. Must match the
+> > >           node's suffix.
+> > >      =20
+> > >       label:
+> > >         description: Human-readable name for the sensor
+> > >    =20
+> > >     required:
+> > >       - apple,key-id
+> > >       - label
+> > >=20
+> > > Though in general, 'label' should never be required being just for hu=
+man
+> > > convenience.
+> >=20
+> > That does not sound as it would be compatible with skipping nodes in the
+> > driver if the node misses label. The driver could of course fall back
+> > to create a hwmon sensors without labels.
+>=20
+> The driver absolutely should.
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
-index d11c8bc16bc0..d18c396c06cd 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf8523.yaml
-@@ -25,6 +25,11 @@ properties:
-     enum: [ 7000, 12500 ]
-     default: 12500
- 
-+  clockout-disable:
-+    type: boolean
-+    description:
-+      Disable the clock generation on CLKOUT pin.
-+
- required:
-   - compatible
-   - reg
-diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
-index 2c63c0ffd05a..7ecbee4f9c6b 100644
---- a/drivers/rtc/rtc-pcf8523.c
-+++ b/drivers/rtc/rtc-pcf8523.c
-@@ -418,6 +418,7 @@ static int pcf8523_probe(struct i2c_client *client)
- 	struct pcf8523 *pcf8523;
- 	struct rtc_device *rtc;
- 	bool wakeup_source = false;
-+	bool clockout_disable;
- 	u32 value;
- 	int err;
- 
-@@ -467,16 +468,20 @@ static int pcf8523_probe(struct i2c_client *client)
- 	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features);
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
- 
-+	clockout_disable = of_property_read_bool(client->dev.of_node,
-+							"clockout-disable");
-+	if (client->irq > 0 || clockout_disable) {
-+		err = regmap_write(pcf8523->regmap,
-+						PCF8523_TMR_CLKOUT_CTRL, 0x38);
-+		if (err < 0)
-+			return err;
-+	}
- 	if (client->irq > 0) {
- 		unsigned long irqflags = IRQF_TRIGGER_LOW;
- 
- 		if (dev_fwnode(&client->dev))
- 			irqflags = 0;
- 
--		err = regmap_write(pcf8523->regmap, PCF8523_TMR_CLKOUT_CTRL, 0x38);
--		if (err < 0)
--			return err;
--
- 		err = devm_request_threaded_irq(&client->dev, client->irq,
- 						NULL, pcf8523_irq,
- 						IRQF_SHARED | IRQF_ONESHOT | irqflags,
--- 
-2.34.1
+The original submission (and our downstream version) do this, but I changed
+it for v2 per Sven's feedback [1]. Outside of development/experimentation,
+we will (should) never have a sensor in the Devicetree of uknown utility.
+If we know what a sensor is for, then we should have a label for it.
+
+> > I looks to me it would be a
+> > stretch to call the presence of the labels human convenience.
+>=20
+> Then it is an abuse of 'label". "label" is supposed to be literally
+> that. Matching a sticker on a port of a device.
+>=20
+> If you need to associate a sensor with some other piece of h/w, then
+> that should be via a phandle or something.
+
+I don't think doing so is particularly useful for this platform. Few of
+the sensors that we know about are directly related to any one piece of=20
+hardware.
+It's pretty much just the CPU cores and Broadcom module. The rest are things
+like fans, palm rest area temperature sensors, ammeters and voltmeters for=
+=20
+entire
+rails, etc.
+
+Even where we can reliably associate a sensor to a piece of hardware,
+(e.g. the WiFi/BT board), doing so does not by itself do anything useful. We
+still need to write a human-readable label for the sensor.
+
+I was trying to avoid yet another vendor property, but would something like
+'apple,sensor-label' work here?
+
+> Rob
+
+James
+
+[1]: https://lore.kernel.org/asahi/4a95cbf3-b3ae-4b26-8db2-dd5cf14a4c0c@ker=
+nel.org/
+
 
 
