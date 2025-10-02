@@ -1,77 +1,77 @@
-Return-Path: <linux-rtc+bounces-5039-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5040-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84D9ABB36EF
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Oct 2025 11:20:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 691D3BB3716
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Oct 2025 11:21:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25EE719C05A5
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Oct 2025 09:20:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EA8516BF89
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Oct 2025 09:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B676430103B;
-	Thu,  2 Oct 2025 09:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0D630148B;
+	Thu,  2 Oct 2025 09:20:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QADZ54w+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IwkNKzPz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5803009FC
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Oct 2025 09:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F034E302163
+	for <linux-rtc@vger.kernel.org>; Thu,  2 Oct 2025 09:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759396807; cv=none; b=c/7yt78FjR8YS7ak4gHrTQlAUWkzVX0tm4xPC8FLaxFr7WbeDY/8QcwR9SCNQKvJWxGD968KAEBIIm4tADUkxTIIheWPJc5ePHY5CLzr8PCaPBmxJ/gHU8EY27uQBID2i7h72ouwgfr0J5rjPm68tDdbk5c9lKECeRKLCk+G20Q=
+	t=1759396851; cv=none; b=sflahSqFiqvBbKy7nYJoAFLCk3HJqczqWYwKzANb3L2pLDRChqsVR4JZVQmmZunJ+aIORfohiM4CtYXPkvuARSzq4LBC+wzNh0HpmXyTkFSxyMAnUpUEIQHsbrQpGeUlf+h/FdFXbfFosZBPGEJmU7NrDzKioP1vvm6lgNvqlbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759396807; c=relaxed/simple;
-	bh=vRt0dtCsdz8vwlJe3xmSExt4YZA46Y5SdTypQbnPYRo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eSxCkWnR+Ku9xUcDbQz6+DEMeGR3uNNZmoF7R5B96jK4h1dHAVRHmisPmzAoXTTCPHd9Q+HOI3DGiUtXJOlO6jYhtXCLwq3FSD6pGIrucF56/NPBzsQWaDpQp10i/ZoOQgiX/3sfBL0ajPfTfY7RLOLlO4JfIKmzZdq6FHeTvSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QADZ54w+; arc=none smtp.client-ip=209.85.167.53
+	s=arc-20240116; t=1759396851; c=relaxed/simple;
+	bh=NbqCWvQCaMNEPmod2yWs0FfaXN1CcGdfkaocxXgMer8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KOp+m+pdDe3Y/geBarH97I9Qaw1jQaSFCiZtL4k7uCtbcWdlITrzhwJ/d8SbiaL6QQcB17CWqxMZaCcviS+vpoekI9YaO4bBfNK1EFQA6STQVrYShHrXJ3+bXS8dK9DuLNU2H5hMUtCR6fxWIrF6e4G9yoQEAT5q27OCDiRTFV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IwkNKzPz; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-57a604fecb4so958159e87.1
-        for <linux-rtc@vger.kernel.org>; Thu, 02 Oct 2025 02:20:05 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-579d7104c37so1067604e87.3
+        for <linux-rtc@vger.kernel.org>; Thu, 02 Oct 2025 02:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759396804; x=1760001604; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759396848; x=1760001648; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KNpNdQn+Mvusm2MT0LBZ46u1KJvuulNytepH41XAksw=;
-        b=QADZ54w+r1e5wGmE2Gt5uFJV0UgWLb/7FxX4NkNUDteSEpwyI06gRhwClpCaX8Ry26
-         v8l2dl8NSjMnjLn+Wse4BAdrOBPSKgZJY94coTJ0YvKtarWm5YF3Kbdp9QHgm8wCBUpz
-         j3dpKYkkc9GTD64rBh8qliKMhGFiaelSzQBipvmW69kwp/L5x29JaYqeoVzj8HfZ49OC
-         CABT3bAOfSkyrZrnsDS5DHaDvmGsA8v029I5pQuEW4bzKs8K25kxzq8zwKJjHkF7Zxku
-         NotUP7Qq69eIdRfKchOPfKBVM/vFtX4ptp9tw5ZI8IzjY6SPxyuuctF4rISnrxQ0Z5hz
-         vYlA==
+        bh=LqXqRp/Z7HtRs3F1hULbBJNB4X8XMTG1LZWCYLOZLtU=;
+        b=IwkNKzPzUuEKVxIsarZZ6FzwhDBfcXPts3aCnr+vjfHzcRZ92SxBJZIvqr6+TBQYi0
+         dntr1Mf1AV4QKXnAT0c5hiOz6QIJK/YfkkKiG/myVvvErpUKJBJ3AcuG1ZMDmYU1p/HR
+         neg0Lk2NOHevy9UbarfG4nRNT6i1k6TPMMDbBgfXGra0naa4EAkuQ6Jh1+nZErkD4kI2
+         j1uZ5YNi9Cjt+muys01EBOQDW74Pilz3B0vECgALwETacnioU3A3XlJLTCVrd8xPTrzY
+         i0I5iFAR1ZoTd6TZbRLKaEHfxjlIwrAJ4Gk8oN8RSgbvinA6lSARX586+v2sevm7nGUY
+         H+vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759396804; x=1760001604;
+        d=1e100.net; s=20230601; t=1759396848; x=1760001648;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KNpNdQn+Mvusm2MT0LBZ46u1KJvuulNytepH41XAksw=;
-        b=pvveqzq/1chviHd+plwJRIwfoDDgRgCx3SjNQWuAkTWvwF0ZeFAuW7qrh9YJuQPTvQ
-         WPQQ4557uj6pWzshuzW0UMQTmZkfjoG51nHUIv3EZ9fHUyHXL75rsVy/em7N2gKzsV2n
-         iLtxPIYzTwRBAnn2kpmhJ2GgLZYMMbG62u8W7fFUzOoSshvrtX7Blax7fz5PBC2zTqY3
-         9QuCPMz3NtiA5k9Vj+OZ31imKRnBf6EN1GxoqGVfIF0A7W9gR926skyszisvHheOPE3p
-         cWx198Vg/NGK0ytmELV0ArVXpa+kymIWIxnr6g5qlRZj9v1FfwJqt0SgUeEOoQQxBt45
-         UdCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXcc3GyX0Jwco7nzALRxhniP+fegX2yR/A/+uJWQQ8sqalzpvEhl/sHKym7N7MQ+OnKHgeaKWD3WGg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywle1oO9f1aSZhi7/i7nNPd1e3UyMTrWKPB2d/l+hVsrPSlKCVk
-	IOpNUvBW8LwCihtnHWioyiaiE2RdK2JxbeP3eannGU/6z0H829942+Wn
-X-Gm-Gg: ASbGncvynoAMpdxwvqGA3J9T4PTRmYVT72iT1orldfdZgLrsKLnLQCnNJawM9REeKvd
-	6K/wKp4SMzTHLvE8x3YYss9dNNYK8YltjMlQBd18OdQnD1oLOecfYOZ7Nai4YqtC2geAbi7PX2G
-	ony5QDnNSkQTcQ1rHat6IjQ/HiYOwsjW9D9xImnV3ze59yoc/pzBxS2qSEsS9d7cEXzqB3oCCO6
-	NcE86lW9nDdQ/vXBsrcggcCv9WVYMiBTo7NHdnQJz7CmE42+l391O5I21GCVffmYLQ9yNPwewF5
-	RBGyR9KrP/hCAyYKRGDOvDHIy4TxMoZ/lBYb19jFlddF8Z9JKn+tBn91OetoAxUqzdp4VE82UOA
-	UueLRQ/mVH2LPDU0Hu0F02zLbN3yPpAgjIK9BkfFsOxtJQsoRfNju6+0BpckISvRuUHQE79+iod
-	EaBzBnV/SH1hN/WBhDzKNGNrPqKdRSbY77IrGX8viz
-X-Google-Smtp-Source: AGHT+IFUIDciA5xZKbT9troHSKjJ/3ia1HG2h024hlGxFpBUK6g1cjjH2CDCxiHjTRESwliPBFXExw==
-X-Received: by 2002:a05:6512:691:b0:57f:492:3263 with SMTP id 2adb3069b0e04-58af9efda86mr1777775e87.1.1759396804139;
-        Thu, 02 Oct 2025 02:20:04 -0700 (PDT)
+        bh=LqXqRp/Z7HtRs3F1hULbBJNB4X8XMTG1LZWCYLOZLtU=;
+        b=gkzVQG/hYHt7gQ9t/9C8/rQzJFMGdEhx7sbW0msZz55YeLEQB1yVbfvOMaf7pMVqiu
+         VzOp9ifh3KQykLNTEo611Rug7j6uCsVuK3sw6wYURL3NUu5g6fNJQOcrYAqWX6JJVHkX
+         c620wW3lqQbIlnK8eaM//s21CUhR46KFx5GGUw+t32BF/2OsOQf1GZJevDyFT1d7aazz
+         8wykIe/BZtoq3JzM3UK0Iv99av95XIjQ/MwIeP08dsyVUPOg8rLXHxhEJ9OJL16kuNSK
+         80TlGtVOlg7Qik+MNlp7ueynPXt3agaOd6b40pmmoSjv6c4WYuACjnXI9W6uTi7TOHCm
+         fiTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXchbndKhA0feXeXYFXFYtXURo2qiDyfFbDolP1ihTGFfqDZ39vPXBvEJLP6f/T+4UJcHX83g/Vrx8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5P1dIiK5kMtiDQ5+YftakR88CxcDMALqDVkdX6YagogCI79cC
+	3Zx6v8G1bYgs+BCiAUdEywK7sKjhf8Hx8qvPmeu4HbqJ2QDPGzuOrQMq
+X-Gm-Gg: ASbGnctZZBYaUmoZ4bMf4OB0qZKUqz9XHFT0NBUO36+bPZZSVEdM5lmOHCHxAeMydir
+	Q8oCqb8KiqXcmRwNelZYgrS1Pxkolu/Awh8FZ3HZ6EJFWYhZvmtI1HE1v0emdDJKjkjbpkdnk9T
+	8AP8dX52Q6G3pBq3QsvHeqlvRHDEu00Ee5KCLF1Xbir/7XLAjWxOgOwGLzoAW+TXvj/Hn8s7WVK
+	XtuMJ4GhCp5TD3ziWFnTT+I3T7m0WHNsp2m+TKWi//8oKFvfzDHsh5qzdzR6VAe4McwC9sHt+8q
+	kTlDf+XhwPn0IyEjO+USEMxpgbo86nGwx5yJakyXKcB/SRoS48td9KDsquxGoroC+iLH21YNB1+
+	2PKuwbOPGrUhKn8PEOJQCaN74eDxbY3qiEt4woOFoXmBHi4geUibGbTGhXG44csVNF5iAYv5Yqf
+	4hdVlDT0bCa5eIUMgAojkXAx6HvXiqeyDZ/DILIInW
+X-Google-Smtp-Source: AGHT+IHKYAv005/la9IKuIOXtbTmebUj1K9IXAgrSaTVgoEJ2t1LESi6LPycN1US0v8bL1eB9MgZIg==
+X-Received: by 2002:a05:6512:108a:b0:57b:8675:e2e5 with SMTP id 2adb3069b0e04-58af9f16ccamr2095615e87.15.1759396847894;
+        Thu, 02 Oct 2025 02:20:47 -0700 (PDT)
 Received: from localhost.localdomain (broadband-109-173-93-221.ip.moscow.rt.ru. [109.173.93.221])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58b01136e83sm668382e87.41.2025.10.02.02.20.03
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-58b0119ece7sm642361e87.103.2025.10.02.02.20.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Oct 2025 02:20:03 -0700 (PDT)
+        Thu, 02 Oct 2025 02:20:47 -0700 (PDT)
 From: Alexandr Sapozhnkiov <alsp705@gmail.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-rtc@vger.kernel.org,
@@ -79,8 +79,8 @@ To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 Cc: Alexandr Sapozhnikov <alsp705@gmail.com>,
 	lvc-project@linuxtesting.org
 Subject: [PATCH] rtc: fix error return in pm80x_rtc_set_time()
-Date: Thu,  2 Oct 2025 12:19:59 +0300
-Message-ID: <20251002092001.20-1-alsp705@gmail.com>
+Date: Thu,  2 Oct 2025 12:20:43 +0300
+Message-ID: <20251002092045.11-1-alsp705@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -92,30 +92,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexandr Sapozhnikov <alsp705@gmail.com>
 
-The regmap_raw_write() function may return an error.
+The regmap_raw_read() function may return an error.
 
 Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
 Signed-off-by: Alexandr Sapozhnikov <alsp705@gmail.com>
 ---
- drivers/rtc/rtc-88pm80x.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/rtc/rtc-88pm80x.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-88pm80x.c b/drivers/rtc/rtc-88pm80x.c
-index f40cc06b0979..71d4cc7e595c 100644
+index f40cc06b0979..50266d2e078a 100644
 --- a/drivers/rtc/rtc-88pm80x.c
 +++ b/drivers/rtc/rtc-88pm80x.c
-@@ -136,9 +136,7 @@ static int pm80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	buf[1] = (base >> 8) & 0xFF;
- 	buf[2] = (base >> 16) & 0xFF;
- 	buf[3] = (base >> 24) & 0xFF;
--	regmap_raw_write(info->map, PM800_RTC_EXPIRE2_1, buf, 4);
--
--	return 0;
-+	return regmap_raw_write(info->map, PM800_RTC_EXPIRE2_1, buf, 4);
- }
+@@ -119,6 +119,7 @@ static int pm80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
  
- static int pm80x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ static int pm80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
++	int ret;
+ 	struct pm80x_rtc_info *info = dev_get_drvdata(dev);
+ 	unsigned char buf[4];
+ 	unsigned long ticks, base, data;
+@@ -126,7 +127,9 @@ static int pm80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	ticks = rtc_tm_to_time64(tm);
+ 
+ 	/* load 32-bit read-only counter */
+-	regmap_raw_read(info->map, PM800_RTC_COUNTER1, buf, 4);
++	ret = regmap_raw_read(info->map, PM800_RTC_COUNTER1, buf, 4);
++	if (ret)
++		return ret;
+ 	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
+ 		(buf[1] << 8) | buf[0];
+ 	base = ticks - data;
 -- 
 2.43.0
 
