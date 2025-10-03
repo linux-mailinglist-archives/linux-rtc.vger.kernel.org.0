@@ -1,156 +1,172 @@
-Return-Path: <linux-rtc+bounces-5042-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5043-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A9DBB46C9
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Oct 2025 17:59:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20334BB7141
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Oct 2025 15:50:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 404407A819A
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Oct 2025 15:57:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F27DF4E3659
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Oct 2025 13:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 858E02367D2;
-	Thu,  2 Oct 2025 15:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927FF1D7E42;
+	Fri,  3 Oct 2025 13:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="veE8CEM/"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="AlkNhiCd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602EB23815C
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Oct 2025 15:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2C31A0BF1;
+	Fri,  3 Oct 2025 13:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759420758; cv=none; b=jpzvyl6LZpl/hp2ZgdRv91SXpu/hjITEN/AYxy0uM7olsf0ac9th06kuto2Ow3K0NOMkd6iVoM6m7hUiqPGanaZJEP0QBc1Fm3YJygGgbVcAe2R3Sav+aPZlpg/iveE+NyvXJadgjGSPk5PG1MmksvrUR5/8Yq3gQo03hyGxf58=
+	t=1759499446; cv=none; b=WRTRmNpg3ZWwsF60hfLUGbZZq7gDkNpVFUTmZgobabz+pJ34+btJTcbZqfHfKJAsOjSdSQ370dY5+X0h4Y476V4MtYayIyaWMcAiB0BUMHuAKgNWaKNTVtksfGBe61+EqlVp+oaUf963C9err/xu3/5UAzokEBEqkBNWwkBBRl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759420758; c=relaxed/simple;
-	bh=pU5ODyOpKgrJfAinV1dcdi2m1lpWYA3M5fMV34X7Kk8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hJ7jkTUqAlR+7DCHJ3gJg7qYan+6etBeTjoTzhib1X+3F5GJNWWClJb4N2W37XtUh+6hjN18FhXlgUZaIXszuXlZj5zpPp5vgzvbvHfun7SGxf2DU+LOeAKspmRH6Cydbe3mF1AY4XUZ+K78J/AeQC/r/qcldaJHM0pKSqzg1ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=veE8CEM/; arc=none smtp.client-ip=103.21.126.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
-Received: from ldns1.iitb.ac.in (ldns1.iitb.ac.in [10.200.12.1])
-	by smtp1.iitb.ac.in (Postfix) with SMTP id 4EBE210380F0
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Oct 2025 21:21:23 +0530 (IST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in 4EBE210380F0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
-	t=1759420283; bh=pU5ODyOpKgrJfAinV1dcdi2m1lpWYA3M5fMV34X7Kk8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=veE8CEM/JQTrNXnNaUxSjTy3nXCrH+jcJ0yHhU9crPy+d6U4v9XY4FPPVSCuD2N2v
-	 t9P63vlHiNSifeVwoolhmazII2WDJWBSLoBRnPrlD98EoMBxFnZBsBVr1HZxn/pexM
-	 BzW8LKREjPKq4w2f/qk4yO/tYR0szF600Qr/C0Y8=
-Received: (qmail 15111 invoked by uid 510); 2 Oct 2025 21:21:23 +0530
-X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns1 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
- spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.101.4/26439} 
- Clear:RC:1(10.200.1.25):SA:0(0.0/7.0):. Processed in 3.263975 secs; 02 Oct 2025 21:21:23 +0530
-X-Spam-Level: 
-X-Spam-Pyzor: Reported 0 times.
-X-Envelope-From: akhilesh@ee.iitb.ac.in
-X-Qmail-Scanner-Mime-Attachments: |
-X-Qmail-Scanner-Zip-Files: |
-Received: from unknown (HELO ldns1.iitb.ac.in) (10.200.1.25)
-  by ldns1.iitb.ac.in with SMTP; 2 Oct 2025 21:21:19 +0530
-Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	by ldns1.iitb.ac.in (Postfix) with ESMTP id 7AD1A360079;
-	Thu,  2 Oct 2025 21:21:19 +0530 (IST)
-Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
-	(Authenticated sender: akhilesh)
-	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id 57BC41E814C6;
-	Thu,  2 Oct 2025 21:21:19 +0530 (IST)
-Date: Thu, 2 Oct 2025 21:21:14 +0530
-From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-To: alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org,
-	conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akhileshpatilvnit@gmail.com
-Subject: Re: [PATCH v3 0/6] rtc: m41t93: add new features alarm, clock out,
- watchdog
-Message-ID: <2025102-155114-838866@bhairav-test.ee.iitb.ac.in>
-References: <cover.1758379856.git.akhilesh@ee.iitb.ac.in>
+	s=arc-20240116; t=1759499446; c=relaxed/simple;
+	bh=2K1jYQzR90qhF8V8+j76XmAlV/ZbdUbBvBcqmABYrNI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=Gp+UNQOoghIBSqh/98J9fSmKjm8noQuMd6kgpw2F8iE37RSusI4fYcd5efCdpDZtaixCvmWhdYmi2A3oF8JfjT2SYsnDn/CAcJmFq5YwtdSGIc2ndDOb06WZIO5cAsHnLQRZUa/UW4ijSZPLJndoPZHNffNcLUnmpA6v5kQKITM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=AlkNhiCd; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1759499435; x=1760104235; i=markus.elfring@web.de;
+	bh=atirCXn1cQF6o8Brcc8R5t4ftRT/ga9/SFABkaR79mc=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=AlkNhiCdx83dMnJHqPpfJYvkrgScQqp0KWsah+zCt8DgCgehb+qlHOHWBh3jHm6g
+	 LxocAnDlY0vah6j1bZQXpLJe5E2jN6XhMXREF6hUt1vMXIZa3HjZqA4zoxcp2uU5Z
+	 fWb7FVaRbNCw6SC3hSrNtfCFiiXi15qk4+MiQjUZmWVZVZWWhZT3TXlAdYp59e2mH
+	 hj1C1WM7J+X/Swei8TcR7fqdB7n7jvABRVqRpQsxtZxt2Euv5+jogkQtjx3iz/8Mj
+	 eFeD6N0jZhdVaR9g9ByiaREwrUKPf+sq6du4Fr4Q9oOnUsRCHtDL489TT9HlYOsl5
+	 1mhP2Ft+mIJQNgPzBQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.196]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MHVet-1v8p2Y03LF-0010qk; Fri, 03
+ Oct 2025 15:50:35 +0200
+Message-ID: <604731a2-c9d0-4326-8304-4a8c7f416bd4@web.de>
+Date: Fri, 3 Oct 2025 15:50:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1758379856.git.akhilesh@ee.iitb.ac.in>
+User-Agent: Mozilla Thunderbird
+To: Alexandr Sapozhnikov <alsp705@gmail.com>, linux-rtc@vger.kernel.org,
+ lvc-project@linuxtesting.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20251002092456.11-1-alsp705@gmail.com>
+Subject: Re: [PATCH] rtc: fix error checking in wdt_disable()
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20251002092456.11-1-alsp705@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:PWhuFHgEzHA8eILm4ljlS532xvk3oxoxc2oSTg87Z/3AA6qeNM8
+ PAGLJ+0rpFA5vlKxd9jker/6CLobDdAQie8t+PzQoQ18RqZbLi0gOTa2zNW4awZob9q/YGu
+ +xazK/2+5YOfvVkz23JpNVsCaOS8hTGyYq77pQtYfcACZa4utt/UWfN3n0Z1Pns3iNEYmd+
+ bnSvI/0vu9G5W5H673wTw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:uZCTMSokwPY=;35D4ZnU7GJIfjGWbbeNXoQfWZ+L
+ 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
 
-On Sat, Sep 20, 2025 at 08:30:59PM +0530, Akhilesh Patil wrote:
-> This patch series adds following to m41t93 rtc driver.
-> 
-> Functionalities: 
-> - Alarm support (support to configure alarm 1)
-> - Square wave output support
-> - Watchdog support
-> 
-> Code improvements:
-> this series migrates existing driver to use standard regmap interface
-> for spi instead of direct spi calls and uses regmap for new features.
-> 
-> Device tree support:
-> Adds device tree support to the driver along with binding documentation.
-> 
-> Testing:
-> This patch series is validated on TI am62x board with m41t93 rtc chip
-> connected to spi0 bus.
-> regmap migration is additionally tested by observing spi transfers
-> with the help of logic analyzer. Short summary of test flow is added in
-> commit message of respective features.
-> 
-> Datasheet:
-> https://www.st.com/resource/en/datasheet/m41t93.pdf
-> 
-> patch 4 to 6 depend on patch 3 (regmap patch)
-> 
-> Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-> ---
+> The i2c_transfer() function may return an error.
+> Ignoring errors returned by functions is bad practice.
 
-Hi Alexandre, I would like to follow-up on this patch series for review
-and feedback for rtc code. Let me know if any additional improvements needed.
-I am willing to volunteer to support this driver in the kernel, in case
-needed, as a reviewer/maintainer. I have this m41t93 RTC hardware with
-me. Given we are in 6.18 merge window, looking forward for
-this patch series.
+See also:
+https://cwe.mitre.org/data/definitions/252.html
+
+
+=E2=80=A6
+> If the second function call succeeds, data corruption will occur.
+
+Should the function return values be checked for both passed messages?
+
+
+* Would a corresponding imperative wording become helpful for an improved =
+change description?
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
+Documentation/process/submitting-patches.rst?h=3Dv6.17#n94
+
+* How do you think about to add any tags (like =E2=80=9CFixes=E2=80=9D and=
+ =E2=80=9CCc=E2=80=9D) accordingly?
+
 
 Regards,
-Akhilesh
-
-> Changes in v3:
-> - Address comments on bindings from Krzysztof and add myself
-> as a maintainer.
-> - Re-validation/testing on top of v6.17-rc6
-> - Link to v2: https://lore.kernel.org/lkml/cover.1757510157.git.akhilesh@ee.iitb.ac.in/
-> 
-> Changes in v2:
-> - Address DTS and bindings coding style feedback from Krzysztof
-> - Verify bindings using $ make dt_binding_check 
-> - Update example in binding documentation after testing.
-> - Analyze and Fix build warnings as suggested by kernel test robot.
-> - Drop patch 5 from series (device detect logic change).
->   This will be taken separately. Focus on functionalities in this series.
-> - Update commit messages with short test steps for each feature.
-> - Link to v1: https://lore.kernel.org/lkml/cover.1756908788.git.akhilesh@ee.iitb.ac.in/
-> ---
-> 
-> Akhilesh Patil (6):
->   dt-bindings: rtc: Add ST m41t93
->   rtc: m41t93: add device tree support
->   rtc: m41t93: migrate to regmap api for register access
->   rtc: m41t93: Add alarm support
->   rtc: m41t93: Add square wave clock provider support
->   rtc: m41t93: Add watchdog support
-> 
->  .../devicetree/bindings/rtc/st,m41t93.yaml    |  50 ++
->  drivers/rtc/rtc-m41t93.c                      | 488 ++++++++++++++++--
->  2 files changed, 486 insertions(+), 52 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/st,m41t93.yaml
-> 
-> -- 
-> 2.34.1
-> 
+Markus
 
