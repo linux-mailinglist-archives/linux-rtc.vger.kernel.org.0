@@ -1,83 +1,83 @@
-Return-Path: <linux-rtc+bounces-5065-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5066-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA54CBC12F7
-	for <lists+linux-rtc@lfdr.de>; Tue, 07 Oct 2025 13:21:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2663BC12A9
+	for <lists+linux-rtc@lfdr.de>; Tue, 07 Oct 2025 13:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEBAF3E1D18
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Oct 2025 11:19:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9175619A04B4
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Oct 2025 11:20:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E0F2DF131;
-	Tue,  7 Oct 2025 11:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5520E2DC330;
+	Tue,  7 Oct 2025 11:18:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYlzwupD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pw1ycah2"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4DD2DC78F
-	for <linux-rtc@vger.kernel.org>; Tue,  7 Oct 2025 11:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AF02D9EDD
+	for <linux-rtc@vger.kernel.org>; Tue,  7 Oct 2025 11:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759835918; cv=none; b=n2TQ8v18ouTIRd6khxUXoBdunt/i+3FD1HUo87+07vNmkkyi+G1ws1m6bnTpTs5joi6FDKwW4CrqwSIrYo/DF9APqg6BvTlZ5zMOueXdyBSz2rR38dw3ktMp5tpI1wgxk39i31OHG2w8SJ5fQb4OjryIQtXx4QUqdHPcHdK0BDo=
+	t=1759835924; cv=none; b=NZN3SqEFqsZnR2zily1Yq3ukti5UKNPIu0H3VEUT/jhcAsI18Z0mOlwaeZd+xx00K0fbhY7PA4cbOIXRxjEmnROOOysZxLVjMRtzQ/eaPSEhBamVlPicDL3EuOlHO0VwKTeXZaGDlTAIIlAPbPZVoPNbcebzF3KjYIZ8PXwMIiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759835918; c=relaxed/simple;
-	bh=aj4aVwNnkYZP/VgOnJhsAwtvL4XTAa/u4ZaKgBAEh3Q=;
+	s=arc-20240116; t=1759835924; c=relaxed/simple;
+	bh=l1N1qUSs7aNQur915ZEPIIc8ybGkzYfyM4nn88B18eA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ayDFUhaxc0muBunDeVE22ZoVoYsX73rJyeQxJ2OygYaiLL+MGWqoZfOsaRGWvE7nQXmKcE3WUYRnQCawwE1yKhzYe+WKImw2LuWCjXtRXkePlVRU+QlLdyeRXOHscAjSJyKW3SacdaVl2oo+JKYfVe+jZscE2104/G/w6SaCCXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYlzwupD; arc=none smtp.client-ip=209.85.215.170
+	 In-Reply-To:To:Cc; b=fhnQus3vE5E9dS+ajoyfkHbGLYMJiNs6Kf5ORp6bYpt8hECWWTi+k6mjgd1XoDxnwJIHoTpA0l0f78oDkO5AUIfGutR3ZBtP6v1s1rBdXiOGaQYD7fJY37VIn00PkVFp5PgJxBWPoQbrJ84M1k50+BwNLdBXMwccAw9oaaIsqYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pw1ycah2; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b553412a19bso4390603a12.1
-        for <linux-rtc@vger.kernel.org>; Tue, 07 Oct 2025 04:18:35 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b6093f8f71dso4024767a12.3
+        for <linux-rtc@vger.kernel.org>; Tue, 07 Oct 2025 04:18:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759835914; x=1760440714; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759835922; x=1760440722; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=U5nftmpeMNxILQOhfvmkuo3ny/kYcoPK9w/ov0DMU2I=;
-        b=NYlzwupDGThZRHDRSJ0IzlInDTU1jpda9LFB651lWtvVtPAmrq9fftwnNnj+eRDorM
-         yZwrHpLjr8nVBFhbVu1UVS5auim9ijYrlm4hcdA78VZoNgKhI4uIlFB0phQVp58Jj5C2
-         zgt9sCwdwgvkKKvG+7yUChG1Ly4xMkVkma0XaicEwAk+otAZOmJ8idSRDPlmVLjHQCf/
-         Sj1tWu7xB0vQFPCOeLQWHVKazaL1Tz2+HoAQvLoyRe4wpYwZy7EfWq4mwIunnc9KD5QU
-         eihl6r8dH+xJqOGRbNpLgU9lX460sC79OTbF8dT+T5Z0geQgPwYwRybBpA0DZ5tEF+fJ
-         cyJA==
+        bh=5xSjj3Iwg14xHIfiMziIXjcapcCofRPyKMdiFHmwd9k=;
+        b=Pw1ycah20Hc6dyibu10Bo6Df40KVcFkHwtBDcZkDyV7NB3mKcBt5WgEpPfn6BP1u8I
+         Ae1O7D1Bpo2el/z4y4rOygtWBu3E5NJFohoYOJjdLUlGK1mUOHz25AIJk3zIVWBxydLA
+         1xJB/Dw2j0iRIvWrGGMAwJ2thTJP8/N2MF5J/G2KV30eQXcDqRXUXLntZ4wsTK7g2nzw
+         t9VrElW8Ie9HfHNYsJE8kmI+b3sLSdIDXgE8k0tTKM0L7J/l8SKwJr/IzmyqqSDv85ss
+         lC4IDoIxMm1PRy9sd+JrOtNLsttEbe2ze7kJyL9e71z2AjvA/23TncWIbTrWLOTKOj/Y
+         WRMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759835914; x=1760440714;
+        d=1e100.net; s=20230601; t=1759835922; x=1760440722;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U5nftmpeMNxILQOhfvmkuo3ny/kYcoPK9w/ov0DMU2I=;
-        b=D3GmpUyQVzM8yFfXVS/MzqHO+yDZDuFVdF1sQhB+qHihHapX852OxZUDNsonG58SSR
-         1uWHGdPZ847vd582qylDpMq/kNHQtC4PVPa14KCBxGkptJEEqqiJUSSDrN83hTEcdT2f
-         CAFtXPZOLcU5R8BtAS4lIY1bLwrZ0UU5JaTRliedTVhBw1dBqFp81NpRki624F/nhUYm
-         v8UvBWDIV68So57BVTdy4FGet84J6xCM4p93389ITN2AqimATO8CPC/o9DZ5q+l00A9/
-         B+DG0dQP9sWT6Cgfd0vj7qCxqIsD2dFh4UiWTcJk0QtOFhazoncc59OfJBcw/w2s+sgI
-         y5jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGXzol+mbeDTHuvZj3hm19QswYi4kLqPEk7xX1I4vfYv3iXuw0tj4Rvqz/qxcq9WgI8dEw6duv/JY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFk4EjyOSQs9li3Y2JR+0tsNKFRgzohKH7QiRtyA68YxlA4olB
-	Gvxi+/Vw8jCRt119pJ+aQ6Wltt+sLsUr5Ann28Ax8qFOZwVXoJphSGOt
-X-Gm-Gg: ASbGnct4Tn6B8e+MunsFMYIAdFn/n4k/XULS+udhZ0MhKjqomXSaYuT/Bdw43yItXOJ
-	Xd0oE1tMmMLhK0F4/17yIxQYTSExvk6Mgp3gMJljBizk3RCflGyBLLuevayHv+xU5UoTD1/qTdQ
-	UvHyDBvyqr4FyT6JyLdAnh0vr5j+dsmB7ax37T3Ay6amtg1GCCxChpRAfq7uLIimj1NIn4CmLJ+
-	PavUgQNez6CbTeroTB6HEoe/9fbo8EcOPVgtO0XMhR2w9Fxjr3TSLWchUu8ZaXqlZWqDubeoSn/
-	pkJB//jI3eZJKxaaNkyf6IGZ14WYubQqy5oMHxi9Rxd2QXznbFbOAxUtT/gxff5ej9iUOC46AP5
-	RCU07SZtW+WGs4F3aVXH6qtO3m1Lm3axmGfXZD7N+WBoN2evoKj7vfGUH/vPjQ4+c5poiGxgnkh
-	6vf+hUcKWTbNZNy6vA+FY83ptXJ6pCu8wgFJdwRdEb2gxYfkf5wrEr
-X-Google-Smtp-Source: AGHT+IHuJHgjXCw9R80/D5o7z6w5Ge8vVPTT5vKpu+uAH8PzOw9lXkX16l4ogNuFgD8KvHrVNOpLCw==
-X-Received: by 2002:a17:902:f60b:b0:269:ed31:6c50 with SMTP id d9443c01a7336-28e9a54efd7mr198564635ad.10.1759835914522;
-        Tue, 07 Oct 2025 04:18:34 -0700 (PDT)
+        bh=5xSjj3Iwg14xHIfiMziIXjcapcCofRPyKMdiFHmwd9k=;
+        b=hR8N6O8TAZ5QuvKngPaYFD4jvkgnzaItOFytZo+R6vxh7w6TN3XTR1+MCAcrcVklZm
+         +E5+E9J9mhtjYkYXwVKdp5OLI8wDEGbv6tG40c+koHLk+8ilUn2JUErmnZ+RA4ZKx0l9
+         MiqzfA88o7nkPeteEVjst+vBHFAcDET0Wt2MK0drPkQnjePkPs/m/oXwDY2VLuXa+G5v
+         yw9USU9K564hVuzCi+0YayWTzN825PkdfUnUEAKG8B6n8GS7A4AQB3v0bgo74TJsgyGh
+         QXiEJjAQJ9u4X4VkTaUphqN/in1jMHX73IFhkrWVsJU/fmwmzadErZhl3QlBFQdUnkRw
+         T/qA==
+X-Forwarded-Encrypted: i=1; AJvYcCUz2FCRA48FrWKQ9SsjajsDErIKznLORrtdGaTxI2EGwWsP4xZc8I+6mzXF/Zr3Y0Rf8WwM4hWIz3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtCBGf7QGbVRcPgGr3/m9o9LGuQQU2M1mXWJxNd7AXtRE7yDdc
+	UnF9cuUQhhRxLUNsQvzKJwgv6/qhOFFzRDiyq/pRm0+uTZesZfyfKlfu
+X-Gm-Gg: ASbGncuwqidpepyGP0/F2yzbD4xVH+v4hKtmDOzHTmFD+SI6XHcg4M5CrrPxFhJVLmG
+	WcKdzQLXye6NMa5cAW16UHkNmrqX2/3y3zM7k/TQT2vVgWuhSNdfR+7qAUBaydnGZ9/nJRQE33d
+	5QDaDk6KZL/UNmKK8QSEkDBhtON95fRD3C4Lb+uhavJj5cQ8HlK7KR/OTZ9/FN73fFzaHuWdYgs
+	pP22oYSoJSsJJTOCQC+b4+U98glEal8pvemLD6AWIBw8s5NOTjN6trBmprTxGZrdOHc31FOtZ0i
+	Qk1dD9xQ2FL+Ciaa0c/r43Bf5sZCwStOT6Imn5ee1yBBABlcB1jlqNH75JhpM9gwysVgKsMSZ1f
+	wV2JcQfA6aQU+q6UrV9mm/B7x4qO6vcxQ0pw1MrHMjE+Wa1hXAfftNizfno8AKTkfvFMW/vm+hQ
+	Y4yj4ZE4XXKr7lHwVCuvcJfMWr3hU1qJXriNGvQ/dgLQ==
+X-Google-Smtp-Source: AGHT+IHQhWG4at6c4CSv92k3Kc2ZO7qLCe+WK+3iGElAPZoi7Z/HUsioUEndvALrS7T+2HHEi3fTMQ==
+X-Received: by 2002:a17:903:2409:b0:27e:e96a:4c3 with SMTP id d9443c01a7336-28e9a54423bmr206134295ad.14.1759835921894;
+        Tue, 07 Oct 2025 04:18:41 -0700 (PDT)
 Received: from [192.168.2.3] (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1d31bdsm162509045ad.94.2025.10.07.04.18.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1d31bdsm162509045ad.94.2025.10.07.04.18.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Oct 2025 04:18:34 -0700 (PDT)
+        Tue, 07 Oct 2025 04:18:41 -0700 (PDT)
 From: James Calligeros <jcalligeros99@gmail.com>
-Date: Tue, 07 Oct 2025 21:16:51 +1000
-Subject: [PATCH v3 10/13] arm64: dts: apple: t8103,t60xx,t8112: Add SMC RTC
- node
+Date: Tue, 07 Oct 2025 21:16:52 +1000
+Subject: [PATCH v3 11/13] arm64: dts: apple: t8103, t8112, t60xx: add hwmon
+ SMC subdevice
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251007-macsmc-subdevs-v3-10-d7d3bfd7ae02@gmail.com>
+Message-Id: <20251007-macsmc-subdevs-v3-11-d7d3bfd7ae02@gmail.com>
 References: <20251007-macsmc-subdevs-v3-0-d7d3bfd7ae02@gmail.com>
 In-Reply-To: <20251007-macsmc-subdevs-v3-0-d7d3bfd7ae02@gmail.com>
 To: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
@@ -104,99 +104,89 @@ Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
  linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org, 
  linux-input@vger.kernel.org, linux-doc@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2689;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2496;
  i=jcalligeros99@gmail.com; h=from:subject:message-id;
- bh=2GQnZlbwDgkFgLSJTTlkgGVtMUC2q8Y46wlmJNb88ZA=;
- b=owGbwMvMwCV2xczoYuD3ygTG02pJDBlPvm3z/bogMmDmvGmNrrUnyxbdOaX5PtCls+l3jMPhz
- 6cmtr+Z3lHKwiDGxSArpsiyoUnIY7YR281+kcq9MHNYmUCGMHBxCsBEym8zMsxcaGsZebPXWOLh
- Jk2m5un3M9certhx625ak2LGK/uJp9UYGbZ/4zg+d7f2xsAVRRMqPC6XTBVXf9Vx57Yo4/bqpe0
- 89gwA
+ bh=l1N1qUSs7aNQur915ZEPIIc8ybGkzYfyM4nn88B18eA=;
+ b=owGbwMvMwCV2xczoYuD3ygTG02pJDBlPvm1b4qq69Uht7n7+Jkm98m/LRPVem4gxb5O6ar954
+ s7df7ZydpSyMIhxMciKKbJsaBLymG3EdrNfpHIvzBxWJpAhDFycAjCRqZ8Y/mmfN0l8cGTT+/aj
+ HGrv5p1WYI5+xXPz5b3Eb+qv5wRNCpvLyNB8WqqikeUrk3D9m6SOk5mMvzVf6f3cW964bnHO3/P
+ 2XiwA
 X-Developer-Key: i=jcalligeros99@gmail.com; a=openpgp;
  fpr=B08212489B3206D98F1479BDD43632D151F77960
 
-From: Sven Peter <sven@kernel.org>
+Apple's System Management Controller integrates numerous sensors
+that can be exposed via hwmon. Add the subdevice and compatible
+in preparation for the sensors that need to be described
+for each device.
 
-The System Manager Controller of all M1/M2 SoCs supports the RTC
-sub-device.
-
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Signed-off-by: Sven Peter <sven@kernel.org>
 Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 ---
- .../arm64/boot/dts/apple/t600x-die0.dtsi | 6 ++++++
- .../arm64/boot/dts/apple/t602x-die0.dtsi | 6 ++++++
- arch/arm64/boot/dts/apple/t8103.dtsi     | 6 ++++++
- arch/arm64/boot/dts/apple/t8112.dtsi     | 6 ++++++
- 4 files changed, 24 insertions(+)
+ .../arm64/boot/dts/apple/t600x-die0.dtsi | 4 ++++
+ .../arm64/boot/dts/apple/t602x-die0.dtsi | 4 ++++
+ arch/arm64/boot/dts/apple/t8103.dtsi     | 4 ++++
+ arch/arm64/boot/dts/apple/t8112.dtsi     | 4 ++++
+ 4 files changed, 16 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-index 3603b276a2ab..f715b19efd16 100644
+index f715b19efd16..e6647c1a9173 100644
 --- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
 +++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
-@@ -44,6 +44,12 @@ smc_reboot: reboot {
- 			nvmem-cell-names = "shutdown_flag", "boot_stage",
- 				"boot_error_count", "panic_count";
+@@ -37,6 +37,10 @@ smc_gpio: gpio {
+ 			#gpio-cells = <2>;
  		};
-+
-+		rtc {
-+			compatible = "apple,smc-rtc";
-+			nvmem-cells = <&rtc_offset>;
-+			nvmem-cell-names = "rtc_offset";
-+		};
- 	};
  
- 	smc_mbox: mbox@290408000 {
++		smc_hwmon: hwmon {
++			compatible = "apple,smc-hwmon";
++		};
++
+ 		smc_reboot: reboot {
+ 			compatible = "apple,smc-reboot";
+ 			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
 diff --git a/arch/arm64/boot/dts/apple/t602x-die0.dtsi b/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-index 2e7d2bf08ddc..8622ddea7b44 100644
+index 8622ddea7b44..680c103c1c0f 100644
 --- a/arch/arm64/boot/dts/apple/t602x-die0.dtsi
 +++ b/arch/arm64/boot/dts/apple/t602x-die0.dtsi
-@@ -121,6 +121,12 @@ smc_reboot: reboot {
- 			nvmem-cell-names = "shutdown_flag", "boot_stage",
- 				"boot_error_count", "panic_count";
+@@ -114,6 +114,10 @@ smc_gpio: gpio {
+ 			#gpio-cells = <2>;
  		};
-+
-+		rtc {
-+			compatible = "apple,smc-rtc";
-+			nvmem-cells = <&rtc_offset>;
-+			nvmem-cell-names = "rtc_offset";
-+		};
- 	};
  
- 	pinctrl_smc: pinctrl@2a2820000 {
++		smc_hwmon: hwmon {
++			compatible = "apple,smc-hwmon";
++		};
++
+ 		smc_reboot: reboot {
+ 			compatible = "apple,smc-reboot";
+ 			nvmem-cells = <&shutdown_flag>, <&boot_stage>,
 diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 8b7b27887968..59f2678639cf 100644
+index 59f2678639cf..78eb931d6fb7 100644
 --- a/arch/arm64/boot/dts/apple/t8103.dtsi
 +++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -916,6 +916,12 @@ smc_reboot: reboot {
- 				nvmem-cell-names = "shutdown_flag", "boot_stage",
- 					"boot_error_count", "panic_count";
+@@ -909,6 +909,10 @@ smc_gpio: gpio {
+ 				#gpio-cells = <2>;
  			};
-+
-+			rtc {
-+				compatible = "apple,smc-rtc";
-+				nvmem-cells = <&rtc_offset>;
-+				nvmem-cell-names = "rtc_offset";
-+			};
- 		};
  
- 		smc_mbox: mbox@23e408000 {
++			smc_hwmon: hwmon {
++				compatible = "apple,smc-hwmon";
++			};
++
+ 			smc_reboot: reboot {
+ 				compatible = "apple,smc-reboot";
+ 				nvmem-cells = <&shutdown_flag>, <&boot_stage>,
 diff --git a/arch/arm64/boot/dts/apple/t8112.dtsi b/arch/arm64/boot/dts/apple/t8112.dtsi
-index 3f79878b25af..6bc3f58b06f7 100644
+index 6bc3f58b06f7..5a8fa6daa00a 100644
 --- a/arch/arm64/boot/dts/apple/t8112.dtsi
 +++ b/arch/arm64/boot/dts/apple/t8112.dtsi
-@@ -919,6 +919,12 @@ smc_reboot: reboot {
- 				nvmem-cell-names = "shutdown_flag", "boot_stage",
- 					"boot_error_count", "panic_count";
+@@ -912,6 +912,10 @@ smc_gpio: gpio {
+ 				#gpio-cells = <2>;
  			};
-+
-+			rtc {
-+				compatible = "apple,smc-rtc";
-+				nvmem-cells = <&rtc_offset>;
-+				nvmem-cell-names = "rtc_offset";
-+			};
- 		};
  
- 		smc_mbox: mbox@23e408000 {
++			smc_hwmon: hwmon {
++				compatible = "apple,smc-hwmon";
++			};
++
+ 			smc_reboot: reboot {
+ 				compatible = "apple,smc-reboot";
+ 				nvmem-cells = <&shutdown_flag>, <&boot_stage>,
 
 -- 
 2.51.0
