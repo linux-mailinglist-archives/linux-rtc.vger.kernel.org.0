@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-5081-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5082-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D5D3BCD09C
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 15:08:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D04AFBCD0EA
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 15:12:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 963794E0721
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 13:08:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A0FD3A4463
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 13:12:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D499F2F0C5B;
-	Fri, 10 Oct 2025 13:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5684C2F0C7D;
+	Fri, 10 Oct 2025 13:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JjyA8ch7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOahLxCd"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01EE28750B;
-	Fri, 10 Oct 2025 13:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2023053A7;
+	Fri, 10 Oct 2025 13:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760101729; cv=none; b=jL4PeMqyZ2zY11D5OPF1+qdiqP8ZrZgHYdl2ogOU/C42M9JfYtUtMImrqq4J/cQj0eqsPFORys75IExA+3pEWYDDe4RZEy0abkU+t63m/6gYf/RoFEEmrkI/Y9PmrS3BIGsJ2eqZ7ECVlU/OSJOBQJRF45Gezbysp8AwGyE6ZWk=
+	t=1760101945; cv=none; b=CcUe+O7r5KUaSYMj7I/4Nv9J7EXShZkgMhETATu6OaRnLylMf66Wra9aV2P1zMVbzTikewTD/T1V6gR5WrDu+cah2eZQaLOzjqzzrSfa8HQlco4cWYPV1oJQSaGfdY+cA5gq+FU+dq1FhOjTu8VrNam71M+BI4gx0F8h2yChiQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760101729; c=relaxed/simple;
-	bh=OoIkaBUgOnFRJZ4ItOqfUhvgmKocuFDgn+1K3Q/R33w=;
+	s=arc-20240116; t=1760101945; c=relaxed/simple;
+	bh=pruHw9/kUby5mwqKpt9tdx97guU3tM0R6qKJsdo0Y8w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fUvCEa0OhTAiy/cYDMAzdQwwMWjB0WgxCAWqjlE/tkSD0ZskJHPXCoFwCvyeghHrfcnWLi90zx9Flp+5iD794yoAlgvKatjQGNElgCEtPooDSobmKZ0LsrgGXOqPjgklRrIbmgzJKa1ETYHJW4VlnbOncsunHXnu8cIQT33Ly18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JjyA8ch7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB92C4CEF1;
-	Fri, 10 Oct 2025 13:08:41 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=P3FkOLLOD3fUjTRl2W0BYZZA1lMAWBDEu3xBruxyyhsbhMDokUiMauUxS2BZx5blWDL5F3K0h7waIhPBglLjcKaTiXcw9OtErfe8O1xjSBpYoCN2+jOAPSRovG9StzBd0uQSWOdAMp2sv0ZkpABSX/vXKYNcLMN3bjXMkcLM1NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOahLxCd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7071C4CEF8;
+	Fri, 10 Oct 2025 13:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760101728;
-	bh=OoIkaBUgOnFRJZ4ItOqfUhvgmKocuFDgn+1K3Q/R33w=;
+	s=k20201202; t=1760101944;
+	bh=pruHw9/kUby5mwqKpt9tdx97guU3tM0R6qKJsdo0Y8w=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JjyA8ch7DyV023aysHS9qAISgleaN45E04W2rBGHljkkzw95sXspdJHO084iGM5iG
-	 wbXQ6FlOhcwWtAH/zvgvEp0jgwwAkD+qq8+nUPVlWqc6lTRoOB6XNBpXtkrUcRtJiV
-	 V9hYy+njjUoddFybr3B3hZo9EcxO4P4aqDu6qvmiG2gF/umvANNuVFtVqyT1kDQvDZ
-	 Bx4KFMwmn47nS719G3okBYgsqnV8NZatTPfrtJ7A5k83zHxCKIeHB1y5jX/fWap4ei
-	 oNFYK8KTcTahhCxQXEemgoQCPsmNcdXNYiB6RU4JgYKuQOyhfJWZDGd+1Se9tdnHEK
-	 KMRNBWaTnKwhQ==
-Message-ID: <ec5d3c86-d3f3-4a13-a85e-3980e3cff0d0@kernel.org>
-Date: Fri, 10 Oct 2025 15:08:39 +0200
+	b=KOahLxCdmHOcxXpftHn+FT27Iz5bHFaVmf00/LRNoBhEzszgFuwmtpjEEKWhBsh0c
+	 rlKk8trl/mk2Pu6HRRB0EJmvW5TYanbhPS2r4l8KUjCVpVY3S5q5ICLu2oaTQAR+64
+	 TRfarE4myEdwRifRvZAS1rWloUcbWZKXUXNoZf5fsNJ44PRrDYgiiykuvr0tC9/f8M
+	 QVOgcisXb66ck8uZjo5BaflYrF/aLSwkSggbjzcgC1w0xdJoYlTwq4O2vHEnAyGgcx
+	 b7Mi+ZrNB+6LY6CexiWZUw4m4CcXYaOBI+esDBK0TqUyerWyGe4gD6ZDkGkk25KrHY
+	 enTzHEVWSFogw==
+Message-ID: <b3c40a8c-fe35-45a3-9702-2d9b1c555d4e@kernel.org>
+Date: Fri, 10 Oct 2025 15:12:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 7/7] regulator: s2mps11: add support for S2MPS16
- regulators
+Subject: Re: [PATCH v1 4/7] mfd: sec: add support for s2mps16 pmic
 To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
  =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Sylwester Nawrocki <s.nawrocki@samsung.com>,
@@ -65,7 +64,7 @@ Cc: linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250914124227.2619925-1-ivo.ivanov.ivanov1@gmail.com>
- <20250914124227.2619925-8-ivo.ivanov.ivanov1@gmail.com>
+ <20250914124227.2619925-5-ivo.ivanov.ivanov1@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,19 +110,28 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250914124227.2619925-8-ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <20250914124227.2619925-5-ivo.ivanov.ivanov1@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 14/09/2025 14:42, Ivaylo Ivanov wrote:
-> S2MPS16 is a PMIC, manufactured by Samsung, particularly used in
-> exynos8890 based devices, featuring 38 LDOs, of which 11 are used for
-> CP, and 11 BUCKs, of which 1 is used for CP. Add driver support for
-> controlling all BUCKs and LDOs, except the ones used for CP, as they are
-> not documented enough and the vendor kernel doesn't handle them anyways.
-> 
-> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+>  enum s2mpu02_irq {
+>  	S2MPU02_IRQ_PWRONF,
+>  	S2MPU02_IRQ_PWRONR,
+> diff --git a/include/linux/mfd/samsung/s2mps16.h b/include/linux/mfd/samsung/s2mps16.h
+> new file mode 100644
+> index 000000000..d4394b054
+> --- /dev/null
+> +++ b/include/linux/mfd/samsung/s2mps16.h
+> @@ -0,0 +1,195 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
 
+
+Does the license 2.0+ (so 3.0 and so one) come from the downstream you
+copied it? Or from other upstream? If not, thus it is your invention,
+please keep only 2.0.
+
+Anyway:
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
