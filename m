@@ -1,48 +1,48 @@
-Return-Path: <linux-rtc+bounces-5079-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5080-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD506BCD04D
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 15:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A585FBCD083
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 15:08:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA5B11A663DB
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 13:05:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0D5D1891D2E
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Oct 2025 13:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E78286430;
-	Fri, 10 Oct 2025 13:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651F02EFDBE;
+	Fri, 10 Oct 2025 13:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRCiNVm/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOMWUJBe"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0C91C5F27;
-	Fri, 10 Oct 2025 13:05:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF1128750B;
+	Fri, 10 Oct 2025 13:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760101531; cv=none; b=QteLo74i0pLD/VzFWRSGylKXknxdL9HD/SHZsSvUkXPpUcaxpqJHvlChQ1UUmCv6zVepRg/mJehHh4oDhmvCHSF+GhwOfKizyxQKwAQDFNJVYYd1GS3IoL+hdcITPzOQnObNVIV4I108UrvFM2xqLD4RHBce3N0SmWt1O3BWPDE=
+	t=1760101684; cv=none; b=H0+fNwb+Kp7k+w8lhD0zYlLpF1KMLuctApJiJKaKd33M/xVC2xL5t9WLZTqTDC8ZWfiqRIFsT9SMnpvdEAUz2icjc/MLjF1sSb6esbL/S5bfrAy/UkanYoNTvV3TzZYXckCfwvupFhOtfbkhJiSgIjzx1Z5WQIIhhJ4DNsYK0wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760101531; c=relaxed/simple;
-	bh=eI0lVn2zqvhKeyBzYrvyQURzCJ7dE2FL0otjWNA8eJE=;
+	s=arc-20240116; t=1760101684; c=relaxed/simple;
+	bh=QEpD/1fTXdcO0XCAHqD2L+0QVbfYRGmr7MZV35gxtbQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p5nZGE2lfCwds1eonaKarlPCy4a69SgTcKrv/7Uq5BUisQ5SrGIXqxB6/gh+07Qa4UHGstW/cxXTIOpEVYDi0X/hdtnpHHwrMz+w1fBlo7PTLObFrvtCGpPReVFXh79zxwzgRRde7s7F/WrJOl3hTaQmDqWRGikayDq/Jx6l5Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRCiNVm/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E597C4CEF1;
-	Fri, 10 Oct 2025 13:05:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=hXeR4sDeiWRw7JEdZjS0QD6lpaqbl3SH9HBELWSw0RxTyv/fxkvm+8NoSAGWYVLQRB1tw2x5WSUHHeYqJJgme4N0mVlmYveGCQvYrg2SMTcs7u904RGxCrbdNE1Z9/yOgoDSDeUmH67rzYZ6V7ObyZX/QhWpdYXRlXUhwUMw1fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOMWUJBe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57394C4CEF8;
+	Fri, 10 Oct 2025 13:07:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760101530;
-	bh=eI0lVn2zqvhKeyBzYrvyQURzCJ7dE2FL0otjWNA8eJE=;
+	s=k20201202; t=1760101683;
+	bh=QEpD/1fTXdcO0XCAHqD2L+0QVbfYRGmr7MZV35gxtbQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fRCiNVm/3dF34ZzrUE+fvON/MgRL8ikYDRgTtPU9/UvueEfUu/zNhUZj35un78yc/
-	 F3og+IbYjn/0N2J/RQuvrTz85nnspTqKTzDoAcmY+pjHa61/1dGdL5IMheP+OO0YHx
-	 hvIl+2RS7kNnEY9Cv1rJ5/q7i97SsCaUvQROybd1pOc0+ImrZnVH1msl53wKXMNmnX
-	 JvjxQilFygro7QZcFTl9Ot+gsLtfQgLdISBfcTYTtru9F4We+yyoKQqfiCoDCvH6Th
-	 /k/L7Unq3lUY2YF6orKHwv9y9jkpbXrn8RLyT5GNIF8WglJ7AqRytp2w8IxMNWPF7n
-	 M4gDnXsmPHy8w==
-Message-ID: <d01ad1f7-dc46-4b9d-9823-9d69b1d2be54@kernel.org>
-Date: Fri, 10 Oct 2025 15:05:19 +0200
+	b=kOMWUJBeJrLOl1vE3ZHefXkBS5KETQu4xSz4uLc4dLfaf4bhI5sb5D+ZPBva8p8Wb
+	 xoj8fJdTwmTsL+uJnBIc9FWWByQ4TLxuoti3A3u7p+cvbtNNoXB+vNFMxCU7QmrxU3
+	 zdvrVf1bq5bskhIwUhuTEt6a2BKsnn2wf75DyU78t/Ab55wvX8diNgnwfr/23gaLev
+	 b5GJ72F4JcOaFoIye1b1igf5FEdT9hvB6qlBwszvI6P/9K8dSEleg8aNpAGAVwtbsx
+	 ddBepVQpCvSrbtbgZ++uWcsyGJZSkTEY8GqN8ShY6NizX+lyd43xbastdMook7lw60
+	 oESFd57YjfRpQ==
+Message-ID: <42195e42-5b5f-4ab0-9651-cb77ef539cca@kernel.org>
+Date: Fri, 10 Oct 2025 15:07:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 5/7] clk: s2mps11: add the support for S2MPS16 PMIC
- clock
+Subject: Re: [PATCH v1 6/7] rtc: s5m: add support for S2MPS16 RTC
 To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
  =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
  Sylwester Nawrocki <s.nawrocki@samsung.com>,
@@ -65,7 +64,7 @@ Cc: linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250914124227.2619925-1-ivo.ivanov.ivanov1@gmail.com>
- <20250914124227.2619925-6-ivo.ivanov.ivanov1@gmail.com>
+ <20250914124227.2619925-7-ivo.ivanov.ivanov1@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,24 +110,62 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250914124227.2619925-6-ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <20250914124227.2619925-7-ivo.ivanov.ivanov1@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 14/09/2025 14:42, Ivaylo Ivanov wrote:
-> Add the support for S2MPS16 PMIC clock, which is functionally the same
-> as the currently supported ones, with the exception of a different
-> register.
+> Add support for Samsung's S2MPS16 PMIC RTC, which has pretty much
+> identical functionality to the existing S2MPS15 support, with the
+> difference being the ST2 register.
 > 
 > Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
 > ---
->  drivers/clk/clk-s2mps11.c | 8 ++++++++
+>  drivers/rtc/rtc-s5m.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
+> index a7220b4d0..910248731 100644
+> --- a/drivers/rtc/rtc-s5m.c
+> +++ b/drivers/rtc/rtc-s5m.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/mfd/samsung/irq.h>
+>  #include <linux/mfd/samsung/rtc.h>
+>  #include <linux/mfd/samsung/s2mps14.h>
+> +#include <linux/mfd/samsung/s2mps16.h>
+>  
+>  /*
+>   * Maximum number of retries for checking changes in UDR field
+> @@ -254,6 +255,11 @@ static int s5m_check_pending_alarm_interrupt(struct s5m_rtc_info *info,
+>  		ret = regmap_read(info->regmap, S5M_RTC_STATUS, &val);
+>  		val &= S5M_ALARM0_STATUS;
+>  		break;
+> +	case S2MPS16X:
+> +		ret = regmap_read(info->s5m87xx->regmap_pmic, S2MPS16_REG_ST2,
+> +				  &val);
+> +		val &= S2MPS_ALARM0_STATUS;
+> +		break;
+>  	case S2MPG10:
+>  	case S2MPS15X:
+>  	case S2MPS14X:
+> @@ -303,6 +309,7 @@ static int s5m8767_rtc_set_alarm_reg(struct s5m_rtc_info *info)
+>  		udr_mask |= S5M_RTC_TIME_EN_MASK;
+>  		break;
+>  	case S2MPG10:
+> +	case S2MPS16X:
+>  	case S2MPS15X:
+>  	case S2MPS14X:
+>  	case S2MPS13X:
 
-This depends on mfd patch. Many maintainers would appreciate if you
-mention it also in the patch changelog (---), not only cover letter.
+Interesting, so we have here reversed alphabetical order within
+S2MPSXXX... that is probably my achievement. Me minus 10 years would not
+pass my current review, for sure.
 
+
+Thanks for the patches, nice work.
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
