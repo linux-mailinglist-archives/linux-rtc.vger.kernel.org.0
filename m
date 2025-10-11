@@ -1,193 +1,96 @@
-Return-Path: <linux-rtc+bounces-5086-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5087-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 893BDBCF835
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Oct 2025 18:20:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D19A9BCF83E
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Oct 2025 18:21:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0D4D5344324
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Oct 2025 16:20:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A5743A88A5
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Oct 2025 16:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18E927A46A;
-	Sat, 11 Oct 2025 16:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B1927C154;
+	Sat, 11 Oct 2025 16:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A6l6cloo"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ktu1mU4O"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927F61DED63
-	for <linux-rtc@vger.kernel.org>; Sat, 11 Oct 2025 16:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C422749F2
+	for <linux-rtc@vger.kernel.org>; Sat, 11 Oct 2025 16:21:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760199620; cv=none; b=o0aVY1MAbo11YrI2osIv+CmsA4ZMYA9Zj1e/RvLYJwm8atO+laZ26JgJRMW0JJHqgTzRMxazwr8nxl2aUTd9eYt8+Zqs2ezDaTbixwtpy0yjtxkl1BdCY2mYU9CU4qiVH5H3UOj4gL57uWFsDm3nfWfCD95ogvv+IuhGRenUGBo=
+	t=1760199689; cv=none; b=f5DDkHoVYOXHOYZOZ7lebz69ZcTSQ+GOyvQOTKzaZsezTFYEDxTyTl0mIeiXIl8NcRPqGtdjAMPMwhNdFZsW7yIctE+kAZlBnHu3Y4Pw36C2HhGJgUgr0WY+dqJ87C07Pkl6m1G9tw+4WwR3Iw3I0jXBmob+xcd552e5NDaGBnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760199620; c=relaxed/simple;
-	bh=m5UaqEZSlsrbFSHb4wV5OkBFZgiJZer1+Gi5aKfEKgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TyuNS0PxV4MVE3Kpb0r0ipPsug0PVgtEgs62/J48yfCsa+Kt4A686wY2oLrR76AxN0LSSgwdZiKMqx/+XJshqEXq6YGNuZBm1tHGfNhydNTFKYkERrxmp8bZbZDo+CwVS3TY8EQlnFW1jiV1hEsF8gppWIIZzJH3ZZ+84B0RyNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A6l6cloo; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1760199689; c=relaxed/simple;
+	bh=LsPT3j03FjH0WuLyWIaQ9v8q5iHAbDNGXpbhOXoX7T8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vx/flDdChSv3N+DXUgppvuDOzWkoIJlNBTwgH7gPF3VZGIwDQ4o/SKxXwDYnx5Cx73WbYykycZrcIW3+8mVFO+48rUzPE81l/6ZoIUq7NnKzuaMhJjowqK21dzd4HNujrQoEI6kU1weZZQkX/hX+dOIAA+gger9X6zufw+7AhPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ktu1mU4O; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 662A64E40FFB;
-	Sat, 11 Oct 2025 16:20:14 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id A5E454E40FFB
+	for <linux-rtc@vger.kernel.org>; Sat, 11 Oct 2025 16:21:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 25F4C606EC;
-	Sat, 11 Oct 2025 16:20:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 68A2B102F222F;
-	Sat, 11 Oct 2025 18:20:10 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 78A66606EC;
+	Sat, 11 Oct 2025 16:21:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E03CC102F222F;
+	Sat, 11 Oct 2025 18:21:22 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760199612; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=nubkwtTG7pjDKHkybyKQcu+6G/5ppcH3oFzBNuGVk6U=;
-	b=A6l6cloo8YWDvn6t3RlYSIWH6qAbNr150SPFzWAkuvsMGd0JaeEohF/EpFqj3JEpYSGS8r
-	rGm2WsxpvYm8gaAYXZ4JqfRoeUhWZZW1FjOVBEMkVDErvf0A8uWdH+ZYcdf5xNjsjECb4l
-	RALl8IZw2lKcPOpBeqFzt2RBqdTiYtXAr8nf/yQ5JMPEEsCpVqH5k+pkdzA29WiWme0zZ4
-	fPGg1QHKVPBk89n4Uq7yWLAdQf78Qy+jmldod3K8Wl8ZLvf4uy6ktH1Vlyhij5uT4i0aoU
-	AVns91lQsMpKo8/pYtR/5nc9ymcmUbZQ6rCpdp5tIwRrhna1eA63UrC+2UXxeA==
-Date: Sat, 11 Oct 2025 18:20:09 +0200
+	t=1760199685; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=XkjM0zby/ZXNMw5BOq1xgd5rRfLeQwnBiSFFspFSujs=;
+	b=ktu1mU4OxDqK649s6HW/JMOYQjzaLv6UMHBjGPZPgikmplOX/f5Vt179x0fhdsNjYGF+RM
+	ZTqACoug23PT0wbdb3gkq24EdD7fGsQ/KM+BmXWN3Ekp9Nu73/AZ96Fl95QhSdbmtScxbv
+	4x44SGiv//wY5nBVEY+IwvzbO8U40s2a8geO2wWk3XlDzgvbaHpjQvn+YHa/VfSCb7bCpj
+	UOVMCkqEqLAJYfHEPZkSvFJEDvZIMlTJVCdO3susBNxB2NB0wUaU4Kz4bMDB7iRJ9Adlny
+	HBSmhx1X/0XaQBxolOnIli94nydqvVp7ghYjSDKCCMu9/Tl+ylI/PH6RHoCTLw==
+Date: Sat, 11 Oct 2025 18:21:22 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC for 6.18
-Message-ID: <20251011162009a4f6040d@mail.local>
+To: Esben Haabendal <esben@geanix.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] rtc: Fix problems with missing UIE irqs
+Message-ID: <176019962507.48002.14768476957818198664.b4-ty@bootlin.com>
+References: <20250516-rtc-uie-irq-fixes-v2-0-3de8e530a39e@geanix.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250516-rtc-uie-irq-fixes-v2-0-3de8e530a39e@geanix.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello Linus,
+On Fri, 16 May 2025 09:23:34 +0200, Esben Haabendal wrote:
+> This fixes a couple of different problems, that can cause RTC (alarm)
+> irqs to be missing when generating UIE interrupts.
+> 
+> The first commit fixes a long-standing problem, which has been
+> documented in a comment since 2010. This fixes a race that could cause
+> UIE irqs to stop being generated, which was easily reproduced by
+> timing the use of RTC_UIE_ON ioctl with the seconds tick in the RTC.
+> 
+> [...]
 
-Here is the RTC subsystem pull request for 6.18. This cycle, we have a
-new RTC driver, for the SpacemiT P1. The optee driver gets alarm
-support. We also get a fix for a race condition that was fairly rare
-unless while stress testing the alarms.
+Applied, thanks!
 
-The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+[1/5] rtc: interface: Fix long-standing race when setting alarm
+      https://git.kernel.org/abelloni/c/795cda8338ea
+[2/5] rtc: isl12022: Fix initial enable_irq/disable_irq balance
+      https://git.kernel.org/abelloni/c/9ffe06b6ccd7
+[3/5] rtc: cpcap: Fix initial enable_irq/disable_irq balance
+      https://git.kernel.org/abelloni/c/e0762fd26ad6
+[4/5] rtc: tps6586x: Fix initial enable_irq/disable_irq balance
+      https://git.kernel.org/abelloni/c/1502fe0e97be
+[5/5] rtc: interface: Ensure alarm irq is enabled when UIE is enabled
+      https://git.kernel.org/abelloni/c/9db26d5855d0
 
-  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.18
-
-for you to fetch changes up to 9db26d5855d0374d4652487bfb5aacf40821c469:
-
-  rtc: interface: Ensure alarm irq is enabled when UIE is enabled (2025-10-09 23:34:52 +0200)
-
-----------------------------------------------------------------
-RTC for 6.18
-
-Subsystem:
- - Fix race when setting alarm
- - Ensure alarm irq is enabled when UIE is enabled
- - remove unneeded 'fast_io' parameter in regmap_config
-
-New driver:
- - SpacemiT P1 RTC
-
-Drivers:
- - efi: Remove wakeup functionality
- - optee: add alarms support
- - s3c: Drop support for S3C2410
- - zynqmp: Restore alarm functionality after kexec transition
-
-----------------------------------------------------------------
-Alex Elder (1):
-      rtc: spacemit: support the SpacemiT P1 RTC
-
-Alexandre Belloni (2):
-      rtc: optee: make optee_rtc_pm_ops static
-      rtc: Kconfig: move symbols to proper section
-
-Ard Biesheuvel (1):
-      rtc: efi: Remove wakeup functionality
-
-Bruno Thomsen (1):
-      rtc: pcf2127: fix watchdog interrupt mask on pcf2131
-
-Clément Le Goffic (3):
-      rtc: optee: fix memory leak on driver removal
-      rtc: optee: remove unnecessary memory operations
-      rtc: optee: add alarm related rtc ops to optee rtc driver
-
-Dan Carpenter (2):
-      rtc: optee: fix error code in probe()
-      rtc: optee: Fix error code in optee_rtc_read_alarm()
-
-Esben Haabendal (5):
-      rtc: interface: Fix long-standing race when setting alarm
-      rtc: isl12022: Fix initial enable_irq/disable_irq balance
-      rtc: cpcap: Fix initial enable_irq/disable_irq balance
-      rtc: tps6586x: Fix initial enable_irq/disable_irq balance
-      rtc: interface: Ensure alarm irq is enabled when UIE is enabled
-
-Frank Li (2):
-      dt-bindings: rtc: pcf85063: remove quartz-load-femtofarads restriction for nxp,pcf85063
-      dt-bindings: rtc: trivial-rtc: add dallas,m41t00
-
-Harini T (1):
-      rtc: zynqmp: Restore alarm functionality after kexec transition
-
-Josua Mayer (1):
-      rtc: pcf2127: clear minute/second interrupt
-
-Krzysztof Kozlowski (3):
-      rtc: s3c: Drop unused defines
-      rtc: s3c: Drop support for S3C2410
-      dt-bindings: rtc: s3c: Drop S3C2410
-
-Rob Herring (Arm) (4):
-      dt-bindings: rtc: Drop isil,isl12057.txt
-      dt-bindings: rtc: Fix Xicor X1205 vendor prefix
-      rtc: x1205: Fix Xicor X1205 vendor prefix
-      dt-bindings: rtc: Convert apm,xgene-rtc to DT schema
-
-Tóth János (1):
-      rtc: sd2405al: Add I2C address.
-
-Wolfram Sang (1):
-      rtc: remove unneeded 'fast_io' parameter in regmap_config
-
-Xianwei Zhao (1):
-      rtc: amlogic-a4: Optimize global variables
-
- .../devicetree/bindings/rtc/apm,xgene-rtc.yaml     |  45 ++
- .../devicetree/bindings/rtc/isil,isl12057.txt      |  74 ----
- .../devicetree/bindings/rtc/nxp,pcf85063.yaml      |  10 -
- Documentation/devicetree/bindings/rtc/s3c-rtc.yaml |  40 +-
- .../devicetree/bindings/rtc/trivial-rtc.yaml       |   6 +-
- .../devicetree/bindings/rtc/xgene-rtc.txt          |  28 --
- drivers/rtc/Kconfig                                |  38 +-
- drivers/rtc/Makefile                               |   1 +
- drivers/rtc/interface.c                            |  27 ++
- drivers/rtc/rtc-amlogic-a4.c                       |  14 +-
- drivers/rtc/rtc-cpcap.c                            |   1 +
- drivers/rtc/rtc-efi.c                              |  76 +---
- drivers/rtc/rtc-isl12022.c                         |   1 +
- drivers/rtc/rtc-meson.c                            |   1 -
- drivers/rtc/rtc-optee.c                            | 465 +++++++++++++++++++--
- drivers/rtc/rtc-pcf2127.c                          |  19 +-
- drivers/rtc/rtc-s3c.c                              |  49 +--
- drivers/rtc/rtc-s3c.h                              |  19 -
- drivers/rtc/rtc-sd2405al.c                         |   4 +-
- drivers/rtc/rtc-spacemit-p1.c                      | 167 ++++++++
- drivers/rtc/rtc-tps6586x.c                         |   1 +
- drivers/rtc/rtc-x1205.c                            |   2 +-
- drivers/rtc/rtc-zynqmp.c                           |  19 +
- 23 files changed, 753 insertions(+), 354 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/apm,xgene-rtc.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/isil,isl12057.txt
- delete mode 100644 Documentation/devicetree/bindings/rtc/xgene-rtc.txt
- create mode 100644 drivers/rtc/rtc-spacemit-p1.c
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
