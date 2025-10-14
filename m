@@ -1,79 +1,101 @@
-Return-Path: <linux-rtc+bounces-5088-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5089-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87586BCFB4D
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Oct 2025 21:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D8ABD6D20
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Oct 2025 02:02:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 93D6C4E9124
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Oct 2025 19:08:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D14824EC126
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Oct 2025 00:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B741E28466E;
-	Sat, 11 Oct 2025 19:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqOgk0D7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF791CD2C;
+	Tue, 14 Oct 2025 00:01:59 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5BB283FFB;
-	Sat, 11 Oct 2025 19:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D671D6AA;
+	Tue, 14 Oct 2025 00:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760209702; cv=none; b=C26HnjF2jRZpns61WRAMx830/PhANKoplp+NXRkzOLcetA1CMaxtWIbmsgFeyRlOp4yG57CVzX00E7wydunxlUaOmiRbR1vriwsmBxDYYZw5n/jB5dtaBCWN5xBhWDYa81/t/r4tXGI0RfBMJKVKR6dd6mHAxRJyjaai4c2HWbs=
+	t=1760400119; cv=none; b=H7g18SsZLDQCFj3fjKEwcRLf8OML0L+3uzzUA1BxrnflVcE36eGN2Fn6HdFjvHgNPp8sQ8dITaALMvzUMgGZzi5bsqmlz5FX4M4ac75aRaWhc260sO0WBTTU1sMF7yXQTWD74iwcmCUzb3bcu90xhbuf+cSf3hRcZV3E1ASEvYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760209702; c=relaxed/simple;
-	bh=XDSw0bZjm4wxB4PceEWxdRZ5cbt7pxcZl+DhMlyWrik=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=quG/TX5MdC7RXrkyt3DGnU9sviXKaSrZDGdK2HqZ+AbmCGSeRnRHLtWtjmcTn8URXZdXa47ov1jjDovfqxloBwmlOresXLfZ4qcOgUHeVthlHSzH77Pyyuazse/RQH/XSmje5kUm6m27p6GAOZJtS7l2bFSHMZ3Hy8hNHlNpDDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqOgk0D7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17838C113D0;
-	Sat, 11 Oct 2025 19:08:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760209702;
-	bh=XDSw0bZjm4wxB4PceEWxdRZ5cbt7pxcZl+DhMlyWrik=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=eqOgk0D7civOy5MzlOWYLoeDuoRZRyXjaCxcFMzl4DzSMHSb2OC+jKsgJcUI9CT3j
-	 x+95d3a6Os0WxFmKM9T6Va6bmCUO9+HyU1KivLaqJQ6Me1f2ZgxXN53GDJhrU4u7fc
-	 m6X0Z6krbGfyOD9eFCl2rr5Tl5m5iI2LQS5jki7xzG4syYJMBVePhSuBmUWV3hVBmS
-	 dRwWXhruR1Uxw1/IBvGaruUJb7R/qm1pt/TTiR5y6CzR8LqVTYFFXPIWqI8/D9mpCS
-	 GutJplPC+j9+/Nba1ptJSN0gCQhZmsQPRdhr2estPdFk6MTyxTkLRWO+lh93PgWGCh
-	 OsiHB0pfQMmvQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33CF43809A18;
-	Sat, 11 Oct 2025 19:08:10 +0000 (UTC)
-Subject: Re: [GIT PULL] RTC for 6.18
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20251011162009a4f6040d@mail.local>
-References: <20251011162009a4f6040d@mail.local>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20251011162009a4f6040d@mail.local>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.18
-X-PR-Tracked-Commit-Id: 9db26d5855d0374d4652487bfb5aacf40821c469
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 98906f9d850e4882004749eccb8920649dc98456
-Message-Id: <176020968883.1431021.14213406223567330950.pr-tracker-bot@kernel.org>
-Date: Sat, 11 Oct 2025 19:08:08 +0000
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1760400119; c=relaxed/simple;
+	bh=+vUFipcYIXgXpqA9AhKG0GuuSmvhuP8nc/YpFn8bR3A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jq71+xaa2/ECtPd66JHjLCOr1B7XBYCOqosGyuvtGt83velJfTMYo5/2o41alXd1tsEYZbTrSfqF6T2Nu1uCmuajluqU0dpO0D9HqPbPE0QuoLvE0SiDwpOFqLpjcoSFfzxQsfkAYiBTMlY3r3ZbXQIzry70XBsrEYuplhq4Swc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from ofsar (unknown [116.232.147.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dlan)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id 10150340E58;
+	Tue, 14 Oct 2025 00:01:50 +0000 (UTC)
+From: Yixun Lan <dlan@gentoo.org>
+To: lee@kernel.org,
+	lgirdwood@gmail.com,
+	broonie@kernel.org,
+	alexandre.belloni@bootlin.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	Alex Elder <elder@riscstar.com>
+Cc: Yixun Lan <dlan@gentoo.org>,
+	mat.jonczyk@o2.pl,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	linux.amoon@gmail.com,
+	troymitchell988@gmail.com,
+	guodong@riscstar.com,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v13 0/7] spacemit: introduce P1 PMIC support
+Date: Tue, 14 Oct 2025 08:01:45 +0800
+Message-ID: <176040002491.864314.9564488018549093381.b4-ty@gentoo.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250825172057.163883-1-elder@riscstar.com>
+References: <20250825172057.163883-1-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Sat, 11 Oct 2025 18:20:09 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.18
+On Mon, 25 Aug 2025 12:20:49 -0500, Alex Elder wrote:
+> The SpacemiT P1 is an I2C-controlled PMIC that implements 6 buck
+> converters and 12 LDOs.  It contains a load switch, ADC channels,
+> GPIOs, a real-time clock, and a watchdog timer.
+> 
+> This series introduces a multifunction driver for the P1 PMIC as
+> well as drivers for its regulators and RTC.
+> 
+> [...]
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/98906f9d850e4882004749eccb8920649dc98456
+Applied, thanks!
 
-Thank you!
+[5/7] riscv: dts: spacemit: enable the i2c8 adapter
+      https://github.com/spacemit-com/linux/commit/3e8d7309e6260b1d066e733bf3e2e1b6a0d3f82b
+[6/7] riscv: dts: spacemit: define fixed regulators
+      https://github.com/spacemit-com/linux/commit/1df07a40453fd652132051419140950d47941fe9
+[7/7] riscv: dts: spacemit: define regulator constraints
+      https://github.com/spacemit-com/linux/commit/09a412d397484e76588707d85ccc37f71e491091
 
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Yixun Lan
+
 
