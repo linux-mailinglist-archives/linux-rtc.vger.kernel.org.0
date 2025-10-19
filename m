@@ -1,39 +1,39 @@
-Return-Path: <linux-rtc+bounces-5096-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5097-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 271D6BEE1C2
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 11:21:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3072BEE1DD
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 11:22:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0446E3BFECA
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 09:21:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 854D8189E4CB
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 09:22:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20BC2E1C6B;
-	Sun, 19 Oct 2025 09:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC972E2661;
+	Sun, 19 Oct 2025 09:21:30 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13DC2E1758;
-	Sun, 19 Oct 2025 09:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024272E06E4;
+	Sun, 19 Oct 2025 09:21:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760865687; cv=none; b=NcxxDw0KSxF/t3LdVO5MrTPMlvE+EnpD2JDwo4MVvGBD0dQCP67CC6VV/0dalnbQ7AT/Ukpglewp5vJ10OxbojgX1uFatjpD9PBfBAFhm5I7XDqPy+QFzJrWDlP1mR3GErP+y+IWVAVCGn07hDdlgxOE5+ulfVvbqF06FmlEKds=
+	t=1760865690; cv=none; b=qq0K3LMYXhw6qZeHpYV3mSig83d6MnQKTaZJnqkV5c/p6+g8i5m5/iWDJPJGWuEtXyH5livpAjDddS3TvXzPaRyl/2PFlHxk0x7yITngm40XYKJbhMEu1c/vDg19DmMOBXfhMvJ0WieM19AVfyMDulkeMYvgjpdYT6X9R8DFzmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760865687; c=relaxed/simple;
-	bh=ZJ8J/vC3cADxPyE1txKIQl0FLVRW1yDOQd1VecaW6PI=;
+	s=arc-20240116; t=1760865690; c=relaxed/simple;
+	bh=Q9kDYSoPbFF62KFfxS3E7WYBeOeSXy6UVimjBbt94qQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VNxjVHXJ5M8DqPnwAISoixhVgz8q8JR7BfqzusgUuGSOutYkZGwYUKKv2vCrkHTlRmJNveYHU5b0bF3mPO1Opk5IqFGEnBM5UqeFB6cxx5N8sF1Uwv3H8vXPwjzG/d2DRRSFe+mEWHpN0e17xUYY+BkoXWEuGXG8wE2PQ9lGNUs=
+	 MIME-Version; b=GWXtXTdUt4csz1y9VssBQ163zDKAAcQVNB1KHYJCK8Ut8Xq0OH23wiqmWm5gZDNYcl6GzvJZYJvpTjsb2+XgXzt3aktlTNEtJG6mF0G6WhtX25yog2PwvtW0uKLLhOVD0BhefBjXya16E/s7xIQbanM+clx8H9gFl9i63PSh/MQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 6zgvx57ATemuihGNR93/oQ==
-X-CSE-MsgGUID: GqCo1ju1TeqAcruSU0ahlg==
+X-CSE-ConnectionGUID: XfI5M+1RSkS65je0rvCtDw==
+X-CSE-MsgGUID: lMeuP9ajQY641W6Hc9cyRQ==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 19 Oct 2025 18:21:18 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 19 Oct 2025 18:21:23 +0900
 Received: from vm01.adwin.renesas.com (unknown [10.226.92.5])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9E30B416123C;
-	Sun, 19 Oct 2025 18:21:13 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id D9BAA4162513;
+	Sun, 19 Oct 2025 18:21:18 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: claudiu.beznea.uj@bp.renesas.com,
 	alexandre.belloni@bootlin.com,
@@ -50,9 +50,9 @@ Cc: linux-rtc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH 1/6] clk: renesas: r9a09g057: Add clock and reset entries for RTC
-Date: Sun, 19 Oct 2025 09:21:01 +0000
-Message-ID: <20251019092106.5737-2-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH 2/6] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H support
+Date: Sun, 19 Oct 2025 09:21:02 +0000
+Message-ID: <20251019092106.5737-3-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251019092106.5737-1-ovidiu.panait.rb@renesas.com>
 References: <20251019092106.5737-1-ovidiu.panait.rb@renesas.com>
@@ -64,36 +64,85 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add module clock and reset entries for the RTC module on the Renesas RZ/V2H
-(R9A09G057) SoC.
+The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
+(r9a08g045), with the following differences:
+- it lacks the time capture functionality
+- the maximum supported periodic interrupt frequency is 128Hz instead
+  of 256Hz
+- it requires two reset lines instead of one
+
+Add new compatible string "renesas,r9a09g057-rtca3" for RZ/V2H and update
+the binding so that "resets" may have either one or two entries, depending
+on the compatible string.
 
 Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 ---
- drivers/clk/renesas/r9a09g057-cpg.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../bindings/rtc/renesas,rz-rtca3.yaml        | 33 ++++++++++++++++---
+ 1 file changed, 28 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/renesas/r9a09g057-cpg.c b/drivers/clk/renesas/r9a09g057-cpg.c
-index c9c117c6782c..100cd56c323e 100644
---- a/drivers/clk/renesas/r9a09g057-cpg.c
-+++ b/drivers/clk/renesas/r9a09g057-cpg.c
-@@ -241,6 +241,8 @@ static const struct rzv2h_mod_clk r9a09g057_mod_clks[] __initconst = {
- 						BUS_MSTOP(5, BIT(13))),
- 	DEF_MOD("wdt_3_clk_loco",		CLK_QEXTAL, 5, 2, 2, 18,
- 						BUS_MSTOP(5, BIT(13))),
-+	DEF_MOD("rtc_0_clk_rtc",		CLK_PLLCM33_DIV16, 5, 3, 2, 19,
-+						BUS_MSTOP(3, BIT(11) | BIT(12))),
- 	DEF_MOD("rspi_0_pclk",			CLK_PLLCLN_DIV8, 5, 4, 2, 20,
- 						BUS_MSTOP(11, BIT(0))),
- 	DEF_MOD("rspi_0_pclk_sfr",		CLK_PLLCLN_DIV8, 5, 5, 2, 21,
-@@ -411,6 +413,8 @@ static const struct rzv2h_reset r9a09g057_resets[] __initconst = {
- 	DEF_RST(7, 6, 3, 7),		/* WDT_1_RESET */
- 	DEF_RST(7, 7, 3, 8),		/* WDT_2_RESET */
- 	DEF_RST(7, 8, 3, 9),		/* WDT_3_RESET */
-+	DEF_RST(7, 9, 3, 10),		/* RTC_0_RST_RTC */
-+	DEF_RST(7, 10, 3, 11),		/* RTC_0_RST_RTC_V */
- 	DEF_RST(7, 11, 3, 12),		/* RSPI_0_PRESETN */
- 	DEF_RST(7, 12, 3, 13),		/* RSPI_0_TRESETN */
- 	DEF_RST(7, 13, 3, 14),		/* RSPI_1_PRESETN */
+diff --git a/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml b/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
+index e70eeb66aa64..39a5c2483374 100644
+--- a/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
++++ b/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
+@@ -9,14 +9,12 @@ title: Renesas RTCA-3 Real Time Clock
+ maintainers:
+   - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+ 
+-allOf:
+-  - $ref: rtc.yaml#
+-
+ properties:
+   compatible:
+     items:
+       - enum:
+           - renesas,r9a08g045-rtca3 # RZ/G3S
++          - renesas,r9a09g057-rtca3 # RZ/V2H
+       - const: renesas,rz-rtca3
+ 
+   reg:
+@@ -48,8 +46,8 @@ properties:
+     maxItems: 1
+ 
+   resets:
+-    items:
+-      - description: VBATTB module reset
++    minItems: 1
++    maxItems: 2
+ 
+ required:
+   - compatible
+@@ -61,6 +59,31 @@ required:
+   - power-domains
+   - resets
+ 
++allOf:
++  - $ref: rtc.yaml#
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: renesas,r9a08g045-rtca3
++    then:
++      properties:
++        resets:
++          items:
++            - description: VBATTB module reset
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: renesas,r9a09g057-rtca3
++    then:
++      properties:
++        resets:
++          items:
++            - description: RTC reset
++            - description: Reset for the RTEST registers
++
+ additionalProperties: false
+ 
+ examples:
 -- 
 2.51.0
 
