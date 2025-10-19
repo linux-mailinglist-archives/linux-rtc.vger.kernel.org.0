@@ -1,144 +1,96 @@
-Return-Path: <linux-rtc+bounces-5094-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5095-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A11EBED592
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 Oct 2025 19:34:50 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAD24BEE1B6
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 11:21:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ABA1634D54A
-	for <lists+linux-rtc@lfdr.de>; Sat, 18 Oct 2025 17:34:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BC9F24E4646
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 09:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4460C25E451;
-	Sat, 18 Oct 2025 17:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VTjqkM7w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899BF2E06E4;
+	Sun, 19 Oct 2025 09:21:23 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995B925F998;
-	Sat, 18 Oct 2025 17:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8156D2DFA4A;
+	Sun, 19 Oct 2025 09:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760808871; cv=none; b=iWVQfe48CLSy7UxO3tpQEd7k1Fve0C6SgIXesQL+ieY6iq/PZ0QUpy1TKqqvsFO1qkdlkWTWTSKSq/ZkCtJHkWCAlO7xxO4Z4NCkrg0Y1JXcFLYiBPFdLtgIeIW3Y/3ZFu76EvtjPbDy+f3jFNzKvVu7ahFLPXSaGsRKO/NK5xk=
+	t=1760865683; cv=none; b=WQvRCYWErC+/p8pw9Jls66RuuSrLAQInq4orsXHrTE7Qlb36/Q57oLU3m4hmoXyUmICH6sB5Wo1rI50Y+4uIkFE4GRhp50W/jxWQafjCscS8Sf6eENp8UW+uRO6e5Y/1mV2Cyf6fi0T+F56+v7NBbesomyAlDgEW3+8LTvnqgzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760808871; c=relaxed/simple;
-	bh=6AWXSaPbH218iF35/hv8CWjRsfc/4VaeAzGRcUvVqHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MKd4Xp9HxACeF3XGtr8IYB74rlgANKYiQ4m3aeF3jhXBIhgz4PJle5rzC9dfGst51aH48MPVUGPkwfENIuELL0aFZDKa1t/raKCunZvvX8bLdPNWyiOZ8FQOjx4bvXF5bVe2nwDuqNgmsQnKyahpmrP4G/QVjQyzXxv3jKLmF+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VTjqkM7w; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760808870; x=1792344870;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6AWXSaPbH218iF35/hv8CWjRsfc/4VaeAzGRcUvVqHE=;
-  b=VTjqkM7wRpJttk6yfmbMRvKIIy9Jk5d67neGK8aa9rvhPGv2zIHP7Srj
-   f4GGCX5Nr47dATmgXruW2kvzkPg+za6VsgSxZj8P1cEHhILxPvv7rZj6B
-   G5jPvzCKvGObE8DJdV8Q71X2W6TN+n92DC4X3vNA3FUa+hrHaFbfHZGGX
-   sF5qUD8vTg+mkCKss/FPQHgj/f7B6JBzeggd2MPPIjPy20mWkrRbjLw8F
-   tpkEmz9SItcabRVRMq/IMcUZqUSJMAZODvwBP/54EGV44JFX5xgEZV5rH
-   EgGo8FuCGmW5KQtdyvVY2FZLOvOmTqI48ONl/7vG0wfu2sI5WSacXqd4+
-   A==;
-X-CSE-ConnectionGUID: /cBNzXB0RreVx9hSyFA75w==
-X-CSE-MsgGUID: g6db/y60TGK/CBYZHIidSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="66864036"
-X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
-   d="scan'208";a="66864036"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 10:34:29 -0700
-X-CSE-ConnectionGUID: MS8PSnlUTOWdesxJd/DnwA==
-X-CSE-MsgGUID: 6J6v8s9TTNCbiwxHtz01eQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
-   d="scan'208";a="182995848"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.194])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 10:34:27 -0700
-Received: from andy by ashevche-desk with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1v8wUz-00000000Cqh-28bB;
-	Wed, 15 Oct 2025 11:04:41 +0300
-Date: Wed, 15 Oct 2025 11:04:41 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Kartik Rajput <kkartik@nvidia.com>
-Cc: alexandre.belloni@bootlin.com, thierry.reding@gmail.com,
-	jonathanh@nvidia.com, linux-rtc@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: tegra: Add ACPI support
-Message-ID: <aO9Vmfm6jPplEQca@smile.fi.intel.com>
-References: <20250919111232.605405-1-kkartik@nvidia.com>
+	s=arc-20240116; t=1760865683; c=relaxed/simple;
+	bh=tLKpJyxvlmQ9U/ALJjzP67xU/u9xd0M7cCT/y5qEVfA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jXPof2AXCjURhD5eifvSKSWPto/tzQO5sDEo4p1gTNCEST0UUE1l4KF0F5c3RiQtZ/OffvFcx3GV/YqZbeEwuQJ30UcjTOVwZyUo7BWaBmsrQ7Ry7lFYFeh2CueomDNa21HhwigFWFztz/CEOqUuCg8yVYcgQwOePe3kA380rlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+X-CSE-ConnectionGUID: iDe8MJGkSL6mtt8EUinhsw==
+X-CSE-MsgGUID: NLgvOtY+SZqlO/b7WCJblQ==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 19 Oct 2025 18:21:13 +0900
+Received: from vm01.adwin.renesas.com (unknown [10.226.92.5])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5DD54416251C;
+	Sun, 19 Oct 2025 18:21:08 +0900 (JST)
+From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+To: claudiu.beznea.uj@bp.renesas.com,
+	alexandre.belloni@bootlin.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de
+Cc: linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH 0/6] Add RTC support for the Renesas RZ/V2H SoC
+Date: Sun, 19 Oct 2025 09:21:00 +0000
+Message-ID: <20251019092106.5737-1-ovidiu.panait.rb@renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250919111232.605405-1-kkartik@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 19, 2025 at 04:42:32PM +0530, Kartik Rajput wrote:
-> Add ACPI support for Tegra RTC, which is available on Tegra241 and
-> Tegra410. Both Tegra241 and Tegra410 use the same ACPI ID 'NVDA0280'.
-> The RTC clock is configured by UEFI before the kernel boots.
+Hi,
 
-...
+This series adds RTC support for the Renesas RZ/V2H SoC.
 
-> +#include <linux/acpi.h>
+The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
+(r9a08g045), with the following differences:
+- it lacks the time capture functionality
+- the maximum supported periodic interrupt frequency is 128Hz instead
+  of 256Hz
+- it requires two reset lines instead of one
 
-No use.
+Best regards,
+Ovidiu
 
-...
+Ovidiu Panait (6):
+  clk: renesas: r9a09g057: Add clock and reset entries for RTC
+  dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H support
+  rtc: renesas-rtca3: Use OF data for configuration
+  rtc: renesas-rtca3: Add support for RZ/V2H SoC
+  arm64: dts: renesas: r9a09g057: Add RTC node
+  arm64: dts: renesas: r9a09g057h44-rzv2h-evk: Enable RTC
 
-> +static const struct acpi_device_id tegra_rtc_acpi_match[] = {
-> +	{ "NVDA0280", 0 },
-
-Drop redundant ', 0' part.
-
-> +	{ }
-> +};
-
-...
-
-> +	if (is_of_node(dev_fwnode(&pdev->dev))) {
-
-Simple dev_of_node() will work here
-
-> +		info->clk = devm_clk_get(&pdev->dev, NULL);
-> +		if (IS_ERR(info->clk))
-> +			return PTR_ERR(info->clk);
->  
-> +		ret = clk_prepare_enable(info->clk);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-
-...
-
->  disable_clk:
-> -	clk_disable_unprepare(info->clk);
-> +	if (is_of_node(dev_fwnode(&pdev->dev)))
-> +		clk_disable_unprepare(info->clk);
-
-Redundant change. CLK APIs are NULL aware.
-
-...
-
-> -	clk_disable_unprepare(info->clk);
-> +	if (is_of_node(dev_fwnode(&pdev->dev)))
-> +		clk_disable_unprepare(info->clk);
-
-Ditto.
+ .../bindings/rtc/renesas,rz-rtca3.yaml        | 33 ++++++++++++++++---
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi    | 14 ++++++++
+ .../dts/renesas/r9a09g057h44-rzv2h-evk.dts    |  4 +++
+ drivers/clk/renesas/r9a09g057-cpg.c           |  4 +++
+ drivers/rtc/rtc-renesas-rtca3.c               | 27 +++++++++++++--
+ 5 files changed, 74 insertions(+), 8 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.51.0
 
 
