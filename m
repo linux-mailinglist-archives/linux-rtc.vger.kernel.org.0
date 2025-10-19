@@ -1,39 +1,39 @@
-Return-Path: <linux-rtc+bounces-5099-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5100-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F18ABEE1F8
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 11:22:35 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82753BEE1FB
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 11:22:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01620189E368
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 09:22:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 598684E7C57
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Oct 2025 09:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C472E427B;
-	Sun, 19 Oct 2025 09:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A4B2E1C6B;
+	Sun, 19 Oct 2025 09:21:41 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E8A2E0410;
-	Sun, 19 Oct 2025 09:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B9B2E0410;
+	Sun, 19 Oct 2025 09:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760865696; cv=none; b=c54SC6y6U+0h3poITJrsNEbXtaxVaLewMVz0LF08TTnXBky7fvK+pnSOmY0Fyra2lpS1ZObiqQ6PqFS0mk8psvzJCzkLxacSlLdJXmRF9Gbw/VX0Gu5Wtj8j9aKcIDkK+n2UUn58YjwqfIEn84AqOZoNt1IFSExN7vNbsULSP78=
+	t=1760865701; cv=none; b=i+M/tVBctJPQ0jIMTJyuhJQArEi6NGUgeCN5XFbCSIbtaOImVekoP7NTx+fgn1TzRTrIxg50gZ6qGcKFH+PF7cV2lFHTQdj7T3mZqXqtpmTv20PAcbdhnXbKe/Tf53LBYT3A2wRKwLIJDi1yFnvLaKhmPPu1U2cbEqQARKTIlxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760865696; c=relaxed/simple;
-	bh=54d6mW08zCH+ECBeih5e8SDsX2nZbAIG8H3d2EyCXic=;
+	s=arc-20240116; t=1760865701; c=relaxed/simple;
+	bh=6NN2vIAm+rmZthkfCmi2bvhIcwWSnYQtkVgWwOpfnkg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JwOfwug/SB7YxHLdgIneCtidpd7lHs8e62bvgbetCuCvTYZcrK16Sb1xi7rf8HpNS9wkuHTMT+PcOfXGHRqMCZoPU+vPT68hns5jwMrCEMZp91jkYu5vqXNmGkNf+hyXfG4lXFZiZ+NBrMjSyJHCm6L786Y80eM+FZogyhNu3SQ=
+	 MIME-Version; b=moIQMuvmsU1pce0GLeDtP3TaJtD/yxBJP6dHbt76i6TObc8Fw8CE1E4yUlj5cg3Wz8WDZALdg4+aeiP6bqU96XKHnX5VYnevIsQ0YoPvYOR22xZ0Sho5O6X/w1nJF+M3M9WTExOBuSKigU5L0bec3bPx2bnqZbHeGeg2+as7Gz0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 1pFkQ76xQ5W19JC0BO1VNw==
-X-CSE-MsgGUID: xcZ7kxPoR+W/2U41fSTucg==
+X-CSE-ConnectionGUID: 7WE6ObC3Ttu2xGeJjedLhA==
+X-CSE-MsgGUID: chHZTdSFTZ2TpF/M3g7Sgg==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 19 Oct 2025 18:21:34 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 19 Oct 2025 18:21:39 +0900
 Received: from vm01.adwin.renesas.com (unknown [10.226.92.5])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 68DF2416123C;
-	Sun, 19 Oct 2025 18:21:29 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id A5A26416123C;
+	Sun, 19 Oct 2025 18:21:34 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: claudiu.beznea.uj@bp.renesas.com,
 	alexandre.belloni@bootlin.com,
@@ -50,9 +50,9 @@ Cc: linux-rtc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH 4/6] rtc: renesas-rtca3: Add support for RZ/V2H SoC
-Date: Sun, 19 Oct 2025 09:21:04 +0000
-Message-ID: <20251019092106.5737-5-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH 5/6] arm64: dts: renesas: r9a09g057: Add RTC node
+Date: Sun, 19 Oct 2025 09:21:05 +0000
+Message-ID: <20251019092106.5737-6-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251019092106.5737-1-ovidiu.panait.rb@renesas.com>
 References: <20251019092106.5737-1-ovidiu.panait.rb@renesas.com>
@@ -64,50 +64,38 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new compatible string for the Renesas RZ/V2H RTC along with the SoC
-specific OF data, to account for the different maximum periodic interrupt
-frequency (128Hz).
-
-Also, switch from devm_reset_control_get_shared() to
-devm_reset_control_array_get_shared() when retrieving resets.
-The RZ/V2H SoC requires two resets for the RTC block instead of one,
-so this will allow to handle multiple resets without additional changes.
+Add RTC node to Renesas RZ/V2H ("R9A09G057") SoC DTSI.
 
 Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 ---
- drivers/rtc/rtc-renesas-rtca3.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/rtc/rtc-renesas-rtca3.c b/drivers/rtc/rtc-renesas-rtca3.c
-index 90dda04fad33..96f5d3734d93 100644
---- a/drivers/rtc/rtc-renesas-rtca3.c
-+++ b/drivers/rtc/rtc-renesas-rtca3.c
-@@ -738,7 +738,7 @@ static int rtca3_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+diff --git a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+index 40b15f1db930..e426b9978e22 100644
+--- a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+@@ -591,6 +591,20 @@ wdt3: watchdog@13000400 {
+ 			status = "disabled";
+ 		};
  
--	priv->rstc = devm_reset_control_get_shared(dev, NULL);
-+	priv->rstc = devm_reset_control_array_get_shared(dev);
- 	if (IS_ERR(priv->rstc))
- 		return PTR_ERR(priv->rstc);
- 
-@@ -887,11 +887,16 @@ static int rtca3_resume(struct device *dev)
- 
- static DEFINE_SIMPLE_DEV_PM_OPS(rtca3_pm_ops, rtca3_suspend, rtca3_resume);
- 
-+static const struct rtca3_of_data rtca3_rzv2h_of_data = {
-+	.max_periodic_irq_freq = 128,
-+};
++		rtc: rtc@11c00800 {
++			compatible = "renesas,r9a09g057-rtca3", "renesas,rz-rtca3";
++			reg = <0 0x11c00800 0 0x400>;
++			interrupts = <GIC_SPI 524 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 525 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 526 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "alarm", "period", "carry";
++			clocks = <&cpg CPG_MOD 0x53>, <&rtxin_clk>;
++			clock-names = "bus", "counter";
++			power-domains = <&cpg>;
++			resets = <&cpg 0x79>, <&cpg 0x7a>;
++			status = "disabled";
++		};
 +
- static const struct rtca3_of_data rtca3_of_data = {
- 	.max_periodic_irq_freq = 256,
- };
- 
- static const struct of_device_id rtca3_of_match[] = {
-+	{ .compatible = "renesas,r9a09g057-rtca3", .data = &rtca3_rzv2h_of_data },
- 	{ .compatible = "renesas,rz-rtca3", .data = &rtca3_of_data },
- 	{ /* sentinel */ }
- };
+ 		scif: serial@11c01400 {
+ 			compatible = "renesas,scif-r9a09g057";
+ 			reg = <0 0x11c01400 0 0x400>;
 -- 
 2.51.0
 
