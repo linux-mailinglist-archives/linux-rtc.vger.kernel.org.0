@@ -1,158 +1,111 @@
-Return-Path: <linux-rtc+bounces-5108-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5109-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9916BEFF82
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Oct 2025 10:32:37 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCB41BF204A
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Oct 2025 17:11:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5331188C7EC
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Oct 2025 08:33:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D053F4EEA54
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Oct 2025 15:11:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953832EC08D;
-	Mon, 20 Oct 2025 08:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4647323506F;
+	Mon, 20 Oct 2025 15:11:22 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930B02EBBB2
-	for <linux-rtc@vger.kernel.org>; Mon, 20 Oct 2025 08:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017E7223DD0;
+	Mon, 20 Oct 2025 15:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760949153; cv=none; b=NqH3KaTTDlofMo758cAXwBUEc0GybYLS8DnMbXuiuWHZ1F8PFBVQPat9NEmWhQ2B00cMlQ4hqz70gBmNG74y3UZAVZWhPk81Vv1aV6bvKlRq8/5UzRuQHno2FH7xjWCfwa/jxIvCC/dCuHh4L3iDuDrYuwp92m3C6CHJQKuIUgc=
+	t=1760973082; cv=none; b=IpJI3NYvvi4jodMyPjr5YpjYSdFFvwdxLp+OTsqcm3bvPRXiOJ+tgTWqZu1ENiq6LMggk+jNGz1Ho0XuQT4IFNKf9df5oH2j4uQM7RFnC3nx8tzBwfsQlAi/JaJlhcCiGrWa/UeYBKRd5f/2GK8zjxyL4x+1GuhWytmnlhNswLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760949153; c=relaxed/simple;
-	bh=2Zxi1uzwcNMLMP/BnWqBgmCsQY6hstGNmVrbM1QaAG8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ImnzTu6g6h4oH0hwE+38PsYSjVx34RQWd4j28Wxu+KrKZf9o3WN+mcmwXJ1WsdwF/2tlDhJqc6XRHVV5rgRddJni/UswbtehmctrGNO+1ERXZKcx8zzIhIIYb72x2sZoVBxN/1K++bQODFj88i+3HML+wVxAEgmSE7Ewjukey14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vAlJG-0004CL-QY; Mon, 20 Oct 2025 10:32:06 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vAlJF-004VyN-1v;
-	Mon, 20 Oct 2025 10:32:05 +0200
-Received: from pza by lupine with local (Exim 4.98.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vAlJF-000000004Ju-23bC;
-	Mon, 20 Oct 2025 10:32:05 +0200
-Message-ID: <d6956eba2f99faedf7e6e28cb23d95a36101e6a9.camel@pengutronix.de>
-Subject: Re: [PATCH 5/6] arm64: dts: renesas: r9a09g057: Add RTC node
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>, Biju Das	
- <biju.das.jz@bp.renesas.com>, Claudiu Beznea
- <claudiu.beznea.uj@bp.renesas.com>,  "alexandre.belloni@bootlin.com"	
- <alexandre.belloni@bootlin.com>, "robh@kernel.org" <robh@kernel.org>, 
- "krzk+dt@kernel.org"	 <krzk+dt@kernel.org>, "conor+dt@kernel.org"
- <conor+dt@kernel.org>,  "geert+renesas@glider.be"	
- <geert+renesas@glider.be>, "magnus.damm" <magnus.damm@gmail.com>, 
- "mturquette@baylibre.com"	 <mturquette@baylibre.com>, "sboyd@kernel.org"
- <sboyd@kernel.org>
-Cc: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>, 
- "linux-renesas-soc@vger.kernel.org"
-	 <linux-renesas-soc@vger.kernel.org>, "devicetree@vger.kernel.org"
-	 <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>, "linux-clk@vger.kernel.org"
-	 <linux-clk@vger.kernel.org>
-Date: Mon, 20 Oct 2025 10:32:05 +0200
-In-Reply-To: <TY7PR01MB14910BB6AD621CC7BA42D56D4D3F5A@TY7PR01MB14910.jpnprd01.prod.outlook.com>
-References: <20251019092106.5737-1-ovidiu.panait.rb@renesas.com>
-	 <20251019092106.5737-6-ovidiu.panait.rb@renesas.com>
-	 <TY3PR01MB11346CBE1C135CBEF82E3E7BE86F4A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-	 <TY7PR01MB14910BB6AD621CC7BA42D56D4D3F5A@TY7PR01MB14910.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	s=arc-20240116; t=1760973082; c=relaxed/simple;
+	bh=yFNw5bZKMyyr+UvEteB9A4gh9Sh5Y0PZAc4BdpYXDUs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JHkYoXM83KEUHHfZhiECV1dUwkcSN0wv4wLuzvE6BY0xoWR/M7s+4r1isrJa8CYp2hkUrpvvUm7NfYfdliQ6WKRlPq0RCIBJRi2obcQE1I0mAr+KXUStqtD4AOkA8ZuChWVa+DkWQnn544KW6i/ssFUiuV+HiKVgCsvD5Sr0qVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from DESKTOP-L0HPE2S (unknown [114.245.38.183])
+	by APP-03 (Coremail) with SMTP id rQCowADXH3oMUfZo9hsqEg--.25932S2;
+	Mon, 20 Oct 2025 23:11:10 +0800 (CST)
+From: Haotian Zhang <vulab@iscas.ac.cn>
+To: Yiting Deng <yiting.deng@amlogic.com>,
+	Xianwei Zhao <xianwei.zhao@amlogic.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-amlogic@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Haotian Zhang <vulab@iscas.ac.cn>
+Subject: [PATCH] rtc: amlogic-a4: fix double free caused by devm
+Date: Mon, 20 Oct 2025 23:09:56 +0800
+Message-ID: <20251020150956.491-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowADXH3oMUfZo9hsqEg--.25932S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xr1kuF48Kr17GFyDJryxZrb_yoW8JF1UpF
+	Z7GFyjkFsIqrW8Ka1DXrykXF15K3y8ta48KrWUW3sa93WrJFykAFZ7J3W8Xan5CrWkGa13
+	Wr4Utr1rGF1DuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j
+	6r4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
+	6r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+	IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbSfO7UUUU
+	U==
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgsBA2j2KwVh2AAAsG
 
-On Mo, 2025-10-20 at 08:13 +0000, Ovidiu Panait wrote:
-> Hi Biju,
->=20
-> > -----Original Message-----
-> > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > Sent: Sunday, October 19, 2025 1:16 PM
-> > To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>; Claudiu Beznea
-> > <claudiu.beznea.uj@bp.renesas.com>; alexandre.belloni@bootlin.com;
-> > robh@kernel.org; krzk+dt@kernel.org; conor+dt@kernel.org;
-> > geert+renesas@glider.be; magnus.damm <magnus.damm@gmail.com>;
-> > mturquette@baylibre.com; sboyd@kernel.org; p.zabel@pengutronix.de
-> > Cc: linux-rtc@vger.kernel.org; linux-renesas-soc@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > clk@vger.kernel.org
-> > Subject: RE: [PATCH 5/6] arm64: dts: renesas: r9a09g057: Add RTC node
-> >=20
-> >=20
-> >=20
-> > > -----Original Message-----
-> > > From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-> > > Sent: 19 October 2025 10:21
-> > > Subject: [PATCH 5/6] arm64: dts: renesas: r9a09g057: Add RTC node
-> > >=20
-> > > Add RTC node to Renesas RZ/V2H ("R9A09G057") SoC DTSI.
-> > >=20
-> > > Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-> > > ---
-> > >  arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > >=20
-> > > diff --git a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-> > b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-> > > index 40b15f1db930..e426b9978e22 100644
-> > > --- a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-> > > +++ b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
-> > > @@ -591,6 +591,20 @@ wdt3: watchdog@13000400 {
-> > >  			status =3D "disabled";
-> > >  		};
-> > >=20
-> > > +		rtc: rtc@11c00800 {
-> > > +			compatible =3D "renesas,r9a09g057-rtca3", "renesas,rz-
-> > rtca3";
-> > > +			reg =3D <0 0x11c00800 0 0x400>;
-> > > +			interrupts =3D <GIC_SPI 524 IRQ_TYPE_EDGE_RISING>,
-> > > +				     <GIC_SPI 525 IRQ_TYPE_EDGE_RISING>,
-> > > +				     <GIC_SPI 526 IRQ_TYPE_EDGE_RISING>;
-> > > +			interrupt-names =3D "alarm", "period", "carry";
-> > > +			clocks =3D <&cpg CPG_MOD 0x53>, <&rtxin_clk>;
-> > > +			clock-names =3D "bus", "counter";
-> > > +			power-domains =3D <&cpg>;
-> > > +			resets =3D <&cpg 0x79>, <&cpg 0x7a>;
-> >=20
-> > Missing reset-names??
-> >=20
->=20
-> The resets are retrieved using devm_reset_control_array_get_shared(),
+The clock obtained via devm_clk_get_enabled() is automatically managed
+by devres and will be disabled and freed on driver detach. Manually
+calling clk_disable_unprepare() in error path and remove function
+causes double free.
 
-The device tree bindings should be designed independently from the
-driver implementation.
+Remove the redundant clk_disable_unprepare() calls from the probe
+error path and aml_rtc_remove(), allowing the devm framework to
+automatically manage the clock lifecycle.
 
-> which does not rely on named reset entries. This keeps the
-> implementation minimal and keeps it in sync with RZ/G3S, which also
-> does not take the RTC reset by its name.
->=20
-> For this reason, I kept the rtca3 bindings without a reset-names property=
-.
+Fixes: c89ac9182ee2 ("rtc: support for the Amlogic on-chip RTC")
+Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+---
+ drivers/rtc/rtc-amlogic-a4.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-There is no need to use the reset names in the driver if they are just
-toggled all at once, but unless you can guarantee that there will never
-be a need to tell them apart, it would be safer to give them a name.
+diff --git a/drivers/rtc/rtc-amlogic-a4.c b/drivers/rtc/rtc-amlogic-a4.c
+index 1928b29c1045..ed36b649c057 100644
+--- a/drivers/rtc/rtc-amlogic-a4.c
++++ b/drivers/rtc/rtc-amlogic-a4.c
+@@ -390,7 +390,6 @@ static int aml_rtc_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ err_clk:
+-	clk_disable_unprepare(rtc->sys_clk);
+ 	device_init_wakeup(dev, false);
+ 
+ 	return ret;
+@@ -425,7 +424,6 @@ static void aml_rtc_remove(struct platform_device *pdev)
+ {
+ 	struct aml_rtc_data *rtc = dev_get_drvdata(&pdev->dev);
+ 
+-	clk_disable_unprepare(rtc->sys_clk);
+ 	device_init_wakeup(&pdev->dev, false);
+ }
+ 
+-- 
+2.25.1
 
-regards
-Philipp
 
