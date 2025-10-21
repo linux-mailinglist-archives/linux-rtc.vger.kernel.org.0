@@ -1,39 +1,39 @@
-Return-Path: <linux-rtc+bounces-5113-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5114-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E460BF52B8
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 10:08:37 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92426BF52A0
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 10:08:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 379054243CD
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 08:07:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E0ED44FEBBD
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 08:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D3D2E9EB2;
-	Tue, 21 Oct 2025 08:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D072EB843;
+	Tue, 21 Oct 2025 08:07:30 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E651C2EB843;
-	Tue, 21 Oct 2025 08:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D3532749D6;
+	Tue, 21 Oct 2025 08:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761034045; cv=none; b=gwwa/wniRXxuac6qciDK4e+VqiwXJarZBXR7xJ0Zv5VhGgpTqbi/BQXQckohVNdSdRfrHEkSvAJK/oq+orZVT2oLBZBJPMpnd+NkEptMT8WxouL5KdVXD7/J+yLx2oOSYSF+JSz8XVSXQab9QQduJ1JCks03NFnbxD/EWMdw72Q=
+	t=1761034050; cv=none; b=RFWGd4lYxfgxSfMNVjSn8lxZtEtA8Y/B5/NUXiPdS7nPIHAH5+sG+SEEe5nmzTN7DKADb5hsifysEefDGF+CdcSW3oTpRSn1JzL0e0sDjdQp/L7nUev5buRHQdY0JSmJ6rrA0nX5pG9pgWKLt8Pj/spMUSlVvlo9ycyOj/tQThs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761034045; c=relaxed/simple;
-	bh=xWpuFNQAF/zxn0+syvpJzxjJDX69VD2sKWEPBDXOaKQ=;
+	s=arc-20240116; t=1761034050; c=relaxed/simple;
+	bh=uov3YlU9mOuzy2FmlphL44IqIYGb+b9pa8YuAVntHM0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M9lL9UaAo1acy2KXNgkxZf40qtCJcGeQpP7OozQkebEe+YBevDh8/PhD8Ia4GcJb/GYh+4/uMhEd3cFiHW2CxyjjR/H2cfAxToDikFod08U57sZtonnw2g/IR05IWl6Hi5rDJIikLyZglv75LiT9MYAUW3MIZvRcZflqW5ntrf4=
+	 MIME-Version; b=kVpulcZDZo4vfb64ysfCCQgXt+jgh8UZUH9AnB7V9MzGyadf6SmfU2Dj1D9psRs4xYvGsdDl0kDwniUtScDm1UPLlx6qnbgUbyYl8SubFJU8Bm2Bcv0mdJ8xXZLWYo/9lKlzu6QMgMxT0490prJJy/4EvudbDphyIytYd6lOBnk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: xo/54YYqT0y8vKuJzrU0EA==
-X-CSE-MsgGUID: QpZCW1kDQ6icE6YFDW02LQ==
+X-CSE-ConnectionGUID: RksKegWRSR2R5GzrZI+NSQ==
+X-CSE-MsgGUID: QWizaDllSOKqbB8esf/RBQ==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 21 Oct 2025 17:07:22 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 21 Oct 2025 17:07:27 +0900
 Received: from vm01.adwin.renesas.com (unknown [10.226.92.145])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id F38C44141CAF;
-	Tue, 21 Oct 2025 17:07:17 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 47FC04141C94;
+	Tue, 21 Oct 2025 17:07:23 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: claudiu.beznea.uj@bp.renesas.com,
 	alexandre.belloni@bootlin.com,
@@ -50,9 +50,9 @@ Cc: linux-rtc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v2 2/6] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H support
-Date: Tue, 21 Oct 2025 08:07:01 +0000
-Message-ID: <20251021080705.18116-3-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH v2 3/6] rtc: renesas-rtca3: Use OF data for configuration
+Date: Tue, 21 Oct 2025 08:07:02 +0000
+Message-ID: <20251021080705.18116-4-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251021080705.18116-1-ovidiu.panait.rb@renesas.com>
 References: <20251021080705.18116-1-ovidiu.panait.rb@renesas.com>
@@ -64,101 +64,80 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
-(r9a08g045), with the following differences:
-- It lacks the time capture functionality
-- The maximum supported periodic interrupt frequency is 128Hz instead
-  of 256Hz
-- It requires two reset lines instead of one
+Prepare for adding support for the Renesas RZ/V2H SoC RTC IP by making the
+driver configuration selectable via OF match data.
 
-Add new compatible string "renesas,r9a09g057-rtca3" for RZ/V2H and update
-the binding accordingly:
-- Allow "resets" to contain one or two entries depending on the SoC.
-- Add "reset-names" property, but make it required only for RZ/V2H.
+For RZ/V2H RTC, the maximum periodic interrupt frequency is 128Hz instead
+of 256Hz, so add this info to a SoC-specific struct and retrieve it
+during probe.
 
 Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 ---
-v2 changes:
-- Added "reset-names" property and made it required for RZ/V2H.
+v2 changes: none
 
- .../bindings/rtc/renesas,rz-rtca3.yaml        | 45 ++++++++++++++++---
- 1 file changed, 40 insertions(+), 5 deletions(-)
+ drivers/rtc/rtc-renesas-rtca3.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml b/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
-index e70eeb66aa64..2569cb494481 100644
---- a/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
-+++ b/Documentation/devicetree/bindings/rtc/renesas,rz-rtca3.yaml
-@@ -9,14 +9,12 @@ title: Renesas RTCA-3 Real Time Clock
- maintainers:
-   - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+diff --git a/drivers/rtc/rtc-renesas-rtca3.c b/drivers/rtc/rtc-renesas-rtca3.c
+index ab816bdf0d77..90dda04fad33 100644
+--- a/drivers/rtc/rtc-renesas-rtca3.c
++++ b/drivers/rtc/rtc-renesas-rtca3.c
+@@ -101,6 +101,15 @@ enum rtca3_alrm_set_step {
+ 	RTCA3_ALRM_SSTEP_INIT = 3,
+ };
  
--allOf:
--  - $ref: rtc.yaml#
--
- properties:
-   compatible:
-     items:
-       - enum:
-           - renesas,r9a08g045-rtca3 # RZ/G3S
-+          - renesas,r9a09g057-rtca3 # RZ/V2H
-       - const: renesas,rz-rtca3
- 
-   reg:
-@@ -48,8 +46,12 @@ properties:
-     maxItems: 1
- 
-   resets:
--    items:
--      - description: VBATTB module reset
-+    minItems: 1
-+    maxItems: 2
++/**
++ * struct rtca3_of_data - OF data for RTCA3
++ *
++ * @max_periodic_irq_freq: maximum periodic interrupt frequency
++ */
++struct rtca3_of_data {
++	int max_periodic_irq_freq;
++};
 +
-+  reset-names:
-+    minItems: 1
-+    maxItems: 2
+ /**
+  * struct rtca3_ppb_per_cycle - PPB per cycle
+  * @ten_sec: PPB per cycle in 10 seconds adjutment mode
+@@ -709,6 +718,7 @@ static void rtca3_action(void *data)
  
- required:
-   - compatible
-@@ -61,6 +63,39 @@ required:
-   - power-domains
-   - resets
+ static int rtca3_probe(struct platform_device *pdev)
+ {
++	const struct rtca3_of_data *of_data;
+ 	struct device *dev = &pdev->dev;
+ 	struct rtca3_priv *priv;
+ 	struct clk *clk;
+@@ -718,6 +728,8 @@ static int rtca3_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
  
-+allOf:
-+  - $ref: rtc.yaml#
++	of_data = of_device_get_match_data(dev);
 +
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a08g045-rtca3
-+    then:
-+      properties:
-+        resets:
-+          items:
-+            - description: VBATTB module reset
-+        reset-names:
-+          const: vbattb
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g057-rtca3
-+    then:
-+      properties:
-+        resets:
-+          items:
-+            - description: RTC reset
-+            - description: Reset for the RTEST registers
-+        reset-names:
-+          items:
-+            - const: rtc
-+            - const: rtc_rtest
-+      required:
-+        - reset-names
-+
- additionalProperties: false
+ 	priv->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+@@ -772,7 +784,7 @@ static int rtca3_probe(struct platform_device *pdev)
+ 		return PTR_ERR(priv->rtc_dev);
  
- examples:
+ 	priv->rtc_dev->ops = &rtca3_ops;
+-	priv->rtc_dev->max_user_freq = 256;
++	priv->rtc_dev->max_user_freq = of_data->max_periodic_irq_freq;
+ 	priv->rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	priv->rtc_dev->range_max = RTC_TIMESTAMP_END_2099;
+ 
+@@ -875,8 +887,12 @@ static int rtca3_resume(struct device *dev)
+ 
+ static DEFINE_SIMPLE_DEV_PM_OPS(rtca3_pm_ops, rtca3_suspend, rtca3_resume);
+ 
++static const struct rtca3_of_data rtca3_of_data = {
++	.max_periodic_irq_freq = 256,
++};
++
+ static const struct of_device_id rtca3_of_match[] = {
+-	{ .compatible = "renesas,rz-rtca3", },
++	{ .compatible = "renesas,rz-rtca3", .data = &rtca3_of_data },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, rtca3_of_match);
 -- 
 2.51.0
 
