@@ -1,114 +1,159 @@
-Return-Path: <linux-rtc+bounces-5120-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5121-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B691EBF6CF7
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 15:36:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 236ADBF8F2D
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 23:35:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A10F44649C1
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 13:36:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB1D418A40E9
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Oct 2025 21:35:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4F3337B86;
-	Tue, 21 Oct 2025 13:35:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57DD28CF5F;
+	Tue, 21 Oct 2025 21:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="LDDwlNL/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="trU68A4Y"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC6633890D
-	for <linux-rtc@vger.kernel.org>; Tue, 21 Oct 2025 13:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9774127FD71;
+	Tue, 21 Oct 2025 21:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761053729; cv=none; b=IHVkaYhbJ4su5R1rAB297ZCVhGBkP2hF7Y8aqrzHzhqM/pHhDLDSZNJQ6Q6WSZdenNDv+9wSl2ev0m51XQcusRLQ6u1ugnbzNShM/vdvVSECa7yI7h3J+w63ZYXyFL1zDYLyMD8dBH8J0XTQ+FQs/28KQtwN6vk63QUkM/XMMrw=
+	t=1761082526; cv=none; b=eL89Dr4EkaFAkL1BbC0XNCrzn363i1sz1pP0t0OZIJjGvo8KghsXrGKs4NqlD4LNnRsNDyy1wEADEpmuKXvGlk/r7k0xJy7TOH5u8Q4DdjaeK8QF2xzXWBjD0Ylc1dbERNOh3CwU2Iim+MsRAj6uCBYGbl9iNbfTne73Z1jmG0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761053729; c=relaxed/simple;
-	bh=gnF9AkJgPkgv+c5e70+0S/TuXUz2qGPWDAKnDZ2oFUs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l7IrFFYjtkUHHX2j4dB2QlKKTin7NFI6tjkmWZMxsvs90xU7JI13sOgRPfFBe1OBYll1DJWaXuBbWSabw/XH8dBxh7iAIExkr1JNGhWW/MjKMxelB6skxJWXX3xyKqjSI+YwgDBTUW5cWS4/x2MelO8VVOFkfIQlPcowoR9cfZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-54a8f6a2d80so1998106e0c.3
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Oct 2025 06:35:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761053726; x=1761658526;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2TkKqx+vxrv5wCaSsuSiP+PuBVA5+FMh9B80POq+sr0=;
-        b=YfzUKltl+T5nHf6BAe+wPrETmWghGL062qGmm6g2MbBYCLa0FUFuw9HWL1U0coNp5g
-         Q2vqKtzLxzxTLQMxTNaHpg42vNx2NJXahxv7oTMNJ29XShkq3kvvIQtiEYcC4V0iZb2w
-         2Kxx+LaXQGTpYN3Ut6mgZvXrbG4Rn8UegIcRC00wiu4cMKpIlstuDGMfoveT7QS0nMbx
-         TVWXAGkbAg+ITiOx0yabwkY7aMUGnZ0R0K0aGj5rjwindPgCPY1X5CTQgVMEiocKBVZP
-         UgiQ+QPKMfPSxSLEpP/HLLxDDYQ1vOqaJW+kSSb5r5LMk3uY5Qspi8imYAjPX4Fl+MfR
-         ENQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXDDW2KDAUMlfavmv15bdqxN6+w33IPEQFzAVM4oUf+tdElLNcwuraucO3Jagt1Vu8p+YdagmzRNgw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfGZEHwL+aKGIuLy4QJZOBBEz3a+LuBpSK6CnD5yGFiLcRK5aG
-	eOWHq4+9k9v5OWGMLNaXd5dcIbUpG3zksZmrCKSuLWe71p9jh2UMHYebinULt37q
-X-Gm-Gg: ASbGncvcn7N3/oz3oUPQR8rVyIYNX+ActKCJzSxs18/gBAGydsUlQp1+DO8b4ZecwiV
-	g8W69mMZUo5vD5D8PBZ6W0mDK3J8m/x9UHZYVgrpNvI5Hbic2Fds2qIhdA2T+6gKxIdnlus6qWG
-	yJrp/LCdz5CokJr+KLFovF/p4hl43yPE/tccQyFJhTys5j146LsWcOj1WMpOf29QaFlK93S5dN/
-	LeeoSK0Y/0FbNZxBcTt3DpLo8Vky5eS5gzWRAgD6/ixzJ6zYpy+TThfwQOtGdfRdAKW83Or9qLa
-	0ioew7SPcxMQ1uJ29yYD7fHjnv9HwalrkjxjMqsicOVOnm5+ZVocbcIOKi/K/zmGCUKlXRZxX9D
-	C+GdhrqJJHZHmmt/qHZMaPAZRJWuKHqT3VCzUHfnlOhtdWcs+rKrewnLHiqspoC77Cqg6F9bICA
-	PulaAGoa6BmJhf3gw9hhcacGUkh+aUJvkTIrdifFMckqA4i0Mw
-X-Google-Smtp-Source: AGHT+IFjXXIJTNz74ORp8fw1SUCuvxPImq6Asc++QNYRIySfkFKggSzHscRopjGdv+UzuKqOaW0CIA==
-X-Received: by 2002:a05:6122:54f:b0:54a:a048:45a4 with SMTP id 71dfb90a1353d-5564efad5demr4691955e0c.16.1761053726317;
-        Tue, 21 Oct 2025 06:35:26 -0700 (PDT)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5566211708bsm3342000e0c.22.2025.10.21.06.35.24
-        for <linux-rtc@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Oct 2025 06:35:25 -0700 (PDT)
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-932cf276843so647140241.1
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Oct 2025 06:35:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVI5+I2B0hDcSkTA8oSRwtxN5GekiP0ieqWeBUR+0OVaCMvXtCmFcEy2tImf60vzRBfzdXuroodNNI=@vger.kernel.org
-X-Received: by 2002:a05:6102:390a:b0:5d5:f6ae:38de with SMTP id
- ada2fe7eead31-5d7dd6ba33emr4614068137.41.1761053723732; Tue, 21 Oct 2025
- 06:35:23 -0700 (PDT)
+	s=arc-20240116; t=1761082526; c=relaxed/simple;
+	bh=YOmO0aTYC7u74cdNwBX4yqTPJteWYgGn+TnC9SPFm5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JIJO2DYjUyeYA/LzfFd5dzOcij03UIPftgx1RSBBzSOYwWGTioNA5rVvRYLKT9kpyCU3yp20r3JnFtzVYhDG3gZKD6I2bHKhQ1LuYiuO3rDap+bFGbEWNTZ9yDBAg6daQ8ETVeVBXIT/uMyEXWas3tGNH1wkxWia4cxIoUf92sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=LDDwlNL/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=trU68A4Y; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id C07911400152;
+	Tue, 21 Oct 2025 17:35:23 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Tue, 21 Oct 2025 17:35:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1761082523; x=1761168923; bh=SSmc773k1o
+	hUjKBtXPg8Ooubnfa2H2zZUHk2E3oNqks=; b=LDDwlNL/Civ8KvUV+4wSIqn9Fp
+	dC6gnUKVTULSO8HojwWFrG0YZyvJvkw047KbdqBA7pfC00sxISkseQmGwM8ejAOE
+	99UrKxGX2dVr3c3gC+DjTGIx7gUjwczI48oyUPRmuP6bFpRZS4oWtedTLRd6IALo
+	1NhTCrbJvbY4KxFA0AJWSHCdhJHb1JW1Vm64AgpwnRzV6gpxaH1eLNqkyUmFz3N0
+	f8GCTKCEaLeOLmz1SEjBIrPUGjcg2MUHuMOPyRBv+S335R3kR441Ij5gQhh+aTvZ
+	9kSHQTNM8/8s8x5ZMPB3nmz5rpEKs9sh7GU+H9oXK2lB7VTeFTthCfJeHJ3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1761082523; x=1761168923; bh=SSmc773k1ohUjKBtXPg8Ooubnfa2H2zZUHk
+	2E3oNqks=; b=trU68A4YzeRx8nSBoXV7wr6rGsygStp9hhqPoTrWvrwH7020yWy
+	LbwZZQTk1JTQFfsyu7YxbX8GIQDPk4hF8h/qLr8e1zhJpVDaCn0gd+jvvHc/St8U
+	PfTGJ7mUgGZQ5LLORJQiWSHFwv97yTDg8ML1SY5Ehe4Z8JJyFs5kp8VGijgdW12w
+	H+q6zOyeZWpERBinzuxMlrx4mvf/1P20p36MaDEI1FyWT+5HWJGykX2U17KDxH63
+	iuZk4CH7K6ZGiBXNSbr/Te3xOiAL2H0nqorV6bVY4LYcmqrCVlBbeh3pTiWs087G
+	fIURyiYh/cVImYO19CBb9EWzpskuQ3u70GA==
+X-ME-Sender: <xms:mvz3aH6CC7ccxitepgQOV4dRf5ycIb3MyGp5fup00yTr9aRmZcxk8w>
+    <xme:mvz3aNR3WqFDe4caBONWo_J67I3zv6_Kgwz3EemEAqUyQhrxbPcQqCmnF4S39S-wp
+    PzKQ_6NQAcYn3zqdXJ_tGN-swiq389HUvU72M0EfweI5HMXfgcT9pc>
+X-ME-Received: <xmr:mvz3aPmKV8lSi3JXACietOeMwXek-wkDaW7hS6ij3kVUWd7Fu3q5gI9k3nMzzl27h7VZ18xiElJUB3-Q2apck-1pizG1VUQUTK2WKBWCyrun-YkCsA1vAkLbbQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugedujeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
+    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
+    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
+    drnhgvthdpnhgspghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopegumhhithhrhidrthhorhhokhhhohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
+    epjhgtrghllhhighgvrhhoshelleesghhmrghilhdrtghomhdprhgtphhtthhopehsvhgv
+    nheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlhihsshgrsehrohhsvghniiifvg
+    highdrihhopdhrtghpthhtohepnhgvrghlsehgohhmphgrrdguvghvpdhrtghpthhtohep
+    lhgvvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pegtohhnohhrodgutheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:mvz3aEKTfwowrvGhnvf4-EXiYQ8vvIQIVEZ1iWF8JuUJEl7pOxPTwQ>
+    <xmx:mvz3aKQDpq6pdomkmnXR8DESBXdjiu6JkQoLsyLelbx_7tE1yw2-gg>
+    <xmx:mvz3aKSM4MHm3ClKfeaqTHWz-nMYXtQafAIa1bNW_e28Sx97dtMPEg>
+    <xmx:mvz3aEzXTHBa5YFFaUthIK9hhDlQyKhib1n9PXB56vtmvPVKipSSUA>
+    <xmx:m_z3aIN6XjMCVaeHimR80BQvfCuR37CLmoygwdxALuTo15O-_yFWnP9x>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Oct 2025 17:35:21 -0400 (EDT)
+Date: Tue, 21 Oct 2025 23:35:20 +0200
+From: Janne Grunau <j@jannau.net>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: James Calligeros <jcalligeros99@gmail.com>,
+	Sven Peter <sven@kernel.org>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+	Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 07/11] input: macsmc-hid: New driver to handle the
+ Apple Mac SMC buttons/lid
+Message-ID: <20251021213520.GA2546203@robin.jannau.net>
+References: <20250827-macsmc-subdevs-v2-0-ce5e99d54c28@gmail.com>
+ <20250827-macsmc-subdevs-v2-7-ce5e99d54c28@gmail.com>
+ <qffp7kadq3xojla5k6f5pr37irgytqfsqvabr6ydvulxnkcgnn@bv5mrraxrhhe>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021080705.18116-1-ovidiu.panait.rb@renesas.com> <20251021080705.18116-2-ovidiu.panait.rb@renesas.com>
-In-Reply-To: <20251021080705.18116-2-ovidiu.panait.rb@renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 21 Oct 2025 15:35:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU+=c-HseXicppm+185qq3fcc7=qq3Nu4LjoKZuYF0d-A@mail.gmail.com>
-X-Gm-Features: AS18NWDE7aRGEcmYizQFJmtQta7msQIG0JXTbcDHGFqFLxinOoGCd4ViST3rwwc
-Message-ID: <CAMuHMdU+=c-HseXicppm+185qq3fcc7=qq3Nu4LjoKZuYF0d-A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] clk: renesas: r9a09g057: Add clock and reset
- entries for RTC
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: claudiu.beznea.uj@bp.renesas.com, alexandre.belloni@bootlin.com, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org, 
-	p.zabel@pengutronix.de, linux-rtc@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <qffp7kadq3xojla5k6f5pr37irgytqfsqvabr6ydvulxnkcgnn@bv5mrraxrhhe>
 
-On Tue, 21 Oct 2025 at 10:07, Ovidiu Panait
-<ovidiu.panait.rb@renesas.com> wrote:
-> Add module clock and reset entries for the RTC module on the Renesas RZ/V2H
-> (R9A09G057) SoC.
->
-> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+On Fri, Aug 29, 2025 at 11:11:22AM +0000, Dmitry Torokhov wrote:
+> Hi James,
+> 
+> On Wed, Aug 27, 2025 at 09:22:41PM +1000, James Calligeros wrote:
+> > +static void macsmc_hid_event_button(struct macsmc_hid *smchid, unsigned long event)
+> > +{
+> > +	u8 button = (event >> 8) & 0xff;
+> > +	u8 state = !!(event & 0xff);
+> > +
+> > +	switch (button) {
+> > +	case BTN_POWER:
+> > +	case BTN_TOUCHID:
+> > +		if (smchid->wakeup_mode) {
+> > +			if (state)
+> > +				pm_wakeup_hard_event(smchid->dev);
+> > +		} else {
+> > +			input_report_key(smchid->input, KEY_POWER, state);
+> > +			input_sync(smchid->input);
+> > +		}
+> 
+> I believe you should be using pm_wakeup_event() in all cases so that
+> pressing power would interrupt suspend even if resume() handler has not
+> been run yet.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk for v6.19.
+pm_wakeup_event() does not wake from s2idle. pm_wakeup_dev_event()'s
+`hard` parameter is explicitily documented to wake from s2idle. So using
+pm_wakeup_dev_event and use `smchid->wakeup_mode && state` as hard
+parameter seems the correct thing to do.
 
-Gr{oetje,eeting}s,
+> Also I do not think suppressing KEY_POWER is needed.
+> Userspace should be smart and decide whether to shutdown the system or
+> not when receiving KEY_POWER depending on the overall system state.
 
-                        Geert
+Not all user space. Using the power button to wake from s2idle while
+showing agetty's login prompt on a tty results in an immediate shutdown.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Janne
 
