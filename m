@@ -1,611 +1,264 @@
-Return-Path: <linux-rtc+bounces-5143-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5144-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C698C0524A
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Oct 2025 10:46:50 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2074FC05A73
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Oct 2025 12:48:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BA3242375E
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Oct 2025 08:37:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9AC94356C54
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Oct 2025 10:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E0D30E839;
-	Fri, 24 Oct 2025 08:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39633306B0D;
+	Fri, 24 Oct 2025 10:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="G0USCoXg"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aBD1VeXD"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011021.outbound.protection.outlook.com [52.101.62.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4984130507B;
-	Fri, 24 Oct 2025 08:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761294813; cv=none; b=nGYDOWt05N7xqDAOmwH/ShtqrTh0ajZVdLKNZX65GuRkosl5zn8shD56LjBi028Qi/WrhCqT+OTZIXloK/vwUPVycqcaC6fW3nqzHWngU9/nBpHSNbp1/GVyKLTa+JA9xLTyftHg+PVUWAbuqJofKkY2IXDAPWtUF4NAi1/kaws=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761294813; c=relaxed/simple;
-	bh=tka2SvgXGZkC1/tSrX0XrtcfbAkqAvDWRfldZUFzQmI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oqA89ew1PtkTRFl8tZ+yrmtReoaq9Gnwd31k9CbG/pI2Zf8EDXTA3Uu8wu9GhhfUHTa+9Jxn3fYgBHczCprda3uuIhlJmlmS3ATvpe+2WrgB+dQc3bSA+rFiFowkxmWjYRy3oOIOr8tBiLzHw0rL1UzHs1AbPPfYO3Tr45csZt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=G0USCoXg; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1761294809;
-	bh=tka2SvgXGZkC1/tSrX0XrtcfbAkqAvDWRfldZUFzQmI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G0USCoXgMdScDG3b2URfaBBOtrb8u17Vt9f8h0WcnyU8WSmdNChb06Iz/KpOhTB5n
-	 1+Yn3yBiIL6Ap+Ch1L5ZzLrQqUKZIoqJETr/eqRz/IUej2Eyn9QHgkkNjBk9rOd5FL
-	 Jo3bEro+uNJi+c9jinWhMKCKS8hQnjW1y+VWEHSaEPfZtUxu1tHvBxIjJfBaogsSko
-	 s0giOlvqb/2ISHR4sp9b0hjsvIkydb8J8PUrL9N7MM473FXVLcxZPG5YaffS2/Nlbe
-	 XjB08VtktoFKC1qq1yF/Ju2gbdbB/GxOkbvXjOQxuv6ID1hZm2WYRLKLIyYo9qkNu0
-	 Rcm+x/3mOhsBw==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 156AF17E1315;
-	Fri, 24 Oct 2025 10:33:29 +0200 (CEST)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: alexandre.belloni@bootlin.com
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com
-Subject: [PATCH v1 2/2] rtc: Add support for MT6685 Clock IC's RTC over SPMI
-Date: Fri, 24 Oct 2025 10:33:18 +0200
-Message-ID: <20251024083318.25890-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251024083318.25890-1-angelogioacchino.delregno@collabora.com>
-References: <20251024083318.25890-1-angelogioacchino.delregno@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5982B19882B;
+	Fri, 24 Oct 2025 10:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.21
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761302907; cv=fail; b=uLeN6k6s5fUI+8Ba7X5XTO8inDi1GqbKj3BQzVm5JOmAepze6vsC3nn7Gmsw7Pt4/ErF4IFS5tszerM9mvq2VGSd4JPUEt7N21pizLW1iXZzFJN+KLuD+uQK8hhxwe3jhGt9BxFgUdmXb+aiZ142gpqqafCRU9t/LSeKdvFPd1s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761302907; c=relaxed/simple;
+	bh=rKnAywtRzlDp3oM03DSrvJyEwGP7qqFOnpCXTxmAkXA=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=c1mMTbEUR0t5k6Q4NqqHcyA3NzO5bOTSbVamYlz6Px4GwXW4Rk30hFDc+Gq+sefVJrbcAM/u+5S+cTJ9N8jnZ0skpXgbl28KJDmQbfZ3jcS2usokbfASKV1h8vnabU84jqBj0WJzGsnT43SSRKQMEfQzXQYlRFcVgtZsebBjX3s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aBD1VeXD; arc=fail smtp.client-ip=52.101.62.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iFsKzf/YmMUYaSMLrPmxZEGBeHN8gVPDbbk0p2z6IRocQmBt+bmlfyuAkrdEsJj0fJDg56DmrlCd7/AZjzCqEvPvFV4bkx9+aeN+ELj/KhYLJqHrmWnwFJunKk/awmca6J9hcB4vTOn/JggPhzsRvmkFxri9dm49hdt9xHzgoRfAXU05+JREW7XYp+0BXoeFNeyxERNlOncVFimvr7cSgfXNw8Lytf8qNouOd3Nf3p3xxupS9GI/C+IIIUHHoCEbcQZdOsF+UveXMQYH7y4VwPfDsV3QdFVhCBSV0N8SFKKukzxVHeDXD7xksGBGv7nhG6Ch+qwS3u9aM3EmClReyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bHZRUtQ6ZMu90XxzL+Btgi9VwwuvZ3kVbjJUJG2LMKM=;
+ b=xrp01tauXrG42Z+kscomuQ8jJSi7ejFHOWUqoL31ApHb6zP6Eh8h1QdV4JSeTryOby4CU4Kl/Sc7MRC6LmyYIQA2uAzgkEAXItiDWs7/4cxI+1FZgQvCJiuNTFmFOJtC20nPhuzMZicIX9ZLlVDuymVlYVdmseBMjjTCDoVbfUriVewrTlQA18QupNw31ASvjRHMIGaJ/aI9zFOWuUVq60NKoIpe+7/Lp+DBYqV3tjamm2lyMBJ9NJKeRnVq232nWvlbpzf5uehUsJNQCstYtlPAH8GhG6PMiX3BEd6ui7PpZwae959wLXCkxMOpnV+pcAgR+QTJIhnj/L5xG9Ib3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bHZRUtQ6ZMu90XxzL+Btgi9VwwuvZ3kVbjJUJG2LMKM=;
+ b=aBD1VeXDnwyUzWeuoivj3e1j3EuMD9Vh2B1px1YZi9wKtOD0wY1XvmQF2Q3Dcz/2tgDR41YIoCkkxWziDJN+XN+rO1ru7Js2egQaDwbxY70XKxnWr40qIKPkgKE0aXlNsagU/n9HbsviqLAOBfvdopcfOO4BIHUdtrQiXER/AEIj9GvgIkXOelgpPVv99aSdl/F8f3Q/Z7vwfg0KPct9c6enuMNdkQreE+BL19ayfH/vzRkMGIN8aLGe9MQOH0F+sBp053yrQzl2bilAKV+xdJOhXd07GFZoVuDqtuYzxJ0q3PCQ0IlQNwtTVUONfzIP2tCk8E7T5f/uiYAdQ293Rg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
+ by DM6PR12MB4073.namprd12.prod.outlook.com (2603:10b6:5:217::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.13; Fri, 24 Oct
+ 2025 10:48:19 +0000
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9%4]) with mapi id 15.20.9253.011; Fri, 24 Oct 2025
+ 10:48:19 +0000
+Message-ID: <1f36b2a9-bf84-49f3-a27e-f264403c3ae1@nvidia.com>
+Date: Fri, 24 Oct 2025 11:48:15 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] rtc: tegra: Use devm_clk_get_enabled() in probe
+To: Kartik Rajput <kkartik@nvidia.com>, alexandre.belloni@bootlin.com,
+ thierry.reding@gmail.com, andriy.shevchenko@linux.intel.com,
+ linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251024064952.775883-1-kkartik@nvidia.com>
+Content-Language: en-US
+From: Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20251024064952.775883-1-kkartik@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0631.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:294::17) To SJ2PR12MB8784.namprd12.prod.outlook.com
+ (2603:10b6:a03:4d0::11)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|DM6PR12MB4073:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4ea9ed0-6e67-4e42-56ef-08de12ead855
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|10070799003|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RHFsbXdTWE5NeFVaTW1QNm85OUNyd1kzNVBOcFN2eFd3Tk11eVZEaGRvVS82?=
+ =?utf-8?B?T25WMGJSTmtvSUdRM1h0WUNLYXJ3ZDBhMjY2RmdQbHpodGlvWU1LMWRKd2h1?=
+ =?utf-8?B?eWt6MlQ1SjJlWWJzY2tBcUg5V3FvM1VzdXRvZ0tRcnFjN1FJVEc5Q3RwY1Vs?=
+ =?utf-8?B?UCtwaW95ZzlGUUk0MUVkbWR3VFZ2cElEMU5EUG5WZUwyMTJFUlNhQldkVFNV?=
+ =?utf-8?B?NzB1MTA0VjZINnpYNWh4SVB2K21wVVV2NkVSRXdlOHIyN0prcldOL1pjNm9i?=
+ =?utf-8?B?MFpnUDlQZ0V6eE1RSmczaG40Q3RJZEdyZUl5K0orQXg2N1gvMUFCc1FWY0VZ?=
+ =?utf-8?B?R214dGNWc0NrUS9DRnJqYmlPZy92T2ZzL0pHM05NVEhxaGdFKzlVc3BMWmJs?=
+ =?utf-8?B?YUp3TXNseGtxVFFIZytKV1d5Zi9QT090MDRYOVlNdGRkbGNKQ1NRU2xuS0w0?=
+ =?utf-8?B?QWpkYTFzZXFKUmtXOUtKTnJHZy9RWkZ2ejc2OXRHWlY2TUZiMmc4ajAwcmxy?=
+ =?utf-8?B?dEZMYVdIRFRGek9ZWDh0QlVmV0lnNm0yalpzaEVjY0dXMFpOeERheWsyMEJq?=
+ =?utf-8?B?TnlKU1B0VkoxbzlyeGFWdEFCQmI5SCt6Q3F5dlZWSVljT0lsazhRaklkU0I1?=
+ =?utf-8?B?MXlyRlpsbDlnRFVTeWlhT2hiT0NITGdIcGczMnRwbVdaeDlZOGoyTktTYk5l?=
+ =?utf-8?B?MDFBQVJCeSt3Q2h0N25LRDRxLzE1OG40ZGthV0xMNm14YW4xTEZPWHhndzdU?=
+ =?utf-8?B?dG4rb1RZNzducU9MN3VwWjRldzh6d2swU0dsM1pGUGJpSTlQdWp2QTVTVG5D?=
+ =?utf-8?B?ZkVmVk5rendsaTlYQTBybG95MUxTd3Z0dDRWVFV5d1VucXhITDIxamg2Y1pS?=
+ =?utf-8?B?a3NKcFZZYVAvNEV2WWZjL08zSTIvMTJYd0RrYnBkNWt5d3JnNTlTckxMRmZy?=
+ =?utf-8?B?OTRMT012WkVqZ1VYTjBYYXJtQ3NZMnAvaTAvVUZ1OWFTcll6SzkrdkVjcTRN?=
+ =?utf-8?B?RmdiOHJ2NmcwS3J2WlI4SERIVVU3SS9lN25GZFBybHA3REg2ai9PQThIeEdH?=
+ =?utf-8?B?QXVZdDQ5bElLSElDc0gyVitzTFJBa1FTYVdEUFZvN3hnWDJTdHA0VThjNFUz?=
+ =?utf-8?B?U0ZMSXFNRzJ6VHFqT2lJSVVuZSs5bUVkc0JHTGFPazlqb09QN1crVHYybVUx?=
+ =?utf-8?B?S0Q0K3I5d0I2UFlBdDFzVmtPcUhkNU5ld3FoZmJneDVGWE9YSFppZ1VWelJG?=
+ =?utf-8?B?czhxTTVFbXEwQk5BZlFtOStSOWNpQUl4ak00VEtSNDI0RVo1SkljNi9Ic3po?=
+ =?utf-8?B?emFjOHVnMjdaYklqZjFxNTQ1cUVxRUNJYUo3V3MvRUVnNVJRMkZJakZwS2Mv?=
+ =?utf-8?B?VUtlOTJ2dFZXckYwOEMvcTk2MkRydFV5bjRGSnN6MnJwWlg4R2ZXWklVelVQ?=
+ =?utf-8?B?Zm5ZU25tdTVUcjd5STlDTkVNeFE5STVqUEVuNnllR1plaWR5Uis1anh0UWhx?=
+ =?utf-8?B?M1pQYXBnYi9KalpUVWJYeS9Ddy9KejVhd1o0dDRpTUR6OTh6WWhzNHFCcjl3?=
+ =?utf-8?B?LzB3T2c1OE83STJSV04wRFNGcjk5cit4YldWODh4eHdvVFY2Vi9FWVNzV2xT?=
+ =?utf-8?B?eFRaVnhkY0lPNWNxRzRwRDFZY0JZaTBYWWRlalk5SVNDWHNlTXJLSkF3bTlQ?=
+ =?utf-8?B?NzV2QWQvU1BnL0srSXQ3b2VzV2lVdWpRV3N4U0Q4bUpZUTFCRjN6VnlwSmZn?=
+ =?utf-8?B?MlM3ZEZpcVVqN3BBL0RxVVhIcXIvYWxWellMUWVUV2Z0bFJOZDRKMjRqRC9Z?=
+ =?utf-8?B?UTBEOFhiQU8wa1hoZWJyNEp4aVVaUndSR21PSkVxTTIzSmY5MzMyeENXaStO?=
+ =?utf-8?B?aXRiNlVTdzNoa0FMRWswZmJYWklnSDBuS0s2UEtIUFF6eHBaeXRLKzhSMFRU?=
+ =?utf-8?Q?DB1agyyTn4O/uK5nXpJJ/XGDrew1D4SU?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(10070799003)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MFRUb0Z4cEdONWJEZi9oSmRGRnh6RXBBTmpUOVpHRW9DS244QUdobHRIdkZP?=
+ =?utf-8?B?QVUwRXYwNUM3VXdha01LRXo0OHdrcmdmMC9qVU85LzNIMnMwaVJuUlZsVmVm?=
+ =?utf-8?B?NlNQREFJSkVwWmJCQVdWdHBBWm0za3ZGQURpNUNyTDJOalIzMjVwenQxbVI3?=
+ =?utf-8?B?VjJwZC9SQXBrSGo4QmRRbWtDamJlQVRqOHZYV0Ywb1ZMM0tRZTYrNDZMRHEz?=
+ =?utf-8?B?QURNeUFIWThYZU12dDJ2S2FGbmx4VmFXYXdCUnM0SDk0VHRsQXp0UU8wQXRV?=
+ =?utf-8?B?UzBxVjdmd21BeGRvS0o0WisyallFUExUaytabjN3Z1N6QmpJaHhDOTA2YWkv?=
+ =?utf-8?B?eENtRXVySFNvMzA2eXV1OC96dG5IcmN3Y1kwdFRWb0l2V05CMGJKeU5NTE5m?=
+ =?utf-8?B?VnJXTXErZlc5Y2tUaFpGUHNjblZBUFgyYTNyNDJBYXRyTGcxK0htemppdEhU?=
+ =?utf-8?B?N0NjU28vbGNxb3poOXNLcjNUTFpmT1hpeTZFb3c3anZXM01lUTl1QzJyTlZU?=
+ =?utf-8?B?aVJEM3FzWWZoeFZKL0tvNUxhbVE2K2Z0dVlvR1lLL24xNzBVNzU3eFJYd3Uz?=
+ =?utf-8?B?RjluVlplcHpWaFZlOUNGbUpmTy95YmlVc0h5Q09CSVpQSGs1c1pIbENHdjNn?=
+ =?utf-8?B?Ni9xUDRaMHNHUHdic2ZRY0l4VkNYekxyMTlBZUlaVlVudXQ2WThKb0UvOWdP?=
+ =?utf-8?B?YXBPZWNMV3NjV1MwS0Fjak1tSW1YZTlMOEVjOTdjK1ZiSHZEcjVmQ2VLanpT?=
+ =?utf-8?B?a3M3NzJuakZtMnFJQmx1V1RaaWNSSnJhUGdQdGJnNmhsR2pJRzJEQzZ5Z0Ja?=
+ =?utf-8?B?U1N5aUU5b0g4VWJYWUpVMzhkWk1Wa3J5N3EwNE9rOEU1aEFJdWF0bm1WNmhQ?=
+ =?utf-8?B?YUhDa1NxcUcrTXZiK2NIL3lLdlVYcGFRM01HOUlTNWp5S2pEa2RWa0kxNmZJ?=
+ =?utf-8?B?MU9FRGtOR3B6aWNWTmVSZCttSXp3WEw3M0RNbnBKa1ltei8yR0RnWXVHbzF4?=
+ =?utf-8?B?VDNUSHBIMjJsZ2tXNFRmbVoxRjY0dXRVbkZjcTFKNlNJemdmTXVORDRPNDVn?=
+ =?utf-8?B?SnJXZS9RRHdTSjE2UzlqOGdRdXFBU3B6NVhRSFFkcWdGQXFUeWJOQ2h1SUcz?=
+ =?utf-8?B?YTRQZjZUMmhqWVpEVzE1VlZ0WGZsOXF0ZmxrdjRIZnprQ0x6RS8rbWpiYTAr?=
+ =?utf-8?B?Y3hJejBEdlJvLzlNRFlLSTIrcVgzN3dxeVhGVEN4UHhGd2x3blgxRlE3NUxj?=
+ =?utf-8?B?VTQ5cUlPVzFtKytqbE85QXp1TGZXeEJLSGg5UmpySFphNmY5WUM4LzBhQVZq?=
+ =?utf-8?B?Y3J1MGVGQXVnalFmQzNVaWp2M1gyZjlzNVl3TEJlMjJUS1pTWDY5cTJtcVU3?=
+ =?utf-8?B?TEJycmRkQk81R1lGRkd2S2lrVkpaeDlzTVRXUVFDSDRhaFhvUlMybHlnT3lG?=
+ =?utf-8?B?N3VERFJSVVpYdVNSSUt0SEs2M2F1SUhrSFRsc3F0UnBsbE1TMmFEeUhCdTlp?=
+ =?utf-8?B?NlVGSEpvWm01R3Z2RHcyRjNQYmxOTFNpM1FWc0ZxUC84czM1VWUwOEJTVUwr?=
+ =?utf-8?B?cm5mUmFzdDVGRDlFbHpQTG1paERlVmFjYzlaZFdIc1g4ZXI3ZHBOMVNEVmcv?=
+ =?utf-8?B?R0VBSTdycVJrMW5GekZ1bEQxRzRjUWpRMjJOY2ZvemcrcnR1b0hubnVWdGVl?=
+ =?utf-8?B?eVFYL2xiZGN3RlFFL2VYNTFCakl0eThKK3I0L2JJWGZQZGNkSzY1MlZvbGlj?=
+ =?utf-8?B?VWxwbGhoNHlJL0N1THl4RS9MeUlzcVM2UlBUQ3pqeXZjN01DWjcvYnRxYjJl?=
+ =?utf-8?B?T0NMUCsrQVBvSU0vUGtONGpVSDFJZFJxSDlzMDg1Y3owbWdIQW52OURJY3Zt?=
+ =?utf-8?B?YlJOak5wZk0yMnBQeEdPZWQvd20rcHhiUm9md0FVYWZpcVkyV014MFpCZTln?=
+ =?utf-8?B?UmJrU29uell2Qjlmc284SnJIamxMUHNLQjJPYy9ISmk3ZVI2RVZYekFpbGlN?=
+ =?utf-8?B?bEd3a2VvZk1FNk1zNzJVYkZTK2I3dGRPTE83dDI1aTBTQ2xFaWh5OUgzczZM?=
+ =?utf-8?B?OHQ4ek5nUjMrOWZjZUVmTVA2dVFpUDVvKzVaZUFPWnNENnhwQlNiM0hGZ0k0?=
+ =?utf-8?B?bE82bUh6eFl5M1QydWFDd1dtWUtrVWxtWjNGOTdsU0ZmZ1NNNkQvelhibk1H?=
+ =?utf-8?Q?9K0RPr+QtjtGAElkxzlyP3zQp07XPIsQXZm2cDt2q+zB?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4ea9ed0-6e67-4e42-56ef-08de12ead855
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2025 10:48:19.6977
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KLwic8dWe9YflKFxCdV81puKRjjQa1oeZ9OmDIx5gq3MOMCcIB48AUA1UL/vZBRVNsmyN+V0Nwv0+x+3iXzbuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4073
 
-The MT6685 Clock IC is connected over the SPMI bus and includes a
-Real Time Clock (RTC) IP.
 
-Like the IP found in the MT6323/57/58/97 PMICs, this RTC ranges
-from year 1900 to 2027: for this reason, in this driver the start
-date is set to 2/1/1968 instead, matching the intepretation that
-is found in most MediaTek bootloaders (which, in too many cases,
-cannot be replaced due to OEM signing) and in downstream drivers.
+On 24/10/2025 07:49, Kartik Rajput wrote:
+> Simplify clock management by replacing devm_clk_get() and manual clock
+> enable/disable with devm_clk_get_enabled(). This also simplifies the
+> error handling logic. Also remove tegra_rtc_remove() as the clock will
+> automatically be disabled when the device is unbound from the bus.
+> 
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Kartik Rajput <kkartik@nvidia.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> Changes in v4:
+> 	* Removed tegra_rtc_remove() as this is not required now.
+> 	* Updated commit message to specify this.
+> ---
+>   drivers/rtc/rtc-tegra.c | 26 ++++----------------------
+>   1 file changed, 4 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-tegra.c b/drivers/rtc/rtc-tegra.c
+> index 46788db89953..e8c83a6a96b3 100644
+> --- a/drivers/rtc/rtc-tegra.c
+> +++ b/drivers/rtc/rtc-tegra.c
+> @@ -300,14 +300,10 @@ static int tegra_rtc_probe(struct platform_device *pdev)
+>   	info->rtc->ops = &tegra_rtc_ops;
+>   	info->rtc->range_max = U32_MAX;
+>   
+> -	info->clk = devm_clk_get(&pdev->dev, NULL);
+> +	info->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+>   	if (IS_ERR(info->clk))
+>   		return PTR_ERR(info->clk);
+>   
+> -	ret = clk_prepare_enable(info->clk);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>   	/* set context info */
+>   	info->pdev = pdev;
+>   	spin_lock_init(&info->lock);
+> @@ -324,29 +320,16 @@ static int tegra_rtc_probe(struct platform_device *pdev)
+>   	ret = devm_request_irq(&pdev->dev, info->irq, tegra_rtc_irq_handler,
+>   			       IRQF_TRIGGER_HIGH, dev_name(&pdev->dev),
+>   			       &pdev->dev);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "failed to request interrupt: %d\n", ret);
+> -		goto disable_clk;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret, "failed to request interrupt\n");
+>   
+>   	ret = devm_rtc_register_device(info->rtc);
+>   	if (ret)
+> -		goto disable_clk;
+> +		return ret;
+>   
+>   	dev_notice(&pdev->dev, "Tegra internal Real Time Clock\n");
+>   
+>   	return 0;
+> -
+> -disable_clk:
+> -	clk_disable_unprepare(info->clk);
+> -	return ret;
+> -}
+> -
+> -static void tegra_rtc_remove(struct platform_device *pdev)
+> -{
+> -	struct tegra_rtc_info *info = platform_get_drvdata(pdev);
+> -
+> -	clk_disable_unprepare(info->clk);
+>   }
+>   
+>   #ifdef CONFIG_PM_SLEEP
+> @@ -399,7 +382,6 @@ static void tegra_rtc_shutdown(struct platform_device *pdev)
+>   
+>   static struct platform_driver tegra_rtc_driver = {
+>   	.probe = tegra_rtc_probe,
+> -	.remove = tegra_rtc_remove,
+>   	.shutdown = tegra_rtc_shutdown,
+>   	.driver = {
+>   		.name = "tegra_rtc",
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/rtc/Kconfig      |  12 +
- drivers/rtc/Makefile     |   1 +
- drivers/rtc/rtc-mt6685.c | 472 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 485 insertions(+)
- create mode 100644 drivers/rtc/rtc-mt6685.c
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 2933c41c77c8..5d14948b3abc 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1937,6 +1937,18 @@ config RTC_DRV_MT6397
- 
- 	  If you want to use MediaTek(R) RTC interface, select Y or M here.
- 
-+config RTC_DRV_MT6685
-+	tristate "MediaTek MT6685 Clock IC based RTC"
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
-+	depends on SPMI
-+	select IRQ_DOMAIN
-+	help
-+	  Say yes here to enable support for the Real Time Clock found
-+	  in the MediaTek MT6685 Clock IC communicating over SPMI.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-mt6685.
-+
- config RTC_DRV_MT7622
- 	tristate "MediaTek SoC based RTC"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 8221bda6e6dc..5ccfb1e02e51 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -113,6 +113,7 @@ obj-$(CONFIG_RTC_DRV_SSD202D)	+= rtc-ssd202d.o
- obj-$(CONFIG_RTC_DRV_MSM6242)	+= rtc-msm6242.o
- obj-$(CONFIG_RTC_DRV_MT2712)	+= rtc-mt2712.o
- obj-$(CONFIG_RTC_DRV_MT6397)	+= rtc-mt6397.o
-+obj-$(CONFIG_RTC_DRV_MT6685)	+= rtc-mt6685.o
- obj-$(CONFIG_RTC_DRV_MT7622)	+= rtc-mt7622.o
- obj-$(CONFIG_RTC_DRV_MV)	+= rtc-mv.o
- obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
-diff --git a/drivers/rtc/rtc-mt6685.c b/drivers/rtc/rtc-mt6685.c
-new file mode 100644
-index 000000000000..3e632a3edbb6
---- /dev/null
-+++ b/drivers/rtc/rtc-mt6685.c
-@@ -0,0 +1,472 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * MediaTek MT6685 Clock IC - Real Time Clock IP driver
-+ *
-+ * Copyright (C) 2020 MediaTek Inc.
-+ * Copyright (C) 2025 Collabora Ltd.
-+ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/bitfield.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of_device.h>
-+#include <linux/of_irq.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+#include <linux/spmi.h>
-+
-+#define RTC_REG_BBPU			0x8
-+#define  RTC_BBPU_PWREN			BIT(0)
-+#define  RTC_BBPU_CLR			BIT(1)
-+#define  RTC_BBPU_RESET_AL		BIT(3)
-+#define  RTC_BBPU_RELOAD		BIT(5)
-+#define  RTC_BBPU_CBUSY			BIT(6)
-+#define  RTC_BBPU_WR_UNLOCK_KEY		0x4300
-+
-+#define RTC_REG_IRQ_STA			0xa
-+#define RTC_REG_IRQ_EN			0xc
-+#define  RTC_IRQ_AL			BIT(0)
-+#define  RTC_IRQ_ONESHOT		BIT(2)
-+#define  RTC_IRQ_LP			BIT(3)
-+
-+#define RTC_REG_AL_MASK			0x10
-+#define  RTC_AL_MASK_DOW		BIT(4)
-+
-+#define RTC_REG_TC_SEC			0x12
-+#define RTC_REG_AL_SEC			0x20
-+#define  RTC_AL_TC_YEAR			GENMASK(6, 0)
-+#define  RTC_AL_TC_SEC_MIN		GENMASK(5, 0)
-+#define  RTC_AL_TC_HOUR_DOM		GENMASK(4, 0)
-+#define  RTC_AL_TC_MON			GENMASK(3, 0)
-+#define  RTC_AL_TC_DOW			GENMASK(2, 0)
-+
-+#define RTC_REG_PDN2			0x36
-+#define  RTC_PDN2_PWRON_ALARM		BIT(4)
-+
-+#define MT6685_RTC_REG_WRTGR		0x42
-+
-+#define MT6685_RTC_POLL_DELAY_US	10
-+#define MT6685_RTC_POLL_TIMEOUT_US	2500
-+
-+/**
-+ * struct mt6885_rtc - Main driver structure
-+ * @rdev:     Pointer to RTC device
-+ * @regmap:   Regmap (SPMI) Handle
-+ * @mclk:     RTC MCLK clock for register write
-+ * @irq:      Alarm interrupt number
-+ */
-+struct mt6685_rtc {
-+	struct rtc_device *rdev;
-+	struct regmap *regmap;
-+	struct clk *mclk;
-+	int irq;
-+};
-+
-+/* HW time registers index - please do *not* add or remove indices! */
-+enum mt6685_timereg_index {
-+	RTC_AL_TC_REGIDX_SEC,
-+	RTC_AL_TC_REGIDX_MIN,
-+	RTC_AL_TC_REGIDX_HOUR,
-+	RTC_AL_TC_REGIDX_DOM,
-+	RTC_AL_TC_REGIDX_DOW,
-+	RTC_AL_TC_REGIDX_MON,
-+	RTC_AL_TC_REGIDX_YEAR,
-+	RTC_AL_TC_REGIDX_MAX
-+};
-+
-+/**
-+ * rtc_mt6685_write_trigger() - Synchronize registers to the HW
-+ * @rtc: Main driver structure
-+ *
-+ * Writes to the Write Trigger (WRTGR) RTC register to start synchronizing
-+ * all of the previous register writes to the hardware.
-+ * This is done in order to avoid race conditions in case an alarm fires
-+ * during the writing of time registers.
-+ *
-+ * Context: Mutex lock must be held before calling this function.
-+ *          Apart from interrupt handlers inside of this driver, that is
-+ *          already taken care of by the RTC API's ops_lock.
-+ * Return:  Zero for success or negative error number.
-+ */
-+static int rtc_mt6685_write_trigger(struct mt6685_rtc *rtc)
-+{
-+	const u16 val = 1;
-+	u32 data;
-+	int ret;
-+
-+	ret = regmap_bulk_write(rtc->regmap, MT6685_RTC_REG_WRTGR, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	/* The RTC usually takes 7-9uS to update: wait a bit before reading */
-+	usleep_range(MT6685_RTC_POLL_DELAY_US, MT6685_RTC_POLL_DELAY_US + 10);
-+
-+	return regmap_read_poll_timeout(rtc->regmap, RTC_REG_BBPU, data,
-+					!(data & RTC_BBPU_CBUSY),
-+					MT6685_RTC_POLL_DELAY_US,
-+					MT6685_RTC_POLL_TIMEOUT_US);
-+}
-+
-+static irqreturn_t rtc_mt6685_irq_handler_thread(int irq, void *data)
-+{
-+	u16 irqsta, irqen = 0, bbpu = RTC_BBPU_WR_UNLOCK_KEY | RTC_BBPU_PWREN;
-+	struct mt6685_rtc *rtc = data;
-+	struct device *dev = &rtc->rdev->dev;
-+	int ret;
-+
-+	ret = clk_prepare_enable(rtc->mclk);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	ret = regmap_bulk_read(rtc->regmap, RTC_REG_IRQ_STA, &irqsta, sizeof(irqsta));
-+	if (ret)
-+		goto end;
-+
-+	/* Only alarm interrupts are supported for now */
-+	if (!(irqsta & RTC_IRQ_AL)) {
-+		ret = -EINVAL;
-+		goto end;
-+	}
-+
-+	rtc_lock(rtc->rdev);
-+
-+	/* Enable BBPU power and clear the interrupt */
-+	ret = regmap_bulk_write(rtc->regmap, RTC_REG_BBPU, &bbpu, sizeof(bbpu));
-+	if (ret)
-+		goto end;
-+
-+	ret = regmap_bulk_write(rtc->regmap, RTC_REG_IRQ_EN, &irqen, sizeof(irqen));
-+	if (ret)
-+		goto end;
-+
-+	/* Trigger reset of the RTC BBPU Alarm */
-+	bbpu |= RTC_BBPU_RESET_AL;
-+	ret = regmap_bulk_write(rtc->regmap, RTC_REG_BBPU, &bbpu, sizeof(bbpu));
-+	if (ret) {
-+		dev_err(dev, "Cannot reset alarm: %d\n", ret);
-+		goto end;
-+	}
-+
-+	/* Trigger write synchronization */
-+	ret = rtc_mt6685_write_trigger(rtc);
-+	if (ret) {
-+		dev_err(dev, "Cannot synchronize write to RTC: %d\n", ret);
-+		goto end;
-+	}
-+	rtc_update_irq(rtc->rdev, 1, RTC_IRQF | RTC_AF);
-+end:
-+	rtc_unlock(rtc->rdev);
-+	clk_disable_unprepare(rtc->mclk);
-+	return ret ? IRQ_NONE : IRQ_HANDLED;
-+}
-+
-+static void rtc_mt6685_reload_bbpu(struct mt6685_rtc *rtc)
-+{
-+	u16 reload;
-+
-+	regmap_bulk_read(rtc->regmap, RTC_REG_BBPU, &reload, sizeof(reload));
-+	reload |= RTC_BBPU_WR_UNLOCK_KEY | RTC_BBPU_RELOAD;
-+	regmap_bulk_write(rtc->regmap, RTC_REG_BBPU, &reload, sizeof(reload));
-+
-+	rtc_mt6685_write_trigger(rtc);
-+}
-+
-+static int rtc_mt6685_read_time_regs(struct mt6685_rtc *rtc, struct rtc_time *tm, u16 reg)
-+{
-+	u16 data[RTC_AL_TC_REGIDX_MAX];
-+	int ret;
-+
-+	ret = regmap_bulk_read(rtc->regmap, reg, &data,
-+			       RTC_AL_TC_REGIDX_MAX * sizeof(data[0]));
-+	if (ret) {
-+		dev_err(&rtc->rdev->dev, "Cannot read time regs\n");
-+		return ret;
-+	}
-+
-+	tm->tm_sec  = FIELD_GET(RTC_AL_TC_SEC_MIN, data[RTC_AL_TC_REGIDX_SEC]);
-+	tm->tm_min  = FIELD_GET(RTC_AL_TC_SEC_MIN, data[RTC_AL_TC_REGIDX_MIN]);
-+	tm->tm_hour = FIELD_GET(RTC_AL_TC_HOUR_DOM, data[RTC_AL_TC_REGIDX_HOUR]);
-+	tm->tm_mday = FIELD_GET(RTC_AL_TC_HOUR_DOM, data[RTC_AL_TC_REGIDX_DOM]);
-+	tm->tm_wday = FIELD_GET(RTC_AL_TC_DOW, data[RTC_AL_TC_REGIDX_DOW]);
-+	tm->tm_mon  = FIELD_GET(RTC_AL_TC_MON, data[RTC_AL_TC_REGIDX_MON]);
-+	tm->tm_year = FIELD_GET(RTC_AL_TC_YEAR, data[RTC_AL_TC_REGIDX_YEAR]);
-+
-+	/* HW register start mon/wday from one, but tm_mon/tm_wday start from zero. */
-+	tm->tm_mon--;
-+	tm->tm_wday--;
-+
-+	return 0;
-+}
-+
-+static int rtc_mt6685_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct mt6685_rtc *rtc = dev_get_drvdata(dev);
-+	u16 sec;
-+	int ret;
-+
-+	ret = clk_prepare_enable(rtc->mclk);
-+	if (ret)
-+		return ret;
-+
-+	do {
-+		rtc_mt6685_reload_bbpu(rtc);
-+
-+		ret = rtc_mt6685_read_time_regs(rtc, tm, RTC_REG_TC_SEC);
-+		if (ret)
-+			goto end;
-+
-+		ret = regmap_bulk_read(rtc->regmap, RTC_REG_TC_SEC, &sec, sizeof(sec));
-+		if (ret)
-+			goto end;
-+	} while ((sec & RTC_AL_TC_SEC_MIN) < tm->tm_sec);
-+
-+end:
-+	clk_disable_unprepare(rtc->mclk);
-+	return ret;
-+}
-+
-+static int rtc_mt6685_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct mt6685_rtc *rtc = dev_get_drvdata(dev);
-+	u16 data[RTC_AL_TC_REGIDX_MAX];
-+	int ret;
-+
-+	ret = clk_prepare_enable(rtc->mclk);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_mon++;
-+	tm->tm_wday++;
-+
-+	data[RTC_AL_TC_REGIDX_SEC] = FIELD_PREP(RTC_AL_TC_SEC_MIN, tm->tm_sec);
-+	data[RTC_AL_TC_REGIDX_MIN] = FIELD_PREP(RTC_AL_TC_SEC_MIN, tm->tm_min);
-+	data[RTC_AL_TC_REGIDX_HOUR] = FIELD_PREP(RTC_AL_TC_HOUR_DOM, tm->tm_hour);
-+	data[RTC_AL_TC_REGIDX_DOM] = FIELD_PREP(RTC_AL_TC_HOUR_DOM, tm->tm_mday);
-+	data[RTC_AL_TC_REGIDX_DOW] = FIELD_PREP(RTC_AL_TC_DOW, tm->tm_wday);
-+	data[RTC_AL_TC_REGIDX_MON] = FIELD_PREP(RTC_AL_TC_MON, tm->tm_mon);
-+	data[RTC_AL_TC_REGIDX_YEAR] = FIELD_PREP(RTC_AL_TC_YEAR, tm->tm_year);
-+
-+	ret = regmap_bulk_write(rtc->regmap, RTC_REG_TC_SEC, data,
-+				RTC_AL_TC_REGIDX_MAX * sizeof(data[0]));
-+	if (ret)
-+		goto end;
-+
-+	/* Wait until write is synchronized (means time was set in HW) */
-+	ret = rtc_mt6685_write_trigger(rtc);
-+end:
-+	clk_disable_unprepare(rtc->mclk);
-+	return ret;
-+}
-+
-+static int rtc_mt6685_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
-+{
-+	struct mt6685_rtc *rtc = dev_get_drvdata(dev);
-+	struct rtc_time *tm = &alm->time;
-+	u16 irqen, pdn2;
-+	int ret;
-+
-+	ret = regmap_bulk_read(rtc->regmap, RTC_REG_IRQ_EN, &irqen, sizeof(irqen));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_read(rtc->regmap, RTC_REG_PDN2, &pdn2, sizeof(pdn2));
-+	if (ret)
-+		return ret;
-+
-+	ret = rtc_mt6685_read_time_regs(rtc, tm, RTC_REG_AL_SEC);
-+	if (ret)
-+		return ret;
-+
-+	alm->enabled = FIELD_GET(RTC_IRQ_AL, irqen);
-+	alm->pending = FIELD_GET(RTC_PDN2_PWRON_ALARM, pdn2);
-+	return 0;
-+}
-+
-+static int rtc_mt6685_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
-+{
-+	struct mt6685_rtc *rtc = dev_get_drvdata(dev);
-+	struct rtc_time *tm = &alm->time;
-+	u16 data[RTC_AL_TC_REGIDX_MAX];
-+	u16 irqen;
-+	int ret;
-+
-+	/*
-+	 * Clocks must be enabled when writing and, if that cannot be done,
-+	 * reading fields is pointless as the alarm cannot finally be set.
-+	 */
-+	ret = clk_prepare_enable(rtc->mclk);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_mon++;
-+	tm->tm_wday++;
-+
-+	ret = regmap_bulk_read(rtc->regmap, RTC_REG_IRQ_EN, &irqen, sizeof(irqen));
-+	if (ret)
-+		goto end;
-+
-+	ret = regmap_bulk_read(rtc->regmap, RTC_REG_AL_SEC, data,
-+			       RTC_AL_TC_REGIDX_MAX * sizeof(data[0]));
-+	if (ret)
-+		goto end;
-+
-+	FIELD_MODIFY(RTC_IRQ_AL, &irqen, alm->enabled);
-+	FIELD_MODIFY(RTC_AL_TC_SEC_MIN, &data[RTC_AL_TC_REGIDX_SEC], tm->tm_sec);
-+	FIELD_MODIFY(RTC_AL_TC_SEC_MIN, &data[RTC_AL_TC_REGIDX_MIN], tm->tm_min);
-+	FIELD_MODIFY(RTC_AL_TC_HOUR_DOM, &data[RTC_AL_TC_REGIDX_HOUR], tm->tm_hour);
-+	FIELD_MODIFY(RTC_AL_TC_HOUR_DOM, &data[RTC_AL_TC_REGIDX_DOM], tm->tm_mday);
-+	FIELD_MODIFY(RTC_AL_TC_DOW, &data[RTC_AL_TC_REGIDX_DOW], tm->tm_wday);
-+	FIELD_MODIFY(RTC_AL_TC_MON, &data[RTC_AL_TC_REGIDX_MON], tm->tm_mon);
-+	FIELD_MODIFY(RTC_AL_TC_YEAR, &data[RTC_AL_TC_REGIDX_YEAR], tm->tm_year);
-+
-+	if (alm->enabled) {
-+		u16 val = RTC_AL_MASK_DOW;
-+
-+		ret = regmap_bulk_write(rtc->regmap, RTC_REG_AL_SEC, data,
-+					RTC_AL_TC_REGIDX_MAX * sizeof(data[0]));
-+		if (ret)
-+			goto end;
-+
-+		ret = regmap_bulk_write(rtc->regmap,
-+					RTC_REG_AL_MASK, &val, sizeof(val));
-+		if (ret)
-+			goto end;
-+	}
-+
-+	ret = regmap_bulk_write(rtc->regmap, RTC_REG_IRQ_EN, &irqen, sizeof(irqen));
-+	if (ret)
-+		goto end;
-+
-+	ret = rtc_mt6685_write_trigger(rtc);
-+end:
-+	clk_disable_unprepare(rtc->mclk);
-+	return ret;
-+}
-+
-+static const struct rtc_class_ops rtc_mt6685_ops = {
-+	.read_time  = rtc_mt6685_read_time,
-+	.set_time   = rtc_mt6685_set_time,
-+	.read_alarm = rtc_mt6685_read_alarm,
-+	.set_alarm  = rtc_mt6685_set_alarm,
-+};
-+
-+static int rtc_mt6685_probe(struct platform_device *pdev)
-+{
-+	struct regmap_config mt6685_rtc_regmap_config = {
-+		.reg_bits = 16,
-+		.val_bits = 8,
-+		.max_register = 0x60,
-+		.fast_io = true,
-+		.use_single_read = true,
-+		.use_single_write = true,
-+	};
-+	struct device *dev = &pdev->dev;
-+	struct spmi_subdevice *sub_sdev;
-+	struct spmi_device *sparent;
-+	struct mt6685_rtc *rtc;
-+	int ret;
-+
-+	rtc = devm_kzalloc(dev, sizeof(struct mt6685_rtc), GFP_KERNEL);
-+	if (!rtc)
-+		return -ENOMEM;
-+
-+	sparent = to_spmi_device(dev->parent);
-+	sub_sdev = devm_spmi_subdevice_alloc_and_add(dev, sparent);
-+	if (IS_ERR(sub_sdev))
-+		return PTR_ERR(sub_sdev);
-+
-+	ret = of_property_read_u32(pdev->dev.of_node, "reg",
-+				   &mt6685_rtc_regmap_config.reg_base);
-+	if (ret)
-+		return ret;
-+
-+	rtc->irq = platform_get_irq(pdev, 0);
-+	if (rtc->irq < 0)
-+		return rtc->irq;
-+
-+	rtc->mclk = devm_clk_get(dev, 0);
-+	if (IS_ERR(rtc->mclk))
-+		return PTR_ERR(rtc->mclk);
-+
-+	rtc->regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &mt6685_rtc_regmap_config);
-+	if (IS_ERR(rtc->regmap))
-+		return PTR_ERR(rtc->regmap);
-+
-+	rtc->rdev = devm_rtc_allocate_device(dev);
-+	if (IS_ERR(rtc->rdev))
-+		return PTR_ERR(rtc->rdev);
-+
-+	platform_set_drvdata(pdev, rtc);
-+
-+	/* Clock is required to auto-synchronize IRQ enable to RTC */
-+	ret = clk_prepare_enable(rtc->mclk);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-+					rtc_mt6685_irq_handler_thread,
-+					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-+					"mt6685-rtc", rtc);
-+	clk_disable_unprepare(rtc->mclk);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Cannot request alarm IRQ");
-+
-+	device_init_wakeup(&pdev->dev, true);
-+
-+	rtc->rdev->ops = &rtc_mt6685_ops;
-+	rtc->rdev->range_min = RTC_TIMESTAMP_BEGIN_1900;
-+	rtc->rdev->range_max = mktime64(2027, 12, 31, 23, 59, 59);
-+	rtc->rdev->start_secs = mktime64(1968, 1, 1, 0, 0, 0);
-+	rtc->rdev->set_start_time = true;
-+
-+	return devm_rtc_register_device(rtc->rdev);
-+}
-+
-+static int __maybe_unused rtc_mt6685_suspend(struct device *dev)
-+{
-+	struct mt6685_rtc *rtc = dev_get_drvdata(dev);
-+
-+	if (device_may_wakeup(dev))
-+		enable_irq_wake(rtc->irq);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused rtc_mt6685_resume(struct device *dev)
-+{
-+	struct mt6685_rtc *rtc = dev_get_drvdata(dev);
-+
-+	if (device_may_wakeup(dev))
-+		disable_irq_wake(rtc->irq);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(rtc_mt6685_pm_ops, rtc_mt6685_suspend, rtc_mt6685_resume);
-+
-+static const struct of_device_id rtc_mt6685_of_match[] = {
-+	{ .compatible = "mediatek,mt6685-rtc" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rtc_mt6685_of_match);
-+
-+static struct platform_driver rtc_mt6685_driver = {
-+	.driver = {
-+		.name = "rtc-mt6685",
-+		.of_match_table = rtc_mt6685_of_match,
-+		.pm = &rtc_mt6685_pm_ops,
-+	},
-+	.probe	= rtc_mt6685_probe,
-+};
-+module_platform_driver(rtc_mt6685_driver);
-+
-+MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
-+MODULE_DESCRIPTION("MediaTek MT6685 Clock IC RTC driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("SPMI");
+Thanks!
+Jon
+
 -- 
-2.51.1
+nvpublic
 
 
