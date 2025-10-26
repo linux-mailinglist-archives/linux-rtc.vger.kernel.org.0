@@ -1,213 +1,172 @@
-Return-Path: <linux-rtc+bounces-5161-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5162-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB346C0A2F6
-	for <lists+linux-rtc@lfdr.de>; Sun, 26 Oct 2025 06:14:56 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 525D5C0AB03
+	for <lists+linux-rtc@lfdr.de>; Sun, 26 Oct 2025 15:50:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B1B724E120A
-	for <lists+linux-rtc@lfdr.de>; Sun, 26 Oct 2025 05:14:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 034444E905B
+	for <lists+linux-rtc@lfdr.de>; Sun, 26 Oct 2025 14:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A437826B0AE;
-	Sun, 26 Oct 2025 05:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF342E9EA6;
+	Sun, 26 Oct 2025 14:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O8qsAmp5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wv+p60qR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42E423A58E;
-	Sun, 26 Oct 2025 05:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940AB2E973A;
+	Sun, 26 Oct 2025 14:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761455687; cv=none; b=lXmZ4a7CEurfGQO5Gd+HN/2uSIwCOJa+h7JzGsS0dPmQL24TCyl6IYQl7zO0tl/kxvf6li6LeIe/RhBk/e32UlA1/rLrXdv6TaBOzjHWe+obzM2BKzm8eo1YP3AtZVo4jMcI2Q0ryLkKbrILF7t5qWAqwg+l6JTKoTOK5icPrvw=
+	t=1761490211; cv=none; b=DnimG3aL/+fc/JJg1N5uD59Q713sgvEK37Rb2y/gfaxY3x0uTBxmRHU+ltHBauCHfSxZaSqCvnfREksDGZKFGZTSMsafmhkoitE2nMZl+wv+wVGuL3zuiDKAP7+CTVZOtJMDsjYqMwX74IKaZukdSFtJzBFpf6N3DlLaP+Mu1wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761455687; c=relaxed/simple;
-	bh=gKJE14w1KDbJqmE7/dHsKdynDf2xulvE3IRzaIW6bj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZUpsPP47SytO41m6krLNn2z9/KLGLAMDF6ww/QLMYSPxabu8z7b6PueTqMwbPA3hYWzPgnbsioRpy/9uracKx+dyuF6y+5DhkiodEeK2GXpYSK32cGhMthLUvV4P7LQoDZelKDECzictHcHd/H0ES5uWTlsbB0lwveynDaVH7OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O8qsAmp5; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761455686; x=1792991686;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gKJE14w1KDbJqmE7/dHsKdynDf2xulvE3IRzaIW6bj4=;
-  b=O8qsAmp5Xb1Vp8UtM3qikDGuIaM9tuveqLPWl80LDT/hHVF5a7mLoZXw
-   YanvayHuKbIdoYFZJ6RS9kD70PYBszj+4UkyU7mQYIgL/Fk5nt99zw0GG
-   N4pFZEuHcd04EG0zLtRjqsLpqQ6SvnbkmGjdlq+udTwwmCr5IXmzaYY8X
-   RrqizPJsP1adMNqjsSyUP51RQPGwGxUuL0b2vgqIE6P25J/Ot0SCGdF+p
-   ybQ799tCXL0qpBggm9+yE18OIrjoBSG1tCXfM3tZlJ3Rkufu3D0PYHj3C
-   iCExywP8x36IgJSp8f1uH1bCMdp5J+Tgux7/0i4I2fIjqomTh3bNA6sYA
-   A==;
-X-CSE-ConnectionGUID: /3cmkCkdQw+hHTulJVx9sw==
-X-CSE-MsgGUID: QfU1L3V2TL6oUtk7gidY+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="51150163"
-X-IronPort-AV: E=Sophos;i="6.19,256,1754982000"; 
-   d="scan'208";a="51150163"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2025 22:14:45 -0700
-X-CSE-ConnectionGUID: 3IfibMsMR/SdoNhlTH/RrA==
-X-CSE-MsgGUID: x7CYNeabSyG2So3RbmdNKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,256,1754982000"; 
-   d="scan'208";a="184839789"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 25 Oct 2025 22:14:42 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vCt5F-000Fty-0a;
-	Sun, 26 Oct 2025 05:14:34 +0000
-Date: Sun, 26 Oct 2025 13:13:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	alexandre.belloni@bootlin.com
-Cc: oe-kbuild-all@lists.linux.dev, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v1 2/2] rtc: Add support for MT6685 Clock IC's RTC over
- SPMI
-Message-ID: <202510261223.NRLximA4-lkp@intel.com>
-References: <20251024083318.25890-3-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1761490211; c=relaxed/simple;
+	bh=jY0mVRH9vGGA3XQwuOzAK8Am1h8Cl0lc9WteBzrBfnI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Eusm5awnf2YdoY5R07ilT7qahvEQTJGZZGJkirdsixad9ATLXxO4uz5gtuP+m5zw45jaSd4DlTBfE3cTgscANCO7MhAGfjWKBTMo83dxSGs1lhAsGD6892yBXsiHrqBJZNvcZ7JnCzogkEGWsyzZiT3JHW71J43Z7fX6RWtNins=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wv+p60qR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AACC4CEE7;
+	Sun, 26 Oct 2025 14:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761490211;
+	bh=jY0mVRH9vGGA3XQwuOzAK8Am1h8Cl0lc9WteBzrBfnI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Wv+p60qRjiw8Lp72ChwpOKNfvl1Xi0necj7mPX0VqhIK23KDgiAHgXBaI6FuGoeaQ
+	 i6N9gFnAvFEXfc340YvdqkaIbI2/UrJ6F2dKrntmKkoYPuDMt65r50dMi4mBNzbkeQ
+	 mTrVS9b2ToNaYW6d6mKxkg4C9Llp20u+tNUkH+/gsv3DOWYZzlQ7oheOEcHvGZ/zOo
+	 rX09pE9MJQsTzzjc2lX/c2Ebp8R3B905Skikb/jyCYi5PdBQJkREfwDe802KeQRYZz
+	 Wfve25x6lz/CRz7eBuXpa8SISRiYijIZB6SokfM6EXdT3v6q2sdKrLMZbtuWxyDZVx
+	 ScRdyRgONX3pQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Harini T <harini.t@amd.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Sasha Levin <sashal@kernel.org>,
+	michal.simek@amd.com,
+	linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.17] rtc: zynqmp: Restore alarm functionality after kexec transition
+Date: Sun, 26 Oct 2025 10:48:45 -0400
+Message-ID: <20251026144958.26750-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251026144958.26750-1-sashal@kernel.org>
+References: <20251026144958.26750-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251024083318.25890-3-angelogioacchino.delregno@collabora.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi AngeloGioacchino,
+From: Harini T <harini.t@amd.com>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit e22f4d1321e0055065f274e20bf6d1dbf4b500f5 ]
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v6.18-rc2 next-20251024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+During kexec reboots, RTC alarms that are fired during the kernel
+transition experience delayed execution. The new kernel would eventually
+honor these alarms, but the interrupt handlers would only execute after
+the driver probe is completed rather than at the intended alarm time.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/dt-bindings-rtc-Add-MediaTek-MT6685-PM-Clock-IC-Real-Time-Clock/20251024-164423
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20251024083318.25890-3-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH v1 2/2] rtc: Add support for MT6685 Clock IC's RTC over SPMI
-config: sparc64-randconfig-r062-20251026 (https://download.01.org/0day-ci/archive/20251026/202510261223.NRLximA4-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 9.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251026/202510261223.NRLximA4-lkp@intel.com/reproduce)
+This is because pending alarm interrupt status from the previous kernel
+is not properly cleared during driver initialization, causing timing
+discrepancies in alarm delivery.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510261223.NRLximA4-lkp@intel.com/
+To ensure precise alarm timing across kexec transitions, enhance the
+probe function to:
+1. Clear any pending alarm interrupt status from previous boot.
+2. Detect existing valid alarms and preserve their state.
+3. Re-enable alarm interrupts for future alarms.
 
-All error/warnings (new ones prefixed by >>):
+Signed-off-by: Harini T <harini.t@amd.com>
+Link: https://lore.kernel.org/r/20250730142110.2354507-1-harini.t@amd.com
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-   drivers/rtc/rtc-mt6685.c: In function 'rtc_mt6685_probe':
-   drivers/rtc/rtc-mt6685.c:380:13: error: implicit declaration of function 'devm_spmi_subdevice_alloc_and_add' [-Werror=implicit-function-declaration]
-     380 |  sub_sdev = devm_spmi_subdevice_alloc_and_add(dev, sparent);
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/rtc/rtc-mt6685.c:380:11: warning: assignment to 'struct spmi_subdevice *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     380 |  sub_sdev = devm_spmi_subdevice_alloc_and_add(dev, sparent);
-         |           ^
-   In file included from drivers/rtc/rtc-mt6685.c:20:
->> drivers/rtc/rtc-mt6685.c:397:51: error: dereferencing pointer to incomplete type 'struct spmi_subdevice'
-     397 |  rtc->regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &mt6685_rtc_regmap_config);
-         |                                                   ^~
-   include/linux/regmap.h:775:6: note: in definition of macro '__regmap_lockdep_wrapper'
-     775 |   fn(__VA_ARGS__, &_key,     \
-         |      ^~~~~~~~~~~
-   drivers/rtc/rtc-mt6685.c:397:16: note: in expansion of macro 'devm_regmap_init_spmi_ext'
-     397 |  rtc->regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &mt6685_rtc_regmap_config);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+LLM Generated explanations, may be completely bogus:
 
+YES
+- `drivers/rtc/rtc-zynqmp.c:303-307` clears a latched `RTC_INT_ALRM` bit
+  left behind by the kexec’d kernel so the new instance doesn’t mis-
+  handle a stale interrupt; this matches the existing acknowledge flow
+  in `xlnx_rtc_alarm_irq_enable()` (`drivers/rtc/rtc-zynqmp.c:125-152`),
+  but now happens eagerly during probe to avoid delayed/duplicate
+  delivery.
+- `drivers/rtc/rtc-zynqmp.c:309-312` inspects the hardware alarm
+  register and only preserves state when the stored alarm time is still
+  in the future, preventing stray enables after a cold boot while
+  keeping real alarms armed across the handover.
+- Because the prior kernel disables the alarm IRQ in the ISR
+  (`drivers/rtc/rtc-zynqmp.c:268-272`), the new code re-arms it when a
+  valid alarm is detected (`drivers/rtc/rtc-zynqmp.c:355-357`); without
+  this, alarms that were scheduled before the kexec never fire under the
+  new kernel, which is a user-visible regression.
+- The change is tightly scoped to probe-time initialization, uses
+  existing register helpers, and introduces no ABI or architectural
+  churn; risk is low compared with the clear functional gain of
+  delivering RTC alarms correctly after kexec on ZynqMP hardware.
 
-vim +397 drivers/rtc/rtc-mt6685.c
+Next step you may want: 1) run the RTC selftests or a quick kexec/alarm
+smoke test on target hardware to validate the restored behavior.
 
-   358	
-   359	static int rtc_mt6685_probe(struct platform_device *pdev)
-   360	{
-   361		struct regmap_config mt6685_rtc_regmap_config = {
-   362			.reg_bits = 16,
-   363			.val_bits = 8,
-   364			.max_register = 0x60,
-   365			.fast_io = true,
-   366			.use_single_read = true,
-   367			.use_single_write = true,
-   368		};
-   369		struct device *dev = &pdev->dev;
-   370		struct spmi_subdevice *sub_sdev;
-   371		struct spmi_device *sparent;
-   372		struct mt6685_rtc *rtc;
-   373		int ret;
-   374	
-   375		rtc = devm_kzalloc(dev, sizeof(struct mt6685_rtc), GFP_KERNEL);
-   376		if (!rtc)
-   377			return -ENOMEM;
-   378	
-   379		sparent = to_spmi_device(dev->parent);
- > 380		sub_sdev = devm_spmi_subdevice_alloc_and_add(dev, sparent);
-   381		if (IS_ERR(sub_sdev))
-   382			return PTR_ERR(sub_sdev);
-   383	
-   384		ret = of_property_read_u32(pdev->dev.of_node, "reg",
-   385					   &mt6685_rtc_regmap_config.reg_base);
-   386		if (ret)
-   387			return ret;
-   388	
-   389		rtc->irq = platform_get_irq(pdev, 0);
-   390		if (rtc->irq < 0)
-   391			return rtc->irq;
-   392	
-   393		rtc->mclk = devm_clk_get(dev, 0);
-   394		if (IS_ERR(rtc->mclk))
-   395			return PTR_ERR(rtc->mclk);
-   396	
- > 397		rtc->regmap = devm_regmap_init_spmi_ext(&sub_sdev->sdev, &mt6685_rtc_regmap_config);
-   398		if (IS_ERR(rtc->regmap))
-   399			return PTR_ERR(rtc->regmap);
-   400	
-   401		rtc->rdev = devm_rtc_allocate_device(dev);
-   402		if (IS_ERR(rtc->rdev))
-   403			return PTR_ERR(rtc->rdev);
-   404	
-   405		platform_set_drvdata(pdev, rtc);
-   406	
-   407		/* Clock is required to auto-synchronize IRQ enable to RTC */
-   408		ret = clk_prepare_enable(rtc->mclk);
-   409		if (ret)
-   410			return ret;
-   411	
-   412		ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-   413						rtc_mt6685_irq_handler_thread,
-   414						IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-   415						"mt6685-rtc", rtc);
-   416		clk_disable_unprepare(rtc->mclk);
-   417		if (ret)
-   418			return dev_err_probe(&pdev->dev, ret, "Cannot request alarm IRQ");
-   419	
-   420		device_init_wakeup(&pdev->dev, true);
-   421	
-   422		rtc->rdev->ops = &rtc_mt6685_ops;
-   423		rtc->rdev->range_min = RTC_TIMESTAMP_BEGIN_1900;
-   424		rtc->rdev->range_max = mktime64(2027, 12, 31, 23, 59, 59);
-   425		rtc->rdev->start_secs = mktime64(1968, 1, 1, 0, 0, 0);
-   426		rtc->rdev->set_start_time = true;
-   427	
-   428		return devm_rtc_register_device(rtc->rdev);
-   429	}
-   430	
+ drivers/rtc/rtc-zynqmp.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
+diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+index f39102b66eac2..3baa2b481d9f2 100644
+--- a/drivers/rtc/rtc-zynqmp.c
++++ b/drivers/rtc/rtc-zynqmp.c
+@@ -277,6 +277,10 @@ static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
+ static int xlnx_rtc_probe(struct platform_device *pdev)
+ {
+ 	struct xlnx_rtc_dev *xrtcdev;
++	bool is_alarm_set = false;
++	u32 pending_alrm_irq;
++	u32 current_time;
++	u32 alarm_time;
+ 	int ret;
+ 
+ 	xrtcdev = devm_kzalloc(&pdev->dev, sizeof(*xrtcdev), GFP_KERNEL);
+@@ -296,6 +300,17 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(xrtcdev->reg_base))
+ 		return PTR_ERR(xrtcdev->reg_base);
+ 
++	/* Clear any pending alarm interrupts from previous kernel/boot */
++	pending_alrm_irq = readl(xrtcdev->reg_base + RTC_INT_STS) & RTC_INT_ALRM;
++	if (pending_alrm_irq)
++		writel(pending_alrm_irq, xrtcdev->reg_base + RTC_INT_STS);
++
++	/* Check if a valid alarm is already set from previous kernel/boot */
++	alarm_time = readl(xrtcdev->reg_base + RTC_ALRM);
++	current_time = readl(xrtcdev->reg_base + RTC_CUR_TM);
++	if (alarm_time > current_time && alarm_time != 0)
++		is_alarm_set = true;
++
+ 	xrtcdev->alarm_irq = platform_get_irq_byname(pdev, "alarm");
+ 	if (xrtcdev->alarm_irq < 0)
+ 		return xrtcdev->alarm_irq;
+@@ -337,6 +352,10 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
+ 
+ 	xlnx_init_rtc(xrtcdev);
+ 
++	/* Re-enable alarm interrupt if a valid alarm was found */
++	if (is_alarm_set)
++		writel(RTC_INT_ALRM, xrtcdev->reg_base + RTC_INT_EN);
++
+ 	device_init_wakeup(&pdev->dev, true);
+ 
+ 	return devm_rtc_register_device(xrtcdev->rtc);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.51.0
+
 
