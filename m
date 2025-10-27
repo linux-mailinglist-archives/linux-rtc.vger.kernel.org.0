@@ -1,60 +1,70 @@
-Return-Path: <linux-rtc+bounces-5186-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5187-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91EAC0D743
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 13:16:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 379D2C0D775
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 13:19:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D409142165D
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 12:08:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C5603A9D08
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 12:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F8033009F1;
-	Mon, 27 Oct 2025 12:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1CC33009D8;
+	Mon, 27 Oct 2025 12:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDzZsf2P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LVFbo6i0"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0D63009D9;
-	Mon, 27 Oct 2025 12:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDB2EEAB;
+	Mon, 27 Oct 2025 12:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761566922; cv=none; b=Bp/q/ezbYvhyyza5+NwF2FiPA04Jd80wuG9epgqYCAL7aWEdJIQwMGJ4bLkoXe1JWzSTqzCvbRZdbyyGtbcz5Bj7QT6RuMSkOFPNqeG/3HlwhWqfJkJAlcpeCLdMXzPMg9CO+GB9L6Lwwcm0HyI8Xg5904xR+T9qpJipgZroas8=
+	t=1761567268; cv=none; b=gtlsnLAihHoYdm5mnZg7jm7wdBdfXuQiSdfcR7A4jgXD4lnpM2HUudWsf+dv1LsAtVk60sgZM/f03rULUAlLsCvHi94tNdaAQspuQvS6oDjqfU/ikjFEjMR0b3QSx857frudb5boCiss3V4HYlwT48BudepLRnE+oqQeCfAeLw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761566922; c=relaxed/simple;
-	bh=WuGfIQ+tG2jneTygaVEiQJvQSrmd5e58lVq0BP7dw44=;
+	s=arc-20240116; t=1761567268; c=relaxed/simple;
+	bh=rWHdHSJPVLgMn3etblo03n9fmEXg8Q3LI4UBHrXAqeU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=syFI64j/DoROh1qS+/fiHNmV24lUFE1CX1vv/76slrpQzGlokU+U4lG7nK0SbV1LY4sxbgO7zjK12SrrrO6br2o0Zx5p+6ARQa1WOXtkjQaypFydszVKC2X+2iolEWUKzFaKLTp6xAOuHtWKmZAnwiQ9PAiOCT2KAZHLwfdT8tQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDzZsf2P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F34A2C4CEFF;
-	Mon, 27 Oct 2025 12:08:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ljx86qHU0TtHlw2dxbCM6bVb9wQEIdzWFRe1LPN5Xv/abCQpgnavuX8k9PQyxjDlm6nhUkuUov8jXE8Xh3dOhmHMu6BynzKLloSC6U8ygODoGSfNuw1Evn3bGh64yb/1hNvelukuqGDXO5cBEj4m9llxzhaXzsn+tb4gUcq5Dbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVFbo6i0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF80C4CEF1;
+	Mon, 27 Oct 2025 12:14:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761566921;
-	bh=WuGfIQ+tG2jneTygaVEiQJvQSrmd5e58lVq0BP7dw44=;
+	s=k20201202; t=1761567268;
+	bh=rWHdHSJPVLgMn3etblo03n9fmEXg8Q3LI4UBHrXAqeU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jDzZsf2Pb9QWorLgRaQo0kRdbyrY6T9ANXI6cMpDVAL06ACAgFDrqDn5qBUxee2yH
-	 zYIUMBLAi/Ik6jgr+lN08HXD9WjCcAFqcDdl9HrrCXvbuzT+lTfjU8OX7NkbNO5wjx
-	 r7lzjsbx6S7LEX7U/WooITDDFKvVnnm5uGrBe3ZAGJSvvQ+cnkmlS2eBhlXqruUXKf
-	 e/s9Hbul7Xzuei3n8QaO+BHhJGfEuQJa7L2+0nmAF9WR8Q8IbvFYrmXWst6ud4xhnM
-	 6AKJ1psai8xuL27Ph6iw5huiDkxIIZYOOSMSQe6tmIaSqEsFNqwTihIdzsseoe4Nv6
-	 6dHHsh/VgXmTA==
-Date: Mon, 27 Oct 2025 12:08:34 +0000
+	b=LVFbo6i0j8oUWrOC68//sH6s67P3CS8SShwRk1eyPZOI7fZ8dKHEN+el+eCGZH426
+	 /SvlLPhf48fwtfjRMFPs3tsBVc6ES6/P7rckdD/WvDk9+G9dz35Db+G6031yEmjUy5
+	 EqHHJvE5nAnM24ht3FoM+X+sfmwZtHu0l48tdWvefHMndQMNwoMKH+MVXdGccnAruQ
+	 MvPhWh/8oxl7KP9n4xbWYYagRxRBtBJVVomhkI0qtbfZ85Tb/W+ndI0wRWSACsmIv3
+	 XAiSeyclFV6nDNr0XcTKDFETTGsEWbOlYAlG9kpG/JEeVCZ+UUSntUrBNiZlA2h7hv
+	 6b2naZCEO9G3w==
+Date: Mon, 27 Oct 2025 12:14:18 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>,
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andreas Kemnade <andreas@kemnade.info>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] regulator: spacemit: MFD_SPACEMIT_P1 as
- dependencies
-Message-ID: <9964721d-eeca-491e-9700-13f7ab66c4d9@sirena.org.uk>
-References: <20251027-p1-kconfig-fix-v2-0-49688f30bae8@linux.spacemit.com>
- <20251027-p1-kconfig-fix-v2-4-49688f30bae8@linux.spacemit.com>
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 08/15] regulator: bd71828: rename IC specific entities
+Message-ID: <c4bdf649-0623-4529-b8e9-43d6701f0111@sirena.org.uk>
+References: <cover.1761564043.git.mazziesaccount@gmail.com>
+ <aa2b31267e6cc93bad4c823ef1ba07ba43efd572.1761564043.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,38 +72,39 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qgx8naedt5U4Gp/s"
+	protocol="application/pgp-signature"; boundary="IGal/9MH6MaJjMWW"
 Content-Disposition: inline
-In-Reply-To: <20251027-p1-kconfig-fix-v2-4-49688f30bae8@linux.spacemit.com>
+In-Reply-To: <aa2b31267e6cc93bad4c823ef1ba07ba43efd572.1761564043.git.mazziesaccount@gmail.com>
 X-Cookie: How do I get HOME?
 
 
---Qgx8naedt5U4Gp/s
+--IGal/9MH6MaJjMWW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Oct 27, 2025 at 01:48:08PM +0800, Troy Mitchell wrote:
-> REGULATOR_SPACEMIT_P1 is a subdevice of P1 and should depend on
-> MFD_SPACEMIT_P1 rather than selecting it directly. Using 'select'
-> does not always respect the parent's dependencies, so 'depends on'
-> is the safer and more correct choice.
+On Mon, Oct 27, 2025 at 01:46:57PM +0200, Matti Vaittinen wrote:
+> The new ROHM BD72720 PMIC has similarities with the BD71828. It makes
+> sense to support the regulator control for both PMICs using the same
+> driver. It is often more clear to have the IC specific functions and
+> globals named starting with the chip-name. So, as a preparatory step,
+> prefix the BD71828 specific functions and globals with the bd71828.
 
 Acked-by: Mark Brown <broonie@kernel.org>
 
---Qgx8naedt5U4Gp/s
+--IGal/9MH6MaJjMWW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj/YMEACgkQJNaLcl1U
-h9Ay0gf+IgmWmQeq60zu9vsu+n6e8+NNPmt9Sn7rEiF2HnhwwYuV9H0gcXPhlyus
-mgyiWSCDo2vH+edAY2zHFb7KgWtGrG31Bf5jTpaF5QtG2x5ZcpNgRhnodKTBEFff
-ovMpQXPMzHeu/1fGbE081rV4bc6iQ3Vn+Rbl7giqaqZ98a/ibQZUcset34yl/UTu
-9bQWFHzI//e0sl8UnMsyk0E0VmKKdqCjHlneRqmYhmB+1/GNEiTeRK2P2O4XwOuw
-D0nhTEaXmm2OIlIBRMezE6gsnAptWdpFrBal92/CBNesEZ4PTu3NdqWQkOOfekG+
-eRMz8He3JKvL5pb2PFELkRxo5hBr8g==
-=Vfcb
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmj/YhkACgkQJNaLcl1U
+h9Af5Af6Ax86Rk1w2Lm8l+WtM+HeqNG9SJTaC/xDAlF9R/wpX008syrILJMQXVEF
+BaXHf+QKJMvTFJeM3pSzKKdQ5NJmoPKlUtKiXSNBhceZGLet2eXw/MuqNR4nRmFC
+2iVksMbfY+P3YPg8ebdn6Zf1icxTngM1raSOPPQMeVAMDt+6MLxdKYbg0I+DMhG1
+Xp9Nz99ObSw5UinFmo7l2ZLaXsNnkQ8jRV4rS2C5uTV0vszr0Op+ym/9KAyLs+N/
+TVnbQ7H+84sRYeLEg/4JIzYyW7tDlg7EerOaP75F9MstIULAFDDZaHRVtVlAKxPV
+BSxxGZyJlVVu6loQH4yvZQimzgUWBQ==
+=lhBS
 -----END PGP SIGNATURE-----
 
---Qgx8naedt5U4Gp/s--
+--IGal/9MH6MaJjMWW--
 
