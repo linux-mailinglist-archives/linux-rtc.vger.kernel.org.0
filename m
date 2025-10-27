@@ -1,68 +1,70 @@
-Return-Path: <linux-rtc+bounces-5191-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5192-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2741C0E374
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 15:01:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2BBFC11770
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 22:04:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6274C4FA3E2
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 13:52:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7467A40200F
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Oct 2025 21:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF44F305E21;
-	Mon, 27 Oct 2025 13:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9ED931C580;
+	Mon, 27 Oct 2025 21:03:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="Zom4EKxh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GgmbakJX"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4687830597A;
-	Mon, 27 Oct 2025 13:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB2920C001;
+	Mon, 27 Oct 2025 21:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761573164; cv=none; b=Ljz2G7g38XGPzvJW9bEadGNsH5zh4MYpdXctk/ebATxc7MVFVWTjsjfNmwrEyMHDKT1gZ4UNXHyXa0LtjIl1rX8ClVHBBcEbbHmjvgO3ijMZfHpibC9Z0M1jYRtfqi766nO0DdEPnfdryoJpYkkwKTqX4CKmdvmj/6E9NDDP8ZI=
+	t=1761599038; cv=none; b=fnyOnkXi9j15hgs+5pqCb/ArfiqKV9kfI8rpXaOAA9p0YMz/J2EUP6iBpF7llEuDCUFEbQvGEPrjS4Asx4BFxEgNJeI/wlblCZKCPYPPlzdskSU/ztMhe4EnsZEc1j5izvnD7q3eEkNBq60m1v5tUvhb7Q17/9yQC/tZvC0bO2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761573164; c=relaxed/simple;
-	bh=mKZXgmC0J5LBgztr81FWGG2KayDzmjGl5hVIlR61sKk=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IAecag9gwzsxMWpgn+SKb9847+f14tx8jGG+vosGpBnGFS0po+LSwx210P2mwnL7xlM25VMZcmxfPgsqfTkFtGwQ8xaRW0IMfUkgGfZhB8lH+jRleOTaKdqjcN+J/pQdYVqQNCMP18PZEcu4f90/YdWjf7Siuxc1cxO/emxKYyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=Zom4EKxh; arc=none smtp.client-ip=18.132.163.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1761573153;
-	bh=3kzLSOuCsNwd3PzYAldLRKtwAf4LDDOP8IpojHoSDqA=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=Zom4EKxhkk0iWK5+i3HgvWF1OGkldxxuwR1H06v/WAki7s4cNLSgUvlRMMaGFZzyr
-	 xRgOyIdYcqjU+IqBLy46bs44SjUMCm81D/Yy3fdWGNSJoC91ME+6j0bgn1PWmlmTZ/
-	 3HsqubF6BKxqhNCprBWN29BZhmXkm5m3no+xtaD4=
-X-QQ-mid: zesmtpip4t1761573148td27e7fff
-X-QQ-Originating-IP: UrvBgtWjK2nHPKDaDc+5eztGAGq+puoGJrqONWDB7do=
-Received: from = ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 27 Oct 2025 21:52:26 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3589194371110630699
-EX-QQ-RecipientCnt: 14
-Date: Mon, 27 Oct 2025 21:52:27 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	s=arc-20240116; t=1761599038; c=relaxed/simple;
+	bh=mpQNWk6XE71LI74R1zJzlQ6C3OyQEWIlBGjFvd/bJBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k7kXee6vJW/5gNOMKHn6LgzD4kGa/25aH73OM4SAhD84Qzs/582AZoQfpjpV/Nr+Eus0oCb1vOI6X3LqvBCJ5i6DQjUjMm/79E4RP+coYEWQKsAxqKQ3er0SQZBywyZPHWY5d+fAy1dWyADcpdhLfRqVz5DlqgWtlBwiSOQb/ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GgmbakJX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F4FC4CEF1;
+	Mon, 27 Oct 2025 21:03:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761599038;
+	bh=mpQNWk6XE71LI74R1zJzlQ6C3OyQEWIlBGjFvd/bJBo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GgmbakJX40KJMFyfWwg7WTbIH9DKp1g/eL85iqD3u7ajE4AZS363DfOYZoGEsENe1
+	 AjA7UBM1E2AVl6zrmOEABYAs9TvMGniM4ybNP+YHbFDrkAupYJmwqgaWNnoaGccwqA
+	 lu94ZtK1P5RCc3LGP6mBLpQjN2adVMNiU5G/SxHPgZ5RMtmee60yJKHy+CcQqcb+Za
+	 q8/yYUwu1LZ+fuX/jNlj/yOe/x6dPVxfKXyIJXZGKpi1WoWVhbGJpl5Si8YNRfKomD
+	 +Au+KOCHpn2GPzUsxm5olRbV7pqSX498JiWb3W8Wu9ccvdBmK/RnU3f1J0/nqOt2WT
+	 Wyv1CXfAB74LQ==
+Date: Mon, 27 Oct 2025 16:03:56 -0500
+From: Rob Herring <robh@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
 	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 0/4] fix the SpacemiT P1 Kconfig and resend the K1 I2C
- ILCR patch.
-Message-ID: <DE3BC758D99A2110+aP95G3ppc_mZaDpq@troy-wujie14pro-arch>
-References: <20251027-p1-kconfig-fix-v2-0-49688f30bae8@linux.spacemit.com>
- <aP9IVckJT-k2_O4K@aurel32.net>
+	Mark Brown <broonie@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 01/15] dt-bindings: regulator: ROHM BD72720
+Message-ID: <20251027210356.GA1565353-robh@kernel.org>
+References: <cover.1761564043.git.mazziesaccount@gmail.com>
+ <25746d258ac57ae3eee82a20fa14a8a168f35e58.1761564043.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,59 +73,207 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aP9IVckJT-k2_O4K@aurel32.net>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: Mh0xRtMdhgZRanLwuwAVcqmp1P5pal50KAfMbD3eUBhbrg5PthVOPmEf
-	sGCN4jmRdbbe5xpLy1i2t+h30110rqU3JDOIWeHHzRRD60R2HH+2BHxviT2E0WSmyEwlnId
-	CC0jO8m1mZ/IBWmmc5+6nERrwOOdw+eHvVboDE+E2Gm21uXExF9vHLiV+62SCxpZBFp6nKF
-	onSpJLykJBQnVJ0IglQ/pe+ngk1wkw2+8N76DVd7W0c7Ho3ak2oxLpgxRPowcq4+9CPj9/n
-	6DENo9CAn6S+3yrMXpnuQEZEGeY6BY8fo12HTF7vKHq4zkAqOnoNgj1igiwpVhxhz+zWtw5
-	1VApAhZD1W80QnYqz7ZOJOx+v/RT+RaA1SRjUbRJbmSUOBfq4TcIdp8DVGMLsErq79dlGeN
-	8Pu26+hhV1+YTtJpLOuGNRhsa7PFC3/y8l9+ueD3dPVxcFZ4YX0rP/jfK8m0Jk5TQsh2M4n
-	R/G9DGS3LvBzj3nzlcJfVvgOk+l+LZCiSsGOt/GHQg6ec2NjBL6Xuj3gviWnnmviyupOEVN
-	qzqUvYy/NAhgJ6HwNQ+Jqqwtb2P6Q0hp/DpFW+Ke+SNCnuZ+eNZlmLDcrymbM1KUHV9TxYf
-	RHxFbhLw4KD3V9xzNNz22a+HfDST0HzhMQZi+YCDdnkn1io1r3TybjQCCHUCiVE4+sIV69F
-	V9sO4pIRinHvLbIj3x9WLT6UWl/z6rLx9SgEgsIHYr1qoPbT1nMaB/VprXxq7wKKH2gjU0I
-	/8E6NLCir7Of0PZiWQ/rh7EeqD3/N2clFkDdmC8FWMcevvrWI41xAdUfZPpornXRyM0+sfD
-	bWptv9DdWT/yo8yi6o0Lbjreu5OT8XKxuwpdtsSDCO1A8/IU7yEUD7wtAj2lYe3bO8wwhxG
-	1QgNzitFphMUzcFKn1efkit0E4kFrfFKIsaVIOuJGgUduzkaZIZG0ovBhLx7ZDphrJunTNm
-	oe8aYjAEekfdG7ZLnjm1e9GGvqx2gqgZuEAmsyn76Twb71DMFzCIGFruu3YFM237WIsbk47
-	JheZa21s+p/n7/YhbEVzJavzd0pbtJdyKZGF/yrzAkgzn5jqpMBD7pemfRgH8ivUMbcbL9B
-	CQTufCOfcne/7aJsNllQ3asTFYIBG4Xjg==
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-X-QQ-RECHKSPAM: 0
+In-Reply-To: <25746d258ac57ae3eee82a20fa14a8a168f35e58.1761564043.git.mazziesaccount@gmail.com>
 
-On Mon, Oct 27, 2025 at 11:24:21AM +0100, Aurelien Jarno wrote:
-> Hi,
+On Mon, Oct 27, 2025 at 01:44:49PM +0200, Matti Vaittinen wrote:
+> The ROHM BD72720 is a new PMIC with 10 BUCk and 11 LDO regulators.
 > 
-> On 2025-10-27 13:48, Troy Mitchell wrote:
-> > Since P1 Kconfig directly selects K1_I2C, after the I2C ILCR patch was
-> > merged, the driver would fail [1] when COMMON_CLK was not selected.
-> > 
-> > This series fixes the P1 Kconfig and resends the I2C ILCR patch(This
-> > patch has reverted by maintainer [2]). In addition, the Kconfig for
-> > P1's two subdevices, regulator and RTC, has been updated to use
-> > 'depends on MFD_SPACEMIT_P1' instead of 'select'.
-> > 
-> > Link: https://lore.kernel.org/oe-kbuild-all/202510202150.2qXd8e7Y-lkp@intel.com/ [1]
-> > Link: https://lore.kernel.org/all/sdhkjmi5l2m4ua4zqkwkecbihul5bc2dbmitudwfd57y66mdht@6ipjfyz7dtmx/ [2]
-> > 
-> > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> The BD72720 is designed to support using the BUCK10 as a supply for
+> the LDOs 1 to 4. When the BUCK10 is used for this, it can be set to a
+> LDON_HEAD mode. In this mode, the BUCK10 voltage can't be controlled by
+> software, but the voltage is adjusted by PMIC to match the LDO1 .. LDO4
+> voltages with a given offset. Offset can be 50mV .. 300mV and is
+> changeable at 50mV steps.
 > 
-> I think this series misses a patch to add a default value for 
-> MFD_SPACEMIT_P1. Otherwise it doesn't make sense to define a default 
-> value for the ones depending on it (RTC_DRV_SPACEMIT_P1, 
-> REGULATOR_SPACEMIT_P1).
-Yes, I forgot that. I'll add it in the next version. Thanks!
+> Add 'ldon-head-millivolt' property to denote a board which is designed
+> to utilize the LDON_HEAD mode.
+> 
+> All other properties are already existing.
+> 
+> Add dt-binding doc for ROHM BD72720 regulators to make it usable.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> ---
+> Revision history:
+>  RFCv1 =>:
+>  - No changes
+> ---
+>  .../regulator/rohm,bd72720-regulator.yaml     | 153 ++++++++++++++++++
+>  1 file changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+> new file mode 100644
+> index 000000000000..665086f56928
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+> @@ -0,0 +1,153 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/rohm,bd72720-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ROHM BD72720 Power Management Integrated Circuit regulators
+> +
+> +maintainers:
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> +
+> +description: |
+> +  This module is part of the ROHM BD72720 MFD device. For more details
+> +  see Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml.
+> +
+> +  The regulator controller is represented as a sub-node of the PMIC node
+> +  on the device tree.
+> +
+> +  Regulator nodes should be named to BUCK_<number> and LDO_<number>.
+> +  The valid names for BD72720 regulator nodes are
+> +  buck1, buck2, buck3, buck4, buck5, buck6, buck7, buck8, buck9, buck10
+> +  ldo1, ldo2, ldo3, ldo4, ldo5, ldo6, ldo7, ldo8, ldo9, ldo10, ldo11
+> +
+> +patternProperties:
+> +  "^ldo[1-11]$":
+> +    type: object
+> +    description:
+> +      Properties for single LDO regulator.
+> +    $ref: regulator.yaml#
+> +
+> +    properties:
+> +      regulator-name:
+> +        pattern: "^ldo[1-11]$"
+> +        description:
+> +          should be "ldo1", ..., "ldo11"
 
-                                  - Troy
-> 
-> Regards
-> Aurelien
-> 
+No need to repeat in prose what the schema says.
+
+> +
+> +      rohm,dvs-run-voltage:
+> +        description:
+> +          PMIC default "RUN" state voltage in uV. See below table for
+> +          LDOs which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +      rohm,dvs-idle-voltage:
+> +        description:
+> +          PMIC default "IDLE" state voltage in uV. See below table for
+> +          LDOs which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +      rohm,dvs-suspend-voltage:
+> +        description:
+> +          PMIC default "SUSPEND" state voltage in uV. See below table for
+> +          LDOs which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +      rohm,dvs-lpsr-voltage:
+> +        description:
+> +          PMIC default "deep-idle" state voltage in uV. See below table for
+> +          LDOs which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +        # Supported default DVS states:
+> +        #     ldo        |    run     |   idle    | suspend   | lpsr
+> +        # --------------------------------------------------------------
+> +        # 1, 2, 3, and 4 | supported  | supported | supported | supported
+> +        # --------------------------------------------------------------
+> +        # 5 - 11         |                    supported (*)
+> +        # --------------------------------------------------------------
+> +        #
+> +        # (*) All states use same voltage but have own enable / disable
+> +        #      settings. Voltage 0 can be specified for a state to make
+> +        #      regulator disabled on that state.
+> +
+> +    unevaluatedProperties: false
+> +
+> +  "^buck[1-10]$":
+> +    type: object
+> +    description:
+> +      Properties for single BUCK regulator.
+> +    $ref: regulator.yaml#
+> +
+> +    properties:
+> +      regulator-name:
+> +        pattern: "^buck[1-10]$"
+> +        description:
+> +          should be "buck1", ..., "buck10"
+
+Same here.
+
+> +
+> +      rohm,ldon-head-millivolt:
+
+Use standard unit-suffixes. (-microvolt)
+
+> +        description:
+> +          Set this on boards where BUCK10 is used to supply LDOs 1-4. The bucki
+> +          voltage will be changed by the PMIC to follow the LDO output voltages
+> +          with the offset voltage given here. This will improve the LDO efficiency.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 50
+> +        maximum: 300
+> +
+> +      rohm,dvs-run-voltage:
+> +        description:
+> +          PMIC default "RUN" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +      rohm,dvs-idle-voltage:
+> +        description:
+> +          PMIC default "IDLE" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +      rohm,dvs-suspend-voltage:
+> +        description:
+> +          PMIC default "SUSPEND" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +      rohm,dvs-lpsr-voltage:
+> +        description:
+> +          PMIC default "deep-idle" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        minimum: 0
+> +        maximum: 3300000
+> +
+> +        # Supported default DVS states:
+> +        #     buck       |    run     |   idle    | suspend   | lpsr
+> +        # --------------------------------------------------------------
+> +        # 1, 2, 3, and 4 | supported  | supported | supported | supported
+> +        # --------------------------------------------------------------
+> +        # 5 - 10    |                    supported (*)
+> +        # --------------------------------------------------------------
+> +        #
+> +        # (*) All states use same voltage but have own enable / disable
+> +        #      settings. Voltage 0 can be specified for a state to make
+> +        #      regulator disabled on that state.
+> +
+> +    required:
+> +      - regulator-name
+> +
+> +    unevaluatedProperties: false
+> +
+> +additionalProperties: false
 > -- 
-> Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-> aurelien@aurel32.net                     http://aurel32.net
+> 2.51.0
 > 
+
+
 
