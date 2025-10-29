@@ -1,74 +1,74 @@
-Return-Path: <linux-rtc+bounces-5213-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5214-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2040CC1AB58
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 14:32:20 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE6C6C1ACA7
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 14:39:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D7DB586E9E
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 13:15:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1294B5A502C
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 13:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E50340293;
-	Wed, 29 Oct 2025 13:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631982BD001;
+	Wed, 29 Oct 2025 13:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wSayh/xO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iUmnKqAV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D003271E7
-	for <linux-rtc@vger.kernel.org>; Wed, 29 Oct 2025 13:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F5729D291
+	for <linux-rtc@vger.kernel.org>; Wed, 29 Oct 2025 13:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761743352; cv=none; b=FsREzBt2fYcrWnUHaKbAjvFd3IKyvuqlIisHgHT7iSEK9YHOwTs/TUxmIwlKb9v6/39eGsaFv9w9GoKpyH1Qi+3Xb9Q74ouC47jMAWJgIC/yy63JtoK4fnw1f4OYXxm3tWstozMJndfBldoNGrGPOhMjC2cf5LtXkAfBFlP0Wec=
+	t=1761744384; cv=none; b=ktfT0vyU5GwZTJKtMwF4EKMFq7qGH4bAbAZUpappyn4xbZ1cYMdf+XID63c3FyyzDE20BrQ1ZJvdiuglcpyrEWAw1WVLW7rdp7WgQ0SR7Jrqin8cDr1VS8YWjPh117SPHqET/8MOFKvxxicjHhmPE7sMtN1Ao2KEULkd1LrIoiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761743352; c=relaxed/simple;
-	bh=fyeNQjPbHba2zQACV1XwHgrmcj9u7mbSw/E0lwVQwQM=;
+	s=arc-20240116; t=1761744384; c=relaxed/simple;
+	bh=aSKuU9xIOHp+USY+0olHQZuj/v2CpxFRMmxMh6Q5UbY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZPL8QACd96YAkL8LTfXXsc22B6lY55a3QEA29NJQ/NdhYCM+DOy7qu6yIuIMEHsGDxk686jGHVS3uTVLDBJz/7wwMLHJbFQTYVNkj0rCvdvpxNOFBq/ynSmlzds8BFjHFeaXBYRrzi2jNCS0aODIfv7xLMyTri8OJevYwhYXSq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wSayh/xO; arc=none smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=EUaI9uF0FqOPJYhIedowIVEE8FWS7SYvB050Ettx9f3tJW8PYNDHlo6CBQoqrt3WSKL6JRDqTagQuT5W7ZwHcvmWmcK6Zts6PsHddmImPhUSPQ1AOdZxJJeYvHVweLDTPHdDVK+wnVQ38hJOhZukGcvZW1v1pfY8sdg4vgM6/UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iUmnKqAV; arc=none smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-592ff1d80feso5982121e87.2
-        for <linux-rtc@vger.kernel.org>; Wed, 29 Oct 2025 06:09:08 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-378d246f0f1so78111661fa.3
+        for <linux-rtc@vger.kernel.org>; Wed, 29 Oct 2025 06:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1761743347; x=1762348147; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1761744380; x=1762349180; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cpAhRZEcISe/L4obGO6K/aBf0H3CSDRAh1WJSbvQ7BI=;
-        b=wSayh/xOnAy3dXi4ntAukqEAHjvP9ucW73ZNIZyHbw2cHQsLL1Szf+DGPNGYsn58u6
-         J0lwB0G/6WXg8TK1O1xAu8Frak99gd/QnbDsG5k9aR5NWpMNTDbuTL7oxRWZPWpRSOFx
-         xVvP+51Ubm/kNNqZYitAOZdba2XhAhmt56BKrWjh3RH4FNJICFR+nON5Pti46FzTT5X3
-         V25xSseaffbJRROIyrMREOd1AAqVkx51lYyblWTF4trc7wR1xEMOfoXA5rLlso0sYxnx
-         sgyo4EO5o2qzKCCrqcLaGoGl+Pw64TwIG1bOSVwYd4/QlwFZqZYmuo7DnuaZmUHhVtZr
-         9GHw==
+        bh=aSKuU9xIOHp+USY+0olHQZuj/v2CpxFRMmxMh6Q5UbY=;
+        b=iUmnKqAV2ZqMdwnarD5Ij79DsuDs8d9nv9eDEmFWWJiu41QA9o1q9vb8Pkbw3xbwmL
+         c6QCK4LsJtvpN8Y7BhbLijAl1jzxLs/rlhWG9ZVtfRggaPEayDKQmSSxpfpjumVUz0H5
+         I8GBQUEMGUmH5HGOvkZB47Y6tPmwj/vITe7gdeYhYEY9X5hUMk4F8RQ/Hv0XqxijV+c+
+         nb6NKK0uARBBlJV1IRx5XEZ8x3KkQqHeyeRmN11znwsMl4mZwxGKDovmKAqV81udKgkq
+         VTaAMZFkD/rpE6QxRLyak22lIf8mIBCRZqn4bUBxHJiRW7plr8/Hq7YjCbztGtpv29yI
+         C6+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761743347; x=1762348147;
+        d=1e100.net; s=20230601; t=1761744380; x=1762349180;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cpAhRZEcISe/L4obGO6K/aBf0H3CSDRAh1WJSbvQ7BI=;
-        b=hZh63uHaVu8VBAU6qUYq8nuyGzEcJT35Uuu/48RdU+1SwyDeOFTJ+i2z4GBgU+2UA2
-         0J26IdbUczmj5CwoOTJYqagxtTybLienk6aVdZypsKQMAJ554OkyshsSt/pQA+PHNrSL
-         IF5xagZUGGZITnOF5cSS9CnE7i6fV09sckS8zRmyWhBBPD08gv3K4QUEWYcVdq81MtHi
-         BwnLRWhlhrRXwwo2cRu3En7Q90qtOURkJgU0gdcMEwkCZkEWEzuR8JDn2x8Jrh/YR72J
-         4fAIppxPtq+2bQXBQGLt3x/doMHJJMGnTZMxkUclq90UZFFxN+U20WlO033whC6gYZiz
-         KASA==
-X-Forwarded-Encrypted: i=1; AJvYcCW8WOB3n7ukKkfOO2f8LONt29K2/K9JXjFzuAsBPraAF4GcecIleVkxBbY+KgXPR8S5U8DGplUvjD4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcHOO3O/TFp0E3+ehxh5Xj5pDV2jLKiaQSZrw3Uyk7yGK8/mpU
-	JSaxpsR+g24K8YX9enjZZukC9fSOez8nv6Pg8XaI3EXAEIsjuebQ9KEPWlWkxFPtn1BlLm+C7mB
-	PozgPSGdesg1dsqjqRFafOnlWT9IpT9jQzUyc+b72Ag==
-X-Gm-Gg: ASbGnctk8Qf42uChiG188JuB7WLZMAuYtpdpQw7C40zHyPqwBrynW4MeLZ/9RCI0Z5w
-	U9zE6h92rq8U1CCy3WDZvm00gu12DK88jJo+is6oQRwuN7NjGigxv967cgGq8sRTU4LHZoRS/N5
-	AH43RM+alRUoS9gPMK1ym+artyQc2Sn7RdFxC1kIcjlbHBTf6/fthGO2XXE/QXoGLBJiQPNL66o
-	5B6gu/fKuj96ss897ePAyLaMWwUb+UxBiFRyQBw8fAM36LbY8M+Tk0OZgkf
-X-Google-Smtp-Source: AGHT+IHoNXhvs7nAEQT1Pr7YoG6bCNTomzDjqEik5GRK5GTNnbmdXX4kn01zdcQcoosBSkAxyYQ6vANHvlPp3vj1L2g=
-X-Received: by 2002:a05:6512:3a8a:b0:592:f449:cbae with SMTP id
- 2adb3069b0e04-594128617a3mr1173473e87.11.1761743347041; Wed, 29 Oct 2025
- 06:09:07 -0700 (PDT)
+        bh=aSKuU9xIOHp+USY+0olHQZuj/v2CpxFRMmxMh6Q5UbY=;
+        b=AjrKCvfaEXzfH4hUfYQZTExnN/WYnPbf7Glopg/uV0ni3hjhfs00Jdl+HdmEDY2xmp
+         zjVPblm2P1ikGx82ppwf8KtKcDeMqosLdmfG+p6IY9chyZpTSBM/beYRhwdCrZp1aM/M
+         SdzZGXlz4u4DGga5UDTeM3IDQiaA1Y4r/HN7YlK+LtHkr1evFOv2XzsaW8GeH6JX01qt
+         UVftVzubpFbF6t9MOVbgcRk+i6fRxefRvHQ2Qyb/OMeWcOKX0tCrqPLlyk+ABVa2CM/q
+         s2eUZKlLVGY38jfmKOTA2oWtaIDkOB/5LJKNfAxQ4XnFP6ZKvxlMNvcFeRSPvUYbyrI6
+         AW9g==
+X-Forwarded-Encrypted: i=1; AJvYcCVtNWdVlShTEjzKiIqo3e5bCJE0dxRuI0hKFoXkiSs/7n2nkwU755ArPa+R59RjZ/fUGLbMnwRhTyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqwA25zSWxBKchy/bkhd0CMm4UBB4R/NG8hkStAQPQrXH0XFMt
+	0XNO2jdXQVF08NPYEX8X4OtnDckasTFHr5H0Mwaxveeenrw507j1iivph/9a4GSGekuNVleg/1c
+	HVvyxn9iuVKeLjBEEnv/4CSbzsF+dCGMyH9F0cIJ7rQ==
+X-Gm-Gg: ASbGnctmpmklAUFTZHspaTblLlY9u9FEbMfUekUtVKdx6f4ELA1zf+1e5EYUfgQKdpF
+	XMk1t7bUUyf5JSf/PFFCqDFj/CcMSv+EnaGEcl4WKk2ifUqgkHsRBtQ4vOlIjfmutriQCDcfmSK
+	DWjPaoP0Df3KhMwI+QQrhUbcSDPf6GMvIX989OS47J4Jns30dh5J35gA2lNdiXzeFx7lB/PaiUX
+	qjbW8GV8uDX6C0ZUP0ez5QoAOtiLamDE6mqDeqPH2ENl2zvXl3V7IBG0Huy
+X-Google-Smtp-Source: AGHT+IFc/hCvDE1Zso/0IxQN+geIgWUqlAHmVbZSzAYj2L1gPzKHQM2rtOb3cVJ3wqFIdmrbO8L60WWStqgI5NAbuCE=
+X-Received: by 2002:a2e:9a12:0:b0:36a:f4d3:82e9 with SMTP id
+ 38308e7fff4ca-37a023ba912mr9579411fa.6.1761744380200; Wed, 29 Oct 2025
+ 06:26:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -76,17 +76,17 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1761564043.git.mazziesaccount@gmail.com>
- <a5957c4f83724d4f32527fb892fc340af4eeddde.1761564043.git.mazziesaccount@gmail.com>
- <CACRpkdYEUdJRvNPKhxx7orYHH3OE6BXXjrG9JVJo5MDHGKE88A@mail.gmail.com> <8b5dbbf6-bbde-4015-b0d1-12d6ec770ceb@gmail.com>
-In-Reply-To: <8b5dbbf6-bbde-4015-b0d1-12d6ec770ceb@gmail.com>
+ <b13b733e7e0fba05652f49f727412fed9e0ceb02.1761564043.git.mazziesaccount@gmail.com>
+ <20251029-adamant-mamba-of-patience-cddb65@kuoka> <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
+In-Reply-To: <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 29 Oct 2025 14:08:55 +0100
-X-Gm-Features: AWmQ_bmctKf4r03BFEQZEB7--T8kdCIHNsOEFNutvbq6JrwVjRi4Ptn1KMtyXrQ
-Message-ID: <CACRpkdaK52wY7MYhnqCqzOAFVu2V=NejDTjAAhkxhf9rmrV8iA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/15] dt-bindings: mfd: ROHM BD72720
+Date: Wed, 29 Oct 2025 14:26:08 +0100
+X-Gm-Features: AWmQ_bkO8UFcogwNBcRXNNMdmHiXiiZyPgTHaU5THyaD5CILTj16yxOphtBr7r4
+Message-ID: <CACRpkdZcszMZEU2Wzx8kaoR46ytziqtedmCrsjEL3QOrDtDgzg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/15] dt-bindings: Add trickle-charge upper limit
 To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, 
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
 	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
@@ -98,57 +98,32 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.o
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 29, 2025 at 1:30=E2=80=AFPM Matti Vaittinen
+On Wed, Oct 29, 2025 at 7:22=E2=80=AFAM Matti Vaittinen
 <mazziesaccount@gmail.com> wrote:
-> On 28/10/2025 00:42, Linus Walleij wrote:
-> > Hi Matti,
-> >
-> > thanks for your patch!
-> >
-> > On Mon, Oct 27, 2025 at 12:45=E2=80=AFPM Matti Vaittinen
-> > <mazziesaccount@gmail.com> wrote:
-> >
-> >> +  rohm,clkout-open-drain:
-> >> +    description: clk32kout mode. Set to 1 for "open-drain" or 0 for "=
-cmos".
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    minimum: 0
-> >> +    maximum: 1
-> >
-> > I think CMOS is the same as "push-pull" ( I could be wrong, but I think=
- I've
-> > seen that before) so I would probably try to use the pin config standar=
-d
-> > names as strings here but I'm not sure.
-> >
-> > rohm,clkout-bias-open-drain;
-> > rohm,clkout-bias-push-pull;
-> >
-> > Mutually exclusive.
-> >
-> > Or maybe use the pattern from rohm,pin-dvs0
-> > with string enumerators?
-> >
-> > rohm,clkout-bias =3D "open-drain";
-> > rohm,clkout-bias =3D "push-pull";
-> >
->
-> Hmm. I kind of agree with you. Still, the way it was done in this patch
-> is used by the other existing ROHM PMICs (bd71815, bd71828, bd71879). I
-> am kind of reluctant to support another way in the same driver - and I
-> am also reluctant to change the existing bindings as that sounds a bit
-> like asking for a nose-bleed :) (I've in the past worked with some
-> devices which didn't update the device-trees when kernel was updated...)
->
-> Do you think you could live with using this existing convention? :)
 
-Yeah if there are precedents, either we can reuse that or we need to
-change them all, and that invariably involves deprecation and re-implementi=
-ng
-the parsing in several drivers in that case, which is annoying and
-takes time.
+> > But I believe this is wrong. Trickle charging does not switch to
+> > anything more, there is no fast charging after trickle. You have some
+> > sort of pre-pre-charging, which is just pre-charging.
+>
+> There is trickle, pre and fast-charge phases. Furthermore, the
+> fast-charge is further divided to CC and CV. Finally, if my memory
+> serves me well, Linus W did explain me that some chargers use
+> 'trickle-charging' as a _last_ charging phase for a full battery. Thus
+> the term 'trickle-charging' is slightly confusing - but it is already
+> used by the existing bindings...
+>
+> https://lore.kernel.org/all/20211116001755.2132036-1-linus.walleij@linaro=
+.org/
 
-It's fine with me to keep like this.
+I think we need to refer to a textbook or IEEE articles to get this
+terminology right.
+
+As you say it appears "trickle-charging" is ambiguous.
+
+Maybe what Krzysztof suggest to use: "pre-pre-charging" or
+"empty-battery-charging" or something like this is needed.
+
+But we really need a trustworthy academic source here.
 
 Yours,
 Linus Walleij
