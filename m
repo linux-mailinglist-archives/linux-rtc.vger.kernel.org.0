@@ -1,81 +1,81 @@
-Return-Path: <linux-rtc+bounces-5204-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5205-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C881C18713
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 07:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E3C5C1871C
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 07:26:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E538D406BF6
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 06:25:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9760406F02
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Oct 2025 06:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE3D53054E1;
-	Wed, 29 Oct 2025 06:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F360D3081D9;
+	Wed, 29 Oct 2025 06:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RmPWOHLN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxiiTm6r"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC2F302164
-	for <linux-rtc@vger.kernel.org>; Wed, 29 Oct 2025 06:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3462E2DD4
+	for <linux-rtc@vger.kernel.org>; Wed, 29 Oct 2025 06:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761718973; cv=none; b=ecLVwQ8xMZ2VlF1915X8eieu+T98ZsjKwp1PFxNkhdCJat6ll4VCy5H8uBL19x+suIMIkz7DiJBMgi0PO19wmEeZOzzrAvFT7/GfInPlGHK3kb718XwmU8EYE/Gxcp8Nf88Ke+ukq0mvqsHIn4RYvdDuAcnUNEBkFe026M0zOeY=
+	t=1761719059; cv=none; b=pIHA0NJEcjOwe9Gz8sgH/I1MOIdd7BnGx+tOW53ag8S24xFXLsN3NlK3913nP86XHsiCTkmjViZmxuDC5lvHwmfNDmpmUlbSa9PLUNDCutgewy3n9dMBP/lsnKIBLh4d4O761wNs3fa7sgDb2BN/XTU43QZxhtvUHPFWRXZO7S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761718973; c=relaxed/simple;
-	bh=4O+7pwhIGGS1RUIpdH+/fPlWfKqvKw0rWPYTnh4gGvE=;
+	s=arc-20240116; t=1761719059; c=relaxed/simple;
+	bh=BS78qzLC6Pbc2ow6QJKzzu9seEeWMo56OC/LqYiyfNM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OPYM0Zkr8nTAxRIYFeGQuXKO8w4Kcy6l35asZqRGF9rVNTkKFNi2cHMVOLlW+3YCyuNpjY0XWqHxsPMUpbACeCekyjxcljZCwTQKlK5jftl6wzo8ACaST4vrPGnAyQ6G1bpCDFE4ng2Xk67euJAA1u4z8JIwkwtzRl87TRB/Ty4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RmPWOHLN; arc=none smtp.client-ip=209.85.167.47
+	 In-Reply-To:Content-Type; b=TOENlGXFkmyrAXVtlUFA56IO2TBHfJJknOsiBu/HT3yofFDc1UgXoLL0wVyopmgOadVXVNDZZeBJyFmCVEJH0gg4hMt7OJoW8kJzNIJ96Yri2dq9+ZGN4Fq4SVjPfnVrTJ7d3uMpKtZfzmqjNrvsgEdZPfXw8rkBbw6g5+Q49Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxiiTm6r; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-591eb980286so7197817e87.2
-        for <linux-rtc@vger.kernel.org>; Tue, 28 Oct 2025 23:22:50 -0700 (PDT)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-58b025fce96so5871881e87.1
+        for <linux-rtc@vger.kernel.org>; Tue, 28 Oct 2025 23:24:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761718969; x=1762323769; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761719056; x=1762323856; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0VW27OesVv2Xc3xIV1cd4ruvQQ3oOkSUpb7LoylGMQM=;
-        b=RmPWOHLN/k1SZE1C1pzZaUFRLoYJ/eZhIZUMYc49u01SncpgT8mOtQNsL2gQDEedfo
-         5CpJnOpxZBO7380lAf+Ol3agJ06sFj6TWqJGxuwGZdZmJsQVcoVByeVKGGcxwbo8uVZX
-         crZ4jmXLSkmGIDznrxFbm0jGmEghzPr/XI4jUmW+ncHaO6lbdFpexiOy7GnQ0Ne1uGko
-         9RhRxUshJQGhSe7JVXD0YRz16Gd7N5SQU6rrhSm7Eaoj4I7aABKqlmQUu5IeQbJrFpPD
-         kXyO7yX2Q7KFZm1ljoQFqLkr7O6kwkJNOasXDZHPJp7nt3tftK9IegqVacOecORCL9rx
-         Ogmg==
+        bh=/E+ZryNph3yMx+vi8h4RvFoOJ/BdFIb+DDgg5r/sdBI=;
+        b=PxiiTm6r6JbM70EsM8ypn0+FtMMn5Z79R/9YpBWR+cdjhNJ9+3rUweHD1mlFX5Sd9s
+         lp+Daj9mwvauPzQ92WpQJqbILWq/c+BvFYAs64TWW+AXi19j+0BD3a2e/mjsBSqk12lI
+         9z+VJ5E3I82crdKpzvoFaIdWitAPPjI/8E26+n7Xrhec5iuDVQHLXfksfj/QxcsSRWOa
+         02lwWT4NhaYkn4Rw7W4bPWePQasO5Hyjrdj1qx5kcyzRxa+KfJSCl51SBRs9JWz6Ri46
+         QW6toLKlmGwf90kfcOOPV7fzP+CEuSH/HS6O0Sue8LWRsLkBOph7SDtpGXLec3+GjPQM
+         u+Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761718969; x=1762323769;
+        d=1e100.net; s=20230601; t=1761719056; x=1762323856;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0VW27OesVv2Xc3xIV1cd4ruvQQ3oOkSUpb7LoylGMQM=;
-        b=DUQt3xZZk4jQD2UsCyALjebPE5gATQXb6h4Y4H45Q+VuVG7cZez2zeNQ70bv58sF2R
-         SHW74x208YC5X6zjO199fIbHv3gEPeceYT4s7Tgx33swIQqenNWJTuW/73XU2evbUsPR
-         IlLI2lhGT3mDPOJOZXJaRZRSDi9mrMMMAQHiOM+xi7fDtY5WleD/rgTLkfBaNvYRTqcr
-         l6P3c7aPuvCxUbG9MDJ7ey339kvCU77qJx+Nljb5E0D+GvUAfR68U8vpOTozsp9FfKW+
-         /SKg6i0BkaavkbcnCqxbsCDqfQFYN9vAr+Wz9moNI7yrUh07iscE2d9uFenY4wHuBGUR
-         baYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV9JLVW7FWZOKvhkvhlKc2f0wtbCbwH+x2b++S8cBFaRUXhQoyGxugBkPl+3nyLyE0Wy6iLGKXjP04=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw224majOrtC0Via0LLuB/Trb4Y83Ihf+Y0v5HubLs1E+zYC20U
-	KvShpdhVvQ7TBrdDtyG+ph7yNpmsWKHQ2DTuMYZUUvUxOsG+wRflduDu
-X-Gm-Gg: ASbGncvT+PEd2RkElQzu/P5tL1JMkpXOOXWiFH/zrfO+l4ZVk2wlViCjkyymQYm/Sjm
-	FnVUwq6MRWLbUXUuqDI1ywzAtYMKJlA51n+IE0PWjjTbz95HwQocunk/nX2m3IBzae+MZqmudGv
-	zMspJcvnsng7VyZGNfmUyx8YFQghKqoSdZ7oDFSo5wjeBEmyOzg8fmckWx5IMiFQWq/vx18aX/R
-	hB38225k2wHp1DcGLrSgQkl/z+alQO7VcOWUh4tvTLnuciZzYXMK3k0DN+bdRBfLsyJ0V3KY/lu
-	DfTtJNBNaatvTSPqxjcwAzokBz80uYesgkI/hEAX4+zE2dAjAY87wb+nQNZN8cbF8N/oNEbllQx
-	vqu5jZsKdYDXU3EcfE/dKjgC7uUSLeFpKrFG6AndLYgFSUsxsXOINKPXfmLc6ntl01JcdpUd7/0
-	ymBLOduDseGuIChuH1DRBips4TaPLjoNmnyBTfyN0aPTpEAHFZ71xYvfWGbA==
-X-Google-Smtp-Source: AGHT+IGanoJgPw6WF2DjE1gIdmQz7mXfEW+doSVsuxKGJlYO+QYEE07542eS5+8tipXltZ0hgrDYBA==
-X-Received: by 2002:a05:6512:3a8b:b0:591:ce58:1def with SMTP id 2adb3069b0e04-5941286524emr697925e87.2.1761718968884;
-        Tue, 28 Oct 2025 23:22:48 -0700 (PDT)
+        bh=/E+ZryNph3yMx+vi8h4RvFoOJ/BdFIb+DDgg5r/sdBI=;
+        b=YfjcaEKFfEaDRO6LyAsk//EE0W+cFd2jswQp+oq9dO6O1ZglvtG/oFxlYDJm6o5d3+
+         bWJDYR9JYqK7GpkeGwHxF8/SwEOU2POeKSrATXNgesGR3+bFlE/fAVIJ4Mz/SmjFz+oq
+         LrooB0a0uT0NqeBB1aqFfW96ytj6ch1pxjqOai+1avlZcpvg86QHZ6Qyq38ZWs0HWIuP
+         zWvTEqIigNQJppErGdhhsOpHKBAQjJwHlI8mFMgbieD65K4rBaAyldqqjWsyWlt3PD8/
+         +iTsK/lmht1ItS8Mlqvg9TDzUMADR7F6pRyrh4L0cVQDqO6cbaw3iXBumQv+1DmSOICQ
+         8Gqg==
+X-Forwarded-Encrypted: i=1; AJvYcCXLtljh47ZY8zW1xfxA8wBErH9wtXlT2TxTIKg/qSi9rC2yQh9cjZwrItr4cOTv5xy3aM4lmmH7xCo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxxhx/S8CQzwMcXQAuFOT3iSRbbzJAZ1HO2afUVueceniLIm/65
+	VVU1A4hBbt1LAV0SvuFOzwwKm5vWxlpUf55SyIuwP0u1Pix30e4ZSWD2
+X-Gm-Gg: ASbGncvbpQsWj60k+Ytqwv7jiMwvBNv67suCxE2uYrnSyaCZdw6JGrv70s5fakpTqWD
+	1DcBSpIqCVF154zmuSLoBjN9xjlEq4730IEepsGCzdDtGdnim9SjsYzq8/kYnEeAejHcqn3ekyh
+	Or0GDnXfytPCVR/En8nmrAHSaQ0zeaYzF566xi+KdSSdq3mLh0aLxoWK1rAq/YM4J48Dh6h/bk1
+	cW/BKFweDna36b55fwK5uSxuFB+922OtcC2fZ79vBGc88L2hhwmO0UENUXDCAF9O5ZRb4U8awC4
+	ielI2x1t1SXKC0OXMykoM6DQNEIW4ITluDT4EChfGrpaKCmTkVchc9STfh1V8HycrMAsEVGxS7c
+	Q2P8D3wnvXCiHELcs0XX5ysTxXuP6MfPTutfYURyybYbY0fSTUlzdQKXrdAo4MYhY13gg+kRQsm
+	XJrwJXgFEon9epSA+ung2S9WhdlGY6k/d7pYa5DTbsMQvniJ7rHR9pzZaUXg==
+X-Google-Smtp-Source: AGHT+IG8NXe1EdGhVyolwk15yW6Efwh7ekc//1eGyM0sEnTM8+C2jzj6xxj8v4NnHT31PN5hE1LQpQ==
+X-Received: by 2002:a05:6512:104c:b0:591:c6c0:9af2 with SMTP id 2adb3069b0e04-59412a0cb9fmr596126e87.54.1761719055744;
+        Tue, 28 Oct 2025 23:24:15 -0700 (PDT)
 Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-593041884c9sm3239104e87.96.2025.10.28.23.22.46
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59301f60ca4sm3577871e87.62.2025.10.28.23.24.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Oct 2025 23:22:47 -0700 (PDT)
-Message-ID: <a81fba66-adf0-440f-96e1-bf3a83d504d8@gmail.com>
-Date: Wed, 29 Oct 2025 08:22:45 +0200
+        Tue, 28 Oct 2025 23:24:15 -0700 (PDT)
+Message-ID: <3d58eb1e-7889-48c3-980b-bd2a98368a3e@gmail.com>
+Date: Wed, 29 Oct 2025 08:24:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -101,87 +101,51 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 References: <cover.1761564043.git.mazziesaccount@gmail.com>
  <b13b733e7e0fba05652f49f727412fed9e0ceb02.1761564043.git.mazziesaccount@gmail.com>
  <20251029-adamant-mamba-of-patience-cddb65@kuoka>
+ <b30eed8e-c8f8-4077-9e6a-0217c5827981@kernel.org>
 Content-Language: en-US, en-AU, en-GB, en-BW
 From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20251029-adamant-mamba-of-patience-cddb65@kuoka>
+In-Reply-To: <b30eed8e-c8f8-4077-9e6a-0217c5827981@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 29/10/2025 08:03, Krzysztof Kozlowski wrote:
-> On Mon, Oct 27, 2025 at 01:45:05PM +0200, Matti Vaittinen wrote:
->> Some of the chargers for lithium-ion batteries use a trickle-charging as
->> a first charging phase for very empty batteries, to "wake-up" the battery.
-> 
-> In the few cases I was dealing with charging circuits, trickle charging
-> was used in context of top-off charging, so when battery is 100%. It's
-> also documented at Wiki like that:
-> https://en.wikipedia.org/wiki/Trickle_charging
-> 
->> Trickle-charging is a low current, constant current phase. After the
->> voltage of the very empty battery has reached an upper limit for
->> trickle charging, the pre-charge phase is started with a higher current.
+On 29/10/2025 08:17, Krzysztof Kozlowski wrote:
+> On 29/10/2025 07:03, Krzysztof Kozlowski wrote:
+>> On Mon, Oct 27, 2025 at 01:45:05PM +0200, Matti Vaittinen wrote:
+>>> Some of the chargers for lithium-ion batteries use a trickle-charging as
+>>> a first charging phase for very empty batteries, to "wake-up" the battery.
 >>
->> Allow defining the upper limit for trickle charging voltage, after which
->> the charging should be changed to the pre-charging.
+>> In the few cases I was dealing with charging circuits, trickle charging
+>> was used in context of top-off charging, so when battery is 100%. It's
+>> also documented at Wiki like that:
+>> https://en.wikipedia.org/wiki/Trickle_charging
+>>
+>>> Trickle-charging is a low current, constant current phase. After the
+>>> voltage of the very empty battery has reached an upper limit for
+>>> trickle charging, the pre-charge phase is started with a higher current.
+>>>
+>>> Allow defining the upper limit for trickle charging voltage, after which
+>>> the charging should be changed to the pre-charging.
+>>
+>> pre-charging is the trickle charging, no? Or you want to say that
+>> trickle-charging is pre-pre-charging? But then what is pre-charging in
+>> this binding?
+> 
+> 
+> Now I see that you added initial trickle-charging in commit
+> e3420b49949c79d6182dd8128fa7a3958da01b07. I looked at TI chargers for
+> LiIon/LiPo batteries and few popular models use the same meaning/cycles
+> as you here. Probably in LiIon/LiPo you cannot or should not use trickle
+> for top-off charging (CV phase).
+> 
+> For NiMh these TI chargers use term "Trickle Maintenance Charge" (e.g.
+> bq24400), so in separate or this patch please also clarify the
+> description of properties that this is trickle-charging for LiIon/LiPo
+> batteries, so the pre-pre charging.
 
-
-> pre-charging is the trickle charging, no? Or you want to say that
-> trickle-charging is pre-pre-charging? But then what is pre-charging in
-> this binding?
-
-There are the (usual?) pre-charging and fast-charging phases in the Rohm 
-devices. Furthermore, the fast-charging is divided to constant current 
-and constant voltage phases.
-
-In addition to this, there is a 'trickle-charging' -phase for a very 
-empty battery. This is already reflected by existing bindings:
-trickle-charge-current-microamp, Please, see:
-bbcecd1b9335 ("dt-bindings: Add trickle-charge upper limit")
-
-I also did do some ASCII art for my very first charger driver binding:
-https://elixir.bootlin.com/linux/v6.18-rc1/source/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-
-Do you think a comment linking to this drawing would help?
+Right. I'll try improving the description. Thanks!
 
 > 
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->>
->> ---
->> Revision history:
->>   RFCv1 =>:
->>   - No changes
->> ---
->>   Documentation/devicetree/bindings/power/supply/battery.yaml | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml b/Documentation/devicetree/bindings/power/supply/battery.yaml
->> index 491488e7b970..66bed24b3dee 100644
->> --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
->> +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
->> @@ -66,6 +66,9 @@ properties:
->>     trickle-charge-current-microamp:
->>       description: current for trickle-charge phase
->>   
->> +  tricklecharge-upper-limit-microvolt:
-> 
-> Please keep existing format, look three lines above. trickle-charge-....
-> 
-> But I believe this is wrong. Trickle charging does not switch to
-> anything more, there is no fast charging after trickle. You have some
-> sort of pre-pre-charging, which is just pre-charging.
+> Best regards,
+> Krzysztof
 
-There is trickle, pre and fast-charge phases. Furthermore, the 
-fast-charge is further divided to CC and CV. Finally, if my memory 
-serves me well, Linus W did explain me that some chargers use 
-'trickle-charging' as a _last_ charging phase for a full battery. Thus 
-the term 'trickle-charging' is slightly confusing - but it is already 
-used by the existing bindings...
-
-https://lore.kernel.org/all/20211116001755.2132036-1-linus.walleij@linaro.org/
-
-
-Yours,
-	-- Matti
 
