@@ -1,45 +1,45 @@
-Return-Path: <linux-rtc+bounces-5251-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5252-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F287AC3443D
-	for <lists+linux-rtc@lfdr.de>; Wed, 05 Nov 2025 08:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B862C3444F
+	for <lists+linux-rtc@lfdr.de>; Wed, 05 Nov 2025 08:39:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA0FB1891D4F
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Nov 2025 07:37:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29A7118C5C80
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Nov 2025 07:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C6992D5926;
-	Wed,  5 Nov 2025 07:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B112D4803;
+	Wed,  5 Nov 2025 07:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QProqwgx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nPHKyIz1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FD62D24B7
-	for <linux-rtc@vger.kernel.org>; Wed,  5 Nov 2025 07:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE2B2D0C8B
+	for <linux-rtc@vger.kernel.org>; Wed,  5 Nov 2025 07:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762328187; cv=none; b=vAK+HTmqkZMkX9jbEio2gqnF7Hei96ZXpbDxgzCyNuELB89TBUMbAuv8IwwQK+wtu7KtlZDmJLvOEUAW2371MNddPj8OudOnoGt4ZQdlT7pAZ+9u1R8d+r2TF24AJoD5h5YzqYBUa+L494wK5cP8gMSr13U+PZkUa5MNTqyDbgU=
+	t=1762328203; cv=none; b=OOQmtrh4JWQXwBgfmcDLxH/MwOF3CcOYC+svZgGCHLuxDNB3ogv9LC9ugYnx4ycX4567xyub2XzMZiFHxNWZbLGhCkNgg+FIJ+ohk3CFHNw2khFLIUudpxAtRK8bK6SO9zJEJbFGovZNz68Rkp40uojhjvG3jE8U5GoVawojvC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762328187; c=relaxed/simple;
-	bh=l4sVPfT+IHVIjHAg6mRjsZ6J0HkKBQLQ79pRWfzDNsg=;
+	s=arc-20240116; t=1762328203; c=relaxed/simple;
+	bh=19uAuz/g8sIAP7Ko2LH8ylRZj9eIUyPyCbNBNDT2YDM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQggeEvEspUUXT3KsEMU1LdLS3JpMKcBc0cpxMhyhI7hQvSFNRuCH7YDJX8ewTqUJyCqrlDQcWNbr3GMJSlG2gKNoRZ69lKcUdR/8jlMHI6aBiiXtGjHRNHMKTiv8XuyAYl8E1BZMnmQ5r84nymn1iOE/WlX+gCoNbgMd9yjImw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QProqwgx; arc=none smtp.client-ip=91.218.175.170
+	 Content-Type:Content-Disposition:In-Reply-To; b=qb8HxTecouugqi1DIOL3j+hZUj9+YohI/xzW0AZaxDR/bRcHw5vDwXdhAqfSIyUWUO9v0JfcUavR8Vsaa5UaABwVw2rYCrGKrTiLBSBKdnwpCOXV29KGn2OMAOSW+tghWNeT/RFIf1R7RsoJ9+Nl3AqOg4Q27F8lZltk9OmAglE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nPHKyIz1; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 5 Nov 2025 09:36:16 +0200
+Date: Wed, 5 Nov 2025 09:36:31 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762328183; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1762328199; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=esXwrIIJ/OfQVqm08M7Pt7VI1MokoOkiScr/2XSUa0U=;
-	b=QProqwgxNjFX8FInVaKiL9gtAoMneHImlBqks/StpSDTaiWJjS+MVjhpUWIWPJtpHBFvhv
-	Awe3Amw95ydMg/bHUSCog7o6q+N73fEpG/EZFqQuQXVI0ztiHt1Qgy4TbvcxSMF4CoRkL7
-	v04md90iCbYkzzQE31QgbJbdJsFrPUo=
+	bh=tG73ZYQq/Po0lnUf1GihhWIQtko9MIqbFBnm4XRooyg=;
+	b=nPHKyIz1bpuGqjnfu/0+H5MwYGt7jHW4ABKWM12rgpEAlWhe8rT+BI8PcJQzwpZEjLTYqm
+	av4FvW5AcmAWgPxljAeMn8OMKU8VyHU5w/EEsHgdhm1ETOg2z5ZJ3+f12hLakwjmWjxtWD
+	HARvc5qV8Bcjej/pvymV6NJVepovEIY=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -61,8 +61,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v3 02/16] dt-bindings: battery: Clarify trickle-charge
-Message-ID: <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
+Subject: [PATCH v3 03/16] dt-bindings: battery: Add trickle-charge upper limit
+Message-ID: <1babb4f8e9a1d21daab737e3427005852ec304fb.1762327887.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1762327887.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -72,84 +72,76 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="I3TnsRBe02/VN2xi"
+	protocol="application/pgp-signature"; boundary="HRAqgqtk7j0jLIHb"
 Content-Disposition: inline
 In-Reply-To: <cover.1762327887.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---I3TnsRBe02/VN2xi
+--HRAqgqtk7j0jLIHb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The term 'trickle-charging' is used to describe a very slow charging
-phase, where electrons "trickle-in" the battery.
+Some of the chargers for lithium-ion batteries use a trickle-charging as
+a first charging phase for very empty batteries, to "wake-up" the battery.
+Trickle-charging is a low current, constant current phase. After the
+voltage of the very empty battery has reached an upper limit for
+trickle charging, the pre-charge phase is started with a higher current.
 
-There are two different use-cases for this type of charging. At least
-some Li-Ion batteries can benefit from very slow, constant current,
-pre-pre phase 'trickle-charging', if a battery is very empty.
+Allow defining the upper limit for trickle charging voltage, after which
+the charging should be changed to the pre-charging.
 
-Some other batteries use top-off phase 'trickle-charging', which is
-different from the above case.
-
-The battery bindings use the term 'trickle-charge' without specifying
-which of the use-cases properties are addressing. This has already
-caused some confusion.
-
-Clarify that the 'trickle-charge-current-microamp' refers to the first
-one, the "pre-pre" -charging use-case.
-
-Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 ---
 Revision history:
-  v2 =3D> v3:
-  - New patch
+ v2 =3D> v3:
+ - Clarify the 'trickle-charging' the property refers to is the
+   "pre-pre" -phase charging.
+ RFCv1 =3D> v2:
+ - No changes
 ---
- .../devicetree/bindings/power/supply/battery.yaml          | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/power/supply/battery.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml b/=
 Documentation/devicetree/bindings/power/supply/battery.yaml
-index 491488e7b970..bfb7b716ae13 100644
+index bfb7b716ae13..d1a2080557a0 100644
 --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
 +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
-@@ -64,7 +64,12 @@ properties:
-     description: battery design capacity
+@@ -71,6 +71,10 @@ properties:
+       NiMh bq24400) - that is different and not controlled by this
+       property.
 =20
-   trickle-charge-current-microamp:
--    description: current for trickle-charge phase
-+    description: current for trickle-charge phase.
-+      Please note that the trickle-charging here, refers "wake-up" or
-+      "pre-pre" -charging, for very empty batteries. Similar term is also
-+      used for "maintenance" or "top-off" -charging of batteries (like
-+      NiMh bq24400) - that is different and not controlled by this
-+      property.
-=20
++  tricklecharge-upper-limit-microvolt:
++    description: limit when to change to precharge from trickle charge
++      Trickle-charging here refers "wake-up" or "pre-pre" -charging.
++
    precharge-current-microamp:
      description: current for pre-charge phase
+=20
 --=20
 2.51.0
 
 
---I3TnsRBe02/VN2xi
+--HRAqgqtk7j0jLIHb
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkK/nAACgkQeFA3/03a
-ocUMIAf+NCseED7kwNbN9UuGodeOWqZ1MLgfMqLBUlOUc7XyZ51vUagUd4WDOIOR
-do4YBR0Fg/uoDT3mJBj5UVJq4TffQsOqyU1jaWCqSNYBwer9Jvz6AfVuOOzJJefi
-qTsLO+90cnMMDhfnEfFH1k7iTcxe9yS4l9D9cXtVrOS5i+Ui8Kp4bFaxKfAN7C+A
-6OeoIRR5ycRzlnEiZtOwfwAXYWbLmmHLpmHG1HEhsv5/FFdqAI2bd9OXFqWPwwdD
-XXHF0+bgQpjIatqk8lPwFR+OufIlWyXHPn9kttT6OZ6NCwcFpQTPf73xhBWWW9vm
-Rfl35j180jsh42CNn8IhlNsa4If8TA==
-=Xtmc
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkK/n8ACgkQeFA3/03a
+ocVR0Af/f4jJ3AXTq+f1Xz0cxg4sRGggbnjMdfpcnYkAeJjFN/xk22kFzzHOLTvE
+qCbC94ZAqJgR52kyYbft/PBLxhRDGl/HyptLAkb2SRb8LzuO/91DEIwCtMfEJgiP
+WG+6nEsAr/YSj3oiVjQlQA0nYeewOI31CJy6LKpTq/IDPGZpnVhNY+zhEsqAzUOJ
+k03o9txBTWtEjqHXFR1cEO8wTzLc0Dxoh2TLbnhr6JF92E3hg+FAKpVZkmcip4Zx
+FqgMSSwlFVCH90KcOMfxjLwGLbIDMNUj8swhw7HXf+DAjGyTpMJhT6x0HaYA1qV6
+Wso1SSKpDYgPWwC6KOw3FY+PGHZEGA==
+=YOkd
 -----END PGP SIGNATURE-----
 
---I3TnsRBe02/VN2xi--
+--HRAqgqtk7j0jLIHb--
 
