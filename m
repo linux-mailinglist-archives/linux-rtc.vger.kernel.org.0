@@ -1,154 +1,117 @@
-Return-Path: <linux-rtc+bounces-5270-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5271-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58677C3566E
-	for <lists+linux-rtc@lfdr.de>; Wed, 05 Nov 2025 12:40:20 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55FA8C3759B
+	for <lists+linux-rtc@lfdr.de>; Wed, 05 Nov 2025 19:37:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B70AC4ECBCF
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Nov 2025 11:40:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B285D4F2CB0
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Nov 2025 18:36:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4194311C38;
-	Wed,  5 Nov 2025 11:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256BE321F42;
+	Wed,  5 Nov 2025 18:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CJSB51PU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMYmejB+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75820311966
-	for <linux-rtc@vger.kernel.org>; Wed,  5 Nov 2025 11:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60D82749DF;
+	Wed,  5 Nov 2025 18:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762342791; cv=none; b=kWhRmC78ZEIot2diq8uivgEIg8aSf/63hJCJRs9E0LOm/fzpW0mGsjGSEJDZ7U4ocOX/Koh6mf1tKWvNUwsm3eKvReW4opvWRbbwQSht08/H0ITgXoB6GmKqVREEXYgATbDWt+dMRrQWuPYRr92Q/62q9nVf5b9Ml0UDdGge5Ss=
+	t=1762367637; cv=none; b=E65DdY3gDahmITL1XXt40MFVQI2L55um21QVNz1GGp7kqrpC8iTu4VEuxlkWKrouDATY60W1zJEORpph4Ov9KNujh91JrNB9szCFZ0u3ujYoVEbw9A9b2L2LJ9o8oKYPReXvqHRmRo32c0+GUFwr4pTbH1XOiCvzbH4ywu+Mvso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762342791; c=relaxed/simple;
-	bh=XJnQ8QAutR/Qjzuilm6RbMyIh+omr6OWVKRLZO5Bnf0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nF6FRBjAkh2XJJ8nh7aNjp40ueprsy65i7v62F5P/BFSTPo7bsw02S6XtPj+lcaXC0LmuJ0svtNdtTNJLc7sdqOdOIRlVGoSycY+2EZh4LPiOHKt98YBIbMcV/1xQ/Y5RjAJ6f79+pOsqfafAEkIqGvYI0LVwjXKHsixl1NCWdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CJSB51PU; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5942e61f001so2715675e87.1
-        for <linux-rtc@vger.kernel.org>; Wed, 05 Nov 2025 03:39:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762342788; x=1762947588; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XFKcDBz895P+pKkilzGMv1j9zQS86el4sifmVfoozzk=;
-        b=CJSB51PUDDIAmXELEChvDo2y27eoe70faA3tbu/iPSRxcznGwDxA4bNg143HX2AY7h
-         6OGa2qZJ2ps5r2LR1uY1uPFiEIH8H8zrwlbmo85b25eyoE02XpPno5Hq12P7LuhwCk1O
-         AzhOd7dtEH/zdfXb7nbzaeQzyYAaewr51fx1+H5AjY8W3Kl0BOuLD5SXeR+Vmn2DTv18
-         xNqJivuHGk0slJeCzmZ6txTYQKgfh9wlTNrQiIKp6MkBqkBELvDcax2vGsyZL/Yhiyyo
-         0UwyKme0BrLCsAaEIC4WGuYf9doozejNTg8izdiv+LZvpkWMA7oSxGmH3YAIz9thlykp
-         fWDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762342788; x=1762947588;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XFKcDBz895P+pKkilzGMv1j9zQS86el4sifmVfoozzk=;
-        b=tscIxFdTwA/2tuLGJzIz7BpfQ6o+cCfUMP+IIlE8VHd9HEZWAqCmOjP6y5A1miP0Sf
-         H1cdv+sY9BYAjjzEjh/A2eEVP3uIYmKTDsn95dLIkeXQtM4sSPe9kbtpmJcTedwV9O5h
-         cOm8RYvnap8Yi2Zj9OZYTMmfkx+z/9XxSFt7nygm0hZ+pUNu+ypyjWzvc23bMLN0cg5J
-         b2Ju6Vyii73WmmXmMIEljop0LVtqZ7RTfARa6Ig/cizuVJGLJdhZzYrjp2D6lbhaVVWj
-         3HaI5RRIOAFR2cuiGUBpsFrhw1LyLUcD/8FLzfgWRTW1NEgoSpzyyy1KKs1aWRJkL1iU
-         tkeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVn9C74SsqtyLye3QGgAxW5+jNtjYTRYWhje51JlcKgr3DuOiu4T6x9rHGo7d9u+7PNjwC2dpjVgHE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztNFrp1YAExpzLK7R5vHFY3F8VN3+ML/X5NA+SQk0w/z4qOljD
-	prjRorepKMNsWm/x6bNiNhf2jzpWICoqCA1fIzAf7nZSd6Dxmk9PRbR+
-X-Gm-Gg: ASbGncuYQ1QX0sFvlkEVYQub9cPTAHjb0o0/ox0zUtM4ApcMygzYwl/AEgGMpICWEx6
-	eMPFkU3p7Z5oETP8CXXdN2cznh8wk3GoOnYMbyMALnKz7Kv9ZnvccXxXizZAXNm7E47CyWvhjVb
-	c2ZbOZTL4BmTHm4tp8ra+GgwfMq4QMvwbaSLGkptf0Z2K8qsuLK1eB3Lx08+RRV5jHXSQwgsw1i
-	gPsAIS0E8ywX9LIsyFjQW6VziQ7rtxQ6A6PBl5azYGjww3dLmyTAuSX4sr8bSKIIAdLjeYmO9r8
-	WsBfqWHElKbw9p7G61aAlFEIG75TKPDu/g79qSOuLUR8ydiuWTTaKIKXq0r1Ukd51zcGmXsnu4r
-	jJbx722TcMJeMP1JyjAPSWO7ff+NEwAQlFeMsSPHX6+GBrPWR3EPdoHBSw791/dzH4YeP8cPvYC
-	TwqkNrwo0GmP62Zrxhii455/Dlh/IopB/kYIIh5wAmoFFU4KI+7gqBbPGbTw==
-X-Google-Smtp-Source: AGHT+IGG31UsLd4o1FDm3BbiPL0QtqwK8nPiQHx1dRUKJ4gb8AV+HvnhJfY8a3mxdgTF9YlyblMwPQ==
-X-Received: by 2002:a05:6512:1395:b0:592:f8aa:c06 with SMTP id 2adb3069b0e04-5943d7f3f74mr1019404e87.57.1762342787278;
-        Wed, 05 Nov 2025 03:39:47 -0800 (PST)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5943443992fsm1652172e87.60.2025.11.05.03.39.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Nov 2025 03:39:46 -0800 (PST)
-Message-ID: <aa55cba7-1f7a-4c44-a101-cb991387fa55@gmail.com>
-Date: Wed, 5 Nov 2025 13:39:45 +0200
+	s=arc-20240116; t=1762367637; c=relaxed/simple;
+	bh=VqJ/IL8uu6HWDCb5Th4A/p6/Q7MW/MOdOkxfXjuZ508=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HuA6Vd6jZNqfR5y6M6826hhe0vRBM4qx802V09cY1kB3+tKicoY0nyJDKhtRm13wRbnJBh2lDkeIFSNzzYyQvq5Rbc0RAbqM8e9yY5vBeb0tetkar/YQeEPTbGfBH6E3aujXKjCZpMg6YtBMIhZENgCvD4Ra3leQUKAMhvCWraE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMYmejB+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94CCC4CEF5;
+	Wed,  5 Nov 2025 18:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762367636;
+	bh=VqJ/IL8uu6HWDCb5Th4A/p6/Q7MW/MOdOkxfXjuZ508=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nMYmejB+OHlG15Yqp+E5CyvGnWcmKcmGDM6ePgcearwJ2eVrXQmfnJfwsQk24Qk17
+	 w3To2pmXOBfxST4oYDr25BgcQrf7x18OjilkteWtk7dnrwFxZxRMrOoKpI4YwJ2Cpm
+	 aVt3YTWrJhTN/XOqq9Wcnes0yAYam3vth8FT4Q4lZX9j6uLRQ7jyGwo9kKZq7rVubF
+	 Kx9ciUb2S4O3yKINr1yKjjRcAJfgSh3G4LamjzCa8JM/3GHd2NJkJxNXoihN5SVOOA
+	 Wsvcw7yG9TJL4lwjVr7kRR1i88Ihxvaqvz9jyvGS4FReOVzTsidb1aPJZTsm2/+0JH
+	 pPcwCKxoVW63Q==
+Date: Wed, 5 Nov 2025 18:33:51 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Ovidiu Panait <ovidiu.panait.rb@renesas.com>,
+	claudiu.beznea.uj@bp.renesas.com, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
+	magnus.damm@gmail.com, p.zabel@pengutronix.de,
+	linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H
+ support
+Message-ID: <20251105-gradually-commode-0b5269ec0aa5@spud>
+References: <20251103121848.6539-1-ovidiu.panait.rb@renesas.com>
+ <20251103121848.6539-2-ovidiu.panait.rb@renesas.com>
+ <20251104-magnitude-deodorant-be607e3ff4be@spud>
+ <2025110420204948103c2f@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/16] dt-bindings: mfd: ROHM BD72720
-To: "Rob Herring (Arm)" <robh@kernel.org>,
- Matti Vaittinen <matti.vaittinen@linux.dev>
-Cc: Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-clk@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, linux-rtc@vger.kernel.org,
- linux-gpio@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>,
- devicetree@vger.kernel.org,
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Pavel Machek <pavel@kernel.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Mark Brown <broonie@kernel.org>,
- Andreas Kemnade <andreas@kemnade.info>, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>
-References: <cover.1762327887.git.mazziesaccount@gmail.com>
- <4c7ea0c83f4bb4af65439a9b8951d50ee705d22c.1762327887.git.mazziesaccount@gmail.com>
- <176233321210.143104.455177775703669783.robh@kernel.org>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <176233321210.143104.455177775703669783.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wjGAGSw+cWS2iRHG"
+Content-Disposition: inline
+In-Reply-To: <2025110420204948103c2f@mail.local>
 
-On 05/11/2025 11:00, Rob Herring (Arm) wrote:
-> 
-> On Wed, 05 Nov 2025 09:37:05 +0200, Matti Vaittinen wrote:
->> From: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> The ROHM BD72720 is a power management IC integrating regulators, GPIOs,
->> charger, LEDs, RTC and a clock gate.
->>
->> Add dt-binding doc for ROHM BD72720.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> Revision history:
->>   v2 => v3:
->>   - Styling
->>   - Document all pin functions
->>   - use pattern-properties
->>   - re-use existing Rsense binding
->>   - correct the example
->>
->>   RFCv1 => v2:
->>   - Typofixes
->> ---
->>   .../bindings/mfd/rohm,bd72720-pmic.yaml       | 273 ++++++++++++++++++
->>   1 file changed, 273 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
->>
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml: Unresolvable reference: /schemas/regulator/rohm,bd77270-regulator.yaml
 
-Not sure how this slipped through. I'll fix this in next version. Thanks.
+--wjGAGSw+cWS2iRHG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+On Tue, Nov 04, 2025 at 09:20:49PM +0100, Alexandre Belloni wrote:
+> On 04/11/2025 17:28:27+0000, Conor Dooley wrote:
+> > On Mon, Nov 03, 2025 at 12:18:45PM +0000, Ovidiu Panait wrote:
+> > > The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
+> > > (r9a08g045), with the following differences:
+> > > - It lacks the time capture functionality
+> > > - The maximum supported periodic interrupt frequency is 128Hz instead
+> > >   of 256Hz
+> > > - It requires two reset lines instead of one
+> > >=20
+> > > Add new compatible string "renesas,r9a09g057-rtca3" for RZ/V2H and up=
+date
+> > > the binding accordingly:
+> > > - Allow "resets" to contain one or two entries depending on the SoC.
+> > > - Add "reset-names" property, but make it required only for RZ/V2H.
+> > >=20
+> > > Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+> > > +        reset-names:
+> > > +          items:
+> > > +            - const: rtc
+> > > +            - const: rtc_rtest
+> >=20
+> > If you respin, just make this second one rtest.
+>=20
+> I already applied it as it had your ack but I can still change it
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+It's fine.
+
+--wjGAGSw+cWS2iRHG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQuYiwAKCRB4tDGHoIJi
+0pV5AQCMb1whhgz4XaSwKDaQRvxE4X1649f5YLbH3+at2WuUkQD/SvrJ/V092Ypk
+DdpJUfwHoVXCJjEgMy3WdDZ5BXNHbAQ=
+=6z5D
+-----END PGP SIGNATURE-----
+
+--wjGAGSw+cWS2iRHG--
 
