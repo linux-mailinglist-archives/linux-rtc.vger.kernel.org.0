@@ -1,47 +1,47 @@
-Return-Path: <linux-rtc+bounces-5279-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5280-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96EF0C3B958
-	for <lists+linux-rtc@lfdr.de>; Thu, 06 Nov 2025 15:10:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23406C3B772
+	for <lists+linux-rtc@lfdr.de>; Thu, 06 Nov 2025 14:54:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED89B62179B
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Nov 2025 13:53:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B81FC1AA8387
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Nov 2025 13:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBDC332916;
-	Thu,  6 Nov 2025 13:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20402332916;
+	Thu,  6 Nov 2025 13:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U/B2+Gtc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQvUOAAz"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195E03321BC;
-	Thu,  6 Nov 2025 13:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AE7213E6D;
+	Thu,  6 Nov 2025 13:54:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762437219; cv=none; b=DX8sIMTCucO0XtnO2MPKDKjac/J1VCPGWRMcymP4j8LUms0n9E4vYjDIs/EM36Ao0SZ5AqcVJOX+MS6zRfDZspiiXxxuVH9Hh0pzQN1y/aqXFu7VLQsSzYPbVO3wgOSpM7aHPKu+LSg05nJ/Q2NAnmPP+K+tyNRMk1Hu77LFSPw=
+	t=1762437262; cv=none; b=CtUyHadTg6xqeyyP22YxpOx4tgYWVM2bDfCN8AIIFQAMjzqrBVki1LhmNoBgPdi9SBwkKWFbsRV82Ru7iDFZ2Ys/AqA6gEYzBJk/SV3M1IEDDKFzKbugK0eTEJP4Fd3d7p3TF10FVSI7CQTD6nyWp1wzUHy4l7F8Islv8KhGgTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762437219; c=relaxed/simple;
-	bh=qcQmnaysazEGwAaCAXfwCY+ui93J1l78Y+j7goEWMJc=;
+	s=arc-20240116; t=1762437262; c=relaxed/simple;
+	bh=gpGj9lMLnvuz0MT/8CxK0FE+kuoPB2CSVZM/LrsKjdE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uk10FsmCzS/9cH4lnTykbaErpSgDo476lwwJhTgDW8BJ1clAH/jgw4twUu/SP9EdSbrcoY+cWGnHazpG34YGPC0ZpCT+qwl7codpK2Sg3pYMdmxWW+MsHhvuPqyYJ3lnI/jSRKOCRbIGB98sDrcjYyOreFoqAZ1yebDbvvYcfg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U/B2+Gtc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C72C4CEFB;
-	Thu,  6 Nov 2025 13:53:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=i88CRfOzyGAr46YtoidUYw5hbniar+oRngJ9bTHgagiG1pYBZZpYpEL+3x+caDYWu3TN9Vtn/LKOpgpKv0IsMU9KUDzrPjm9/yYr5jLuanEf7eo6iVSsnIgEYJjqZ4c46+QSO2P0fW/kjVbuIRT86PWpE8MB1LSaHBAg0r1NsL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQvUOAAz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460AAC116D0;
+	Thu,  6 Nov 2025 13:54:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762437218;
-	bh=qcQmnaysazEGwAaCAXfwCY+ui93J1l78Y+j7goEWMJc=;
+	s=k20201202; t=1762437261;
+	bh=gpGj9lMLnvuz0MT/8CxK0FE+kuoPB2CSVZM/LrsKjdE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U/B2+GtcbfxHYrwm8y9iKwVHm3brmqcyvJtf4kiAdXrQDv1jwhYUcTEgaaUtro6s0
-	 o5VrpCW2Rju2WAsXureWRM+JhsrHxM+pBN4wLQVW2lonyMvfzgZJKiNHhifzSY7wt/
-	 PhIv8p4oNEq8+U8/zZ84jDmu5ataeLN4CvNqXhqpq/n0D95018PTYjFlsC8Tvt0iW6
-	 lFfWNyXVb8yhjgd0vYXnjOAHkfjdxK+aQkd1xrgZcclFjSbvvf3p8E5KrLg7FfboCg
-	 3dKl+jQSzofaYCalbwQFv8FKaevex9OtCiic+efn2dU9bPa8oJ3g+/IzfVFSU5/hmQ
-	 reEPNN+OZK3mQ==
-Date: Thu, 6 Nov 2025 13:53:31 +0000
+	b=nQvUOAAzRQ71RP1RFBkIEsamS76gIZw1XnPOymu03j1Qb22RtExWxS+omPqMRNcjN
+	 nBuU0Cz7BSw9jbp2vZxe+QD+mXy19WzwfNLbRQms+5Kd5vnyAROdYcvHX1m2u6zj41
+	 eNIVCkzPE421CW+xRFXRNFd50RkbqKGtOvaopfNk7fEyaIwn1dgNf2ZjLEvjqsu0MX
+	 Lb++LzbcqEGnKinMAryDzTFI0oT7fCa7/7SDIWB2g//lBKQobZupVI5l6UQzi3nSb9
+	 M0OvsONVZoN/R368gSI7iDqXgtqC6v/gnNzqGFOr3a7QBzOfMIhvjOBl33IZQ5NORG
+	 pZjmnvbxZRCsg==
+Date: Thu, 6 Nov 2025 13:54:14 +0000
 From: Lee Jones <lee@kernel.org>
 To: James Calligeros <jcalligeros99@gmail.com>
 Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
@@ -58,11 +58,11 @@ Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
 	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
 	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
 	linux-doc@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v4 08/11] input: macsmc-input: New driver to handle the
- Apple Mac SMC buttons/lid
-Message-ID: <20251106135331.GN8064@google.com>
+Subject: Re: [PATCH v4 03/11] rtc: Add new rtc-macsmc driver for Apple
+ Silicon Macs
+Message-ID: <20251106135414.GO8064@google.com>
 References: <20251025-macsmc-subdevs-v4-0-374d5c9eba0e@gmail.com>
- <20251025-macsmc-subdevs-v4-8-374d5c9eba0e@gmail.com>
+ <20251025-macsmc-subdevs-v4-3-374d5c9eba0e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -72,100 +72,106 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251025-macsmc-subdevs-v4-8-374d5c9eba0e@gmail.com>
+In-Reply-To: <20251025-macsmc-subdevs-v4-3-374d5c9eba0e@gmail.com>
 
 On Sat, 25 Oct 2025, James Calligeros wrote:
 
 > From: Hector Martin <marcan@marcan.st>
 > 
-> This driver implements power button and lid switch support for Apple Mac
-> devices using SMC controllers driven by the macsmc driver.
+> Apple Silicon Macs (M1, etc.) have an RTC that is part of the PMU IC,
+> but most of the PMU functionality is abstracted out by the SMC.
+> On T600x machines, the RTC counter must be accessed via the SMC to
+> get full functionality, and it seems likely that future machines
+> will move towards making SMC handle all RTC functionality.
 > 
-> In addition to basic input support, this also responds to the final
-> shutdown warning (when the power button is held down long enough) by
-> doing an emergency kernel poweroff. This allows the NVMe controller to
-> be cleanly shut down, which prevents data loss for in-cache data.
+> The SMC RTC counter access is implemented on all current machines
+> as of the time of this writing, on firmware 12.x. However, the RTC
+> offset (needed to set the time) is still only accessible via direct
+> PMU access. To handle this, we expose the RTC offset as an NVMEM
+> cell from the SPMI PMU device node, and this driver consumes that
+> cell and uses it to compute/set the current time.
 > 
 > Reviewed-by: Neal Gompa <neal@gompa.dev>
 > Signed-off-by: Hector Martin <marcan@marcan.st>
-> Co-developed-by: Sven Peter <sven@kernel.org>
 > Signed-off-by: Sven Peter <sven@kernel.org>
 > Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 > ---
->  MAINTAINERS                       |   1 +
->  drivers/input/misc/Kconfig        |  11 ++
->  drivers/input/misc/Makefile       |   1 +
->  drivers/input/misc/macsmc-input.c | 208 +++++++++++++++++++++++++
->  4 files changed, 221 insertions(+)
+>  MAINTAINERS              |   1 +
+>  drivers/rtc/Kconfig      |  11 ++
+>  drivers/rtc/Makefile     |   1 +
+>  drivers/rtc/rtc-macsmc.c | 141 +++++++++++++++++++++++++
+>  4 files changed, 154 insertions(+)
 > 
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 79b9f40224a9..e8283f127f11 100644
+> index 10f4c0034b5e..3c6322872dd1 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -2451,6 +2451,7 @@ F:	drivers/hwmon/macsmc-hwmon.c
->  F:	drivers/pmdomain/apple/
->  F:	drivers/i2c/busses/i2c-pasemi-core.c
->  F:	drivers/i2c/busses/i2c-pasemi-platform.c
-> +F:	drivers/input/misc/macsmc-input.c
->  F:	drivers/input/touchscreen/apple_z2.c
->  F:	drivers/iommu/apple-dart.c
->  F:	drivers/iommu/io-pgtable-dart.c
-> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-> index 0e6b49fb54bc..109660a1a5d2 100644
-> --- a/drivers/input/misc/Kconfig
-> +++ b/drivers/input/misc/Kconfig
-> @@ -981,4 +981,15 @@ config INPUT_STPMIC1_ONKEY
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called stpmic1_onkey.
+> @@ -2460,6 +2460,7 @@ F:	drivers/nvmem/apple-spmi-nvmem.c
+>  F:	drivers/pinctrl/pinctrl-apple-gpio.c
+>  F:	drivers/power/reset/macsmc-reboot.c
+>  F:	drivers/pwm/pwm-apple.c
+> +F:	drivers/rtc/rtc-macsmc.c
+>  F:	drivers/soc/apple/*
+>  F:	drivers/spi/spi-apple.c
+>  F:	drivers/spmi/spmi-apple-controller.c
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 4a8dc8d0a4b7..e165301d4abb 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -2078,6 +2078,17 @@ config RTC_DRV_WILCO_EC
+>  	  This can also be built as a module. If so, the module will
+>  	  be named "rtc_wilco_ec".
 >  
-> +config INPUT_MACSMC
-> +	tristate "Apple Mac SMC lid/buttons"
+> +config RTC_DRV_MACSMC
+> +	tristate "Apple Mac System Management Controller RTC"
 > +	depends on MFD_MACSMC
 > +	help
-> +	  Say Y here if you want to use the input events delivered via the
-> +	  SMC controller on Apple Mac machines using the macsmc driver.
-> +	  This includes lid open/close and the power button.
+> +	  If you say yes here you get support for RTC functions
+> +	  inside Apple SPMI PMUs accessed through the SoC's
+> +	  System Management Controller
 > +
 > +	  To compile this driver as a module, choose M here: the
-> +	  module will be called macsmc-input.
+> +	  module will be called rtc-macsmc.
 > +
->  endif
-> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-> index ae857c24f48e..480a0d08d4ae 100644
-> --- a/drivers/input/misc/Makefile
-> +++ b/drivers/input/misc/Makefile
-> @@ -51,6 +51,7 @@ obj-$(CONFIG_INPUT_IQS7222)		+= iqs7222.o
->  obj-$(CONFIG_INPUT_KEYSPAN_REMOTE)	+= keyspan_remote.o
->  obj-$(CONFIG_INPUT_KXTJ9)		+= kxtj9.o
->  obj-$(CONFIG_INPUT_M68K_BEEP)		+= m68kspkr.o
-> +obj-$(CONFIG_INPUT_MACSMC_INPUT)	+= macsmc-input.o
->  obj-$(CONFIG_INPUT_MAX7360_ROTARY)	+= max7360-rotary.o
->  obj-$(CONFIG_INPUT_MAX77650_ONKEY)	+= max77650-onkey.o
->  obj-$(CONFIG_INPUT_MAX77693_HAPTIC)	+= max77693-haptic.o
-> diff --git a/drivers/input/misc/macsmc-input.c b/drivers/input/misc/macsmc-input.c
+>  config RTC_DRV_MSC313
+>  	tristate "MStar MSC313 RTC"
+>          depends on ARCH_MSTARV7 || COMPILE_TEST
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index 610a9ee5fd33..32083bd5bb81 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -93,6 +93,7 @@ obj-$(CONFIG_RTC_DRV_M48T35)	+= rtc-m48t35.o
+>  obj-$(CONFIG_RTC_DRV_M48T59)	+= rtc-m48t59.o
+>  obj-$(CONFIG_RTC_DRV_M48T86)	+= rtc-m48t86.o
+>  obj-$(CONFIG_RTC_DRV_MA35D1)	+= rtc-ma35d1.o
+> +obj-$(CONFIG_RTC_DRV_MACSMC)	+= rtc-macsmc.o
+>  obj-$(CONFIG_RTC_DRV_MAX31335)	+= rtc-max31335.o
+>  obj-$(CONFIG_RTC_DRV_MAX6900)	+= rtc-max6900.o
+>  obj-$(CONFIG_RTC_DRV_MAX6902)	+= rtc-max6902.o
+> diff --git a/drivers/rtc/rtc-macsmc.c b/drivers/rtc/rtc-macsmc.c
 > new file mode 100644
-> index 000000000000..d35322856526
+> index 000000000000..05e360277f63
 > --- /dev/null
-> +++ b/drivers/input/misc/macsmc-input.c
-> @@ -0,0 +1,208 @@
+> +++ b/drivers/rtc/rtc-macsmc.c
+> @@ -0,0 +1,141 @@
 > +// SPDX-License-Identifier: GPL-2.0-only OR MIT
 > +/*
-> + * Apple SMC input event driver
+> + * Apple SMC RTC driver
 > + * Copyright The Asahi Linux Contributors
-> + *
-> + * This driver exposes certain events from the SMC as an input device.
-> + * This includes the lid open/close and power button notifications.
 > + */
 > +
-> +#include <linux/device.h>
-> +#include <linux/input.h>
+> +#include <linux/bitops.h>
 > +#include <linux/mfd/core.h>
 
-This looks like it shouldn't be there.
+Why is this here?
 
 > +#include <linux/mfd/macsmc.h>
 > +#include <linux/module.h>
-> +#include <linux/reboot.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/rtc.h>
+> +#include <linux/slab.h>
 
 -- 
 Lee Jones [李琼斯]
