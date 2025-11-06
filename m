@@ -1,117 +1,86 @@
-Return-Path: <linux-rtc+bounces-5271-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5272-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55FA8C3759B
-	for <lists+linux-rtc@lfdr.de>; Wed, 05 Nov 2025 19:37:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D73C397C9
+	for <lists+linux-rtc@lfdr.de>; Thu, 06 Nov 2025 09:00:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B285D4F2CB0
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Nov 2025 18:36:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85E9B3B9695
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Nov 2025 08:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256BE321F42;
-	Wed,  5 Nov 2025 18:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437FD2FFDCB;
+	Thu,  6 Nov 2025 08:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMYmejB+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kaMpff5u"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60D82749DF;
-	Wed,  5 Nov 2025 18:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020C42FFDCE;
+	Thu,  6 Nov 2025 08:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762367637; cv=none; b=E65DdY3gDahmITL1XXt40MFVQI2L55um21QVNz1GGp7kqrpC8iTu4VEuxlkWKrouDATY60W1zJEORpph4Ov9KNujh91JrNB9szCFZ0u3ujYoVEbw9A9b2L2LJ9o8oKYPReXvqHRmRo32c0+GUFwr4pTbH1XOiCvzbH4ywu+Mvso=
+	t=1762416049; cv=none; b=EgQOXpMuUvAUjEUEsaEtRq0sl/RLB/WzWBw1c+VoRpiKVH/MqxdiEaNUOh8AFOvOyyQFkpnY8U5m3QyuINPB97E/Qxw+ws8KcVMy9+Dei29dF1ix321MpksfJeOwdNfoeHylsiiieoyk7rgcUU+7tG3kC5oTZ6p949Or6j8Au68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762367637; c=relaxed/simple;
-	bh=VqJ/IL8uu6HWDCb5Th4A/p6/Q7MW/MOdOkxfXjuZ508=;
+	s=arc-20240116; t=1762416049; c=relaxed/simple;
+	bh=45on0mQEJNXhkLCVWCtk8c5NFmV1NROMIVn+DN3yc9I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HuA6Vd6jZNqfR5y6M6826hhe0vRBM4qx802V09cY1kB3+tKicoY0nyJDKhtRm13wRbnJBh2lDkeIFSNzzYyQvq5Rbc0RAbqM8e9yY5vBeb0tetkar/YQeEPTbGfBH6E3aujXKjCZpMg6YtBMIhZENgCvD4Ra3leQUKAMhvCWraE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMYmejB+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94CCC4CEF5;
-	Wed,  5 Nov 2025 18:33:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=K188KMISaDW/Dfng4f5WOwm5eHwOhG4EXI54tnAxd1/J+I4ig9U2dmsR9HkQnZMStIUhRsmR3P1tnMcMrkQIiLRmsy75QB8MTP+Npp4ebS0nlu0MCuvnTtDsZmNl9rBE5lmpxd9Kg9LK+gO3jMBF85k3e/mVuO3XMoFNa4PflWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kaMpff5u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0062C16AAE;
+	Thu,  6 Nov 2025 08:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762367636;
-	bh=VqJ/IL8uu6HWDCb5Th4A/p6/Q7MW/MOdOkxfXjuZ508=;
+	s=k20201202; t=1762416048;
+	bh=45on0mQEJNXhkLCVWCtk8c5NFmV1NROMIVn+DN3yc9I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nMYmejB+OHlG15Yqp+E5CyvGnWcmKcmGDM6ePgcearwJ2eVrXQmfnJfwsQk24Qk17
-	 w3To2pmXOBfxST4oYDr25BgcQrf7x18OjilkteWtk7dnrwFxZxRMrOoKpI4YwJ2Cpm
-	 aVt3YTWrJhTN/XOqq9Wcnes0yAYam3vth8FT4Q4lZX9j6uLRQ7jyGwo9kKZq7rVubF
-	 Kx9ciUb2S4O3yKINr1yKjjRcAJfgSh3G4LamjzCa8JM/3GHd2NJkJxNXoihN5SVOOA
-	 Wsvcw7yG9TJL4lwjVr7kRR1i88Ihxvaqvz9jyvGS4FReOVzTsidb1aPJZTsm2/+0JH
-	 pPcwCKxoVW63Q==
-Date: Wed, 5 Nov 2025 18:33:51 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Ovidiu Panait <ovidiu.panait.rb@renesas.com>,
-	claudiu.beznea.uj@bp.renesas.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, geert+renesas@glider.be,
-	magnus.damm@gmail.com, p.zabel@pengutronix.de,
-	linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H
- support
-Message-ID: <20251105-gradually-commode-0b5269ec0aa5@spud>
-References: <20251103121848.6539-1-ovidiu.panait.rb@renesas.com>
- <20251103121848.6539-2-ovidiu.panait.rb@renesas.com>
- <20251104-magnitude-deodorant-be607e3ff4be@spud>
- <2025110420204948103c2f@mail.local>
+	b=kaMpff5u+ZOX4yqZ7ZCmCQf0fgdVehDztu3JJEmtCK/Hp3IAgVy+2xpwxobUW48MX
+	 lj1CNwO3w5y8uXdB3nNoKXYjByBBHbHHf6uTZ1ylwmAclhvy0eBQ2EfM1Tky/OdhJq
+	 4iycXMhK/JZ5oAn8uvP7jUynCZjsnpIqVkNDrTRiuc8r8N9fEKg8m1VXoJr//K+5Z6
+	 GMCpHxhrwdx7fvRIOVv0Y9sFcQ2n4GsUbCBW1eVvWFoufuharfV/eIrPEL/DYbJkRU
+	 SpjL5e0+atV1eFRhudCKki9uSYOnO/kCNBEBoilQFpB2qKnKY8jGGfObVbOWdjVKeE
+	 bykQC3xIZGxxw==
+Date: Thu, 6 Nov 2025 09:00:46 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, 
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
+Subject: Re: [PATCH v3 02/16] dt-bindings: battery: Clarify trickle-charge
+Message-ID: <20251106-aloof-unyielding-turaco-c9a51a@kuoka>
+References: <cover.1762327887.git.mazziesaccount@gmail.com>
+ <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wjGAGSw+cWS2iRHG"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2025110420204948103c2f@mail.local>
+In-Reply-To: <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
 
+On Wed, Nov 05, 2025 at 09:36:16AM +0200, Matti Vaittinen wrote:
+> From: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> The term 'trickle-charging' is used to describe a very slow charging
+> phase, where electrons "trickle-in" the battery.
+> 
+> There are two different use-cases for this type of charging. At least
+> some Li-Ion batteries can benefit from very slow, constant current,
+> pre-pre phase 'trickle-charging', if a battery is very empty.
 
---wjGAGSw+cWS2iRHG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Tue, Nov 04, 2025 at 09:20:49PM +0100, Alexandre Belloni wrote:
-> On 04/11/2025 17:28:27+0000, Conor Dooley wrote:
-> > On Mon, Nov 03, 2025 at 12:18:45PM +0000, Ovidiu Panait wrote:
-> > > The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
-> > > (r9a08g045), with the following differences:
-> > > - It lacks the time capture functionality
-> > > - The maximum supported periodic interrupt frequency is 128Hz instead
-> > >   of 256Hz
-> > > - It requires two reset lines instead of one
-> > >=20
-> > > Add new compatible string "renesas,r9a09g057-rtca3" for RZ/V2H and up=
-date
-> > > the binding accordingly:
-> > > - Allow "resets" to contain one or two entries depending on the SoC.
-> > > - Add "reset-names" property, but make it required only for RZ/V2H.
-> > >=20
-> > > Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-> > > +        reset-names:
-> > > +          items:
-> > > +            - const: rtc
-> > > +            - const: rtc_rtest
-> >=20
-> > If you respin, just make this second one rtest.
->=20
-> I already applied it as it had your ack but I can still change it
+Best regards,
+Krzysztof
 
-It's fine.
-
---wjGAGSw+cWS2iRHG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQuYiwAKCRB4tDGHoIJi
-0pV5AQCMb1whhgz4XaSwKDaQRvxE4X1649f5YLbH3+at2WuUkQD/SvrJ/V092Ypk
-DdpJUfwHoVXCJjEgMy3WdDZ5BXNHbAQ=
-=6z5D
------END PGP SIGNATURE-----
-
---wjGAGSw+cWS2iRHG--
 
