@@ -1,216 +1,154 @@
-Return-Path: <linux-rtc+bounces-5276-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5277-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6299DC3A2DF
-	for <lists+linux-rtc@lfdr.de>; Thu, 06 Nov 2025 11:19:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A055C3A432
+	for <lists+linux-rtc@lfdr.de>; Thu, 06 Nov 2025 11:30:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 519244248CC
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Nov 2025 10:11:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B7124F85F1
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Nov 2025 10:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD4A30F530;
-	Thu,  6 Nov 2025 10:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8348B271A9A;
+	Thu,  6 Nov 2025 10:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kbHDPJkf"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="sS2O1qPK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012046.outbound.protection.outlook.com [40.107.209.46])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE162848A7;
-	Thu,  6 Nov 2025 10:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762423490; cv=fail; b=myHGjdVkmPF+lvpClf0oM+NQYI8y/rTMbeVLfBXpe70099drAYRMjxy0VuPbZzdD2duq//ECT/ilmO+hoNt2UAPflyx82A2RGgqiW4abgl6ty0bhMOhJ0XeKe0btNWPliNm38VD+jfVvjSh1CkvPRrLZ2pN+7qWUet8G/W9u3BI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762423490; c=relaxed/simple;
-	bh=LhvTA0CvwA2RpP7Y7JFF/t7+gcH63VHwbYYElStrBW8=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=b7KgVqNtxG32NI1WpIra6fRSnL9wrORx1gSNZAb+DUOSS4ZC8lyjkDpB0mwot/boACM1C4IVcBczdoIZbFNgRRFmyH28uDtVcGoQ+LvhwnG8E6XH1QpCuej8wME2zN/zsDaSQQSLt1BBZ1hlYdrUq+4C6jjuAUjrBG4QveqUABE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kbHDPJkf; arc=fail smtp.client-ip=40.107.209.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pupQ7Fl4Zzqtp40KMFNiQ6m786hbFhHEBk9IJXM2vA8Vf4mSeSh+XFDPOEhMjbvjeGOSDjXiFAWgDH7DU/b3JOGcpWYetIxeI5Hbh5paYcDEmOP78yAPOQ+YkY7uJdGCtBqcZGVsfzLzK9nD78cGq05gBg2Iqi1aiMmW9fyNmwDeAEJjfN/6TKcfo3Kp/juIFSa2B0CWvYbw54+do/mEjHsmaCIirg79QUJZwhbdK+cZUcXlJfbQGLzrkJriGP6m+0/kR/avL89yb+WgM62cyFuwpqYKnTTrGdMeTgEc+x6YLask+lB9cJ3u73kIQ0kulscQp+ZBR8oQX3E5+GhwNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=krlpna0Qn+4uminHHhzSyaip6TaOGfUlENv3MM1AYX8=;
- b=pSoP5bn5s+6HJ7oZ+RRToJHJyPDpbbctl/wFv3DoLF9LAjx8UCGfIZ4QwucLNrz1M3RxHjExhp4ce7/45bYnoOvXVren5uFijIyr2W4CChvFutW59fjxYh1qN6/AwfHYqwyQebqd17JeaIitoDN/MseZvYqJnxcsyXb3FZbr/Z8cCBjr+3jXQ25hVf8AazTiD3x8BVrPpOwxat1QHFwj38Dkf/NRlb9OtLJsomqLobcbN7ybJe06BtQCGH6Lxqy83vv3QFfhwa9qaR9Gv01k5XR6zThrNalkPvK4qxfZnHtcjruc8zYalQZuEqLWGdNDJzzgTetEFTFvskJO1m/Vaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=krlpna0Qn+4uminHHhzSyaip6TaOGfUlENv3MM1AYX8=;
- b=kbHDPJkf1BymYUykZwV4mvd4Yxim9xB8zaUV+UelLNvjGu6A1kN9NoYlcdyIv1/haFHxplITBOt2XjV9yjTOG+QgqgSKuw/6W+9JHrQkvvFJnd8DI5otO4N9zqUSIzLrZOYk881DDhNhMpbeRkN8ihUgmhT12mogQdGbRprEoYyPJrKRevYoZsWNwUqify9VMlJoKQ1rNeyPG225F91mTYqU3RfukDM2t8pi5Lm5ZUL39qwP1lDUUrzh7zKnuUrfE2cbWNqkUzJmTVLVxbAHjTpfwteiE7fPm21+rsreIzneYPBAH3+lfog0wr8/ChLJeYIPZBOCNIqYcymVdrZN1A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by DS7PR12MB5862.namprd12.prod.outlook.com (2603:10b6:8:79::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9275.15; Thu, 6 Nov 2025 10:04:44 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%4]) with mapi id 15.20.9298.007; Thu, 6 Nov 2025
- 10:04:44 +0000
-Message-ID: <423cac10-849b-4fb3-a092-ef50cd9846f9@nvidia.com>
-Date: Thu, 6 Nov 2025 10:04:38 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 0/4] Add NVIDIA VRS RTC support
-From: Jon Hunter <jonathanh@nvidia.com>
-To: Shubhi Garg <shgarg@nvidia.com>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20251007135738.487694-1-shgarg@nvidia.com>
- <bd7d8771-e063-4f03-9b0f-bc6ad95adb3d@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <bd7d8771-e063-4f03-9b0f-bc6ad95adb3d@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0290.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:196::7) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1562248B4;
+	Thu,  6 Nov 2025 10:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762424760; cv=none; b=OH6sM+BzQHk0qRXWybbMiP64bQo7u5Fgl3wktGZtx7q7Oxx1ZYITYgtdng1yTdy/vPVn+qo37wYNgrAjDAhFUGJRpLMitSN4vZ4P3prwBU47CS/gmw7+ayBOeyF2Hnxa/nhcbtikOJ6APabOe7pHAgzd7Memmo1+/v58zmew9z0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762424760; c=relaxed/simple;
+	bh=l6IJfTSubUl1j+bVYQvNukvCpqigIfS4TZId0nfTM9A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=exhOKCFMjMoVAdFgVTh49oVAjXp8hfC8/zXnmlVExB1uSdKIw/vJ4MncEvLSx1avjOn3VagDgDRZU0OjHL+AInEAs+ZT0nXpxJKeE3J70wwjCU/e0ecCMNi7yVgpwWIZyuPRfrK16fxzlqGEHRmZN5shsSdVusuXQQ7kRfRguLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=sS2O1qPK; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=2IClDRTOjvKr2LkZUS907ZmY/aBDdBWl2pRamxXXXKg=; t=1762424758;
+	x=1762856758; b=sS2O1qPKH4NJcG4nSyZGwY4M8Ue1/enu3lw58G19vP13Gx2RFN+cMlnq1Hh1z
+	GRhYu+CnKcLPTNiUY0Tg9SkYdMbEzKkcwGviLeYwfeH7v1Lx6CSxEy1XdkOfxYFPiw5YlOyNaRazN
+	+2spBnGAC2VujXgqs1YR3EzO8OfbDhn6r/jypRRs+mnbVH0KShSPCtJTQAXBMgmQmtkexIdGETDfL
+	RjeXewmAIcaqLrJcDXfl1IcaEtx5PyT6g0yWx8L+FzFWDVWTltmIgUDS1FkzRiuFYbip504Jny/7N
+	jMkMuo4IiazhKKg4L5G5t1C0ypZWdo3+bGLWS+pRFj0QRMWqrQ==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1vGxBk-005Y5i-1q;
+	Thu, 06 Nov 2025 11:25:56 +0100
+Message-ID: <35bd11bf-23fa-4ce9-96fb-d10ad6cd546e@leemhuis.info>
+Date: Thu, 6 Nov 2025 11:25:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|DS7PR12MB5862:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4d59333-df5a-4f95-46c7-08de1d1be8a7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZTVXMDJiTjE2L0UrMVJPTnBtZlZkYjR4L1BON053L1dHRkJEdENNc1pGejhR?=
- =?utf-8?B?R042TkJoa1pJWENBTkFzZGhZbTB3dzBZaGViMjk4a3haUVpMbkZxald2V0ZE?=
- =?utf-8?B?MGV2U0RadzN3YVZTSmloK2xucWFKejdjVlVRNlF1T2Z0SlpJL0lISmdrQWRE?=
- =?utf-8?B?K24xWFlLZkpjdHpEWEo5aTgxd2pDTkhGb0pNbjlsQXlwSml6THRlTG5ucnVM?=
- =?utf-8?B?ZW9aOENSaXE4eEhnR25IRlNSYkU4RktqK0IrNlJVS1ZVbkJTeFc5SjJkdFFT?=
- =?utf-8?B?UDFUMmthNG9CVWRvOWVFQVNFRFdJZE5NUDFGYUdFQVZuWVR2dDY5S0VSemgx?=
- =?utf-8?B?enBTRTZqaGdwbkdmSWIyb0FtYzlHd2xCdlNXRnNSZnVFQ1NZVGFxMXBqNnV0?=
- =?utf-8?B?RlFCbFNHZmZXTEFKdGpFaDJtNXFoclFvRWV2TDRMRWE5cHIwSWdiVjU5OWhV?=
- =?utf-8?B?M3d6aTFuZmpOb1hpN0VIdHF1bnFLMzJtaVBvOUlnbG1yYWtYb2tudTlxVjNX?=
- =?utf-8?B?YjNWMGNIeTZUcDNkZU5hMk9FSlBuVmRWMzNWeWtQV3FJTVRuV1dUL3ZlZGJ2?=
- =?utf-8?B?eUU4bzNYZXVSZTBuUkRTcmNYbTI5OWdWMlJHeTd0REFRVCtvaWRlUmtTZDFi?=
- =?utf-8?B?eDhBb1NsREFJanR2dnhtLytOcEM4OVgrTFBWdU9idG5ETHhxak5Bdm12WkRT?=
- =?utf-8?B?MEZ4V0V4NmM2blpOUDU4QmN5VTA2Q2wwMHJ1SWlrSGkyZ2g0NTl3S25NMzkr?=
- =?utf-8?B?aUljc2wrdTNnQ0FNUjNUbjZMbGhvWXdZaXdqZXQ3QnJocEk2Qm51NGNKYXZv?=
- =?utf-8?B?WDNQT3VBc1RLOGp2Z1R2QjZ5Ky9nNUhPc3o2V1EzaEpvZ2orWGlXUzgrRFNy?=
- =?utf-8?B?bG1wazZQTmpwSjlVemxzMU5UK1J0VGVnUXloWGRLSEV6UmhESmhTQlY0R3Jp?=
- =?utf-8?B?bUNFSDJOR1FBS2tNN1owNlJkYklkNElEbjFmbmEvNFlDSUM5ejk4U3I2ZWFM?=
- =?utf-8?B?RVM3L1BaQTZpbitkck9qK0hZSG5wcG5WSmFnbGZETEpleFRlOTRyeFgzemY2?=
- =?utf-8?B?TVkrUDV3cjRNKytsaFBDNmpWOFV3ck80YnduV1FMMkVySmZCZVA3L0pNb3Fa?=
- =?utf-8?B?dG1xMVdCZ1U5VHZWalpTOURJVG1ueWdjQ3Q3dzdvejFvVWNKcGErUExuZGZK?=
- =?utf-8?B?R3FTSW5JenZacm1PYUExY24zbkFTRVcyYTRkbCtFU0J4ZVExNDZ3MWlHVzFX?=
- =?utf-8?B?SmJmYWlhK1F3UkttWUxaVkxCWGJpTDAzdllERlBsTmFReGRKejJnYjNKWDE3?=
- =?utf-8?B?UytTZlBFVGltTVFXR3JiVHYxb3F6S0t3Y080bGVxRDF1Ri9TekhMUDV5SUYx?=
- =?utf-8?B?dzRiN2dKdGJKOHJScTMrdlBRNEVBSGdvV3F1SjdVd2dxcUlHZ015dG5NNGpm?=
- =?utf-8?B?ZEJ2d2tQNTdOczNhQ2kyT1F2WDY4QmVRcGhDN2YvdElwMUZIVXQrWnoxSDlU?=
- =?utf-8?B?QUdBN1hlenJReGxGcjhYUi9CVkpNOXppQnk0VVB6TVhaZ29id3hHKzlwMXZ1?=
- =?utf-8?B?TEpkL1d5ekErdEs5VkdWZXEvUFcyZ0crYU1BSUF1SXhrS3poeEw1bnR2N2kr?=
- =?utf-8?B?am4vOUlDM1duRmh3U1BOOFBjbGo3bW11SDRGRXdFUEFoN0l1akxsYmcwMDcz?=
- =?utf-8?B?N2twcGwwRWxHRlBuRWZaM3ZVSVdHclMxbXEvMU1CaGNMNUF2YzdWQU9KcXZI?=
- =?utf-8?B?SnBhZ0JBcVNnRUxvWlBuRytJU1lwNndISW0zdWhSdzJBNzI1eEw1YXRDaDlY?=
- =?utf-8?B?Zzl0aHN0dHB4SGIrVVhjVnRjcDZaUi9lMU5FWmpYUzBrUHU1ZkExTHpiYVZp?=
- =?utf-8?B?T0hsNmQwNncvNm9wQzJSaHpJb2ZKS2hGcVFqTW9teUx0b3RYT1UwU3B0WjR3?=
- =?utf-8?Q?XIRiCiKoe908YPy1m4UPPuZPFOoZSwGQ?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S29hSjhReXljaUYxcGpmZVBMZ25VdkpYWUkwNTQ2c2NDdTBiTGZPTUdCcDYv?=
- =?utf-8?B?a0dIazVlWWZvK2t5a0grS0RwY2RYbmpUK2l3aTJxL242eHZhY3VWeGtHcERs?=
- =?utf-8?B?RmVnNGNPTDBqc3FLZnV6Q3BrUUdlK0NuR3UrMFZuTnRsWnZKTW11S1U5dWQw?=
- =?utf-8?B?VmVsaG1iQUlaTXhwbU1aQ3ZGTVVlYkc5Y1B5NFk2TFdWbE9iMG00ZXY0dm1F?=
- =?utf-8?B?czQvYjBLcEtOOGtNTVhjbnNDdHQyU3FIWURxTVFXMVRmeU9aWjFjdnJ6cXlD?=
- =?utf-8?B?a1BpWkVWNE0wSm92MGsrY3BycFZTeE5Ta1NjNVV1eDk3Z2FHRHRDTm1qRGhr?=
- =?utf-8?B?MlpFbXcvSEkvcnIwSDdBU0FRbEsrcFNqKzBDQTgvUE0xSk9LZ3EvYmVWbGVq?=
- =?utf-8?B?c0tUeTB1N3gzUk11THMySmM0d2JiNGlKakhlRWpDN1hkR0w3eWFSbU0rUXVV?=
- =?utf-8?B?MEZIMmJEU1E3WkRzdlZuNFRySXhVZGN1WlE5REM5eU15UjVxT2h5ZGh3eFBT?=
- =?utf-8?B?anNXOXRiM3h5NWFIQkNQNG5FejJ4S2RPYWNCWmRMWnZXTU04cWt6aTFEWGtV?=
- =?utf-8?B?UHVWMkpRWEphTFQ3NHZRa2d2U1FwTGlTVVI1S0g0eDVadzNKV1pnMStZYUln?=
- =?utf-8?B?MVVtLzd1NVJuaUJuTG91Z29rcUlTNDRIOThYRnNla0llK3N0cDBZRDJjUnFo?=
- =?utf-8?B?UnRDbklCUk9XQVFQY0IyY3A5ZElVdjBoMUR4eFAwbmRhenZaZlhyZjZONTJ1?=
- =?utf-8?B?L0xzcWxmejJ4eVVRdHprTVpwT040R3FhUTZYWmJUaExMUjNxVEt2elFrTm9k?=
- =?utf-8?B?QnJqVDd4SGRQTCtGb0dFMkdKQndxclBHdW1vS1NGaklOTS83YUhDM2pYbUhD?=
- =?utf-8?B?SjA3M1dIS25SbERKNE1Kd0g5TldLVTBQS3pqZ0F0aGJOZEl4d0w0SGdyRDhp?=
- =?utf-8?B?K3lvZWtKWDV5aGRWaC9KZ3lOaVZDMlV6UkFsUGZPZFFqdlcyclZOS2p2eXlu?=
- =?utf-8?B?d0ZvZTFKdkdnN3c2QURTVHB5NmZqN0kvVGV3STQxMHI0Umd1endVYzFKTk5u?=
- =?utf-8?B?WE9Gc1hQV0JWOHNwdWFKTUtVUlNtUUd1bEE3R2dxY0dXblVObUVQcXhva2VE?=
- =?utf-8?B?N2hvTm9IZFJQRENSdGlXUUxLN3Bvd01ab0t1TWhBcmxIV1haRjB2NlVoaVpW?=
- =?utf-8?B?Nm10Mys1ZXRuU2ltT0pjUTN4ZDE4d1Nibnowb1BMaUNodThZaU9xNU5ycy9V?=
- =?utf-8?B?VER2Y2dQeVlsNllDeERWeWFJNHVua0grVCs0M05BRTNJbDkza1l2UEI2aTRD?=
- =?utf-8?B?OUxyRnpFQjgrM3pjbkpsYjFJNzJWL0xmaGVjQUFPOWVCOExCTHJ4YjN3OTAw?=
- =?utf-8?B?VGpMb2lEMVRlSkpNLzhIQWdhZXpBWHlmR0djOS91QVR1ampocjNUU3lZUnh2?=
- =?utf-8?B?dDVsMTZVbEdZMHpZeHZtVWdBaDNQaklnOWpCZlBUc0VYc2p1Yi9BOGg5M20z?=
- =?utf-8?B?OUV4QzV5NXUwaUpKQWNFMXNUU3EvWk9aYUFaTkxaUHI2U1VaZHQ0Sys1R1p4?=
- =?utf-8?B?L0xrMEJqY2NRN1ZiSCswWGVkVzd2czlJR2lHU0lpZHdLS0t3R0Q0VHZ2aE4y?=
- =?utf-8?B?VXdFcERHQ3R5TlRWSUw0cGxjQ1ZiY3BzNnJLd3pka3l0Yk9TZ2V6SGJrVVJt?=
- =?utf-8?B?VDVodnhlbU9RemZMODNWNi82WjlBeHZqSXphUnE3YVRET3F1Y0FVb0ZhUVk2?=
- =?utf-8?B?SGp2UmhWRTBteDdyWXdXK0ZTMEZ4ZlVZekRWQWtmekEvQU9NdHEveWJxTHlx?=
- =?utf-8?B?b2plMEpFbGdVRGdzdUUwQU9UcFVYNUQwcGVsWVRoUno1RWVXVTMyQm9DMVd2?=
- =?utf-8?B?aWc5ZlNPd3JabnZBVFZtSXppZnduRTNYZDh4T0ZFY2dSTmZBS1JnZG9FRUpt?=
- =?utf-8?B?cUIrK2krZkI1cDcxSWx3akVMTkFtUTNlRWNrRGlldHlhc3RMSk12RE8vdkJX?=
- =?utf-8?B?OFYwSFRDQWpCd0puUjlwRVQ5WHJ5TlYvMEt1Ykw4eGVlZXpKb0M5VS9IUHdz?=
- =?utf-8?B?RjRnN0paTGE0bVBlRjBYRUtBYUlwemNGQml2QXpheStlYmRCbElsNmZqdWNt?=
- =?utf-8?B?bTNnZ1k0ZG5VYVpaK3RTTlQrNEFtK01hb0VmL2hWR0JOcm9LSWY3ZUdFWlQ2?=
- =?utf-8?B?NHNzYXdHanZoUUZpclFnMkdnQkNDdjlIL3JxcFJOemF4TEtvTkJpMll3SjM2?=
- =?utf-8?B?UFlwS1Y2RmJMNkp1N1hNc1NXZGtRPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4d59333-df5a-4f95-46c7-08de1d1be8a7
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 10:04:44.1036
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3KzJ2TZVHWm2e7g8xpkt/j5Hrmh/I77N4UBAlT1VqtiKx1hJuE/ws3duZuptxu233U/rZ/XaL/mynD5sgfup2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5862
+User-Agent: Mozilla Thunderbird
+Subject: Re: PROBLEM: hwclock busted w/ M48T59 RTC (regression)
+To: Nick Bowler <nbowler@draconx.ca>, Esben Haabendal <esben@geanix.com>
+Cc: linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+ linux-rtc@vger.kernel.org, stable@vger.kernel.org, sparclinux@vger.kernel.org
+References: <krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
+ <DmLaDrfp-izPBqLjB9SAGPy3WVKOPNgg9FInsykhNO3WPEWgltKF5GoDknld3l5xoJxovduV8xn8ygSupvyIFOCCZl0Q0aTXwKT2XhPM1n8=@geanix.com>
+ <ni6gdeax2itvzagwbqkw6oj5xsbx6vqsidop6cbj2oqneovjib@mrwzqakbla35>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: de-DE, en-US
+In-Reply-To: <ni6gdeax2itvzagwbqkw6oj5xsbx6vqsidop6cbj2oqneovjib@mrwzqakbla35>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1762424758;53ba1f3e;
+X-HE-SMSGID: 1vGxBk-005Y5i-1q
 
-Hi Alexandre,
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
 
-On 29/10/2025 12:49, Jon Hunter wrote:
-> 
-> On 07/10/2025 14:57, Shubhi Garg wrote:
->> This patch series adds support for NVIDIA's Voltage Regulator 
->> Specification
->> (VRS) RTC device. It provides following features:
->> - read/set system time
->> - 32kHz clock support with backup battery input to retain system time
->>    across boot
->> - alarm functionality to wake system from suspend and shutdown state
+Just wondering: was this fixed in between? Just asking, as I noticed the
+culprit was backported to various stable/longterm series recently
+
+Ciao, Thorsten
+
+On 10/23/25 15:39, Nick Bowler wrote:
+> On Thu, Oct 23, 2025 at 07:21:21AM +0000, Esben Haabendal wrote:
+>> On Thursday, 23 October 2025 at 06:45, Nick Bowler <nbowler@draconx.ca> wrote:
 >>
->> The series includes:
->> - Device tree bindings for the VRS RTC
->> - VRS device tree nodes for NVIDIA platforms
->> - VRS RTC device driver
->> - Configuration updates to enable the driver
+>>> After a stable kernel update, the hwclock command seems no longer
+>>> functional on my SPARC system with an ST M48T59Y-70PC1 RTC:
+>>>
+>>> # hwclock
+>>> [...long delay...]
+>>
+>> I assume this is 10 seconds long.
 > 
+> Yeah, about that.
 > 
-> For the series ...
+>>> hwclock: select() to /dev/rtc0 to wait for clock tick timed out
+>>
+>> And this is 100% reproducible, or does it sometimes work and sometimes fail?
 > 
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> Tested-by: Jon Hunter <jonathanh@nvidia.com>
+> It fails every time.
+> 
+>> Are you using the util-linux hwclock command? Which version?
+> 
+> hwclock from util-linux 2.40.2
+> 
+>> Do you have CONFIG_RTC_INTF_DEV_UIE_EMUL enabled?
+> 
+> No, this option is not enabled.
+> 
+>> Can you run `hwclock --verbose`, both with and without the reverted commit,
+>> and send the output from that?
+> 
+> 6.18-rc2 (broken):
+> 
+>   # hwclock --verbose
+>   hwclock from util-linux 2.40.2
+>   System Time: 1761226454.799573
+>   Trying to open: /dev/rtc0
+>   Using the rtc interface to the clock.
+>   Last drift adjustment done at 1657523820 seconds after 1969
+>   Last calibration done at 1657523820 seconds after 1969
+>   Hardware clock is on UTC time
+>   Assuming hardware clock is kept in UTC time.
+>   Waiting for clock tick...
+>   hwclock: select() to /dev/rtc0 to wait for clock tick timed out
+>   ...synchronization failed
+> 
+> 6.18-rc2 w/ revert (working):
+> 
+>   # hwclock --verbose
+>   hwclock from util-linux 2.40.2
+>   System Time: 1761226685.238753
+>   Trying to open: /dev/rtc0
+>   Using the rtc interface to the clock.
+>   Last drift adjustment done at 1657523820 seconds after 1969
+>   Last calibration done at 1657523820 seconds after 1969
+>   Hardware clock is on UTC time
+>   Assuming hardware clock is kept in UTC time.
+>   Waiting for clock tick...
+>   ioctl(3, RTC_UIE_ON, 0): Input/output error
+>   Waiting in loop for time from /dev/rtc0 to change
+>   ...got clock tick
+>   Time read from Hardware Clock: 2025/10/23 13:38:06
+>   Hw clock time : 2025/10/23 13:38:06 = 1761226686 seconds since 1969
+>   Time since last adjustment is 103702866 seconds
+>   Calculated Hardware Clock drift is 0.000000 seconds
+>   2025-10-23 09:38:05.239100-04:00
+> 
+> Thanks,
+>   Nick
+> 
 
 
-Are you OK to pick up the driver changes? We would like to get this into 
--next unless you have any objections.
-
-Thanks
-Jon
-
--- 
-nvpublic
-
+#regzbot poke
 
