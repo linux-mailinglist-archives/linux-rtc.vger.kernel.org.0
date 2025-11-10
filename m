@@ -1,108 +1,128 @@
-Return-Path: <linux-rtc+bounces-5308-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5309-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04213C48ECC
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 20:13:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC12BC49B1B
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Nov 2025 00:04:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F21D9420E5A
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 19:01:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB5314E311D
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 23:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF02D32E147;
-	Mon, 10 Nov 2025 18:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AE23009EA;
+	Mon, 10 Nov 2025 23:04:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qj3wCZ0+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UhQ1D1Km"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1431321445;
-	Mon, 10 Nov 2025 18:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721D02F5A10
+	for <linux-rtc@vger.kernel.org>; Mon, 10 Nov 2025 23:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762800626; cv=none; b=eObHnt5pg/m8tkoAY7j4vvr/qCtEG7gxtrETqS2/YSYvTsle3duqJECyEqbj3lI8pUYjbFmx9afasPXlTp5uBM5MDBPGX7IXb4/xooFDxrI/PonWovea7pHSQRQymZJLzAwUzzq02iVZAttJ949xnaUSQI7TdMr5ovBhFi5qorA=
+	t=1762815867; cv=none; b=RC1RN2FGbGCYU3Fscgl2KqIgLDUaLr/fg3oDvy2ur6PJUFeuj5F0O56q4YreYRMaPMyIC0E8EMoCfwkS+HcUOJquk72uEGprZXdGE2hGriGgZD6E0YE7Xw6L6CsoP/4eTdWC/pipm5OBN3VR0COPO0xPMrC0ShQJVFGYHEMoI24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762800626; c=relaxed/simple;
-	bh=WMEB6mjW751eoW5/MtKFj40ys+WzQgF9PxLiSmGpWMg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PZRBAprx+5l7zFybAfZ6IFW6663KSMfEzUjG2JHDQEdtbCdfQWou0s3RlNMXjEUmAJGYV1QA7IMfrxvUTLRySdmBVAAdp26c1A33eNyR3YbXITA1Wt7B5rq9KHqrAXRHjkRf8DudZGE8QBfVLoOSzWciCQu3YlFFa+CgxVsd5Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qj3wCZ0+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27B9C4CEF5;
-	Mon, 10 Nov 2025 18:50:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762800626;
-	bh=WMEB6mjW751eoW5/MtKFj40ys+WzQgF9PxLiSmGpWMg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qj3wCZ0+BgJTkXfacsrtMMfnqYs0xda0ZTXRZUat4o9nLOOMpxsYFM3oS1aPV09f4
-	 r4w1Gmml/8tFgebNwcxlp+wBL2ViJsKqNb0oowQxpx6qPQ9bVUxvFBZuB8sZsnylxs
-	 dXFX7ADkUsQyFcDHOmn3I2MFKjd7bnoxRXT0+ZfVpNPmRdK2b0Ggcv50nmGqe5R63F
-	 iY+QInw9VNoZ2xXqYkW07077LMVffZoCHiUU9eBgpdr3v7yMuWgXtOiCMu3sW47h5R
-	 JUqlY88sg8qa2mT3vSj1LeYhxLvjflOFx48OpuMC04IK3QBBYBVnk4NLlBOfjnf95A
-	 yaB6110+aFWtg==
-Date: Mon, 10 Nov 2025 18:50:21 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: claudiu.beznea.uj@bp.renesas.com, alexandre.belloni@bootlin.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	geert+renesas@glider.be, magnus.damm@gmail.com,
-	p.zabel@pengutronix.de, linux-rtc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H
- support
-Message-ID: <20251110-hardhead-upside-54baa149f453@spud>
-References: <20251107210706.45044-1-ovidiu.panait.rb@renesas.com>
- <20251107210706.45044-2-ovidiu.panait.rb@renesas.com>
+	s=arc-20240116; t=1762815867; c=relaxed/simple;
+	bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WLssv6GrEzAKtiu9tQVfH9xSw6L07mgdFHc9xNHOXdcusGYU+R6mUWhWWHePEbdfLEJLvrCDfppNp53l7BVQ3lEkWzi6Yy6osj/4Y7fVguc0MuFyJMzRQXfWV0rq01y63zZqwx0etfoRiNzjhgYHvpARjFtvJ4UABq93YMtUg7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UhQ1D1Km; arc=none smtp.client-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-640f88b873bso155233d50.3
+        for <linux-rtc@vger.kernel.org>; Mon, 10 Nov 2025 15:04:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1762815864; x=1763420664; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
+        b=UhQ1D1KmPSyna4F/76ZCUiG8KhIv95nF4dhc49qrIM3p2GzZR8fl4PtKw6Yk5uaenr
+         Jxo6B1MPDizlQu/eAzhlHvAjPysa3NgZUqffrBat8sUZCey95AmWJHKnSMiP9zRpfVwn
+         yDf7hD9zPMNJY5K/TDMfIBp874x/FBBHi88+dxfp8g2/um8X8UHQj372t+OGfbo82eR1
+         O1hbOAThw5oCk4Sy/TkWbTHXa+HDjeRny+D/HCyIsPlxXxKrnhIkL79zMZOuophqGxN7
+         HEm1Hqzly5dxGv5sdqIOUUxBQAtVaiVswEfsuQw5gUpO4MhmxEB5Nma4Cgn7+HcHKITN
+         65kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762815864; x=1763420664;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
+        b=tDEBhz6W5lRjZOr12AFoZHjE4OpaJTzDo254xQ5Rcd8qfiJ0wbDFUHyvcNz5vJHvjI
+         7VfXsujotDg2aSKx5iRI3zJfylBKTuPczI1g1VPIN40aduXB6IgXl1kt7zmAUx7RZM3H
+         a8kqtYQV8eJwYKWqs1JHV7UchokyH4T8aIpKoxIBGN4v/qB2wAK5UC8Sd6c4qb/tjqQT
+         +UM6/PTLr4pRjboib2c2iTycKhlvREqKV4qK3yXN4hUzyilaNtBp/yPwBHTVDWWRgBz7
+         UtTDx4rBgpDcOzO/3pNzqkJ/Cyd1GfM15YAMeOXx5krrtfBAOXmu7oJv/Dt/sGMlrwPc
+         HIng==
+X-Forwarded-Encrypted: i=1; AJvYcCXNJ4Yl8T+tQ1wYiLMxS12dUxAhFuDv93/bquxeOejuQQAMSX8Xa5vx0v8WwCx336IzK2Y43oY+7Yg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfFj1b/9n2j+ydgHeT5E3reCpaaKHv/+/gtRpyzkOM+vh77Uu5
+	p7qXlwmYIrGhsq1azJCfcJDB1Go/0l806vVXBB6uudQ5s0egnkCI9+o/BWsswfvl/hWTSTtlpI5
+	PRwkEtib3Y39pXXHIpdywKKnhk6KncNBaIXlc5CepmQ==
+X-Gm-Gg: ASbGncugNotKRrlz1MNaCqgpKB8NGOGBSXkd69SRHgzwx9tZGdRuAuxdKVdQNXVpA4S
+	x98n1Gv3/hSArqTjIZDA+Q8cfdmojjIUlnjZqJ3XdVB+MKxGuB1txNtzpC8CtlkuPdcmIm6Yrs1
+	76i4zCUOhQoVgKdEirKCqcxHTl/i09KAyB0n6NbwiCFq6WVmjA2g4aVC7fwNHDU+fVx2uqom5Kp
+	1MYqMQ/54ypH9of9qjSh27aH2z4Hf4K247S0qTbnwEXCnFmdSr9m7SnkBCnjNYKtKZ96jE=
+X-Google-Smtp-Source: AGHT+IHoC/R8TGWkSsRmVYTrTznpjr4STw1JDCmsU2sbR9qoad5PnTy6Rrlwiey4S9ikwN3xlZNQtXBlBuI95lMoqZY=
+X-Received: by 2002:a05:690c:6385:b0:786:4fd5:e5cb with SMTP id
+ 00721157ae682-787d541b7f3mr90568307b3.35.1762815864323; Mon, 10 Nov 2025
+ 15:04:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uLr7jK3Ro09awz3l"
-Content-Disposition: inline
-In-Reply-To: <20251107210706.45044-2-ovidiu.panait.rb@renesas.com>
-
-
---uLr7jK3Ro09awz3l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1762327887.git.mazziesaccount@gmail.com> <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
+In-Reply-To: <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 11 Nov 2025 00:04:09 +0100
+X-Gm-Features: AWmQ_blNtjThswk7W8THjiE7tdsgu2zFtwGMw_ARgVxMcfWy78tjHu1U0YBhMO0
+Message-ID: <CACRpkdbP-GZXtj_-AuZ=q8zUKwt0qWQ1L6v7WsoQ50JwTs6JUA@mail.gmail.com>
+Subject: Re: [PATCH v3 02/16] dt-bindings: battery: Clarify trickle-charge
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 07, 2025 at 09:07:03PM +0000, Ovidiu Panait wrote:
-> The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
-> (r9a08g045), with the following differences:
-> - It lacks the time capture functionality
-> - The maximum supported periodic interrupt frequency is 128Hz instead
->   of 256Hz
-> - It requires two reset lines instead of one
->=20
-> Add new compatible string "renesas,r9a09g057-rtca3" for RZ/V2H and update
-> the binding accordingly:
-> - Allow "resets" to contain one or two entries depending on the SoC.
-> - Add "reset-names" property, but make it required only for RZ/V2H.
->=20
-> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+On Wed, Nov 5, 2025 at 8:36=E2=80=AFAM Matti Vaittinen
+<matti.vaittinen@linux.dev> wrote:
 
-Didn't Alexandre already apply this? The changed version is
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-in case this replaces the other.
+> From: Matti Vaittinen <mazziesaccount@gmail.com>
+>
+> The term 'trickle-charging' is used to describe a very slow charging
+> phase, where electrons "trickle-in" the battery.
+>
+> There are two different use-cases for this type of charging. At least
+> some Li-Ion batteries can benefit from very slow, constant current,
+> pre-pre phase 'trickle-charging', if a battery is very empty.
+>
+> Some other batteries use top-off phase 'trickle-charging', which is
+> different from the above case.
+>
+> The battery bindings use the term 'trickle-charge' without specifying
+> which of the use-cases properties are addressing. This has already
+> caused some confusion.
+>
+> Clarify that the 'trickle-charge-current-microamp' refers to the first
+> one, the "pre-pre" -charging use-case.
+>
+> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-pw-bot: not-applicable
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
---uLr7jK3Ro09awz3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRIz7QAKCRB4tDGHoIJi
-0tEyAQDXu1HgKNoW6Q/JrOXqf5BJ+qv5Ngh7KZHolUf2tBa8MAD/b167Oao1IVO+
-wVheMPBaKJfDFGbt0JRvKNf759VP+Qs=
-=P3r6
------END PGP SIGNATURE-----
-
---uLr7jK3Ro09awz3l--
+Yours,
+Linus Walleij
 
