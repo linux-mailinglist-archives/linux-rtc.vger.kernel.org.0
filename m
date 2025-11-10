@@ -1,107 +1,108 @@
-Return-Path: <linux-rtc+bounces-5307-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5308-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81CE3C47083
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 14:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 04213C48ECC
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 20:13:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46C213B7A3F
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 13:45:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F21D9420E5A
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 19:01:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 189E91DE4CD;
-	Mon, 10 Nov 2025 13:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF02D32E147;
+	Mon, 10 Nov 2025 18:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pGr1PmZR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qj3wCZ0+"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6281B6CE9;
-	Mon, 10 Nov 2025 13:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1431321445;
+	Mon, 10 Nov 2025 18:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762782357; cv=none; b=Kafi10boIiU5E75lXZoL4XsXeFiqbVlZz16grtfv8jd4iPO84aLtOvwPJG+q5vcTI3G6cMIJhr8Mnf+16TIjzBNFJXRS7F3V6kaItuUjvDOMK722PQGVmOmjbwEul062iSPiW4dSpbxBIVbW+AMUyDkyKi++EC6XgWMiKQ1lqKU=
+	t=1762800626; cv=none; b=eObHnt5pg/m8tkoAY7j4vvr/qCtEG7gxtrETqS2/YSYvTsle3duqJECyEqbj3lI8pUYjbFmx9afasPXlTp5uBM5MDBPGX7IXb4/xooFDxrI/PonWovea7pHSQRQymZJLzAwUzzq02iVZAttJ949xnaUSQI7TdMr5ovBhFi5qorA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762782357; c=relaxed/simple;
-	bh=BfZlbtmgRdgYv7hKoZSzpQyyse54YgiwBUgsuLLVOEo=;
+	s=arc-20240116; t=1762800626; c=relaxed/simple;
+	bh=WMEB6mjW751eoW5/MtKFj40ys+WzQgF9PxLiSmGpWMg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b6Q7rCuklgl3ROg3awe6TIjURykYhyqDkPMXkU0R55VLifA0SSCyVR/lZW28RgjobjlZ2do3CeDUj6PT9M8ijL/YqkqSoL5DTbE7ZkKAEFP4K5jSFSVAQKz/DgrXSP5lNdyHl8LMawi4kImlVAlzupxLaE/KhzcCzj8au2LjzsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pGr1PmZR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 835D4C2BCAF;
-	Mon, 10 Nov 2025 13:45:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PZRBAprx+5l7zFybAfZ6IFW6663KSMfEzUjG2JHDQEdtbCdfQWou0s3RlNMXjEUmAJGYV1QA7IMfrxvUTLRySdmBVAAdp26c1A33eNyR3YbXITA1Wt7B5rq9KHqrAXRHjkRf8DudZGE8QBfVLoOSzWciCQu3YlFFa+CgxVsd5Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qj3wCZ0+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27B9C4CEF5;
+	Mon, 10 Nov 2025 18:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762782356;
-	bh=BfZlbtmgRdgYv7hKoZSzpQyyse54YgiwBUgsuLLVOEo=;
+	s=k20201202; t=1762800626;
+	bh=WMEB6mjW751eoW5/MtKFj40ys+WzQgF9PxLiSmGpWMg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pGr1PmZRLwYBt/uM1R1jlsuy0hADBTEbyD6JFYM/9qUmH/OSBiahCYGGplFS1TzUF
-	 fzlRKv1LJnDjYZ9SoLa9wINK0OmUliXSttYyrAzFwGa1MlYTb4z8ik8fU4as9WOPdW
-	 Ozt/nUh+2gA0m/XJ3p5Ms1fbTcA9DkgYyfPdwnVAWGUHuMdVQa28g5QWxudt1OOjct
-	 Jzvlm8a9BwvM+gi1kTO+AiMKpvXjCc4FMQYFeyBF29yT77ji9HSTO9MkBjVjrO8lI/
-	 DzpyQh8F6WHUcnGAG7YOkh7LNk9iGs6JMyerz1X/pCSGtUKnS8wn9ZQivYcOHm4RGQ
-	 OH8bedllMvOGg==
-Date: Mon, 10 Nov 2025 13:45:50 +0000
-From: Lee Jones <lee@kernel.org>
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Yixun Lan <dlan@gentoo.org>, Alex Elder <elder@riscstar.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: (subset) [PATCH v2 1/4] mfd: simple-mfd-i2c: remove select I2C_K1
-Message-ID: <20251110134550.GE1949330@google.com>
-References: <20251027-p1-kconfig-fix-v2-1-49688f30bae8@linux.spacemit.com>
- <176244506110.1925720.10807118665958896958.b4-ty@kernel.org>
- <71DB25E553BE0B04+aQ1LlKzeR-FkZA83@kernel.org>
+	b=qj3wCZ0+BgJTkXfacsrtMMfnqYs0xda0ZTXRZUat4o9nLOOMpxsYFM3oS1aPV09f4
+	 r4w1Gmml/8tFgebNwcxlp+wBL2ViJsKqNb0oowQxpx6qPQ9bVUxvFBZuB8sZsnylxs
+	 dXFX7ADkUsQyFcDHOmn3I2MFKjd7bnoxRXT0+ZfVpNPmRdK2b0Ggcv50nmGqe5R63F
+	 iY+QInw9VNoZ2xXqYkW07077LMVffZoCHiUU9eBgpdr3v7yMuWgXtOiCMu3sW47h5R
+	 JUqlY88sg8qa2mT3vSj1LeYhxLvjflOFx48OpuMC04IK3QBBYBVnk4NLlBOfjnf95A
+	 yaB6110+aFWtg==
+Date: Mon, 10 Nov 2025 18:50:21 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Cc: claudiu.beznea.uj@bp.renesas.com, alexandre.belloni@bootlin.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	p.zabel@pengutronix.de, linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H
+ support
+Message-ID: <20251110-hardhead-upside-54baa149f453@spud>
+References: <20251107210706.45044-1-ovidiu.panait.rb@renesas.com>
+ <20251107210706.45044-2-ovidiu.panait.rb@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uLr7jK3Ro09awz3l"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <71DB25E553BE0B04+aQ1LlKzeR-FkZA83@kernel.org>
+In-Reply-To: <20251107210706.45044-2-ovidiu.panait.rb@renesas.com>
 
-On Fri, 07 Nov 2025, Troy Mitchell wrote:
 
-> On Thu, Nov 06, 2025 at 04:04:21PM +0000, Lee Jones wrote:
-> > On Mon, 27 Oct 2025 13:48:05 +0800, Troy Mitchell wrote:
-> > > select will force a symbol to a specific value without considering
-> > > its dependencies. As a result, the i2c-k1 driver will fail to build
-> > > when OF or COMMON_CLK are disabled.
-> > > 
-> > > The reason for removing I2C_K1 instead of adding a depends on condition
-> > > is to keep the possibility for other SoCs to use this PMIC.
-> > > 
-> > > [...]
-> > 
-> > Applied, thanks!
-> > 
-> > [1/4] mfd: simple-mfd-i2c: remove select I2C_K1
-> >       commit: ecf6bc474ae97c404e2125b413eb0ef3627b03c5
-> Hi Lee,
-> 
-> I think you didn't notice this reply [1]
-> (Maybe because he was replying to the cover letter).
-> 
-> As Aurelien mentioned, the current shutdown/reboot (and possibly the regulator
-> as well) intends to use the `default MFD_SPACEMIT_P1`.
-> So if there’s no `default m if ARCH_SPACEMIT`,
-> the default value in subdevices may not make much sense.
-> 
-> But don’t worry — to make things easier for you, I’ll send an additional
-> patch based on your branch (in this series).
-> 
-> How does that sound?
+--uLr7jK3Ro09awz3l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Go for it.
+On Fri, Nov 07, 2025 at 09:07:03PM +0000, Ovidiu Panait wrote:
+> The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
+> (r9a08g045), with the following differences:
+> - It lacks the time capture functionality
+> - The maximum supported periodic interrupt frequency is 128Hz instead
+>   of 256Hz
+> - It requires two reset lines instead of one
+>=20
+> Add new compatible string "renesas,r9a09g057-rtca3" for RZ/V2H and update
+> the binding accordingly:
+> - Allow "resets" to contain one or two entries depending on the SoC.
+> - Add "reset-names" property, but make it required only for RZ/V2H.
+>=20
+> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 
--- 
-Lee Jones [李琼斯]
+Didn't Alexandre already apply this? The changed version is
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+in case this replaces the other.
+
+pw-bot: not-applicable
+
+--uLr7jK3Ro09awz3l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRIz7QAKCRB4tDGHoIJi
+0tEyAQDXu1HgKNoW6Q/JrOXqf5BJ+qv5Ngh7KZHolUf2tBa8MAD/b167Oao1IVO+
+wVheMPBaKJfDFGbt0JRvKNf759VP+Qs=
+=P3r6
+-----END PGP SIGNATURE-----
+
+--uLr7jK3Ro09awz3l--
 
