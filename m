@@ -1,128 +1,116 @@
-Return-Path: <linux-rtc+bounces-5309-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5310-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC12BC49B1B
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Nov 2025 00:04:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD22C4F4E5
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Nov 2025 18:48:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DB5314E311D
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Nov 2025 23:04:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41CF7189BE5D
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Nov 2025 17:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AE23009EA;
-	Mon, 10 Nov 2025 23:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E63365A13;
+	Tue, 11 Nov 2025 17:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UhQ1D1Km"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcgXixfi"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721D02F5A10
-	for <linux-rtc@vger.kernel.org>; Mon, 10 Nov 2025 23:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E4122157B
+	for <linux-rtc@vger.kernel.org>; Tue, 11 Nov 2025 17:48:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762815867; cv=none; b=RC1RN2FGbGCYU3Fscgl2KqIgLDUaLr/fg3oDvy2ur6PJUFeuj5F0O56q4YreYRMaPMyIC0E8EMoCfwkS+HcUOJquk72uEGprZXdGE2hGriGgZD6E0YE7Xw6L6CsoP/4eTdWC/pipm5OBN3VR0COPO0xPMrC0ShQJVFGYHEMoI24=
+	t=1762883320; cv=none; b=l3xEQMXliGnpzwqsLwZU5+Fbi/h5FdnlWDKLvdlBVZc1I/qKBDGnLjWxSLlErTCoGIfyHzTFgffDb9Bdq6M3y8LCV5Xn9tLfA6fuN7HLaUIFtofWggZF5pZKN0gZij1IxaUQD4CmSrJiiJDzSHKb5Yfr9+N/VlMbH19wYd749Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762815867; c=relaxed/simple;
-	bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WLssv6GrEzAKtiu9tQVfH9xSw6L07mgdFHc9xNHOXdcusGYU+R6mUWhWWHePEbdfLEJLvrCDfppNp53l7BVQ3lEkWzi6Yy6osj/4Y7fVguc0MuFyJMzRQXfWV0rq01y63zZqwx0etfoRiNzjhgYHvpARjFtvJ4UABq93YMtUg7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UhQ1D1Km; arc=none smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-640f88b873bso155233d50.3
-        for <linux-rtc@vger.kernel.org>; Mon, 10 Nov 2025 15:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762815864; x=1763420664; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
-        b=UhQ1D1KmPSyna4F/76ZCUiG8KhIv95nF4dhc49qrIM3p2GzZR8fl4PtKw6Yk5uaenr
-         Jxo6B1MPDizlQu/eAzhlHvAjPysa3NgZUqffrBat8sUZCey95AmWJHKnSMiP9zRpfVwn
-         yDf7hD9zPMNJY5K/TDMfIBp874x/FBBHi88+dxfp8g2/um8X8UHQj372t+OGfbo82eR1
-         O1hbOAThw5oCk4Sy/TkWbTHXa+HDjeRny+D/HCyIsPlxXxKrnhIkL79zMZOuophqGxN7
-         HEm1Hqzly5dxGv5sdqIOUUxBQAtVaiVswEfsuQw5gUpO4MhmxEB5Nma4Cgn7+HcHKITN
-         65kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762815864; x=1763420664;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
-        b=tDEBhz6W5lRjZOr12AFoZHjE4OpaJTzDo254xQ5Rcd8qfiJ0wbDFUHyvcNz5vJHvjI
-         7VfXsujotDg2aSKx5iRI3zJfylBKTuPczI1g1VPIN40aduXB6IgXl1kt7zmAUx7RZM3H
-         a8kqtYQV8eJwYKWqs1JHV7UchokyH4T8aIpKoxIBGN4v/qB2wAK5UC8Sd6c4qb/tjqQT
-         +UM6/PTLr4pRjboib2c2iTycKhlvREqKV4qK3yXN4hUzyilaNtBp/yPwBHTVDWWRgBz7
-         UtTDx4rBgpDcOzO/3pNzqkJ/Cyd1GfM15YAMeOXx5krrtfBAOXmu7oJv/Dt/sGMlrwPc
-         HIng==
-X-Forwarded-Encrypted: i=1; AJvYcCXNJ4Yl8T+tQ1wYiLMxS12dUxAhFuDv93/bquxeOejuQQAMSX8Xa5vx0v8WwCx336IzK2Y43oY+7Yg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfFj1b/9n2j+ydgHeT5E3reCpaaKHv/+/gtRpyzkOM+vh77Uu5
-	p7qXlwmYIrGhsq1azJCfcJDB1Go/0l806vVXBB6uudQ5s0egnkCI9+o/BWsswfvl/hWTSTtlpI5
-	PRwkEtib3Y39pXXHIpdywKKnhk6KncNBaIXlc5CepmQ==
-X-Gm-Gg: ASbGncugNotKRrlz1MNaCqgpKB8NGOGBSXkd69SRHgzwx9tZGdRuAuxdKVdQNXVpA4S
-	x98n1Gv3/hSArqTjIZDA+Q8cfdmojjIUlnjZqJ3XdVB+MKxGuB1txNtzpC8CtlkuPdcmIm6Yrs1
-	76i4zCUOhQoVgKdEirKCqcxHTl/i09KAyB0n6NbwiCFq6WVmjA2g4aVC7fwNHDU+fVx2uqom5Kp
-	1MYqMQ/54ypH9of9qjSh27aH2z4Hf4K247S0qTbnwEXCnFmdSr9m7SnkBCnjNYKtKZ96jE=
-X-Google-Smtp-Source: AGHT+IHoC/R8TGWkSsRmVYTrTznpjr4STw1JDCmsU2sbR9qoad5PnTy6Rrlwiey4S9ikwN3xlZNQtXBlBuI95lMoqZY=
-X-Received: by 2002:a05:690c:6385:b0:786:4fd5:e5cb with SMTP id
- 00721157ae682-787d541b7f3mr90568307b3.35.1762815864323; Mon, 10 Nov 2025
- 15:04:24 -0800 (PST)
+	s=arc-20240116; t=1762883320; c=relaxed/simple;
+	bh=rV8j9wbrOPZrNlvkNJphUfu8i9HlNDBAEuKSg/M5zr8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VNfsQp1+c6D4qb16YZV6ychH4fxltc328ZCjqmb5XuPJccvRAYbArmP6Wy9DDYxF/ZyCogalQuCU22CneRjiN7jtr14IupZMW3GviEuGF4HZXvi6WQTPvcE7f4A5kw+b4B07HOa+T3+gm+ZDGCLHBX100GpVGZ9nJjVBGog88g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcgXixfi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 651ADC16AAE;
+	Tue, 11 Nov 2025 17:48:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762883319;
+	bh=rV8j9wbrOPZrNlvkNJphUfu8i9HlNDBAEuKSg/M5zr8=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=DcgXixfiea/+hRyPUf+zhYyg3a+xqreKw7Gzlxb7/dcAnxhT8M5k6aweb9xfK8ZWQ
+	 R3X6ZkwotJCuaIDyWfCiySS5kWCm6SBvKAuIpm7lWajNtHs3/XREPB55SSyLQA0i+/
+	 7OgkqGOYoCNgQ50RLEeE0mvs9Ia4psAWksSvqHg92sickQmgiHc9QCzqW0e9jkpUn/
+	 0m9sCUP0P4QWVqwbyejxVrAgntL+Yj+iyTNfeZg2BueNN+QuulZLZXfkBBI54scWtl
+	 /3svXe8V/Q1W9rOSBSWjmkPAPYiQ4HWLG+OEh9lAiVZ5kiOIi19A5nszTsvH/YWRLQ
+	 t70kNZ/B8WbGw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5963ACCF9E3;
+	Tue, 11 Nov 2025 17:48:39 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Date: Tue, 11 Nov 2025 17:48:48 +0000
+Subject: [PATCH RESEND] rtc: max31335: Fix ignored return value in
+ set_alarm
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1762327887.git.mazziesaccount@gmail.com> <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
-In-Reply-To: <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 11 Nov 2025 00:04:09 +0100
-X-Gm-Features: AWmQ_blNtjThswk7W8THjiE7tdsgu2zFtwGMw_ARgVxMcfWy78tjHu1U0YBhMO0
-Message-ID: <CACRpkdbP-GZXtj_-AuZ=q8zUKwt0qWQ1L6v7WsoQ50JwTs6JUA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/16] dt-bindings: battery: Clarify trickle-charge
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251111-max31335-handler-error-v1-1-2152457cc203@analog.com>
+To: linux-rtc@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Antoniu Miclaus <antoniu.miclaus@analog.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762883356; l=1114;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=yZMxjkRilIU/IcTJjTLZ+cXNpd/pN79VeBziWYaCG+k=;
+ b=ttzyhZJ0mCNUgOFgpX1uTN8JaIkC35I6YwJy1pkPYIN4HY4/l5Bocb+UvekaSDr1V3fNIEZGd
+ VmBcFgeZMHVBCICkCV7KGQCazJ7ugdb8/1Cna7TQlqpyqix4qRyd4GH
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Wed, Nov 5, 2025 at 8:36=E2=80=AFAM Matti Vaittinen
-<matti.vaittinen@linux.dev> wrote:
+From: Nuno Sá <nuno.sa@analog.com>
 
-> From: Matti Vaittinen <mazziesaccount@gmail.com>
->
-> The term 'trickle-charging' is used to describe a very slow charging
-> phase, where electrons "trickle-in" the battery.
->
-> There are two different use-cases for this type of charging. At least
-> some Li-Ion batteries can benefit from very slow, constant current,
-> pre-pre phase 'trickle-charging', if a battery is very empty.
->
-> Some other batteries use top-off phase 'trickle-charging', which is
-> different from the above case.
->
-> The battery bindings use the term 'trickle-charge' without specifying
-> which of the use-cases properties are addressing. This has already
-> caused some confusion.
->
-> Clarify that the 'trickle-charge-current-microamp' refers to the first
-> one, the "pre-pre" -charging use-case.
->
-> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Return the result from regmap_update_bits() instead of ignoring it
+and always returning 0.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: dedaf03b99d6 ("rtc: max31335: add driver support")
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+---
+ drivers/rtc/rtc-max31335.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
+index dfb5bad3a369..23b7bf16b4cd 100644
+--- a/drivers/rtc/rtc-max31335.c
++++ b/drivers/rtc/rtc-max31335.c
+@@ -391,10 +391,8 @@ static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
+-				 MAX31335_STATUS1_A1F, 0);
+-
+-	return 0;
++	return regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
++				  MAX31335_STATUS1_A1F, 0);
+ }
+ 
+ static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
+
+---
+base-commit: 9db26d5855d0374d4652487bfb5aacf40821c469
+change-id: 20251029-max31335-handler-error-65a286c74289
+--
+
+Thanks!
+- Nuno Sá
+-- 
+Nuno Sá <nuno.sa@analog.com>
+
+
 
