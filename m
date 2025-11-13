@@ -1,111 +1,164 @@
-Return-Path: <linux-rtc+bounces-5347-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5349-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B8D2C57EA7
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Nov 2025 15:24:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76C8EC5999A
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Nov 2025 20:05:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A1A254E9E76
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Nov 2025 14:19:17 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E438B3442DE
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Nov 2025 19:05:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F5326CE15;
-	Thu, 13 Nov 2025 14:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67AA318152;
+	Thu, 13 Nov 2025 19:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="KOikJ6xR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162E52727E3
-	for <linux-rtc@vger.kernel.org>; Thu, 13 Nov 2025 14:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67011313529;
+	Thu, 13 Nov 2025 19:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763043553; cv=none; b=r/hLPywiXjVJoRbbJXuPfFhGJSGjUgD2E8OhceUp9nFkJo3U0DIX/SBsn7O2KkA+/7Uu6msSVSy+oTym6d8G8duzgrbWHQ1uln77IJ8BxiZdSIlBaR7G6XFUW4oFe+XTjbGw7AXa9b4/zTT6HAyzDYFB3O404sfQSq38mIZRPng=
+	t=1763060732; cv=none; b=BSvNFEF2Rx0QWaUt5MpBxH6sUkjrwz/yQoZ6Iew98oV64Yi+B2O9f6PDmSG2GZT6+2hoXbLN2pJbc+MHhBsD3KQnuMFBDUaLevEZstmefPahjbVswzqXoxZS6tPA+8tPqm6Ze60xKoWc/wV+SinNl34nXwkDlfYwwg51oQ5dyxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763043553; c=relaxed/simple;
-	bh=vJVdsmeHsUXqAeVRdhsj7TQml+wrLBqo7mPbRPjpD20=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sjzQqcuXdBM2O9QXFyy61wg5eafee92TrFdBdMcxonhueR8PR0MODr1XPcGUtf9co4O1W7fTszz/rLV6y4IgZYf6xBvNqz3Hy3fnZFcnBfrjayosVDHEb97Lz5tZqNy0XwNZ+XXvM83Lo+I83LxhTRqNj6LvZJAekOlVvOaCu9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-559f4801609so312202e0c.0
-        for <linux-rtc@vger.kernel.org>; Thu, 13 Nov 2025 06:19:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763043551; x=1763648351;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=icPVrj3OePZGMuahj/4/ViTGnP1F/ipWE8Dz8LO0Hro=;
-        b=F9zKye/FPMY3AirY/IAX/IiGcLNi2rITRE7CmTogxapeIlkS+MRlTR0E7vjzzUxEXU
-         R5qyHA6G3W9eKti0RXZkqbvABLkX7k51GahOyeDC4JtqOXM5Ynoh0QZc9D76i3yMtBOw
-         1HEarArzGFykG5OvI0OLK0dBvX2Q1WIaXfCSggqgUTE9lfhSmDZjuSXSyrbZ/oEpDSCV
-         pCtGTSMIbPvthe3/N9mFpjiEBvc8G950TaPzkyiKky740OS/IhLs/Om78+Ad69jGbkt1
-         2UO0siheCehjlXDCsSDW/vXyeU6Qg/LCNC6wavYCcVDy9qrfzFPCWSXg6kt0UGKnrCWt
-         kCRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwXdaibEMIn6w2e2XCY8JfAFsastVkF27jPeN3XdK49SSmVJHbIjzTSlz15DtamGVre5De/52IP+w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxV3tmDmN6xnHpMw+gDocijJX0LtSCqqC1lRcY1etsvlt6dQHUr
-	Jk3G+UV4n/6+X5A0PrHwKsEp+d4FPlc7FYfKwCNtoVKhi7i5iPvckE+umJwsg6lNCVs=
-X-Gm-Gg: ASbGnctlf2e0mtH6GDv/7mzdKf62IHEqTYILWssw3lNYmYMLdluAs9vMkAilV3yEB1D
-	iybiL7NeMPsrovQRCiaRzUwYFtB3sBM9ujxoA/DVM2kxTrHVyXYgv5FJP/VX5drlVnvYQ4hkSa7
-	Ih4hWD7YFC2vS+c9LPi3hwe0rmgyOY+spX6jkmaVOL9EqdWfyb2/msX5xHmsZ6Br14Iye+DsOfg
-	9c8Y0nKRHcdgGEz6W6l/LwyKMv2Y7Ung65U8H5mgFbz2STLYAGfEz8pWw4g6WDZhH0LUz78gv9K
-	8KRYQSPaIMN8rTNEPo8HchfYuGEBTxNv1+1A+KE0NnmK5YT9RSENbQK7nTIhfv89/XhxS+IQ1Hx
-	u8h/K59wKMbEi581TAjKLCbClKPNsSi8SPbyE1w3weTdTvIb0qDMUcY0OShFDbSVln2bbOE7Mh1
-	MKVNR4kq0VpSDLlSUQfYFfHhAMafBmIIdIB85wtw==
-X-Google-Smtp-Source: AGHT+IESZruYO7818AvGMxGjHYq29FTq/g0+il7x4+SphSZoNyPh19tvPhzrPW8fgQgiU491JH9DSQ==
-X-Received: by 2002:a05:6122:6b0d:b0:55b:1938:9173 with SMTP id 71dfb90a1353d-55b19389264mr330116e0c.3.1763043550616;
-        Thu, 13 Nov 2025 06:19:10 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55b0f359fa2sm792724e0c.8.2025.11.13.06.19.10
-        for <linux-rtc@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Nov 2025 06:19:10 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-93722262839so509223241.2
-        for <linux-rtc@vger.kernel.org>; Thu, 13 Nov 2025 06:19:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWHe4wntv4B+Asc4Pywu3cRck23hPTZ5ODqmLal3qxiyMzUfFfSTkgaK9XIVk44pSmzXOlJ54SZqWs=@vger.kernel.org
-X-Received: by 2002:a05:6102:390a:b0:5db:d07c:21a9 with SMTP id
- ada2fe7eead31-5de07e67bc0mr2364221137.35.1763043549851; Thu, 13 Nov 2025
- 06:19:09 -0800 (PST)
+	s=arc-20240116; t=1763060732; c=relaxed/simple;
+	bh=xbsJgSP/qfdSCYvBFIjxcuGK2HLNSgntGJrudJXGpGE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CYOC5lAtDCGigBPTqm0ELRXfyiC19P6cNKVr8GqB2kAL8HXtmjpTs5yel4tkydZCJ9UtnvWF9kRQiolpFBsu+sHQjI9lpW9c+sJ2TxcPmAwSHNzWP74GQzmBz0Iy8YKGdD5qlbHXqBYcfTvtGCKWjvXd7mcmM2fpCFsuguvO0/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=KOikJ6xR; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id A4006264C2;
+	Thu, 13 Nov 2025 20:05:27 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cVVbP0EOnFVw; Thu, 13 Nov 2025 20:05:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1763060727; bh=xbsJgSP/qfdSCYvBFIjxcuGK2HLNSgntGJrudJXGpGE=;
+	h=From:Subject:Date:To:Cc;
+	b=KOikJ6xRJHpCFTI/IIBv1x8rSDYBLfgSMh9rKWcN5FiFD9GTD+S8ktgGR3JSvzm84
+	 0xdJl1jE+pMK76FoZ2piHSO1IccpEXEQ9bomElLgh80726rKxRTd1jTcs1XdUlmUQq
+	 AGxS5iDOodDd7gTXYQwxQoGoPD6i/F3dplQeTi30OGt09aAg8h2ySEvuuDQl8//u4I
+	 C1mc8Qz8pFJjwdYv/908gh3ceaDLKOc7qDCTMRJBd5QKFNSl0+cw/ZqzKKIZNUvQY1
+	 t3SXCgcS4PGfrFYdP0lqTqV5lPCTYXQer6mnf0hUuc9W00h+xJIgfx84VLvn37Y5OB
+	 4xSuRWpJTsTpw==
+From: Kaustabh Chakraborty <kauschluss@disroot.org>
+Subject: [PATCH 00/13] Support for Samsung S2MU005 PMIC and its sub-devices
+Date: Fri, 14 Nov 2025 00:35:01 +0530
+Message-Id: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251107210706.45044-1-ovidiu.panait.rb@renesas.com> <20251107210706.45044-5-ovidiu.panait.rb@renesas.com>
-In-Reply-To: <20251107210706.45044-5-ovidiu.panait.rb@renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 13 Nov 2025 15:18:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVSgpJ3khJGFn9__BW+W+zM+fgrEDFKuAZgQeXyWa6w-g@mail.gmail.com>
-X-Gm-Features: AWmQ_bnydjHxg_KvXSzY7Vjv_ur8bfvy2AE8JWRXR2FRDM9SQFjKqTqegYDXS7g
-Message-ID: <CAMuHMdVSgpJ3khJGFn9__BW+W+zM+fgrEDFKuAZgQeXyWa6w-g@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] arm64: dts: renesas: r9a09g057h44-rzv2h-evk:
- Enable RTC
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: claudiu.beznea.uj@bp.renesas.com, alexandre.belloni@bootlin.com, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	magnus.damm@gmail.com, p.zabel@pengutronix.de, linux-rtc@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN0rFmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQ0Mj3WKj3FIDA1PdgtzMZF2DZDPztESzpMRk42QloJaCotS0zAqwcdG
+ xtbUAuSre+V4AAAA=
+X-Change-ID: 20251112-s2mu005-pmic-0c67fa6bac3c
+To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763060713; l=4075;
+ i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
+ bh=xbsJgSP/qfdSCYvBFIjxcuGK2HLNSgntGJrudJXGpGE=;
+ b=BtLrXuFPHG7bSTiR5t6fQiSMgXQ+caOKS4PELrmBT94oWUNgGzcGPA3OMy56H2k1iPz9Y0ktH
+ dTdDg5YNfc3BqiZIqypdiFUb4NME3nHGoQx3bnRuOHcdyzmAGCjy6E+
+X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
+ pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
 
-On Fri, 7 Nov 2025 at 22:07, Ovidiu Panait <ovidiu.panait.rb@renesas.com> wrote:
-> Enable RTC.
->
-> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+S2MU005 is an MFD chip manufactured by Samsung Electronics. This is
+found in various devices manufactured by Samsung and others, including
+all Exynos 7870 devices. It is known to have the following features:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.19.
+1. Two LED channels with adjustable brightness for use as a torch, or a
+   flash strobe.
+2. An RGB LED with 8-bit channels. Usually programmed as a notification
+   indicator.
+3. An MUIC, which works with USB micro-B (and USB-C?). For the micro-B
+   variant though, it measures the ID-GND resistance using an internal
+   ADC.
+4. A charger device, which reports if charger is online, voltage,
+   resistance, etc.
 
-Gr{oetje,eeting}s,
+This patch series implements a lot of these features. Naturally, this
+series touches upon a lot of subsystems. The 'parent' is the MFD driver,
+so the subsystems have some form of dependency to the MFD driver, so
+they are not separable.
 
-                        Geert
+Here are the subsystems corresponding to the patch numbers:
+dt-bindings - 01, 02, 03, 04, 05
+mfd         - 05, 06, 07, 08
+rtc         - 06
+led         - 01, 02, 09, 10, 11
+extcon      - 03, 12
+power       - 04, 13
 
+Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+---
+Kaustabh Chakraborty (13):
+      dt-bindings: leds: document Samsung S2M series PMIC flash LED device
+      dt-bindings: leds: document Samsung S2M series PMIC RGB LED device
+      dt-bindings: extcon: document Samsung S2M series PMIC extcon device
+      dt-bindings: power: supply: document Samsung S2M series PMIC charger device
+      dt-bindings: mfd: s2mps11: add documentation for S2MU005 PMIC
+      mfd: sec-irq: add support for creating multiple IRQ chips
+      mfd: sec: add support for S2MU005 PMIC
+      mfd: sec: store hardware revision in sec_pmic_dev and add S2MU005 support
+      leds: flash: add support for Samsung S2M series PMIC flash LED device
+      leds: rgb: add support for Samsung S2M series PMIC RGB LED device
+      Documentation: leds: document pattern behavior of Samsung S2M series PMIC RGB LEDs
+      extcon: add support for Samsung S2M series PMIC extcon devices
+      power: supply: add support for Samsung S2M series PMIC charger device
+
+ .../bindings/extcon/samsung,s2mu005-muic.yaml      |  35 ++
+ .../bindings/leds/samsung,s2mu005-flash.yaml       |  52 +++
+ .../bindings/leds/samsung,s2mu005-rgb.yaml         |  34 ++
+ .../devicetree/bindings/mfd/samsung,s2mps11.yaml   | 103 ++++-
+ .../power/supply/samsung,s2mu005-charger.yaml      |  35 ++
+ Documentation/leds/index.rst                       |   1 +
+ Documentation/leds/leds-s2m-rgb.rst                |  60 +++
+ drivers/extcon/Kconfig                             |  10 +
+ drivers/extcon/Makefile                            |   1 +
+ drivers/extcon/extcon-s2m.c                        | 355 ++++++++++++++++
+ drivers/leds/flash/Kconfig                         |  12 +
+ drivers/leds/flash/Makefile                        |   1 +
+ drivers/leds/flash/leds-s2m-flash.c                | 413 ++++++++++++++++++
+ drivers/leds/rgb/Kconfig                           |  11 +
+ drivers/leds/rgb/Makefile                          |   1 +
+ drivers/leds/rgb/leds-s2m-rgb.c                    | 462 +++++++++++++++++++++
+ drivers/mfd/sec-common.c                           |  41 +-
+ drivers/mfd/sec-i2c.c                              |  29 ++
+ drivers/mfd/sec-irq.c                              | 234 ++++++++---
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/s2m-charger.c                 | 216 ++++++++++
+ drivers/rtc/rtc-s5m.c                              |  15 +-
+ include/linux/mfd/samsung/core.h                   |   9 +-
+ include/linux/mfd/samsung/irq.h                    |  94 +++++
+ include/linux/mfd/samsung/s2mu005.h                | 328 +++++++++++++++
+ 26 files changed, 2487 insertions(+), 77 deletions(-)
+---
+base-commit: 131f3d9446a6075192cdd91f197989d98302faa6
+change-id: 20251112-s2mu005-pmic-0c67fa6bac3c
+
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Kaustabh Chakraborty <kauschluss@disroot.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
