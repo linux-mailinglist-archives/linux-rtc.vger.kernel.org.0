@@ -1,100 +1,208 @@
-Return-Path: <linux-rtc+bounces-5324-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5325-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF7DC5211D
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Nov 2025 12:48:20 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81B58C55D5C
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Nov 2025 06:43:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF7361897022
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Nov 2025 11:46:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 04E6A34BA3D
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Nov 2025 05:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE82B3148D8;
-	Wed, 12 Nov 2025 11:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redadmin.org header.i=@redadmin.org header.b="kp+76Fc2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCE54302165;
+	Thu, 13 Nov 2025 05:43:13 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from www.redadmin.org (bc043154.ppp.asahi-net.or.jp [222.228.43.154])
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4093C313E24;
-	Wed, 12 Nov 2025 11:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=222.228.43.154
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762947909; cv=pass; b=Zhtxy9CbrlVlbJUHqYDJxXXbzych3civvhhX40PfJXm98bTcc8IJYivSyf8M+VZe5s1RAamaQlKqIegkTttJOyTi5uLzqwH4uxi/Rt45ISzN1eozs8dUSQ38nhDKZoroANH47bhoZTLyLk/4scPRDUjfZGNM8j3saxEENvBZeKM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762947909; c=relaxed/simple;
-	bh=HDXaiRc1VzTANVt9xw5CI/8qsYIEfLU8f6fpFkFRgiM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SXQGDGizg0z4EFjetQJSctBv+/3DKxIYu2y0pS5S983QlP+/g2mzs/LanB1XAd8+4MT7juWtGmBE6hPXBgKZ1QN/DKb3HWtXimcvGpSmR1HhwLW55rrONBFupTel0HvMpdI4h7eItvJCUcc+IvpgIOiAeCVqq/oUzsoZ8NS5kB4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redadmin.org; spf=pass smtp.mailfrom=redadmin.org; dkim=pass (1024-bit key) header.d=redadmin.org header.i=@redadmin.org header.b=kp+76Fc2; arc=pass smtp.client-ip=222.228.43.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redadmin.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redadmin.org
-Received: from localhost (localhost [127.0.0.1])
-	by www.redadmin.org (Postfix) with ESMTP id E13791116C841;
-	Wed, 12 Nov 2025 20:38:07 +0900 (JST)
-X-Virus-Scanned: amavis at redadmin.org
-Received: from www.redadmin.org ([127.0.0.1])
- by localhost (redadmin.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h3-AdmoTuXKJ; Wed, 12 Nov 2025 20:38:04 +0900 (JST)
-Received: by www.redadmin.org (Postfix, from userid 1000)
-	id B8BDA10B4100B; Wed, 12 Nov 2025 20:38:04 +0900 (JST)
-Authentication-Results: www.redadmin.org; arc=none smtp.remote-ip=127.0.0.1
-ARC-Seal: i=1; a=rsa-sha256; d=redadmin.org; s=20231208space; t=1762947484;
-	cv=none; b=Exn2CsSCFGKngR5HMvmdGXABoscxs/9JSHjMwrF1FHhv0vcKkZ/Dze93dU2aAIj7Eo3OhXAmLHj/m7Cv7M0Y3pvb/cDz8iZXXt8gBFnQqI+8er3UfFWF1fSR4iZvWxsPA/cfPZ3GF6hjx5dZDQn5CQ/pjKlPOpe2eyy9K4sC38o=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=redadmin.org; s=20231208space;
-	t=1762947484; c=relaxed/relaxed;
-	bh=Q1hT18l1dO/zqdkjffLbjjbAPImRtW7wCjrLxZl9Y7Q=;
-	h=DKIM-Filter:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding; b=MUH8ZQ9fZ6KZi+MH/BQPGnxO2oA8asJhmuCabiR084QO+6O/OjTcZnUrjZTGfVi2nlIe7Q6i7d46fZfaW0tl5OwX5qagVIs9e2ciUXrFAj0vm1TJfHVe7pjRdjRZbR2Uz5woc3xPfMb1/xR+apoEIKHZaaVFAD755BYkuMDcCf0=
-ARC-Authentication-Results: i=1; www.redadmin.org
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.redadmin.org B8BDA10B4100B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redadmin.org;
-	s=20231208space; t=1762947484;
-	bh=Q1hT18l1dO/zqdkjffLbjjbAPImRtW7wCjrLxZl9Y7Q=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kp+76Fc2kq+wK+7ziBc0C6/Zga+NcYOmPbf6w6ET/82srgTt92gR66USCOQ2BFr1W
-	 Dqh37RBb0wVgnxikbLTPkE8gFt1nGP6jGgIMR4VIKLOLdfusL2NScYn8IBVy9EMX66
-	 Lmxkcz/Vxv88hzKqAzGcIoOFmHCpy+ebykbTRgLM=
-From: Akiyoshi Kurita <weibu@redadmin.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE1A2C0287;
+	Thu, 13 Nov 2025 05:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763012593; cv=none; b=rZpo0tPVg/LC9zyFMCHYsBdpZCNTfGjL3UrVsj9ikPQybkDF8WSZ5e4dA3mnoYvdr2siPgya4hrzlsZYWuRi8i7OPz3zid45COEWHH6apodnOVIPc+65sxHjpWStDD4HKOLkBCOLH0iBoBB8zQ+GXVn+cS0E8VQ2hMRFz9e6MhY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763012593; c=relaxed/simple;
+	bh=jOxd00r+YwWXv1MXTgcYRx4BSLk5Y60wWxXG9PQxRZU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FcsmXrgV1nEyqaq6IFLVLyQPjQ2GDMmQx7rUtiazv0l6n3TIcwtaY2a+yivvPYSeJCS0Nj09BElelliZNUTYSZulr2TAgh92NPbQIwg3m0nr4qwgGWNKUC5E4mV1BlVWQUIYgKSMOT/VuijbInX6lM28j2nidJSvMdr+Kq00xKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A901C1A1AA3;
+	Thu, 13 Nov 2025 06:42:59 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 731C51A3AAF;
+	Thu, 13 Nov 2025 06:42:59 +0100 (CET)
+Received: from lsv03900.swis.in-blr01.nxp.com (lsv03900.swis.in-blr01.nxp.com [10.12.177.15])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 456CC18000A0;
+	Thu, 13 Nov 2025 13:42:58 +0800 (+08)
+From: Lakshay Piplani <lakshay.piplani@nxp.com>
+To: alexandre.belloni@bootlin.com,
+	linux-rtc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Akiyoshi Kurita <weibu@redadmin.org>
-Subject: [PATCH] Documentation: ABI: testing: Fix "upto" typo in rtc-cdev
-Date: Wed, 12 Nov 2025 20:37:59 +0900
-Message-ID: <20251112113759.2953758-1-weibu@redadmin.org>
-X-Mailer: git-send-email 2.47.3
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org
+Cc: pankit.garg@nxp.com,
+	vikash.bansal@nxp.com,
+	priyanka.jain@nxp.com,
+	shashank.rebbapragada@nxp.com,
+	Lakshay Piplani <lakshay.piplani@nxp.com>
+Subject: [PATCH v6 1/2] dt-bindings: rtc: Add pcf85053 support
+Date: Thu, 13 Nov 2025 11:12:42 +0530
+Message-Id: <20251113054243.4045820-1-lakshay.piplani@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-The word "upto" is a common typo for "up to". Correct this.
+Add device tree bindings for NXP PCF85053 RTC chip.
 
-Signed-off-by: Akiyoshi Kurita <weibu@redadmin.org>
+Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
+Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
 ---
- Documentation/ABI/testing/rtc-cdev | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V5 -> V6: - Dropped driver-specific commentary from property descriptions.
+	  - Simplified and clarified descriptions for better readability.
+V4 -> V5: - Updated schema validation logic to enforce correct combinations of
+            'nxp,interface' and 'nxp,write-access' using oneOf clauses.
+          - Refined property descriptions for clarity and hardware alignment.
+V3 -> V4: Add dedicated nxp,pcf85053.yaml.
+          Remove entry from trivial-rtc.yaml.
+V2 -> V3: Moved MAINTAINERS file changes to the driver patch
+V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
 
-diff --git a/Documentation/ABI/testing/rtc-cdev b/Documentation/ABI/testing=
-/rtc-cdev
-index 25910c3c3d7e..cec099a27c6d 100644
---- a/Documentation/ABI/testing/rtc-cdev
-+++ b/Documentation/ABI/testing/rtc-cdev
-@@ -14,7 +14,7 @@ Description:
- 		  for RTCs that support alarms
-=20
- 		* RTC_ALM_READ, RTC_ALM_SET: Read or set the alarm time for
--		  RTCs that support alarms. Can be set upto 24 hours in the
-+		  RTCs that support alarms. Can be set up to 24 hours in the
- 		  future. Requires a separate RTC_AIE_ON call to enable the
- 		  alarm interrupt. (Prefer to use RTC_WKALM_*)
-=20
---=20
-2.47.3
+ .../devicetree/bindings/rtc/nxp,pcf85053.yaml | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
+
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
+new file mode 100644
+index 000000000000..81cfceabc04c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2025 NXP
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/nxp,pcf85053.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PCF85053 Real Time Clock
++
++maintainers:
++  - Pankit Garg <pankit.garg@nxp.com>
++  - Lakshay Piplani <lakshay.piplani@nxp.com>
++
++properties:
++  compatible:
++    enum:
++      - nxp,pcf85053
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  nxp,interface:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [ primary, secondary ]
++    description: |
++      Identifies this host's logical role in a multi-host topology for the
++      PCF85053 RTC. The device exposes a "TWO" ownership bit in the CTRL
++      register that gates which host may write time/alarm registers.
++        - "primary": Designated host that *may* claim write ownership (set
++          CTRL.TWO=1) **if** write-access is explicitly requested.
++        - "secondary": Peer host that writes only when CTRL.TWO=0 (default).
++
++      This property determines the intended role of the host in relation to
++      the write ownership.
++
++      The actual role depends on whether 'nxp,write-access' is also specified.
++      Supported configurations are:-
++        1. Primary with 'nxp,write-access' -> primary claims write ownership.
++        2. Primary without 'nxp,write-access' -> primary is ready only; secondary may write.
++        3. Secondary (must not specify 'nxp,write-access') -> Secondary writes only
++           when no primary claims ownership.
++
++  nxp,write-access:
++    type: boolean
++    description: |
++      Indicates that write ownership of the PCF85053 RTC should be claimed by setting
++      CTRL.TWO=1. This property is only valid when acting as the primary interface
++      (nxp,interface="primary").
++
++required:
++  - compatible
++  - reg
++  - nxp,interface
++
++additionalProperties: false
++
++allOf:
++  - $ref: rtc.yaml#
++  - if:
++      properties:
++        nxp,interface:
++          const: secondary
++    then:
++      not:
++        required: [ "nxp,write-access" ]
++
++examples:
++  # Single host example.
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rtc@6f {
++        compatible = "nxp,pcf85053";
++        reg = <0x6f>;
++        nxp,interface = "primary";
++        nxp,write-access;
++        interrupt-parent = <&gpio2>;
++        interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
++      };
++    };
++
++  # Dual-host example: one primary that claims writes; one secondary that never claims writes.
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rtc@6f {
++        compatible = "nxp,pcf85053";
++        reg = <0x6f>;
++        nxp,interface = "primary";
++        nxp,write-access;
++        interrupt-parent = <&gpio2>;
++        interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
++      };
++    };
++
++    i2c1 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rtc@6f {
++        compatible = "nxp,pcf85053";
++        reg = <0x6f>;
++        nxp,interface = "secondary";
++      };
++    };
+-- 
+2.25.1
 
 
