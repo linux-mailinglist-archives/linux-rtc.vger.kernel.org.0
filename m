@@ -1,146 +1,167 @@
-Return-Path: <linux-rtc+bounces-5379-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5380-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F512C5D596
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Nov 2025 14:29:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B094C5E594
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Nov 2025 17:53:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EADB34E25B5
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Nov 2025 13:22:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5C697387252
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Nov 2025 16:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5665314B88;
-	Fri, 14 Nov 2025 13:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE541337B8F;
+	Fri, 14 Nov 2025 15:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLxJBecV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FSHfay3A"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C8722B5A5
-	for <linux-rtc@vger.kernel.org>; Fri, 14 Nov 2025 13:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491153370EC
+	for <linux-rtc@vger.kernel.org>; Fri, 14 Nov 2025 15:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763126525; cv=none; b=YC0Q7UB1Ih3UU8W/z8Vth7ydm5n0CX01LMh7NN0BBwwXldpZAXglwzzyqwtrpgOvHO/qZdYxLcppHXK5kCWRm4ZDPOdLP/kRdMyj8mdQpi7W/n2inm3JPktO0jHR7bu8ySty+oO3vMuzmRnCuhPTiGte6p09uYoO6ZQeGjI3QMI=
+	t=1763135910; cv=none; b=dlXihpgU93bY7Fc5TOOJtOkTExt2KHfRu74CubqmaHZi2ZNIKANn/vPRb9H+KaN9hMrw9AxIwhzvl4JenjHkcSKWSXvRvMjnsLVAZwGh4oMOLBviDBbcqvQsQuMKbGL0EFn/llfiGHUK1hpDQ0k269WXH/IhxcCvFhDmpCT4o14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763126525; c=relaxed/simple;
-	bh=PIhVxornY+xeHydrfUvm8sKztzt4GgYtkzvZxgJ8W40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mwW+FBZb0F5iEJOfq+uMlmS3+8gTaxylt3c+k3KI4t9Qux+q1vf+UbEDLWvMD7ESVc3n7ed+asp36yEz1K1xRoaBvbcehAWX0Bd4wtIkrk28Id0n42gjR0O72Izs/5coyijfD/7wG+YabLOqf4qPiGdwuxRzaGd8v8JPYjo1Tqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLxJBecV; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-37a3a4d3d53so17531831fa.3
-        for <linux-rtc@vger.kernel.org>; Fri, 14 Nov 2025 05:22:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763126522; x=1763731322; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TrtX8x6xiGPlcF3REo6XTaulSDVNKE90sjqlhnGudPU=;
-        b=JLxJBecVTt7ci4MySHtaJCX2RuSWm+47+kgQXd3+q5iCTC6xRsKVeS4VMO2C6iKoUi
-         7wC7myl8516ZyD8NfP4qhC6InalfcMWDXVAnbtLDFNwJ6ARwpQfEZIrsLX12cgIT1uql
-         lrk6TGIK/1QEbP5uaOpQ8lOu/DJZfSzIb3aiGlYvsoBl6Z+b0tkjB3xpz6kbj1SreGpl
-         da9piGtvNIXkCcYmoDu2sNWR9609OQO1ta0KvjdQNYb4U1AiIS2D9tvNsn+Wv5udjE9n
-         tKW1+Vcx+V8JDmWgyb2Y2iuVQPq4hnOZ7a48Uw3v7Cx5fOHYIAEu4dBdezJxsOSPM0Es
-         tZGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763126522; x=1763731322;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TrtX8x6xiGPlcF3REo6XTaulSDVNKE90sjqlhnGudPU=;
-        b=SwpbGRMpRBBz9/8ppetIcqXqqRc7/aN1EUH79uJBxdBcaKImLsMtlMyGYFfE4UXEvK
-         loWHTLbtBq9Jniml0SAPazqkWX/JxnPFQEwT8mLlmVDmXZ6rUJdknT6MPTx0YOXbmkJo
-         chtI89jcO2Cq0g6iJLeIPpfGqNT936K2/BrNEgV13QiHJE0RJd/jl6DfR723HtA80rKU
-         GhUW6MUjBo8AnXbmPGYTjmH+uQdIPL1h3vQVqLzRjbJL52DlihN065i0UyxnzLirRFLo
-         HCUmeBpmuP8VMHQCaKSbq8hNlZzNP3SyJZJTYm+tzysaWnLQz4roMmZtp+h/03Am7BXA
-         Sliw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDBaoypNt1QPyXrim4JY4zrwzprcd/nGr3JUTSBdOe73fbUHDpmLwQfPyAfHaE584YKUV2j0gH91c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9XqmmLZywYd8UMphXYfRMOG6wy2y9XM5zehFgK44UKPtprHuJ
-	8BAXGFciJJ6biGjYJ/8N1PD3LAQuSCLlAghR4NVi4ybKBB5mikpBAAmF
-X-Gm-Gg: ASbGncu0P3I1uoOTZg1MmKRqCV3GtbYI8zkeYTUOtoan6bA77RoYu7y2Ed5gi4FC7gr
-	oTNevgfNb7g5pQOz7fkygBvTChAMXHLvXBu9l4iBKu0WlweuYPjb6aURVviYD20UB1W0HkfZu8s
-	TZGcaMFLaPBelFf84OY13B4Zkey+MYhLQoeqUnBhO7lEKoHr4PEOwG79VMjQ6oJ88iVQlfSTDwc
-	8ijkIHLca8VVTdPAbfQgNpMbGZLuVWqm7uSYeDnf0/g3dkirUNGIYC17kXxFsZI8Hi71GOYn9Gn
-	joL5x5N/iktCuBRIMb5JYr3jhe6gDcQNaA+1EchSWg52U2E4UebSVtFNsJs/cR96fnO71UdVGhJ
-	zncWgQ9pp/im0IWqJcAF6FHRhex1tosZ8FszHea5pAcgvMn4dvFGw248R5wo/SwpPKzl+UfoFds
-	zPblNxHS8HCcRy6vUd0U8YgSo7xTl7D5EIUX+qcu6ya7sr3HxmtHOFwuwv9w==
-X-Google-Smtp-Source: AGHT+IFJvPwRc3iSb2WexT7/Nxb76MqMei5zXQUBPxVbaOVwZ0mTUJAzGoCKPRFSwFTVf5iDU0WZyw==
-X-Received: by 2002:a05:651c:418f:b0:378:e3f9:2d26 with SMTP id 38308e7fff4ca-37babd80ac1mr5793261fa.39.1763126521767;
-        Fri, 14 Nov 2025 05:22:01 -0800 (PST)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37b9ce080a6sm10220141fa.4.2025.11.14.05.22.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Nov 2025 05:22:01 -0800 (PST)
-Message-ID: <2334e57c-a384-4a1e-9708-19d14b8f082c@gmail.com>
-Date: Fri, 14 Nov 2025 15:22:00 +0200
+	s=arc-20240116; t=1763135910; c=relaxed/simple;
+	bh=/4jpfOVdwxaqs5UuVbb+nzeLmNtMSQLkUWtDXm7PJeM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WgCBxegqWgGKFi/7iQ+CxlvUNZFfTaHmLVob0V61QaporXOBmKoXahWQxmhC3AeNfN7U1J4Ii1Hgq3P8WT9Mo4Y3kGP68gRyVx8QXhsePvKd6fJVK7ZgbgmRE9vHcCfQgrTDqBjtKh2YY0DAyBuN15fKWmFs5IJHukUBuTqVExo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FSHfay3A; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6EBF61A1A99;
+	Fri, 14 Nov 2025 15:58:25 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 4114C6060E;
+	Fri, 14 Nov 2025 15:58:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 71864102F23EE;
+	Fri, 14 Nov 2025 16:58:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1763135904; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=ateTgk+5rjws/58LFnBTFYJ2F6CnbGYyxzpZqXut2Hk=;
+	b=FSHfay3A0McuC6t6OlkmslKsXxEHWuaPHvzGO346RrJxdiQ3y9WMOUNULJ4WHA7XB5WA/n
+	VkO1reeq1lc7WqlPXR75B1PkCvRfq+QWJ1WSM82O9HA9vvnR5rQvt0vDwHigaj874d08lL
+	rA6fKpLtkBzBU06WexJPT7+F5JHdUN5LyHCGO9ASaRbKd3XJ2QcBZ0BkiPpeVSxTtNhDV/
+	auy4L9HnnM2DwoFxRRZgwkr1XrM0Mr6hTZmNt9I8pi7B6kAMcmvomO6PXIy48tYL0WOGEa
+	ex7d5dhMshKIma6fR/X5eq05FmbRb5MYA9smwRRjx88lBBHoYTObHcMeLSUGfw==
+Date: Fri, 14 Nov 2025 16:58:21 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>,
+	Juan Yescas <jyescas@google.com>,
+	Douglas Anderson <dianders@chromium.org>, kernel-team@android.com,
+	Kaustabh Chakraborty <kauschluss@disroot.org>,
+	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 2/3] rtc: s5m: query platform device IRQ resource for
+ alarm IRQ
+Message-ID: <2025111415582194c6ee16@mail.local>
+References: <20251114-s5m-alarm-v1-0-c9b3bebae65f@linaro.org>
+ <20251114-s5m-alarm-v1-2-c9b3bebae65f@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 14/16] power: supply: bd71828: Support wider register
- addresses
-To: Andreas Kemnade <andreas@kemnade.info>,
- Matti Vaittinen <matti.vaittinen@linux.dev>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <cover.1763022807.git.mazziesaccount@gmail.com>
- <6248200397d3582fe926938736da66d6bbf9535d.1763022807.git.mazziesaccount@gmail.com>
- <20251114121509.629d171b@kemnade.info>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20251114121509.629d171b@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251114-s5m-alarm-v1-2-c9b3bebae65f@linaro.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thanks Andreas,
-
-On 14/11/2025 13:15, Andreas Kemnade wrote:
-> On Thu, 13 Nov 2025 10:55:39 +0200
-> Matti Vaittinen <matti.vaittinen@linux.dev> wrote:
+On 14/11/2025 11:47:22+0000, André Draszik wrote:
+> The core driver now exposes the alarm IRQ as a resource, so we can drop
+> the lookup from here to simplify the code and make adding support for
+> additional variants easier in this driver.
 > 
->> As a side note, we can reduce the "wasted space / member / instance" from
->> 3 bytes to 1 byte, by using u16 instead of the unsigned int if needed. I
->> rather use unsigned int to be initially prepared for devices with 32 bit
->> registers if there is no need to count bytes.
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+> ---
+>  drivers/rtc/rtc-s5m.c | 21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
 > 
-> Well, this is totally internal to the module, so no ABI/API changes, so
-> there is no advantage of using 32bit now I think. We can switch any time.
+> diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
+> index a7220b4d0e8dd35786b060e2a4106e2a39fe743f..c6ed5a4ca8a0e4554b1c88c879b01fc384735007 100644
+> --- a/drivers/rtc/rtc-s5m.c
+> +++ b/drivers/rtc/rtc-s5m.c
+> @@ -15,7 +15,6 @@
+>  #include <linux/rtc.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/mfd/samsung/core.h>
+> -#include <linux/mfd/samsung/irq.h>
+>  #include <linux/mfd/samsung/rtc.h>
+>  #include <linux/mfd/samsung/s2mps14.h>
+>  
+> @@ -683,22 +682,18 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+>  		case S2MPS15X:
+>  			regmap_cfg = &s2mps14_rtc_regmap_config;
+>  			info->regs = &s2mps15_rtc_regs;
+> -			alarm_irq = S2MPS14_IRQ_RTCA0;
+>  			break;
+>  		case S2MPS14X:
+>  			regmap_cfg = &s2mps14_rtc_regmap_config;
+>  			info->regs = &s2mps14_rtc_regs;
+> -			alarm_irq = S2MPS14_IRQ_RTCA0;
+>  			break;
+>  		case S2MPS13X:
+>  			regmap_cfg = &s2mps14_rtc_regmap_config;
+>  			info->regs = &s2mps13_rtc_regs;
+> -			alarm_irq = S2MPS14_IRQ_RTCA0;
+>  			break;
+>  		case S5M8767X:
+>  			regmap_cfg = &s5m_rtc_regmap_config;
+>  			info->regs = &s5m_rtc_regs;
+> -			alarm_irq = S5M8767_IRQ_RTCA1;
+>  			break;
+>  		default:
+>  			return dev_err_probe(&pdev->dev, -ENODEV,
+> @@ -719,7 +714,6 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+>  					     "Failed to allocate regmap\n");
+>  	} else if (device_type == S2MPG10) {
+>  		info->regs = &s2mpg10_rtc_regs;
+> -		alarm_irq = S2MPG10_IRQ_RTCA0;
+>  	} else {
+>  		return dev_err_probe(&pdev->dev, -ENODEV,
+>  				     "Unsupported device type %d\n",
+> @@ -730,13 +724,14 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+>  	info->s5m87xx = s5m87xx;
+>  	info->device_type = device_type;
+>  
+> -	if (s5m87xx->irq_data) {
+> -		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
+> -		if (info->irq <= 0)
+> -			return dev_err_probe(&pdev->dev, -EINVAL,
+> -					     "Failed to get virtual IRQ %d\n",
+> -					     alarm_irq);
+> -	}
+> +	alarm_irq = platform_get_irq_byname_optional(pdev, "alarm");
+> +	if (alarm_irq > 0)
+> +		info->irq = alarm_irq;
+> +	else if (alarm_irq == -ENXIO)
+> +		info->irq = 0;
+> +	else
+> +		return dev_err_probe(&pdev->dev, alarm_irq ? : -EINVAL,
+> +				     "IRQ 'alarm' not found\n");
+>  
+>  	platform_set_drvdata(pdev, info);
+>  
+> 
+> -- 
+> 2.52.0.rc1.455.g30608eb744-goog
+> 
 
-The only advantage is to avoid the churn if 32bit ICs are to be added.
-
-> But we have 32bit stuff in the regmap cache anyways, so that is not above
-> the general level of wasting space.
-
-Exactly. And, I am not sure if sparing ~hundred bytes is worth the 
-hassle - even if it is hassle internal to the driver. But yeah, we can 
-squeeze a few bytes if it is seen beneficial. That's why I mentioned it 
-here :)
-
-Yours,
-	-- Matti
-
----
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
