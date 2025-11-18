@@ -1,127 +1,133 @@
-Return-Path: <linux-rtc+bounces-5402-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5403-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F59C68EA3
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 11:52:02 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49893C6A99E
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 17:25:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 96F4D3627BF
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 10:49:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5037A4F3DB2
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 16:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4EF34B1A8;
-	Tue, 18 Nov 2025 10:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C873A1CF9;
+	Tue, 18 Nov 2025 16:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jaQy0gmv"
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="NA23H0BR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBEE30F52B
-	for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 10:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5DA36829B
+	for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 16:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763462945; cv=none; b=Rl8GI7UlSJQZFPvYDQZpJf1yz9lL2dNS/GPm3wBd8NMQekaJ4na9lNO5XD7rESYPaGp7m4yFB+/0yjnwjXHZtkAokK0wtGxNQ+iko6U6uFkS8Xo4+F195vF2Sczb5WsBn/ONjbHGBtS80C8xctecCLKUhl/wJRT2Q9QnlgTGIN0=
+	t=1763482588; cv=none; b=pFX3DV1gjRMIRC6vdGexEZckesbguxZXy1jNfCsozjc321LlzhJvrSVC24bNr2mpJleT+px7Kxrddx0TtpYKr/Cu2b1yXGgKH9UhMl0uc0As5g6ZAO/iPBt2OSWCUBo3LB2Ux7OkH6BeJV8aBINtgtOXnCcilwtXSjKq2nlf6hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763462945; c=relaxed/simple;
-	bh=pSacPUfTJqdVOpSE7Tqm0QbIDxP64e72/O29IF4V3js=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GreTSM0tAmmV6dpe9la1IMHeV0qrhzCsslFl72cPzXDH5tx3hhjRK9KPaUobxDCKmRkV3KHye6JuH0lHRNVsy0fb40MnFYOsmMu8fCnkjjiXERjXCYmffBj536DX/+d7Yp3JUtKFT3WhMWEn/xbAtTlQR0AYCWfvYucPtGlh4pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jaQy0gmv; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-42b32a5494dso3156810f8f.2
-        for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 02:49:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763462942; x=1764067742; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s1y/mR0RQcwwMGAg4az+yXoD/LmwVs8/J1VOM/Bo49w=;
-        b=jaQy0gmv3NmoT4NKJB7QoioFGGvfnAVGT81Oydr3i+Bem9ZQEabq3E9E2b68FynQYZ
-         83q+GxfedYbMbLE3xGy+b+e47053OOIj3Kcm0jCekOLh+zVoUnRtQWGZZ3eaElUGWfBN
-         /ea0MYfmgUz7+ckU/pwmWeFzWUEEuYxgkuT5AmvYRnnNnRu7N/KN/N4SZccu9pZfIdp7
-         lsSsDUk3cF6sXQSEUbSwqRB9MMgl5Ve1TFrMWDeEBSTAIJeigHgpQuCMIy0DWC40lrB/
-         M6t4UDBQZrYDVLS0I2Lxc43gg+y8RKdi3dv1EhY60iGSDCVnQYb+8HXse3scznZxiOxp
-         nsTQ==
+	s=arc-20240116; t=1763482588; c=relaxed/simple;
+	bh=btv3uPBsVnXpVNmS4qDs/R7pyu+51TWUj9EIVRnOgio=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PzNUkkCoeFGY/CPTVDW4VPV7rDefwavtOesNIFytjrr0xVUAu/dJAJclIW50BLdurJxrIm3PVFTA2Uu4xkIqe4kc8XAlpXWSsgaTCDMOeuj0QLbkKIPW/uyUSTuUC54TjI0H36yQ0wWAoUqekYaNpZVWKLM1u23rjd8OrxvuAU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=NA23H0BR; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9E5773F29F
+	for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 16:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1763482582;
+	bh=mIyOErqpwna01AMHHTOqB9yVf2/6iPsT5MoLCulL3dY=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=NA23H0BRIHHg4VdBucuTrC+dBTTq9NQRQotNCm44yEeHuwXYI1R86DbMXnuG6/I0f
+	 w5CedOqT7oWnsT8BzRV/eV+MTnkdEeFWteaDqsMCSKkTVd8sR+MlA4riZgJYjPnj4b
+	 8zDxnMpYldgCkidZsOqBuxWNra+GHso6H6QjsgoErt5PFlbUuezGCVUDsb2XcSjajZ
+	 fELUsraU4iWMyy0I6/zY6v2rHGi8CsloAzSBuyx2mlyqJmOqvzoCjMCwoJIGq8ssUP
+	 27pX6wZL91yj3dcLyk/S3FIXh/AE12+TJUKB3F09GYDBk400+ZPqn8MN1VNqQxvrfL
+	 xqDkoGPjLnrGt6cqobEdXjlAyL6NttDfRP1UtksjM2J2qHVxGbiDbpqYwIZuyge1cn
+	 thcXSnOqtSIrFZ1dybbZZpZc2BPc6ehTUvZtG+kr4FTlv2G7XcRdnvLTNJCpJ2u3sx
+	 PVoFKPq1kAnfs76dCYE5Q9H9GSjme1u4llmOautmshzZFw7A5reUT2XvI9/UvsK7MW
+	 cZqvu8Rp5dxSFa/HscRzhJjgbft2ut+Nwuc5MEH/LN+8ObSbWT4L5qfK08OG9/dKHR
+	 BuTWEueC+Teud0k+aTC+7KkuWCF0UsJlo5ffrv9EOQm5OBHgEAH2xa4m0p1tyl6MfP
+	 KmIRj5xIKgEIHNj4dIJUAmEU=
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-b70b2a89c22so554752466b.0
+        for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 08:16:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763462942; x=1764067742;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s1y/mR0RQcwwMGAg4az+yXoD/LmwVs8/J1VOM/Bo49w=;
-        b=etil4xYlcmteDrw3vQ1nl2PPymwzVUhdcaJ0ejI/MiDaEKCl4yy/n0kG8OlGeT63ek
-         ofCQAeF4kT9Vuyx3octl+L9RuHDYGSW08PL68IlyVdQrK6SzopjkPoAQawJsTniWILl4
-         orMkvu2EFEwM3b/3lDDGGgsQOzUESsowbKe9kuP66r35vPRTsBT0kRv9gxrysT4H9rnk
-         xHMUCX84Zw/b6p44+iQs6XYhJ30QCEMoPsWpPaIGFMd0ImQGd8zWfGj6cbbEzMdWr5C7
-         CdNXTKUV2lF4KsQ9aKU9hO4EkpfgbrzFBunwDnZIfTesevbVDxXX+ygRDsRfTYmX8aTB
-         fEdg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGf5VMxRY/G0R9P8nxCAX1CMizZNb/6UmPAguxzVT0G8XAG3CmQM75Tn8+hJoClz4NMaoFUZxScGQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcKwUFR7d1IZMwvaNpQ841z2A5J9EJ8kUTU1LyV1IO5bXtFzrp
-	IykqogxeNwN4EBiZxftFZPbqzAWS7u2+oXTPWpUtd/b08ru2raJKc1+Y56MZhUId+tU=
-X-Gm-Gg: ASbGncsFqZPsqOTiZeHdhsQzWeCCJhyEaI9UdXKskQTvxeX5YeFrbE3mO19m0mRbJnY
-	Hx+Jac0L2TquOKIuetiIKA4qkx0+VEuMCWVMR8IuH2rz2sqTAj5eVAY+0eBQRJZlGDJVRxlsSEO
-	Hh/eAXDc8P/n4YmQZiTmlWT0JVh5qg7jV6XfhXI23J9rUC2ctkIb/XQBnKXUGj6GHcVptnwGhuG
-	I+MGK4dsuZZOCuPJ95mkt3ZNYSOa5H07SiXVm0Ix3InshMG2IizweDICgM+AsJTTrTyMC+Ie0Pt
-	54gHocQgha9GVF59vgZmmnovdR+PlbHuerJgf2fxKhj8i/w7ft4ezLvsN0OQe+uDXkK1NViyc6F
-	/d4R2H7ZMo2zwwzkfrf2kapHfa8kJC0q8FGawz8Cz6moNMsBFCjR8IjjBRP8Y8wu57Crl9gip1G
-	JIYKS/sg==
-X-Google-Smtp-Source: AGHT+IE+uO9N9ifqs1Y8ygDQTWEad0nnwpu/28efWIWor11GJUehCS6HQAbsFian1eY23T6Y6M2COg==
-X-Received: by 2002:a5d:5f42:0:b0:429:c711:22d8 with SMTP id ffacd0b85a97d-42b59339b7dmr15233727f8f.15.1763462941281;
-        Tue, 18 Nov 2025 02:49:01 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42b53e7ae16sm31647134f8f.3.2025.11.18.02.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 02:49:00 -0800 (PST)
-Date: Tue, 18 Nov 2025 13:48:56 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: CL Wang <cl634@andestech.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH next] rtc: atcrtc100: Fix signedness bug in probe()
-Message-ID: <aRxPGBEX8hbY6sjV@stanley.mountain>
+        d=1e100.net; s=20230601; t=1763482582; x=1764087382;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mIyOErqpwna01AMHHTOqB9yVf2/6iPsT5MoLCulL3dY=;
+        b=s31LmJwDmDkLwjQsnqQ1hCVeNJi6VqUCcMWIO0fVpsOMglIr196tc8oCr1toopKGxl
+         J94Zalcdzer6ogZSk5XPifBxrRho/yDAs4/5FSZh5lE0Sv54IaM8q/MZ29HhRSQXayEY
+         mVOyKvnTBaAjR93JVo/C1WK0Ge9fgK7kYbBlgo7etORr2HAv7R5hbq1O0oQmdngZ7RZk
+         uc67IqE6oThx0LRayxf0fmrlTYuuKsurixLhGh1LgH9QsSXk4q5T4L205SpXmSTroKbO
+         CHXi54LqCBvJMnHEmwV3Uod8SyeGC7AjR8XVsHjcQOUXXXStW0yv6pNRPGhIeETGXzr3
+         3W3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXzZ5zcEyUJf0f0GVF82J4mlG3WAGUBdSFmFbg9t9NjeMhav+yfNjLJAwGGU5fViaC6rZBKgIIVKu4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL2q6JHGWPasKwGlglFvYs+myHVhG2w2TaRJ9Gcr+YDg3i85L8
+	ZetK1x8rc3xm3n7jUV8AQlD5u52u/hHPWqHvzBw96r8Gk2Mh+Ow2NLvTZvLFD97EoEQ0CUJX404
+	JYlsCL7myXEpTiwu5J2Qtlb/JulZlzz3sRT3HJZRqsRO2BuQa+zyVUPyGLYkeAQFA9vzcg8ho1e
+	gduFA80PatlPPiZeKQicWFzC6dzebDJ9i+pNOXp3dDGrEQUl6aCSW0
+X-Gm-Gg: ASbGncuPIR0z2jqjxu0uNB+TnojU/bp1mI11G/BNfQEpoJZnR4FXiKbsX5+/q+Th/Jj
+	qwouEZowT1bcwplSAhSPqX/ar8l+o7np2SHzwtd9PK03H8NNyr5//TuWY9DpQ/AGRcsFveQFZAV
+	UYulNTgEFIhwTnic9GbRh82zOwXgdFsWxJyh3ZWgio+ADa6SuF7D5D3A==
+X-Received: by 2002:a17:906:c10a:b0:b61:e088:b560 with SMTP id a640c23a62f3a-b76346ef9cemr3648766b.4.1763482581760;
+        Tue, 18 Nov 2025 08:16:21 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGBn7K4EsQ1/VADA/bQzwH86ZFXAYwYh29/z7evvXjdMBNS0csaU/n5+W/6S5nKTtDNtgN/9vlYqKGmpyFhzys=
+X-Received: by 2002:a17:906:c10a:b0:b61:e088:b560 with SMTP id
+ a640c23a62f3a-b76346ef9cemr3644766b.4.1763482581386; Tue, 18 Nov 2025
+ 08:16:21 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 18 Nov 2025 08:16:20 -0800
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 18 Nov 2025 08:16:20 -0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+In-Reply-To: <20251118-p1-kconfig-fix-v3-4-8839c5ac5db3@linux.spacemit.com>
+References: <20251118-p1-kconfig-fix-v3-0-8839c5ac5db3@linux.spacemit.com> <20251118-p1-kconfig-fix-v3-4-8839c5ac5db3@linux.spacemit.com>
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+User-Agent: alot/0.0.0
+Date: Tue, 18 Nov 2025 08:16:20 -0800
+X-Gm-Features: AWmQ_blHnUdEuO_Xk-xLGxCSBj91WsT4QrqSPcs0Pl7bY6VmfVJn7i7Sg1yCEAQ
+Message-ID: <CAJM55Z9Ep6xAR_TP+dCrSqWWyk8n=31-W3H4Ad6BkWUAWsbObg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] mfd: simple-mfd-i2c: add default value
+To: Alex Elder <elder@riscstar.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>, Yixun Lan <dlan@gentoo.org>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	spacemit@lists.linux.dev, linux-i2c@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The "atcrtc_dev->alarm_irq" variable is an unsigned int but it needs to
-be signed for the error handling to work.  Use the "ret" variable
-instead.
+Quoting Troy Mitchell (2025-11-18 07:08:08)
+> The default value of the P1 sub-device depends on the value
+> of P1, so P1 should have a default value here.
+>
+> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> ---
+>  drivers/mfd/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 6cec1858947bf7ab5ee78beb730c95dabcb43a98..b0f109b3acc40b074e4d0178e123437495853496 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1260,6 +1260,7 @@ config MFD_SPACEMIT_P1
+>         depends on I2C
+>         select I2C_K1
+>         select MFD_SIMPLE_MFD_I2C
+> +       default ARCH_SPACEMIT
 
-Fixes: 7adca706fe16 ("rtc: atcrtc100: Add ATCRTC100 RTC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/rtc/rtc-atcrtc100.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Can this not be default m if ARCH_SPACEMIT?
 
-diff --git a/drivers/rtc/rtc-atcrtc100.c b/drivers/rtc/rtc-atcrtc100.c
-index 51933ae1a2fa..9808fc2c5a49 100644
---- a/drivers/rtc/rtc-atcrtc100.c
-+++ b/drivers/rtc/rtc-atcrtc100.c
-@@ -296,10 +296,12 @@ static int atcrtc_probe(struct platform_device *pdev)
- 				     "Failed to initialize RTC: unsupported hardware ID 0x%x\n",
- 				     rtc_id);
- 
--	atcrtc_dev->alarm_irq = platform_get_irq(pdev, 1);
--	if (atcrtc_dev->alarm_irq < 0)
--		return dev_err_probe(&pdev->dev, atcrtc_dev->alarm_irq,
-+	ret = platform_get_irq(pdev, 1);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret,
- 				     "Failed to get IRQ for alarm\n");
-+	atcrtc_dev->alarm_irq = ret;
-+
- 	ret = devm_request_irq(&pdev->dev,
- 			       atcrtc_dev->alarm_irq,
- 			       atcrtc_alarm_isr,
--- 
-2.51.0
-
+/Emil
 
