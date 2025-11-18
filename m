@@ -1,138 +1,144 @@
-Return-Path: <linux-rtc+bounces-5396-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5397-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 670AEC65DDD
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Nov 2025 20:08:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79531C67A6A
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 07:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BB2D2343F4D
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Nov 2025 19:05:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id C40DB28F77
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 06:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE24328269;
-	Mon, 17 Nov 2025 19:00:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5802D7DE3;
+	Tue, 18 Nov 2025 06:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bb7vhjgo"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="ijcyv0Zy"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 714B72236E3
-	for <linux-rtc@vger.kernel.org>; Mon, 17 Nov 2025 19:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A20428488D;
+	Tue, 18 Nov 2025 06:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763406054; cv=none; b=nE6hhW5VBsx8eipfD3wYIHtsm9XB+n6M38YZbP8cwwM4+ZK0qd3Ls4WK+MGUXsBzcS9RyliXzyhfAoi/9n03nSPo2p62e2Jewc4yPxnd1+a3eQ3hGov2THPKQhlsKhFXeE36cHIwY9dwQuuDN+sMSrxVXRlUdXe17oSwDp7/cY8=
+	t=1763446103; cv=none; b=Q60Qrw2dUW+2XDVFZ5ou0NOKod57KrrORvpfHuA0z+dWJoPEHfa1N+OIVx76MUISHLAkZHAJXCEm6CWHGjL5mqfj9Fh72gXcdMsApXYDo/nJlMgt7PTlpjaK0BGp9SMgkboD04teem6hZJs5LQEbueGc8cKO6oKvSqb9eb969yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763406054; c=relaxed/simple;
-	bh=9LwQ8cgiBx+GR9gi4Ze2NRYHzMsmpVYF+u+bBwx5cCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TFBSjh8mEy+YV7055T8gGxBuXku7D4cIBHZR1UHMpIRv2du3ZHSGxNg3AtiKIZacUVK2zmN/5jwzjKMaWMqtTydd1ZeK7i8CQKAmebCc5B8+P6MlAn+gbXJyMyv+0i77gx7odKT3GASFNfrTF47TdYEwbsnvtcSQ8KOlHNPILmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bb7vhjgo; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-29808a9a96aso48216275ad.1
-        for <linux-rtc@vger.kernel.org>; Mon, 17 Nov 2025 11:00:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763406052; x=1764010852; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H0lS2cED24LXASEO8Kaw1E9xKUmdy8WEPj1E8PP+Wtk=;
-        b=Bb7vhjgo8i3MdNxVG4EuzsP0kY56sHhKC0hWXy3SNDE+0Ky7g2//Vfq9gp+Z3YGBG2
-         kEV2VMszuPQ4nQazsSKgdPOTiRGD1zm95jdORpTJBag6XwmEn5c2/HvrxvuQ0/2Y921F
-         UvQBWH0YZMZjhyeFp2YU/N52BH0iW//+scsr+miVtegB+9hZP+42GsqTErMJdr37zFTf
-         YF7gzWQjdjmNsm/SlxP/4ZKN6wnkOMpf8uEmxEjzhHoPjE0GreCvD45hd39nEQskXra/
-         bg/GnRKMnZp3vn2z/u0j8s3BNDcw8sZ4BbHamAFyvnzIlSksGSxQ/4P1O7k3ELztEwXd
-         9h3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763406052; x=1764010852;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H0lS2cED24LXASEO8Kaw1E9xKUmdy8WEPj1E8PP+Wtk=;
-        b=uZoSjQQ5h1ftPgX8/IcLQoe+EQAtItoHxh8JYa+wBO291WeC7p+LVaup2RS0kBhfgg
-         bo8kV+cbUmKim7ri3KxnhvYuoGorUOG6hYCebY3Ip0URUT+ls01glASV5IySz23rX47T
-         oLBW3uwCfoJbdPVYPTvmLLqj4421v8OAfj+1m1ltygMW8eK+XzNVeDybpmTAt+eZc+5t
-         s4qFKCt08JUUfFY1kVQAGh47HPsTZrXRthKymZyrVrja9zCMe7arwahteoCthy5ZTimc
-         inOhszLX5JF696Rj5d9ssRO+S8FCFT8lAxipA0BQZkY+TVKvFJ499RgSC29mGMemJmRH
-         nFjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxG4+sYaEoOKgVVn+N5TtVIdqiH9syo7Q57s4wjJjB2wC4Mu47PWjhvfJfPsXtuegk19UpIMq3ZMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6zuXNTxaqrHYF8o6eIU505vXF31Hcq4iEOqJ5vX2ZLYHS3Jkp
-	2iwpPSL15q/QXOYZCvzzTT8akMP4theJ1Lh0bp7oNUf4yD6uhwz8/BCs
-X-Gm-Gg: ASbGncuUd5BsEYLctqruI4nHC71Ov5QCSZIy7Dldc7LgOB007pZSnwjMKj0TS32EroD
-	y8+ceh0uU97+3tn6v3kq2u5kITwPNAHQkNA5Dz5UDgFKStoYOhy0/5FLmH9C0igR5YUzzYGEwcw
-	WmXNiFRXpNU6YKJKTbHSJfuoZtXcR73SH378pNhVs0CmlwOuheTEajWa4LI6MZ00wyPnGe4WOZV
-	v/TSK4AgXTezPk0WUp0sIru+rOQkD6f3abaC0ibKdVZ2e+Kfc+D3iEZ6JqCvBiqXqdHpnvOdNVh
-	u1DrAIiG6BUOdo26Xa9ha/27YWs01Mq614I3O4AFXqaWSXyfKxWD9zULjYOEKFgI1P+/lhi7fbS
-	15BK2lh0UBeHg6PNCJTDC+nLLZPmYJhUUnfHRpZemfyoewF/WfBmv9nzuJ0QoBlzZGEQ27HOII7
-	AxEhDYlwaRAttZZefRWcXwCOMAgb4wSmTL6i6x5BZ8loyL
-X-Google-Smtp-Source: AGHT+IGDVNZOalPoeGLRx0StV1WyF6OuSXplI/tFFH2YjaxRb6M+ZouwxCgXlyJ+r8uHMpC01NlQdg==
-X-Received: by 2002:a17:903:198d:b0:298:2af7:8d26 with SMTP id d9443c01a7336-2986a76a26dmr169206325ad.54.1763406050080;
-        Mon, 17 Nov 2025 11:00:50 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2376f6sm146281525ad.21.2025.11.17.11.00.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 11:00:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 17 Nov 2025 11:00:48 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: James Calligeros <jcalligeros99@gmail.com>
-Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 06/11] hwmon: Add Apple Silicon SMC hwmon driver
-Message-ID: <7a445358-ce9e-4180-99dd-1a771c8ffa98@roeck-us.net>
-References: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
- <20251112-macsmc-subdevs-v5-6-728e4b91fe81@gmail.com>
+	s=arc-20240116; t=1763446103; c=relaxed/simple;
+	bh=pRelXNcNN37ZM7O2BV0S35r975DWh+ueu5XV8SMlrBs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UxDYNM1MiB8SFvUtRm+JAp/tiPJRrFj9AUO5QAjDVwX92nZvaGB126/0+ANQoxqaGlBL9XMnSzW8TVLbbeI8iDss4r84fbmKs5IzsBqh4OO+tR3rnDtgAXEu/NCZgApLGpEQJx9aA3jqkeA8jodIiEz6J3WDJ8iewhQqOvOoAPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=ijcyv0Zy; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1763446094;
+	bh=hzOfPR919VrIHi152EWvE2Bp6APdazRwuR4ex5e3Hbw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:To;
+	b=ijcyv0ZyQdx4/Dt2OxHp8jPOM1LAgKSIiUdc42cJlIyPNdbf3lg5+HYdO7XHz8kjP
+	 lmkJTDdaE+DTp91FiYxl6XZLlFQYcBzWOiqmOLNlaexxVF6ORcmZakpFjA1oooudz1
+	 3EInMnyM3UOujF35fyR8AHe4bBkjK1Jm79Wm/8Dw=
+X-QQ-mid: zesmtpsz8t1763446089t05f7671e
+X-QQ-Originating-IP: gfIiIDlmEa/nlrPhq5QOGcUUZldrQI1NIAYC/9iO1aU=
+Received: from = ( [120.237.158.181])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 18 Nov 2025 14:08:06 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12746656525817130818
+EX-QQ-RecipientCnt: 13
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Subject: [PATCH v3 0/4] fix the SpacemiT P1 Kconfig and resend the K1 I2C
+ ILCR patch.
+Date: Tue, 18 Nov 2025 14:08:04 +0800
+Message-Id: <20251118-p1-kconfig-fix-v3-0-8839c5ac5db3@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251112-macsmc-subdevs-v5-6-728e4b91fe81@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEQNHGkC/23MSw6CMBSF4a2Qjr2ktzwsjtyHcUBLCzfKIy0SD
+ GHvFhITow7/k5xvYd44Mp6dooU5M5GnvguRHCKmm7KrDVAVmgkuMuQCYUC46b6zVIOlGfJKqKy
+ oeKKkZeE0OBPmHbxcQzfkx949d3/CbX1T4puaEBA0pqLK0KDi8nyn7jHHfii1aWmMdd+yzZzEp
+ 3P8cQRwSItcSptwVZr/zrquL7HQGtj9AAAA
+X-Change-ID: 20251021-p1-kconfig-fix-6d2b59d03b8f
+To: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ spacemit@lists.linux.dev, linux-i2c@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.spacemit.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763446086; l=1635;
+ i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
+ bh=pRelXNcNN37ZM7O2BV0S35r975DWh+ueu5XV8SMlrBs=;
+ b=jSJ9sJxE6RX5av6jM6BMhL0iGQaZppaNPJMQJNNU9u9qR01cb/m3k5HQIqRhqBGGXg1KdD1y6
+ xz4wUtB+mffAgOu9cOkDzl1KmjRdAqngIzXfCp7HEC7e5lwlCuEVn7z
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NioaTWkRhWwabMl859UJroPOUZFJLGvVRGATXzj/VbNitmwY7J8imLPz
+	i472u+81WFRp25QRQ2gvum/nHUfgu1n0cZM9eYE1nwmM6JClmWbYXu1SJsrKO1z44Ie/v4G
+	WLhJJjMY7oBDvDgp35f1VpxtOU3fHn7tM3bCHc97dTYMS8fg2O0P9FeUUTGkVRKl89yFcQC
+	rJBBNZrGoBoFJU5AjTJ6c7hAIMjVWlmqsIuaA8jFOaZxwDmctMdT8KlPwfpl5YUhTJQAzqD
+	ospYX7axHbsAEqaa3GO+NOq4X69qQj1rhZTcW3DZwihAsc6buZXn/eIMQ0qQjC0ngr+8b+v
+	UAmem6RITRlr2zSBt3+1MXmv7T3l1pXeSErZMYvdGPKI9JGpEzyclMBLA/yQcDFbOnnRdX3
+	s6pNsGVubdoLFbx0iZvgd9r69qsIXyIJUDU+YjU1A8aLc7XsYMj/LZ8sgH/E2v2eTV+K7o5
+	USrR0s9p4lQVhNfriZYk336HiF+ZN4kFRrmaCrHj41DkhGwJGa5/xlIFSyBi6JQ6bLkfkFc
+	r1p1q1If41WR8sTz1rzD0xLAzG0fc3Rs+piCz4UEc5pm95KH7mQL6DWPMgIfyKvWlC7qhu8
+	bSgWmIUnDGvTzMUaVpripiiOjZW5nNtLQeBR66kakvG6MMbqIrhwm2XXLbjwhbgme59WYHI
+	PtX/QEoomsfTMzAeJEMk9OzN4I6QdpKGvL9BH8k/6XdJToJKxGy1a/ViFCv8yU4kTWFz/cA
+	px9AT/3pyd+D4W2ZqEj6ZUaGDMp6BcjPn7QeF3ZK6WxNqNeeE9BrWDRFFb5Si41DS5aqEtI
+	lYz7JqS188kB4PAFCjfdXVHw5IlwAG4ftnPInN0MPbvJFgrvy5sBxoWL7JnTVOS9mzpqv/i
+	eSa9/RDiqw7dIeTSJfFWyc2jzU/kK22z0oxUxIMnilvSDf9fs3DbKzmsVTJpyy1fHWOWKDX
+	0Z9KamhRB3pEtfvpUBjjU4CA2cnkXTb/bDrFqSBkXLOkBtFHiHRtlRkFj4oEGW7fy/oqsVz
+	KMmmraYXRoiFj1sep6BYb5xVBb7LN5tP0HDqgBdFMaCLma+1yuBCoenSyzV/2guwi9CJs2Q
+	AJvc6NTpqW7gjlYOC5DvT5CbZMLO9Ru0GHVo91DNPUZ9ltZPwE7vIUdNju4bZMriCQ5KX0D
+	iF0z
+X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+X-QQ-RECHKSPAM: 0
 
-On Wed, Nov 12, 2025 at 09:16:52PM +1000, James Calligeros wrote:
-> The System Management Controller on Apple Silicon devices is responsible
-> for integrating and exposing the data reported by the vast array of
-> hardware monitoring sensors present on these devices. It is also
-> responsible for fan control, and allows users to manually set fan
-> speeds if they so desire. Add a hwmon driver to expose current,
-> power, temperature, and voltage monitoring sensors, as well as
-> fan speed monitoring and control via the SMC on Apple Silicon devices.
-> 
-> The SMC firmware has no consistency between devices, even when they
-> share an SoC. The FourCC keys used to access sensors are almost
-> random. An M1 Mac mini will have different FourCCs for its CPU core
-> temperature sensors to an M1 MacBook Pro, for example. For this
-> reason, the valid sensors for a given device are specified in a
-> child of the SMC Devicetree node. The driver uses this information
-> to determine which sensors to make available at runtime.
-> 
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Co-developed-by: Janne Grunau <j@jannau.net>
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+Since P1 Kconfig directly selects K1_I2C, after the I2C ILCR patch was
+merged, the driver would fail [1] when COMMON_CLK was not selected.
 
-Applied to hwmon-next.
+This series fixes the P1 Kconfig and resends the I2C ILCR patch(This
+patch has reverted by maintainer [2]).
 
-Note that I can not apply the devicetree patch (2/11), presumably since it depends
-on the first patch of the series.
+Now, P1 Kconfig patch has been merged[3], so I2C ILCR patch can be
+merged as well.
 
-Guenter
+In addition, the Kconfig for P1's two subdevices, regulator and RTC,
+has been updated to use 'depends on MFD_SPACEMIT_P1' instead of 'select' and
+change default value from `ARCH_SPACEMIT` to `MFD_SPACEMIT_P1`.
+
+Link: https://lore.kernel.org/oe-kbuild-all/202510202150.2qXd8e7Y-lkp@intel.com/ [1]
+Link: https://lore.kernel.org/all/sdhkjmi5l2m4ua4zqkwkecbihul5bc2dbmitudwfd57y66mdht@6ipjfyz7dtmx/ [2]
+Link: https://lore.kernel.org/all/176244506110.1925720.10807118665958896958.b4-ty@kernel.org/ [3]
+
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+---
+Troy Mitchell (4):
+      i2c: spacemit: configure ILCR for accurate SCL frequency
+      rtc: spacemit: MFD_SPACEMIT_P1 as dependencies
+      regulator: spacemit: MFD_SPACEMIT_P1 as dependencies
+      mfd: simple-mfd-i2c: add default value
+
+ drivers/i2c/busses/Kconfig  |   2 +-
+ drivers/i2c/busses/i2c-k1.c | 159 ++++++++++++++++++++++++++++++++++++++++----
+ drivers/mfd/Kconfig         |   1 +
+ drivers/regulator/Kconfig   |   5 +-
+ drivers/rtc/Kconfig         |   4 +-
+ 5 files changed, 151 insertions(+), 20 deletions(-)
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251021-p1-kconfig-fix-6d2b59d03b8f
+
+Best regards,
+-- 
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
+
 
