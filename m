@@ -1,117 +1,113 @@
-Return-Path: <linux-rtc+bounces-5409-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5410-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F8BBC6BF0E
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 00:06:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A124C6C674
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 03:35:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D96CA364443
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Nov 2025 23:06:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 0C913298D0
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 02:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC8830F553;
-	Tue, 18 Nov 2025 23:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UfvYck1u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3B6286426;
+	Wed, 19 Nov 2025 02:35:53 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FD1309DDD
-	for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 23:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9045017BA1;
+	Wed, 19 Nov 2025 02:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763507200; cv=none; b=sp2bHBS+45X58fOGOg1hs+xLY6NGg8MyyXbZAp/pMTPKaT2aUKKWcN6hjdMLv1vef9kxOTVzt/A6LSSnA+ia8kRdYYYsi+1BBD2c1anbUBQ8TBuySsHx41SMNhuk8ilM8iOZY59tfRjbY7QkMclGgEqCzmFvI27+TD2DlfsbHdw=
+	t=1763519753; cv=none; b=YI+/D9eNZTKRQOKOOCUc9hKqUFVERdIgUPX/NUZ8Nce5pFueaF6+iTZziPhNgK1SVsG8eBf5MU8L0naabrHtKjVvZyfs9db9TKUxQsgWF4Y+bBmC7rxtYh6SCCiCL1ZquzyJ1W6IPDURB2J0UccYNbVGz8JEz4x0V4IO+VBOWJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763507200; c=relaxed/simple;
-	bh=njsPLW5+sRAcBfyQAXjbkM6oMwgJ0E/jrmQ49WJzmtY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jY6Iv/hs+Vxhs4N08VEmBrr9xXcNUOMVfen0RcE8aZmnc1ZwelwBbkMQ8KSXDg6grXcwj5xwjbjX5wGOt5M3WzxiHhuaESoY6RT223rKvwVjMRkjaaupNobt7ykZ32sbsCO5+nw1LTelI3rJTbErzpw5EktBdU8Sq82CHWY9/Ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UfvYck1u; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-3761e5287c9so53419271fa.2
-        for <linux-rtc@vger.kernel.org>; Tue, 18 Nov 2025 15:06:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763507197; x=1764111997; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=njsPLW5+sRAcBfyQAXjbkM6oMwgJ0E/jrmQ49WJzmtY=;
-        b=UfvYck1uNz8mqIo13JFGwzFX9VIkjKIEo9RmRV4QPX5MnAX+9ywoIUDmVoPkCRVIiG
-         3fxyN53ckBdXcvwPWw89T7UAoRuOIys+10yKO3sA++4R44slzYgRUir+QbRn2769mnk4
-         UnUwnfec1xgR4Xn6p22g6kaT7AUAac4rXo6Lmu/xf/BLJjfEXH5eFSFC9uHxVF9+UTu/
-         HGU5ktezAOQtZ36HJxwuWEjhQul4Gcn10kzddMrXMmazzT9msgcv/l0C71FGD5mXbrDK
-         x9lKdHGi+prGGXgWm8LMMM/Td90mu1ZLW+L7bVuf4z9Kl5kYjL1Q39LHBi+TKA/57TK+
-         TdaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763507197; x=1764111997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=njsPLW5+sRAcBfyQAXjbkM6oMwgJ0E/jrmQ49WJzmtY=;
-        b=V8ig1zmvC3mqcR9BSQVJQdhwdawKXgFATply87nuNPv4LmFesP8wwLzvzDPITvNuy1
-         +vIjKAkum3FnFdXG1ufauW4SBwslMJ59vtDqHNyRsGxfoQbg6sXbUlRUy8h9XSebNIei
-         dWxq1y8wELFgoPekDT2FSt/3u0bP4cp6b/eAWAPTR//DiGTGNDwl7TRxV5FKxGhUMGKA
-         G+uIc9vqvi/b13lieZGcdbFy60TUc9RYk0uPYE1K0dL7RsgBo/ST8mGxbno2xnALR7PZ
-         YzvBiuDlrCmd2EFPr0jDnBmF4s3KJfYVIcY6smnSQvaDxF9f00iXvURqO6uTPsEehbH8
-         frPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUu7VpGgf5Yl5Wk7oR4j4RyOELeu9VZfOKFcgnsbvNL+R92W2NaBzJ9igBG6YpICRCqvhrPeQnBrW8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtsY/19Optoq3FuF3+Z3SgAs347r42n6EcKpnqwEkWtdgZkBSz
-	thoHgsi3NBxx4i6VYZE71oOGrkmkRMGupgHR0ifTBfLtA23rMBcqqcNILse1XyxmDRXAZpwpDiM
-	NHoSrB++Q/+EhD014ejbQ6jmI+1gOMt4rgZzFajiFbw==
-X-Gm-Gg: ASbGncvqn37W7CDYrVQDfE5HJsr5U0Qb9caZyyyKaeAXcTfvFvNQwb7Wn+sEZp1EMFL
-	w5KLB7TUAP8aNlkwY/T2nKoODh+2txhvr3Xq2n5rb85xzUZQ9wVY5EBjfBk318ixc5Rz/Urd/Sh
-	4lmWjgj0YEpFPLQ3K86pnPer119mrowpgu7MB0mGwIc7XXjjocM5zVyt9fEPBc7Xa6EqffexH/G
-	wPUSStDegblDPrvua6CNjGWGlkKLkGR+fhI7VRDtnoGSBBFzQjMZDCnXBHehAOWuyXu4/Oe7ShM
-	LHP77w==
-X-Google-Smtp-Source: AGHT+IHgvWgHNR1n7HikNfbECM3QMJGErQNkGV7PI3jzhreQtbR/8j6SX6DzkJAmHt+W6Slk62x/gQ3zMskh1FFfiGU=
-X-Received: by 2002:ac2:4c4b:0:b0:592:fe0f:d9e with SMTP id
- 2adb3069b0e04-5958419866amr5810310e87.7.1763507196990; Tue, 18 Nov 2025
- 15:06:36 -0800 (PST)
+	s=arc-20240116; t=1763519753; c=relaxed/simple;
+	bh=014ovtrA7seX6bLGyJxqCdyEZcNKnMDc6qIU9ej5CFQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CZCWhOpo242K/8aN8igeRgVlZntN/AQNUlbKZT17TCWo8TAZc1InMSkKZEYpUcPQJvJ/ROgVeNUKOyLRIkNukeyecsaaQo6f9QwAWFZH8wwcO7MF3tKPU+Zv2u1f3JEClRV/HOVr3DA0nWWgNEK71L4orabiR4sqvil0rXHPhkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
+Received: from mail.andestech.com (ATCPCS31.andestech.com [10.0.1.89])
+	by Atcsqr.andestech.com with ESMTPS id 5AJ2ZNOI060352
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Nov 2025 10:35:23 +0800 (+08)
+	(envelope-from cl634@andestech.com)
+Received: from swlinux02 (10.0.15.183) by ATCPCS31.andestech.com (10.0.1.89)
+ with Microsoft SMTP Server id 14.3.498.0; Wed, 19 Nov 2025 10:35:23 +0800
+Date: Wed, 19 Nov 2025 10:35:23 +0800
+From: CL Wang <cl634@andestech.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+CC: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, <cl634@andestech.com>
+Subject: Re: [PATCH next] rtc: atcrtc100: Fix signedness bug in probe()
+Message-ID: <aR0s653C4g2auavf@swlinux02>
+References: <aRxPGBEX8hbY6sjV@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1763022807.git.mazziesaccount@gmail.com> <ec2cb44d9d00f5edaed2fbe17fd9ddbed914ff37.1763022807.git.mazziesaccount@gmail.com>
-In-Reply-To: <ec2cb44d9d00f5edaed2fbe17fd9ddbed914ff37.1763022807.git.mazziesaccount@gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 19 Nov 2025 00:06:25 +0100
-X-Gm-Features: AWmQ_bnx0kL6TQjG1WBAuJJp0XRB0JYUZxqe_CZgABTVpH_anNv9ed5mp--DLwo
-Message-ID: <CACRpkdaa_DuXbLYqOV3aOSGywz1wSPc3-7SN8FtwTdVza6-omg@mail.gmail.com>
-Subject: Re: [PATCH v4 05/16] dt-bindings: mfd: ROHM BD72720
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aRxPGBEX8hbY6sjV@stanley.mountain>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-DKIM-Results: atcpcs31.andestech.com; dkim=none;
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:Atcsqr.andestech.com 5AJ2ZNOI060352
 
-On Thu, Nov 13, 2025 at 9:52=E2=80=AFAM Matti Vaittinen
-<matti.vaittinen@linux.dev> wrote:
+On Tue, Nov 18, 2025 at 01:48:56PM +0300, Dan Carpenter wrote:
 
-> From: Matti Vaittinen <mazziesaccount@gmail.com>
->
-> The ROHM BD72720 is a power management IC integrating regulators, GPIOs,
-> charger, LEDs, RTC and a clock gate.
->
-> Add dt-binding doc for ROHM BD72720.
->
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Hi Dan,
 
-This is looking good!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thank you for pointing out the issue and for providing the fix.
 
-Yours,
-Linus Walleij
+You're absolutely correct that using an unsigned type for alarm_irq
+prevents proper error handling when platform_get_irq() returns a
+negative value. I will apply your patch and also review other return
+value checks to ensure there are no similar issues elsewhere.
+
+Thank you again for your detailed review and suggestions.
+
+Best regards,
+CL
+
+> 
+> The "atcrtc_dev->alarm_irq" variable is an unsigned int but it needs to
+> be signed for the error handling to work.  Use the "ret" variable
+> instead.
+> 
+> Fixes: 7adca706fe16 ("rtc: atcrtc100: Add ATCRTC100 RTC driver")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+>  drivers/rtc/rtc-atcrtc100.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-atcrtc100.c b/drivers/rtc/rtc-atcrtc100.c
+> index 51933ae1a2fa..9808fc2c5a49 100644
+> --- a/drivers/rtc/rtc-atcrtc100.c
+> +++ b/drivers/rtc/rtc-atcrtc100.c
+> @@ -296,10 +296,12 @@ static int atcrtc_probe(struct platform_device *pdev)
+>                                      "Failed to initialize RTC: unsupported hardware ID 0x%x\n",
+>                                      rtc_id);
+> 
+> -       atcrtc_dev->alarm_irq = platform_get_irq(pdev, 1);
+> -       if (atcrtc_dev->alarm_irq < 0)
+> -               return dev_err_probe(&pdev->dev, atcrtc_dev->alarm_irq,
+> +       ret = platform_get_irq(pdev, 1);
+> +       if (ret < 0)
+> +               return dev_err_probe(&pdev->dev, ret,
+>                                      "Failed to get IRQ for alarm\n");
+> +       atcrtc_dev->alarm_irq = ret;
+> +
+>         ret = devm_request_irq(&pdev->dev,
+>                                atcrtc_dev->alarm_irq,
+>                                atcrtc_alarm_isr,
+> --
+> 2.51.0
+> 
 
