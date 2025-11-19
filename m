@@ -1,224 +1,465 @@
-Return-Path: <linux-rtc+bounces-5419-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5420-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26678C6E3D7
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 12:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 038A8C6FBBF
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 16:46:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F37FC3815C2
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 11:25:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1D269368173
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Nov 2025 15:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2BE350A38;
-	Wed, 19 Nov 2025 11:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938E62E8B8A;
+	Wed, 19 Nov 2025 15:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="FxDXFFaz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxy1r19Q"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013027.outbound.protection.outlook.com [40.107.159.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645F42F0C7D;
-	Wed, 19 Nov 2025 11:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763551498; cv=fail; b=hWaGF1Q8Yxc0BR/VpCaHGw1bzOD+KlNkfaGvYBzF6WhMaGVJegNcE5ng+aqjyG60SRJuVgMcICOnKlkl9t0lOZw0VL3+hkgtw84F/CQk6N6uucH3/9lSAXkgfgEjWj/mk68NWBb79iwNrRp9yF1GIgB7uhAiU1gRBJmkdjPVulo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763551498; c=relaxed/simple;
-	bh=Kb2MRxlgbvKMSJBY253Obyo6W0mYya2jwSJQjS0n5TM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=fI1VM6isMhPlFE1n5WBMRhs7JcJfHVNq/AIdZEBjBpdnRTMGpoWg9K8UhZpU/CjaVicJ5jYbQMEs0ditgbMRmTud/DaHyejGsAZlV3VvxMUO/cIueGF7n5EgwJIDcGjb8CNvr0gHqYJImNA4AFcPv4UKMep+kCh/XSUOziNNjfQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=FxDXFFaz; arc=fail smtp.client-ip=40.107.159.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=D/wtb1MJRIlrKhAx8TLD/spInLWLmEHxCB5/COTSc6xhO1/wUpRKHHTSV8nnesFS34LHnwB09iKFn0RAuXPajDxHfoECKPchpGxN9n1wvdcAdoSxHBbwumkDd/RVG38HK6KD1HFKYtT2yOG/g0LHUGGuE/Rqbz5kfN3LhdxDBkPJTXpRrHyrSc7Av7AAK5/LbL1DYHWphKcqrCs/l8ejACdY6hvJSJfV8cg+gI9+RWhezOEH34MEolun/09a1HHRi0uI5mXp6R8Mogak14ImGzE/2bxltZU10CB7Sq7xtp82to1KZnt5I+3ByyHLoQvghaDP5MDKKyC/4NxLZhJXbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kb2MRxlgbvKMSJBY253Obyo6W0mYya2jwSJQjS0n5TM=;
- b=hUE+RWsn5YOMAv8/C4y4Pz+Nisg7bOBcKniVpelOw+Z3+y/vpmty9Xi13JMES6xmqaEoYF9cxxyzWqLywTW1CbWHnF5q5VdrJEeCVn511dYOro6zOldOPUnySc3voandmyTSPJtMJ2j7THa4qu/NbTh/iFF/TVWS5NINcyGturIft4xzudazsKnReVcX9CihTgUskJmV5b2BnjssAGynNz/zEvS3DRE3zffa0jXfLfNheOSiMOhgSXcjne9d3oKuR9zu8bd22o7eGSGrbFD/2arIrPAZIQnpQLGmRGI+akUr4frRA3s0NLjLqs8JxhdHbccePFZX9iYIDkAvQ5mPEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kb2MRxlgbvKMSJBY253Obyo6W0mYya2jwSJQjS0n5TM=;
- b=FxDXFFazRAEsabx6zKL6ECVQCSKurUDeODHPTFiunJaCJepfzALafWHm5MgFwDW1Fdc3q2hlQJyPntfoLZCEIKPrFl91P+h04Bmp8nkzdLmfGNvhoseAASSfP27YYE8i+m4uyGw02/pLTVnq63Ucyqk2M6s/4ci0AENY/7ftesmjKU1p1RaLF5+6LTkPqtALSjTWHv8X9Zq7LFPxUA6fLb99crfn/0xJ/K+l/XVqL8LsTvMYJoQZu1Y+YiDC1iHM35eB2Y+XIoz/UtoYCm2bWlL+m54fn0K0U4IvXy3sHeljoGcOq7Lg+hAhlKBqaecUEgzN7ytbjZnRGqH/UhEWZQ==
-Received: from AS4PR04MB9362.eurprd04.prod.outlook.com (2603:10a6:20b:4e7::9)
- by GV1PR04MB10275.eurprd04.prod.outlook.com (2603:10a6:150:1ad::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.22; Wed, 19 Nov
- 2025 11:24:52 +0000
-Received: from AS4PR04MB9362.eurprd04.prod.outlook.com
- ([fe80::e196:11a8:211:feaa]) by AS4PR04MB9362.eurprd04.prod.outlook.com
- ([fe80::e196:11a8:211:feaa%4]) with mapi id 15.20.9320.013; Wed, 19 Nov 2025
- 11:24:52 +0000
-From: Lakshay Piplani <lakshay.piplani@nxp.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "alexandre.belloni@bootlin.com"
-	<alexandre.belloni@bootlin.com>, "linux-rtc@vger.kernel.org"
-	<linux-rtc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "wim@linux-watchdog.org"
-	<wim@linux-watchdog.org>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC: Vikash Bansal <vikash.bansal@nxp.com>, Priyanka Jain
-	<priyanka.jain@nxp.com>, Shashank Rebbapragada
-	<shashank.rebbapragada@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v3 1/5] dt-bindings: rtc: nxp,pcf85363: add
- timestamp mode config
-Thread-Topic: [EXT] Re: [PATCH v3 1/5] dt-bindings: rtc: nxp,pcf85363: add
- timestamp mode config
-Thread-Index: AQHcWS82a7WI7c6Br0eFb0gJuqWNQrT5yneAgAARN3A=
-Date: Wed, 19 Nov 2025 11:24:52 +0000
-Message-ID:
- <AS4PR04MB9362C413D827B0377A70A510FBD7A@AS4PR04MB9362.eurprd04.prod.outlook.com>
-References: <20251119083336.2241142-1-lakshay.piplani@nxp.com>
- <0bc4d069-29bf-4d22-9a38-f9f6222fc07d@kernel.org>
-In-Reply-To: <0bc4d069-29bf-4d22-9a38-f9f6222fc07d@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS4PR04MB9362:EE_|GV1PR04MB10275:EE_
-x-ms-office365-filtering-correlation-id: 640b5c42-697a-448e-8b35-08de275e4211
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|19092799006|7416014|376014|38070700021|921020;
-x-microsoft-antispam-message-info:
- =?utf-8?B?V2ZGbWNobGxBUVM4VGVBZDZZU2I4ZTRDcnpac3pRTy94bUdNSGZWaHpzL3Vw?=
- =?utf-8?B?ZE1DSDlVMjU0ZkVMODlGREFDTWk1RXhVUlhTbTlZTHNjeFAzQVIrdWhJVUJD?=
- =?utf-8?B?NDZuZURiMUlJYjBGMDllKzEzZ3NkQ2VvYTFXaXZkajJ1R2hDbnZJTVQ5clAv?=
- =?utf-8?B?bkNOMUFoTUFreGs5SWJFTkJFRS9vYms1QjQ2N2YvcGNESHFwU2k3MkNXQi82?=
- =?utf-8?B?ckMwRklaN25wc25DalNKQTl2ZUZVRzRJVkFtaHhORVoxbFdXUndkRDY3QlM0?=
- =?utf-8?B?UFpFcGluZ2lhT3ZEQ3kzL2ZQRDI0dHZ6WUxFQUZJYzNaK3NybkRWR00zcHl5?=
- =?utf-8?B?VVAzNHJ0dnlURDM2T3E3elc0bEpqTGRELzRydXFNaWd6ekttSEN3ZjAxMlZ0?=
- =?utf-8?B?QlQ3YlQ4Nng2R1hyVU9FcWltL0l3ZGdKWmhwMXJUeTRMWUhtN3pIMVNOMUxI?=
- =?utf-8?B?YlNCb0xMQzV3bDFhQjBId2FNc3NDSlRFZVRzQzhST293WEFmYyt1Tk50Nnlq?=
- =?utf-8?B?bXRHSUxZbmJWVlJvU0kveEpaajUrWTg2a0VycEFqTVhVTFdVRjlVM2g1bGdh?=
- =?utf-8?B?WmRpcjIzTStFVlgwSTJ0QzV6eGU3dXBNQnR6TVNSb1p6d3FLMGpyOHpCdStT?=
- =?utf-8?B?QUhVcTRwZkp0WVp1dE9MVlBVTnFPMWtsWVdaZGRQR09TSHA0VldMQWhpSyt1?=
- =?utf-8?B?aXFybm5RYzN3UXBweEdLNTgxbjFkQ1p1cFVmY2hyZERKWXM1ZjIyUEhxTDRi?=
- =?utf-8?B?Um9sMVFSNUlHVDZLODdkcGgvNitJdVZ5aHc0WVlpcStwaFZkcVBCRjdkL094?=
- =?utf-8?B?WUQvM0VwZUlYT3h3QjVUbzNiYzFVMXhGbjBHKzRxSGtZQVpBVUlJbE43YzBN?=
- =?utf-8?B?dnp4cVh4dEZ4MDY1azdwSUpPV1VNRWdiZUVIdVFHVlBlTUdGdEdKZkhrZU1M?=
- =?utf-8?B?ZEhaaTMrSHNIYlRkNkFxUVJqZ1NnZ1VWeVh2bStpdDNtMkRkUEJMSlA3V3Nx?=
- =?utf-8?B?Y2NYRnAwUWRCTU80SE00ci9VeDFVZDZ5UVI5VHVvR0kwaFlFRnVrbExKSDFu?=
- =?utf-8?B?WkpLQlI2d1k0TUZRRitnbjJoaUJEbFpMUnpuS1dtc2g5UEVORG80QlcvbWZ2?=
- =?utf-8?B?d3krd1BxL2IvWVNnUUQ4eXlMVXBNT3NoU0V1Q012b1VFL0FVTHRaMWlEck9w?=
- =?utf-8?B?VUZtcVVxMHlVL1Jsa0NWcmhYbExzZTRPblpHeUc5MFlwdlBwbmtrb2poMVJ3?=
- =?utf-8?B?dGR5Z2Q5V0VtWEYxeEtkdnp2cmM3UENEYWJ4QVpHeXlzdjhmdG5Gcy85Vk9P?=
- =?utf-8?B?R2dEcStGTklhQXM0dlNVcVVoZEcrbnZudjRzejY3amoxdFJsMC9iUUh6SXFl?=
- =?utf-8?B?NUJKbStrWlJlU0hYRk9FZnNlYThsMEwrZy8wS1hsejdrTjJsSXB3bjYvWDdE?=
- =?utf-8?B?NkduQndHNGNSQjlrY0RDQ2dqTHBiVzVHNmNJdW9NYUhyRUZiNHp4NFVyOEIz?=
- =?utf-8?B?cy9sdzB2dWdUeDZKN21BejNSZGw1V24xemhKSnFwKzJRelNQMy9oWldMUENR?=
- =?utf-8?B?ZFBwZVpXTGhiZDBTSlF0NTRoZzB5R2VKT3ZweVZvTUZ5SWVrTzZ4TGdsMDVl?=
- =?utf-8?B?RUJJVnBTR3kwMW5GUG1NTkZFN09PYXFEUEdXek5tZlZPODJkdEdUZHZFMmhK?=
- =?utf-8?B?RzBGTERoZm9OS3ZNK25oRklkdnpwY3RjNzlTRUFidC8yTnZqUVZhcHY3cmJS?=
- =?utf-8?B?NGRDRWE2Tm8yenBndS93REo5ckgyVDNGOWhhbW9lVVh2Z3dWYlp6Sy9DaEJa?=
- =?utf-8?B?QlFMS0VrZmNvSDR2Vm00Q25DbWpNWDFXWGdTRWVWT3ZjTStFUlhsSWx4dXRH?=
- =?utf-8?B?SkU5elFwVk54NFAwSkpUZ2pVN29SN04wSlFMQ2dXdlVpYkdFYlhxTnB2N3Bp?=
- =?utf-8?B?RVpoc1lSbDRubXcyb0NqTDN0ajErbkNQckJjTEFEV0V0L2kzY2VSbzcvM2kr?=
- =?utf-8?B?SHIwOTZKZXk0aHlDQnVkUHR2QlM5ZFdVbFpleXZhVko3V2k5RHZEc1V3U1V0?=
- =?utf-8?B?ajZRejExVTNWd0lCb3o2Z2s2aEZQdlhVdk44Zz09?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9362.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(7416014)(376014)(38070700021)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?ekVQaUdSTGV2NDZWalJSWW5GaXA2b0UrdFN1ZUdkSUZtanpIQ3JUN3ZZMnpy?=
- =?utf-8?B?N3J2Y1FmWXY5bWZDWnBwV0ljNS80YXR5SnZ0Si9KYzFwZ0xkZWxaS1o2SCsw?=
- =?utf-8?B?bzdGaDdGVGdRRlVBN3VudGEvVkhjeDdDQlppK0puWHB4SmNoOHY1M1RsbkIy?=
- =?utf-8?B?V2RURnlGcmIzYnNmYzdJTWQvb1VrRlZUcG1Eb2xKWjJua0lXaCtxWi9YV3dZ?=
- =?utf-8?B?c1kwMVgxdFpVUFhkMVRCeGszRytYK3dGUWVLQUkvUEV1VkZHelkzYWp5ZTND?=
- =?utf-8?B?MjBHczVBdGlQM24xV0w2aG5heU8va25PeGxzZFlub2RJMFJiMUl4blVlUGlF?=
- =?utf-8?B?U0FnUVNiVk51dzZQMXJDS0VWTENWdGFIbWRFMk5hQnhZN3RhTHl3bjVTYTZU?=
- =?utf-8?B?WXB1bnVYYzFXV3JSbFVvMkNZKzVBS0dqS05YUjhVa3BDa3Z0WlRQcENYaTJi?=
- =?utf-8?B?UUdiWk5SWTExa2FneDVSTDVJYXBtNmdCTVl5NFhEVFhRaWpvUXFOa3ZYZGhB?=
- =?utf-8?B?VUFlcEZNY3pNK0JwUnZ2TVR1L2dOeWpRTjFLZDlWSFB5bnVvK0xpQmJFMWIx?=
- =?utf-8?B?U2NPdWNFQTlNd3JCWE85d3dNTFZOaXNMY1dwdk5rRk5ZK3R1N2pCcldrT2ps?=
- =?utf-8?B?N2pXTkpQUTFyYlh3MDNkRnpuNFdkclFFUW9LNjBJY21Dby9BeE15dUtTY2xF?=
- =?utf-8?B?TnZCMU9lSThTRzZkbGhyOTZ0SFJGY3dXKzlXMDEyYko1clVMcVhDM0tLRkto?=
- =?utf-8?B?TVIwd1ZXendZRVdRMFFTcFFCZ09tUTFlTTRVVkREaHhML0M0Qk1EeXBhYW9y?=
- =?utf-8?B?QlZlQXJlSEswZVFHQXhsSGUwN2NKeVRpdTczbzdwMndZNDFDSFJDdE1sUDc4?=
- =?utf-8?B?bzhlZXNOMmtBRWdpZ1pyYm1DMmtvVHd4VE5IdjliWlRyakhkellGZlF1NEZD?=
- =?utf-8?B?ZnVRZ2diTzBoMFRJN2oxQWVMb2UxRWMxd3dBQm4vK2R2anUxWUhNYWdQRjc0?=
- =?utf-8?B?N0tDUm1UZHpVZ0xoYUdLWFNLSXZKS2VQWGZmd3lBM2U4WURoaDByT09Jck9V?=
- =?utf-8?B?VGdKdzFCQjA2V24zNTY2S0hSbVdwTmthb2diZ1ltVzIxMzNzZmhZSm5MMkcr?=
- =?utf-8?B?UFhLT3NQZG5oakZEM2xyRkdCWmhDNk1JV2o0UHdFOGhYblBKOHhnMWt3ejV2?=
- =?utf-8?B?SXloUVZjMERRa0dvMXBCWEpuMm1rRmdWdzBiVDVDWTA0RVU0VDdwNkZWUVQ4?=
- =?utf-8?B?eXBlYmxpWitVLzRWTmMxTVJsM2ViNy9TbVBvQ1k1ZUpJT08xM0thQVNFcTcx?=
- =?utf-8?B?NVlOeVo0cE9IK29XQVN6T1ZUaGJ5Znl0WHp1a3lhL1JjV2lCOGZJMDMrMFQr?=
- =?utf-8?B?V0RadjM2bDVCMDRWeVdTQlZTZmtIV1NrRlk4cngvQnc0M1JKMkg1aURub0V0?=
- =?utf-8?B?RUhQTWF3TG1tWCtPb0ZaMGJQY0dHZHVTOFhCRUpwUXlveE9CMFEzR0JrbEtZ?=
- =?utf-8?B?MFlxVlZDT2dORlc3MmN6RXpVZHhRcCtyUkIwY0RkUFg0L0szMnFBVlYzaTNt?=
- =?utf-8?B?bzNidEJkdkU0dGRQUlFsMnlORnU5bkhaVFIycHMwampQRGxqWDNzb1o5MjYy?=
- =?utf-8?B?eGd3MEgwOFVHdWxHcWZCVUovbjhVNmZERTZDenNVS05TbDFneUNGSG4veG1X?=
- =?utf-8?B?TVN2TlFLT3g5T2tDZS9OeDNaYnF1czh0NGVNL2tLTXRuWDJqNitNUkhDRlBH?=
- =?utf-8?B?VlVrOGFkdnpmUXBnKytJNW8wVThWTmQxN1NybllIdkZaR1NrZXBsbWNzd0VX?=
- =?utf-8?B?SzJhbFhDVkErYTBUZUR2WFlhellaMXc1a2pKWm83VW45UUdEOXlVZU9rMGE2?=
- =?utf-8?B?aXNoTVpTcHBoZjFBN0VXK3NTNGxjbCtLY0x3d0tRUHg2a0JIb3NwdjFveDUv?=
- =?utf-8?B?V0lZcE5ndXFsbm1GaFdoczJwSmU1S0NRZmtuOUlMMVJmcVNYUVdwd1hZNmsz?=
- =?utf-8?B?WnBaWVpKcDlneFVDV2E3WHhvTjQ0S25XQjd5ZUsyMDBmRCtLcHVCZzlsQ3B3?=
- =?utf-8?B?dGo2TDEySGFkYW95NkZqODBlWVFDZ0VNbjBub0RBa2JNYXYyNFhtMUx1WjhN?=
- =?utf-8?Q?kL3QqBQAH3LXrAL4ynvrhY9rC?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD07E2D8390
+	for <linux-rtc@vger.kernel.org>; Wed, 19 Nov 2025 15:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763566649; cv=none; b=HoOBw3FdM23Zk7qMPt/Mt45AZKi04YutWdgmAVCkckTeiVhHFlwZCKyjJXvnQ2cMyeHxH9wTsrmAZidQk/ICjWbPEojIo6KQ/IjGIxD4LlgJvBt5hFuPrubTCS2MArQ1EK6lZOpxXLo7fbHCHmYugcA/kggcbX+vZV3CbYA2xIA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763566649; c=relaxed/simple;
+	bh=JNsHnpqqoCu9TLMATnBtnxuYup7Rli8LSx7MEXVnfyM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N2By/hUWrIKn+ahGP5mjN0yVxIMV2r3v4lQr3coNzMru7O32frHBZS0611dcZkcLZNg61I2HdCPD6SsBjnhdmuFaU2P1p7shjlcsthAFDlow4Gh3fBQypbfVjiHTygbQvEQC9xFsxEQcuukwQkyQc8Rmu/MDfbJ2zJIG9NLw80A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxy1r19Q; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-29845b06dd2so79108835ad.2
+        for <linux-rtc@vger.kernel.org>; Wed, 19 Nov 2025 07:37:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763566646; x=1764171446; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sxmUZsoOCJ6lHkKgggTpYT42aa6xpsfZ81OfTf3Cb4Y=;
+        b=bxy1r19QGnA+osPEYdILR8CyW2VW+o1QBm2R/LG7UgHHe/5VWCKtSyBobYsTrHQK4q
+         lmvK+h2QshpYiRUmJPkcKSTwA7kEXicIqFzbKs+9ubq7wyMFLj/2NNgJ6fFzyMPme8B/
+         qkdnnyF/GWkfCDTu0IeJ6tqh9PZKSDUc90lhCbmjzm/qkqtAkifSCOBhxSUbGsROUZSI
+         LubkW/PJXjUyiyZ2eFMLhmDBtywrAnSCvTsjhz5RosVTAmOBni+llWpy9DkwU+4AXwpb
+         5lxaxSN/XIMU/VsBfNEI8v5UK5HMmOMliKzySxWl9TFB6V/VfSiu+MvwIW6oqpsMszB1
+         zlEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763566646; x=1764171446;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sxmUZsoOCJ6lHkKgggTpYT42aa6xpsfZ81OfTf3Cb4Y=;
+        b=k+dnWZDtbaxv9u/ayFf1uG5ZrbOo/+3IFGI89ApTa7VJjbJ/jr/1Y8l4q3ooMWUf/F
+         ncF/3p+Q5ktTzciZfSzujphxJBRfgR486UbQN4JjxMgmUSMitjIx1gForJWSGrbH64Su
+         nGWLNScNVaX5LbrP3iwdMRxgsPVniRbsAKxbA9yYpfu2HgzbUyw4cvsIpbz0eh2wqepX
+         G9oi54k52o+BHxKcmBTG/riKt5jdhkU3Jubb/oiSiu+IxRq2vw/jz/PmAFCTYOmPkTyi
+         qQkzr/FMDRTZ5H5Y3QvIgQtHwRm8/YFRZOZtam+XQQKcPckxq2KtTrvLYgX45uDwyZyT
+         6qUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUjLUckUJZIyChV7qM+bHQ044H4C+sw+HO64Xa2FlaYFElY2eUKohPEyFH9j1+s5P+V1GdALSGmytE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+vE9kHDayNhOTSg6GTIrCYLH4K6PSlU0uCXnr++PkVVakdhgG
+	D9pkT5W4iW7iVabUmi2KgiED6U+dhbd6NMtUjVO/6zAXANAnejTcTaoV
+X-Gm-Gg: ASbGncv5Rn7z7IaXuDLeuAENHbRfYGh7EFfc+n1wVVa8ZdDatXq7TxScGP/rDHpLbdM
+	qT1onCKuwGoecZMKBT2iCy3hj97xX+nVytSMeOjzTf8rhl6ZpH1GOlBgkxG7/K5jm19HBfPw4n7
+	qMMLcAR+Vtz23Q6ZRHgj45ppLQtxLchtoyfhCUjspKoVuPg369B/pQBUY3UB4M3fN41b7gc8rgR
+	3/bMYM4xxzBa1TCwNc43PaFxGKbcmkE7nNbP5bTTgN1kP2jJg927tGanNRoi8BHiEUSMUQq5585
+	5ERHt4Kbxor9ZioiYkoOrDrBVM/OKWRv626Cyw8ZNd6mvHYROsR8RxWOIh8qnhpguGSsGbucFJ0
+	dI0yv3JD/YLAaypalapYFrGZi0+kiQsNL/2XT68t2RzjqK1LV06DnSh6HinK8cxrbpM0+pZo2Ha
+	keQTKstce+SCAHr+l43RxippWfk9JgA51uVjsqHxQg2CL6cAgaliU/GFHBFw1wSUiQGTQ11RAiL
+	bvy53h9BRiQqdrkaUU=
+X-Google-Smtp-Source: AGHT+IHVXFdR7cHMhK0rOfUZUByORTk73+zezC6P5A0R5dzlzFk9qnN2xEZ09nwutx6vHEJoHpqMzw==
+X-Received: by 2002:a17:903:120b:b0:295:613f:3d6a with SMTP id d9443c01a7336-2986a72ca49mr231540215ad.29.1763566645884;
+        Wed, 19 Nov 2025 07:37:25 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2bed39sm209572605ad.77.2025.11.19.07.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Nov 2025 07:37:25 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <06fbcdd3-4368-44e0-9a31-6cf83fa625d5@roeck-us.net>
+Date: Wed, 19 Nov 2025 07:37:23 -0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9362.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 640b5c42-697a-448e-8b35-08de275e4211
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Nov 2025 11:24:52.1657
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FwYQsnYeTnI8qbefSBVeajVcxuff7EQEALpDxpLBoE5irdedIxUfTrVRIfEruTGPUYKzAj0/+qxqITqKaBJRoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10275
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 5/5] rtc: pcf85363: add watchdog support with
+ configurable step size
+To: Lakshay Piplani <lakshay.piplani@nxp.com>, alexandre.belloni@bootlin.com,
+ linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ wim@linux-watchdog.org, linux-watchdog@vger.kernel.org
+Cc: vikash.bansal@nxp.com, priyanka.jain@nxp.com,
+ shashank.rebbapragada@nxp.com
+References: <20251119083336.2241142-1-lakshay.piplani@nxp.com>
+ <20251119083336.2241142-5-lakshay.piplani@nxp.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251119083336.2241142-5-lakshay.piplani@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
-d3NraSA8a3J6a0BrZXJuZWwub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDE5LCAy
-MDI1IDM6NTMgUE0NCj4gVG86IExha3NoYXkgUGlwbGFuaSA8bGFrc2hheS5waXBsYW5pQG54cC5j
-b20+Ow0KPiBhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNvbTsgbGludXgtcnRjQHZnZXIua2Vy
-bmVsLm9yZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHJvYmhAa2VybmVsLm9y
-Zzsga3J6aytkdEBrZXJuZWwub3JnOw0KPiBjb25vcitkdEBrZXJuZWwub3JnOyBkZXZpY2V0cmVl
-QHZnZXIua2VybmVsLm9yZzsgd2ltQGxpbnV4LXdhdGNoZG9nLm9yZzsNCj4gbGludXhAcm9lY2st
-dXMubmV0OyBsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IFZpa2FzaCBCYW5z
-YWwgPHZpa2FzaC5iYW5zYWxAbnhwLmNvbT47IFByaXlhbmthIEphaW4NCj4gPHByaXlhbmthLmph
-aW5AbnhwLmNvbT47IFNoYXNoYW5rIFJlYmJhcHJhZ2FkYQ0KPiA8c2hhc2hhbmsucmViYmFwcmFn
-YWRhQG54cC5jb20+DQo+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0ggdjMgMS81XSBkdC1iaW5k
-aW5nczogcnRjOiBueHAscGNmODUzNjM6IGFkZA0KPiB0aW1lc3RhbXAgbW9kZSBjb25maWcNCj4g
-DQo+IENhdXRpb246IFRoaXMgaXMgYW4gZXh0ZXJuYWwgZW1haWwuIFBsZWFzZSB0YWtlIGNhcmUg
-d2hlbiBjbGlja2luZyBsaW5rcyBvcg0KPiBvcGVuaW5nIGF0dGFjaG1lbnRzLiBXaGVuIGluIGRv
-dWJ0LCByZXBvcnQgdGhlIG1lc3NhZ2UgdXNpbmcgdGhlICdSZXBvcnQNCj4gdGhpcyBlbWFpbCcg
-YnV0dG9uDQo+IA0KPiANCj4gT24gMTkvMTEvMjAyNSAwOTozMywgTGFrc2hheSBQaXBsYW5pIHdy
-b3RlOg0KPiA+IE5YUCBQQ0Y4NTI2My9QQ0Y4NTM2MyBwcm92aWRlcyB0aHJlZSB0aW1lc3RhbXAg
-cmVnaXN0ZXJzIChUU1IxLVRTUjMpDQo+ID4gd2hpY2ggbGF0Y2ggdGhlIGN1cnJlbnQgdGltZSB3
-aGVuIGEgc2VsZWN0ZWQgZXZlbnQgb2NjdXJzLiBBZGQgYQ0KPiA+IHZlbmRvciBzcGVjaWZpYyBw
-cm9wZXJ0eSwgbnhwLHRpbWVzdGFtcC1tb2RlLCB0byBzZWxlY3QgdGhlIGV2ZW50DQo+ID4gc291
-cmNlIGZvciBlYWNoIHJlZ2lzdGVyLg0KPiA+DQo+ID4gQWxzbyBpbnRyb2R1Y2UgYSBuZXcgaGVh
-ZGVyICdwY2Y4NTM2My10c3IuaCcgdG8gZXhwb3NlIG1hY3JvcyBmb3INCj4gPiB0aW1lc3RhbXAg
-bW9kZSBmaWVsZHMsIGltcHJvdmluZyByZWFkYWJpbGl0eSBvZiBkZXZpY2UgdHJlZSBmaWxlLg0K
-PiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTGFrc2hheSBQaXBsYW5pIDxsYWtzaGF5LnBpcGxhbmlA
-bnhwLmNvbT4NCj4gPiAtLS0NCj4gPiBWMiAtPiBWMzoNCj4gPiAtIE5vIGNoYW5nZXMgaW4gdjMN
-Cj4gPiAtIEFkZGVkIFJldmlld2VkLWJ5OiBSb2IgSGVycmluZyA8cm9iaEBrZXJuZWwub3JnPg0K
-PiANCj4gSSBkb24ndCBzZWUgaXQuIFBsZWFzZSBzdGFydCB1c2luZyBiNCwgc28gc3VjaCB0cml2
-aWFsaXRpZXMgd29uJ3QgYWZmZWN0IHRoZSBwcm9jZXNzLg0KPiANCj4gQmVzdCByZWdhcmRzLA0K
-PiBLcnp5c3p0b2YNCg0KSGkgS3J6eXN6dG9mLA0KDQpUaGFua3MgZm9yIHBvaW50aW5nIHRoYXQg
-b3V0Lg0KDQpJIG1pc3Rha2VubHkgbWVudGlvbmVkIHRoZSBSZXZpZXdlZC1ieSB0YWcgaW4gdGhl
-IGNoYW5nZWxvZyBidXQgZm9yZ290IHRvIGluY2x1ZGUgaXQgaW4gdGhlIGFjdHVhbCBjb21taXQu
-IEnigJlsbCBtYWtlIHN1cmUgdG8gYWRkIGl0IGluIHRoZSB2NCBEVCBwYXRjaCBhbmQgc3RhcnQg
-dXNpbmcgYjQgZm9yIHByZXBhcmluZyBmdXR1cmUgcmV2aXNpb25zIHRvIGF2b2lkIHN1Y2ggaXNz
-dWVzLg0KDQpCZXN0IHJlZ2FyZHMsDQpMYWtzaGF5DQo=
+On 11/19/25 00:33, Lakshay Piplani wrote:
+> Add watchdog timer support to PCF85263/PCF85363 using the linux watchdog
+> subsystem. The driver programs the hardware watchdog timeout based on
+> the requested period.
+> 
+> Also use rtc_add_group() instead of sysfs_create_group() to register
+> timestamp attributes under the RTC class device (/sys/class/rtc/rtcX).
+> 
+> Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+> ---
+> V2 -> V3:
+> - Split into separate patches as suggested:
+>    - Battery switch-over detection.
+>    - Timestamp recording for TS pin and battery switch-over events.
+>    - Offset calibration.
+>    - Watchdog timer (to be reviewed by watchdog maintainers).
+> - Dropped Alarm2 support
+> - Switched to rtc_add_group() for sysfs attributes
+> - Removed failure paths after RTC device registration as per subsystem guidelines.
+> V1 -> V2:
+> - Watchdog related changes due to removal of vendor specific properties
+>    from device tree
+>    * remove vendor DT knobs (enable/timeout/stepsize/repeat)
+>    * use watchdog_init_timeout (with 10s default)
+>    * derive clock_sel from final timeout
+>    * default, repeat=true (repeat mode)
+> - Fixed uninitalised warning on 'ret' (reported by kernel test robot)
+> - Use dev_dbg instead of dev_info for debug related print messages
+> - Minor cleanup and comments
+> 
+>   drivers/rtc/rtc-pcf85363.c | 168 +++++++++++++++++++++++++++++++++++--
+>   1 file changed, 160 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
+> index 3d733375187b..34d4c2e16774 100644
+> --- a/drivers/rtc/rtc-pcf85363.c
+> +++ b/drivers/rtc/rtc-pcf85363.c
+> @@ -5,6 +5,10 @@
+>    * Driver for NXP PCF85363 real-time clock.
+>    *
+>    * Copyright (C) 2017 Eric Nelson
+> + *
+> + * Copyright 2025 NXP
+> + * Added support for timestamps, battery switch-over,
+> + * watchdog, offset calibration.
+>    */
+>   #include <linux/module.h>
+>   #include <linux/i2c.h>
+> @@ -17,6 +21,8 @@
+>   #include <linux/device.h>
+>   #include <linux/of.h>
+>   #include <linux/regmap.h>
+> +#include <linux/rtc.h>
+> +#include <linux/watchdog.h>
+>   
+>   /*
+>    * Date/Time registers
+> @@ -127,6 +133,18 @@
+>   #define OFFSET_MAXIMUM  127
+>   #define OFFSET_MASK     0xFF
+>   
+> +#define WD_MODE_REPEAT  BIT(7)
+> +#define WD_TIMEOUT_MASK GENMASK(6, 2)
+> +#define WD_TIMEOUT_SHIFT        2
+> +#define WD_CLKSEL_MASK  GENMASK(1, 0)
+> +#define WD_CLKSEL_0_25HZ        0x00
+> +#define WD_CLKSEL_1HZ   0x01
+> +#define WD_CLKSEL_4HZ   0x02
+> +#define WD_CLKSEL_16HZ  0x03
+> +
+> +#define WD_TIMEOUT_MIN  1
+> +#define WD_TIMEOUT_MAX  0x1F
+> +
+>   struct pcf85363 {
+>   	struct rtc_device	*rtc;
+>   	struct regmap		*regmap;
+> @@ -138,6 +156,15 @@ struct pcf85x63_config {
+>   	unsigned int num_nvram;
+>   };
+>   
+> +struct pcf85363_watchdog {
+> +	struct watchdog_device wdd;
+> +	struct regmap *regmap;
+> +	struct device *dev;
+> +	u8 timeout_val;
+> +	u8 clock_sel;
+> +	bool repeat;
+> +};
+> +
+>   static int pcf85363_load_capacitance(struct pcf85363 *pcf85363, struct device_node *node)
+>   {
+>   	u32 load = 7000;
+> @@ -323,12 +350,13 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
+>   		return IRQ_NONE;
+>   
+>   	if (flags) {
+> -		dev_dbg(&pcf85363->rtc->dev, "IRQ flags: 0x%02x%s%s%s%s%s\n",
+> +		dev_dbg(&pcf85363->rtc->dev, "IRQ flags: 0x%02x%s%s%s%s%s%s\n",
+>   			flags, (flags & FLAGS_A1F) ? " [A1F]" : "",
+>   			(flags & FLAGS_TSR1F) ? " [TSR1F]" : "",
+>   			(flags & FLAGS_TSR2F) ? " [TSR2F]" : "",
+>   			(flags & FLAGS_TSR3F) ? " [TSR3F]" : "",
+> -			(flags & FLAGS_BSF) ? " [BSF]" : "");
+> +			(flags & FLAGS_BSF) ? " [BSF]" : "",
+> +			(flags & FLAGS_WDF) ? " [WDF]" : "");
+>   	}
+>   
+>   	if (flags & FLAGS_A1F) {
+> @@ -360,6 +388,11 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
+>   		handled = true;
+>   	}
+>   
+> +	if (flags & FLAGS_WDF) {
+> +		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_WDF, 0);
+> +		handled = true;
+> +	}
+> +
+>   	return handled ? IRQ_HANDLED : IRQ_NONE;
+>   }
+>   
+> @@ -503,6 +536,123 @@ static const struct pcf85x63_config pcf_85363_config = {
+>   	.num_nvram = 2
+>   };
+>   
+> +/*
+> + * This function sets the watchdog control register based on the timeout,
+> + * clock selection and repeat mode settings. It prepares the value to
+> + * write into the watchdog control register (CTRL_WDOG).
+> + */
+> +static int pcf85363_wdt_reload(struct pcf85363_watchdog *wd)
+> +{
+> +	u8 val;
+> +
+> +	val = (wd->repeat ? WD_MODE_REPEAT : 0) |
+> +	       ((wd->timeout_val & WD_TIMEOUT_MAX) << WD_TIMEOUT_SHIFT) |
+> +	       (wd->clock_sel & WD_CLKSEL_MASK);
+> +
+> +	return regmap_write(wd->regmap, CTRL_WDOG, val);
+> +}
+> +
+> +static int pcf85363_wdt_start(struct watchdog_device *wdd)
+> +{
+> +	struct pcf85363_watchdog *wd = watchdog_get_drvdata(wdd);
+> +
+> +	return pcf85363_wdt_reload(wd);
+> +}
+> +
+> +static int pcf85363_wdt_stop(struct watchdog_device *wdd)
+> +{
+> +	struct pcf85363_watchdog *wd = watchdog_get_drvdata(wdd);
+> +
+> +	return regmap_write(wd->regmap, CTRL_WDOG, 0);
+> +}
+> +
+> +static int pcf85363_wdt_ping(struct watchdog_device *wdd)
+> +{
+> +	struct pcf85363_watchdog *wd = watchdog_get_drvdata(wdd);
+> +
+> +	regmap_update_bits(wd->regmap, CTRL_FLAGS, FLAGS_WDF, 0);
+> +
+> +	return pcf85363_wdt_reload(wd);
+> +}
+> +
+> +static int pcf85363_wdt_set_timeout(struct watchdog_device *wdd,
+> +				    unsigned int timeout)
+> +{
+> +	struct pcf85363_watchdog *wd = watchdog_get_drvdata(wdd);
+> +
+> +	wd->timeout_val = clamp(timeout, WD_TIMEOUT_MIN, WD_TIMEOUT_MAX);
+> +	wdd->timeout = wd->timeout_val;
+> +
+> +	return pcf85363_wdt_reload(wd);
+> +}
+> +
+> +static const struct watchdog_info pcf85363_wdt_info = {
+> +	.identity = "PCF85363 Watchdog",
+> +	.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
+> +};
+> +
+> +static const struct watchdog_ops pcf85363_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = pcf85363_wdt_start,
+> +	.stop = pcf85363_wdt_stop,
+> +	.ping = pcf85363_wdt_ping,
+> +	.set_timeout = pcf85363_wdt_set_timeout,
+> +};
+> +
+> +static int pcf85363_watchdog_init(struct device *dev, struct regmap *regmap)
+> +{
+> +	struct pcf85363_watchdog *wd;
+> +	unsigned int timeout_sec;
+> +	int ret;
+> +
+> +	if (!IS_ENABLED(CONFIG_WATCHDOG))
+> +		return 0;
+> +
+> +	wd = devm_kzalloc(dev, sizeof(*wd), GFP_KERNEL);
+> +	if (!wd)
+> +		return -ENOMEM;
+> +
+> +	wd->regmap = regmap;
+> +	wd->dev = dev;
+> +
+> +	wd->wdd.info = &pcf85363_wdt_info;
+> +	wd->wdd.ops = &pcf85363_wdt_ops;
+> +	wd->wdd.min_timeout = WD_TIMEOUT_MIN;
+> +	wd->wdd.max_timeout = WD_TIMEOUT_MAX;
+> +	wd->wdd.parent = dev;
+> +	wd->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
+> +
+> +	ret = watchdog_init_timeout(&wd->wdd, 10, dev);
+
+Calling watchdog_init_timeout() with a value other than 0 means that
+a parameter from devicetree won't be accepted. Calling it with a fixed
+value is usually pointless unless the value is out of the valid range,
+which by itself would be pointless.
+
+watchdog_init_timeout() is normally called to pass and validate a module
+parameter or to pick a timeout from devicetree. Calling it with a constant
+value other than 0 is unnecessary.
+
+> +	if (ret)
+> +		wd->wdd.timeout = clamp(10U, WD_TIMEOUT_MIN, WD_TIMEOUT_MAX);
+
+So if 10 seconds is invalid, 10 is clamped to [1, 31] and applied directly.
+That is an odd and complicated way of setting the timeout to 10 seconds.
+
+If you don't want a timeout value from devicetree to be accepted, just make this
+
+	wd->wdd.timeout = 10;
+
+and do not call watchdog_init_timeout() in the first place.
+
+> +
+> +	timeout_sec = wd->wdd.timeout;
+> +
+> +	if (timeout_sec <= 2)
+> +		wd->clock_sel = WD_CLKSEL_16HZ;
+> +	else if (timeout_sec <= 8)
+> +		wd->clock_sel = WD_CLKSEL_4HZ;
+> +	else if (timeout_sec <= 16)
+> +		wd->clock_sel = WD_CLKSEL_1HZ;
+> +	else
+> +		wd->clock_sel = WD_CLKSEL_0_25HZ;
+> +
+
+This seems an odd location for this code. What if the timeout changes
+later on to one of the other values ?
+
+Also, the timeout is set to a fixed value of 10. That means the above
+can be simplified to
+	wd->clock_sel = WD_CLKSEL_1HZ;
+... and that in turn means that the variable is pointless, and that
+WD_CLKSEL_1HZ could be used as constant instead.
+
+Why all that complexity ? Am I missing something ? I am quite concerned that
+I may be missing trees in the forest, meaning that the real problems are hiding
+behind the noise.
+
+Guenter
+
+> +	wd->repeat = true;
+
+What is the purpose of this variable ? It is always set to true.
+You might as well drop it.
+
+> +
+> +	ret = regmap_update_bits(regmap, CTRL_FLAGS, FLAGS_WDF, 0);
+> +	if (ret) {
+> +		dev_err(dev, "failed to clear WDF:%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	watchdog_set_drvdata(&wd->wdd, wd);
+> +
+> +	dev_dbg(dev, "pcf85363 watchdog registered (timeout=%us, clk_sel=%u)\n",
+> +		timeout_sec, wd->clock_sel);
+> +
+> +	return devm_watchdog_register_device(dev, &wd->wdd);
+> +}
+> +
+>   /*
+>    * Reads 6 bytes of timestamp data starting at the given base register,
+>    * converts them from BCD to binary, and formats the result into a
+> @@ -684,20 +834,22 @@ static int pcf85363_probe(struct i2c_client *client)
+>   			   PIN_IO_TSPM | PIN_IO_TSIM,
+>   			   PIN_IO_TSPM | PIN_IO_TSIM);
+>   
+> +	ret = pcf85363_watchdog_init(dev, pcf85363->regmap);
+> +	if (ret)
+> +		dev_err_probe(dev, ret, "Watchdog init failed\n");
+> +
+>   	if (irq_a > 0 || wakeup_source)
+>   		device_init_wakeup(dev, true);
+>   
+>   	dev_set_drvdata(&pcf85363->rtc->dev, pcf85363);
+>   
+> -	ret = devm_rtc_register_device(pcf85363->rtc);
+> -
+> +	ret = rtc_add_group(pcf85363->rtc, &pcf85363_attr_group);
+>   	if (ret)
+> -		return dev_err_probe(dev, ret, "RTC registration failed\n");
+> -
+> -	ret = sysfs_create_group(&pcf85363->rtc->dev.kobj, &pcf85363_attr_group);
+> +		return ret;
+>   
+> +	ret = devm_rtc_register_device(pcf85363->rtc);
+>   	if (ret)
+> -		return dev_err_probe(dev, ret, "Timestamp sysfs creation failed\n");
+> +		return dev_err_probe(dev, ret, "RTC registration failed\n");
+>   
+It is not entirely obvious how those changes are related to adding watchdog support
+to this driver.
+
+>   	for (i = 0; i < config->num_nvram; i++) {
+>   		nvmem_cfg[i].priv = pcf85363;
+
 
