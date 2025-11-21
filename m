@@ -1,42 +1,43 @@
-Return-Path: <linux-rtc+bounces-5450-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5451-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A385C78F78
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 13:13:40 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80387C78F60
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 13:13:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9B0E74EC780
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 12:12:05 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4C3C135FD2F
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 12:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB20834BA3A;
-	Fri, 21 Nov 2025 12:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3524034D39B;
+	Fri, 21 Nov 2025 12:11:54 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745D2346785;
-	Fri, 21 Nov 2025 12:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83AD034AB13;
+	Fri, 21 Nov 2025 12:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763727110; cv=none; b=YDmRquvQuGX0mQt3G5B12FWsL6RytcFsahkIIRREttVvxyFl9BlJyInEIvS8Vo0BD1LcBX8zyArQNT2rzJ6lpeDjttDDc7CM8/Znepw7VWpoShgm1GKE0PuSPZ82dK6Efbcojbtt1NxsNi9cdvNZGxKjSypp5LNqGi78iO3HhLw=
+	t=1763727114; cv=none; b=ZR1l/Jq02xGD0RNA4TxLmDjEjAwlOOGumiorpHj9cj+MLmDJrQ2+UszOVJ0kC2iV+v/vysWMj9N8wnKY0pLDGrEUzO9/gM99s/C844uHDFDNB2imgAGnnpR7PulEORFy9sofztin7fSoSa7TEoXM8/WlbUve49rMQeU0wFQnveg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763727110; c=relaxed/simple;
-	bh=BmozpeUBmvpWzH6co7gbd6JjF/r3KB3trk5Ft5C16jk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aauSvtZaTw9N5Ls4xyIoKGAwyWxnvy9QYYBSNLp2M2tFbNAcvVMY2EoFMVSH7v1kiQ+FCUYRnAJVDJ7CYOqf6Tiw6AL86wQ6ulPH0bkax97StnLIHXBpUkaX+Y39JiwVEmhddyV5H/6fYNTnvmGQzTuW1n/LLQKjO43ms7x9dYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
+	s=arc-20240116; t=1763727114; c=relaxed/simple;
+	bh=D+3q7ui4s8HRziAqwfu8QHnqaJo2nk6cZX7C7LOvYzI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ueN4IT9hnglfOTKkepGe/S+B/1Aj2q6pB7coEKZ/lrb7PYKJSqaerk7z/3lF/61vLFy3HfspymttiwlifHJR/voBf3Czlrmc7WwSJtCOIbcHjzAlWPtBaPiwpEFBptRVP5dqZDDZK6YZ7mFVOYIZNQb5Sd9+2IBCdiM/ECE6yN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D67841A0E16;
-	Fri, 21 Nov 2025 13:11:40 +0100 (CET)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AA03A200EE1;
+	Fri, 21 Nov 2025 13:11:42 +0100 (CET)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9FC1E1A0ABA;
-	Fri, 21 Nov 2025 13:11:40 +0100 (CET)
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 745F2200E0F;
+	Fri, 21 Nov 2025 13:11:42 +0100 (CET)
 Received: from lsv03900.swis.in-blr01.nxp.com (lsv03900.swis.in-blr01.nxp.com [10.12.177.15])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 5DEB21800087;
-	Fri, 21 Nov 2025 20:11:39 +0800 (+08)
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 3ACB91800089;
+	Fri, 21 Nov 2025 20:11:41 +0800 (+08)
 From: Lakshay Piplani <lakshay.piplani@nxp.com>
 To: alexandre.belloni@bootlin.com,
 	linux-rtc@vger.kernel.org,
@@ -52,10 +53,12 @@ Cc: vikash.bansal@nxp.com,
 	priyanka.jain@nxp.com,
 	shashank.rebbapragada@nxp.com,
 	Lakshay Piplani <lakshay.piplani@nxp.com>
-Subject: [PATCH v4 1/5] dt-bindings: rtc: nxp,pcf85363: add timestamp mode config
-Date: Fri, 21 Nov 2025 17:41:33 +0530
-Message-Id: <20251121121137.3043764-1-lakshay.piplani@nxp.com>
+Subject: [PATCH v4 2/5] rtc: pcf85363: support reporting battery switch-over via RTC_VL
+Date: Fri, 21 Nov 2025 17:41:34 +0530
+Message-Id: <20251121121137.3043764-2-lakshay.piplani@nxp.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20251121121137.3043764-1-lakshay.piplani@nxp.com>
+References: <20251121121137.3043764-1-lakshay.piplani@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,124 +68,122 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: ClamAV using ClamSMTP
 
-NXP PCF85263/PCF85363 provides three timestamp registers (TSR1-TSR3)
-which latch the current time when a selected event occurs. Add a
-vendor specific property, nxp,timestamp-mode, to select the event
-source for each register.
+Add battery switch-over reporting for PCF85263/PCF85363 using the standard
+RTC_VL_* ioctl interface. When the backup supply takes over, the BSF flag
+is exposed to userspace through RTC_VL_READ and can be cleared using
+RTC_VL_CLR.
 
-Also introduce a new header 'pcf85363-tsr.h' to expose
-macros for timestamp mode fields, improving readability
-of device tree file.
+This allows applications to detect loss of main power without relying on
+non-standard interfaces.
 
 Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 V3 -> V4:
-- Added Reviewed-by tag in commit message (previously only in changelog) 
+- No changes in v4.
 V2 -> V3:
-- No changes in v3
-- Added Reviewed-by: Rob Herring <robh@kernel.org>
+- Split into separate patches as suggested:
+  - Battery switch-over detection.
+  - Timestamp recording for TS pin and battery switch-over events.
+  - Offset calibration.
+  - Watchdog timer (to be reviewed by watchdog maintainers).
+- Dropped Alarm2 support
+- Switched to rtc_add_group() for sysfs attributes
 V1 -> V2:
-- Addressed review comments from Rob Herring:
-  * use $ref: /schemas/types.yaml#/definitions/uint32-array
-  * tuple form with exactly 3 items (TSR1/TSR2/TSR3), per items decimal enums
-  * define 'nxp,timestamp-mode' clearly
-  * drop watchdog related vendor properties
-  * remove watchdog related vendor properties from i2c example
+- Watchdog related changes due to removal of vendor specific properties
+  from device tree
+  * remove vendor DT knobs (enable/timeout/stepsize/repeat)
+  * use watchdog_init_timeout (with 10s default)
+  * derive clock_sel from final timeout
+  * default, repeat=true (repeat mode)
+- Fixed uninitalised warning on 'ret' (reported by kernel test robot)
+- Use dev_dbg instead of dev_info for debug related print messages
+- Minor cleanup and comments.
 
- .../devicetree/bindings/rtc/nxp,pcf85363.yaml | 23 ++++++++++++++-
- include/dt-bindings/rtc/pcf85363-tsr.h        | 28 +++++++++++++++++++
- 2 files changed, 50 insertions(+), 1 deletion(-)
- create mode 100644 include/dt-bindings/rtc/pcf85363-tsr.h
+ drivers/rtc/rtc-pcf85363.c | 49 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 47 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
-index 52aa3e2091e9..cf9c155162d6 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85363.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/rtc/nxp,pcf85363.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
+index 540042b9eec8..c03d5a65c5f7 100644
+--- a/drivers/rtc/rtc-pcf85363.c
++++ b/drivers/rtc/rtc-pcf85363.c
+@@ -14,6 +14,7 @@
+ #include <linux/err.h>
+ #include <linux/errno.h>
+ #include <linux/bcd.h>
++#include <linux/device.h>
+ #include <linux/of.h>
+ #include <linux/regmap.h>
  
--title: Philips PCF85263/PCF85363 Real Time Clock
-+title: NXP PCF85263/PCF85363 Real Time Clock
+@@ -295,23 +296,67 @@ static int pcf85363_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
+ {
+ 	struct pcf85363 *pcf85363 = i2c_get_clientdata(dev_id);
++	bool handled = false;
+ 	unsigned int flags;
+ 	int err;
  
- maintainers:
-   - Alexandre Belloni <alexandre.belloni@bootlin.com>
-@@ -39,6 +39,24 @@ properties:
-   start-year: true
-   wakeup-source: true
+ 	err = regmap_read(pcf85363->regmap, CTRL_FLAGS, &flags);
++
+ 	if (err)
+ 		return IRQ_NONE;
  
-+  nxp,timestamp-mode:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    items:
-+      - enum: [0, 1, 2] # TSR1: NONE, FE, LE
-+        description: TSR1 mode
-+      - enum: [0, 1, 2, 3, 4, 5] # TSR2: NONE, FB, LB, LV, FE, LE
-+        description: TSR2 mode
-+      - enum: [0, 1, 2, 3] # TSR3: NONE, FB, LB, LV
-+        description: TSR3 mode
-+    description: |
-+      Defines timestamp modes for TSR1, TSR2, and TSR3.
-+      Use macros from <dt-bindings/rtc/pcf85363-tsr.h>.
++	if (flags) {
++		dev_dbg(&pcf85363->rtc->dev, "IRQ flags: 0x%02x%s%s\n",
++			flags, (flags & FLAGS_A1F) ? " [A1F]" : "",
++			(flags & FLAGS_BSF) ? " [BSF]" : "");
++	}
 +
-+      Each value corresponds to a mode constant:
-+        - TSR1: NONE, FE, LE
-+        - TSR2: NONE, FB, LB, LV, FE, LE
-+        - TSR3: NONE, FB, LB, LV
-+
- required:
-   - compatible
-   - reg
-@@ -47,6 +65,7 @@ additionalProperties: false
+ 	if (flags & FLAGS_A1F) {
+ 		rtc_update_irq(pcf85363->rtc, 1, RTC_IRQF | RTC_AF);
+ 		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_A1F, 0);
+-		return IRQ_HANDLED;
++		handled = true;
+ 	}
  
- examples:
-   - |
-+    #include <dt-bindings/rtc/pcf85363-tsr.h>
-     i2c {
-         #address-cells = <1>;
-         #size-cells = <0>;
-@@ -56,5 +75,7 @@ examples:
-             reg = <0x51>;
-             #clock-cells = <0>;
-             quartz-load-femtofarads = <12500>;
-+            wakeup-source;
-+            nxp,timestamp-mode = <PCF85363_TSR1_FE PCF85363_TSR2_LB PCF85363_TSR3_LV>;
-         };
-     };
-diff --git a/include/dt-bindings/rtc/pcf85363-tsr.h b/include/dt-bindings/rtc/pcf85363-tsr.h
-new file mode 100644
-index 000000000000..1fb5b9b3601e
---- /dev/null
-+++ b/include/dt-bindings/rtc/pcf85363-tsr.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
-+/*
-+ * Copyright 2025 NXP
-+ */
+-	return IRQ_NONE;
++	if (flags & FLAGS_BSF) {
++		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_BSF, 0);
++		handled = true;
++	}
 +
-+#ifndef _DT_BINDINGS_RTC_PCF85363_TSR_H
-+#define _DT_BINDINGS_RTC_PCF85363_TSR_H
++	return handled ? IRQ_HANDLED : IRQ_NONE;
++}
 +
-+/* TSR1 modes */
-+#define PCF85363_TSR1_NONE 0x00
-+#define PCF85363_TSR1_FE 0x01
-+#define PCF85363_TSR1_LE 0x02
++static int pcf85363_rtc_ioctl(struct device *dev,
++			      unsigned int cmd, unsigned long arg)
++{
++	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
++	unsigned int val;
++	int ret;
 +
-+/* TSR2 modes */
-+#define PCF85363_TSR2_NONE 0x00
-+#define PCF85363_TSR2_FB 0x01
-+#define PCF85363_TSR2_LB 0x02
-+#define PCF85363_TSR2_LV 0x03
-+#define PCF85363_TSR2_FE 0x04
-+#define PCF85363_TSR2_LE 0x05
++	switch (cmd) {
++	case RTC_VL_READ: {
++		u32 status = 0;
 +
-+/* TSR3 modes */
-+#define PCF85363_TSR3_NONE 0x00
-+#define PCF85363_TSR3_FB 0x01
-+#define PCF85363_TSR3_LB 0x02
-+#define PCF85363_TSR3_LV 0x03
++		ret = regmap_read(pcf85363->regmap, CTRL_FLAGS, &val);
 +
-+#endif /* _DT_BINDINGS_RTC_PCF85363_TSR_H */
++		if (ret)
++			return ret;
++
++		if (val & FLAGS_BSF)
++			status |= RTC_VL_BACKUP_SWITCH;
++
++		return put_user(status, (u32 __user *)arg);
++	}
++
++	case RTC_VL_CLR:
++		return regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_BSF, 0);
++
++	default:
++		return -ENOIOCTLCMD;
++	}
+ }
+ 
+ static const struct rtc_class_ops rtc_ops = {
++	.ioctl  = pcf85363_rtc_ioctl,
+ 	.read_time	= pcf85363_rtc_read_time,
+ 	.set_time	= pcf85363_rtc_set_time,
+ 	.read_alarm	= pcf85363_rtc_read_alarm,
 -- 
 2.25.1
 
