@@ -1,43 +1,43 @@
-Return-Path: <linux-rtc+bounces-5452-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5453-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546DBC78F8D
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 13:14:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2011C78F4E
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 13:12:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 55F494EA241
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 12:12:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id DD3C02DA38
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Nov 2025 12:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6492334D3A8;
-	Fri, 21 Nov 2025 12:11:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AAB834D4CF;
+	Fri, 21 Nov 2025 12:11:55 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B03933BBC6;
-	Fri, 21 Nov 2025 12:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8197934CFC4;
+	Fri, 21 Nov 2025 12:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763727114; cv=none; b=CNcQlKHFScJzF/swZl4dxYdqcwMYPgH9MPliX3j85iqR/q9BxTrnELDqaAHt58K/Ni/XORnQb/2qoTocgQhQIkN6Fr06iy9arB4sQn34VDU9GarUk912+nskLeyP4SyMTmQnTtJcjpemso/fAedg4pKkaf/2qPUaOBobRhllmqs=
+	t=1763727115; cv=none; b=ApwnQfMvMnjBvYL33yUW6jGR+DjyakNaa8wK5UbUncKv+tdB1e+ZucvJOodB731A2BW8VyzedYSMaF5eM6EJouxuA3iIFd90d+AAFp9n0LF/fDlW/qhpGCz9i61VPVcm3R6yZSZZvvFt9lETCnzj4z55EUEKmBIZgmbI7Y5QEFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763727114; c=relaxed/simple;
-	bh=StC8QDYrLnSiwMZutuA5gSBHwvm3C4QqXZZ+E8CjO98=;
+	s=arc-20240116; t=1763727115; c=relaxed/simple;
+	bh=Nl7jBWTi1jIZibZWCIEWxIOAcf2GASDGQPxfgjE5Ihs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QoeP1XeuxEya/U/cQN3zL1sJFXdyK76/bP2doWSEOJ12DTgV32QM2xUexLGxpDhPmhUEgYFzFIKU6/yNz6d4CNM6GqOaZx2BCCqp05vJTjQi8zd/RAJ87L7xz7zV5EJjkdE2Q3RGSoEMsX2Pezv8AsZjlnYRtzU1iUxe9Al0Bns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
+	 MIME-Version; b=qP3GnFQo3NhWibv1F/o+Apgj/M4BLD31WCJvr18hyJ2cHJoocw4NcJGN3+ba9W3neeW2tdGWGXrUJ+AQ9WEmC109hfDuJZfRXMePCdcvyLkHbdZzHK7KougctssyJeD48Pj+gY+eFsj58W5AbQCnrPDeOJ//y5z5WhyBdno41TE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E71581A0ABA;
-	Fri, 21 Nov 2025 13:11:43 +0100 (CET)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0910A203435;
+	Fri, 21 Nov 2025 13:11:45 +0100 (CET)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B1D351A317F;
-	Fri, 21 Nov 2025 13:11:43 +0100 (CET)
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D1BFF203419;
+	Fri, 21 Nov 2025 13:11:44 +0100 (CET)
 Received: from lsv03900.swis.in-blr01.nxp.com (lsv03900.swis.in-blr01.nxp.com [10.12.177.15])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 742271800091;
-	Fri, 21 Nov 2025 20:11:42 +0800 (+08)
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 987AC1800087;
+	Fri, 21 Nov 2025 20:11:43 +0800 (+08)
 From: Lakshay Piplani <lakshay.piplani@nxp.com>
 To: alexandre.belloni@bootlin.com,
 	linux-rtc@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: vikash.bansal@nxp.com,
 	priyanka.jain@nxp.com,
 	shashank.rebbapragada@nxp.com,
 	Lakshay Piplani <lakshay.piplani@nxp.com>
-Subject: [PATCH v4 3/5] rtc: pcf85363: add timestamp support with configurable timestamp mode
-Date: Fri, 21 Nov 2025 17:41:35 +0530
-Message-Id: <20251121121137.3043764-3-lakshay.piplani@nxp.com>
+Subject: [PATCH v4 4/5] rtc: pcf85363: add oscillator offset calibration support
+Date: Fri, 21 Nov 2025 17:41:36 +0530
+Message-Id: <20251121121137.3043764-4-lakshay.piplani@nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20251121121137.3043764-1-lakshay.piplani@nxp.com>
 References: <20251121121137.3043764-1-lakshay.piplani@nxp.com>
@@ -68,18 +68,13 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: ClamAV using ClamSMTP
 
-Add support for the timestamp capture registers available on PCF85263 and
-PCF85363. The registers latch the current time when selected events occur,
-such as TS pin activation or battery switch-over.
+Expose the oscillator offset register of PCF85263/PCF85363 through the
+rtc_class_ops read_offset and set_offset callbacks, allowing userspace
+to apply frequency correction for drift compensation.
 
-The capture source can be configured via the nxp,timestamp-mode device
-tree property, and latched values are exported through read-only sysfs
-attributes.
-
-Additionally:
-- Use rtc_add_group() instead of sysfs_create_group() to register the
-  timestamp attributes under the RTC class device (/sys/class/rtc/rtcX).
-- Perform minor cleanups in the probe function for better readability.
+The correction mode defaults to normal mode (OFFM = 0), where each step
+introduces an offset of approximately 2.170 ppm and corrections occur
+every 4 hours.
 
 Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
 ---
@@ -104,308 +99,80 @@ V1 -> V2:
 - Use dev_dbg instead of dev_info for debug related print messages
 - Minor cleanup and comments.
 
- drivers/rtc/rtc-pcf85363.c | 209 +++++++++++++++++++++++++++++++------
- 1 file changed, 175 insertions(+), 34 deletions(-)
+ drivers/rtc/rtc-pcf85363.c | 46 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
 diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index c03d5a65c5f7..e10e58f69012 100644
+index e10e58f69012..665bbbb169b0 100644
 --- a/drivers/rtc/rtc-pcf85363.c
 +++ b/drivers/rtc/rtc-pcf85363.c
-@@ -16,6 +16,7 @@
- #include <linux/bcd.h>
- #include <linux/device.h>
- #include <linux/of.h>
-+#include <linux/rtc.h>
- #include <linux/regmap.h>
+@@ -123,6 +123,11 @@
+ #define TSR2_SHIFT      2
+ #define TSR3_SHIFT      6
  
- /*
-@@ -101,19 +102,31 @@
- #define PIN_IO_INTA_OUT	2
- #define PIN_IO_INTA_HIZ	3
- 
-+#define PIN_IO_TSPM     GENMASK(3, 2)
-+#define PIN_IO_TSIM     BIT(4)
-+
- #define OSC_CAP_SEL	GENMASK(1, 0)
- #define OSC_CAP_6000	0x01
- #define OSC_CAP_12500	0x02
- 
- #define STOP_EN_STOP	BIT(0)
-+#define RTCM_BIT        BIT(4)
- 
- #define RESET_CPR	0xa4
- 
- #define NVRAM_SIZE	0x40
- 
-+#define TSR1_MASK       0x03
-+#define TSR2_MASK       0x07
-+#define TSR3_MASK       0x03
-+#define TSR1_SHIFT      0
-+#define TSR2_SHIFT      2
-+#define TSR3_SHIFT      6
++#define OFFSET_SIGN_BIT 7
++#define OFFSET_MINIMUM  -128
++#define OFFSET_MAXIMUM  127
++#define OFFSET_MASK     0xFF
 +
  struct pcf85363 {
  	struct rtc_device	*rtc;
  	struct regmap		*regmap;
-+	u8 ts_valid_flags;
- };
- 
- struct pcf85x63_config {
-@@ -306,8 +319,11 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
- 		return IRQ_NONE;
- 
- 	if (flags) {
--		dev_dbg(&pcf85363->rtc->dev, "IRQ flags: 0x%02x%s%s\n",
-+		dev_dbg(&pcf85363->rtc->dev, "IRQ flags: 0x%02x%s%s%s%s%s\n",
- 			flags, (flags & FLAGS_A1F) ? " [A1F]" : "",
-+			(flags & FLAGS_TSR1F) ? " [TSR1F]" : "",
-+			(flags & FLAGS_TSR2F) ? " [TSR2F]" : "",
-+			(flags & FLAGS_TSR3F) ? " [TSR3F]" : "",
- 			(flags & FLAGS_BSF) ? " [BSF]" : "");
- 	}
- 
-@@ -317,6 +333,24 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
- 		handled = true;
- 	}
- 
-+	if (flags & FLAGS_TSR1F) {
-+		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_TSR1F, 0);
-+		pcf85363->ts_valid_flags |= FLAGS_TSR1F;
-+		handled = true;
-+	}
-+
-+	if (flags & FLAGS_TSR2F) {
-+		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_TSR2F, 0);
-+		pcf85363->ts_valid_flags |= FLAGS_TSR2F;
-+		handled = true;
-+	}
-+
-+	if (flags & FLAGS_TSR3F) {
-+		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_TSR3F, 0);
-+		pcf85363->ts_valid_flags |= FLAGS_TSR3F;
-+		handled = true;
-+	}
-+
- 	if (flags & FLAGS_BSF) {
- 		regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_BSF, 0);
- 		handled = true;
-@@ -424,11 +458,94 @@ static const struct pcf85x63_config pcf_85363_config = {
- 	.num_nvram = 2
- };
+@@ -359,6 +364,45 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
+ 	return handled ? IRQ_HANDLED : IRQ_NONE;
+ }
  
 +/*
-+ * Reads 6 bytes of timestamp data starting at the given base register,
-+ * converts them from BCD to binary, and formats the result into a
-+ * human-readable string in "YYYY-MM-DD HH:MM:SS" format.
++ * Read the current RTC offset from the CTRL_OFFSET
++ * register. This value is an 8-bit signed 2's complement
++ * value that corrects osciallator drift.
 + */
-+static int pcf85363_read_timestamp(struct pcf85363 *pcf85363, u8 base_reg, char *buf)
++static int pcf85363_read_offset(struct device *dev, long *offset)
 +{
-+	struct rtc_time tm;
-+	u8 regs[6];
++	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
++	unsigned int val;
 +	int ret;
 +
-+	ret = regmap_bulk_read(pcf85363->regmap, base_reg, regs, sizeof(regs));
++	ret = regmap_read(pcf85363->regmap, CTRL_OFFSET, &val);
 +
 +	if (ret)
 +		return ret;
 +
-+	tm.tm_sec = bcd2bin(regs[0]);
-+	tm.tm_min = bcd2bin(regs[1]);
-+	tm.tm_hour = bcd2bin(regs[2]);
-+	tm.tm_mday = bcd2bin(regs[3]);
-+	tm.tm_mon = bcd2bin(regs[4]) - 1;
-+	tm.tm_year = bcd2bin(regs[5]) + 100;
++	*offset = sign_extend32(val & OFFSET_MASK, OFFSET_SIGN_BIT);
 +
-+	return sysfs_emit(buf, "%04d-%02d-%02d %02d:%02d:%02d\n",
-+			  tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-+			  tm.tm_hour, tm.tm_min, tm.tm_sec);
++	return 0;
 +}
 +
 +/*
-+ * Checks whether a specific timestamp flag is set. If so, reads and
-+ * returns the formatted timestamp. Otherwise, returns "00-00-00 00:00:00".
++ * Write an oscillator offset correction value to
++ * the CTRL_OFFSET register. The valid range is
++ * -128 to 127 (8-bit signed), typically used to fine
++ * tune accuracy.
 + */
-+
-+static ssize_t pcf85363_timestamp_show(struct device *dev, char *buf,
-+				       u8 timestamp_flag, u8 base_reg)
++static int pcf85363_set_offset(struct device *dev, long offset)
 +{
 +	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
 +
-+	if (!(pcf85363->ts_valid_flags & timestamp_flag))
-+		return sysfs_emit(buf, "00-00-00 00:00:00\n");
-+
-+	return pcf85363_read_timestamp(pcf85363, base_reg, buf);
-+}
-+
-+static ssize_t timestamp1_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	return pcf85363_timestamp_show(dev, buf, FLAGS_TSR1F, DT_TIMESTAMP1);
-+}
-+static DEVICE_ATTR_RO(timestamp1);
-+
-+static ssize_t timestamp2_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	return pcf85363_timestamp_show(dev, buf, FLAGS_TSR2F, DT_TIMESTAMP2);
-+}
-+static DEVICE_ATTR_RO(timestamp2);
-+
-+static ssize_t timestamp3_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	return pcf85363_timestamp_show(dev, buf, FLAGS_TSR3F, DT_TIMESTAMP3);
-+}
-+static DEVICE_ATTR_RO(timestamp3);
-+
-+static struct attribute *pcf85363_attrs[] = {
-+	&dev_attr_timestamp1.attr,
-+	&dev_attr_timestamp2.attr,
-+	&dev_attr_timestamp3.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group pcf85363_attr_group = {
-+	.attrs = pcf85363_attrs,
-+};
-+
- static int pcf85363_probe(struct i2c_client *client)
- {
--	struct pcf85363 *pcf85363;
- 	const struct pcf85x63_config *config = &pcf_85363_config;
- 	const void *data = of_device_get_match_data(&client->dev);
-+	struct device *dev = &client->dev;
-+	struct pcf85363 *pcf85363;
-+	int irq_a = client->irq;
-+	bool wakeup_source;
-+	int ret, i, err;
-+	u32 tsr_mode[3];
-+	u8 val;
-+
- 	static struct nvmem_config nvmem_cfg[] = {
- 		{
- 			.name = "pcf85x63-",
-@@ -446,25 +563,43 @@ static int pcf85363_probe(struct i2c_client *client)
- 			.reg_write = pcf85363_nvram_write,
- 		},
- 	};
--	int ret, i, err;
--	bool wakeup_source;
- 
- 	if (data)
- 		config = data;
- 
--	pcf85363 = devm_kzalloc(&client->dev, sizeof(struct pcf85363),
--				GFP_KERNEL);
-+	pcf85363 = devm_kzalloc(&client->dev, sizeof(*pcf85363), GFP_KERNEL);
- 	if (!pcf85363)
- 		return -ENOMEM;
- 
-+	pcf85363->ts_valid_flags = 0;
-+
- 	pcf85363->regmap = devm_regmap_init_i2c(client, &config->regmap);
--	if (IS_ERR(pcf85363->regmap)) {
--		dev_err(&client->dev, "regmap allocation failed\n");
--		return PTR_ERR(pcf85363->regmap);
--	}
-+	if (IS_ERR(pcf85363->regmap))
-+		return dev_err_probe(dev, PTR_ERR(pcf85363->regmap), "regmap init failed\n");
- 
- 	i2c_set_clientdata(client, pcf85363);
- 
-+	ret = regmap_update_bits(pcf85363->regmap, CTRL_FUNCTION, RTCM_BIT, 0);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to enable RTC mode\n");
-+
-+	if (!device_property_read_u32_array(dev, "nxp,timestamp-mode", tsr_mode, 3)) {
-+		tsr_mode[0] &= TSR1_MASK;
-+		tsr_mode[1] &= TSR2_MASK;
-+		tsr_mode[2] &= TSR3_MASK;
-+
-+		val = (tsr_mode[2] << TSR3_SHIFT) |
-+		      (tsr_mode[1] << TSR2_SHIFT) |
-+		      (tsr_mode[0] << TSR1_SHIFT);
-+
-+		ret = regmap_write(pcf85363->regmap, DT_TS_MODE, val);
-+		if (ret)
-+			dev_warn(dev, "Failed to write timestamp mode register\n");
-+
-+		dev_dbg(dev, "Timestamp mode set: TSR1=0x%x TSR2=0x%x TSR3=0x%x\n",
-+			tsr_mode[0], tsr_mode[1], tsr_mode[2]);
++	if (offset < OFFSET_MINIMUM || offset > OFFSET_MAXIMUM) {
++		dev_warn(dev, "Offset out of range: %ld\n", offset);
++		return -ERANGE;
 +	}
 +
- 	pcf85363->rtc = devm_rtc_allocate_device(&client->dev);
- 	if (IS_ERR(pcf85363->rtc))
- 		return PTR_ERR(pcf85363->rtc);
-@@ -478,38 +613,44 @@ static int pcf85363_probe(struct i2c_client *client)
- 	pcf85363->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
- 	pcf85363->rtc->range_max = RTC_TIMESTAMP_END_2099;
- 
--	wakeup_source = device_property_read_bool(&client->dev,
--						  "wakeup-source");
--	if (client->irq > 0 || wakeup_source) {
--		regmap_write(pcf85363->regmap, CTRL_FLAGS, 0);
--		regmap_update_bits(pcf85363->regmap, CTRL_PIN_IO,
--				   PIN_IO_INTAPM, PIN_IO_INTA_OUT);
--	}
-+	wakeup_source = device_property_read_bool(dev, "wakeup-source");
- 
--	if (client->irq > 0) {
--		unsigned long irqflags = IRQF_TRIGGER_LOW;
-+	ret = regmap_write(pcf85363->regmap, CTRL_FLAGS, 0x00);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to clear CTRL_FLAGS\n");
++	return regmap_write(pcf85363->regmap, CTRL_OFFSET, offset & OFFSET_MASK);
++}
 +
-+	if (irq_a > 0) {
-+		regmap_update_bits(pcf85363->regmap, CTRL_PIN_IO, PIN_IO_INTAPM, PIN_IO_INTA_OUT);
-+		ret = devm_request_threaded_irq(dev, irq_a, NULL,
-+						pcf85363_rtc_handle_irq,
-+						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+						"pcf85363-inta", client);
+ static int pcf85363_rtc_ioctl(struct device *dev,
+ 			      unsigned int cmd, unsigned long arg)
+ {
+@@ -396,6 +440,8 @@ static const struct rtc_class_ops rtc_ops = {
+ 	.read_alarm	= pcf85363_rtc_read_alarm,
+ 	.set_alarm	= pcf85363_rtc_set_alarm,
+ 	.alarm_irq_enable = pcf85363_rtc_alarm_irq_enable,
++	.read_offset = pcf85363_read_offset,
++	.set_offset = pcf85363_set_offset,
+ };
  
--		if (dev_fwnode(&client->dev))
--			irqflags = 0;
--		ret = devm_request_threaded_irq(&client->dev, client->irq,
--						NULL, pcf85363_rtc_handle_irq,
--						irqflags | IRQF_ONESHOT,
--						"pcf85363", client);
- 		if (ret) {
--			dev_warn(&client->dev,
--				 "unable to request IRQ, alarms disabled\n");
--			client->irq = 0;
-+			dev_err_probe(dev, ret, "INTA IRQ request failed\n");
-+			irq_a = 0;
-+		} else {
-+			regmap_write(pcf85363->regmap, CTRL_INTA_EN, INT_BSIE
-+				     | INT_TSRIE);
- 		}
- 	}
- 
--	if (client->irq > 0 || wakeup_source) {
--		device_init_wakeup(&client->dev, true);
--		set_bit(RTC_FEATURE_ALARM, pcf85363->rtc->features);
--	} else {
--		clear_bit(RTC_FEATURE_ALARM, pcf85363->rtc->features);
--	}
-+	regmap_update_bits(pcf85363->regmap, CTRL_PIN_IO,
-+			   PIN_IO_TSPM | PIN_IO_TSIM,
-+			   PIN_IO_TSPM | PIN_IO_TSIM);
-+
-+	if (irq_a > 0 || wakeup_source)
-+		device_init_wakeup(dev, true);
-+
-+	dev_set_drvdata(&pcf85363->rtc->dev, pcf85363);
-+
-+	ret = rtc_add_group(pcf85363->rtc, &pcf85363_attr_group);
-+	if (ret)
-+		return ret;
- 
- 	ret = devm_rtc_register_device(pcf85363->rtc);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "RTC registration failed\n");
- 
- 	for (i = 0; i < config->num_nvram; i++) {
- 		nvmem_cfg[i].priv = pcf85363;
+ static int pcf85363_nvram_read(void *priv, unsigned int offset, void *val,
 -- 
 2.25.1
 
