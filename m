@@ -1,101 +1,141 @@
-Return-Path: <linux-rtc+bounces-5457-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5458-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BC80C87AD8
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 02:20:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27B56C87EBB
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 04:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 47C7B354D04
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 01:20:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DBA63B3F86
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 03:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019342D7DC7;
-	Wed, 26 Nov 2025 01:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B867F30DEBE;
+	Wed, 26 Nov 2025 03:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="QZDePy1B"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395862459D7;
-	Wed, 26 Nov 2025 01:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7730DD18
+	for <linux-rtc@vger.kernel.org>; Wed, 26 Nov 2025 03:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764120044; cv=none; b=EG6nVltWBZLaCmYq7Lzb5hl0GRzglXFHXIWAaZbHfwrRdL8qvaInlyRmPW/CsmhorLltJBojBEEzNSeotYUlAXOUgbFPPlOXM8XiMgxDRJ+hI2NgyF8BzSVUA5zmvJSc0Kt9AQtS4BWoRdQa1t8xGVqLL3cxSGiRyp65ToF9ZXQ=
+	t=1764127095; cv=none; b=RpLDmqXAnxt3bkIUzQCrGaOeAlqTV2jdjnOkiagQWPb8M9bIOGB5aVZmgX2aVi58k7Ztbh7Rx3b53ucEJUVvcCQ3BwENQolZLh2wbgVSXPCkMl/AN3bcPahMXiUsaXnbdELEk3zpUhxG/8qXvdBAwv5apgvLRYsvJW0xyK5pVsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764120044; c=relaxed/simple;
-	bh=vuDjNzHtNm+8qyLrqifULp4b26GGpEBVCqbY+ekJtsU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qz6oKVv4qmN8yXPp/G1QNetzL4g5kbrBrdK4SqElXKi4XD9xRFsxUUpLlc8Xwq9LiaOgq3t0PfH1lFE/nUE6wJzPAI0xGXYC1MEoPJH64ypWkBTmLHgBs/RrPjatTgODG428MfHuANkIXk6h1Q7ZB4a1R8k+zmxZhfWCLBJotxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from DESKTOP-L0HPE2S (unknown [124.16.141.245])
-	by APP-05 (Coremail) with SMTP id zQCowAD38mPcVSZpT48VAg--.12017S2;
-	Wed, 26 Nov 2025 09:20:30 +0800 (CST)
-From: Haotian Zhang <vulab@iscas.ac.cn>
-To: alexandre.belloni@bootlin.com
-Cc: linkmauve@linkmauve.fr,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haotian Zhang <vulab@iscas.ac.cn>
-Subject: [PATCH] rtc: gamecube: Check the return value of ioremap()
-Date: Wed, 26 Nov 2025 09:20:19 +0800
-Message-ID: <20251126012019.1003-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.50.1.windows.1
+	s=arc-20240116; t=1764127095; c=relaxed/simple;
+	bh=MebXQ/i/4CXGFSpTUvGXKnO4bK1YiUe6DcpTQoQ/VGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ck/pNoi++hdFizA4vmkwKmnKHiuMjTQhXyAwV5ukCm+tjjakIBF2MS1isOShrAjheEkL7pi1Ev6OauYPlIm1B6DakpYDhQEl6Ge+uZrxUe5voP5S6tNsBQaLdyztOXjYTX2fMYgJTTO685K2UObFRMHIydj5zcVk+ys/9HKf1Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=QZDePy1B; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4ee1e18fb37so64996411cf.0
+        for <linux-rtc@vger.kernel.org>; Tue, 25 Nov 2025 19:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1764127093; x=1764731893; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cvs0VVC0mcv4NgOGijtzLsQWvxXXKQp640I94GmhkA8=;
+        b=QZDePy1BQK7nrhF5my/7UsIFIUbHAKuC1dIVqNpFMrlAlNKOf+8jqdINeehVA6sbhO
+         G4u5OeAiry1/XeS5XF9Fd+ARzW/ZbZUIn/7ev9ZZaNSOLiM5bc1cVetA49Luqt1vaPAQ
+         56v7mzD8Eaw6HZuJknAQj+uP2sh4hB3TG/RuUB29vDr8zZQkK7ZGa5Evs7voMPiWYd9J
+         knDDiD+QbtuiDTkN0OnlX8gQC1FwU3/b4bV+HWJZS6Kx04DXMnL99r5LqxiQfIBbvVBA
+         QSkX2N4xYpTckY+63WFdTR6YRja49EEtM7sGqfCrhdiPle7ZnxgE3XKbpSlPPE3l3ERE
+         R3PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764127093; x=1764731893;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cvs0VVC0mcv4NgOGijtzLsQWvxXXKQp640I94GmhkA8=;
+        b=W79GFamlHHb7W63nOOPSAKTjsOa/3cbidx+t05Ge/TwEa4CISMv86Z5ze2l3PvkNMb
+         uH2f0eQJlyaCwtnn7K1WpQappcYlQ1b2tck6ChEBZLKbALoXS0I5q4qUFRyCOsb/hloG
+         KKUzGoc/98YbBSdRO+BRyuGacHaOTHs3J7gytl6K/ku4Sun0NJFACEFuDq6JL0C3lCiE
+         CICtnBz1LqYo8E6hJtI7W3M4rWfmZwFM9QTx75pVfjgyOOr3J75o/972WqWyMCclQlkR
+         NsC/A61byj6sTlBZCVvhqBk/34QvD6yj/BPQSRTmn7IU5Uq3gA6xjZEmgpXA10qKp6vd
+         StrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8+KZ9HRdtFGDi5WMWH07ZrUoKfexZabf+rVrawdZJI5HwOsH7Z/GiJeyGCe2G/y9HMXDL10DYXMI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmQ7waTYIOp0J7YNjziZVdXM4XPOwXJaeiccrcbiHZQ9Pg9cMf
+	7eAPHXCoVMGfX8Z2GuL/lP8nVnxrSMT2iJ23X6ixti7oEJnOsmqTPFZyRbFtvq78vZc=
+X-Gm-Gg: ASbGncvXM+wqvggGpQ9wgBSCmX5/YCe3JfkYyXxAW27KCWQa0RThNZx9P3wdfAM+cBU
+	+WSAh9TSn7RLoQ9AI7H5zqQyqFmMQKwWSvfd3Rq5tCdX9wOVROKYHL9+YDJYUkeCAz8CxVqPfzt
+	RjwnfUX9q3vEtvR0ZXCzgjYhiJKZOZ45QIcX8NVqIdYoob0FqYwn+6KDudcWjv8mSomfTIzBmWf
+	yuOu/eIRaknmPIS8Zbkfi3gMl2Xo4OVcuegOVbwx/ei2u3d1RZQXGg45yaNHQ9LQEKuFMxX1t+r
+	GGwO3EZoVnOC/mas143CsJSPRC8L9xpZgdZztxpdoBN0FqycqY8k4k7oWigd6CCN2SskVLyi34O
+	usYvGxp/R9fm3tvHm86mufGqB/Qff8ADgSgtEUb2wXjwGzQR5wTNShcRrsKzP8Yw3eef7R54bBu
+	7MsaieFIwTn1ssagQyBe9W3vJ+7xDdXn2mSoeIe25mwVRkWANHcSg=
+X-Google-Smtp-Source: AGHT+IFVPZAvlFu8nDpWWVLI1C6FD2IyTsqdkG4yg1n+X5k0lKqQqgf0T0rJLMz2wOCW390Qqgh8pg==
+X-Received: by 2002:ac8:5f84:0:b0:4ee:2c3c:6e with SMTP id d75a77b69052e-4efbda49e09mr73391871cf.30.1764127092631;
+        Tue, 25 Nov 2025 19:18:12 -0800 (PST)
+Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4ee48d3a041sm115728681cf.1.2025.11.25.19.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 19:18:11 -0800 (PST)
+Date: Tue, 25 Nov 2025 22:18:10 -0500
+From: Nick Bowler <nbowler@draconx.ca>
+To: linux-kernel@vger.kernel.org, regressions@lists.linux.dev, 
+	linux-rtc@vger.kernel.org
+Cc: Esben Haabendal <esben@geanix.com>, stable@vger.kernel.org, 
+	sparclinux@vger.kernel.org
+Subject: Re: PROBLEM: hwclock busted w/ M48T59 RTC (regression)
+Message-ID: <gfwdg244bcmkv7l44fknfi4osd2b23unwaos7rnlirkdy2rrrt@yovd2vewdviv>
+References: <krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAD38mPcVSZpT48VAg--.12017S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFyDCF1fCFWrJw18Jr4Dtwb_yoWDCrgE93
-	WfWr13Ja98Ar1DGw10qr1fZry5K3Wv9r1vqr4Igas0kFZ8urnFgryIyrsxGw4UWa4akFn8
-	C34ayryfZr12yjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbskFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-	Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v2
-	6r126r1DMxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
-	IFyTuYvjfUezuWDUUUU
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiDAURA2klxbZy4wACs3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
 
-The function ioremap() in gamecube_rtc_read_offset_from_sram() can fail
-and return NULL, which is dereferenced without checking, leading to a
-NULL pointer dereference.
+Any thoughts?
 
-Add a check for the return value of ioremap() and return -ENOMEM on
-failure.
+The problem is still present in 6.18-rc7 and reverting the commit
+indicated below still fixes it.
 
-Fixes: 86559400b3ef ("rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U")
-Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
----
- drivers/rtc/rtc-gamecube.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I am also seeing the same failure on a totally different system with
+Dallas DS1286 RTC, which is also fixed by reverting this commit.
 
-diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
-index c828bc8e05b9..cd7714437107 100644
---- a/drivers/rtc/rtc-gamecube.c
-+++ b/drivers/rtc/rtc-gamecube.c
-@@ -242,6 +242,10 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
- 	}
- 
- 	hw_srnprot = ioremap(res.start, resource_size(&res));
-+	if (!hw_srnprot) {
-+		pr_err("Failed to ioremap hw_srnprot\n");
-+		return -ENOMEM;
-+	}
- 	old = ioread32be(hw_srnprot);
- 
- 	/* TODO: figure out why we use this magic constant.  I obtained it by
--- 
-2.50.1.windows.1
+Since the initial report this regression has been further backported
+to all the remaining longterm kernel series.
 
+Thanks,
+  Nick
+
+On Thu, Oct 23, 2025 at 12:45:13AM -0400, Nick Bowler wrote:
+> Hi,
+> 
+> After a stable kernel update, the hwclock command seems no longer
+> functional on my SPARC system with an ST M48T59Y-70PC1 RTC:
+> 
+>   # hwclock
+>   [...long delay...]
+>   hwclock: select() to /dev/rtc0 to wait for clock tick timed out
+> 
+> On prior kernels, there is no problem:
+> 
+>   # hwclock
+>   2025-10-22 22:21:04.806992-04:00
+> 
+> I reproduced the same failure on 6.18-rc2 and bisected to this commit:
+> 
+>   commit 795cda8338eab036013314dbc0b04aae728880ab
+>   Author: Esben Haabendal <esben@geanix.com>
+>   Date:   Fri May 16 09:23:35 2025 +0200
+>   
+>       rtc: interface: Fix long-standing race when setting alarm
+> 
+> This commit was backported to all current 6.x stable branches,
+> as well as 5.15.x, so they all have the same regression.
+> 
+> Reverting this commit on top of 6.18-rc2 corrects the problem.
+> 
+> Let me know if you need any more info!
+> 
+> Thanks,
+>   Nick
 
