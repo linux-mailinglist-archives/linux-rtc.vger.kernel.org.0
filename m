@@ -1,142 +1,119 @@
-Return-Path: <linux-rtc+bounces-5462-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5463-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD540C89169
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 10:50:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB480C89850
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 12:29:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5F60D35835B
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 09:49:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BD3ED4E5441
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 11:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7574A30BF74;
-	Wed, 26 Nov 2025 09:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7A3320A20;
+	Wed, 26 Nov 2025 11:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="LCChGlIo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o3sDv/Fd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A263090C6;
-	Wed, 26 Nov 2025 09:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEFB31ED81;
+	Wed, 26 Nov 2025 11:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764150403; cv=none; b=hxgaWZGKw3imXznNSBBhxKnE/tE4iVZCpyotGO2U/TmjcrenBs5CqmK9I3yEqHuqOLPkETTxyCnlv5FPurR4l7vIDhiDUyiCJAGBylryQ49qnFkFQWlvEjTcg/2IU3S0qgVTkgF2MCPNSESNW5eJlG473I5AxaO8vZcureQ5W9A=
+	t=1764156582; cv=none; b=NsrQ4qVovIeuC+Fshf2f167ZgYiKem+WwFd5jKiGWAazSUWr7GGfCHebuLJ6QUEO6ntfc1QYMVgWHw1KDfKbIMLI+ICYknMkZuzS6Gw3ThRibvb3FtyMl3cEcaoIsM5ZnfebWBGKPtSAIUJzL+ETbgLGrJcYxrv/mse9UfX6X4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764150403; c=relaxed/simple;
-	bh=AfDBkPaSHEH12W0txSPu3aX4L9071oFXlQtzgNtVWQE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NlcVi9bsfhdpzU1oRJwchpaL8u5lXHCEt2qOFa8sZQiAhbcIQzkm+9Uvl47QAlLP1nN5VntFNhHQtxLBKRUL6zXxzsu/KTM/dfrFIB7Zaos/La+lqBSsWtnxluZUswH1ZkDilryzK5feAw2jbw6pcLMFQt9XRq8F2yNggvFq1qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=LCChGlIo; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=kX18TokZJrRxzuxjDzOD7jkR62kfpAqVIr+hp9PYCqU=; t=1764150400;
-	x=1764755200; b=LCChGlIokez1125S1qRl5f/gDC6NKvnh84wv7gm0onfv9mKftyBilrprjiDzJ
-	Q7yC0L5cGUQu9aRCGBYFXJVhSZ4ICijWmrIkeYnoFbIDO7IgSrlZXvR8ejOxrfsPp7xyNy7+kasZ1
-	LdZaswV1Hh71jU1cpzrwkVtknnkwi1ZnF8YFD+crtUnKngF2vX20erJ++osxKrnrIaACTrsdDHbPw
-	9+IfIaMqNzjtF2L+nO7BGVgcpduXUUyobOWo4wLbBr4HUWxFzP5j/Urn80aO6SvcpaopBrMulpeaO
-	ugb6/licB78BSIdzNxEe9UFOHd48MLGmmT0isJShHZkc/CooKQ==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1vOC6g-00000003j2F-1Bur; Wed, 26 Nov 2025 10:46:38 +0100
-Received: from p5b13aa34.dip0.t-ipconnect.de ([91.19.170.52] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1vOC6g-00000001zCX-0BlY; Wed, 26 Nov 2025 10:46:38 +0100
-Message-ID: <f60b787529422eb2b3655b92aa8a7377b838baf4.camel@physik.fu-berlin.de>
-Subject: Re: PROBLEM: hwclock busted w/ M48T59 RTC (regression)
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Nick Bowler <nbowler@draconx.ca>, linux-kernel@vger.kernel.org, 
-	regressions@lists.linux.dev, linux-rtc@vger.kernel.org
-Cc: Esben Haabendal <esben@geanix.com>, stable@vger.kernel.org, 
-	sparclinux@vger.kernel.org, regressions <regressions@lists.linux.dev>
-Date: Wed, 26 Nov 2025 10:46:37 +0100
-In-Reply-To: <gfwdg244bcmkv7l44fknfi4osd2b23unwaos7rnlirkdy2rrrt@yovd2vewdviv>
-References: 
-	<krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
-	 <gfwdg244bcmkv7l44fknfi4osd2b23unwaos7rnlirkdy2rrrt@yovd2vewdviv>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 
+	s=arc-20240116; t=1764156582; c=relaxed/simple;
+	bh=Rv36ldC1sp4jcPeSJa5adn3sTqPjM81EnfbmQDGmLfc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qclBRbz4rYdx0fwyIKA+SnO0NbSsLNsy8MCm3QTILH76guJgdNiRKvMD9BM3P1VAOXg3j9sgS08lB0XYxh9UXNrvNODdv5W7E9eSGem6BqEJB5uFssLsgWsNTm+3d4ne3Vkm1ffouG5qfo5hGCWR4F5a8q56HQdlKxzQMqYZ/+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o3sDv/Fd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94846C113D0;
+	Wed, 26 Nov 2025 11:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764156581;
+	bh=Rv36ldC1sp4jcPeSJa5adn3sTqPjM81EnfbmQDGmLfc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o3sDv/FdElKHmG+88H/8dE0uw0vNFy5gDV8s2HpjEJ2IM4PBR+uyvcvjcSCvvgbUH
+	 XSh+EkCICeJfG20Hmyku/fxtVMnC5sgDdvcieQZiBZzPXR0nw/WvVrfYj2+j/m+xxY
+	 ocCP25WWH/iTy5Epo2lsQZ9RTcUnFkYlPY3fOsrPygdSM3Fo7s5D6N8reWNtH2BNBy
+	 h7JZGPTiyEeQLdD7LXyBzRTZHIdk3IVYaHOXhWmoPMn3KJmwnxQPtj0h3KoxgFYfzQ
+	 8xvyZYZ3MYJ/twubGpf01HMamTaVroY4nR+GfY+sHgAHS7oQFv5lxafgZ5qe8DZ5m/
+	 Lc0ZpDMoSqY5w==
+Date: Wed, 26 Nov 2025 11:29:35 +0000
+From: Lee Jones <lee@kernel.org>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>,
+	Juan Yescas <jyescas@google.com>,
+	Douglas Anderson <dianders@chromium.org>, kernel-team@android.com,
+	Kaustabh Chakraborty <kauschluss@disroot.org>,
+	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Samsung mfd/rtc driver alarm IRQ simplification
+Message-ID: <20251126112935.GA3070764@google.com>
+References: <20251120-s5m-alarm-v2-0-cc15f0e32161@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251120-s5m-alarm-v2-0-cc15f0e32161@linaro.org>
 
-Hi Nick,
+On Thu, 20 Nov 2025, André Draszik wrote:
 
-I have not used the regression tracker before, so let's give it a try:
+> Hi,
+> 
+> With the attached patches the Samsung s5m RTC driver is simplified a
+> little bit with regards to alarm IRQ acquisition.
+> 
+> The end result is that instead of having a list of IRQ numbers for each
+> variant (and a BUILD_BUG_ON() to ensure consistency), the RTC driver
+> queries the 'alarm' platform resource from the parent (mfd cell).
+> 
+> Additionally, we can drop a now-useless field from runtime data,
+> reducing memory consumption slightly.
+> 
+> The attached patches must be applied in-order as patch 2 without 1 will
+> fail at runtime, and patch 3 without 2 will fail at build time. I would
+> expect them all to go via the MFD tree. Alternatively, they could be
+> applied individually to the respective kernel trees during multiple
+> kernel release cycles, but that seems a needless complication and
+> delay.
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+> Changes in v2:
+> - rebase on top of https://lore.kernel.org/r/20251114-s2mpg10-chained-irq-v1-1-34ddfa49c4cd@linaro.org
+> - return struct regmap_irq_chip_data * in sec_irq_init() (Lee)
+> - collect tags
+> - Link to v1: https://lore.kernel.org/r/20251114-s5m-alarm-v1-0-c9b3bebae65f@linaro.org
+> 
+> ---
+> André Draszik (3):
+>       mfd: sec: add rtc alarm IRQ as platform device resource
+>       rtc: s5m: query platform device IRQ resource for alarm IRQ
+>       mfd: sec: drop now unused struct sec_pmic_dev::irq_data
+> 
+>  drivers/mfd/sec-common.c         | 45 ++++++++++++++++++++--------
+>  drivers/mfd/sec-core.h           |  2 +-
+>  drivers/mfd/sec-irq.c            | 63 ++++++++++++++++++----------------------
+>  drivers/rtc/rtc-s5m.c            | 21 +++++---------
+>  include/linux/mfd/samsung/core.h |  1 -
+>  5 files changed, 71 insertions(+), 61 deletions(-)
 
-#regzbot ^introduced: 795cda8338eab036013314dbc0b04aae728880ab
+The MFD parts look okay to me.
 
-Adrian
+Once we have the RTC Ack, I'll merge this and send out a PR.
 
-On Tue, 2025-11-25 at 22:18 -0500, Nick Bowler wrote:
-> Any thoughts?
->=20
-> The problem is still present in 6.18-rc7 and reverting the commit
-> indicated below still fixes it.
->=20
-> I am also seeing the same failure on a totally different system with
-> Dallas DS1286 RTC, which is also fixed by reverting this commit.
->=20
-> Since the initial report this regression has been further backported
-> to all the remaining longterm kernel series.
->=20
-> Thanks,
->   Nick
->=20
-> On Thu, Oct 23, 2025 at 12:45:13AM -0400, Nick Bowler wrote:
-> > Hi,
-> >=20
-> > After a stable kernel update, the hwclock command seems no longer
-> > functional on my SPARC system with an ST M48T59Y-70PC1 RTC:
-> >=20
-> >   # hwclock
-> >   [...long delay...]
-> >   hwclock: select() to /dev/rtc0 to wait for clock tick timed out
-> >=20
-> > On prior kernels, there is no problem:
-> >=20
-> >   # hwclock
-> >   2025-10-22 22:21:04.806992-04:00
-> >=20
-> > I reproduced the same failure on 6.18-rc2 and bisected to this commit:
-> >=20
-> >   commit 795cda8338eab036013314dbc0b04aae728880ab
-> >   Author: Esben Haabendal <esben@geanix.com>
-> >   Date:   Fri May 16 09:23:35 2025 +0200
-> >  =20
-> >       rtc: interface: Fix long-standing race when setting alarm
-> >=20
-> > This commit was backported to all current 6.x stable branches,
-> > as well as 5.15.x, so they all have the same regression.
-> >=20
-> > Reverting this commit on top of 6.18-rc2 corrects the problem.
-> >=20
-> > Let me know if you need any more info!
-> >=20
-> > Thanks,
-> >   Nick
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+-- 
+Lee Jones [李琼斯]
 
