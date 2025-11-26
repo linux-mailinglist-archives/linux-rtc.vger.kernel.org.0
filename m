@@ -1,141 +1,125 @@
-Return-Path: <linux-rtc+bounces-5458-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5459-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B56C87EBB
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 04:18:28 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30DB5C8872A
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 08:39:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DBA63B3F86
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 03:18:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5F42C4EBDC6
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Nov 2025 07:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B867F30DEBE;
-	Wed, 26 Nov 2025 03:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="QZDePy1B"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0021D2BE7C0;
+	Wed, 26 Nov 2025 07:38:32 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from luna.linkmauve.fr (luna.linkmauve.fr [82.65.109.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7730DD18
-	for <linux-rtc@vger.kernel.org>; Wed, 26 Nov 2025 03:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113FC2F1FD2;
+	Wed, 26 Nov 2025 07:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.65.109.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764127095; cv=none; b=RpLDmqXAnxt3bkIUzQCrGaOeAlqTV2jdjnOkiagQWPb8M9bIOGB5aVZmgX2aVi58k7Ztbh7Rx3b53ucEJUVvcCQ3BwENQolZLh2wbgVSXPCkMl/AN3bcPahMXiUsaXnbdELEk3zpUhxG/8qXvdBAwv5apgvLRYsvJW0xyK5pVsQ=
+	t=1764142712; cv=none; b=Ql+F+16jF9AEMwvlGKbWAzq+qGBoCu5CKjnCe84jD49Wi+I13MngQ1Q3Rlm+Jhv74gdp3ix+QT4+lWpFL68oyWY2hpralFSsYxYdjblNPcBvj9hKhTAW8JexuuCAKX3ZA1iGwInhQ6d3OWpgp2yhjGoSV129+6KClynab7xCrVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764127095; c=relaxed/simple;
-	bh=MebXQ/i/4CXGFSpTUvGXKnO4bK1YiUe6DcpTQoQ/VGA=;
+	s=arc-20240116; t=1764142712; c=relaxed/simple;
+	bh=m9HdBlhhrcsb1A89VJ9psxAlEXGuCEmEIB4V6gAH35g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ck/pNoi++hdFizA4vmkwKmnKHiuMjTQhXyAwV5ukCm+tjjakIBF2MS1isOShrAjheEkL7pi1Ev6OauYPlIm1B6DakpYDhQEl6Ge+uZrxUe5voP5S6tNsBQaLdyztOXjYTX2fMYgJTTO685K2UObFRMHIydj5zcVk+ys/9HKf1Vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=QZDePy1B; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4ee1e18fb37so64996411cf.0
-        for <linux-rtc@vger.kernel.org>; Tue, 25 Nov 2025 19:18:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1764127093; x=1764731893; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cvs0VVC0mcv4NgOGijtzLsQWvxXXKQp640I94GmhkA8=;
-        b=QZDePy1BQK7nrhF5my/7UsIFIUbHAKuC1dIVqNpFMrlAlNKOf+8jqdINeehVA6sbhO
-         G4u5OeAiry1/XeS5XF9Fd+ARzW/ZbZUIn/7ev9ZZaNSOLiM5bc1cVetA49Luqt1vaPAQ
-         56v7mzD8Eaw6HZuJknAQj+uP2sh4hB3TG/RuUB29vDr8zZQkK7ZGa5Evs7voMPiWYd9J
-         knDDiD+QbtuiDTkN0OnlX8gQC1FwU3/b4bV+HWJZS6Kx04DXMnL99r5LqxiQfIBbvVBA
-         QSkX2N4xYpTckY+63WFdTR6YRja49EEtM7sGqfCrhdiPle7ZnxgE3XKbpSlPPE3l3ERE
-         R3PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764127093; x=1764731893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cvs0VVC0mcv4NgOGijtzLsQWvxXXKQp640I94GmhkA8=;
-        b=W79GFamlHHb7W63nOOPSAKTjsOa/3cbidx+t05Ge/TwEa4CISMv86Z5ze2l3PvkNMb
-         uH2f0eQJlyaCwtnn7K1WpQappcYlQ1b2tck6ChEBZLKbALoXS0I5q4qUFRyCOsb/hloG
-         KKUzGoc/98YbBSdRO+BRyuGacHaOTHs3J7gytl6K/ku4Sun0NJFACEFuDq6JL0C3lCiE
-         CICtnBz1LqYo8E6hJtI7W3M4rWfmZwFM9QTx75pVfjgyOOr3J75o/972WqWyMCclQlkR
-         NsC/A61byj6sTlBZCVvhqBk/34QvD6yj/BPQSRTmn7IU5Uq3gA6xjZEmgpXA10qKp6vd
-         StrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8+KZ9HRdtFGDi5WMWH07ZrUoKfexZabf+rVrawdZJI5HwOsH7Z/GiJeyGCe2G/y9HMXDL10DYXMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmQ7waTYIOp0J7YNjziZVdXM4XPOwXJaeiccrcbiHZQ9Pg9cMf
-	7eAPHXCoVMGfX8Z2GuL/lP8nVnxrSMT2iJ23X6ixti7oEJnOsmqTPFZyRbFtvq78vZc=
-X-Gm-Gg: ASbGncvXM+wqvggGpQ9wgBSCmX5/YCe3JfkYyXxAW27KCWQa0RThNZx9P3wdfAM+cBU
-	+WSAh9TSn7RLoQ9AI7H5zqQyqFmMQKwWSvfd3Rq5tCdX9wOVROKYHL9+YDJYUkeCAz8CxVqPfzt
-	RjwnfUX9q3vEtvR0ZXCzgjYhiJKZOZ45QIcX8NVqIdYoob0FqYwn+6KDudcWjv8mSomfTIzBmWf
-	yuOu/eIRaknmPIS8Zbkfi3gMl2Xo4OVcuegOVbwx/ei2u3d1RZQXGg45yaNHQ9LQEKuFMxX1t+r
-	GGwO3EZoVnOC/mas143CsJSPRC8L9xpZgdZztxpdoBN0FqycqY8k4k7oWigd6CCN2SskVLyi34O
-	usYvGxp/R9fm3tvHm86mufGqB/Qff8ADgSgtEUb2wXjwGzQR5wTNShcRrsKzP8Yw3eef7R54bBu
-	7MsaieFIwTn1ssagQyBe9W3vJ+7xDdXn2mSoeIe25mwVRkWANHcSg=
-X-Google-Smtp-Source: AGHT+IFVPZAvlFu8nDpWWVLI1C6FD2IyTsqdkG4yg1n+X5k0lKqQqgf0T0rJLMz2wOCW390Qqgh8pg==
-X-Received: by 2002:ac8:5f84:0:b0:4ee:2c3c:6e with SMTP id d75a77b69052e-4efbda49e09mr73391871cf.30.1764127092631;
-        Tue, 25 Nov 2025 19:18:12 -0800 (PST)
-Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4ee48d3a041sm115728681cf.1.2025.11.25.19.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 19:18:11 -0800 (PST)
-Date: Tue, 25 Nov 2025 22:18:10 -0500
-From: Nick Bowler <nbowler@draconx.ca>
-To: linux-kernel@vger.kernel.org, regressions@lists.linux.dev, 
-	linux-rtc@vger.kernel.org
-Cc: Esben Haabendal <esben@geanix.com>, stable@vger.kernel.org, 
-	sparclinux@vger.kernel.org
-Subject: Re: PROBLEM: hwclock busted w/ M48T59 RTC (regression)
-Message-ID: <gfwdg244bcmkv7l44fknfi4osd2b23unwaos7rnlirkdy2rrrt@yovd2vewdviv>
-References: <krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E79pR5EAC+rLNEtpAP4miMgdIgEHCf1boSA7RPPlwKwvYVK9YmY2vv7hnQtk5Y4l836I91UAK2RuCnbU1lGwsCpPSWDIQB2120FX34rIIWX6OAC/0Xk2HqgREW+qpQVUXsYXMXTR8q61377F6iHh5fcgNVrQKg4+NGEV8NBH++M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr; spf=pass smtp.mailfrom=linkmauve.fr; arc=none smtp.client-ip=82.65.109.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linkmauve.fr
+Received: by luna.linkmauve.fr (Postfix, from userid 1000)
+	id 755D96C7E0BB; Wed, 26 Nov 2025 08:33:15 +0100 (CET)
+Date: Wed, 26 Nov 2025 08:33:15 +0100
+From: Link Mauve <kernel@linkmauve.fr>
+To: Haotian Zhang <vulab@iscas.ac.cn>
+Cc: alexandre.belloni@bootlin.com, linkmauve@linkmauve.fr,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: gamecube: Check the return value of ioremap()
+Message-ID: <aSatO6MgjdnurVBJ@desktop>
+References: <20251126012019.1003-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="D0VjSyyxrcEI3t+E"
 Content-Disposition: inline
-In-Reply-To: <krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
+In-Reply-To: <20251126012019.1003-1-vulab@iscas.ac.cn>
+Jabber-ID: linkmauve@linkmauve.fr
 
-Any thoughts?
 
-The problem is still present in 6.18-rc7 and reverting the commit
-indicated below still fixes it.
+--D0VjSyyxrcEI3t+E
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am also seeing the same failure on a totally different system with
-Dallas DS1286 RTC, which is also fixed by reverting this commit.
+Good catch!
 
-Since the initial report this regression has been further backported
-to all the remaining longterm kernel series.
+On Wed, Nov 26, 2025 at 09:20:19AM +0800, Haotian Zhang wrote:
+> The function ioremap() in gamecube_rtc_read_offset_from_sram() can fail
+> and return NULL, which is dereferenced without checking, leading to a
+> NULL pointer dereference.
+>=20
+> Add a check for the return value of ioremap() and return -ENOMEM on
+> failure.
+>=20
+> Fixes: 86559400b3ef ("rtc: gamecube: Add a RTC driver for the GameCube, W=
+ii and Wii U")
+> Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+> ---
+>  drivers/rtc/rtc-gamecube.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
+> index c828bc8e05b9..cd7714437107 100644
+> --- a/drivers/rtc/rtc-gamecube.c
+> +++ b/drivers/rtc/rtc-gamecube.c
+> @@ -242,6 +242,10 @@ static int gamecube_rtc_read_offset_from_sram(struct=
+ priv *d)
+>  	}
+> =20
+>  	hw_srnprot =3D ioremap(res.start, resource_size(&res));
+> +	if (!hw_srnprot) {
+> +		pr_err("Failed to ioremap hw_srnprot\n");
 
-Thanks,
-  Nick
+The error messages on lines 240 and 276 start with a lowercase letter,
+please use the same case for this message.  From a quick grep through
+the kernel, it seems we use either lowercase or uppercase, but I=E2=80=99d
+prefer to keep the case consistent in this driver at least.
 
-On Thu, Oct 23, 2025 at 12:45:13AM -0400, Nick Bowler wrote:
-> Hi,
-> 
-> After a stable kernel update, the hwclock command seems no longer
-> functional on my SPARC system with an ST M48T59Y-70PC1 RTC:
-> 
->   # hwclock
->   [...long delay...]
->   hwclock: select() to /dev/rtc0 to wait for clock tick timed out
-> 
-> On prior kernels, there is no problem:
-> 
->   # hwclock
->   2025-10-22 22:21:04.806992-04:00
-> 
-> I reproduced the same failure on 6.18-rc2 and bisected to this commit:
-> 
->   commit 795cda8338eab036013314dbc0b04aae728880ab
->   Author: Esben Haabendal <esben@geanix.com>
->   Date:   Fri May 16 09:23:35 2025 +0200
->   
->       rtc: interface: Fix long-standing race when setting alarm
-> 
-> This commit was backported to all current 6.x stable branches,
-> as well as 5.15.x, so they all have the same regression.
-> 
-> Reverting this commit on top of 6.18-rc2 corrects the problem.
-> 
-> Let me know if you need any more info!
-> 
-> Thanks,
->   Nick
+> +		return -ENOMEM;
+> +	}
+>  	old =3D ioread32be(hw_srnprot);
+> =20
+>  	/* TODO: figure out why we use this magic constant.  I obtained it by
+> --=20
+> 2.50.1.windows.1
+>=20
+
+With that change:
+Reviewed-by: Link Mauve <kernel@linkmauve.fr>
+
+--=20
+Link Mauve
+
+--D0VjSyyxrcEI3t+E
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEjrVT1SzTln43kCLJOWgfYkb2LpAFAmkmrTcACgkQOWgfYkb2
+LpB2xgf/UaffCZJpmuVNtBPU1VokxsmdGAGGCvGxerZHtlBLjP2GZNY76mp4p2KQ
+g7wrrRHCFg7EmirXWkyd1/eccm69NzVguv+Z7CIh4TpPfMvIpIj1aqOAvKm5Eqlu
+U51wQP0SLOaJ1tdHGcjHuuAD8VKom37M5w5Rw3CaqVrhi5Sm+U9Aq16gWxsHN88v
+0aHlJoQefztU0mOUWVK9eKHSdYR9Ha/1sXhX/YRWL+I4cm7OHZ6MTQfsaWzS+rPs
+YXKpXiKf9JFHrek7Cb2Zji1bWYE+0+1Viw26vKDRKZgmf1etQ5pG/I4BwL74ZSIs
+K1JvzbAndtHj5lSjqdv4RmuV1p7pMg==
+=qliF
+-----END PGP SIGNATURE-----
+
+--D0VjSyyxrcEI3t+E--
 
