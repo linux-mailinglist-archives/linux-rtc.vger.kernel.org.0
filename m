@@ -1,140 +1,212 @@
-Return-Path: <linux-rtc+bounces-5486-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5487-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F51C8E086
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 12:25:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CE4FC8E2F0
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 13:05:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80E563A6E4C
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 11:22:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 431BC3AE33F
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 12:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D71932ED26;
-	Thu, 27 Nov 2025 11:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bNZKoPli"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A23432E728;
+	Thu, 27 Nov 2025 12:05:15 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8C932D0EE
-	for <linux-rtc@vger.kernel.org>; Thu, 27 Nov 2025 11:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DED832E6BD;
+	Thu, 27 Nov 2025 12:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764242471; cv=none; b=ds57MDnpwkFFZixIGhA8Hlih6bT6R2FBIDQBPF9rKhy0rkbUX/m90Vbou4Jw4vEy6PxV/hndG3z6vk9NNrEDkyoLn6dNWaIruyWufF31jFedBMXVjKZAVxIWtvNKBj8Q8C4UVOP8IybB42UZl729LpayanXBt05ca0+L1S+Bn6A=
+	t=1764245115; cv=none; b=Kv9/A7p0gpC/nYEiBtoP0U6A1AlYl3QLI4EJX9P1gI9ucdQ2ik4A+h4mKTEabp5zyPlwD5XJE5dCeTr7oEDxQuYR5z4oyngNOpSbC6TAOh9ippKY7govZSerXLw1sjKpgyMzUqeIXQvq0LFzf4tviTx6jral9qJjOf8it864Pqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764242471; c=relaxed/simple;
-	bh=Ap6/9SbkbbPmwKUm+ihzBVNWRWeUs4zdF9KjvdKRdpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7Hs+9EXsQoyyK5/85l9KZh3UlLTKlcd6LvmnkfONrAvuyzvA+a7L/SPk6tFpJhJh/G8EBk3av8kd7u0wLf/nfzYir2huOxEo3QdyKDba6MWHgfsUSk/06F1AbJBVgRG965RPX2EXffIsVGQkgrmRxyemBySKS2+vlmkTWZu6jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bNZKoPli; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 27 Nov 2025 13:20:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764242467; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=9hlvCyZam0KEugkCTICJnPQK3CmfT/W9AcEwJZGBgVM=;
-	b=bNZKoPlijfeIKaessbhVKny47LUKJ96A8IP++cezctLMuEAswDl7dm94n5cgZ1rJgbu0kH
-	ac7WG827thIkBZkzxrRokIrtVGsgZufp/lcbh5c/GQOo+haInO57NBPwGB5cJ8jPreLuBa
-	EP7ij3w6c52Q2cch1r5DqRWtXjxMjps=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Matti Vaittinen <matti.vaittinen@linux.dev>
-To: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v6 17/17] MAINTAINERS: Add ROHM BD72720 PMIC
-Message-ID: <e9bf9a504fdd5011adc4a012d59f71a9385d57ea.1764241265.git.mazziesaccount@gmail.com>
-Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
-References: <cover.1764241265.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1764245115; c=relaxed/simple;
+	bh=eQcaX7QQGRbichX5g121DxRcToGnuFmjTqFeqxFEnpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IU6P1Z0WL3K8RraT6hKyU8i8xI4Vw7WIdnWYZrhlKPpgzUs1mVC5e99rd+UISRrNZ1A3b+Ed3q2rdFIDROXUYlZwpycFGpAzUk0cztnwjpoVPNc9ph74apXMoZGObtxOwMk68cw1QByZIBIi9c48Q4r4mBOsSVB6VgKDVcQ/WFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4FB3D1A02A0;
+	Thu, 27 Nov 2025 13:05:06 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 15D811A02A3;
+	Thu, 27 Nov 2025 13:05:06 +0100 (CET)
+Received: from lsv03900.swis.in-blr01.nxp.com (lsv03900.swis.in-blr01.nxp.com [10.12.177.15])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id C48241800083;
+	Thu, 27 Nov 2025 20:05:04 +0800 (+08)
+From: Lakshay Piplani <lakshay.piplani@nxp.com>
+To: alexandre.belloni@bootlin.com,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org
+Cc: vikash.bansal@nxp.com,
+	priyanka.jain@nxp.com,
+	shashank.rebbapragada@nxp.com,
+	Lakshay Piplani <lakshay.piplani@nxp.com>,
+	Pankit Garg <pankit.garg@nxp.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v7 1/2] dt-bindings: rtc: Add pcf85053 support
+Date: Thu, 27 Nov 2025 17:34:55 +0530
+Message-Id: <20251127120456.1849177-1-lakshay.piplani@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TAKA8cOt62rM1h2P"
-Content-Disposition: inline
-In-Reply-To: <cover.1764241265.git.mazziesaccount@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 
+Add device tree bindings for NXP PCF85053 RTC chip.
 
---TAKA8cOt62rM1h2P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-=46rom: Matti Vaittinen <mazziesaccount@gmail.com>
-
-Add the ROHM BD72720 PMIC driver files to be maintained by undersigned.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
+Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
+Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
-Revision history:
- RFCv1 =3D>:
- - No changes
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+V6 -> V7: - no changes
+	  - Added Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+V5 -> V6: - Dropped driver-specific commentary from property descriptions.
+	  - Simplified and clarified descriptions for better readability.
+V4 -> V5: - Updated schema validation logic to enforce correct combinations of
+            'nxp,interface' and 'nxp,write-access' using oneOf clauses.
+          - Refined property descriptions for clarity and hardware alignment.
+V3 -> V4: Add dedicated nxp,pcf85053.yaml.
+          Remove entry from trivial-rtc.yaml.
+V2 -> V3: Moved MAINTAINERS file changes to the driver patch
+V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe01aa31c58b..7e3c1eac7cda 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22353,6 +22353,7 @@ S:	Supported
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
-+F:	drivers/gpio/gpio-bd72720.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-@@ -22369,6 +22370,7 @@ F:	drivers/watchdog/bd96801_wdt.c
- F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
-+F:	include/linux/mfd/rohm-bd72720.h
- F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-bd96802.h
---=20
-2.52.0
+ .../devicetree/bindings/rtc/nxp,pcf85053.yaml | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
 
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
+new file mode 100644
+index 000000000000..81cfceabc04c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2025 NXP
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/nxp,pcf85053.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PCF85053 Real Time Clock
++
++maintainers:
++  - Pankit Garg <pankit.garg@nxp.com>
++  - Lakshay Piplani <lakshay.piplani@nxp.com>
++
++properties:
++  compatible:
++    enum:
++      - nxp,pcf85053
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  nxp,interface:
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [ primary, secondary ]
++    description: |
++      Identifies this host's logical role in a multi-host topology for the
++      PCF85053 RTC. The device exposes a "TWO" ownership bit in the CTRL
++      register that gates which host may write time/alarm registers.
++        - "primary": Designated host that *may* claim write ownership (set
++          CTRL.TWO=1) **if** write-access is explicitly requested.
++        - "secondary": Peer host that writes only when CTRL.TWO=0 (default).
++
++      This property determines the intended role of the host in relation to
++      the write ownership.
++
++      The actual role depends on whether 'nxp,write-access' is also specified.
++      Supported configurations are:-
++        1. Primary with 'nxp,write-access' -> primary claims write ownership.
++        2. Primary without 'nxp,write-access' -> primary is ready only; secondary may write.
++        3. Secondary (must not specify 'nxp,write-access') -> Secondary writes only
++           when no primary claims ownership.
++
++  nxp,write-access:
++    type: boolean
++    description: |
++      Indicates that write ownership of the PCF85053 RTC should be claimed by setting
++      CTRL.TWO=1. This property is only valid when acting as the primary interface
++      (nxp,interface="primary").
++
++required:
++  - compatible
++  - reg
++  - nxp,interface
++
++additionalProperties: false
++
++allOf:
++  - $ref: rtc.yaml#
++  - if:
++      properties:
++        nxp,interface:
++          const: secondary
++    then:
++      not:
++        required: [ "nxp,write-access" ]
++
++examples:
++  # Single host example.
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rtc@6f {
++        compatible = "nxp,pcf85053";
++        reg = <0x6f>;
++        nxp,interface = "primary";
++        nxp,write-access;
++        interrupt-parent = <&gpio2>;
++        interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
++      };
++    };
++
++  # Dual-host example: one primary that claims writes; one secondary that never claims writes.
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rtc@6f {
++        compatible = "nxp,pcf85053";
++        reg = <0x6f>;
++        nxp,interface = "primary";
++        nxp,write-access;
++        interrupt-parent = <&gpio2>;
++        interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
++      };
++    };
++
++    i2c1 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rtc@6f {
++        compatible = "nxp,pcf85053";
++        reg = <0x6f>;
++        nxp,interface = "secondary";
++      };
++    };
+-- 
+2.25.1
 
---TAKA8cOt62rM1h2P
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkoNBsACgkQeFA3/03a
-ocX3XwgA0e7s/RbGuUWSAffxeMa2iMDujJPBu2E1K8RfwmVs+g7zs1N1LXPRjig0
-RsN2Q6KdvgbMyTWjhich47XuU1THSsNf5zWKCWw9lgsopVO5UMxnRfJWaNlDNCDG
-5WetCUfKGSjh0uJHmg6y48ggWigquj/D+8z/cqELCWTiXlEVxvzSW1gbYUn2a6/e
-oKHSGSHMg1gXoho7utxadtFxdfI0kBiuEs724deIcx9L4TLMsktEmV0+t5j5E1Jj
-naA+FsVE0tfSlMwpSEOV7L4WVUaDrd/JjeO+poH74sjwgQx7CXke9nCYIbdywWCs
-5hjJhl0RnIlLdrd4k9xiu0lCEs/KLQ==
-=l3La
------END PGP SIGNATURE-----
-
---TAKA8cOt62rM1h2P--
 
