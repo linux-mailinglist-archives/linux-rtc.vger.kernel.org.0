@@ -1,49 +1,49 @@
-Return-Path: <linux-rtc+bounces-5489-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5490-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23346C8E5BC
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 14:00:12 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D8D1C8E628
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 14:15:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0BBD84E5475
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 13:00:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 08CAA34C399
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Nov 2025 13:15:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26A9267729;
-	Thu, 27 Nov 2025 13:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188591E00B4;
+	Thu, 27 Nov 2025 13:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bgu5tLRM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="idiZWJ4i"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B80723A984;
-	Thu, 27 Nov 2025 13:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC81229A1;
+	Thu, 27 Nov 2025 13:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764248408; cv=none; b=iKj6euHjzZd126LN3CWjZfPgNXXD0jcwjnmu+PQlswDWtIEv/LQ4DQ5jroD1D5vsMSJ3A9KZrRskzMvC9h1XSnDo0a98rS/h2ZA0eCxsH+yb/nTZcG4P4a/Rug+KCuDaERR/U5asLNJmQ9oc3wKZkRQWrRg4FdZqvKbE7CVwknQ=
+	t=1764249314; cv=none; b=VS18qO4fgnWAD7oQ7pr5rCg7OWwqPHB+T9+Gw/QvRsU/65nFD66deG4O2FYf9NVCDO40e1hBdfhZ+sQ6vWkJHc6M6xftJ4RWjK1Tw+4GMJ0vzA/pekNmgPn111VlK7nfJNE6OUznRoHJj8+JJUzSmYUPZqbsda8cPo69WC1azNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764248408; c=relaxed/simple;
-	bh=6LrJVzLjJp3Q+EaA05iUYg1t/kmAtnKEHrk0vSbRdfI=;
+	s=arc-20240116; t=1764249314; c=relaxed/simple;
+	bh=/pYQe+AEElC8pJ6wJmKYGTTUlDA7qrt2HtbBAmtPy6o=;
 	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=MmHS12oPUyIDXnTfsCfdKipvxyrUAMU21tW+R2HffFMV5A41/TTQu70Ka9qDO4ItQO395On7c/WWOdLV9IMIyd1e418NMkiV7l/cS366ZnZAmeWrsegZbe49pDDRInqbF7+c8KFu8gN1Ld+1bUEqd7Nk4CC14vg9eDTxEpSv/Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bgu5tLRM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2195C4CEF8;
-	Thu, 27 Nov 2025 13:00:07 +0000 (UTC)
+	 Message-Id:Subject; b=cuWZPRJnMy7UL1P4vU//xGD5I3fYB3su9gz4r6/rqGZHpSu8oJNYlEc5grLPVL6R6GKVxT63Oc+HE08LCJpQLIEzMt487rC8CcJiMPV6LmJzQli0d7jI8dJTbRGW2+QVQNxevEUD+sSHF8addv0nHnJWPYa1yVupComik/VZ0AU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=idiZWJ4i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CCDDC4CEF8;
+	Thu, 27 Nov 2025 13:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764248408;
-	bh=6LrJVzLjJp3Q+EaA05iUYg1t/kmAtnKEHrk0vSbRdfI=;
+	s=k20201202; t=1764249313;
+	bh=/pYQe+AEElC8pJ6wJmKYGTTUlDA7qrt2HtbBAmtPy6o=;
 	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=Bgu5tLRM8p3LGiPa1+Tciv4cbuelDjgjUOe8fkwlBz+rnAtJQt6LiTyVA2WcFAmIO
-	 0/tMiZ220QT/crLXEVpjfQuiXc7sZNNO3wGYoSSpb62NEZtKvaPkCQmfPP1hosjekV
-	 sVZYSr7hMR6ZK7dZTgkASDFvS+27O5AFMtXHvVETsxJiUUm3YQMdjC7cD4Gayeme0e
-	 ZtG3ON2sfuI9qwkPV8fT4TXKTkSHdl6q56xjDkOf+TnBY87JLO42rgg6LZwggnIt0A
-	 zKQm3ki5z/IZfi9+NuZ/mL5cSuNnYlzDLQkGCNMqYTkiotIv0kt7/zjIfyWZZikKom
-	 nxyLZPp6rAA2w==
-Date: Thu, 27 Nov 2025 07:00:06 -0600
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+	b=idiZWJ4iIIgAFunFsVENkhIQ2qqFGL4Ohv+cpgFVbK8HK0h13B9x9JS/pIxsBWkxb
+	 H93QbN4XT20IlBlap2l9NMxL2pO1bmJ0CLhF7nMUogojkJcKR1Bna+B8VK/iclmCBW
+	 3uMRh5Atw8ku2p6XxjIbRalEgH/AuyIp+ajpYVJ7clgNdUZTi9TkXDUFVqiv/D586U
+	 4JwWIo4xKY6Bi2dNNzYqIoydcXhitwE43FvSD55gKnWSVywF74HfZzaTerTKrA63rY
+	 3/S8kHWh4Girklc55LQ9Wh8BRS1EiRGq9ACnX5tYbzsmyuwvPyGriynr2/3n5Hj/Dy
+	 ii0vZJHcnG7Bw==
+Date: Thu, 27 Nov 2025 07:15:11 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -51,68 +51,41 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Matti Vaittinen <mazziesaccount@gmail.com>, 
- Mark Brown <broonie@kernel.org>, linux-leds@vger.kernel.org, 
- linux-gpio@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-pm@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, devicetree@vger.kernel.org, 
- Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Sebastian Reichel <sre@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, Andreas Kemnade <andreas@kemnade.info>, 
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To: Matti Vaittinen <matti.vaittinen@linux.dev>
-In-Reply-To: <28726d1e0573a6efb6e70716a23ba27c4fc93c6d.1764241265.git.mazziesaccount@gmail.com>
-References: <cover.1764241265.git.mazziesaccount@gmail.com>
- <28726d1e0573a6efb6e70716a23ba27c4fc93c6d.1764241265.git.mazziesaccount@gmail.com>
-Message-Id: <176424840632.3926566.6121421598691420073.robh@kernel.org>
-Subject: Re: [PATCH v6 01/17] dt-bindings: regulator: ROHM BD72720
+Cc: linux-rtc@vger.kernel.org, priyanka.jain@nxp.com, 
+ Conor Dooley <conor.dooley@microchip.com>, vikash.bansal@nxp.com, 
+ krzk+dt@kernel.org, shashank.rebbapragada@nxp.com, 
+ Pankit Garg <pankit.garg@nxp.com>, linux-kernel@vger.kernel.org, 
+ conor+dt@kernel.org, alexandre.belloni@bootlin.com, 
+ devicetree@vger.kernel.org
+To: Lakshay Piplani <lakshay.piplani@nxp.com>
+In-Reply-To: <20251127120456.1849177-1-lakshay.piplani@nxp.com>
+References: <20251127120456.1849177-1-lakshay.piplani@nxp.com>
+Message-Id: <176424931148.3999997.8332932232270023828.robh@kernel.org>
+Subject: Re: [PATCH v7 1/2] dt-bindings: rtc: Add pcf85053 support
 
 
-On Thu, 27 Nov 2025 13:16:59 +0200, Matti Vaittinen wrote:
-> From: Matti Vaittinen <mazziesaccount@gmail.com>
+On Thu, 27 Nov 2025 17:34:55 +0530, Lakshay Piplani wrote:
+> Add device tree bindings for NXP PCF85053 RTC chip.
 > 
-> The ROHM BD72720 is a new PMIC with 10 BUCk and 11 LDO regulators.
-> 
-> The BD72720 is designed to support using the BUCK10 as a supply for
-> the LDOs 1 to 4. When the BUCK10 is used for this, it can be set to a
-> LDON_HEAD mode. In this mode, the BUCK10 voltage can't be controlled by
-> software, but the voltage is adjusted by PMIC to match the LDO1 .. LDO4
-> voltages with a given offset. Offset can be 50mV .. 300mV and is
-> changeable at 50mV steps.
-> 
-> Add 'ldon-head-microvolt' property to denote a board which is designed
-> to utilize the LDON_HEAD mode.
-> 
-> All other properties are already existing.
-> 
-> Add dt-binding doc for ROHM BD72720 regulators to make it usable.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> 
+> Signed-off-by: Pankit Garg <pankit.garg@nxp.com>
+> Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
-> Revision history:
->  v4 =>
->  - No changes
+> V6 -> V7: - no changes
+> 	  - Added Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> V5 -> V6: - Dropped driver-specific commentary from property descriptions.
+> 	  - Simplified and clarified descriptions for better readability.
+> V4 -> V5: - Updated schema validation logic to enforce correct combinations of
+>             'nxp,interface' and 'nxp,write-access' using oneOf clauses.
+>           - Refined property descriptions for clarity and hardware alignment.
+> V3 -> V4: Add dedicated nxp,pcf85053.yaml.
+>           Remove entry from trivial-rtc.yaml.
+> V2 -> V3: Moved MAINTAINERS file changes to the driver patch
+> V1 -> V2: Handled dt-bindings by trivial-rtc.yaml
 > 
->  v3 => v4:
->  - Drop type from ldon-head
->  - Fix the name patterns for regulator nodes and names
-> 
->  v2 => v3:
->  - drop unnecessary descriptions
->  - use microvolts for the 'ldon-head' dt-property
-> 
->  RFCv1 => v2:
->  - No changes
-> ---
->  .../regulator/rohm,bd72720-regulator.yaml     | 148 ++++++++++++++++++
->  1 file changed, 148 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+>  .../devicetree/bindings/rtc/nxp,pcf85053.yaml | 114 ++++++++++++++++++
+>  1 file changed, 114 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85053.yaml
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
@@ -120,13 +93,18 @@ My bot found errors running 'make dt_binding_check' on your patch:
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-
+Documentation/devicetree/bindings/thermal/thermal-zones.example.dtb: /example-0/soc/thermal-sensor@c263000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-zones.example.dtb: /example-0/soc/thermal-sensor@c263000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-zones.example.dtb: /example-0/soc/thermal-sensor@c265000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-zones.example.dtb: /example-0/soc/thermal-sensor@c265000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-sensor.example.dtb: /example-0/soc/thermal-sensor@c263000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-sensor.example.dtb: /example-0/soc/thermal-sensor@c263000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-sensor.example.dtb: /example-0/soc/thermal-sensor@c265000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
+Documentation/devicetree/bindings/thermal/thermal-sensor.example.dtb: /example-0/soc/thermal-sensor@c265000: failed to match any schema with compatible: ['qcom,sdm845-tsens', 'qcom,tsens-v2']
 
 doc reference errors (make refcheckdocs):
-Warning: Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
-Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml: Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/28726d1e0573a6efb6e70716a23ba27c4fc93c6d.1764241265.git.mazziesaccount@gmail.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20251127120456.1849177-1-lakshay.piplani@nxp.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
