@@ -1,162 +1,116 @@
-Return-Path: <linux-rtc+bounces-5493-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5494-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09672C91AD3
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Nov 2025 11:37:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CBCDC92980
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Nov 2025 17:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C34A34E5008
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Nov 2025 10:37:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 964774E1C4D
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Nov 2025 16:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C332730BF78;
-	Fri, 28 Nov 2025 10:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3A728469B;
+	Fri, 28 Nov 2025 16:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyFJfB5E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYgur2ci"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C24309DAF
-	for <linux-rtc@vger.kernel.org>; Fri, 28 Nov 2025 10:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495D3264F81
+	for <linux-rtc@vger.kernel.org>; Fri, 28 Nov 2025 16:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764326229; cv=none; b=lxuzcKIUp35ZIW7m2mibgcdjGXbyT9pHl+tPmFXL2V0yq8qhn1OZFjV6PpTOZLQvl1FZCvWXDpegNF49naxAATkseQYl/V7IFvL/zoqqHGSCwKazN6skv97z5CT11vTUXlVkZiKhhhRfkFYILVtuq3GSyZTBKOJE5pXywmFWOZA=
+	t=1764347772; cv=none; b=uxRQTabd95xQd9fO6vRAaM4wy+xSOGR+jH7p3EOWzwjjz2x7saGmFsJv2iTXrWN9bY4uiqv9UxGiJzY9LEs9/PAJQGn8e1pveCl1AyH2/02c2zSHqYIA1APW7+ltcu2JRXSOcACZp8K4+Jp1HNEwS56yaQvQVf+AABVzg4iOmSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764326229; c=relaxed/simple;
-	bh=LsjBUCj2srMne7edzgGW8cbMkZIkCTv5yV9uYfkGBBM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Dk8PpFCJskTGiupldbjsFwjtr6pFHclkz6yc2MYYJrYdHLF6F3/bxZpYSDuhzGqUNNvti6o/BrXlEDxnIj7vwVUvHuKz0NUT3X4LvDXyA6+67Jx11Jg5849ZH3iyB5oIK4cH2uZc76VVZWexPwM5Bg75XXBXbq6MUK+03YL7Ko0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyFJfB5E; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-29586626fbeso22023565ad.0
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Nov 2025 02:37:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764326226; x=1764931026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L4VICBTALhOgKQ11NcNnDdPOSrcRxYndkOphogjBgx4=;
-        b=TyFJfB5Ep4A7ODMRUKn8tZ7ZKi6TTBW1kh28faa/niAkS6GcO8WPf7G2Y/g2oubik4
-         fzhckhp4qq0IWU5BuOJALxL+nzRPxaWHgo1g9roiJv36iT+0X0zcgfy4kLjj4LdS1Lfd
-         /Zg4DJZisPmw9SZFyC5gUpkdHDVHYlVp+2+5V6+6U1k8P7EfvhrYND5Xr09YDd1O7r8l
-         Mp/4S/Lb8cDe/tJyl7mgZfCnk3kI+lxQFxcsLRG/9PngjLN7x6NQZrojCz4YtrlFc1wy
-         s9yUOjCqBxKzevDIKlwZp6JZL/rHCSdgSNlqpZnvl6jjaotXbp3Wnla1FLhVmXgX7wDu
-         d9Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764326226; x=1764931026;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=L4VICBTALhOgKQ11NcNnDdPOSrcRxYndkOphogjBgx4=;
-        b=itnvjzPqDRxdKSPjkGFHv989FUx8MH5fQuI6SP5S9Vl+c7ctLXvOBA6kXsHPDyruKu
-         wVIYTHeAO72RGTYxuIjhqlZ0Xd+Er2c/Z+T8ZH2Fe+xVQjYFRjNRRqozDNJUXH3zI/E8
-         erklTiOKajOrP1g6lPqPeM7y3zxJ2ZXRpq7zG8uNCTTWmWuxksxx4FXD0QuiJ42tx3HH
-         tU3Vqj4EX6zARlA1g5yCsWaP1fmUJ0L1JVqMiZZ6+c6sD7m9j117UdUfDR9/b7irfOFR
-         hsR/IZ7/P3GxvjjuzR6zrubRXMPGp861lKXmq+H3oxt5Mmu/1xD6Tx2ImGST/8GqVB+7
-         N2ug==
-X-Forwarded-Encrypted: i=1; AJvYcCXgncziMgS0AOJxsJKTH8pEXA31JIoSW2UAxgSw8ZCMzijTu7WkfWK//wLwAEg6su0q/WF8/hl2GDs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxklKn/ZtD7ne5kspYxwPVpMQN4FN1/MrNd9fpRCFInh3LWS/SA
-	EZDc0QdGbna8fw9aPUJH0ckZNeZPrrZfdWH5e60cBqHt6hkz/RsSx7Hl
-X-Gm-Gg: ASbGncvRfHlG1SHPbNRXGoeVmM81EQhcdajROAOUvsFq6zjd2llJ16CboSWnEeEhhbJ
-	SlaeXEhV9bamteDItIOaI9kkfhXXFbOdmZvFMZDJ1wGyNYQkN4JeCkzhyIxmQbD8d/SUL0KK/BQ
-	ZDBYEhJZRT3bRKFwmdZXg9Oam0tJWKMnz8RlyIYlERSbhCpx1CODAnKKOmamiSXAAu3jKhnTbEf
-	o2Isj2zZjas5BiDyaN5RFvYiaSQ721wt18+pkUPOf2lcSyQ5JXH5sq1c2gg5ZGcPunXRPrFCANk
-	DDGhHOBGp+XVAIB5+TjNs0FZ68/hgyPtDv+i+mS1fqoOg6WDe0z2fjmn4yQl/3Yyasf4jtbDzui
-	teFeCE5Xyxme56kEHNk46xZDX7wY46L0YyxlpoLyQrvTYAAWsMUzbjdwUbFBFlOdapz6hD+eASd
-	Seyo6H/qmQGNgyk+5TEirh6L/3FNJ/oXB/MMyzgLKUJRYUp7TXbrkJVJSQ2zcAHxXeOCSU2U/BK
-	yBSD0a3kE6N/2+AeRqOPYWjE9GTGNUYeoRDgIcSIVKPVzangST1ScmgQiqMVgi686IJIyhTCbN5
-	X83MMxmn+X1wx5qopZ/a4rP8Qen96+VZpE/MPUgVxhJvsqzPX9/EeKM=
-X-Google-Smtp-Source: AGHT+IGMXq1Dh7hKw7TbowlI22iUZ08cEdFKrn/i/FIQAiWpJQ+dGpYRwCov3xkXMTBkJf1Am/GMAQ==
-X-Received: by 2002:a17:903:b84:b0:295:b7a3:30e6 with SMTP id d9443c01a7336-29b6bec45damr309873285ad.18.1764326225590;
-        Fri, 28 Nov 2025 02:37:05 -0800 (PST)
-Received: from setsuna.localnet (2403-580a-80ed-0-4835-5a07-49e7-f115.ip6.aussiebb.net. [2403:580a:80ed:0:4835:5a07:49e7:f115])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce470347sm41643525ad.41.2025.11.28.02.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 02:37:05 -0800 (PST)
-From: James Calligeros <jcalligeros99@gmail.com>
-To: Lee Jones <lee@kernel.org>
-Cc: Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
- linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 05/11] mfd: macsmc: Add new __SMC_KEY macro
-Date: Fri, 28 Nov 2025 20:36:56 +1000
-Message-ID: <1938104.tdWV9SEqCh@setsuna>
-In-Reply-To: <20251120134445.GC661940@google.com>
-References:
- <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
- <20251112-macsmc-subdevs-v5-5-728e4b91fe81@gmail.com>
- <20251120134445.GC661940@google.com>
+	s=arc-20240116; t=1764347772; c=relaxed/simple;
+	bh=rV8j9wbrOPZrNlvkNJphUfu8i9HlNDBAEuKSg/M5zr8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lXSVghyAfHDW/L8D42whoB+hpUWWOHtJ7AT62ByYh/JBXoc3blQAjGfxygMfXGp33bWPD7sc5w0QDiTwIb2KZNalSMm4uWLw01jXLIuEiowTwfoIwOtHqbzGH7j6gPrOyZdPZJ5l6i9ykt8idHFJIdvLxkKR27erud/VeDhKlOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYgur2ci; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 14E03C4CEF1;
+	Fri, 28 Nov 2025 16:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764347772;
+	bh=rV8j9wbrOPZrNlvkNJphUfu8i9HlNDBAEuKSg/M5zr8=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=RYgur2ciS6BR1MznOO0Pf3Vlbzj/AcRkpUAWtRhFNf/iJMvrEAFK3zp4TnYtOzKkr
+	 LtnDUYQtDOHtau4uWPn4vHr7pgPc6pxNKX/B1nV/xXr/E2RbgkhzvnJ5Mz0KyHuAPZ
+	 lzcX7vpvfGfCinEYby3hcIgMUcf4q+jFlVV3DbfiCp3wZIczG4WAmAfvADrCaGUT8G
+	 QggWp0ih5Lxizl01Ei4OXgJ7WaW5xXqB2BBzlz1bYoQiB/Y/xHpzLMqavGAy/7IY/m
+	 JPZNKlwmKS2ohBdQPgwZ58u9zDNpZ/b5L8s3+dcNx3T5wIWXTZdQbTzAOq8fqW7QD8
+	 6vyEQADph1vBQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C9BD116E2;
+	Fri, 28 Nov 2025 16:36:12 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Date: Fri, 28 Nov 2025 16:36:38 +0000
+Subject: [PATCH RESEND] rtc: max31335: Fix ignored return value in
+ set_alarm
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251128-max31335-handler-error-v1-1-6b6f7f78dbda@analog.com>
+To: linux-rtc@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Antoniu Miclaus <antoniu.miclaus@analog.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764347811; l=1114;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=yZMxjkRilIU/IcTJjTLZ+cXNpd/pN79VeBziWYaCG+k=;
+ b=Ww6kNNxfHs92/DiGWx2t9ft94HuafT9pupVr6oNlNPCHvMtFozJL0WX/yzBeWZCS59lwvt/Gu
+ XvadEoJuSm+DM9ZB64hxFNHANTNHJZd7jEQFHIF5mimVHejmdOl0RIO
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Thursday, 20 November 2025 11:44:45=E2=80=AFpm Australian Eastern Standa=
-rd Time Lee=20
-Jones wrote:
-> On Wed, 12 Nov 2025, James Calligeros wrote:
-> > When using the _SMC_KEY macro in switch/case statements, GCC 15.2.1 err=
-ors
-> > out with 'case label does not reduce to an integer constant'. Introduce
-> > a new __SMC_KEY macro that can be used instead.
-> >=20
-> > Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
-> > ---
-> >=20
-> >  include/linux/mfd/macsmc.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/include/linux/mfd/macsmc.h b/include/linux/mfd/macsmc.h
-> > index 6b13f01a8592..f6f80c33b5cf 100644
-> > --- a/include/linux/mfd/macsmc.h
-> > +++ b/include/linux/mfd/macsmc.h
-> > @@ -41,6 +41,7 @@ typedef u32 smc_key;
-> >=20
-> >   */
-> > =20
-> >  #define SMC_KEY(s) (smc_key)(_SMC_KEY(#s))
-> >  #define _SMC_KEY(s) (((s)[0] << 24) | ((s)[1] << 16) | ((s)[2] << 8) |
-> >  (s)[3])>=20
-> > +#define __SMC_KEY(a, b, c, d) (((u32)(a) << 24) | ((u32)(b) << 16) |
-> > ((u32)(c) << 8) | ((u32)(d)))
-> Are we expecting users/consumers to be able to tell the difference
-> between SMC_KEY and __SMC_KEY (assuming that _SMC_KEY is just an
-> internal)?
+From: Nuno Sá <nuno.sa@analog.com>
 
-_SMC_KEY is used in the gpio driver, and I would have used it here too if n=
-ot=20
-for GCC complaining about it. I wouldn't expect anyone to want to use=20
-__SMC_KEY outside of the specific use case this commit addresses given the=
-=20
-suboptimal ergonomics.
+Return the result from regmap_update_bits() instead of ignoring it
+and always returning 0.
 
-> I have not tested this and it is just off the top of my head, but does
-> this work:
->=20
-> #define _SMC_KEY(s) __SMC_KEY((s)[0], (s)[1], (s)[2], (s)[3])
+Fixes: dedaf03b99d6 ("rtc: max31335: add driver support")
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+---
+ drivers/rtc/rtc-max31335.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-This works fine on a smattering of M1 and M2 series machines. I can submit =
-a=20
-v6 with this and the hwmon driver dropped if need be.
+diff --git a/drivers/rtc/rtc-max31335.c b/drivers/rtc/rtc-max31335.c
+index dfb5bad3a369..23b7bf16b4cd 100644
+--- a/drivers/rtc/rtc-max31335.c
++++ b/drivers/rtc/rtc-max31335.c
+@@ -391,10 +391,8 @@ static int max31335_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
+-				 MAX31335_STATUS1_A1F, 0);
+-
+-	return 0;
++	return regmap_update_bits(max31335->regmap, max31335->chip->int_status_reg,
++				  MAX31335_STATUS1_A1F, 0);
+ }
+ 
+ static int max31335_alarm_irq_enable(struct device *dev, unsigned int enabled)
 
-Regards,
-James
+---
+base-commit: 9db26d5855d0374d4652487bfb5aacf40821c469
+change-id: 20251029-max31335-handler-error-65a286c74289
+--
+
+Thanks!
+- Nuno Sá
+-- 
+Nuno Sá <nuno.sa@analog.com>
 
 
 
