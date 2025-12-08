@@ -1,148 +1,136 @@
-Return-Path: <linux-rtc+bounces-5506-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5507-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 312F7CAC62D
-	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 08:41:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C54CCAD780
+	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 15:42:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 762033006623
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 07:39:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A4417301B100
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 14:42:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF70199931;
-	Mon,  8 Dec 2025 07:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E02732EC563;
+	Mon,  8 Dec 2025 14:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="hXmRSfSs"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from r9103.ps.combzmail.jp (r9103.ps.combzmail.jp [49.212.47.32])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C93253B73
-	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 07:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.47.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F821EA84;
+	Mon,  8 Dec 2025 14:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765179570; cv=none; b=uWQ9ek+uMz+by2JPEijGJw4/uz4K029Y++lrSg/SnQy5TaDVqidy/jljQkji5UQ/fRqeRc5zhE2Uy9mF3j8nqzS3X1R1KO43GYxqX3epnK3zy9AdBcYgh/Y17xzSdEs02LvUXeEZOXUT10gOK5M1gOnmP3rHoTOm/tM8GOk+k8Y=
+	t=1765204546; cv=none; b=CliW7j+2fWJyKKsr0/2DEzyPmGN0tMF50oz4MJrJ57plNN/Kwem8UeO9vYn3+/2HjBoL82MJMM2o1HuUjNB6XsfY5uDZoxP8EbrmjgKdgpccUu/uNlxC3qAx6N3H5yJcaz/vD9duZAT52Zi5Wsddz3RJX0zBo+i3tg2T9HiL5hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765179570; c=relaxed/simple;
-	bh=8wjS8TY79vBoclLoYhDrScqTAatGVrLzqKGljB1qa6c=;
-	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=BqPmmqE6TH9dDAeEbNfHceLNQBFvD0TzyroI7B0B38emg2HnPhASbH/PsO/Bn/964bRG5yfdrPnUXbncHZFSaZERICSIlFv8HJoIW8efkyPbGRNR5WGsCRdHtSJsLOtz4LjY0s0K8xLK65pCpyAlfwDZ+5TaoK+xa8kkUCZNpuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onelife-lab.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=49.212.47.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onelife-lab.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
-Received: by r9103.ps.combzmail.jp (Postfix, from userid 99)
-	id 7D31C187D73; Mon,  8 Dec 2025 16:39:17 +0900 (JST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 r9103.ps.combzmail.jp 7D31C187D73
-To: linux-rtc@vger.kernel.org
-From: =?ISO-2022-JP?B?GyRCJVolQyVISl04bjtZMWclOyVfJUohPBsoQg==?= <info@onelife-lab.jp>
-X-Ip: 931097595542651
-X-Ip-source: k85gj77948dnsa46u0p6gd
-Precedence: bulk
-List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Subject: =?ISO-2022-JP?B?GyRCJVolQyVIMCYkciRiJEQhIjdQMUQ8VE1NGyhC?=
- =?ISO-2022-JP?B?GyRCJFgbKEI=?=
+	s=arc-20240116; t=1765204546; c=relaxed/simple;
+	bh=xO8dU7UTBPxQOjnMZaRCLB/JI4X0kHsARttn4ZBj7MM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ot+h6EqAudLKUZGplTsGZyRdvOf7n+tBbJCd8R2NLMcZENPDD2+f+3fWjyX51u+SuPm6HC38ZLqAPPvLR8pQIHSM7T/kiz9YeSoU/Ejza2sY5nhg6Fv+Y0o96zmb4YCaLQ9Q+e62Atu2ftCOqxS4g6RcI3CvLRE2Lga1N1QfRe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=hXmRSfSs; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=Ba46iqGvPVxQZaXq9WNEuTq1PH6XqEj/ZP2zxUaVvwI=; t=1765204545;
+	x=1765636545; b=hXmRSfSs4IQmLAgk0mXKuMmkey7EYvODbZWFEVfOx6Cm+aRbBnsrmElemaMMK
+	iNhY9538uwbcSCNlBV9PWbP27VyMFQ/BtubDVM522jRZOJi0yjPF9N8jddt0dSUTEbu66F9B87w5n
+	orp86R6GV+rqExAnPYnm/TJv2t8Qgm53HNGyABBfUZxevsvERTdjNsywLeEeuRZ91rHReyAozCQsA
+	6Hw59mXs+pKudA69g/DsKLN46k+Ufi5QCshzHN8Vb64hgeBoKMB5UIF6dQi6W9Bew42GVLjhVaIV0
+	+DzVc8s+/riXkhkun0aQRxjZcWbcDa5roLHwdaVRLBcdP6v+Iw==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1vScL0-004U9y-37;
+	Mon, 08 Dec 2025 15:35:43 +0100
+Message-ID: <48db01b1-f4e5-4687-8ffb-472981d153ed@leemhuis.info>
+Date: Mon, 8 Dec 2025 15:35:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-2022-jp
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: PROBLEM: hwclock busted w/ M48T59 RTC (regression)
+To: Nick Bowler <nbowler@draconx.ca>, linux-kernel@vger.kernel.org,
+ regressions@lists.linux.dev, linux-rtc@vger.kernel.org
+Cc: Esben Haabendal <esben@geanix.com>, stable@vger.kernel.org,
+ sparclinux@vger.kernel.org
+References: <krmiwpwogrvpehlqdrugb5glcmsu54qpw3mteonqeqymrvzz37@dzt7mes7qgxt>
+ <gfwdg244bcmkv7l44fknfi4osd2b23unwaos7rnlirkdy2rrrt@yovd2vewdviv>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: de-DE, en-US
+In-Reply-To: <gfwdg244bcmkv7l44fknfi4osd2b23unwaos7rnlirkdy2rrrt@yovd2vewdviv>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MagazineId: 7946
-X-uId: 6763334643485968614655491058
-X-Sender: CombzMailSender
-X-Url: http://www.combzmail.jp/
-Message-Id: <20251208073921.7D31C187D73@r9103.ps.combzmail.jp>
-Date: Mon,  8 Dec 2025 16:39:17 +0900 (JST)
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1765204545;f93b2119;
+X-HE-SMSGID: 1vScL0-004U9y-37
 
-　ペット愛の心を持つ経営者様へ
-　
-　動物の尊い命を救い、働く喜びを支援する
-　革新的な新規事業を始めませんか？
+Lo!
 
-−−−−−−−−−−−−−−−−−−−−−−−
-　■ フランチャイズシステム説明会 ■
+On 11/26/25 04:18, Nick Bowler wrote:
+> Any thoughts?
 
-　社会貢献と高収益を両立！
+Not really, just a vague idea (and reminder, this is not my area or
+expertise, I'm just tracking regressions):
 
-　ペット保護×就労継続支援B型事業
-　”ONEPET（ワンペット）”
+Two fixes were proposed for the culprit, see:
 
-　※本部が徹底サポート！「経験や資格が無くても」
-　　リスクを抑えて安心して始められます。
+https://lore.kernel.org/all/BN0PR08MB69510928028C933749F4139383D1A@BN0PR08MB6951.namprd08.prod.outlook.com/
+https://lore.kernel.org/all/BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com/
 
-　■ 開催方式
-　　オンライン（申込後に参加方法をご案内）
+Wondering if they might help. Esben might have an idea, but in case
+Esben does not reply maybe just give them a spin if you have a minute.
 
-　■ 日程
-　　12月09日（火）17：00〜18：30
-　　12月13日（土）13：00〜14：30　残1枠
-　　12月17日（水）17：00〜18：30
-　　12月19日（金）16：00〜17：30
+Ciao, Thorsten
 
-　■ 定員
-　　各回4名 ／ 1社2名まで
+> The problem is still present in 6.18-rc7 and reverting the commit
+> indicated below still fixes it.
+> 
+> I am also seeing the same failure on a totally different system with
+> Dallas DS1286 RTC, which is also fixed by reverting this commit.
+> 
+> Since the initial report this regression has been further backported
+> to all the remaining longterm kernel series.
+> 
+> Thanks,
+>   Nick
+> 
+> On Thu, Oct 23, 2025 at 12:45:13AM -0400, Nick Bowler wrote:
+>> Hi,
+>>
+>> After a stable kernel update, the hwclock command seems no longer
+>> functional on my SPARC system with an ST M48T59Y-70PC1 RTC:
+>>
+>>   # hwclock
+>>   [...long delay...]
+>>   hwclock: select() to /dev/rtc0 to wait for clock tick timed out
+>>
+>> On prior kernels, there is no problem:
+>>
+>>   # hwclock
+>>   2025-10-22 22:21:04.806992-04:00
+>>
+>> I reproduced the same failure on 6.18-rc2 and bisected to this commit:
+>>
+>>   commit 795cda8338eab036013314dbc0b04aae728880ab
+>>   Author: Esben Haabendal <esben@geanix.com>
+>>   Date:   Fri May 16 09:23:35 2025 +0200
+>>   
+>>       rtc: interface: Fix long-standing race when setting alarm
+>>
+>> This commit was backported to all current 6.x stable branches,
+>> as well as 5.15.x, so they all have the same regression.
+>>
+>> Reverting this commit on top of 6.18-rc2 corrects the problem.
+>>
+>> Let me know if you need any more info!
+>>
+>> Thanks,
+>>   Nick
+> 
+> 
 
-　■ 視聴予約はこちら
-   　 https://onelife-lab.site/onepet/
-−−−−−−−−−−−−−−−−−−−−−−−
-　
-　お世話になります。
-　
-　この度は、「保護犬・猫」と「就労支援」を組み合わせた、
-　革新的なフランチャイズ事業の説明会をご案内いたします。
-
-　私たちがご提供する ONEPET（ワンペット） は、
-　　「殺処分を待つ命を救う」
-　　「働きたいと願う人々の自立を支援する」
-
-　という、二つの大きな社会課題を同時に
-　解決するビジネスモデルです。
-　
-　社会貢献事業は、収益がイマイチ。と、思わないでください。
-　
-　
-　ONEPETでは、“動物と関わる”という圧倒的な差別化コンテンツを持つことで
-　利用者から「やってみたい」と選ばれ、極めて高い集客力を誇ります。
-　（オープン2ヶ月で400件超の問合せを達成）
-　
-　さらに、国の給付金によるストック型収益と
-　ペット事業による店舗収益の二本柱で、
-　景気に左右されにくい安定経営を実現しています。
-　
-　事実、年商7,000万円／営業利益率40％を目指せる高収益事業として、
-　多くの経営者様にご注目いただいています。
-　
-　
-　ここまでこの文章を読まれたということは、
-　あなたも動物への深い愛情と、社会に貢献したいという
-　強い意志をお持ちなのではないでしょうか。
-　
-　先輩FCオーナー様も福祉業界の経験がなくても、
-　「定員満員までWeb広告費本部負担」
-　「稼働率50％までロイヤリティ無料」
-　
-　といった、本部の手厚いサポートのもと
-　事業を成功させています。
-　
-　この革新的なビジネスモデルの詳細を聞き逃さないよう、
-　新規事業を探している経営者様は、この機会にぜひご視聴ください。
-　
-　
-　「社会課題解決」と「安定収益」を両立する、
-　新しい社会貢献のカタチを一緒につくっていきましょう。
-
-■ 視聴予約はこちら
-    https://onelife-lab.site/onepet/
-
-+++++++++++++++++++++++++++++++++++++++
-
-本メールのご不要な方には大変ご迷惑をおかけいたしました。
-お手数お掛けしますが、メール解除のお手続きは
-下記よりお願いいたします。
-<依頼フォーム>
-https://onelife-lab.site/mail/
-
-+++++++++++++++++++++++++++++++++++++++
-
-ONEPET（ワンペット）　フランチャイズ本部　
-群馬県前橋市広瀬町3-18-15
-TEL：080-7723-6089
 
