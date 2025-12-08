@@ -1,58 +1,58 @@
-Return-Path: <linux-rtc+bounces-5509-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5510-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E951BCAE467
-	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 23:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AED3CAE470
+	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 23:09:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A532430530A6
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 22:08:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6F84930517EF
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 22:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FCF32E172D;
-	Mon,  8 Dec 2025 22:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5412C2E2665;
+	Mon,  8 Dec 2025 22:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LMEehbZ+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ga+j6OHg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACE12E0922
-	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 22:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36F3217659
+	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 22:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765231737; cv=none; b=KIvTu5A4TRunPBOa7Zf/IrP+AxPBwCBQWhN4LJX/ngELaq6+1cmQnoU1rSQAJXWoiZuehH/X9kNGhNJd+XP0lTdfKgdb9gySGjGPMdmqBgMGSB30OGfFnvgzF+z9NractPplGGEGO/h9vzthrkwx/bvsHYOZSKwiBinM6UK/O68=
+	t=1765231745; cv=none; b=pTQZOgj04OItdrFnKj6ICYuwJpW0qUSS7uoH8zYbfP55rldX9OxPU8hPcKfS47xFenpGGZmh+aG8OBxuLDPybi1QVnzcTV1Aa7DtFbA7QxhaLL2su0fHJc4Is9Tkem4wYNfh8SDmMa+u6Qo3hjTpsUVF3/KJlFNjXZNx+h1YN10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765231737; c=relaxed/simple;
-	bh=gSmYTd2aoBc2jdYJ/YEF1OoaVPkBnyItJ6VbM/70cQc=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZ3zooQ9eEwVpcqK2FiXw0vnrqRVBkkcf7oWvjlQOYtEZsBLQpPlDpaIOUsCGXjgrBQIp3JKRaPyGHqEn2dJIGEL6++Si8oqpDn06JHoyvfwebNA6RRwlk/+w0BnjlqT4KiJeEKEQvUkNm0TzY46yrb3PWpzkBiIB2RLhvgBEtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LMEehbZ+; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1765231745; c=relaxed/simple;
+	bh=DUqRli0nxSti2hkeyVHxCVSXpcipRk9bFxGZ4j9Pqss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T4PG4askIoVojv8hxdSWaiDQzfId0WNqjjWo4bJES7SCs7gzFMdNNqOeq5NkV4h6Tcs+sUciHslLibnRArcYmJWdrQmLIDGIr5n6rkIbwywRB5xwTMMYRlMsF0WibubaCQDKiab+HKcS9RXx653fYFZn+ajYpGffTdhPAvzfcs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ga+j6OHg; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 14AD71A203F;
-	Mon,  8 Dec 2025 22:08:53 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 814AF4E41AF2;
+	Mon,  8 Dec 2025 22:09:01 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DE067606DD;
-	Mon,  8 Dec 2025 22:08:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CFD42103C8D5C;
-	Mon,  8 Dec 2025 23:08:51 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5767C606DD;
+	Mon,  8 Dec 2025 22:09:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3068B103C8E29;
+	Mon,  8 Dec 2025 23:08:58 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765231732;
-	h=from:subject:date:message-id:to:mime-version:content-type:in-reply-to:
-	 references; bh=F+q/lc0m41Xrk18HpU5wiR+zeL3mDBfmvgcOH5YQ0So=;
-	b=LMEehbZ+jpHefGopCXCAacU32qeXKjzHHykpSpCUaa9iHR7c5pCuQaEq/TCaxSCYIxUJBo
-	0ETu726Au2q8ZiP9zVaoEmM+4X7zLQwaflYV7kqE7w2VuW93CZ+YwpxpGJEEgM+a62oyd5
-	SaUeFFOLAWVSYUPQ74IpHfv8gP3ltBs2ee0Aa5RRoB0MkmpJlKU4ZkBaO9xBWP40hBRFcd
-	4Z481o5P/zWgV5SZsjf6UUDFved+t2n9ffqh9HmDGhH6IeMlZx3vDyhu7kpALluoSKSXCF
-	Uv0mliJHYyCP1RPtomT60qZRTApcbic9rY2JPvaFyUmepN88nfq/cMCX6WaRgw==
-Date: Mon, 8 Dec 2025 23:08:51 +0100
+	t=1765231741; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=Lvs4pRLHDrzl0zfJuB5oUtLIpOt8kqAlRKlem7ApBJ4=;
+	b=Ga+j6OHgGeFcquoiwCI5Am3F218oBBicgyW5/o+Ic2xqO7tTj+z6wO27WYnHCIcI14Ffx+
+	FD1QeDazr3bsgXW91SPARFz/O4AHnUk6ixoARwr5om9PzGbmIaBSqlJF1Pkpk0RmE6cbVY
+	UC97T6GTRGtFn4KXUFenjmRGRT5CM+QC9sW7obNeWg9KriAM92QC+ALwwCx8UckFUZZFGg
+	vPBG+XH0BoKGQR/GGOJmMLGX7BSPK8qfEsLsm7++hyDABzujfKCa/4/8UO8ooCFbbm6O68
+	qNTUeJtH0iJj2RL4ud0veZYz02WC/9DxSl8mFAQ25TTxNEexzRlECsCYecliTA==
+Date: Mon, 8 Dec 2025 23:08:58 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alexander Kurz <akurz@blala.de>
-Subject: Re: [PATCH] rtc: Kconfig: add MC34708 to mc13xxx help text
-Message-ID: <176523152338.342815.15677107096947364029.b4-ty@bootlin.com>
-References: <20251011062605.13591-1-akurz@blala.de>
+To: CL Wang <cl634@andestech.com>, Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH next] rtc: atcrtc100: Fix signedness bug in probe()
+Message-ID: <176523152356.342815.6072782957739777163.b4-ty@bootlin.com>
+References: <aRxPGBEX8hbY6sjV@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,19 +61,20 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251011062605.13591-1-akurz@blala.de>
+In-Reply-To: <aRxPGBEX8hbY6sjV@stanley.mountain>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat, 11 Oct 2025 06:26:05 +0000, Alexander Kurz wrote:
-> MC34708 is one of the three mfd devices supported by DRV_MC13XXX.
-> Update Kconfig accordingly.
+On Tue, 18 Nov 2025 13:48:56 +0300, Dan Carpenter wrote:
+> The "atcrtc_dev->alarm_irq" variable is an unsigned int but it needs to
+> be signed for the error handling to work.  Use the "ret" variable
+> instead.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] rtc: Kconfig: add MC34708 to mc13xxx help text
-      https://git.kernel.org/abelloni/c/53e71c177cd8
+[1/1] rtc: atcrtc100: Fix signedness bug in probe()
+      https://git.kernel.org/abelloni/c/159a740c768e
 
 Best regards,
 
