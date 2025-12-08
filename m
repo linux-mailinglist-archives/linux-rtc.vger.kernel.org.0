@@ -1,58 +1,65 @@
-Return-Path: <linux-rtc+bounces-5516-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5517-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE2D0CAE4A3
-	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 23:10:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D86CAE497
+	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 23:10:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 281A5300D55F
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 22:10:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8F657301C654
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 22:10:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449702F0C67;
-	Mon,  8 Dec 2025 22:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F382FB622;
+	Mon,  8 Dec 2025 22:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e6zUFyan"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Rt24g4my"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1032E88B6
-	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 22:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BE623B62A
+	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 22:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765231805; cv=none; b=VJ2qSfZ9qbvJV0TWMTiG6GH1ESwyYjag96OYR+6XvTvzUiNUi2LakRF5UIFEBa0FC8nhJIQU8mOYo/0HBDf384Vdj5x2QMRz+0MTPxX/M4uTOtEQGiFfXN2jQLe7Q8FMxyW1y248VHwTeIe8cxDP0ZkMBB65UJdlJ+B68exGjhg=
+	t=1765231815; cv=none; b=gYjo/134UvJkYrp4MiXjpKKOQQT+7DhjRzEB2ciZa6JIBOGAa6AucfuDRJCkkse0ehko9VbUewtRdkGLqKRxuxxxxe+M33QYVjn+VlzPmQlVbXPn1GVHrak/IrdQUwJgyma7L3D6As0jfYaAhWq76XxwhHwXSzUDa13SqIzeLmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765231805; c=relaxed/simple;
-	bh=gfYFM8TZgzDduuiSpQZGBHSlOvjR6UivfuFLb5xtC/A=;
+	s=arc-20240116; t=1765231815; c=relaxed/simple;
+	bh=zFHEO13RL+zJ5zTB0G4JLuS740G9rywMqOvHfsbtQVU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GiRRYb1IeyoILWUjb2R82OoxdGeEH624BYbAhifFuxEfBzW5HZeqbGkctVbOtk6xY74pnPF0M5v5uUKVYg0TiG0Du6fvn9LN4upqskhSyF5g4xlg1i+QHEDTsyCTcrUPsUsLlgqyGFpDhKZr6g1AEsQ3Hhiygq8Ec6UGMAZsmOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=e6zUFyan; arc=none smtp.client-ip=185.246.85.4
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+ub4itv8KFJDFw8K59A7byeTFYp/FKuqugrL+qmPLcdTC6uplsw/rSOZH7eocHgu1q6zrh0mzBG2JY6oQNTBtBqRRya1+To/SY7r9hiMmBh4tXHN/ddbhkHSfzYXftjYqEDpCnwlHt5hvW0QzGWwxjClriMHjLiclL2dK5URVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Rt24g4my; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 9CBF74E41AF2;
-	Mon,  8 Dec 2025 22:10:00 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id C75E8C180D1;
+	Mon,  8 Dec 2025 22:09:48 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 729C9606DD;
-	Mon,  8 Dec 2025 22:10:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 93DB6103C8D5C;
-	Mon,  8 Dec 2025 23:09:59 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8EE9B606DD;
+	Mon,  8 Dec 2025 22:10:12 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1D1B3103C8D5C;
+	Mon,  8 Dec 2025 23:10:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765231800; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=yZw4AcLBHNo2XBKMHVb0t2bjqlmRcb3KT4PRafjbGKc=;
-	b=e6zUFyanY0QmGYjJ+uvzOaQxicsE8N6WHDSXOnnWQz214niX4ZROmlEEPrA29PdMgL4Sgz
-	CFNCkc1zHcSdJWf+HPwOO/FnEk8VtP+yFqk/CSipurIs0WWa+qaHiwzweZS0CacDiNRZ2s
-	GyZ36IDLLBue4EI8iB+moQsM4USbmLrnivcNNXBQaxvWbYBXyhd+VQiHQQiW9hJOHAfufm
-	hf3kSabYuQRmZKmZUWuhY41I9SgWSUnSi3qXD62KU+++tdLt9FDHMTf19eEYPok/gBb2LL
-	uiIPhw6JOwlWNfACeIVlcgc/q2/HNc0D88UhARmYsDG27XCBfQ48e/dCQzKVZA==
-Date: Mon, 8 Dec 2025 23:09:59 +0100
+	t=1765231811; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=mWYWUqUd6OQt7ZTmYi9XvKs64pHlmAY9QPRYKKtCcFM=;
+	b=Rt24g4myiXVnNAovrP9jmwGnftV0vDJl4Pb6W9vWLh7F7cxwRKWvMSxvvJilWNvYoBFu3Z
+	EQ2LIYI3Zzn53izvjSbY3Bqm/c6y/2svxnL2eelGeqq6n+hovdbER0s10q12AtvO6texI2
+	1pnme6q7Krn5NRMlM5Lrl9wOQUONd25MzixAhudxvBzcPVgx6LOm4utGikX3ySF0avryUb
+	RKHvAfiBuyjK70bta4tdNw+wmokJzX8dS+NPm5DficVcGyhgOviL9vJ9NBsuBIYAweJIFq
+	iwslDl/nfwQhPUsC0l3rB1MPDauYaHnuVVXcn8GMDc33BzGSeJt9HaDVWurhjQ==
+Date: Mon, 8 Dec 2025 23:10:08 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Nick Huang <sef1548@gmail.com>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kusogame68@gmail.com, byron.bbradley@gmail.com
-Subject: Re: [PATCH] rtc: s35390a: use u8 instead of char for register buffer
-Message-ID: <176523152338.342815.273365090583562629.b4-ty@bootlin.com>
-References: <20250920174224.108795-1-sef1548@gmail.com>
+To: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-i2c@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 2/4] rtc: spacemit: MFD_SPACEMIT_P1 as
+ dependencies
+Message-ID: <176523152359.342815.11295458688296790112.b4-ty@bootlin.com>
+References: <20251118-p1-kconfig-fix-v3-0-8839c5ac5db3@linux.spacemit.com>
+ <20251118-p1-kconfig-fix-v3-2-8839c5ac5db3@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,24 +68,24 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250920174224.108795-1-sef1548@gmail.com>
+In-Reply-To: <20251118-p1-kconfig-fix-v3-2-8839c5ac5db3@linux.spacemit.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Sun, 21 Sep 2025 01:42:23 +0800, Nick Huang wrote:
-> The register buffer in s35390a_get_reg() was previously defined as
-> `char *buf`. This is not ideal since register data represents raw
-> binary values rather than textual data.
+On Tue, 18 Nov 2025 14:08:06 +0800, Troy Mitchell wrote:
+> RTC_DRV_SPACEMIT_P1 is a subdevice of P1 and should depend on
+> MFD_SPACEMIT_P1 rather than selecting it directly. Using 'select'
+> does not always respect the parent's dependencies, so 'depends on'
+> is the safer and more correct choice.
 > 
-> Switch the type to `u8 *buf` to better reflect its intended usage and
-> to avoid potential issues with sign extension when handling register
-> values on platforms where `char` is signed by default.
+> Additionally, the default value depends on MFD_SPACEMIT_P1 rather
+> than ARCH_SPACEMIT.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] rtc: s35390a: use u8 instead of char for register buffer
-      https://git.kernel.org/abelloni/c/73c4638a2864
+[2/4] rtc: spacemit: MFD_SPACEMIT_P1 as dependencies
+      https://git.kernel.org/abelloni/c/16bd954c9336
 
 Best regards,
 
