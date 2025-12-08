@@ -1,41 +1,42 @@
-Return-Path: <linux-rtc+bounces-5505-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5506-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 954BACA5C8D
-	for <lists+linux-rtc@lfdr.de>; Fri, 05 Dec 2025 02:06:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 312F7CAC62D
+	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 08:41:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0792E3014BE9
-	for <lists+linux-rtc@lfdr.de>; Fri,  5 Dec 2025 01:06:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 762033006623
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 07:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2431E7C12;
-	Fri,  5 Dec 2025 01:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF70199931;
+	Mon,  8 Dec 2025 07:39:30 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from r9220.ps.combzmail.jp (r9220.ps.combzmail.jp [160.16.65.223])
+Received: from r9103.ps.combzmail.jp (r9103.ps.combzmail.jp [49.212.47.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B312629D
-	for <linux-rtc@vger.kernel.org>; Fri,  5 Dec 2025 01:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.16.65.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C93253B73
+	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 07:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.47.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764896762; cv=none; b=E4HywiT1zqqph+xOZ5QK7pkw2DzQdBF/ffgI4BAjlU05bGE9K1Dsu1pH0t9e9wyYoykflHYlBIi6W5snjC9RoYpItsv229jpB4vEfR7bkJoxGASBdcdgC0SMK4L57AsK6mC7pCVcxeIuvCpoqaqmdRaHYDugjmIorm9Wksp9Luc=
+	t=1765179570; cv=none; b=uWQ9ek+uMz+by2JPEijGJw4/uz4K029Y++lrSg/SnQy5TaDVqidy/jljQkji5UQ/fRqeRc5zhE2Uy9mF3j8nqzS3X1R1KO43GYxqX3epnK3zy9AdBcYgh/Y17xzSdEs02LvUXeEZOXUT10gOK5M1gOnmP3rHoTOm/tM8GOk+k8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764896762; c=relaxed/simple;
-	bh=K/QxYS82NIE2dEMFRCFKxQrMjAb9jb2gJx9sXdTMB+A=;
-	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=W6MdZz7FjjhGqgiTmTdMUbKyMH/vyVUajFTJfhwMDZXNgU/gGqksqJ24mZoTIo+SPGEasKnu2pML/TJQtr4oETPEIODUGaEW3jgMswW61dert/6rOQa6wMUU+lCQ3la2KSSgONj+chdXr4ZEAZ9kpbbYXpXvK202TnmQuwPof2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fc-tocotoco.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=160.16.65.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fc-tocotoco.jp
+	s=arc-20240116; t=1765179570; c=relaxed/simple;
+	bh=8wjS8TY79vBoclLoYhDrScqTAatGVrLzqKGljB1qa6c=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=BqPmmqE6TH9dDAeEbNfHceLNQBFvD0TzyroI7B0B38emg2HnPhASbH/PsO/Bn/964bRG5yfdrPnUXbncHZFSaZERICSIlFv8HJoIW8efkyPbGRNR5WGsCRdHtSJsLOtz4LjY0s0K8xLK65pCpyAlfwDZ+5TaoK+xa8kkUCZNpuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onelife-lab.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=49.212.47.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=onelife-lab.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
-Received: by r9220.ps.combzmail.jp (Postfix, from userid 99)
-	id C51C6C0B49; Fri,  5 Dec 2025 10:05:33 +0900 (JST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 r9220.ps.combzmail.jp C51C6C0B49
+Received: by r9103.ps.combzmail.jp (Postfix, from userid 99)
+	id 7D31C187D73; Mon,  8 Dec 2025 16:39:17 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9103.ps.combzmail.jp 7D31C187D73
 To: linux-rtc@vger.kernel.org
-From: =?ISO-2022-JP?B?GyRCSiE7YyVVJWklcyVBJWMlJCU6S1xJdBsoQg==?= <info@fc-tocotoco.jp>
-X-Ip: 178614508330645
-X-Ip-source: k85gj73348dnsaq6u0p6gd
+From: =?ISO-2022-JP?B?GyRCJVolQyVISl04bjtZMWclOyVfJUohPBsoQg==?= <info@onelife-lab.jp>
+X-Ip: 931097595542651
+X-Ip-source: k85gj77948dnsa46u0p6gd
 Precedence: bulk
 List-Unsubscribe-Post: List-Unsubscribe=One-Click
-Subject: =?ISO-2022-JP?B?GyRCJF4kayRKJDJKITtjO3Y2SBsoQg==?=
+Subject: =?ISO-2022-JP?B?GyRCJVolQyVIMCYkciRiJEQhIjdQMUQ8VE1NGyhC?=
+ =?ISO-2022-JP?B?GyRCJFgbKEI=?=
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -44,94 +45,104 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=iso-2022-jp
 Content-Transfer-Encoding: 7bit
-X-MagazineId: 33q6
-X-uId: 6763334339485968575053681001
+X-MagazineId: 7946
+X-uId: 6763334643485968614655491058
 X-Sender: CombzMailSender
 X-Url: http://www.combzmail.jp/
-Message-Id: <20251205010551.C51C6C0B49@r9220.ps.combzmail.jp>
-Date: Fri,  5 Dec 2025 10:05:33 +0900 (JST)
+Message-Id: <20251208073921.7D31C187D73@r9103.ps.combzmail.jp>
+Date: Mon,  8 Dec 2025 16:39:17 +0900 (JST)
 
+　ペット愛の心を持つ経営者様へ
 　
-　新規事業をご検討中の経営者様へ
+　動物の尊い命を救い、働く喜びを支援する
+　革新的な新規事業を始めませんか？
 
-　いつもお世話になっております。
+−−−−−−−−−−−−−−−−−−−−−−−
+　■ フランチャイズシステム説明会 ■
 
-　「社会貢献性の高い事業で、確実な収益を上げたい」
+　社会貢献と高収益を両立！
 
-　そう考え、成長著しい福祉市場にご関心をお持ちのことと存じます。
-　しかし、同時にこうも考えていませんか？
+　ペット保護×就労継続支援B型事業
+　”ONEPET（ワンペット）”
+
+　※本部が徹底サポート！「経験や資格が無くても」
+　　リスクを抑えて安心して始められます。
+
+　■ 開催方式
+　　オンライン（申込後に参加方法をご案内）
+
+　■ 日程
+　　12月09日（火）17：00〜18：30
+　　12月13日（土）13：00〜14：30　残1枠
+　　12月17日（水）17：00〜18：30
+　　12月19日（金）16：00〜17：30
+
+　■ 定員
+　　各回4名 ／ 1社2名まで
+
+　■ 視聴予約はこちら
+   　 https://onelife-lab.site/onepet/
+−−−−−−−−−−−−−−−−−−−−−−−
 　
-　「市場は魅力的だが、専門的な法規制や複雑な運営、人材採用は荷が重すぎる…」
-　「もし失敗したら、多額の投資が無駄になってしまうのでは…」
-
-　ご安心ください。その不安こそ、私たちが解決したい最大の課題でした。
-
-　この障壁を根本から取り除くのが、私たちtocotocoだけの
-　【運営本部代行プラン】です。
-
-　煩雑な運営業務は全て本部がプロフェッショナルとして代行します。
-　オーナー様には、「投資家」として市場の確実な成長という
-　最大の果実のみを受け取っていただきます。
-―――――――――――
-
-　廃業率0.055％　業態を選べる
-　 　障がい福祉フランチャイズ
-
-　　 <ご視聴予約はこちら>
-　https://fc-tocotoco.work/25/
-
-〇オンラインで開催中
-　12月9日（火）10:00〜11:00
-　12月17日（水）15:00〜16:00
-
-ご都合の良い日程をお選びいただけます。
-―――――――――――
-
-　■ 失敗の不安を解消。本部代行プランの3大メリット
-　１．専門知識、一切不要
-　　複雑な行政への請求や法改正対応、専門スタッフの採用・管理まで、全て本部が代行します。
-　　異業種出身であることを気にする必要は一切ありません。
-
-　２．早期の投資回収を実現
-　　煩雑な運営業務から解放され、オーナー様は事業拡大、
-　　そして投資利回り50%以上、6ヶ月&#12316;での投資回収実績を持つ、
-　　確実な収益構造の構築に専念できます。
-
-　３．廃業率0.055％の安定性を最大限享受
-　　業界トップクラスの実績とノウハウを持つ本部が現場を担うため、
-　　「運営不安による失敗」というリスクが限りなくゼロに近づきます。
-
-
-　■ 市場の確実性を数字で証明
-　　・市場規模：4兆円超え
-　　・需要：障がい者数 毎月4万人増加
-　　・安定性：廃業率0.055％（行政による総量規制で事業が守られています）
-
-　この巨大かつ安定した市場で、本部が代行することで、
-　より確実性の高い事業運営が実現します。
-
-
-　【運営代行プラン】は説明会でのみ詳細を公開
+　お世話になります。
 　
-　投資したいが運営までは荷が重い、という経営者様のために開発されたこの特別プランと、
-　5つの高収益業態（訪問看護、グループホームなど）の具体的な収益モデルは、
-　下記の説明会でのみ公開しております。
+　この度は、「保護犬・猫」と「就労支援」を組み合わせた、
+　革新的なフランチャイズ事業の説明会をご案内いたします。
 
-　新規事業のリスクを最小化し、確実な収益源を確保したい方は、
-　ぜひこの機会にご参加ください。
+　私たちがご提供する ONEPET（ワンペット） は、
+　　「殺処分を待つ命を救う」
+　　「働きたいと願う人々の自立を支援する」
 
+　という、二つの大きな社会課題を同時に
+　解決するビジネスモデルです。
+　
+　社会貢献事業は、収益がイマイチ。と、思わないでください。
+　
+　
+　ONEPETでは、“動物と関わる”という圧倒的な差別化コンテンツを持つことで
+　利用者から「やってみたい」と選ばれ、極めて高い集客力を誇ります。
+　（オープン2ヶ月で400件超の問合せを達成）
+　
+　さらに、国の給付金によるストック型収益と
+　ペット事業による店舗収益の二本柱で、
+　景気に左右されにくい安定経営を実現しています。
+　
+　事実、年商7,000万円／営業利益率40％を目指せる高収益事業として、
+　多くの経営者様にご注目いただいています。
+　
+　
+　ここまでこの文章を読まれたということは、
+　あなたも動物への深い愛情と、社会に貢献したいという
+　強い意志をお持ちなのではないでしょうか。
+　
+　先輩FCオーナー様も福祉業界の経験がなくても、
+　「定員満員までWeb広告費本部負担」
+　「稼働率50％までロイヤリティ無料」
+　
+　といった、本部の手厚いサポートのもと
+　事業を成功させています。
+　
+　この革新的なビジネスモデルの詳細を聞き逃さないよう、
+　新規事業を探している経営者様は、この機会にぜひご視聴ください。
+　
+　
+　「社会課題解決」と「安定収益」を両立する、
+　新しい社会貢献のカタチを一緒につくっていきましょう。
 
-　▼ 詳細はこちら
-　https://fc-tocotoco.work/25/
+■ 視聴予約はこちら
+    https://onelife-lab.site/onepet/
 
-―――
-　tocotoco株式会社　セミナー事務局
-　東京都千代田区九段南2丁目3−25
- 　03-5256-7578
-‥‥‥‥
-　本メールのご不要な方には大変ご迷惑をおかけいたしました。
-　メール停止ご希望の方は、お手数ですが下記URLにて、
-　お手続きをお願いいたします。
-　https://fc-tocotoco.work/mail/
-―――
++++++++++++++++++++++++++++++++++++++++
+
+本メールのご不要な方には大変ご迷惑をおかけいたしました。
+お手数お掛けしますが、メール解除のお手続きは
+下記よりお願いいたします。
+<依頼フォーム>
+https://onelife-lab.site/mail/
+
++++++++++++++++++++++++++++++++++++++++
+
+ONEPET（ワンペット）　フランチャイズ本部　
+群馬県前橋市広瀬町3-18-15
+TEL：080-7723-6089
 
