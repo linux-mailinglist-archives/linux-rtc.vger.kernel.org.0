@@ -1,62 +1,58 @@
-Return-Path: <linux-rtc+bounces-5515-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5516-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C29CCAE48B
-	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 23:09:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE2D0CAE4A3
+	for <lists+linux-rtc@lfdr.de>; Mon, 08 Dec 2025 23:10:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A2EBA3005F21
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 22:09:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 281A5300D55F
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Dec 2025 22:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037B02E54B2;
-	Mon,  8 Dec 2025 22:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449702F0C67;
+	Mon,  8 Dec 2025 22:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="u/94yr7V"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="e6zUFyan"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615E121E0AF
-	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 22:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1032E88B6
+	for <linux-rtc@vger.kernel.org>; Mon,  8 Dec 2025 22:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765231795; cv=none; b=Arw+u+znjV+f73eVkhyzhXl/W0x91iAGt80spF4A4xqpp074CrjtZXdx8hirLsgtqiqALoFfIlPh3jZ1oqFY0w3HJoGAU15f27YssF65vFmh4U/xvlYU+vPV6LS7YcS7LxclMWrE6lNV7qnKyMLdbyIv857/lF+GABLb5X2a9EE=
+	t=1765231805; cv=none; b=VJ2qSfZ9qbvJV0TWMTiG6GH1ESwyYjag96OYR+6XvTvzUiNUi2LakRF5UIFEBa0FC8nhJIQU8mOYo/0HBDf384Vdj5x2QMRz+0MTPxX/M4uTOtEQGiFfXN2jQLe7Q8FMxyW1y248VHwTeIe8cxDP0ZkMBB65UJdlJ+B68exGjhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765231795; c=relaxed/simple;
-	bh=J8irHp6MbN2c2a4RVyStaynsf/OasjHQTErx7VEKAK8=;
+	s=arc-20240116; t=1765231805; c=relaxed/simple;
+	bh=gfYFM8TZgzDduuiSpQZGBHSlOvjR6UivfuFLb5xtC/A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r5wKLl61YqcT13Rd68Fsaz/ojMkkjJZXmT+RxBlh7BcSkP+zJMuj15EcoGGt6EO/s1rZBIJlfg+aPLjzW5a1erGjTe11hb/g+cZdswEjdtClubCv57g4BK28Yf7lZU0ZXySLHJxfCWxz4vZfghE/Luls/7jzEHkw97nYtPg47ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=u/94yr7V; arc=none smtp.client-ip=185.171.202.116
+	 Content-Type:Content-Disposition:In-Reply-To; b=GiRRYb1IeyoILWUjb2R82OoxdGeEH624BYbAhifFuxEfBzW5HZeqbGkctVbOtk6xY74pnPF0M5v5uUKVYg0TiG0Du6fvn9LN4upqskhSyF5g4xlg1i+QHEDTsyCTcrUPsUsLlgqyGFpDhKZr6g1AEsQ3Hhiygq8Ec6UGMAZsmOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=e6zUFyan; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 2DF22C180D1;
-	Mon,  8 Dec 2025 22:09:29 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 9CBF74E41AF2;
+	Mon,  8 Dec 2025 22:10:00 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E9AF5606DD;
-	Mon,  8 Dec 2025 22:09:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 42453103C8D5C;
-	Mon,  8 Dec 2025 23:09:49 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 729C9606DD;
+	Mon,  8 Dec 2025 22:10:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 93DB6103C8D5C;
+	Mon,  8 Dec 2025 23:09:59 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765231792; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=IpPBmn5Por7VIp81eYBe7WxjsEyiLaoPiOP1GCzp0vM=;
-	b=u/94yr7VKJoFAIT4XNcqfKwDGfDww8jQcNrKa80RhoiKz8dI10C+jw63Z8IKyGl+8FIQcC
-	PLlFBjx7EFH64SlaAXhzNxWuLf/TlijbJKQUDTnIArKKzcB4Yb+8jGiemMQM+dgg7Rkmd5
-	hjc9IEAS1Csuj2rVZMPO9GySBF9PpKAUWMowLF0M1SlbSEyxqbK4Ga7O1F18GyYWFlw637
-	ER4ttJKWEiRbwFH2QaFkaVzw570KweYOHZ4tuH8Qd0+x3VeXOzNlbCbhjjHtw96+dMm3m/
-	UojUMoSzE9zrBx2IsNwubh8yNpSGtwBYF55SslsB9gD3JOj9nejB+BHFOOsvtA==
-Date: Mon, 8 Dec 2025 23:09:49 +0100
+	t=1765231800; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=yZw4AcLBHNo2XBKMHVb0t2bjqlmRcb3KT4PRafjbGKc=;
+	b=e6zUFyanY0QmGYjJ+uvzOaQxicsE8N6WHDSXOnnWQz214niX4ZROmlEEPrA29PdMgL4Sgz
+	CFNCkc1zHcSdJWf+HPwOO/FnEk8VtP+yFqk/CSipurIs0WWa+qaHiwzweZS0CacDiNRZ2s
+	GyZ36IDLLBue4EI8iB+moQsM4USbmLrnivcNNXBQaxvWbYBXyhd+VQiHQQiW9hJOHAfufm
+	hf3kSabYuQRmZKmZUWuhY41I9SgWSUnSi3qXD62KU+++tdLt9FDHMTf19eEYPok/gBb2LL
+	uiIPhw6JOwlWNfACeIVlcgc/q2/HNc0D88UhARmYsDG27XCBfQ48e/dCQzKVZA==
+Date: Mon, 8 Dec 2025 23:09:59 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: claudiu.beznea.uj@bp.renesas.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
-	p.zabel@pengutronix.de,
-	Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 0/4] Add RTC support for the Renesas RZ/V2H
- SoC
-Message-ID: <176523152343.342815.5815704941932518377.b4-ty@bootlin.com>
-References: <20251107210706.45044-1-ovidiu.panait.rb@renesas.com>
+To: Nick Huang <sef1548@gmail.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kusogame68@gmail.com, byron.bbradley@gmail.com
+Subject: Re: [PATCH] rtc: s35390a: use u8 instead of char for register buffer
+Message-ID: <176523152338.342815.273365090583562629.b4-ty@bootlin.com>
+References: <20250920174224.108795-1-sef1548@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -65,27 +61,24 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107210706.45044-1-ovidiu.panait.rb@renesas.com>
+In-Reply-To: <20250920174224.108795-1-sef1548@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, 07 Nov 2025 21:07:02 +0000, Ovidiu Panait wrote:
-> This series adds RTC support for the Renesas RZ/V2H SoC.
+On Sun, 21 Sep 2025 01:42:23 +0800, Nick Huang wrote:
+> The register buffer in s35390a_get_reg() was previously defined as
+> `char *buf`. This is not ideal since register data represents raw
+> binary values rather than textual data.
 > 
-> The Renesas RZ/V2H RTC IP is based on the same RTCA3 IP as RZ/G3S
-> (r9a08g045), with the following differences:
-> - it lacks the time capture functionality
-> - the maximum supported periodic interrupt frequency is 128Hz instead
->   of 256Hz
-> - it requires two reset lines instead of one
+> Switch the type to `u8 *buf` to better reflect its intended usage and
+> to avoid potential issues with sign extension when handling register
+> values on platforms where `char` is signed by default.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/4] dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2H support
-      https://git.kernel.org/abelloni/c/4800046b56a5
-[2/4] rtc: renesas-rtca3: Add support for multiple reset lines
-      https://git.kernel.org/abelloni/c/6ada8e24238d
+[1/1] rtc: s35390a: use u8 instead of char for register buffer
+      https://git.kernel.org/abelloni/c/73c4638a2864
 
 Best regards,
 
