@@ -1,129 +1,127 @@
-Return-Path: <linux-rtc+bounces-5547-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5548-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69DEECBD61A
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 11:37:03 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7827BCBD650
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 11:42:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 127C43012BDA
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 10:36:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0D42E300D907
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 10:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5C503164C8;
-	Mon, 15 Dec 2025 10:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FCBF3168E4;
+	Mon, 15 Dec 2025 10:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULVZ/usP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="b/iVlkhq"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A232882C5;
-	Mon, 15 Dec 2025 10:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE127227599;
+	Mon, 15 Dec 2025 10:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765794989; cv=none; b=eJLXbhqoXmIRIN2+PSwJG2jdtm7BPSFgaxDWWBRslN74PLnV1UEcu1ifxgV6PnoyFgGFJV7V/VfW8+gHn8ry4m06sLzfZC4veh4O/sdAuN6YpFzlmrvx2Trwc9XkGQY4vfBciHaa8C6fBoL2wzV+gexNduEeY+0sZa5GbEr/qEE=
+	t=1765795326; cv=none; b=p6aARtkrdGU6gijpjd96qQssKp+CpbDiKLf9rZJRrcmQn0KYjRUz/X2bksamPtklSOHLI9DwFT7RNuPkjR0Y8YvexlUbZ2rhuRE3EL4kUTQNUtVoiMAsCAQ9FNxnkZ7gVX+RCzb7pc4R0guIsuhxnCQW3Tut+5AWyzji5BdemNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765794989; c=relaxed/simple;
-	bh=VnZ9AI+OcSYjRRCKYpKhQNADkzDfaUzJNzcsasS8Vos=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=heMDI9xb77UFtxkdb3R6rfd/nZlnyXI243hUtGSueVFzhcYhf7eITP/F3B1pzJW3pQ5PvJpuOc/eJfqac7N9vO8DDM4M7/fOwzR/itPqK9rxkhsdXyvddirFUcXEy95yJwRxHF2eqEvYyTMLHMC2xgyW4dpM5NRTSUsvntO3e0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULVZ/usP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4F1C4CEF5;
-	Mon, 15 Dec 2025 10:36:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765794989;
-	bh=VnZ9AI+OcSYjRRCKYpKhQNADkzDfaUzJNzcsasS8Vos=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=ULVZ/usPznXq3DhQThXZBO4aMJjHoKA+pwX75G7MAXzBw0Wn1zC2vrBwOvcFA41xC
-	 ULin4X7tqnkgmW26HZnJ3w0CgFKGu1o842V2AKsmaCVLYtjRr8deodkKtvtpbLAB1l
-	 BEPLvuLrRahuZ8yZ4hhFQJOueLxi+TpJys7JJD1MzdspYT/rdSbN/T7Hm8dPlfWAUc
-	 7uiTH4lWg2NjaobkqgPiCeIXHfXmqCW+JXsiareBFSVyW/48VNkWqhb5YB0qL1QL/H
-	 Mq5xrxiRn9uudLeKLrKnWbi4tz7L+Tpcplc9ihm39Uuu8R93Hk4JoreYdKqSS22u5/
-	 8gzm6RHv/C0/Q==
-Date: Mon, 15 Dec 2025 04:36:26 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1765795326; c=relaxed/simple;
+	bh=1ROjGf/hsTf0lhC3w/5rY8hx2rynx3949E5ZtD6gekY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ra0kjbkxb9SUdnpIcUlt3KMNP0HCyde3tWA9sBJBbl9r75NmbrSRo1fHqHc1GhdyAV5bjYuCliDWRboNs/F7g5UEErf0MDNEMHa/ndX5V6Tk0euN7JmXyX2MnpQgGhRwDdNeSMvOdsd6zsZPRds6vF2C4LXREG+oc24FY0YeSVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=b/iVlkhq; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 7F063C19D15;
+	Mon, 15 Dec 2025 10:41:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D764D60664;
+	Mon, 15 Dec 2025 10:41:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8998511941C6F;
+	Mon, 15 Dec 2025 11:41:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1765795309; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=EUBV6XSQpX1AofrFO8TKRN3vjQObFhvyS/Q6s52icVw=;
+	b=b/iVlkhqa6DufO+mHtMb971AG3039Ptu5Xc+nyaBEScChO/NPquLSNONryRngqJFD2WZP0
+	pzqy8pVV4dw+POe66rZLCpPUkbLXxiwZ3aXecRDodt9h5XDTY1yzV0LE2w4goZCd8fAHiY
+	8zVmEoAU7ZanSrQDDNj0hu6s6Hddz6cIDJtK+Afjpil5MMq+j29h10fALy4J5TSF04qEXM
+	n8TfM0rtozRTCoWSTtQoBcf3z8J5ng6zdEmBuLI2eMyYmnLG4ARMNSEaorIQE/3ywIiUVe
+	XnLAizzyVvVkmc8T+0UQoBdqYRXsGzWGPPhStjrLK3samR6QXkFuzjjn5HbMlQ==
+Date: Mon, 15 Dec 2025 11:41:47 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jens Wiklander <jens.wiklander@linaro.org>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	op-tee@lists.trustedfirmware.org, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 06/17] rtc: optee: Migrate to use tee specific driver
+ registration function
+Message-ID: <202512151041471a0eabfc@mail.local>
+References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+ <a586934215a4971f9920398655cb85fd29d91c9f.1765472125.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, Sven Peter <sven@kernel.org>, 
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev, 
- Lee Jones <lee@kernel.org>, linux-input@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>, 
- linux-arm-kernel@lists.infradead.org, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org, 
- Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: James Calligeros <jcalligeros99@gmail.com>
-In-Reply-To: <20251215-macsmc-subdevs-v6-1-0518cb5f28ae@gmail.com>
-References: <20251215-macsmc-subdevs-v6-0-0518cb5f28ae@gmail.com>
- <20251215-macsmc-subdevs-v6-1-0518cb5f28ae@gmail.com>
-Message-Id: <176579498664.1749225.5193965875803198793.robh@kernel.org>
-Subject: Re: [PATCH v6 1/7] dt-bindings: hwmon: Add Apple System Management
- Controller hwmon schema
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a586934215a4971f9920398655cb85fd29d91c9f.1765472125.git.u.kleine-koenig@baylibre.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
+On 11/12/2025 18:15:00+0100, Uwe Kleine-König wrote:
+> The tee subsystem recently got a set of dedicated functions to register
+> (and unregister) a tee driver. Make use of them. These care for setting the
+> driver's bus (so the explicit assignment can be dropped) and the driver
+> owner (which is an improvement this driver benefits from).
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 
-On Mon, 15 Dec 2025 19:37:45 +1000, James Calligeros wrote:
-> Apple Silicon devices integrate a vast array of sensors, monitoring
-> current, power, temperature, and voltage across almost every part of
-> the system. The sensors themselves are all connected to the System
-> Management Controller (SMC). The SMC firmware exposes the data
-> reported by these sensors via its standard FourCC-based key-value
-> API. The SMC is also responsible for monitoring and controlling any
-> fans connected to the system, exposing them in the same way.
-> 
-> For reasons known only to Apple, each device exposes its sensors with
-> an almost totally unique set of keys. This is true even for devices
-> which share an SoC. An M1 Mac mini, for example, will report its core
-> temperatures on different keys to an M1 MacBook Pro. Worse still, the
-> SMC does not provide a way to enumerate the available keys at runtime,
-> nor do the keys follow any sort of reasonable or consistent naming
-> rules that could be used to deduce their purpose. We must therefore
-> know which keys are present on any given device, and which function
-> they serve, ahead of time.
-> 
-> Add a schema so that we can describe the available sensors for a given
-> Apple Silicon device in the Devicetree.
-> 
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
 > ---
->  .../bindings/hwmon/apple,smc-hwmon.yaml  | 86 +++++++++++++++++++++++++
->  .../bindings/mfd/apple,smc.yaml          | 36 +++++++++++
->  MAINTAINERS                              |  1 +
->  3 files changed, 123 insertions(+)
+>  drivers/rtc/rtc-optee.c | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-optee.c b/drivers/rtc/rtc-optee.c
+> index 184c6d142801..f924a729ead0 100644
+> --- a/drivers/rtc/rtc-optee.c
+> +++ b/drivers/rtc/rtc-optee.c
+> @@ -726,25 +726,13 @@ static struct tee_client_driver optee_rtc_driver = {
+>  	.id_table	= optee_rtc_id_table,
+>  	.driver		= {
+>  		.name		= "optee_rtc",
+> -		.bus		= &tee_bus_type,
+>  		.probe		= optee_rtc_probe,
+>  		.remove		= optee_rtc_remove,
+>  		.pm		= pm_sleep_ptr(&optee_rtc_pm_ops),
+>  	},
+>  };
+>  
+> -static int __init optee_rtc_mod_init(void)
+> -{
+> -	return driver_register(&optee_rtc_driver.driver);
+> -}
+> -
+> -static void __exit optee_rtc_mod_exit(void)
+> -{
+> -	driver_unregister(&optee_rtc_driver.driver);
+> -}
+> -
+> -module_init(optee_rtc_mod_init);
+> -module_exit(optee_rtc_mod_exit);
+> +module_tee_client_driver(optee_rtc_driver);
+>  
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_AUTHOR("Clément Léger <clement.leger@bootlin.com>");
+> -- 
+> 2.47.3
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/hwmon/apple,smc-hwmon.yaml:73:1: [warning] too many blank lines (2 > 1) (empty-lines)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.kernel.org/project/devicetree/patch/20251215-macsmc-subdevs-v6-1-0518cb5f28ae@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
