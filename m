@@ -1,43 +1,43 @@
-Return-Path: <linux-rtc+bounces-5563-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5564-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CAADCBE143
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 14:32:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B84ECBE1A6
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 14:40:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3D5D5300A9FC
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 13:31:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B3315304F667
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Dec 2025 13:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B3C32ABCC;
-	Mon, 15 Dec 2025 13:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A6332C95F;
+	Mon, 15 Dec 2025 13:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FguL3AOj"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t83uPLBi"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F11F328B72
-	for <linux-rtc@vger.kernel.org>; Mon, 15 Dec 2025 13:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C3C314B7D
+	for <linux-rtc@vger.kernel.org>; Mon, 15 Dec 2025 13:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765804847; cv=none; b=FHx0SHxqPt/aCgfnhJ1O9SbSGAdwr0h3Tkh8EAjx47Vj2QebSzphgnXWFLu7mg/MW5D+Usuu3aL0l5LntPIGoJUf6hZeNln2C4GnVNz89kjA+tvDAekn6VUusMPNwznflXkghbwQIi5z/LDXWRPgkZ/SOyC6dD92qgTCwX8OBx0=
+	t=1765804860; cv=none; b=o8rXOe9FQFHI/7Pepgoo/DzwCTmxjzU+KKRiSO9phuKpg1/Wj5YD/q5v4r9rweQJUlwQBSJHKH1mwiMHKA36fScimW5BomDF6ZzEgnIjHCC8lu+/48P1rZPtqx/UE7v+U/TLB5J9DCFsyXnQgRZeIwfFEQ1P8ewpFARRoszBOT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765804847; c=relaxed/simple;
-	bh=tWXTuMmd9qNBh/tJZlkP5bQal1tFpPdbSS1MVywLD2E=;
+	s=arc-20240116; t=1765804860; c=relaxed/simple;
+	bh=9JtRaVTCUByXkLOu+YTSVTz1lkC60PblVa/Ge11fduo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SVa7pwIkA8ysnyhj8YrlHOtzgBsufxhVM6aDO7qIkwhgGhYGPkyNghXYTfyBARt4ytKRRJnYIhqbq0w1C9mV1pxiUYvJjC1/pYPvlI/AaFOanDMj2z20kD1Qb//36ZfvP8svslCrpdl9Nyrsw78AIg786I8FenpG4LUTUeReuaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FguL3AOj; arc=none smtp.client-ip=95.215.58.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=eQXs1bh3CJ0qLrVrOblhwHU8SsSRA758jHdIATOnoIvyosotWiwKmqosji0JGDabfbaFhHhdWKfsRkJu31cH65liycBWsDvrnqTzmeMj6zDZV7VxOsbXpglpZht5cUQcy++n6f53qXAexSQgC0iHQIErUmNa8KOWocRP33Epm5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t83uPLBi; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 15 Dec 2025 15:20:37 +0200
+Date: Mon, 15 Dec 2025 15:20:50 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765804843; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1765804857; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=BXTNPYAia8/vYsrVtwHiHHcngiJkCzd4DGfT+o6VYYs=;
-	b=FguL3AOjQiCpsXoNu8JaOM51ZK1o+b97lbcvpN3fiZYUEAc62If2tbHgOg0Uk2wdnsRaJr
-	yj8VcSP9Z5mSShPP+e7BD16NKRpo7MOsADdfUx/LibjdZls21welzZiqXk2/AEub3ySywc
-	wN/I4LbMJfti2mnczqBq1LjGpf4JfY4=
+	bh=5Qe2X5dtJk9O8WONzalRNh+8GKWelpEOMSRQZ70zUHY=;
+	b=t83uPLBijwK8TTSisbNKTxMjVvQXR16RjZiH3QtQfgtgu/8Cm52ujwClyRtjvqmqaD8eIs
+	bJ+gDB4sb89z4etug45sEwxyYf5fn4YDSAiVT6Q0XFj2JKUqoRGXlXUtObMmlu6NcIxj6J
+	aVCcwpE0MBkNTp94inOUynsj5aK7+wE=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -59,8 +59,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH RESEND v6 13/17] clk: clk-bd718x7: Support BD72720 clk gate
-Message-ID: <742e76cd0b87e726818d4fddc534a29298697b6b.1765804226.git.mazziesaccount@gmail.com>
+Subject: [PATCH RESEND v6 14/17] rtc: bd70528: Support BD72720 rtc
+Message-ID: <3241773f0f8e8d8e591a8e948495686cfdee4875.1765804226.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1765804226.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -70,111 +70,120 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9MjrILCrb8+eJPvM"
+	protocol="application/pgp-signature"; boundary="w/bi4r6yG05+JGgA"
 Content-Disposition: inline
 In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---9MjrILCrb8+eJPvM
+--w/bi4r6yG05+JGgA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The BD72720 has similar simple clk gate as a few other ROHM PMICs.
+The BD72720 has similar RTC block as a few other ROHM PMICs.
 
-Add support for BD72720 clk gate.
+Add support for BD72720 RTC.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 ---
 Revision history:
  RFCv1 =3D>:
  - No changes
 ---
- drivers/clk/Kconfig       |  4 ++--
- drivers/clk/clk-bd718x7.c | 10 ++++++++--
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ drivers/rtc/Kconfig       |  3 ++-
+ drivers/rtc/rtc-bd70528.c | 21 ++++++++++++++-------
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 3a1611008e48..619bd63a3c77 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -475,8 +475,8 @@ config COMMON_CLK_BD718XX
- 	tristate "Clock driver for 32K clk gates on ROHM PMICs"
- 	depends on MFD_ROHM_BD718XX || MFD_ROHM_BD71828
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 50dc779f7f98..7ac18985e438 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -570,7 +570,8 @@ config RTC_DRV_BD70528
+ 	depends on MFD_ROHM_BD71828
  	help
--	  This driver supports ROHM BD71837, BD71847, BD71850, BD71815
--	  and BD71828 PMICs clock gates.
-+	  This driver supports ROHM BD71837, BD71847, BD71850, BD71815,
-+	  BD71828, and BD72720 PMICs clock gates.
+ 	  If you say Y here you will get support for the RTC
+-	  block on ROHM BD71815 and BD71828 Power Management IC.
++	  block on ROHM BD71815, BD71828 and BD72720 Power
++	  Management ICs.
 =20
- config COMMON_CLK_FIXED_MMIO
- 	bool "Clock driver for Memory Mapped Fixed values"
-diff --git a/drivers/clk/clk-bd718x7.c b/drivers/clk/clk-bd718x7.c
-index ac40b669d60b..1cae974e6d1d 100644
---- a/drivers/clk/clk-bd718x7.c
-+++ b/drivers/clk/clk-bd718x7.c
-@@ -19,7 +19,8 @@
- #define BD71828_REG_OUT32K	0x4B
- /* BD71837 and BD71847 */
- #define BD718XX_REG_OUT32K	0x2E
--
-+/* BD72720 */
-+#define BD72720_REG_OUT32K	0x9a
- /*
-  * BD71837, BD71847, and BD71828 all use bit [0] to clk output control
-  */
-@@ -118,6 +119,10 @@ static int bd71837_clk_probe(struct platform_device *p=
-dev)
- 		c->reg =3D BD71815_REG_OUT32K;
- 		c->mask =3D CLK_OUT_EN_MASK;
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-bd70528.
+diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
+index 954ac4ef53e8..4c8599761b2e 100644
+--- a/drivers/rtc/rtc-bd70528.c
++++ b/drivers/rtc/rtc-bd70528.c
+@@ -7,6 +7,7 @@
+ #include <linux/bcd.h>
+ #include <linux/mfd/rohm-bd71815.h>
+ #include <linux/mfd/rohm-bd71828.h>
++#include <linux/mfd/rohm-bd72720.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -262,13 +263,13 @@ static int bd70528_probe(struct platform_device *pdev)
+=20
+ 		/*
+ 		 * See also BD718XX_ALM_EN_OFFSET:
+-		 * This works for BD71828 and BD71815 as they have same offset
+-		 * between ALM0 start and ALM0_MASK. If new ICs are to be
+-		 * added this requires proper check as ALM0_MASK is not located
+-		 * at the end of ALM0 block - but after all ALM blocks so if
+-		 * amount of ALMs differ the offset to enable/disable is likely
+-		 * to be incorrect and enable/disable must be given as own
+-		 * reg address here.
++		 * This works for BD71828, BD71815, and BD72720 as they all
++		 * have same offset between the ALM0 start and the ALM0_MASK.
++		 * If new ICs are to be added this requires proper check as
++		 * the  ALM0_MASK is not located at the end of ALM0 block -
++		 * but after all ALM blocks. If amount of ALMs differ, the
++		 * offset to enable/disable is likely to be incorrect and
++		 * enable/disable must be given as own reg address here.
+ 		 */
+ 		bd_rtc->bd718xx_alm_block_start =3D BD71815_REG_RTC_ALM_START;
+ 		hour_reg =3D BD71815_REG_HOUR;
+@@ -278,6 +279,11 @@ static int bd70528_probe(struct platform_device *pdev)
+ 		bd_rtc->bd718xx_alm_block_start =3D BD71828_REG_RTC_ALM_START;
+ 		hour_reg =3D BD71828_REG_RTC_HOUR;
  		break;
 +	case ROHM_CHIP_TYPE_BD72720:
-+		c->reg =3D BD72720_REG_OUT32K;
-+		c->mask =3D CLK_OUT_EN_MASK;
++		bd_rtc->reg_time_start =3D BD72720_REG_RTC_START;
++		bd_rtc->bd718xx_alm_block_start =3D BD72720_REG_RTC_ALM_START;
++		hour_reg =3D BD72720_REG_RTC_HOUR;
 +		break;
  	default:
- 		dev_err(&pdev->dev, "Unknown clk chip\n");
- 		return -EINVAL;
-@@ -146,6 +151,7 @@ static const struct platform_device_id bd718x7_clk_id[]=
- =3D {
- 	{ "bd71847-clk", ROHM_CHIP_TYPE_BD71847 },
- 	{ "bd71828-clk", ROHM_CHIP_TYPE_BD71828 },
- 	{ "bd71815-clk", ROHM_CHIP_TYPE_BD71815 },
-+	{ "bd72720-clk", ROHM_CHIP_TYPE_BD72720 },
+ 		dev_err(&pdev->dev, "Unknown chip\n");
+ 		return -ENOENT;
+@@ -337,6 +343,7 @@ static int bd70528_probe(struct platform_device *pdev)
+ static const struct platform_device_id bd718x7_rtc_id[] =3D {
+ 	{ "bd71828-rtc", ROHM_CHIP_TYPE_BD71828 },
+ 	{ "bd71815-rtc", ROHM_CHIP_TYPE_BD71815 },
++	{ "bd72720-rtc", ROHM_CHIP_TYPE_BD72720 },
  	{ },
  };
- MODULE_DEVICE_TABLE(platform, bd718x7_clk_id);
-@@ -161,6 +167,6 @@ static struct platform_driver bd71837_clk =3D {
- module_platform_driver(bd71837_clk);
-=20
- MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
--MODULE_DESCRIPTION("BD718(15/18/28/37/47/50) and chip clk driver");
-+MODULE_DESCRIPTION("BD718(15/18/28/37/47/50) and BD72720 chip clk driver");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:bd718xx-clk");
+ MODULE_DEVICE_TABLE(platform, bd718x7_rtc_id);
 --=20
 2.52.0
 
 
---9MjrILCrb8+eJPvM
+--w/bi4r6yG05+JGgA
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlACyUACgkQeFA3/03a
-ocVm2gf/TptgAgvYLweha8P2crX/2iypH76u3lOEfT0HkfVjEVhJzR+a/osAuBZH
-jeYkvUBUuQc5RFOLIGMzi8ue5vUpV6jOfyhV5mBSzkI6IpHPNxnUop6SLJImKp26
-LEq6lG0nR9pKSavaxK+pa9nhfOIAwKsA06J+flm95Ysc5vTUEZKB60wqjh7KbD9q
-e68dhs1XDSVp7daqZj/OcgEfabRMjahlbdtrtYR7Goof96wmmoCKO5YQYa2cD9YC
-MJZgKB1TYRcSZLDl0YIbWPLAweFLWs0ZmvMxUo/AhutCpZjtybAlHJJxeqhec7BN
-5iKKchwvud+JQFrI1ipoclbso+K5lg==
-=yT4F
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlACzIACgkQeFA3/03a
+ocUn+wf+LjgqAcukg+Vs7gDF4jlXtDnhohij9rPseui/0/h27XcqOtE/HLAER0Yv
+v5T0mNGJon/SiTpHCjGP6W4KZf7Q+nqDo0QlCVuHTLBta7bQthFFcXbklkFquhZE
+ZgvDnoQULVTR19jAi+NON6Kjb7QegnyuuYQmO3OHqk8twoUDC33/S1I9Bk95ItLh
+PvLohOn+MPRPf4EZf1cSMUBydU3ethCWu0E/z5NcRM/BNWlw+LxIufk11zOxZRnu
+229fw0C+3cbjs0tEZAyIDtP2gXwlaPaTS1miTwXDit81C1LPub7UAPLi17hk1PEi
+W9UKmOj1+Y3vslto1WSgyjq1PWr5pA==
+=HFvt
 -----END PGP SIGNATURE-----
 
---9MjrILCrb8+eJPvM--
+--w/bi4r6yG05+JGgA--
 
