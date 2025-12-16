@@ -1,117 +1,174 @@
-Return-Path: <linux-rtc+bounces-5576-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5577-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BCCCC3E40
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 16:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE781CC4645
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 17:47:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 67052308716E
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 15:18:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CAC7330161B0
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 16:43:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B2182EA158;
-	Tue, 16 Dec 2025 15:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457B1322B81;
+	Tue, 16 Dec 2025 16:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="e8Vume33"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8pVkjwM"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66FB33064C
-	for <linux-rtc@vger.kernel.org>; Tue, 16 Dec 2025 15:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271CB31DD90;
+	Tue, 16 Dec 2025 16:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765897756; cv=none; b=reJF2Orx2sw5zDOoNa6fgyZYp1Ogi8ng548zmqTZMM98PHaltMXtrwXhsb4iTo5ml7/4nGwmZ+IsNMc4ao5gcJnMy4zfQeBaFCIZdlB40j0qwtznRhtrC9V6AIEm7A0PtscFUxyABwBJJ1nIwhHFs5IHzFAadTWly954NSo9LcE=
+	t=1765902031; cv=none; b=oMHwHJhW7AoGkZR3syHE2dpJ8NXv+4/H5xJjuundAblOzy1LuslZ+4GpG74hFIXi5UPWz3bvsj6iiS1aJtVqvw2Kp0fRroEOwzyAwdLeAR5VhEWIySWhUh8i0HkkItHenCJJBRGfa+zo8lyoOYMNGgYTjv4nGdryXRzseMtzzbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765897756; c=relaxed/simple;
-	bh=P5EatezNq4BgJDiRy+qSnDLhBpsRdk6obTP3oqH4CHU=;
+	s=arc-20240116; t=1765902031; c=relaxed/simple;
+	bh=88Io3/dEnsh7J9mzKOUPUWY7WtjcW6vC0ycmDPe6/LQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JHvmCxpnFjz0inFEU74YEwrSE3wq+UosGs1EfJF1tdXWX2+/++gz9tW1jpHOjALPyP/Ojx2KOzAvyKIgSWj6jhJamyJwYLyWsrZpw4R/I1laX35bjEaa5ZI+5kfYXlbzAs4E72Rk4RIiQWT941ExwUN7PHLX0IL1x0SHTinxBNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=e8Vume33; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ed861eb98cso52203651cf.3
-        for <linux-rtc@vger.kernel.org>; Tue, 16 Dec 2025 07:09:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1765897753; x=1766502553; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jrMcbVCU0QysEyyCI8MUU0ym/IVFglQ8rabaf9/So5I=;
-        b=e8Vume33nTLd9jJNIbvkm+gDOVCCE1hl6Gc7/107gHG+g1B8qBsz/1QWaEFsHRZn9I
-         koJySIkfMuzNj+kxUziaRdfNtUAnj/a4O/m0s1TjUPKpmmBbFsX626/nGa+p1Stzm3ci
-         eAUtDpklc0fPq/WpBxwcacHldW/jy5jWYjRWwnwoTVrEmd5h+DlfYXbKB5wbhGW6WFd8
-         21MRUf7q5vI1FsDh/ecLO761QY4JE6sSfzYk0Jj+ZhQXKCQQkWhRFsS+herhRSer33Gm
-         1CgacyDm004rYoVE6vHGPBMaPLVxQqT+Uo1balFc2YSn0mP5wDjQLjVHg9+AHBMUpcBz
-         Cv2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765897753; x=1766502553;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jrMcbVCU0QysEyyCI8MUU0ym/IVFglQ8rabaf9/So5I=;
-        b=YZZFNH5641yAMQ1oTIemUKXbhHgBtnrG6IhhrwJwFBk/UtWcXmEfH1XcGcYYhiQbfl
-         dyIua5zrrtTRIYj2i/XxA9as3GDSUu9pMs8edw4zXfkfH0/g6dMF1QayP2cmQHakii/I
-         2zh5MesDDDrcavOMPSZQ9s6UyKPdsUZhtE74zEgFEER5529EMpTgwuNZRHu0+CQwjFLm
-         kgnxsfC7+nauJgtzn/I0rW59+29PsJUhLiiatLXs2AbXh8qLGZMiH2qzo0ewo6g8Gtis
-         cmY7tLHSk+G9a9ArW4RPcBtHxt9l/+SxRet+jX65Oix0mgGuVoW+TNI1cY2kubfoitqK
-         TfHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUiYeqEZbbQ/T5/UkP3gFECiJLFaszzbE6xB4pF1qQRYuvivtyHJniMiyjd30mE15dahiT5X3F0ZEk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWG3vaskYG2sO32GAn3Q+2sczPrtTz4kKBEVBuzK8DOLNA0QOP
-	oX4jVFiJE/FrFG8ovI0E0N6uF313WD0WOZ2TX5EmCcQzGRhM4MueEvRhDykmX19h5bE=
-X-Gm-Gg: AY/fxX6KKCxR0EWMuTbo+YCjiVFKYDBKEVccWuVsPT098lyDD2Q+5Sj5AXo2XaBkJ4P
-	B9BEcf6IUghLN3z2924NNG7H8k/NUiHVU6aB/JaTnWb3pH7542Sp5BkBrcfe0NT7uhRO/FemkRi
-	QCkH6M50QZ9LMmXK1UFE5Ww0hk7tyCIvIZg3vfqgyunv4L8zS11Thi/Zd3bth4GIOKhyZcsKkYp
-	ReiY8AE+F8Xm0yl8I2Qa+zvMbqqLLoa3fLAwOY4cyXZxg13qpDV73q1ZqY7CtndDRi3duRGNLiz
-	0MzpUBjFLPjQJQE8uAOFKFIshepo3abLdu0C6Vfu2HbVv7ndFBwC3plqNE2n1UR5LabesmBeXD7
-	5IIaWBPCKEHI6Dy/AJuG0htx15VsnMke6Hn2ar9ftSRh1NdnOC5UtseAb9Co5634T+S1mg7B5Mp
-	5JUZf//xKb36Uy5Z5IYYNJLqoUI5+H5/+5H2SMLwVy
-X-Google-Smtp-Source: AGHT+IEW3ea/jO7lBPSQ+CsTkd0hRgRRgaNgvTaIJoUUggk99zhFWx2fuRHPwk2sKowsnvyuNmOmPA==
-X-Received: by 2002:a05:622a:581b:b0:4e8:a0bf:f5b5 with SMTP id d75a77b69052e-4f1d062a6bfmr207842641cf.73.1765897753249;
-        Tue, 16 Dec 2025 07:09:13 -0800 (PST)
-Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4f345c2e0f7sm15891281cf.21.2025.12.16.07.09.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 07:09:12 -0800 (PST)
-Date: Tue, 16 Dec 2025 10:09:11 -0500
-From: Nick Bowler <nbowler@draconx.ca>
-To: Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: "Anthony Pighin (Nokia)" <anthony.pighin@nokia.com>, 
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>, "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>, 
-	Esben Haabendal <esben@geanix.com>, Linux kernel regressions list <regressions@lists.linux.dev>
-Subject: Re: [PATCH] rtc: interface: Alarm race handling should not discard
- preceding error
-Message-ID: <g3phtogna3a55vzah6olpxekdcmi322q5lzzwxwq5za4oi4plr@js34hr72bemi>
-References: <BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com>
- <80e7450d-d842-49ca-8219-a995c8ce8bfe@leemhuis.info>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IW44DBtMcvojBEQegstGwjArXZPd+S3y9R4PpouvulxKN0hdTKyfLnmqvxNA9ev3Sa42vYH53BFvmIZ1OI/IarkgJXqhfNCMv+1EXCPA4zmfa2oqlKSNprZHmLd/iU8StcNqCz85VYowgM0HT3MUsGY55TiEmtK6MvseFdHlWGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8pVkjwM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE598C4CEF1;
+	Tue, 16 Dec 2025 16:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765902030;
+	bh=88Io3/dEnsh7J9mzKOUPUWY7WtjcW6vC0ycmDPe6/LQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p8pVkjwMcYgI5x+cY3Z1C93MjU0pBEi/EtR2zfplBPMG3mcXgBNqND36HWiV6qcbe
+	 +rDac8spLkPiOQ8mg8OqWCEvMbYOpxgPFM0W2jFiKGzpJq0pQipX0D7xAyFv0EMWXq
+	 jRimw/OyQfriGLM1Td4xiPnbyZLcXqnm3xH2rORmyr+DWyAFFkEIxOXD/hKLYiLH8E
+	 2f+E1Rqc46CqI+D9Z9/0zvbi/H4X94LOAFHfRFg761a+/0I0+vtVaFab1iu7Pv19b+
+	 yIy8LV03DJZQ215Uw96aVMzwqsOhT76APvq8d1F05Kiu/J1O1yv1R9TMVSd6LaIbIT
+	 0aNO256AdOfKQ==
+Date: Tue, 16 Dec 2025 16:20:24 +0000
+From: Lee Jones <lee@kernel.org>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Will McVicker <willmcvicker@google.com>,
+	Juan Yescas <jyescas@google.com>,
+	Douglas Anderson <dianders@chromium.org>, kernel-team@android.com,
+	Kaustabh Chakraborty <kauschluss@disroot.org>,
+	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Samsung mfd/rtc driver alarm IRQ simplification
+Message-ID: <20251216162024.GI9275@google.com>
+References: <20251120-s5m-alarm-v2-0-cc15f0e32161@linaro.org>
+ <20251126112935.GA3070764@google.com>
+ <20251126140409.GC3070764@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <80e7450d-d842-49ca-8219-a995c8ce8bfe@leemhuis.info>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251126140409.GC3070764@google.com>
 
-On Tue, Dec 16, 2025 at 11:51:30AM +0100, Thorsten Leemhuis wrote:
-> Lo! FWIW, Nick Bowler (now CCed) reported that below patch fixes a
-> regression for him caused by the commit from Esben (now also CCed) the
-> Fixes: tag mentions. See "hwclock busted w/ M48T59 RTC (regression)" for
-> details:
-> https://lore.kernel.org/all/2t6bhs4udbu55ctbemkhlluchz2exrwown7kmu2gss6zukaxdm@ughygemahmem/
-> and
+On Wed, 26 Nov 2025, Lee Jones wrote:
+
+> On Wed, 26 Nov 2025, Lee Jones wrote:
 > 
-> Nick, could you maybe provide a tested-by tag here? Maybe that would
-> motivate someone to get this en route to mainline.
+> > On Thu, 20 Nov 2025, André Draszik wrote:
+> > 
+> > > Hi,
+> > > 
+> > > With the attached patches the Samsung s5m RTC driver is simplified a
+> > > little bit with regards to alarm IRQ acquisition.
+> > > 
+> > > The end result is that instead of having a list of IRQ numbers for each
+> > > variant (and a BUILD_BUG_ON() to ensure consistency), the RTC driver
+> > > queries the 'alarm' platform resource from the parent (mfd cell).
+> > > 
+> > > Additionally, we can drop a now-useless field from runtime data,
+> > > reducing memory consumption slightly.
+> > > 
+> > > The attached patches must be applied in-order as patch 2 without 1 will
+> > > fail at runtime, and patch 3 without 2 will fail at build time. I would
+> > > expect them all to go via the MFD tree. Alternatively, they could be
+> > > applied individually to the respective kernel trees during multiple
+> > > kernel release cycles, but that seems a needless complication and
+> > > delay.
+> > > 
+> > > Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> > > ---
+> > > Changes in v2:
+> > > - rebase on top of https://lore.kernel.org/r/20251114-s2mpg10-chained-irq-v1-1-34ddfa49c4cd@linaro.org
+> > > - return struct regmap_irq_chip_data * in sec_irq_init() (Lee)
+> > > - collect tags
+> > > - Link to v1: https://lore.kernel.org/r/20251114-s5m-alarm-v1-0-c9b3bebae65f@linaro.org
+> > > 
+> > > ---
+> > > André Draszik (3):
+> > >       mfd: sec: add rtc alarm IRQ as platform device resource
+> > >       rtc: s5m: query platform device IRQ resource for alarm IRQ
+> > >       mfd: sec: drop now unused struct sec_pmic_dev::irq_data
+> > > 
+> > >  drivers/mfd/sec-common.c         | 45 ++++++++++++++++++++--------
+> > >  drivers/mfd/sec-core.h           |  2 +-
+> > >  drivers/mfd/sec-irq.c            | 63 ++++++++++++++++++----------------------
+> > >  drivers/rtc/rtc-s5m.c            | 21 +++++---------
+> > >  include/linux/mfd/samsung/core.h |  1 -
+> > >  5 files changed, 71 insertions(+), 61 deletions(-)
+> > 
+> > The MFD parts look okay to me.
+> > 
+> > Once we have the RTC Ack, I'll merge this and send out a PR.
 > 
-> Adding a "Cc: <stable@vger.kernel.org>" would be great, too, as Nick
-> encountered this on earlier series, as it was backported all the way to
-> 5.15.y
+> Ah, I see it.  Apologies.
+> 
+> It's too late in the cycle to take this now anyway.
+> 
+> It's on my radar for when -rc1 is released.
 
-It was backported to 5.10.y and 5.4.y too, but only after I had reported
-this regression back in October (and I guess 5.4.y is EOL now).
+This does not seem to apply well on v6.19-rc1.
 
-Tested-by: Nick Bowler <nbowler@draconx.ca>
+Please rebase and send as a [RESEND].
 
-Thanks,
-  Nick
+-----
+
+% cat drivers/mfd/sec-irq.c.rej
+diff a/drivers/mfd/sec-irq.c b/drivers/mfd/sec-irq.c	(rejected hunks)
+@@ -302,27 +304,28 @@ static int sec_irq_init_s2mpg1x(struct sec_pmic_dev *sec_pmic)
+ 		chained_pirq = S2MPG10_COMMON_IRQ_PMIC;
+ 		break;
+ 	default:
+-		return dev_err_probe(sec_pmic->dev, -EINVAL, "Unsupported device type %d\n",
+-				    sec_pmic->device_type);
++		return dev_err_ptr_probe(sec_pmic->dev, -EINVAL, "Unsupported device type %d\n",
++					sec_pmic->device_type);
+ 	};
+ 
+ 	regmap_common = dev_get_regmap(sec_pmic->dev, "common");
+ 	if (!regmap_common)
+-		return dev_err_probe(sec_pmic->dev, -EINVAL, "No 'common' regmap %d\n",
+-				    sec_pmic->device_type);
++		return dev_err_ptr_probe(sec_pmic->dev, -EINVAL, "No 'common' regmap %d\n",
++					sec_pmic->device_type);
+ 
+ 	ret = devm_regmap_add_irq_chip(sec_pmic->dev, regmap_common, sec_pmic->irq, IRQF_ONESHOT, 0,
+ 				      irq_chip, &irq_data);
+ 	if (ret)
+-		return dev_err_probe(sec_pmic->dev, ret, "Failed to add %s IRQ chip\n",
+-				    irq_chip->name);
++		return dev_err_ptr_probe(sec_pmic->dev, ret, "Failed to add %s IRQ chip\n",
++					irq_chip->name);
+ 
+ 	return s2mpg1x_add_chained_irq_chip(sec_pmic->dev, sec_pmic->regmap_pmic, chained_pirq,
+-					   irq_data, chained_irq_chip, &sec_pmic->irq_data);
++					   irq_data, chained_irq_chip);
+ }
+ 
+-int sec_irq_init(struct sec_pmic_dev *sec_pmic)
++struct regmap_irq_chip_data *sec_irq_init(struct sec_pmic_dev *sec_pmic)
+ {
++	struct regmap_irq_chip_data *sec_irq_chip_data;
+ 	const struct regmap_irq_chip *sec_irq_chip;
+ 	int ret;
+
+-- 
+Lee Jones [李琼斯]
 
