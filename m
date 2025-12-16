@@ -1,171 +1,207 @@
-Return-Path: <linux-rtc+bounces-5573-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5574-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D81CC2068
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 11:51:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55A36CC214D
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 12:09:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C3A63005E9F
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 10:51:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D90D13012BF3
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 11:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98CD82E719B;
-	Tue, 16 Dec 2025 10:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 544F733C197;
+	Tue, 16 Dec 2025 11:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="XcM2/l/h"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TuhEal39"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E27645948;
-	Tue, 16 Dec 2025 10:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8702D7DD0
+	for <linux-rtc@vger.kernel.org>; Tue, 16 Dec 2025 11:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765882295; cv=none; b=YfmqH84CrZr6zf9pZUZFCmfVI69pF1tj75P73zvUtZnOTeQB/V2Fwe86kiF6mba0LUcee61JM5PZEwkjvv4CxXYhOJUNqlNdg33gnGIt1d+ZTU5tq370ipyj1BbniMnRLJN+t7ksk6Pxd1T+O/EpxqMu3hPuMixT3kuS6y5Ufvk=
+	t=1765883325; cv=none; b=C2Om5MKqiim4SSLNNRRMkVlBFHGtpb5T32TugwEnlPNXmAHcONwPv09KjyXiMkjQ00AB6pJpQ6gv31VHEipWEBMyzqsfuAakzar1faIgpJkL1p2r1W07m954xdJUmocTyCyiPUyulGSqMpfFFavDqz4gPF8Mr9AanztZS5gjm1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765882295; c=relaxed/simple;
-	bh=u8ksKZ5EyjUtTXiyhvIGHmJc42ntOt8GzlmAhzorWB0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ovy1HHTmlmmS/OGowjJtqxPNiJFgTdqTShfb4Y75ByfN8jV1WWq9R1K6eRUymHfv5j4BGUUqSycdSJeFM8cbyRlfzwsCAGlpA2l6Z8Co2ZIYy/VtMEJ2memRgH+E5uWJ07KWjHe8ZP/N0g3VCoi8n7kA9iLe68OtF/al+M4zexo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=XcM2/l/h; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=yLdtDyF9YwP7ISvcRawhi0NSmBjSBSf03ccAR2RwNco=; t=1765882293;
-	x=1766314293; b=XcM2/l/hE8+OwkiwN6BtB4bapqwK4rXnqiiJLQYahmPTZj59Ip3OZTaZQ3H9D
-	HYn3t6b/G0lMJOsNH18UEV1spOCdKDk/QPKDnCGy1sWb5VjYKJJTm85U9P4cQVy/Yf4yYhqRMwIX7
-	vrQazCLQhvxByf/4oDJXTY1NpKjHnT1OA4EIBYy6StABcEZ27f4fZJYtVXtnKYqPtODBIF72VadVL
-	1N7yo4pGSBqAtK4msYHzw2yeqQwOkhYJDYJw5gKuhZBEs6jLDluDnod7eRP8MXdTaBR2/plTbefQF
-	bkDeXLoV8Ig+0sq6V+QyOknkIHo2GRFV8fkZ4FVIAcRAa0PdpA==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1vVSeR-00C3S8-0t;
-	Tue, 16 Dec 2025 11:51:31 +0100
-Message-ID: <80e7450d-d842-49ca-8219-a995c8ce8bfe@leemhuis.info>
-Date: Tue, 16 Dec 2025 11:51:30 +0100
+	s=arc-20240116; t=1765883325; c=relaxed/simple;
+	bh=7eCpaO8h0XuRWUlnnZDRQQvxiOwboz4wCDo5+3haAtQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mKTwJFTa7vBq8NQpve8jMMcDJvQ/A4o9gv7kk0foJU0AKBD/fVovUOErBqv5VQ16Pa1pX8TE/y38/x4vggkMNDk+3ojzJajM5w7U4f4/TVJT2UkaIWgwTyujkUN2cqmnvuiEwHp35+74TXymKlKpginauGPtFcsLWWaE7UTYvC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TuhEal39; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-477b198f4bcso36231155e9.3
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Dec 2025 03:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765883321; x=1766488121; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzbZNSoR9XV7c/fw2WEyAJLfwBQw/kZL/Ydt6MIWYlk=;
+        b=TuhEal39hD7OzJsRaLhLQRzrJWrmiGxmtcdjrQQEW3h4ZHalghwmMgBq5J88Pvef9/
+         1AyxW7vmjGodV8qgsJmC3Dy2PBUX8p80aXi1G2HA0Q/38H1Vz0fvkmnUHJz8oR2nN5nX
+         lzluP0XFgEIOQmzX5WCwDHqg9J+STt5D/CvEH5OlmpJa4VBcMX20w6Axb3xxbbFuOjYf
+         31xqFcD1UKZguaYIOdSgvBeQRZuFNraMApNS3a1DDHOxFJR/xqGB+OkPq9p1lC/qS+QX
+         4siVEiXEDqiCFDLE26nWnEFiiMNdVlDtsnk4gY2ytH0eU23DNANtfygwZ+Fc6a2uvfzK
+         eiBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765883321; x=1766488121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JzbZNSoR9XV7c/fw2WEyAJLfwBQw/kZL/Ydt6MIWYlk=;
+        b=eED+h2uIP9mtQAG4RWwhWyHUM0UmOPzlZM1kknpLnlpB0z5+B5LLRDUK0fqqVr3A0l
+         7t6qAa1le2IQ6MsajgujpHm0PpPWzTldswp3z38CZpQwuQEccds+RIqclsFQBMbwrtG8
+         eOnxHD/i9+2+e2vJBPqzvtsZqSTCs7vaQO5DMP00bU85+jHcpFKIzUphFegEM9kV0mmU
+         uXoCVjDi0eRb/OeS4bkf+WfOzHzbUkCmtAYKKJBrEqG7/VDrKcqk7KIFB5QlYWrqle1B
+         0ZpQWhX0Q1PzZ6shzmv72JqvVKY6w9HM/NY8EN7Mf+aoa5aNoQjt1U/BthNemMD7FhMS
+         wkWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXHSwPW1qbJ8+Yfj8ho8bEcTLvYcTBETiZWGvlhrwgUyATi8pFe91cxoK/UzUdpckmthT0AzXrh+OA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKy5UwZpZ2Git/8TVSpgqzrRCOJGjilHE7UsA2jgz6lmZuhYl4
+	vuizHc2RoWxE+gasXN03YSfCagqh3VF+5JftkDq2KLRAxrL/0esNkVhgoMMvUvKchvM=
+X-Gm-Gg: AY/fxX6xBtYtUbbTuGf5djWMM2EZyGRaldus/4LB0CN7RYT//pTH12GHEilCefA9CTf
+	0k74WAmLy9A/vfp+ABdTb+NrJj3QaGzNKGrQboRTiNO1tfT30d1nhalvg4vFlcLZ8NbUUJPpbY5
+	/R1SOBcYdVrzo8D4nzL/Vy1gNF+crgBh2L4N1cwoX7e2Clw4pbP2gdwCQRQes9hTIloXOLe6FAq
+	l8TdyjuZ+0YOybDaXqqo5NGAh4ZBLZcULbwN59Vocn8BirADw5oCXXrxgjGz8idtam3gWLizGt3
+	NdUSseCf/XSlU4lO812a4mBGNk3TgpCIRt5AD1TrweeP9SmusOYmRaD5HS3DRhlXsGARAZChbQ9
+	LtKkz1H/8AVWNfFNCASwMMJry7fKHDNe6hZNzjyP3rKLuIB0RAORC1iQwODmZyG3x3wcuyhgGoG
+	ZrsKkWan5z+/X/yKzBe2suM3KhbVm1DqSQm5nEh2FsIse7zaKUjXxgZnOpKEC/j9fxsKUh3jiRX
+	x4=
+X-Google-Smtp-Source: AGHT+IFp5IncMGvMC+pwiacOOoEIbditx6SKu86limMmxyrWyAZX1pq9RrgklnX8yEKbt8tmwVfkyQ==
+X-Received: by 2002:a05:600c:8288:b0:477:a1a2:d829 with SMTP id 5b1f17b1804b1-47a8f8c0caamr134941025e9.13.1765883320955;
+        Tue, 16 Dec 2025 03:08:40 -0800 (PST)
+Received: from localhost (p200300f65f00660852dfbbf029d2e03c.dip0.t-ipconnect.de. [2003:f6:5f00:6608:52df:bbf0:29d2:e03c])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-47a8f4ace61sm233401395e9.7.2025.12.16.03.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 03:08:40 -0800 (PST)
+Date: Tue, 16 Dec 2025 12:08:38 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Sumit Garg <sumit.garg@oss.qualcomm.com>
+Cc: Sumit Garg <sumit.garg@kernel.org>, 
+	Jens Wiklander <jens.wiklander@linaro.org>, Olivia Mackall <olivia@selenic.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
+	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
+	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <ayebinxqpcnl7hpa35ytrudiy7j75u5bdk3enlirkp5pevppeg@6mx6a5fwymwf>
+References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+ <aT--ox375kg2Mzh-@sumit-X1>
+ <dhunzydod4d7vj73llpuqemxb5er2ja4emxusr66irwf77jhhb@es4yd2axzl25>
+ <CAGptzHOOqLhBnAXDURAzkgckUvRr__UuF1S_7MLV0u-ZxYEdyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rtc: interface: Alarm race handling should not discard
- preceding error
-To: "Anthony Pighin (Nokia)" <anthony.pighin@nokia.com>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-Cc: "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- Nick Bowler <nbowler@draconx.ca>, Esben Haabendal <esben@geanix.com>,
- Linux kernel regressions list <regressions@lists.linux.dev>
-References: <BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: de-DE, en-US
-X-Enigmail-Draft-Status: N11222
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 MEK4
-In-Reply-To: <BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1765882293;779aca84;
-X-HE-SMSGID: 1vVSeR-00C3S8-0t
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="judjbtjlccebrcda"
+Content-Disposition: inline
+In-Reply-To: <CAGptzHOOqLhBnAXDURAzkgckUvRr__UuF1S_7MLV0u-ZxYEdyA@mail.gmail.com>
 
-Lo! FWIW, Nick Bowler (now CCed) reported that below patch fixes a
-regression for him caused by the commit from Esben (now also CCed) the
-Fixes: tag mentions. See "hwclock busted w/ M48T59 RTC (regression)" for
-details:
-https://lore.kernel.org/all/2t6bhs4udbu55ctbemkhlluchz2exrwown7kmu2gss6zukaxdm@ughygemahmem/
-and
 
-Nick, could you maybe provide a tested-by tag here? Maybe that would
-motivate someone to get this en route to mainline.
+--judjbtjlccebrcda
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+MIME-Version: 1.0
 
-Adding a "Cc: <stable@vger.kernel.org>" would be great, too, as Nick
-encountered this on earlier series, as it was backported all the way to
-5.15.y
+Hello,
 
-Ciao, Thorsten
+On Tue, Dec 16, 2025 at 01:08:38PM +0530, Sumit Garg wrote:
+> On Mon, Dec 15, 2025 at 3:02=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+> <u.kleine-koenig@baylibre.com> wrote:
+> > On Mon, Dec 15, 2025 at 04:54:11PM +0900, Sumit Garg wrote:
+> > > Feel free to make the tee_bus_type private as the last patch in the s=
+eries
+> > > such that any followup driver follows this clean approach.
+> >
+> > There is a bit more to do for that than I'm willing to invest. With my
+> > patch series applied `tee_bus_type` is still used in
+> > drivers/tee/optee/device.c and drivers/tee/tee_core.c.
+>=20
+> Oh I see, I guess we need to come with some helpers around device
+> register/unregister from TEE subsystem as well. Let's plan that for a
+> followup patch-set, I don't want this patch-set to be bloated more.
 
-On 11/25/25 18:35, Anthony Pighin (Nokia) wrote:
-> Commit 795cda8338ea ("rtc: interface: Fix long-standing race when setting
-> alarm") should not discard any errors from the preceding validations.
-> 
-> Prior to that commit, if the alarm feature was disabled, or the
-> set_alarm failed, a meaningful error code would be returned to the
-> caller for further action.
-> 
-> After, more often than not, the __rtc_read_time will cause a success
-> return code instead, misleading the caller.
-> 
-> An example of this is when timer_enqueue is called for a rtc-abx080x
-> device. Since that driver does not clear the alarm feature bit, but
-> instead relies on the set_alarm operation to return invalid, the discard
-> of the return code causes very different behaviour; i.e.
->     hwclock: select() to /dev/rtc0 to wait for clock tick timed out
-> 
-> Fixes: 795cda8338ea ("rtc: interface: Fix long-standing race when setting alarm")
-> Signed-off-by: Anthony Pighin <anthony.pighin@nokia.com>
-> ---
->  drivers/rtc/interface.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> index b8b298efd9a9..1906f4884a83 100644
-> --- a/drivers/rtc/interface.c
-> +++ b/drivers/rtc/interface.c
-> @@ -457,7 +457,7 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
->          * are in, we can return -ETIME to signal that the timer has already
->          * expired, which is true in both cases.
->          */
-> -       if ((scheduled - now) <= 1) {
-> +       if (!err && (scheduled - now) <= 1) {
->                 err = __rtc_read_time(rtc, &tm);
->                 if (err)
->                         return err;
-> --
-> 2.43.0
+Don't consider me in for that. But it sounds like a nice addition.
 
+> > Maybe it's
+> > sensible to merge these two files into a single one.
+>=20
+> It's not possible as the design for TEE bus is to have TEE
+> implementation drivers like OP-TEE, AMD-TEE, TS-TEE, QTEE and so on to
+> register devices on the bus.
+
+So only OP-TEE uses the bus for devices and the other *-TEE don't. Also
+sounds like something worth to be fixed.
+
+> > The things I wonder about additionally are:
+> >
+> >  - if CONFIG_OPTEE=3Dn and CONFIG_TEE=3Dy|m the tee bus is only used for
+> >    drivers but not devices.
+>=20
+> Yeah since the devices are rather added by the TEE implementation driver.
+>=20
+> >
+> >  - optee_register_device() calls device_create_file() on
+> >    &optee_device->dev after device_register(&optee_device->dev).
+> >    (Attention half-knowledge!) I think device_create_file() should not
+> >    be called on an already registered device (or you have to send a
+> >    uevent afterwards). This should probably use type attribute groups.
+> >    (Or the need_supplicant attribute should be dropped as it isn't very
+> >    useful. This would maybe be considered an ABI change however.)
+>=20
+> The reasoning for this attribute should be explained by commit:
+> 7269cba53d90 ("tee: optee: Fix supplicant based device enumeration").
+> In summary it's due to a weird dependency for devices we have with the
+> user-space daemon: tee-supplicant.
+
+=46rom reading that once I don't understand it. (But no need to explain
+:-)
+
+Still the file should better be added before device_add() is called.
+
+> >  - Why does optee_probe() in drivers/tee/optee/smc_abi.c unregister all
+> >    optee devices in its error path (optee_unregister_devices())?
+>=20
+> This is mostly to take care of if any device got registered before the
+> failure occured. Let me know if you have a better way to address that.
+
+Without understanding the tee stuff, I'd say: Don't bother and only undo
+the things that probe did before the failure.
+
+Best regards
+Uwe
+
+--judjbtjlccebrcda
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmlBPbMACgkQj4D7WH0S
+/k50zggAsVQDsAnPdX//uyplsEvssm5818ssVGID4+9TjkXIhLGs1HOk+Aj1Obfh
+3kp723jXSfcxla/GVnutv+SGgjCbWQLat1zF3XNhzFZBDegNnPHffiYotY4NYV+x
+z+cBC6Mgx1s9c5xNg134fGOJ+TxBlfUxarnCrkXKqWF+dVSwTe5Cv3f0SXlVU/7L
+l/3T0OflRgILL2Y6wod6E9ydmYfiSapc79eKAzVY5jnUx1sGt7oLNYrjpHmJklBF
+J4I7ToK96aPowluUQqNPzlS13OTb/sx00zg5CnrrGchqVR6i1kK71xhoszfQPcx5
+IOs/eRzJsAmcF/JiN04ZsRRMrAvppA==
+=QAXr
+-----END PGP SIGNATURE-----
+
+--judjbtjlccebrcda--
 
