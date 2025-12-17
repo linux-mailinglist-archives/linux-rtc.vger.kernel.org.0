@@ -1,62 +1,87 @@
-Return-Path: <linux-rtc+bounces-5577-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5578-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE781CC4645
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 17:47:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF92ACC6726
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Dec 2025 08:56:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CAC7330161B0
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Dec 2025 16:43:19 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 74E97303E4A4
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Dec 2025 07:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457B1322B81;
-	Tue, 16 Dec 2025 16:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD574335BAD;
+	Wed, 17 Dec 2025 07:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8pVkjwM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ELlSPoe4"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271CB31DD90;
-	Tue, 16 Dec 2025 16:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86537313264;
+	Wed, 17 Dec 2025 07:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765902031; cv=none; b=oMHwHJhW7AoGkZR3syHE2dpJ8NXv+4/H5xJjuundAblOzy1LuslZ+4GpG74hFIXi5UPWz3bvsj6iiS1aJtVqvw2Kp0fRroEOwzyAwdLeAR5VhEWIySWhUh8i0HkkItHenCJJBRGfa+zo8lyoOYMNGgYTjv4nGdryXRzseMtzzbY=
+	t=1765958157; cv=none; b=Wr7408CjKwmcJb9V3lDsIgh+isc/oxglNPgVFZEHgE5iSK2NlJ4QdEALWQUtXD3ISyfP3ofnAN2bVgYQAW7rXwrML1+64ybWzbLGQjnFuwmV/GBbXZW4l7FKzhM5Tt6OSM7yEAbYKWRVfFVKS214s+keNPq7ksuQbkhGp97Ybmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765902031; c=relaxed/simple;
-	bh=88Io3/dEnsh7J9mzKOUPUWY7WtjcW6vC0ycmDPe6/LQ=;
+	s=arc-20240116; t=1765958157; c=relaxed/simple;
+	bh=Xo9c1qEYiQMSvCEooBFQkEOr2bYPsShQNIttr2X1DG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IW44DBtMcvojBEQegstGwjArXZPd+S3y9R4PpouvulxKN0hdTKyfLnmqvxNA9ev3Sa42vYH53BFvmIZ1OI/IarkgJXqhfNCMv+1EXCPA4zmfa2oqlKSNprZHmLd/iU8StcNqCz85VYowgM0HT3MUsGY55TiEmtK6MvseFdHlWGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8pVkjwM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE598C4CEF1;
-	Tue, 16 Dec 2025 16:20:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WPfMXK5DTKOSa1/ubqkw3Ft5S8CalKuzCjpDHdalvaDGTOPIiY2p/khF+VfurDoyQ7uaIYNz03ILYAZNU/WUiSKP3FVbMwyx63BtozfF6gmMOeWQjLrIFHSdHZ23qCFOOOZr+ZPAa+9yaJthxSa0sH+7akvrRkIRAiE2dSwhdK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ELlSPoe4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B78C4CEF5;
+	Wed, 17 Dec 2025 07:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765902030;
-	bh=88Io3/dEnsh7J9mzKOUPUWY7WtjcW6vC0ycmDPe6/LQ=;
+	s=k20201202; t=1765958157;
+	bh=Xo9c1qEYiQMSvCEooBFQkEOr2bYPsShQNIttr2X1DG8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p8pVkjwMcYgI5x+cY3Z1C93MjU0pBEi/EtR2zfplBPMG3mcXgBNqND36HWiV6qcbe
-	 +rDac8spLkPiOQ8mg8OqWCEvMbYOpxgPFM0W2jFiKGzpJq0pQipX0D7xAyFv0EMWXq
-	 jRimw/OyQfriGLM1Td4xiPnbyZLcXqnm3xH2rORmyr+DWyAFFkEIxOXD/hKLYiLH8E
-	 2f+E1Rqc46CqI+D9Z9/0zvbi/H4X94LOAFHfRFg761a+/0I0+vtVaFab1iu7Pv19b+
-	 yIy8LV03DJZQ215Uw96aVMzwqsOhT76APvq8d1F05Kiu/J1O1yv1R9TMVSd6LaIbIT
-	 0aNO256AdOfKQ==
-Date: Tue, 16 Dec 2025 16:20:24 +0000
-From: Lee Jones <lee@kernel.org>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	b=ELlSPoe46Vp/wKpVK3LLNZx61ZRTeN9a8aiwZ+dBOq6JSgu8lT1rxJ3wY80rxeXhw
+	 OZrPCLpEBFk6TLKFBA5pONUweIEe6/iPED+L08U/dXepE25vl89hRZiQ/FCns7UqdC
+	 coya/6tg0ImJ/cGQDCryPzjE8vQi9Nqu3aUuHEAmYgRVp1m3qEkelGkvr/TPOrnFV9
+	 yhPHmKfYuEbW8BihXNYfIx3rYzf4yaVAhlcte6H35pz0VG5SbKINKXAIGTAmOGvHIK
+	 XqbbXlo5Mxru1Gcnu0BaAUfhCIDC3t50dTRFkXYmmP/w7QngJootP/5QLOgvwTke2k
+	 Z91VDTNTIflIw==
+Date: Wed, 17 Dec 2025 13:25:39 +0530
+From: Sumit Garg <sumit.garg@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Will McVicker <willmcvicker@google.com>,
-	Juan Yescas <jyescas@google.com>,
-	Douglas Anderson <dianders@chromium.org>, kernel-team@android.com,
-	Kaustabh Chakraborty <kauschluss@disroot.org>,
-	linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Samsung mfd/rtc driver alarm IRQ simplification
-Message-ID: <20251216162024.GI9275@google.com>
-References: <20251120-s5m-alarm-v2-0-cc15f0e32161@linaro.org>
- <20251126112935.GA3070764@google.com>
- <20251126140409.GC3070764@google.com>
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org, netdev@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <aUJh--HGVeJWIilS@sumit-xelite>
+References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+ <aT--ox375kg2Mzh-@sumit-X1>
+ <dhunzydod4d7vj73llpuqemxb5er2ja4emxusr66irwf77jhhb@es4yd2axzl25>
+ <CAGptzHOOqLhBnAXDURAzkgckUvRr__UuF1S_7MLV0u-ZxYEdyA@mail.gmail.com>
+ <ayebinxqpcnl7hpa35ytrudiy7j75u5bdk3enlirkp5pevppeg@6mx6a5fwymwf>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,109 +91,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251126140409.GC3070764@google.com>
+In-Reply-To: <ayebinxqpcnl7hpa35ytrudiy7j75u5bdk3enlirkp5pevppeg@6mx6a5fwymwf>
 
-On Wed, 26 Nov 2025, Lee Jones wrote:
-
-> On Wed, 26 Nov 2025, Lee Jones wrote:
+On Tue, Dec 16, 2025 at 12:08:38PM +0100, Uwe Kleine-König wrote:
+> Hello,
 > 
-> > On Thu, 20 Nov 2025, André Draszik wrote:
+> On Tue, Dec 16, 2025 at 01:08:38PM +0530, Sumit Garg wrote:
+> > On Mon, Dec 15, 2025 at 3:02 PM Uwe Kleine-König
+> > <u.kleine-koenig@baylibre.com> wrote:
+> > > On Mon, Dec 15, 2025 at 04:54:11PM +0900, Sumit Garg wrote:
+> > > > Feel free to make the tee_bus_type private as the last patch in the series
+> > > > such that any followup driver follows this clean approach.
+> > >
+> > > There is a bit more to do for that than I'm willing to invest. With my
+> > > patch series applied `tee_bus_type` is still used in
+> > > drivers/tee/optee/device.c and drivers/tee/tee_core.c.
 > > 
-> > > Hi,
-> > > 
-> > > With the attached patches the Samsung s5m RTC driver is simplified a
-> > > little bit with regards to alarm IRQ acquisition.
-> > > 
-> > > The end result is that instead of having a list of IRQ numbers for each
-> > > variant (and a BUILD_BUG_ON() to ensure consistency), the RTC driver
-> > > queries the 'alarm' platform resource from the parent (mfd cell).
-> > > 
-> > > Additionally, we can drop a now-useless field from runtime data,
-> > > reducing memory consumption slightly.
-> > > 
-> > > The attached patches must be applied in-order as patch 2 without 1 will
-> > > fail at runtime, and patch 3 without 2 will fail at build time. I would
-> > > expect them all to go via the MFD tree. Alternatively, they could be
-> > > applied individually to the respective kernel trees during multiple
-> > > kernel release cycles, but that seems a needless complication and
-> > > delay.
-> > > 
-> > > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> > > ---
-> > > Changes in v2:
-> > > - rebase on top of https://lore.kernel.org/r/20251114-s2mpg10-chained-irq-v1-1-34ddfa49c4cd@linaro.org
-> > > - return struct regmap_irq_chip_data * in sec_irq_init() (Lee)
-> > > - collect tags
-> > > - Link to v1: https://lore.kernel.org/r/20251114-s5m-alarm-v1-0-c9b3bebae65f@linaro.org
-> > > 
-> > > ---
-> > > André Draszik (3):
-> > >       mfd: sec: add rtc alarm IRQ as platform device resource
-> > >       rtc: s5m: query platform device IRQ resource for alarm IRQ
-> > >       mfd: sec: drop now unused struct sec_pmic_dev::irq_data
-> > > 
-> > >  drivers/mfd/sec-common.c         | 45 ++++++++++++++++++++--------
-> > >  drivers/mfd/sec-core.h           |  2 +-
-> > >  drivers/mfd/sec-irq.c            | 63 ++++++++++++++++++----------------------
-> > >  drivers/rtc/rtc-s5m.c            | 21 +++++---------
-> > >  include/linux/mfd/samsung/core.h |  1 -
-> > >  5 files changed, 71 insertions(+), 61 deletions(-)
+> > Oh I see, I guess we need to come with some helpers around device
+> > register/unregister from TEE subsystem as well. Let's plan that for a
+> > followup patch-set, I don't want this patch-set to be bloated more.
+> 
+> Don't consider me in for that. But it sounds like a nice addition.
+>
+
+No worries, the current cleanup is fine for now.
+
+> > > Maybe it's
+> > > sensible to merge these two files into a single one.
 > > 
-> > The MFD parts look okay to me.
+> > It's not possible as the design for TEE bus is to have TEE
+> > implementation drivers like OP-TEE, AMD-TEE, TS-TEE, QTEE and so on to
+> > register devices on the bus.
+> 
+> So only OP-TEE uses the bus for devices and the other *-TEE don't. Also
+> sounds like something worth to be fixed.
+
+The TEE bus is common for all the TEE implementation drivers which need
+to support kernel TEE client drivers. I am aware there will be QTEE and
+TS-TEE from past discussion that they will be exposing devices on the
+TEE bus.
+
+> 
+> > > The things I wonder about additionally are:
+> > >
+> > >  - if CONFIG_OPTEE=n and CONFIG_TEE=y|m the tee bus is only used for
+> > >    drivers but not devices.
 > > 
-> > Once we have the RTC Ack, I'll merge this and send out a PR.
+> > Yeah since the devices are rather added by the TEE implementation driver.
+> > 
+> > >
+> > >  - optee_register_device() calls device_create_file() on
+> > >    &optee_device->dev after device_register(&optee_device->dev).
+> > >    (Attention half-knowledge!) I think device_create_file() should not
+> > >    be called on an already registered device (or you have to send a
+> > >    uevent afterwards). This should probably use type attribute groups.
+> > >    (Or the need_supplicant attribute should be dropped as it isn't very
+> > >    useful. This would maybe be considered an ABI change however.)
+> > 
+> > The reasoning for this attribute should be explained by commit:
+> > 7269cba53d90 ("tee: optee: Fix supplicant based device enumeration").
+> > In summary it's due to a weird dependency for devices we have with the
+> > user-space daemon: tee-supplicant.
 > 
-> Ah, I see it.  Apologies.
+> From reading that once I don't understand it. (But no need to explain
+> :-)
 > 
-> It's too late in the cycle to take this now anyway.
+> Still the file should better be added before device_add() is called.
+
+Noted, let me see if I can get to fix this until someone jumps in before
+me.
+
 > 
-> It's on my radar for when -rc1 is released.
+> > >  - Why does optee_probe() in drivers/tee/optee/smc_abi.c unregister all
+> > >    optee devices in its error path (optee_unregister_devices())?
+> > 
+> > This is mostly to take care of if any device got registered before the
+> > failure occured. Let me know if you have a better way to address that.
+> 
+> Without understanding the tee stuff, I'd say: Don't bother and only undo
+> the things that probe did before the failure.
+> 
 
-This does not seem to apply well on v6.19-rc1.
+True, but this is special case where if there is any leftover device
+registered from the TEE implementation then it is likely going to cause
+the corresponding kernel client driver crash.
 
-Please rebase and send as a [RESEND].
-
------
-
-% cat drivers/mfd/sec-irq.c.rej
-diff a/drivers/mfd/sec-irq.c b/drivers/mfd/sec-irq.c	(rejected hunks)
-@@ -302,27 +304,28 @@ static int sec_irq_init_s2mpg1x(struct sec_pmic_dev *sec_pmic)
- 		chained_pirq = S2MPG10_COMMON_IRQ_PMIC;
- 		break;
- 	default:
--		return dev_err_probe(sec_pmic->dev, -EINVAL, "Unsupported device type %d\n",
--				    sec_pmic->device_type);
-+		return dev_err_ptr_probe(sec_pmic->dev, -EINVAL, "Unsupported device type %d\n",
-+					sec_pmic->device_type);
- 	};
- 
- 	regmap_common = dev_get_regmap(sec_pmic->dev, "common");
- 	if (!regmap_common)
--		return dev_err_probe(sec_pmic->dev, -EINVAL, "No 'common' regmap %d\n",
--				    sec_pmic->device_type);
-+		return dev_err_ptr_probe(sec_pmic->dev, -EINVAL, "No 'common' regmap %d\n",
-+					sec_pmic->device_type);
- 
- 	ret = devm_regmap_add_irq_chip(sec_pmic->dev, regmap_common, sec_pmic->irq, IRQF_ONESHOT, 0,
- 				      irq_chip, &irq_data);
- 	if (ret)
--		return dev_err_probe(sec_pmic->dev, ret, "Failed to add %s IRQ chip\n",
--				    irq_chip->name);
-+		return dev_err_ptr_probe(sec_pmic->dev, ret, "Failed to add %s IRQ chip\n",
-+					irq_chip->name);
- 
- 	return s2mpg1x_add_chained_irq_chip(sec_pmic->dev, sec_pmic->regmap_pmic, chained_pirq,
--					   irq_data, chained_irq_chip, &sec_pmic->irq_data);
-+					   irq_data, chained_irq_chip);
- }
- 
--int sec_irq_init(struct sec_pmic_dev *sec_pmic)
-+struct regmap_irq_chip_data *sec_irq_init(struct sec_pmic_dev *sec_pmic)
- {
-+	struct regmap_irq_chip_data *sec_irq_chip_data;
- 	const struct regmap_irq_chip *sec_irq_chip;
- 	int ret;
-
--- 
-Lee Jones [李琼斯]
+-Sumit
 
