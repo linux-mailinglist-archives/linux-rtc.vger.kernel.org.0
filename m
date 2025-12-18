@@ -1,152 +1,197 @@
-Return-Path: <linux-rtc+bounces-5586-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5589-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD906CC964B
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Dec 2025 20:17:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57C0DCCAA06
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Dec 2025 08:23:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 97FD43004B91
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Dec 2025 19:17:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F18E301B83B
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Dec 2025 07:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C68025DD1E;
-	Wed, 17 Dec 2025 19:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B478A330D42;
+	Thu, 18 Dec 2025 07:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="D0zzTwtH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hFvxQjnf"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D344B1F4CA9
-	for <linux-rtc@vger.kernel.org>; Wed, 17 Dec 2025 19:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0265C330D36
+	for <linux-rtc@vger.kernel.org>; Thu, 18 Dec 2025 07:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765999048; cv=none; b=TswUDmHkPS7zxW0mVpO39wsqJgEzjToKaEkL2NaUs1doIUXSD+CpclFfm+VtXTIprJI7GgDBjmDV+4oXZXy2hw1ymv6Xx7YeoeFGGRy7xswa+OCup5z9ub98gaAl1UVhF/siGAAEy/8yLR7PNEOUjNJQ9YErAqNCjBRS8F8fqvk=
+	t=1766042505; cv=none; b=R7J6xAjnivx7bim8PfHmymRge8g70xqXzogeTJcb9FMIPkAl7eWMdBxZ/2bCOkZM4Axcfx0klQb/ftVAE1PiG/bPd7YffjjX5B40uv2d2ccULx3CDNIqmBo36EGn7AZAsFr7wj+F143NtL6yTXs3opVzQZILBQT+DrombGmWvHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765999048; c=relaxed/simple;
-	bh=hAtQiia9jc+As6FMeW0lPsX98+ielv5C2yDHwDT9/kw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eaNM3maKeb720PotbM/gS5B2g1bYNgrLd+GCWCviotKikzu5vFaxK22rksxc8fjNavK/hsSSeoZ7BZwnRbWsohuCoHWDBFobGZcjGRcnb34VHIYVns4EQ+Bnq30EMdUC6BCetfZPKam90JQ34ZvfjbrM3fi+v15+4+O6UAMw81c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=D0zzTwtH; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 44680C1A5A2;
-	Wed, 17 Dec 2025 19:16:57 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 9B4046072F;
-	Wed, 17 Dec 2025 19:17:21 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E0B35102F0AF3;
-	Wed, 17 Dec 2025 20:17:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765999037; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=81Abl9aSXqO6VCJZziQzRy2Nkmg+USJz57ws9VtOYYM=;
-	b=D0zzTwtH8rkpA3QHSZ9WyVjL9H4YQPxC1eQuACw7FknGFABBOdidh/uDc2GIjb10s1/+4Q
-	8ZPJ4dYi61SHm1RHj9hRAXzoRXdFpziIk6EKJdLP3U3gEo8zrHQ9Ia7SYR+iaWBDSFLnMs
-	SDasUUQZNP+zfBT1/Dy4zQEckye2TNGlcK15V3U+34nhpF2qaWWO2kIgZtHwaLXagyMRUt
-	BeuizFmum9QkckiwVAUvnuF5xdVnVxlUKnftNw9kvsiT2NGO8VVL3QDp/o5yGtOQwiwobe
-	drgIRJaqBinjyVUlOx+CSy5kkMmzdrNoWndS9ykDEROKpyJ4jYSJTuiOV4FgEA==
-Date: Wed, 17 Dec 2025 20:17:15 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: "T, Harini" <Harini.T@amd.com>
-Cc: Tomas Melin <tomas.melin@vaisala.com>,
-	"Simek, Michal" <michal.simek@amd.com>,
-	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] rtc: zynqmp: rework read_offset
-Message-ID: <202512171917155dba6723@mail.local>
-References: <20251201-zynqmp-rtc-updates-v1-0-33875c1e385b@vaisala.com>
- <20251201-zynqmp-rtc-updates-v1-2-33875c1e385b@vaisala.com>
- <LV5PR12MB98047B0A754AFFFB01163E0992A3A@LV5PR12MB9804.namprd12.prod.outlook.com>
- <353422a2-ba6e-4600-9326-e0cee2098062@vaisala.com>
- <LV5PR12MB980448D3F4109DC0775A56AA92ABA@LV5PR12MB9804.namprd12.prod.outlook.com>
+	s=arc-20240116; t=1766042505; c=relaxed/simple;
+	bh=oRDVeoSH7AN/+1EKf418Edx8/qjw/FEB71Hmt8IhBro=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZJIgjNSkw0GtzsmS9npIIzbqR8oui5jz8TiEx4oxdpltIm0jWJjiAp8qZwDci1J0cH8nKC36Gln1hyvOlsPnKS6gYxZq7hi2esqB0RdpfiJj/Ry3gkgMB0fWHg5nS1VCPW1XnxpVlXEFOS4RgtNLwJ2oNvwDDyh2mlsQ++JAzD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hFvxQjnf; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-65b73eacdfcso54701eaf.2
+        for <linux-rtc@vger.kernel.org>; Wed, 17 Dec 2025 23:21:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1766042501; x=1766647301; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u95c9TyT1XdaOnIyGBwMeLSiKMNJeuqg+7XxBfANtKE=;
+        b=hFvxQjnfCf2CUAqy40N2AHyq5MIDA0GgC5LKgr2+oJWxzVnQ/H2BlDj/PRT3fjn6YS
+         6uoMn7+YEL0+8O2LkRt30f+/2R5PDahttu121Fq4t7CeI0ECWbcDX44yZNP52rNK3/eA
+         fPojzuLnONspq5CUtSTCNO3/tkNye7HZkr84BB+Y/ocSOeYeJ03l/SmFCJB5qTJptZdQ
+         RbLfAkSfM0ummJWRnc7E8aYHqgmwBJNI/c/pFs/M401mDi2bS0euznuCTV9DcKpXnQ1t
+         H/xEDBrHcjuX6fA2f9gHgqEpAJVqBMy72GfMnDPZoRbg6fOFBpJbmBiSpijWbwGJ9Uu8
+         +Vxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766042501; x=1766647301;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=u95c9TyT1XdaOnIyGBwMeLSiKMNJeuqg+7XxBfANtKE=;
+        b=IqOMO58ZCePuIwzZ8ASpX7Iyin5lX26iyWhXhbXL2iuMq7G6fYEYOr4fYxBo0sjvx/
+         C7YQDBopjQRr4fheSHYi9LWbqYyo1DomN/LnXiWfN24M2cbnvwpJBTD9i9NT4H3vGBBV
+         Lp8wytMWCB5Efo/IcRXHeGkXpaFYlESVGIjXklsh64X6FIOSkTCmMA92sbgQmQPKoXY5
+         NtnirhcH1RNeQumVIeA1Fb9RksBZQBBX/HB0DRQJHNj7asVxMIkABszbfpdLZmZ/Pc5y
+         lbsyXxPyxiBWWHnlPkBMgIn8eP4DlXFScAGSAz4N9n8dVDUf4CljZRsyBLgQ3bsu1qMs
+         OH4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWn4Rl50+7yixoPMaeP2GJZfuV2YcQtTd15vKkmtEPDt2C6xChzTtmupX+qVLEVvvIpUCxahhRN0JY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhlyBPaRTbsgrf187H8krQ9YKHvawSsAa1KREaBzBMGtR8dtpt
+	5i/5cyUx1PYL+VBqjpDbam0ik2yd00UNOsDZMQX0bqoFH77+7QfqdVbuxRM8pjp55vfoy0o8mpF
+	MKusGwsU0q2v31G04PxdXxAjEfH2OCQqMQzLo68MzcA==
+X-Gm-Gg: AY/fxX7B/er85zA91Uco9cwlIyPHz0Q3rjneKq9b5CjsmP8mREJoIWPFVGYwlq4jQHD
+	SK3b98VXlTYdYsbXCgCD/k7BY2DqD6mWMnjBljGBqz+dj1x+7+HbwpBWBnylHTgD+6tcOwG4gcw
+	yGKGtDKjdiyldkEME/qLRS0q/ehyNoOtUwb+DHsfn0LUdvAoVpfmykUDEOh/JoG7mDOiIjnUBnA
+	bElefWnDukGv9vrG2tgMrIDCWPNjiFx+78Xxk/D2yogT3XIBgwu8gXceCkXqb1L/Zq/wWgyi7u0
+	8BdhcdQdUILis19/t/GIxR/o3g==
+X-Google-Smtp-Source: AGHT+IHdzsrnh67Z+uk7sg0iAMocZMySikku48EGz5g7L5MG+hq7iSRlseyY2l5vM8LHePwozU/hD6rMNUuAq73AgFc=
+X-Received: by 2002:a05:6820:828:b0:65c:f41b:7119 with SMTP id
+ 006d021491bc7-65cf41b750emr1784992eaf.5.1766042500598; Wed, 17 Dec 2025
+ 23:21:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <LV5PR12MB980448D3F4109DC0775A56AA92ABA@LV5PR12MB9804.namprd12.prod.outlook.com>
-X-Last-TLS-Session-Version: TLSv1.3
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+In-Reply-To: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Thu, 18 Dec 2025 08:21:27 +0100
+X-Gm-Features: AQt7F2r_j21Nqcv1IzhOT6jk9UPtvnwA1D3etXiTv5WveGJRYXXMC9qqoGF_Yc4
+Message-ID: <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver callbacks
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Sumit Garg <sumit.garg@kernel.org>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, 
+	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, 
+	linux-mips@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/12/2025 18:14:30+0000, T, Harini wrote:
-> [Public]
-> 
-> Hi,
-> 
-> > -----Original Message-----
-> > From: Tomas Melin <tomas.melin@vaisala.com>
-> > Sent: Wednesday, December 10, 2025 5:35 PM
-> > To: T, Harini <Harini.T@amd.com>; Alexandre Belloni
-> > <alexandre.belloni@bootlin.com>; Simek, Michal <michal.simek@amd.com>
-> > Cc: linux-rtc@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: Re: [PATCH 2/4] rtc: zynqmp: rework read_offset
-> >
-> > Caution: This message originated from an External Source. Use proper caution
-> > when opening attachments, clicking links, or responding.
-> >
-> >
-> > Hi,
-> >
-> > On 09/12/2025 19:28, T, Harini wrote:
-> > > [Public]
-> > >
-> > > Hi,
-> > >
-> > >> -----Original Message-----
-> > >> From: Tomas Melin <tomas.melin@vaisala.com>
-> > >> Sent: Monday, December 1, 2025 6:20 PM
-> > >> To: Alexandre Belloni <alexandre.belloni@bootlin.com>; Simek, Michal
-> > >> <michal.simek@amd.com>
-> > >> Cc: linux-rtc@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > >> linux- kernel@vger.kernel.org; Tomas Melin <tomas.melin@vaisala.com>
-> > >> Subject: [PATCH 2/4] rtc: zynqmp: rework read_offset
-> > >>
-> > >> Caution: This message originated from an External Source. Use proper
-> > >> caution when opening attachments, clicking links, or responding.
-> > >>
-> > >>
-> > >> read_offset() was using static frequency for determining the tick
-> > >> offset. It was also using remainder from do_div() operation as
-> > >> tick_mult value which caused the offset to be incorrect.
-> > >>
-> > >> At the same time, rework function to improve readability.
-> > >>
-> > >> Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
-> > >> ---
-> > >>  drivers/rtc/rtc-zynqmp.c | 25 ++++++++++++++++---------
-> > >>  1 file changed, 16 insertions(+), 9 deletions(-)
-> > >>
-> > >> diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-> > >> index
-> > >>
-> > 856bc1678e7d31144f320ae9f75fc58c742a2a64..7af5f6f99538f961a53ff56
-> > bfc6
-> > >> 56c907611b900 100644
-> > >> --- a/drivers/rtc/rtc-zynqmp.c
-> > >> +++ b/drivers/rtc/rtc-zynqmp.c
-> > >> @@ -178,21 +178,28 @@ static void xlnx_init_rtc(struct xlnx_rtc_dev
-> > >> *xrtcdev)  static int xlnx_rtc_read_offset(struct device *dev, long *offset)  {
-> > >>         struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-> > >> -       unsigned long long rtc_ppb = RTC_PPB;
-> > >> -       unsigned int tick_mult = do_div(rtc_ppb, xrtcdev->freq);
-> > >> -       unsigned int calibval;
-> > >> +       unsigned int calibval, fract_data, fract_part;
-> > > Prefer one variable assignment per line for readability.
-> > This is after all quite common practice, and in a function like this where several
-> > variables are needed, I would argue that this is more readable than the
-> > alternative. Is there some convention I'm not aware of?
-> There is no such mandatory convention. It's up to the RTC maintainer.
+Hi,
 
-I don't mind having multiple variable declarations on a single line.
+On Mon, Dec 15, 2025 at 3:17=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
+>
+> Hello,
+>
+> the objective of this series is to make tee driver stop using callbacks
+> in struct device_driver. These were superseded by bus methods in 2006
+> (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> methods.")) but nobody cared to convert all subsystems accordingly.
+>
+> Here the tee drivers are converted. The first commit is somewhat
+> unrelated, but simplifies the conversion (and the drivers). It
+> introduces driver registration helpers that care about setting the bus
+> and owner. (The latter is missing in all drivers, so by using these
+> helpers the drivers become more correct.)
+>
+> v1 of this series is available at
+> https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylibre=
+.com
+>
+> Changes since v1:
+>
+>  - rebase to v6.19-rc1 (no conflicts)
+>  - add tags received so far
+>  - fix whitespace issues pointed out by Sumit Garg
+>  - fix shutdown callback to shutdown and not remove
+>
+> As already noted in v1's cover letter, this series should go in during a
+> single merge window as there are runtime warnings when the series is
+> only applied partially. Sumit Garg suggested to apply the whole series
+> via Jens Wiklander's tree.
+> If this is done the dependencies in this series are honored, in case the
+> plan changes: Patches #4 - #17 depend on the first two.
+>
+> Note this series is only build tested.
+>
+> Uwe Kleine-K=C3=B6nig (17):
+>   tee: Add some helpers to reduce boilerplate for tee client drivers
+>   tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+>   tee: Adapt documentation to cover recent additions
+>   hwrng: optee - Make use of module_tee_client_driver()
+>   hwrng: optee - Make use of tee bus methods
+>   rtc: optee: Migrate to use tee specific driver registration function
+>   rtc: optee: Make use of tee bus methods
+>   efi: stmm: Make use of module_tee_client_driver()
+>   efi: stmm: Make use of tee bus methods
+>   firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+>   firmware: arm_scmi: Make use of tee bus methods
+>   firmware: tee_bnxt: Make use of module_tee_client_driver()
+>   firmware: tee_bnxt: Make use of tee bus methods
+>   KEYS: trusted: Migrate to use tee specific driver registration
+>     function
+>   KEYS: trusted: Make use of tee bus methods
+>   tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+>   tpm/tpm_ftpm_tee: Make use of tee bus methods
+>
+>  Documentation/driver-api/tee.rst             | 18 +----
+>  drivers/char/hw_random/optee-rng.c           | 26 ++----
+>  drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
+>  drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
+>  drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
+>  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
+>  drivers/rtc/rtc-optee.c                      | 27 ++-----
+>  drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
+>  include/linux/tee_drv.h                      | 12 +++
+>  security/keys/trusted-keys/trusted_tee.c     | 17 ++--
+>  10 files changed, 164 insertions(+), 138 deletions(-)
+>
+> base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> --
+> 2.47.3
+>
 
+Thank you for the nice cleanup, Uwe.
 
+I've applied patch 1-3 to the branch tee_bus_callback_for_6.20 in my
+tree at https://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.gi=
+t/
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The branch is based on v6.19-rc1, and I'll try to keep it stable for
+others to depend on, if needed. Let's see if we can agree on taking
+the remaining patches via that branch.
+
+Cheers,
+Jens
 
