@@ -1,142 +1,400 @@
-Return-Path: <linux-rtc+bounces-5601-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5602-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F4F8CD5580
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 10:36:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC1A6CD6479
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 15:00:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1AF823007D9F
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 09:36:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F079930CE596
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 13:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6E330C37A;
-	Mon, 22 Dec 2025 09:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD0C342538;
+	Mon, 22 Dec 2025 13:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="FeQN+0iv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AzBdwSf9"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26471E5018;
-	Mon, 22 Dec 2025 09:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E831341AD0
+	for <linux-rtc@vger.kernel.org>; Mon, 22 Dec 2025 13:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766396191; cv=none; b=WeDNIMtatL2eCFXO4YWbsiE+IRm+thRdXUd58XZ3rmW7rGk5kjtqX5QtLraJFkM9r5nHn5LlAMLBp4T+wUeTHX+x8r+QHme0zrFjD21/LyvT+g4WT0oQoBSuD0R2u8YRMvQXBHKWmKDmXlBXWUfZBAkTecyww6Af0Hj5+/BFSsI=
+	t=1766411442; cv=none; b=diqaEfiWSFLHOxicyi9vFjRaYVKPyrDqh0ivC3K4T+X4rfHPeP36zea38x5v2hWWf7ZrKCTG5zvCBO71SBPnBSt/ch+zvJEiDo/NBecKtWd5l7isEd9lIETvlPIwvtIDOCmVrfav4hoWmLDIaxPJJD2TW3vSM3hX+4o0JY62W2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766396191; c=relaxed/simple;
-	bh=HkhjCZrne7qQJahedWxiCLoh4aOir3xN7KC94v/fQ40=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sDUjslfdACEgn0nSvrL8rhQcQ4frsTn2eBXn4H0b+IQWAN4DePLg0zEiMPzgy4f0/CW/7W5Ob2Ht7nq5dlS9Ai0QyZ8ILliInlxxpiT5y1xZOtmWQyFhjsrnI0kqXs2Cdpz/ZtFqdLhAId2UEwUy0gdJHJ9puz+aT/lEDDZ+5Rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=FeQN+0iv; arc=none smtp.client-ip=18.132.163.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1766396164;
-	bh=HsbEwL+a3ehQwaqo4UIyfPjDh/hFR3Gu+Q/uCtPiRcM=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=FeQN+0ivvzkZvaMy2YHQO7aBztQanzf01RZheYchbmsZ3KefH6IUtP+u6gBpaEIFD
-	 oEqpS771fF0mK+wNMPJbUjfEelNpJRcixXjD4gyIAuG1AH1TTVYBXTsF46AUDD01Xk
-	 n3pP33SbV6eUGWvtOtf8Qr9sINXowTPUZ/oiMKYc=
-X-QQ-mid: zesmtpsz4t1766396162te0c85235
-X-QQ-Originating-IP: rk4yZ8PstRgyj0RWzoU0G3baXYfMJuIshSlWznk2Z4g=
-Received: from = ( [120.239.196.19])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 22 Dec 2025 17:36:00 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11526639101067456687
-EX-QQ-RecipientCnt: 16
-Date: Mon, 22 Dec 2025 17:36:00 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Lee Jones <lee@kernel.org>, patchwork-bot+linux-riscv@kernel.org,
-	Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-	tools@kernel.org
-Cc: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	linux-riscv@lists.infradead.org, dlan@gentoo.org,
-	elder@riscstar.com, andi.shyti@kernel.org,
-	alexandre.belloni@bootlin.com, lgirdwood@gmail.com,
-	broonie@kernel.org, linux-kernel@vger.kernel.org,
-	spacemit@lists.linux.dev, linux-i2c@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] fix the SpacemiT P1 Kconfig and resend the K1 I2C
- ILCR patch.
-Message-ID: <5242B57B5E933BCD+aUkRAGxI5ABW-s3O@kernel.org>
-References: <20251118-p1-kconfig-fix-v3-0-8839c5ac5db3@linux.spacemit.com>
- <176613181654.3684357.18070317581817603415.git-patchwork-notify@kernel.org>
- <20251219112634.GJ9275@google.com>
+	s=arc-20240116; t=1766411442; c=relaxed/simple;
+	bh=k+WlEjGFs5Rkzrhieb+Ls4G8ju4EL+kjwknMhVtHuZc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h+YECl+WWA90vjcNXDsttlZiT/GUbKNgCHHPlRUq770lIiOFwegKWRj2vfZRfqEDL5ABURB72KoqmTVAk08H86Bq3GTmXxhxuZQDwfSAbOENXnPLG+IB28kXzxxuAKswgPTNJl5I1Kv02zu8WufDWaAemLCMdVwyAmwgPlZu4HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AzBdwSf9; arc=none smtp.client-ip=209.85.210.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-7b8bbf16b71so3946967b3a.2
+        for <linux-rtc@vger.kernel.org>; Mon, 22 Dec 2025 05:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766411439; x=1767016239; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8BaR3k+5zrCCB1XIcd8osL/EF92HXoyzBz26/MVuE/I=;
+        b=AzBdwSf9WIshU7q07vYyHUpPA2tgnCfSYywc9VqwNX7ogLOWbYb+BzaTIwjKvfFs7s
+         mexcE0JrX2w/pwBANmibYyzaZm80yP95KJLbiQPY3om4L8+g1KMI6VK9CTVra64sbe4Y
+         Odj5Xp22WUtOZU2aVcii3Eerq1s7dyH1hnrs4kuFu8CNn/RA4q/WCkFby5S5yrsrceXC
+         3Ms4G4Iaq1xphs48MdQHX+9TSeKXYCU8TPFlVshDKy5obBqsV1jmhi9QlUHKRdOX0T/t
+         uiBhjjec6KGHg0icCC/KfUHXij2a011JctSanad2bNRc0FaHom3O58G1u1ImeOIVEvnw
+         sFDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766411439; x=1767016239;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8BaR3k+5zrCCB1XIcd8osL/EF92HXoyzBz26/MVuE/I=;
+        b=OIcGywmSnZnH1PENS+Yg/INXQhMSydB/DW80LjgyIaQ+JAVk0MwtKv2SQvimzyc4HI
+         bi3fYW3zt4rZB2XyAq2kmSJpcuciJ7zmtEnbjEh/OBpfntbajiMsran/jqxV7lFelq2R
+         D/jj0eBs5Aacr1QrmwMaoIpEoUTTBQ+vhCtjxgQZwivrBiLTaHxht3Et1WV3KdprtTgv
+         xjsH6HoRkBzHxxYkFczP3Im1u6I7kwUNze7qNOjcJsCb9REIg2MVgy30O+aNQZK+Hg6s
+         Ptg433f5lH2ximN5VZJBTtC0BYZ+Jux7GuXlJ5BeSXxKleeCAn8sNB8y48pO/TTb1z+J
+         +DFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXeZGorcs7yrUTcp+GhZUUJOpuHsfvNztupST6ow3qECdvGVaT0D8YvJcq0+U+Hx58tB73vaFZhbk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/lXgCQeEPTUhMRECt9Uh5CbItSbWXg2K2g/XNlZ4EWSiO6LSH
+	VHE+0lQmrTGv2ebq9/cG70G8TDTJO/oIhxJboZjlez5vNqPCxtQ1JvtB
+X-Gm-Gg: AY/fxX7/JVSqoq8Q+hAqsJRLuqV7kzKtqA5Wd85+OvbFTT3v/9oNkkIFWI98YLeqicS
+	dnDRMsr7S2qhW3RrNrJtuM5evo5ha7/L/U9jvoiS+4yBK6XtsNfa/mcKaVKlpMCgSj8LX83T+XL
+	4XVBSlrVynnCCr+PS9icDEbDBiW/J7eoeNkvZGSMhWksxET0MhsT7i5ewKUtPg3IQLGfF4YZUhe
+	S25U+zGuKi0RF5MHeRT3MlINMMljOBusWjHNHRWF3R0iFzXf18ZSsWsjrrKZ5TbhKmWg1gFK7mq
+	oas1HyavNCf+RO2WmsJdBTOcguO8uXwSA7AYa7/vPUpad50RxhlBxKSuL5lg7LZ4qTYRsWXBhzS
+	tbtotXQqmqfMz1oUTcS5BVSVu3vy5aVvfjnj3wtMPb9K06odYFnxEk+81M9fbVPGMOACTCFfM58
+	JbIlX4KprU704YRrqmgetxg5INd1NL
+X-Google-Smtp-Source: AGHT+IEyXSAJPi4cc8ok6Aq+xnI2o3obyF+3x23oU5Ir+vtxQzV06aOtv7kzKDFrV13w830o83jyfg==
+X-Received: by 2002:aa7:930b:0:b0:7e8:450c:61b8 with SMTP id d2e1a72fcca58-7ff6607e842mr10207742b3a.40.1766411439404;
+        Mon, 22 Dec 2025 05:50:39 -0800 (PST)
+Received: from [192.168.1.115] ([59.188.211.98])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7e493123sm10542320b3a.50.2025.12.22.05.50.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Dec 2025 05:50:38 -0800 (PST)
+Message-ID: <aa4242f9-7d26-4df5-9e14-1b3bb7334652@gmail.com>
+Date: Mon, 22 Dec 2025 21:50:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251219112634.GJ9275@google.com>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
-X-QQ-XMAILINFO: Ni2ZB8mfJmbFvyCBzBMDPa3xCFaq8m8z5niqr8vjx3twsaaCO18Mq4WP
-	XiEeMRNFHxTdb/oa3Fn3QR27dZcs4VXdxVYQB9r+kQWF2Ir2QXY3t2qKt+x/eH+Cj5OFq4e
-	k2iwn4G2+9adPInhNAygcFdZQOMwR6kZaicOdueI83a+yIYD/+VoilPJgOnnYMd1mnBcAcv
-	lan64mvYE2QHa4EEWP/d0H6d1Vp2cP0OoM5edMjN1LrWCMDbSAWlMOOHbiMDL5g5kNsZanl
-	BZ7K0DN9PKb/6YIIfCeJJdbSLIYF6AMH86dZhs/oIZTwHMlXH5tb5/lAURDjRI5WefsbYfk
-	R3xtx3SiRWvrrd6AnAWckR1bOB679F5j/SRdBB5T8ym/Z1cSu6LayU110IV8JVepL4HZ51b
-	gKnaAN7IY229Sa+xvoOVNsUXSgJGd5UXUKPmbrzHGB3uFKjKQaQI+TwfF3LKjPhkzg7rKcx
-	YMp8tJWY/lf+Dhq7EPhtNwEDBAbrtze4KttJxBpetXuxiOkt1nyDhI9oprbhnqmnC/bviCH
-	QF6xOH3rlhjFH+HJSAiFB5iAca15p1/jbLCY0fO2qg3MKmUtLnhkn20LJTdH5CaWmk0G9oc
-	PU6PRt8n8vohhOxZ2iIskf2+kPDTu+uGY4Y4x5PaO0V9SCArNPdazwvq9KnkcLpmwSlgYTn
-	htkhp3zgQLW8FFy2o+IXUO5vxtda3IBZEVrbVVyBhOdBKM3dllIox9uuJ7eozjBlgXS3uzP
-	PdhK+7fzz3RmXi2B5WMV/2XIKPLNEKcEnAzVpgOmI3Oumm6AH3FIbzNPLAvfJk/OGplxuhF
-	iG5ZyvLcxahybtQrX1WOFI+Jiqps0PoAAHVness1f6qv5cHar2u+uNRHK3Tp+P95BBFys3h
-	QFH7wo59ARAdYZqdaqSkLzPsADzinVBqFvOnkAnlUi/ZYALURzlrX+PjgeGv3CvdKhxWjJj
-	Tby7gWczR+sy1KSJIg8DUTEukG4TJo+FdacWqg/qdJkYtw753sqOGOaw1opzeFUwgeox2sp
-	QKKGEp2ClmyZhxrIAjKLMjxYBPsxi5DbdRKBsyfefo6AqAXcn/lhe+0cDXLEz0ZCzJD0TV4
-	WcguwXD2aZ2xT3kZNTH5Mt4LvOGkJ1KenvJ7nH7HYG+
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 08/11] input: macsmc-input: New driver to handle the
+ Apple Mac SMC buttons/lid
+To: James Calligeros <jcalligeros99@gmail.com>, Sven Peter <sven@kernel.org>,
+ Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Neal Gompa <neal@gompa.dev>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Jonathan Corbet <corbet@lwn.net>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+ Hector Martin <marcan@marcan.st>
+References: <20251112-macsmc-subdevs-v5-0-728e4b91fe81@gmail.com>
+ <20251112-macsmc-subdevs-v5-8-728e4b91fe81@gmail.com>
+Content-Language: en-MW
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <20251112-macsmc-subdevs-v5-8-728e4b91fe81@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 19, 2025 at 11:26:34AM +0000, Lee Jones wrote:
-> Hi Konstantin,
-> 
-> > This series was applied to riscv/linux.git (fixes)
-> > by Alexandre Belloni <alexandre.belloni@bootlin.com>:
-> > 
-> > On Tue, 18 Nov 2025 14:08:04 +0800 you wrote:
-> > > Since P1 Kconfig directly selects K1_I2C, after the I2C ILCR patch was
-> > > merged, the driver would fail [1] when COMMON_CLK was not selected.
-> > > 
-> > > This series fixes the P1 Kconfig and resends the I2C ILCR patch(This
-> > > patch has reverted by maintainer [2]).
-> > > 
-> > > Now, P1 Kconfig patch has been merged[3], so I2C ILCR patch can be
-> > > merged as well.
-> > > 
-> > > [...]
-> > 
-> > Here is the summary with links:
-> >   - [v3,1/4] i2c: spacemit: configure ILCR for accurate SCL frequency
-> >     (no matching commit)
-> >   - [v3,2/4] rtc: spacemit: MFD_SPACEMIT_P1 as dependencies
-> >     https://git.kernel.org/riscv/c/16bd954c9336
-> >   - [v3,3/4] regulator: spacemit: MFD_SPACEMIT_P1 as dependencies
-> >     (no matching commit)
-> 
-> >   - [v3,4/4] mfd: simple-mfd-i2c: add default value
-> >     (no matching commit)
-> 
-> I was just about to send another snot-o-gram about people picking up
-> patches without the correct Acks, but I just realised this is the same
-> Patchwork issue we spoke about a couple of weeks ago.
-> 
-> This formatting is very confusing, since at first blush it looks as
-> though the whole patch-set was applied.
-> 
-> Please can we only list patches that were merged?
-I agree. At first glance, I also thought the entire series was applied.
 
-                          - Troy
+
+Hi,
+On 12/11/2025 19:16, James Calligeros wrote:
+
+> From: Hector Martin <marcan@marcan.st>
 > 
-> -- 
-> Lee Jones [李琼斯]
+> This driver implements power button and lid switch support for Apple Mac
+> devices using SMC controllers driven by the macsmc driver.
 > 
+> In addition to basic input support, this also responds to the final
+> shutdown warning (when the power button is held down long enough) by
+> doing an emergency kernel poweroff. This allows the NVMe controller to
+> be cleanly shut down, which prevents data loss for in-cache data.
+> 
+> Reviewed-by: Neal Gompa <neal@gompa.dev>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> Co-developed-by: Sven Peter <sven@kernel.org>
+> Signed-off-by: Sven Peter <sven@kernel.org>
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> ---
+>  MAINTAINERS                       |   1 +
+>  drivers/input/misc/Kconfig        |  11 ++
+>  drivers/input/misc/Makefile       |   1 +
+>  drivers/input/misc/macsmc-input.c | 207 +++++++++++++++++++++++++
+>  4 files changed, 220 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fb55a167699e..48bdca6943f3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2455,6 +2455,7 @@ F:	drivers/hwmon/macsmc-hwmon.c
+>  F:	drivers/pmdomain/apple/
+>  F:	drivers/i2c/busses/i2c-pasemi-core.c
+>  F:	drivers/i2c/busses/i2c-pasemi-platform.c
+> +F:	drivers/input/misc/macsmc-input.c
+>  F:	drivers/input/touchscreen/apple_z2.c
+>  F:	drivers/iommu/apple-dart.c
+>  F:	drivers/iommu/io-pgtable-dart.c
+> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+> index cc2558630797..1144ba151dbf 100644
+> --- a/drivers/input/misc/Kconfig
+> +++ b/drivers/input/misc/Kconfig
+> @@ -992,4 +992,15 @@ config INPUT_STPMIC1_ONKEY
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called stpmic1_onkey.
+>  
+> +config INPUT_MACSMC
+> +	tristate "Apple Mac SMC lid/buttons"
+> +	depends on MFD_MACSMC
+> +	help
+> +	  Say Y here if you want to use the input events delivered via the
+> +	  SMC controller on Apple Mac machines using the macsmc driver.
+> +	  This includes lid open/close and the power button.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called macsmc-input.
+> +
+>  endif
+> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+> index f5ebfa9d9983..c6394105252f 100644
+> --- a/drivers/input/misc/Makefile
+> +++ b/drivers/input/misc/Makefile
+> @@ -52,6 +52,7 @@ obj-$(CONFIG_INPUT_IQS7222)		+= iqs7222.o
+>  obj-$(CONFIG_INPUT_KEYSPAN_REMOTE)	+= keyspan_remote.o
+>  obj-$(CONFIG_INPUT_KXTJ9)		+= kxtj9.o
+>  obj-$(CONFIG_INPUT_M68K_BEEP)		+= m68kspkr.o
+> +obj-$(CONFIG_INPUT_MACSMC_INPUT)	+= macsmc-input.o
+should be CONFIG_INPUT_MACSMC (alternatively change Kconfig instead)
+
+>  obj-$(CONFIG_INPUT_MAX7360_ROTARY)	+= max7360-rotary.o
+>  obj-$(CONFIG_INPUT_MAX77650_ONKEY)	+= max77650-onkey.o
+>  obj-$(CONFIG_INPUT_MAX77693_HAPTIC)	+= max77693-haptic.o
+> diff --git a/drivers/input/misc/macsmc-input.c b/drivers/input/misc/macsmc-input.c
+> new file mode 100644
+> index 000000000000..f4598e65fc80
+> --- /dev/null
+> +++ b/drivers/input/misc/macsmc-input.c
+> @@ -0,0 +1,207 @@
+> +// SPDX-License-Identifier: GPL-2.0-only OR MIT
+> +/*
+> + * Apple SMC input event driver
+> + * Copyright The Asahi Linux Contributors
+> + *
+> + * This driver exposes certain events from the SMC as an input device.
+> + * This includes the lid open/close and power button notifications.
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/input.h>
+> +#include <linux/mfd/macsmc.h>
+Missing #include <linux/mfd/core.h>
+
+> +#include <linux/module.h>
+> +#include <linux/reboot.h>
+> +
+> +/**
+> + * struct macsmc_input
+> + * @dev: Underlying struct device for the input sub-device
+> + * @smc: Pointer to apple_smc struct of the mfd parent
+> + * @input: Allocated input_dev; devres managed
+> + * @nb: Notifier block used for incoming events from SMC (e.g. button pressed down)
+> + * @wakeup_mode: Set to true when system is suspended and power button events should wake it
+> + */
+> +struct macsmc_input {
+> +	struct device *dev;
+> +	struct apple_smc *smc;
+> +	struct input_dev *input;
+> +	struct notifier_block nb;
+> +	bool wakeup_mode;
+> +};
+> +
+> +#define SMC_EV_BTN 0x7201
+> +#define SMC_EV_LID 0x7203
+> +
+> +#define BTN_POWER		0x01 /* power button on e.g. Mac Mini chasis pressed */
+> +#define BTN_TOUCHID		0x06 /* combined TouchID / power button on MacBooks pressed */
+> +#define BTN_POWER_HELD_SHORT	0xfe /* power button briefly held down */
+> +#define BTN_POWER_HELD_LONG	0x00 /* power button held down; sent just before forced poweroff */
+> +
+> +static void macsmc_input_event_button(struct macsmc_input *smcin, unsigned long event)
+> +{
+> +	u8 button = (event >> 8) & 0xff;
+> +	u8 state = !!(event & 0xff);
+> +
+> +	switch (button) {
+> +	case BTN_POWER:
+> +	case BTN_TOUCHID:
+> +		pm_wakeup_dev_event(smcin->dev, 0, (smcin->wakeup_mode && state));
+> +
+> +		/* Suppress KEY_POWER event to prevent immediate shutdown on wake */
+> +		if (smcin->wakeup_mode)
+> +			return;
+> +
+> +		input_report_key(smcin->input, KEY_POWER, state);
+> +		input_sync(smcin->input);
+> +		break;
+> +	case BTN_POWER_HELD_SHORT: /* power button held down; ignore */
+> +		break;
+> +	case BTN_POWER_HELD_LONG:
+> +		/*
+> +		 * If we get here the power button has been held down for a while and
+> +		 * we have about 4 seconds before forced power-off is triggered by SMC.
+> +		 * Try to do an emergency shutdown to make sure the NVMe cache is
+> +		 * flushed. macOS actually does this by panicing (!)...
+> +		 */
+> +		if (state) {
+> +			dev_crit(smcin->dev, "Triggering forced shutdown!\n");
+> +			if (kernel_can_power_off())
+> +				kernel_power_off();
+> +			else /* Missing macsmc-reboot driver? */
+> +				kernel_restart("SMC power button triggered restart");
+> +		}
+> +		break;
+> +	default:
+> +		dev_warn(smcin->dev, "Unknown SMC button event: %04lx\n", event & 0xffff);
+> +	}
+> +}
+> +
+> +static void macsmc_input_event_lid(struct macsmc_input *smcin, unsigned long event)
+> +{
+> +	u8 lid_state = !!((event >> 8) & 0xff);
+> +
+> +	pm_wakeup_dev_event(smcin->dev, 0, (smcin->wakeup_mode && !lid_state));
+> +	input_report_switch(smcin->input, SW_LID, lid_state);
+> +	input_sync(smcin->input);
+> +}
+> +
+> +static int macsmc_input_event(struct notifier_block *nb, unsigned long event, void *data)
+> +{
+> +	struct macsmc_input *smcin = container_of(nb, struct macsmc_input, nb);
+> +	u16 type = event >> 16;
+> +
+> +	switch (type) {
+> +	case SMC_EV_BTN:
+> +		macsmc_input_event_button(smcin, event);
+> +		return NOTIFY_OK;
+> +	case SMC_EV_LID:
+> +		macsmc_input_event_lid(smcin, event);
+> +		return NOTIFY_OK;
+> +	default:
+> +		/* SMC event meant for another driver */
+> +		return NOTIFY_DONE;
+> +	}
+> +}
+> +
+> +static int macsmc_input_probe(struct platform_device *pdev)
+> +{
+> +	struct apple_smc *smc = dev_get_drvdata(pdev->dev.parent);
+> +	struct macsmc_input *smcin;
+> +	bool have_lid, have_power;
+> +	int error;
+> +
+> +	/* Bail early if this SMC neither supports power button nor lid events */
+> +	have_lid = apple_smc_key_exists(smc, SMC_KEY(MSLD));
+> +	have_power = apple_smc_key_exists(smc, SMC_KEY(bHLD));
+> +	if (!have_lid && !have_power)
+> +		return -ENODEV;
+> +
+> +	smcin = devm_kzalloc(&pdev->dev, sizeof(*smcin), GFP_KERNEL);
+> +	if (!smcin)
+> +		return -ENOMEM;
+> +
+> +	smcin->dev = &pdev->dev;
+> +	smcin->smc = smc;
+> +	platform_set_drvdata(pdev, smcin);
+> +
+> +	smcin->input = devm_input_allocate_device(&pdev->dev);
+> +	if (!smcin->input)
+> +		return -ENOMEM;
+> +
+> +	smcin->input->phys = "macsmc-input (0)";
+> +	smcin->input->name = "Apple SMC power/lid events";
+> +
+> +	if (have_lid)
+> +		input_set_capability(smcin->input, EV_SW, SW_LID);
+> +	if (have_power)
+> +		input_set_capability(smcin->input, EV_KEY, KEY_POWER);
+> +
+> +	if (have_lid) {
+> +		u8 val;
+> +
+> +		error = apple_smc_read_u8(smc, SMC_KEY(MSLD), &val);
+> +		if (error < 0)
+> +			dev_warn(&pdev->dev, "Failed to read initial lid state\n");
+> +		else
+> +			input_report_switch(smcin->input, SW_LID, val);
+> +	}
+> +
+> +	if (have_power) {
+> +		u32 val;
+> +
+> +		error = apple_smc_read_u32(smc, SMC_KEY(bHLD), &val);
+> +		if (error < 0)
+> +			dev_warn(&pdev->dev, "Failed to read initial power button state\n");
+> +		else
+> +			input_report_key(smcin->input, KEY_POWER, val & 1);
+> +	}
+> +
+> +	error = input_register_device(smcin->input);
+> +	if (error) {
+> +		dev_err(&pdev->dev, "Failed to register input device: %d\n", error);
+> +		return error;
+> +	}
+> +
+> +	input_sync(smcin->input);
+> +
+> +	smcin->nb.notifier_call = macsmc_input_event;
+> +	blocking_notifier_chain_register(&smc->event_handlers, &smcin->nb);
+> +
+> +	device_init_wakeup(&pdev->dev, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static int macsmc_input_pm_prepare(struct device *dev)
+> +{
+> +	struct macsmc_input *smcin = dev_get_drvdata(dev);
+> +
+> +	smcin->wakeup_mode = true;
+> +	return 0;
+> +}
+> +
+> +static void macsmc_input_pm_complete(struct device *dev)
+> +{
+> +	struct macsmc_input *smcin = dev_get_drvdata(dev);
+> +
+> +	smcin->wakeup_mode = false;
+> +}
+> +
+> +static const struct dev_pm_ops macsmc_input_pm_ops = {
+> +	.prepare = macsmc_input_pm_prepare,
+> +	.complete = macsmc_input_pm_complete,
+> +};
+> +
+> +static struct platform_driver macsmc_input_driver = {
+> +	.driver = {
+> +		.name = "macsmc-input",
+> +		.pm = &macsmc_input_pm_ops,
+> +	},
+> +	.probe = macsmc_input_probe,
+> +};
+> +module_platform_driver(macsmc_input_driver);
+> +
+> +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
+> +MODULE_LICENSE("Dual MIT/GPL");
+> +MODULE_DESCRIPTION("Apple SMC input driver");
+> +MODULE_ALIAS("platform:macsmc-input");
+> 
+
+Best regards,
+Nick Chan
 
