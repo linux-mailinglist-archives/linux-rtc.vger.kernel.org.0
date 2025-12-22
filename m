@@ -1,120 +1,142 @@
-Return-Path: <linux-rtc+bounces-5600-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5601-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A36BCD4AC1
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 04:57:23 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F4F8CD5580
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 10:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE64130062EB
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 03:57:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1AF823007D9F
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Dec 2025 09:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72509326935;
-	Mon, 22 Dec 2025 03:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6E330C37A;
+	Mon, 22 Dec 2025 09:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TcHeJWgH"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="FeQN+0iv"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC95E2FFFB7
-	for <linux-rtc@vger.kernel.org>; Mon, 22 Dec 2025 03:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26471E5018;
+	Mon, 22 Dec 2025 09:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766375836; cv=none; b=srFFQrgE3mhrL4KLV4n9CZNBzBnozmIv2/oF4I8cAztVVzI8XmBb5MzR/kU1L9q3KCVIEtp3gnEExqYMjy2G6linFnLnCteSUR/OsjCr4ZDMXSBGxfzL+VMWgR6MPrNEh3zF0foC8P3a4CtknNd61MdQVQhfqLgaFscHCZa3Adg=
+	t=1766396191; cv=none; b=WeDNIMtatL2eCFXO4YWbsiE+IRm+thRdXUd58XZ3rmW7rGk5kjtqX5QtLraJFkM9r5nHn5LlAMLBp4T+wUeTHX+x8r+QHme0zrFjD21/LyvT+g4WT0oQoBSuD0R2u8YRMvQXBHKWmKDmXlBXWUfZBAkTecyww6Af0Hj5+/BFSsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766375836; c=relaxed/simple;
-	bh=BvVajLp1vUvXpZFR+I7tRHBL1m6EdtzuKWN2bHn2q7M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jc4gE5n7QKVlx/1qSUsxuT4pBxyeztwI8xBuSITwNXHdPIHTG91anIwW1VDoyEuq1+lHMIDAKMxdPhVw9WyoJK4+CXNPNVNEOnzb3W5eQycFW7H0KHd09aetYj8AogQTggkjrRodsrnJ2hgeO3fLSKNKqx5TA+9hQy+zBXu7ynw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TcHeJWgH; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477563e28a3so22144835e9.1
-        for <linux-rtc@vger.kernel.org>; Sun, 21 Dec 2025 19:57:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766375832; x=1766980632; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=POVz2j0cbg6XGxLUTiSFT4ESlAnY5GZTQTAeqNVRf3Y=;
-        b=TcHeJWgHVc0iMgqqyF0XyCNqPzOIJoZlTMzMsMWWLyYEjqRH/KiT4gp0f6PoRarVK3
-         AhOCDzLTteTd5Q6OiedCPhm3TkcrgqPPA4H8qGfdNSCTxRU2keozutKtlAg0avdOe9QA
-         Iz2NqhvmvVvBwY4h7c2KXp200TQOjsZloMpDlrHCEjijkZNv3dRq+gt9oMNgkd+5zM0g
-         y7Ne3DrW1IZuCWv0AzsTUCG9rC1vMIMe5n6QYqnCTiQk/co3ZIb5ZA+v8134jVnNB0zb
-         pUk8/vrg3d61dJY6yEUDX2Q2yFKfdadwEK92s35VfqOpvY09hzBcIL1cZBM/x17drQlp
-         6Cbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766375832; x=1766980632;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=POVz2j0cbg6XGxLUTiSFT4ESlAnY5GZTQTAeqNVRf3Y=;
-        b=WcFlXp9vVqzCGe1EjTIPm3gmmXew1eKQjTxdIfUfvN4UGwY8S29rJwTLFF+8/FTF4X
-         0T0NpkANaI/f1GNp0/M1PAwk3UUPPppOzTGzbF3MaJyAN4+65gHDGdQG2QXT4DFMLhj1
-         oCeEQtgsBOQylMf83hAqambMC615L9ULsn5UcKs+Cyk8ndU11sppgBaaXDAo1mhmhhmd
-         hpK4pRi58JRjna/lKahnVZrjsaiQAm3wSe4MwQIVjCAnciJXOk7srUTiE1nfNvQdbvVL
-         0lkC69Gz7+l7WXM7XNKnFB9iFOhPa73HhGNrmCkRKD/n4nv80K8EhvCvebfSVc/TbPs0
-         mz7g==
-X-Forwarded-Encrypted: i=1; AJvYcCW5rYzm45W8fycJy7Hh3e9WF3PPV9cMKqRJxNzl4XviHLXi/HSOJ3uJzrPxrkp+K5XWLWrWIYjqWqw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJraSrAcjEVl1s5J/8yXsj7gvNrbtHFSeDnJtwt2RppPUdRhAU
-	aK/oIrDw6JDVbmvEPyqqMgmBpgW0+GsfC3o6bp2Oz8yFv/SQMqS/NYVC
-X-Gm-Gg: AY/fxX4uFTUkoUf6NxZCchGLk3Q/qrd7mTB25T4vvTSpV9bDtzhAFfhXyHKr41av/89
-	dkmEz8/hXpm9WGxSHP/fuMmaI06YyWIVR4H06sNM2+X8g3fodpECbnzt/d/6AX+XFnMN1j5gTSD
-	cnp4xZAfuV5MiiEuhR6pJ0IY+dOAA9pDA5we9lxq3gYk3Eo1hhC8NUSlWcKA1f8rVa7PHxQw2EY
-	N2QAzE4Osqb1mc452JKagSBkWyK+OkKX6b+YO1Cikjn3CKja4pk/6l1iT76UeQQG/NdmXZoIdgK
-	zrWuIMXRlr+GHqyknbGl4z54NDuj51OarcVrrXvHZF/yybyxguczBFuH9PxeJJeCJEgHWaIL1zR
-	gXXwTAOyxsOb1ZC4sBRmDpoJfklhA029dg8E2hIUrN4FVVMTwLD+G8njVczLa0rAZNtvCYZaSkV
-	KoNVH7jf02WDze52MNsEytjyoYitIeBjwJEEoT4XKJbWn4G57qWLy/RCYtnZw/Bp8eQLt1WU3pc
-	tMOTHRcGEStcKNVb6N7sg4R4o6wwV8g/kGhiIVKtNPqnHWLvr42rfeffH+9c3kiY58B/QDLWuRQ
-	/Ek48nFY82GqLTcBPh0=
-X-Google-Smtp-Source: AGHT+IE7ko0ygEMyIcM1Wh7JNh26YiuOuGeHMGQPgUYUsjTSE697CX1T1j7cEmKQoqskY/OQp3mw4A==
-X-Received: by 2002:a05:600c:22d4:b0:477:a2f7:74de with SMTP id 5b1f17b1804b1-47be29990e3mr111391915e9.3.1766375831762;
-        Sun, 21 Dec 2025 19:57:11 -0800 (PST)
-Received: from cypher.home.roving-it.com (82-132-221-81.dab.02.net. [82.132.221.81])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-47be3a4651bsm87474075e9.7.2025.12.21.19.57.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Dec 2025 19:57:11 -0800 (PST)
-From: Peter Robinson <pbrobinson@gmail.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	s=arc-20240116; t=1766396191; c=relaxed/simple;
+	bh=HkhjCZrne7qQJahedWxiCLoh4aOir3xN7KC94v/fQ40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sDUjslfdACEgn0nSvrL8rhQcQ4frsTn2eBXn4H0b+IQWAN4DePLg0zEiMPzgy4f0/CW/7W5Ob2Ht7nq5dlS9Ai0QyZ8ILliInlxxpiT5y1xZOtmWQyFhjsrnI0kqXs2Cdpz/ZtFqdLhAId2UEwUy0gdJHJ9puz+aT/lEDDZ+5Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=FeQN+0iv; arc=none smtp.client-ip=18.132.163.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1766396164;
+	bh=HsbEwL+a3ehQwaqo4UIyfPjDh/hFR3Gu+Q/uCtPiRcM=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=FeQN+0ivvzkZvaMy2YHQO7aBztQanzf01RZheYchbmsZ3KefH6IUtP+u6gBpaEIFD
+	 oEqpS771fF0mK+wNMPJbUjfEelNpJRcixXjD4gyIAuG1AH1TTVYBXTsF46AUDD01Xk
+	 n3pP33SbV6eUGWvtOtf8Qr9sINXowTPUZ/oiMKYc=
+X-QQ-mid: zesmtpsz4t1766396162te0c85235
+X-QQ-Originating-IP: rk4yZ8PstRgyj0RWzoU0G3baXYfMJuIshSlWznk2Z4g=
+Received: from = ( [120.239.196.19])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 22 Dec 2025 17:36:00 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11526639101067456687
+EX-QQ-RecipientCnt: 16
+Date: Mon, 22 Dec 2025 17:36:00 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Lee Jones <lee@kernel.org>, patchwork-bot+linux-riscv@kernel.org,
+	Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	tools@kernel.org
+Cc: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	linux-riscv@lists.infradead.org, dlan@gentoo.org,
+	elder@riscstar.com, andi.shyti@kernel.org,
+	alexandre.belloni@bootlin.com, lgirdwood@gmail.com,
+	broonie@kernel.org, linux-kernel@vger.kernel.org,
+	spacemit@lists.linux.dev, linux-i2c@vger.kernel.org,
 	linux-rtc@vger.kernel.org
-Cc: Peter Robinson <pbrobinson@gmail.com>,
-	Shubhi Garg <shgarg@nvidia.com>,
-	Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH] rtc: nvvrs: Add ARCH_TEGRA to the NV VRS RTC driver
-Date: Mon, 22 Dec 2025 03:56:48 +0000
-Message-ID: <20251222035651.433603-1-pbrobinson@gmail.com>
-X-Mailer: git-send-email 2.52.0
+Subject: Re: [PATCH v3 0/4] fix the SpacemiT P1 Kconfig and resend the K1 I2C
+ ILCR patch.
+Message-ID: <5242B57B5E933BCD+aUkRAGxI5ABW-s3O@kernel.org>
+References: <20251118-p1-kconfig-fix-v3-0-8839c5ac5db3@linux.spacemit.com>
+ <176613181654.3684357.18070317581817603415.git-patchwork-notify@kernel.org>
+ <20251219112634.GJ9275@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251219112634.GJ9275@google.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: Ni2ZB8mfJmbFvyCBzBMDPa3xCFaq8m8z5niqr8vjx3twsaaCO18Mq4WP
+	XiEeMRNFHxTdb/oa3Fn3QR27dZcs4VXdxVYQB9r+kQWF2Ir2QXY3t2qKt+x/eH+Cj5OFq4e
+	k2iwn4G2+9adPInhNAygcFdZQOMwR6kZaicOdueI83a+yIYD/+VoilPJgOnnYMd1mnBcAcv
+	lan64mvYE2QHa4EEWP/d0H6d1Vp2cP0OoM5edMjN1LrWCMDbSAWlMOOHbiMDL5g5kNsZanl
+	BZ7K0DN9PKb/6YIIfCeJJdbSLIYF6AMH86dZhs/oIZTwHMlXH5tb5/lAURDjRI5WefsbYfk
+	R3xtx3SiRWvrrd6AnAWckR1bOB679F5j/SRdBB5T8ym/Z1cSu6LayU110IV8JVepL4HZ51b
+	gKnaAN7IY229Sa+xvoOVNsUXSgJGd5UXUKPmbrzHGB3uFKjKQaQI+TwfF3LKjPhkzg7rKcx
+	YMp8tJWY/lf+Dhq7EPhtNwEDBAbrtze4KttJxBpetXuxiOkt1nyDhI9oprbhnqmnC/bviCH
+	QF6xOH3rlhjFH+HJSAiFB5iAca15p1/jbLCY0fO2qg3MKmUtLnhkn20LJTdH5CaWmk0G9oc
+	PU6PRt8n8vohhOxZ2iIskf2+kPDTu+uGY4Y4x5PaO0V9SCArNPdazwvq9KnkcLpmwSlgYTn
+	htkhp3zgQLW8FFy2o+IXUO5vxtda3IBZEVrbVVyBhOdBKM3dllIox9uuJ7eozjBlgXS3uzP
+	PdhK+7fzz3RmXi2B5WMV/2XIKPLNEKcEnAzVpgOmI3Oumm6AH3FIbzNPLAvfJk/OGplxuhF
+	iG5ZyvLcxahybtQrX1WOFI+Jiqps0PoAAHVness1f6qv5cHar2u+uNRHK3Tp+P95BBFys3h
+	QFH7wo59ARAdYZqdaqSkLzPsADzinVBqFvOnkAnlUi/ZYALURzlrX+PjgeGv3CvdKhxWjJj
+	Tby7gWczR+sy1KSJIg8DUTEukG4TJo+FdacWqg/qdJkYtw753sqOGOaw1opzeFUwgeox2sp
+	QKKGEp2ClmyZhxrIAjKLMjxYBPsxi5DbdRKBsyfefo6AqAXcn/lhe+0cDXLEz0ZCzJD0TV4
+	WcguwXD2aZ2xT3kZNTH5Mt4LvOGkJ1KenvJ7nH7HYG+
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+X-QQ-RECHKSPAM: 0
 
-The NV VRS RTC driver currently is only supported on the
-Tegra platform so add a dep for ARCH_TEGRA and compile test
-so it doesn't show up universally across all arches/platforms.
+On Fri, Dec 19, 2025 at 11:26:34AM +0000, Lee Jones wrote:
+> Hi Konstantin,
+> 
+> > This series was applied to riscv/linux.git (fixes)
+> > by Alexandre Belloni <alexandre.belloni@bootlin.com>:
+> > 
+> > On Tue, 18 Nov 2025 14:08:04 +0800 you wrote:
+> > > Since P1 Kconfig directly selects K1_I2C, after the I2C ILCR patch was
+> > > merged, the driver would fail [1] when COMMON_CLK was not selected.
+> > > 
+> > > This series fixes the P1 Kconfig and resends the I2C ILCR patch(This
+> > > patch has reverted by maintainer [2]).
+> > > 
+> > > Now, P1 Kconfig patch has been merged[3], so I2C ILCR patch can be
+> > > merged as well.
+> > > 
+> > > [...]
+> > 
+> > Here is the summary with links:
+> >   - [v3,1/4] i2c: spacemit: configure ILCR for accurate SCL frequency
+> >     (no matching commit)
+> >   - [v3,2/4] rtc: spacemit: MFD_SPACEMIT_P1 as dependencies
+> >     https://git.kernel.org/riscv/c/16bd954c9336
+> >   - [v3,3/4] regulator: spacemit: MFD_SPACEMIT_P1 as dependencies
+> >     (no matching commit)
+> 
+> >   - [v3,4/4] mfd: simple-mfd-i2c: add default value
+> >     (no matching commit)
+> 
+> I was just about to send another snot-o-gram about people picking up
+> patches without the correct Acks, but I just realised this is the same
+> Patchwork issue we spoke about a couple of weeks ago.
+> 
+> This formatting is very confusing, since at first blush it looks as
+> though the whole patch-set was applied.
+> 
+> Please can we only list patches that were merged?
+I agree. At first glance, I also thought the entire series was applied.
 
-Fixes: 9d6d6b06933c8 ("rtc: nvvrs: add NVIDIA VRS RTC device driver")
-Cc: Shubhi Garg <shgarg@nvidia.com>
-Cc: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
----
- drivers/rtc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 50dc779f7f983..50ba48609d74e 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -418,6 +418,7 @@ config RTC_DRV_SPACEMIT_P1
- 
- config RTC_DRV_NVIDIA_VRS10
- 	tristate "NVIDIA VRS10 RTC device"
-+	depends on ARCH_TEGRA || COMPILE_TEST
- 	help
- 	  If you say yes here you will get support for the battery backed RTC device
- 	  of NVIDIA VRS (Voltage Regulator Specification). The RTC is connected via
--- 
-2.52.0
-
+                          - Troy
+> 
+> -- 
+> Lee Jones [李琼斯]
+> 
 
