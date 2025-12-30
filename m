@@ -1,153 +1,147 @@
-Return-Path: <linux-rtc+bounces-5624-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5625-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46A6ECE7CA4
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Dec 2025 19:02:43 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54C69CE8731
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Dec 2025 01:51:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 11E69301B2FD
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Dec 2025 18:02:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 56770300A9F6
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Dec 2025 00:51:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80F7E3203A0;
-	Mon, 29 Dec 2025 18:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D625127E077;
+	Tue, 30 Dec 2025 00:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="t2wdZ+4w"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="1rO6y0Ff"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A5D17A31C
-	for <linux-rtc@vger.kernel.org>; Mon, 29 Dec 2025 18:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50758241696;
+	Tue, 30 Dec 2025 00:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767031349; cv=none; b=p6gFL6znc5P/TOL+5Dm+8BcRJqpsRVEUO9h3METrRNgHdne61/DtRPY4vPc0EJsndfHaUkUjbyk4YmLvW7vArtZ8scJwjZhimBj2Zy+nEoliUe3n1UiQ9pCztrDjaYvCT+2/Lp0JLUOg/EV7HAekA1GC4EcJvwVVDyzZIGmMJzs=
+	t=1767055915; cv=none; b=G0/ev28t3mZcnyaB/t8M+BaotCdqPZicQP4aW4pxySoGpBiJCmfLh6v+jBwH35TwPRlQ/0sfs0KLxlTJYb4U6f9tbdIzoEq+6+y7IkXjhmNcD9Bmne4K4twKW8ey7v25IAotXF7w7s9A9Np/hHud+ieBPNi0fkmYSDbkZKghgAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767031349; c=relaxed/simple;
-	bh=Wq4FNyNXdL2dOO4wrLWKkEOSeqpU9XuvsacZ1Is3UGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aQqBki/rMCdZa3Zd9cHwxmcqyuykRml+ar2qAR1uobqnLhcCSmkFkGKdZmm8oYK+Xj1Xx7wfzcXQdad/MeB22IFBBrRwXIqfj1a4bFB5tfkzI6aEVjqi2y9ZmdlSG+h7wh6trQqAqMU6xoOO1nOl2VYSM/SYut3tilRZR7H4zoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=t2wdZ+4w; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-88059c28da1so89099546d6.2
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Dec 2025 10:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1767031345; x=1767636145; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xDy1M86lySMiZB+6e+NfnSGr5v4JHWbEjB5Zb9z5vPo=;
-        b=t2wdZ+4w7Ajz9fevd3tA4lUf7mV2qblpu2vBsU0ua3j5homu2HKBkWKh9wqHlG8Y8g
-         rVMsep/LABt5BBO3IcpeuuMFidISDOcw/xMp53tE6lmr+G3HNFx6Z/apYh3HWMruQ2ru
-         Uk4ppvmmIGOOB3vfa3zfKTgRh/lltcPtlgd3wNKuzGHJ0s66P0BAhMGBZRrOFqcWLtNj
-         zSxioC9zTU92v8EaPz6Q2O0P2qGYDlRmrXmXkTvOYNIOm0Hm7ep5HqVbSFS65XuFAZpo
-         bWwZ3r6zlncjEBGD015G3GZwpKOWFLTAQ5ytNnJX8n4wgl6SvwEstNcDvzCr/VhRSd70
-         8Aag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767031345; x=1767636145;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xDy1M86lySMiZB+6e+NfnSGr5v4JHWbEjB5Zb9z5vPo=;
-        b=QYX249y2fqY4/RBUbQH42rHXWMrHt8Q0NDdeerhfHmxHp6E3ht2kqURQTXUyhI1W7Z
-         2j2f6EhTu7iTKv287FGp9ESdvDQ05nGVySw5nSqZvPsWiq5ZmGCQB+JrmpkWcfWw3zIr
-         8DHo3OGmhNHHil6EWeoed2grJLjSNFgvB9EfcxsY9hLTO5KTZcEUW0X/2PsUaLfdVOVH
-         Z9vsdutXvLfvXypqJoH/mRp89J130Sj2m0bOyspORXYCLRKNyynqs3z/X8osyR5Tql2c
-         I1ewD8VH/Bpgx1IlCEkyPSchlLrbBg1k8RUdAKhC1S2SCauavtkvzHnIKru0Ed3j8WS0
-         PuwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1bZKp2dUj53e0L5s4Y4Mn2VOk1LT5dE3Ge028kazCBmFu/4a7wWRO8Zm77N03bXdKGarU5rZfrNI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvacsgTxVPDHreMfSvvD2RMVO9ZrMCUfLiBsJjkSHWm+Ee6Csb
-	44XtIXNDvgWCQ7lQKUT877KUQGgcvHAhlmfMMpMiY57WaU5OadZw10q6wuLc9xN3AVc=
-X-Gm-Gg: AY/fxX5RtMs3P7ls1j0HpCNUCiE401ssu11rtdPgn8JVuz6cXfzGGDO/dkD0IGiUwis
-	F/kqLsGt7kke9QK50R+mgR8DcpDBkBUL/5oyeQwMRYz05s5WR/p22jmQT1UNh9W6J7ULZJ2vdx9
-	VwM0WWUEit5qhl49FWolJVlPHwDqoKz929/1GW2HQOgruRQEqerPRtAhSe463O0uKcUofWB9vcZ
-	wNfO1WNekPVXLUpDXlz+JVBavqIuTsK944WyAGpZeohWiA79JngzltIxjQ0YAnyw00sUjSMzQaR
-	7N/rXjtDlAIklt04N+0cxQc3tNVqZAa2W41c/DJaGjtIdDxE8y2cPO93fOqCpjPA+T/hbxCeB/3
-	DPUf7amBtpzwvP3AMeLrk4WmfPpAadaPsNgaYwuoYxwiY5m9ilPVZiF7jSriZD/nHNr6Z6bVvLm
-	LzcCf0haB5f7gNHXJNXQ4nak1NeA==
-X-Google-Smtp-Source: AGHT+IGXtGMT6O6A6KaQIdzPXBUgINz+WinbQ4cwEL4NneioBCpZL0bLeOv1X+9oO0ye3ANqbf5YQw==
-X-Received: by 2002:a05:6214:3a83:b0:888:7d0a:18db with SMTP id 6a1803df08f44-88d83a78234mr548804566d6.48.1767031345078;
-        Mon, 29 Dec 2025 10:02:25 -0800 (PST)
-Received: from [10.211.55.5] ([209.81.125.20])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88d997ada77sm231925916d6.37.2025.12.29.10.02.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Dec 2025 10:02:24 -0800 (PST)
-Message-ID: <4c7c0f69-4732-4f62-970a-2a9273b3b5c7@riscstar.com>
-Date: Mon, 29 Dec 2025 12:02:23 -0600
+	s=arc-20240116; t=1767055915; c=relaxed/simple;
+	bh=xQUcebZ74Rn2hytmFPKwsmC8Q8oX6l61OTLIv3KQC1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bkgBDB5ER4WjAFctcFMuMPOdPLqAuOI1WI7UaZow9tVm6OQsv/iGFZ2inmem8ctVu9wj8veFdXrgV0tI8hNhJf086W5cQKVDGNkjru0OmRgSVDEic4Sf2o/dlGdUag0WtfUo8BdiC6kQlnX8wVeaOmWw8LS50NwIt/Ru6KMx08c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=1rO6y0Ff; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 5E9491A2507;
+	Tue, 30 Dec 2025 00:51:50 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1E73F6072C;
+	Tue, 30 Dec 2025 00:51:50 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 484B4113B078F;
+	Tue, 30 Dec 2025 01:51:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1767055909; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=v2UYhRBgvuL5HQq2pRiflGWNydMQVG1+kD2bMSHnlZM=;
+	b=1rO6y0FfOg210W/91ZG+QWem4y/7X0XYctHDlEzdbyLi+hI0vJFgLFfzCIG9N9ZN0Mi/xc
+	kpqSv4BS+I3glLCn3eg7gYetiJbQ92j4CD7nnz9jsHXZYyoN6zX/vGArpTcYU2K7eFdVD1
+	z9tV9Kt421vLFsXkpzg2lZU6M7MJ7HQl+pzvn8hax7tHpI+2Z7E26h9fza253RE+2heiGR
+	1abrW+0FdDJweNk46k4tywtdTI19Vz05hA30CSKr68z9cxjf8VVECoxBwn8SO2hB7isv2Q
+	S79dAEx/DtqdOrOtvftZEVTXBjJz9uIG9r32/8DKi2xZHSJlfvx4z7LAd9KusA==
+Date: Tue, 30 Dec 2025 01:51:42 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Alex Elder <elder@riscstar.com>
+Cc: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] rtc: spacemit: default module when
+ MFD_SPACEMIT_P1 is enabled
+Message-ID: <20251230005142d1bfc6f7@mail.local>
+References: <20251225-p1-kconfig-fix-v4-0-44b6728117c1@linux.spacemit.com>
+ <20251225-p1-kconfig-fix-v4-3-44b6728117c1@linux.spacemit.com>
+ <202512251653368b33c7e7@mail.local>
+ <4c7c0f69-4732-4f62-970a-2a9273b3b5c7@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] rtc: spacemit: default module when MFD_SPACEMIT_P1
- is enabled
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Cc: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>,
- Andi Shyti <andi.shyti@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <20251225-p1-kconfig-fix-v4-0-44b6728117c1@linux.spacemit.com>
- <20251225-p1-kconfig-fix-v4-3-44b6728117c1@linux.spacemit.com>
- <202512251653368b33c7e7@mail.local>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <202512251653368b33c7e7@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4c7c0f69-4732-4f62-970a-2a9273b3b5c7@riscstar.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 12/25/25 10:53 AM, Alexandre Belloni wrote:
-> On 25/12/2025 15:46:33+0800, Troy Mitchell wrote:
->> The RTC driver defaulted to the same value as MFD_SPACEMIT_P1, which
->> caused it to be built-in automatically whenever the PMIC support was
->> set to y.
->>
->> This is not always desirable, as the RTC function is not required on
->> all platforms using the SpacemiT P1 PMIC.
+On 29/12/2025 12:02:23-0600, Alex Elder wrote:
+> On 12/25/25 10:53 AM, Alexandre Belloni wrote:
+> > On 25/12/2025 15:46:33+0800, Troy Mitchell wrote:
+> > > The RTC driver defaulted to the same value as MFD_SPACEMIT_P1, which
+> > > caused it to be built-in automatically whenever the PMIC support was
+> > > set to y.
+> > > 
+> > > This is not always desirable, as the RTC function is not required on
+> > > all platforms using the SpacemiT P1 PMIC.
+> > 
+> > But then, can't people simply change the config? I don't feel like
+> > this is an improvement.
 > 
-> But then, can't people simply change the config? I don't feel like
-> this is an improvement.
+> It's not an improvement for people who want to use the SpacemiT
+> P1 PMIC, but it's an improvement for all the other RISC-V builds
+> using "defconfig" that would rather have that support be modular
+> to avoid needlessly consuming resources.
 
-It's not an improvement for people who want to use the SpacemiT
-P1 PMIC, but it's an improvement for all the other RISC-V builds
-using "defconfig" that would rather have that support be modular
-to avoid needlessly consuming resources.
+But then, wouldn't MFD_SPACEMIT_P1 be simply not set or set to m ? So
+this doesn't have any impact on other RISC-V builds while it makes
+people using the SpacemiT P1 PMIC jump through hoops to be able to use
+the RTC as this is a very uncommon way to set default values.
 
-I haven't done any testing on this but it looks fine to me.
+My point is:
+ - other RISC-V platforms would simply not select MFD_SPACEMIT_P1 or
+   have MFD_SPACEMIT_P1 set to m
+ - having RTC_DRV_SPACEMIT_P1 built-in by default when MFD_SPACEMIT_P1
+   is built-in doesn't really hurt any SpacemiT P1 users but would be
+   the expectation of those using the RTC.
+ - those wanting to optimise because they won't use the RTC, they can
+   already simply unselect RTC_DRV_SPACEMIT_P1 or set it to m.
 
-Acked-by: Alex Elder <elder@riscstar.com>
-
-I think it's a small change worth merging.  I don't think
-doing so does any harm.  Your call or course, Alexandre.
-
-					-Alex
-
->> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
->> ---
->>   drivers/rtc/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
->> index 50dc779f7f983074df7882200c90f0df21d142f2..53866493e9bbaf35ff0de85cbfe43e8343eadc1e 100644
->> --- a/drivers/rtc/Kconfig
->> +++ b/drivers/rtc/Kconfig
->> @@ -410,7 +410,7 @@ config RTC_DRV_SPACEMIT_P1
->>   	tristate "SpacemiT P1 RTC"
->>   	depends on ARCH_SPACEMIT || COMPILE_TEST
->>   	depends on MFD_SPACEMIT_P1
->> -	default MFD_SPACEMIT_P1
->> +	default m if MFD_SPACEMIT_P1
->>   	help
->>   	  Enable support for the RTC function in the SpacemiT P1 PMIC.
->>   	  This driver can also be built as a module, which will be called
->>
->> -- 
->> 2.52.0
->>
+> 
+> I haven't done any testing on this but it looks fine to me.
+> 
+> Acked-by: Alex Elder <elder@riscstar.com>
+> 
+> I think it's a small change worth merging.  I don't think
+> doing so does any harm.  Your call or course, Alexandre.
+> 
+> 					-Alex
+> 
+> > > Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> > > ---
+> > >   drivers/rtc/Kconfig | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > > index 50dc779f7f983074df7882200c90f0df21d142f2..53866493e9bbaf35ff0de85cbfe43e8343eadc1e 100644
+> > > --- a/drivers/rtc/Kconfig
+> > > +++ b/drivers/rtc/Kconfig
+> > > @@ -410,7 +410,7 @@ config RTC_DRV_SPACEMIT_P1
+> > >   	tristate "SpacemiT P1 RTC"
+> > >   	depends on ARCH_SPACEMIT || COMPILE_TEST
+> > >   	depends on MFD_SPACEMIT_P1
+> > > -	default MFD_SPACEMIT_P1
+> > > +	default m if MFD_SPACEMIT_P1
+> > >   	help
+> > >   	  Enable support for the RTC function in the SpacemiT P1 PMIC.
+> > >   	  This driver can also be built as a module, which will be called
+> > > 
+> > > -- 
+> > > 2.52.0
+> > > 
+> > 
 > 
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
