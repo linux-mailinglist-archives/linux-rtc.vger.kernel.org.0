@@ -1,127 +1,245 @@
-Return-Path: <linux-rtc+bounces-5638-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5639-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CFEBCF0D6D
-	for <lists+linux-rtc@lfdr.de>; Sun, 04 Jan 2026 12:40:42 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84C90CF0EF0
+	for <lists+linux-rtc@lfdr.de>; Sun, 04 Jan 2026 13:37:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DAA9C300EE6F
-	for <lists+linux-rtc@lfdr.de>; Sun,  4 Jan 2026 11:40:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id ED2BC3000B0D
+	for <lists+linux-rtc@lfdr.de>; Sun,  4 Jan 2026 12:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0C7287259;
-	Sun,  4 Jan 2026 11:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740682C0F97;
+	Sun,  4 Jan 2026 12:37:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T4okUE7t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5fSJLGS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A4C284686
-	for <linux-rtc@vger.kernel.org>; Sun,  4 Jan 2026 11:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B05621CC44;
+	Sun,  4 Jan 2026 12:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767526834; cv=none; b=nGzfMESMDXq42hAKO+Ssoggovdo08sqNHqn1ZrVm5t4+os0bbeb0lCiNRmF9qbJu31nUxS2CXiyHL1VI/vxDr/mxIQZGAYfygjT8pNmMN6JgEvqqtoRwbNC2//GDQF/Ez06lcuNyTfrcFdA8HFHnwTJgGaDA/fff63J5K3Hl3LU=
+	t=1767530269; cv=none; b=Ajei/DolnWR8ykkOF8il8E1gkbwbssMDrUO9VQBXQ5WkpuvAcSMXSb/1viParNdA1hvjObiPHhBEAC5u4zByV4ZtPgZy0/vhhIaOnMv4ZDMnL8sucH1paR5dC8VYh+j41FdjOjZYdDIsqyFRqC46psZgG9I+v0If+1NQe27QgdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767526834; c=relaxed/simple;
-	bh=AdLaEbu+CLiQdTtmMqeBoK5MYppvfGHNfnURahOocNE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B+26mDosxDbgSR+99VvkbinvjvhFgd2cQYeLdNa0jzvdGXTAg0XRrXq0zydwPaK7BVK5GxvSdVl9wgeuqId1cAVgWwlLwD/GkibPgf/gzCO2pNj8A/1sK3g2LOeqLEqp+XdysEs//E2qemSep0pQuzKWFOcmjF8R9IWukDQZSiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T4okUE7t; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a355c8b808so13488375ad.3
-        for <linux-rtc@vger.kernel.org>; Sun, 04 Jan 2026 03:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767526831; x=1768131631; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OOiR2u6mlLJSl02K2L/VerbaqrkSVNkTdi5KWJEftGE=;
-        b=T4okUE7t+I9TqDuCLL+M/tpNw3aQ5bD15V8iH/q2I7xh94TiS4QUyiRr3+89ppVnMN
-         JOv7Rr7QCkzALUbgerC75tarvJqQJnAjftb8uKP7fPGWmmkaJ+u8qYROB2H1AaX4Z+AR
-         ok9B3jKLInItr78KbYbQpNEYGBvRvlrdF3qBaqHuC3C6eOvwQ9hw1GP/hOgAvenpUwxf
-         kocf/ALJU2c+65fwEXTm6bGGkm62ryKuZ9bppCkX++4XmtikAAbq4gB+YjJj+jXXHIfY
-         5haaCJuLbJTxh+vSW4FL/lAGiSSyVXuKthAoY/qgduRNPppGsTId46Hud7r6fp76WH32
-         sZbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767526831; x=1768131631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OOiR2u6mlLJSl02K2L/VerbaqrkSVNkTdi5KWJEftGE=;
-        b=YA6eg7AqOLzDK9lgXQuiTvz8smTv0/lDoMZSVwF4U48d0be/EkrWN2ydBWNXljwvkV
-         Q8S6Gt+ArJeY+pUHcQNyMHTGOhQpSfCLNZLqULoYLaWPMjlAHMB5qQwoosp6oP99xTRo
-         dgL2fncKpxyUlYJpoWWQBpBXSVi56T52Se33jZFOCYjU0BQPabTN/tINMmv//BXE5fs6
-         6Pimv4BW/Y5KxWZW5ZrXT9YRBI6F0rZ5jaVuOn+M3IvANHR7c1/3iyjCgDMaISUBFpgd
-         d+xZWerw19PAxMwCqEyA+vXlhInGyHniDAiP8N3DOq1LBYPnB0UfoIYnkdkSDkeru4hd
-         adKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXEJs1gpIqXjS8LtG6owu9Cf+cxZp3EuzWmPCzMnqwUIqCQk6S7GkmGwjzxrAYMXxBFMCMOMxgoPbE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxAJQ3jdEYls0cXK/tU94WRN6mmlt+5gmaoNSnOksWIcgABre1
-	Rbihtw3PtKDVE7fLvYBciOz5sZxK1QHshQZEiRBx0LtBo20PoZQUWoxkO8CBop20KZ8Gs4F/sZU
-	Ere4vNqAvnU5L5andYSIFXIJpRU1wHVM=
-X-Gm-Gg: AY/fxX7syUMrjWmiv4GoXP8z0OAehCaq1QWh8sblEr5u3TKHtZnnw6K4B/bBlJnVTtp
-	1tSMwLfnO946HcjIUhYdMLiAVv//as1tC2PTsMjQgnBJdyj9TIY4EvUxpRTPkWZZxssTtS1QVqP
-	S07fLoejvm1ARSi88fw/H99b7HA46u9haxm1dfL/GRepG5kgh+yl4W8P9xzbCmdsLXibrndLzMN
-	8fZf5+M1r9ujFTEtYZ9yTMBIN8KD2oBbXkJ52jjdarhl+TJDOmO6Cw27oM5g3vfgPUddpiZy7Md
-	q7n03Mzb0OGhFmRn6KepvBDryKngXf2iFG9d092N5qEmOM3vVhWvde55a4PL9m/1/EGRdkd7jkS
-	k2SCXUetehXJuxqQP2mSCp5M=
-X-Google-Smtp-Source: AGHT+IGZNGJXWeGUy0qD/2ZZlBLns4S640emjlxF0i1BMJssLEDYehJ0Tyk52/9hDWEGz80hiiY9y6axy5gmUTKV/qI=
-X-Received: by 2002:a05:7300:c695:b0:2ae:5f73:1968 with SMTP id
- 5a478bee46e88-2b05eb7b6d1mr15977856eec.2.1767526831057; Sun, 04 Jan 2026
- 03:40:31 -0800 (PST)
+	s=arc-20240116; t=1767530269; c=relaxed/simple;
+	bh=GofnBp9Gm0p+t98w+nAQ/wFFuASBFnBUVDE1VLoggM8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=dCcI8tQeoofYfjNNA1azFjccjfp3n7L3Zh06BxbwrkU/a0ShSNJv+rh+ZDw+zCBBkTZn0DI4HIVIbrFDW1msGcLBm5lAhvwwo/yL77oIPyWFQnbNB21xSjcuZEyz5DO8SrMm5ieEMUXHgeo9jkC+zUG63ot9SdBodL8+Gp2Bb9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5fSJLGS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338DBC4CEF7;
+	Sun,  4 Jan 2026 12:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767530268;
+	bh=GofnBp9Gm0p+t98w+nAQ/wFFuASBFnBUVDE1VLoggM8=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=o5fSJLGSOQHI6Fq88P0aJO5LHv/qYuA4Uzepsbu4IJ2wF8QZhDbjFaTInBlsWlQRd
+	 AwGOYMdHYfHsXRlAW1Q5ACqSkwep8rmarNEmVS7s+VHmmCme6J6DikMvg0HPd+k+ao
+	 ca/R7f2ZitLqgwQ0Rh4F3+tHV566aaNZFekWDn+SvFrd6wip/5yHThylIaaNhe7Rkl
+	 hJHqPyEJD2eSmtfTjLN7uR1pPg9tOA+GkpAfjDEGiE8A0JdWi0SwR7HexoR6ok8gBc
+	 7KedP65lYTLZF6lVh+wyLFTbDr1g/zcZilIuQp4Wnmy/uQNLf7gYNFd573W3B4nVhs
+	 R1A09RJQY7QvA==
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260104060621.3757812-1-sunke@kylinos.cn> <20260104060621.3757812-5-sunke@kylinos.cn>
-In-Reply-To: <20260104060621.3757812-5-sunke@kylinos.cn>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 4 Jan 2026 12:40:19 +0100
-X-Gm-Features: AQt7F2oEoZEFUpXfnYcIBsrd_YW6Vf92sLDWAC2rt0GMlus4l9UQhJ5Etusj34M
-Message-ID: <CANiq72=tk1=qM_KMOKJeWj32T85ogJUZbFpiSZkABaUPrwB3Hg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 4/4] rust: add PL031 RTC driver
-To: Ke Sun <sunke@kylinos.cn>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-rtc@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Alvin Sun <sk.alvin.x@gmail.com>, Russell King <linux@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 04 Jan 2026 13:37:44 +0100
+Message-Id: <DFFT6PR57TZ4.IG4LJVST0X8C@kernel.org>
+Subject: Re: [RFC PATCH v1 1/4] rust: add AMBA bus abstractions
+Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, <linux-rtc@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, "Alvin Sun" <sk.alvin.x@gmail.com>
+To: "Ke Sun" <sunke@kylinos.cn>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260104060621.3757812-1-sunke@kylinos.cn>
+ <20260104060621.3757812-2-sunke@kylinos.cn>
+In-Reply-To: <20260104060621.3757812-2-sunke@kylinos.cn>
 
-On Sun, Jan 4, 2026 at 7:07=E2=80=AFAM Ke Sun <sunke@kylinos.cn> wrote:
->
-> Add Rust implementation of the ARM AMBA PrimeCell 031 RTC driver.
+On Sun Jan 4, 2026 at 7:06 AM CET, Ke Sun wrote:
+> Add Rust abstractions for the ARM AMBA bus, including:
+> - Device type wrapper for amba_device
+> - DeviceId for device matching
+> - TryFrom implementation for converting device::Device to amba::Device
+> - IRQ and I/O resource management methods
 
-> The driver uses the AMBA bus abstractions and RTC core framework
-> introduced in previous commits.
+I don't see any Driver trait or Adapter implementation implementing to regi=
+ster
+and probe an AMBA driver.
 
-Cc'ing AMBA (Russell) here as well, in case it is useful for context.
+Since I had a look at your RTC abstractions, I can see the reason why, i.e.=
+ you
+baked that part into the RTC abstractions, but this is not how the device /
+driver model works. I will comment about this in the RTC patch. But for thi=
+s
+one, please implement thing analogous to platform, PCI, etc.
 
-> +       depends on RUST && RTC_CLASS && RUST_BUILD_ASSERT_ALLOW
+> +impl DeviceId {
+> +    /// Creates a new device ID from an AMBA device ID and mask.
+> +    ///
+> +    /// A driver binds to a device when `(hardware_device_id & mask) =3D=
+=3D id`.
+> +    #[inline(always)]
+> +    pub const fn new(id: u32, mask: u32) -> Self {
+> +        // SAFETY: FFI type is valid to be zero-initialized.
+> +        let mut amba: bindings::amba_id =3D unsafe { core::mem::zeroed()=
+ };
 
-> +         This driver requires CONFIG_RUST_BUILD_ASSERT_ALLOW to be enabl=
-ed
-> +         because it uses build-time assertions for memory safety checks.
+Please use pin_init::zeroed() instead.
 
-While replying for the Cc, I noticed this...
+> +        amba.id =3D id;
+> +        amba.mask =3D mask;
+> +        amba.data =3D core::ptr::null_mut();
+> +
+> +        Self(amba)
+> +    }
+> +
+> +    /// Creates a new device ID with driver-specific data.
+> +    #[inline(always)]
+> +    pub const fn new_with_data(id: u32, mask: u32, data: usize) -> Self =
+{
+> +        // SAFETY: FFI type is valid to be zero-initialized.
+> +        let mut amba: bindings::amba_id =3D unsafe { core::mem::zeroed()=
+ };
 
-One cannot require `CONFIG_RUST_BUILD_ASSERT_ALLOW`. If you need it,
-then it is because some of the assertions are *not* true at build
-time, in which case either you need to fix them so that the optimizer
-can figure out that they are be true or, if they are intended to be
-runtime assertions, then use something else (likely normal error
-handling).
+Same here.
 
-Put another way, one should always assume
-`CONFIG_RUST_BUILD_ASSERT_ALLOW` does not exist, i.e. assume it has to
-always be `n`. That config is just an escape hatch, and one can
-consider it may get removed at any point.
+> +        amba.id =3D id;
+> +        amba.mask =3D mask;
+> +        amba.data =3D data as *mut core::ffi::c_void;
 
-Cheers,
-Miguel
+What is this data? The driver specific data is derived from the index store=
+d in
+DRIVER_DATA_OFFSET. This does interfere with each other.
+
+You already get driver specific data per entry from the generic code, you c=
+an
+just drop this.
+
+> +    /// Returns the memory resource.
+> +    pub fn resource(&self) -> Option<&Resource> {
+
+Why does this return an Option if you do not have a None case? Are you sure
+resource can never be NULL?
+
+> +        // SAFETY: `self.as_raw()` returns a valid pointer to a `struct =
+amba_device`.
+> +        let resource =3D unsafe { &raw mut (*self.as_raw()).res };
+> +        // SAFETY: `resource` is a valid pointer to a `struct resource`.
+> +        Some(unsafe { Resource::from_raw(resource) })
+> +    }
+> +}
+> +
+> +impl<Ctx: device::DeviceContext> AsRef<device::Device<Ctx>> for Device<C=
+tx> {
+> +    fn as_ref(&self) -> &device::Device<Ctx> {
+> +        // SAFETY: By the type invariant of `Self`, `self.as_raw()` is a=
+ pointer to a
+> +        // valid `struct amba_device`.
+> +        let dev =3D unsafe { &raw mut (*self.as_raw()).dev };
+> +
+> +        // SAFETY: `dev` points to a valid `struct device`.
+> +        unsafe { device::Device::from_raw(dev) }
+> +    }
+> +}
+> +
+> +// SAFETY: `Device` is a transparent wrapper that doesn't depend on its =
+generic
+> +// argument.
+> +crate::impl_device_context_deref!(unsafe { Device });
+> +crate::impl_device_context_into_aref!(Device);
+> +
+> +impl<Ctx: device::DeviceContext> TryFrom<&device::Device<Ctx>> for &Devi=
+ce<Ctx> {
+> +    type Error =3D kernel::error::Error;
+> +
+> +    fn try_from(dev: &device::Device<Ctx>) -> Result<Self, Self::Error> =
+{
+> +        // SAFETY: By the type invariant of `Device`, `dev.as_raw()` is =
+a valid pointer
+> +        // to a `struct device`.
+> +        if !unsafe { bindings::dev_is_amba(dev.as_raw()) } {
+> +            return Err(crate::error::code::EINVAL);
+> +        }
+> +
+> +        // SAFETY: We've just verified that the bus type of `dev` equals
+> +        // `bindings::amba_bustype`, hence `dev` must be embedded in a v=
+alid
+> +        // `struct amba_device` as guaranteed by the corresponding C cod=
+e.
+> +        let adev =3D unsafe { container_of!(dev.as_raw(), bindings::amba=
+_device, dev) };
+> +
+> +        // SAFETY: `adev` is a valid pointer to a `struct amba_device`.
+> +        Ok(unsafe { &*adev.cast() })
+> +    }
+> +}
+
+Please implement the AsBusDevice trait instead, this TryFrom solution you
+probably found in the platform and PCI bus are for very specific cases. For
+instance, if you have a driver that exports and auxiliary device, but is
+supported on two busses.
+
+In your case, you simply want to derive an amba device from a generic devic=
+e in
+a class device abstraction (RTC device), hence please incorporate the
+AsBusDevice trait.
+
+> +impl Device<device::Core> {}
+> +
+> +impl Device<device::Bound> {
+> +    /// Returns an [`IoRequest`] for the memory resource.
+> +    pub fn io_request(&self) -> Option<IoRequest<'_>> {
+> +        self.resource()
+> +            // SAFETY: `resource` is valid for the lifetime of the `IoRe=
+quest`.
+> +            .map(|resource| unsafe { IoRequest::new(self.as_ref(), resou=
+rce) })
+> +    }
+> +
+> +    /// Returns an [`IrqRequest`] for the IRQ at the given index.
+> +    pub fn irq_by_index(&self, index: u32) -> Result<IrqRequest<'_>> {
+> +        if index >=3D bindings::AMBA_NR_IRQS {
+> +            return Err(crate::error::code::EINVAL);
+> +        }
+> +
+> +        // SAFETY: `self.as_raw()` returns a valid pointer to a `struct =
+amba_device`.
+> +        let irq =3D unsafe { (*self.as_raw()).irq[index as usize] };
+> +
+> +        if irq =3D=3D 0 {
+> +            return Err(crate::error::code::ENXIO);
+> +        }
+> +
+> +        // SAFETY: `irq` is guaranteed to be a valid IRQ number for `&se=
+lf`.
+> +        Ok(unsafe { IrqRequest::new(self.as_ref(), irq) })
+> +    }
+> +
+> +    /// Requests an IRQ at the given index and returns a [`irq::Registra=
+tion`].
+> +    pub fn request_irq_by_index<'a, T: irq::Handler + 'static>(
+> +        &'a self,
+> +        flags: irq::Flags,
+> +        index: u32,
+> +        name: &'static CStr,
+> +        handler: impl PinInit<T, Error> + 'a,
+> +    ) -> Result<impl PinInit<irq::Registration<T>, Error> + 'a> {
+
+Please don't return a Result here, the error code is already within the imp=
+l
+PinInit<T, Error>. Please use pin_init::pin_init_scope() instead.
+
+> +        let request =3D self.irq_by_index(index)?;
+> +
+> +        Ok(irq::Registration::<T>::new(request, flags, name, handler))
+> +    }
+> +}
 
