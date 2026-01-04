@@ -1,62 +1,62 @@
-Return-Path: <linux-rtc+bounces-5634-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5635-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0D0CF0A40
-	for <lists+linux-rtc@lfdr.de>; Sun, 04 Jan 2026 07:07:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01F2CF0A43
+	for <lists+linux-rtc@lfdr.de>; Sun, 04 Jan 2026 07:07:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 54BCE30037AA
-	for <lists+linux-rtc@lfdr.de>; Sun,  4 Jan 2026 06:07:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D7188300E3C6
+	for <lists+linux-rtc@lfdr.de>; Sun,  4 Jan 2026 06:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952B1264602;
-	Sun,  4 Jan 2026 06:07:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798D82D879C;
+	Sun,  4 Jan 2026 06:07:05 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0718E2D879C
-	for <linux-rtc@vger.kernel.org>; Sun,  4 Jan 2026 06:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A33441C63
+	for <linux-rtc@vger.kernel.org>; Sun,  4 Jan 2026 06:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767506823; cv=none; b=esDwv9dtBPmLQ4p3HTTd4pQob952balOSfbkpSOTg3ADZwXSVonWWM76H+E0vbW6nkEok9RmfiLJJlc5MrGbh2LfK7VJI8F6tHhuQYxzCzcnY0eTCAfuzhZ1HnNkoFtrTspXtf7urHcaRL3KJFB/J7lFejonE2TjQeKeI5VhxD8=
+	t=1767506825; cv=none; b=ZwUVDoi8emquYwIbvAjixiaKF3Hy1TIMk8XnwziwXZfhaCCBYjXZONTv6XuTvmiS0cY18ojsZOxQHoDLr3+Dkkn2H4124Y2pHdoLYvYG8bDMh7OLxbg/NIJv/0IsolyJ+j19Ab4pAD4giFRCOxz6JXZ15YCbPH+3DOGNLTYuMiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767506823; c=relaxed/simple;
-	bh=BtEj7s+YTaPDNNizNXLlA96me79eH1LuhqPNDZC6u6Q=;
+	s=arc-20240116; t=1767506825; c=relaxed/simple;
+	bh=HKcaWZzyPitSDFKRyBcypsW4terJ3mr+O+62Qdbh6Uk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MGr7lFjExTu62esN22FuWlDTbKwMqK3pQY8I+wFTRFwOxz/1hJck1/XMBmbpNoLBsi9u/5A+DM1fESf6GaTsb0D2W9fzRdAcSa+skpWsQcqqOum6qFwNweDOCaP9CksIxbD8dWp6/ocaSilEaFd1jlNy4maO0NDTrYd/NwOlXTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=S7y5mcHoKFWSlYTjdfUcgEdTl6ztegjGpzvA9EfrrOXS+zWTbZQ2PIGHfAuyogAJFEgGgp5DyfTnkIew8SQxRtYvTGxylR8JDm1eIp9Cx+q3yY1YvBqWMJd+UEbU2AnzxaCQfHpNYI6LcQAcBHMVQ9jb4TmVm4zBLllGQNVAcxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-34c213f7690so10493957a91.2
-        for <linux-rtc@vger.kernel.org>; Sat, 03 Jan 2026 22:06:58 -0800 (PST)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7bc248dc16aso10385728b3a.0
+        for <linux-rtc@vger.kernel.org>; Sat, 03 Jan 2026 22:07:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767506818; x=1768111618;
+        d=1e100.net; s=20230601; t=1767506823; x=1768111623;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=h999U7NtRb28FN6D5JVS0zKQ+y3arVJ38ez3L4m7IXw=;
-        b=NzQy2B9qwzSwtLRKYvAMGeq66figp8+BkxeedAUvKQPHERYDAVRaq8egAtwnW+eLPV
-         fX/wdkDOcBhbiuDEEoS8Frxyt+PPnWZbE7PpJAPw8E43arFtlkxiyJCuaz57GxdNbxAx
-         NjP2vH3tkrIBDYsc9DBRglPr2vf3BQHw+9i1rxEAVglTAa2CmccEPfvDpmwdd/3gW1VI
-         OJYo+UDTQHTWxbJgrqAZKQ3ZHI4oMQJ9clOj3D4WS+PjtssNxPF/J5kBLteYzNhLDRXD
-         Zxnr5fnuGNW7BiW09U9PXsiSe2RSjxJ2KmGlFtEHsjDNppoR/aXh96Xeuzbrn8ZhiYOe
-         Wzsw==
-X-Gm-Message-State: AOJu0YwrFkn5CM38AHU3xAvV1C7cfywwNl9KjlohQJcbRTL0kkL5BbU+
-	5YPsWw8oildmzATRyju/aubtQu6BQBlrpVWKdqGv+ncOvB9s/pPimDw9
-X-Gm-Gg: AY/fxX5u6K1eWaqzLMEJF4Pcge+C/kT32U5BwUGwmJPY65QaGqwtEwZy0+DRfFGoN9i
-	Y2SZERcH2KlOIELMdUhBCJjpid6SBq6eq76yrV8W3tsgb7S93VcZjL/IJXd/rUd5IjlQbdH3XLD
-	79O+2jJzwjMoYDt+dx0JO8DzT8BSf/7EBzmK6XlPQMyT0Id+EspmzkGY+5E6C/JUqnE72IPtVj2
-	q7orGeHxfAn8I9jvPgd8rKSWe+2Hfx3LYva82KJiLXneq5iy6EUkamLLGNUGh0RdQhsXZ4HgWbe
-	zMT8788BjuT3XsPeS/6uOdDlUtsTTfqhpFQfkNUWkbbYHPSfxTTQLjvkF+ByRqqORGdjqTd8uBw
-	+z0k1ak0gb2rvc+7Zi5Qj3vH5Y4lbUYWBV80afvW7y9PTZ1iM28h1Z+DnGxbskgEUeujfd5W827
-	Iu7OTMHNPD9vpeVojm7es7
-X-Google-Smtp-Source: AGHT+IFvP25fj4Vva/iP+YWbfa+yJ6X16BV1gaUxlJ/CXpSEwp+vQAwF5FR+pNjHPR+8aU0UbbNkGg==
-X-Received: by 2002:a17:90b:518d:b0:343:7714:4caa with SMTP id 98e67ed59e1d1-34e9211c415mr37027388a91.3.1767506817486;
-        Sat, 03 Jan 2026 22:06:57 -0800 (PST)
+        bh=lIcJk2qDwLQtQ+17HTbPVTopkMuvkQpVHsPgSwRvQHg=;
+        b=AMmZk2B2P5IsTnyWVscoqqiMy7H5hZf7WktFV+P97KXHiCGiIkXmp+xvr/umMisu6u
+         gHq4Sy4fxbloHNTv3JiuSeV37NO73QjlhA0Q0F1uu+fzXno5YdPLq8TIIsHg/VgaM2nd
+         YAJFSKDSKpsnn43SeOrhmmAoAZ3aHB6UoFRz/VKB9pPn0+qmphvr1EERAFbFhFvXBx00
+         GOg6zzStNgHGeplLe+LP4EWxFC9Kig/DlZuinnD2Sxk+GhhnmpfvHYHpnqhku8iV4xBn
+         Q3JEvGKRgJPfA1u787E0Jlm2/VJ7fiMI2T1mCxjC3KOAjCnybM2Raz2d0Jj+dpv23pcH
+         FD6A==
+X-Gm-Message-State: AOJu0YyOznEC4ES/HJj+nmVfkBpKABHef+H0Fv5ddx0A2wp4H9MLcKZL
+	u8KI6WPISsVKSPoJAydE1fu5lNPq44HOEcsp1c8Uo4txTWHgA8Zs5BGo
+X-Gm-Gg: AY/fxX50Fd6o+8n+eQui8VYFI/e3ofdguHcPzOP+Q8ckUptPeY7XmNaeX5YQ2lhRhVo
+	UbYydh2j0GGfT/G1xoqdHWIYO6Er5x5d9WrueU2OFm1lAsMDRXs/AwX4VtwfITOOjhcM4FDSi6m
+	IJemSQYdFY9adKpHty0SBfg/Yx4fAUoaK4SMX2DuBDjhzgvLUkNHzBtJY6h4KuOmOEJ5DfZEDab
+	iUvkfnXdfG5D3G/kjpkMpuLViIZQ3ZnjL/QWupRPa8owpEynSWMl/iqskJUVhvK40kpz3jUbtmW
+	Q2nTbv5xqvfFGS4cIO/PhYRfIA/Yv0/UzGy31uuEbOtv+AGDWV0DCbvJanhqH7GiLIS/pbfa5xC
+	bKp/kdzqbw/OwFmALhcdwP0HCksbt+b4ExZsGEN5SA6BP3hZ4OqI5LhoyOuyrCSyLmKYfcIWAvB
+	YPRROBOaCEaYi6fxYekH0U
+X-Google-Smtp-Source: AGHT+IGj/Pib9Qk3z4v8xsvq/It0YCo4xC765Rf8DWOqzjUKkCKtkHkNtEwLzbX4OpJfSpSc6ZrAkg==
+X-Received: by 2002:a05:6a20:244e:b0:366:14b2:313 with SMTP id adf61e73a8af0-376aa1ef20amr42885192637.70.1767506822569;
+        Sat, 03 Jan 2026 22:07:02 -0800 (PST)
 Received: from localhost.localdomain ([195.245.219.189])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7bc68ab5sm40408449a12.17.2026.01.03.22.06.52
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7bc68ab5sm40408449a12.17.2026.01.03.22.06.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jan 2026 22:06:56 -0800 (PST)
+        Sat, 03 Jan 2026 22:07:02 -0800 (PST)
 From: Ke Sun <sunke@kylinos.cn>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
@@ -72,9 +72,9 @@ Cc: linux-rtc@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	Alvin Sun <sk.alvin.x@gmail.com>,
 	Ke Sun <sunke@kylinos.cn>
-Subject: [RFC PATCH v1 3/4] rust: add RTC core abstractions and data structures
-Date: Sun,  4 Jan 2026 14:06:20 +0800
-Message-ID: <20260104060621.3757812-4-sunke@kylinos.cn>
+Subject: [RFC PATCH v1 4/4] rust: add PL031 RTC driver
+Date: Sun,  4 Jan 2026 14:06:21 +0800
+Message-ID: <20260104060621.3757812-5-sunke@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260104060621.3757812-1-sunke@kylinos.cn>
 References: <20260104060621.3757812-1-sunke@kylinos.cn>
@@ -86,1784 +86,594 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Rust abstractions for RTC (Real-Time Clock) devices, including:
+Add Rust implementation of the ARM AMBA PrimeCell 031 RTC driver.
 
-- Data structures: RtcTime, RtcWkAlrm, RtcParam wrappers for RTC types
-- RtcDevice: Safe wrapper for struct rtc_device
-- DriverGeneric trait: Generic RTC driver trait over bus types
-- RtcOperations trait: VTable for RTC device operations
-- Bus abstractions: PlatformBus, AmbaBus, I2cBus implementations
-- Adapter: Generic adapter for RTC driver registration
-- module_rtc_driver! macro: Module declaration macro for RTC drivers
+This driver supports:
+- ARM, ST v1, and ST v2 variants
+- Time read/write operations
+- Alarm read/write operations
+- Interrupt handling
+- Wake-up support
 
-This provides the foundation for RTC drivers on multiple bus types
-(platform, AMBA, and I2C).
+The driver uses the AMBA bus abstractions and RTC core framework
+introduced in previous commits.
 
 Signed-off-by: Ke Sun <sunke@kylinos.cn>
 ---
- rust/helpers/helpers.c |    1 +
- rust/helpers/rtc.c     |    9 +
- rust/kernel/lib.rs     |    2 +
- rust/kernel/rtc.rs     | 1710 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 1722 insertions(+)
- create mode 100644 rust/helpers/rtc.c
- create mode 100644 rust/kernel/rtc.rs
+ drivers/rtc/Kconfig           |  11 +
+ drivers/rtc/Makefile          |   1 +
+ drivers/rtc/rtc_pl031_rust.rs | 529 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 541 insertions(+)
+ create mode 100644 drivers/rtc/rtc_pl031_rust.rs
 
-diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-index 79c72762ad9c4..1a5c103fb24ba 100644
---- a/rust/helpers/helpers.c
-+++ b/rust/helpers/helpers.c
-@@ -48,6 +48,7 @@
- #include "rcu.c"
- #include "refcount.c"
- #include "regulator.c"
-+#include "rtc.c"
- #include "scatterlist.c"
- #include "security.c"
- #include "signal.c"
-diff --git a/rust/helpers/rtc.c b/rust/helpers/rtc.c
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 50dc779f7f983..c7ce188dcc5cf 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1591,6 +1591,17 @@ config RTC_DRV_PL031
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rtc-pl031.
+ 
++config RTC_DRV_PL031_RUST
++	tristate "ARM AMBA PL031 RTC (Rust)"
++	depends on RUST && RTC_CLASS && RUST_BUILD_ASSERT_ALLOW
++	help
++	  This is the Rust implementation of the PL031 RTC driver.
++	  It provides the same functionality as the C driver but is
++	  written in Rust for improved memory safety.
++
++	  This driver requires CONFIG_RUST_BUILD_ASSERT_ALLOW to be enabled
++	  because it uses build-time assertions for memory safety checks.
++
+ config RTC_DRV_AT91RM9200
+ 	tristate "AT91RM9200 or some AT91SAM9 RTC"
+ 	depends on ARCH_AT91 || COMPILE_TEST
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 6cf7e066314e1..10f540e7409b4 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -139,6 +139,7 @@ obj-$(CONFIG_RTC_DRV_PCF8583)	+= rtc-pcf8583.o
+ obj-$(CONFIG_RTC_DRV_PIC32)	+= rtc-pic32.o
+ obj-$(CONFIG_RTC_DRV_PL030)	+= rtc-pl030.o
+ obj-$(CONFIG_RTC_DRV_PL031)	+= rtc-pl031.o
++obj-$(CONFIG_RTC_DRV_PL031_RUST)	+= rtc_pl031_rust.o
+ obj-$(CONFIG_RTC_DRV_PM8XXX)	+= rtc-pm8xxx.o
+ obj-$(CONFIG_RTC_DRV_POLARFIRE_SOC)	+= rtc-mpfs.o
+ obj-$(CONFIG_RTC_DRV_PS3)	+= rtc-ps3.o
+diff --git a/drivers/rtc/rtc_pl031_rust.rs b/drivers/rtc/rtc_pl031_rust.rs
 new file mode 100644
-index 0000000000000..862cd61670bfc
+index 0000000000000..c00a49c2bf94e
 --- /dev/null
-+++ b/rust/helpers/rtc.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/rtc.h>
-+
-+int rust_helper_devm_rtc_register_device(struct rtc_device *rtc)
-+{
-+	return __devm_rtc_register_device(THIS_MODULE, rtc);
-+}
-+
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 3e557335fc5fe..1390073e4ae27 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -135,6 +135,8 @@
- pub mod rbtree;
- pub mod regulator;
- pub mod revocable;
-+#[cfg(CONFIG_RTC_CLASS)]
-+pub mod rtc;
- pub mod scatterlist;
- pub mod security;
- pub mod seq_file;
-diff --git a/rust/kernel/rtc.rs b/rust/kernel/rtc.rs
-new file mode 100644
-index 0000000000000..1d14d38650839
---- /dev/null
-+++ b/rust/kernel/rtc.rs
-@@ -0,0 +1,1710 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! RTC (Real-Time Clock) device support.
++++ b/drivers/rtc/rtc_pl031_rust.rs
+@@ -0,0 +1,529 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++//! Real Time Clock interface for ARM AMBA PrimeCell 031 RTC
 +//!
-+//! C headers: [`include/linux/rtc.h`](srctree/include/linux/rtc.h).
++//! This is a Rust port of the C driver in rtc-pl031.c
 +//!
-+//! Reference: <https://www.kernel.org/doc/html/latest/driver-api/rtc.html>
-+use crate::{
-+    acpi,
++//! Author: Ke Sun <sunke@kylinos.cn>
++//! Based on: drivers/rtc/rtc-pl031.c
++
++use core::ops::Deref;
++use kernel::{
 +    amba,
 +    bindings,
-+    bitmap::Bitmap,
-+    device::{self},
-+    driver,
-+    error::{
-+        code,
-+        from_result,
-+        to_result,
-+        VTABLE_DEFAULT_ERROR, //
++    c_str,
++    device,
++    devres::Devres,
++    error::code,
++    io::mem::IoMem,
++    irq::{
++        Handler,
++        IrqReturn, //
 +    },
-+    i2c,
-+    of,
-+    platform,
 +    prelude::*,
-+    seq_file::SeqFile,
-+    sync::aref::AlwaysRefCounted,
-+    types::{
-+        ForeignOwnable,
-+        Opaque, //
++    rtc::{
++        self,
++        RtcDevice,
++        RtcDeviceOptions,
++        RtcOperations,
++        RtcTime,
++        RtcWkAlrm, //
 +    },
-+    ThisModule, //
++    sync::aref::ARef, //
 +};
 +
-+use core::{
-+    marker::PhantomData,
-+    ptr::NonNull, //
-+};
++// Register definitions
++const RTC_DR: usize = 0x00; // Data read register
++const RTC_MR: usize = 0x04; // Match register
++const RTC_LR: usize = 0x08; // Data load register
++const RTC_CR: usize = 0x0c; // Control register
++const RTC_IMSC: usize = 0x10; // Interrupt mask and set register
++const RTC_RIS: usize = 0x14; // Raw interrupt status register
++const RTC_MIS: usize = 0x18; // Masked interrupt status register
++const RTC_ICR: usize = 0x1c; // Interrupt clear register
++const RTC_YDR: usize = 0x30; // Year data read register
++const RTC_YMR: usize = 0x34; // Year match register
++const RTC_YLR: usize = 0x38; // Year data load register
 +
-+/// RTC time structure.
-+///
-+/// Wraps the C `struct rtc_time` from `include/uapi/linux/rtc.h`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct RtcTime(pub bindings::rtc_time);
++// Control register bits
++const RTC_CR_EN: u32 = 1 << 0; // Counter enable bit
++const RTC_CR_CWEN: u32 = 1 << 26; // Clockwatch enable bit
 +
-+impl RtcTime {
-+    /// Creates a new `RtcTime` from a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    pub fn from_time64(time: i64) -> Self {
-+        // SAFETY: `rtc_time` is a C struct with only integer fields, so it's safe to
-+        // zero-initialize.
-+        let mut tm = Self(unsafe { core::mem::zeroed() });
-+        // SAFETY: `rtc_time64_to_tm` is a pure function that only writes to the provided
-+        // `struct rtc_time` pointer. The pointer is valid because `tm.0` is a valid mutable
-+        // reference, and the function does not retain any references to it.
-+        unsafe {
-+            bindings::rtc_time64_to_tm(time, &mut tm.0);
-+        }
-+        tm
++// Interrupt status and control register bits
++const RTC_BIT_AI: u32 = 1 << 0; // Alarm interrupt bit
++
++// RTC event flags
++#[allow(dead_code)]
++const RTC_AF: u32 = bindings::RTC_AF;
++#[allow(dead_code)]
++const RTC_IRQF: u32 = bindings::RTC_IRQF;
++
++// ST v2 time format bit definitions
++const RTC_SEC_SHIFT: u32 = 0;
++const RTC_SEC_MASK: u32 = 0x3F << RTC_SEC_SHIFT; // Second [0-59]
++const RTC_MIN_SHIFT: u32 = 6;
++const RTC_MIN_MASK: u32 = 0x3F << RTC_MIN_SHIFT; // Minute [0-59]
++const RTC_HOUR_SHIFT: u32 = 12;
++const RTC_HOUR_MASK: u32 = 0x1F << RTC_HOUR_SHIFT; // Hour [0-23]
++const RTC_WDAY_SHIFT: u32 = 17;
++const RTC_WDAY_MASK: u32 = 0x7 << RTC_WDAY_SHIFT; // Day of week [1-7], 1=Sunday
++const RTC_MDAY_SHIFT: u32 = 20;
++const RTC_MDAY_MASK: u32 = 0x1F << RTC_MDAY_SHIFT; // Day of month [1-31]
++const RTC_MON_SHIFT: u32 = 25;
++const RTC_MON_MASK: u32 = 0xF << RTC_MON_SHIFT; // Month [1-12], 1=January
++
++/// Vendor-specific data for different PL031 variants
++#[derive(Copy, Clone, PartialEq)]
++enum VendorVariant {
++    /// Original ARM version
++    Arm,
++    /// First ST derivative
++    StV1,
++    /// Second ST derivative
++    StV2,
++}
++
++impl VendorVariant {
++    fn clockwatch(&self) -> bool {
++        matches!(self, VendorVariant::StV1 | VendorVariant::StV2)
 +    }
 +
-+    /// Converts this `RtcTime` to a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    pub fn to_time64(&self) -> i64 {
-+        // SAFETY: `rtc_tm_to_time64` is a pure function that only reads from the provided
-+        // `struct rtc_time` pointer. The pointer is valid because `self.0` is a valid reference,
-+        // and the function does not retain any references to it.
-+        unsafe { bindings::rtc_tm_to_time64(core::ptr::from_ref(&self.0).cast_mut()) }
++    #[allow(dead_code)]
++    fn st_weekday(&self) -> bool {
++        matches!(self, VendorVariant::StV1 | VendorVariant::StV2)
 +    }
 +
-+    /// Sets this `RtcTime` from a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    pub fn set_from_time64(&mut self, time: i64) {
-+        // SAFETY: `rtc_time64_to_tm` is a pure function that only writes to the provided
-+        // `struct rtc_time` pointer. The pointer is valid because `self.0` is a valid mutable
-+        // reference, and the function does not retain any references to it.
-+        unsafe {
-+            bindings::rtc_time64_to_tm(time, &mut self.0);
-+        }
-+    }
-+
-+    /// Converts a time64_t value to an RTC time structure.
-+    #[inline]
-+    pub fn time64_to_tm(time: i64, tm: &mut Self) {
-+        tm.set_from_time64(time);
-+    }
-+
-+    /// Converts an RTC time structure to a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    #[inline]
-+    pub fn tm_to_time64(tm: &Self) -> i64 {
-+        tm.to_time64()
-+    }
-+
-+    /// Calculates the day of the year (0-365) from the date components.
-+    #[inline]
-+    pub fn year_days(&self) -> i32 {
-+        // SAFETY: `rtc_year_days` is a pure function that only performs calculations based on
-+        // the provided parameters. The values should be from valid RTC time structures and
-+        // non-negative, but the function itself is safe to call with any values.
-+        unsafe {
-+            bindings::rtc_year_days(
-+                self.0.tm_mday as u32,
-+                self.0.tm_mon as u32,
-+                self.0.tm_year as u32,
-+            )
++    #[allow(dead_code)]
++    fn range_min(&self) -> i64 {
++        match self {
++            VendorVariant::Arm | VendorVariant::StV1 => 0,
++            VendorVariant::StV2 => bindings::RTC_TIMESTAMP_BEGIN_0000,
 +        }
 +    }
 +
-+    /// Returns the seconds field (0-59).
-+    #[inline]
-+    pub fn tm_sec(&self) -> i32 {
-+        self.0.tm_sec
-+    }
-+
-+    /// Sets the seconds field (0-59).
-+    #[inline]
-+    pub fn set_tm_sec(&mut self, sec: i32) {
-+        self.0.tm_sec = sec;
-+    }
-+
-+    /// Returns the minutes field (0-59).
-+    #[inline]
-+    pub fn tm_min(&self) -> i32 {
-+        self.0.tm_min
-+    }
-+
-+    /// Sets the minutes field (0-59).
-+    #[inline]
-+    pub fn set_tm_min(&mut self, min: i32) {
-+        self.0.tm_min = min;
-+    }
-+
-+    /// Returns the hours field (0-23).
-+    #[inline]
-+    pub fn tm_hour(&self) -> i32 {
-+        self.0.tm_hour
-+    }
-+
-+    /// Sets the hours field (0-23).
-+    #[inline]
-+    pub fn set_tm_hour(&mut self, hour: i32) {
-+        self.0.tm_hour = hour;
-+    }
-+
-+    /// Returns the day of the month (1-31).
-+    #[inline]
-+    pub fn tm_mday(&self) -> i32 {
-+        self.0.tm_mday
-+    }
-+
-+    /// Sets the day of the month (1-31).
-+    #[inline]
-+    pub fn set_tm_mday(&mut self, mday: i32) {
-+        self.0.tm_mday = mday;
-+    }
-+
-+    /// Returns the month (0-11, where 0 is January).
-+    #[inline]
-+    pub fn tm_mon(&self) -> i32 {
-+        self.0.tm_mon
-+    }
-+
-+    /// Sets the month (0-11, where 0 is January).
-+    #[inline]
-+    pub fn set_tm_mon(&mut self, mon: i32) {
-+        self.0.tm_mon = mon;
-+    }
-+
-+    /// Returns the year (years since 1900).
-+    #[inline]
-+    pub fn tm_year(&self) -> i32 {
-+        self.0.tm_year
-+    }
-+
-+    /// Sets the year (years since 1900).
-+    #[inline]
-+    pub fn set_tm_year(&mut self, year: i32) {
-+        self.0.tm_year = year;
-+    }
-+
-+    /// Returns the day of the week (0-6, where 0 is Sunday).
-+    #[inline]
-+    pub fn tm_wday(&self) -> i32 {
-+        self.0.tm_wday
-+    }
-+
-+    /// Sets the day of the week (0-6, where 0 is Sunday).
-+    #[inline]
-+    pub fn set_tm_wday(&mut self, wday: i32) {
-+        self.0.tm_wday = wday;
-+    }
-+
-+    /// Returns the day of the year (0-365).
-+    #[inline]
-+    pub fn tm_yday(&self) -> i32 {
-+        self.0.tm_yday
-+    }
-+
-+    /// Sets the day of the year (0-365).
-+    #[inline]
-+    pub fn set_tm_yday(&mut self, yday: i32) {
-+        self.0.tm_yday = yday;
-+    }
-+
-+    /// Returns the daylight saving time flag.
-+    #[inline]
-+    pub fn tm_isdst(&self) -> i32 {
-+        self.0.tm_isdst
-+    }
-+
-+    /// Sets the daylight saving time flag.
-+    #[inline]
-+    pub fn set_tm_isdst(&mut self, isdst: i32) {
-+        self.0.tm_isdst = isdst;
-+    }
-+}
-+
-+impl Default for RtcTime {
-+    fn default() -> Self {
-+        // SAFETY: `rtc_time` is a C struct with only integer fields, so it's safe to
-+        // zero-initialize.
-+        Self(unsafe { core::mem::zeroed() })
-+    }
-+}
-+
-+/// RTC wake alarm structure.
-+///
-+/// Wraps the C `struct rtc_wkalrm` from `include/uapi/linux/rtc.h`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct RtcWkAlrm(pub bindings::rtc_wkalrm);
-+
-+impl Default for RtcWkAlrm {
-+    fn default() -> Self {
-+        // SAFETY: `rtc_wkalrm` is a C struct with only integer fields and a nested `rtc_time`
-+        // struct (which also has only integer fields), so it's safe to zero-initialize.
-+        Self(unsafe { core::mem::zeroed() })
-+    }
-+}
-+
-+impl RtcWkAlrm {
-+    /// Returns a reference to the alarm time.
-+    #[inline]
-+    pub fn get_time(&self) -> &RtcTime {
-+        // SAFETY: `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so the memory
-+        // layout is identical. We can safely reinterpret the reference.
-+        unsafe { &*(&raw const self.0.time).cast::<RtcTime>() }
-+    }
-+
-+    /// Returns a mutable reference to the alarm time.
-+    #[inline]
-+    pub fn get_time_mut(&mut self) -> &mut RtcTime {
-+        // SAFETY: `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so the memory
-+        // layout is identical. We can safely reinterpret the reference.
-+        unsafe { &mut *(&raw mut self.0.time).cast::<RtcTime>() }
-+    }
-+
-+    /// Sets the alarm time from a `RtcTime` value.
-+    #[inline]
-+    pub fn set_time(&mut self, time: RtcTime) {
-+        self.0.time = time.0;
-+    }
-+
-+    /// Returns the enabled field.
-+    #[inline]
-+    pub fn enabled(&self) -> u8 {
-+        self.0.enabled
-+    }
-+
-+    /// Sets the `enabled` field.
-+    #[inline]
-+    pub fn set_enabled(&mut self, enabled: u8) {
-+        self.0.enabled = enabled;
-+    }
-+
-+    /// Returns the pending field.
-+    #[inline]
-+    pub fn pending(&self) -> u8 {
-+        self.0.pending
-+    }
-+
-+    /// Sets the `pending` field.
-+    #[inline]
-+    pub fn set_pending(&mut self, pending: u8) {
-+        self.0.pending = pending;
-+    }
-+}
-+
-+/// RTC parameter structure.
-+///
-+/// Wraps the C `struct rtc_param` from `include/uapi/linux/rtc.h`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct RtcParam(pub bindings::rtc_param);
-+
-+impl Default for RtcParam {
-+    fn default() -> Self {
-+        // SAFETY: FFI type is valid to be zero-initialized.
-+        Self(unsafe { core::mem::zeroed() })
-+    }
-+}
-+
-+/// A Rust wrapper for the C `struct rtc_device`.
-+///
-+/// This type provides safe access to RTC device operations. The underlying `rtc_device`
-+/// is managed by the kernel and remains valid for the lifetime of the `RtcDevice`.
-+///
-+/// # Invariants
-+///
-+/// A [`RtcDevice`] instance holds a pointer to a valid [`struct rtc_device`] that is
-+/// registered and managed by the kernel.
-+///
-+/// # Examples
-+///
-+/// ```rust
-+/// # use kernel::{
-+/// #     prelude::*,
-+/// #     rtc::{
-+/// #         DriverGeneric,
-+/// #         PlatformBus,
-+/// #         RtcDevice, //
-+/// #     }, //
-+/// # };
-+/// // Example IdInfo type with range fields
-+/// struct DeviceInfo {
-+///     range_min: i64,
-+///     range_max: u64,
-+/// }
-+///
-+/// // In your DriverGeneric implementation:
-+/// // fn init_rtcdevice(
-+/// //     rtc: &RtcDevice,
-+/// //     _driver: Pin<&Self>,
-+/// //     id_info: Option<&DeviceInfo>,
-+/// // ) -> Result {
-+/// //     // Set the time range for the RTC device based on device variant
-+/// //     if let Some(info) = id_info {
-+/// //         rtc.set_range_min(info.range_min);
-+/// //         rtc.set_range_max(info.range_max);
-+/// //     } else {
-+/// //         rtc.set_range_min(0);
-+/// //         rtc.set_range_max(u64::MAX);
-+/// //     }
-+/// //     Ok(())
-+/// // }
-+/// ```
-+///
-+/// [`struct rtc_device`]: https://docs.kernel.org/driver-api/rtc.html
-+#[repr(transparent)]
-+pub struct RtcDevice(Opaque<bindings::rtc_device>);
-+
-+impl RtcDevice {
-+    /// Obtain the raw [`struct rtc_device`] pointer.
-+    #[inline]
-+    pub fn as_raw(&self) -> *mut bindings::rtc_device {
-+        self.0.get()
-+    }
-+
-+    /// Returns a bound reference to the parent [`device::Device`].
-+    pub fn bound_parent_device(&self) -> &device::Device<device::Bound> {
-+        // SAFETY: `device()` returns a valid device, and RTC devices always have a parent.
-+        let parent = unsafe { self.device().parent().unwrap_unchecked() };
-+        // SAFETY: A bound RTC device always has a bound parent device.
-+        unsafe { parent.as_bound() }
-+    }
-+
-+    /// Returns a reference to the [`device::Device`] that the RTC device is bound to.
-+    pub fn device(&self) -> &device::Device {
-+        // SAFETY: `self.as_raw()` is a valid pointer to a `struct rtc_device`, and `dev` is a valid
-+        // field within it.
-+        unsafe { device::Device::from_raw(&raw mut (*self.as_raw()).dev) }
-+    }
-+
-+    /// Set the minimum time range for the RTC device.
-+    #[inline]
-+    pub fn set_range_min(&self, min: i64) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only writing to the `range_min` field.
-+        unsafe {
-+            (*self.as_raw()).range_min = min;
++    #[allow(dead_code)]
++    fn range_max(&self) -> u64 {
++        match self {
++            VendorVariant::Arm | VendorVariant::StV1 => u64::from(u32::MAX),
++            VendorVariant::StV2 => bindings::RTC_TIMESTAMP_END_9999,
 +        }
 +    }
-+
-+    /// Set the maximum time range for the RTC device.
-+    #[inline]
-+    pub fn set_range_max(&self, max: u64) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only writing to the `range_max` field.
-+        unsafe {
-+            (*self.as_raw()).range_max = max;
-+        }
-+    }
-+
-+    /// Get the minimum time range for the RTC device.
-+    #[inline]
-+    pub fn range_min(&self) -> i64 {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only reading the `range_min` field.
-+        unsafe { (*self.as_raw()).range_min }
-+    }
-+
-+    /// Get the maximum time range for the RTC device.
-+    #[inline]
-+    pub fn range_max(&self) -> u64 {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only reading the `range_max` field.
-+        unsafe { (*self.as_raw()).range_max }
-+    }
-+
-+    /// Notify the RTC framework that an interrupt has occurred.
-+    ///
-+    /// Should be called from interrupt handlers. Schedules work to handle the interrupt
-+    /// in process context.
-+    #[inline]
-+    pub fn update_irq(&self, num: usize, events: usize) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`. The rtc_update_irq function handles NULL/ERR checks internally.
-+        unsafe {
-+            bindings::rtc_update_irq(self.as_raw(), num, events);
-+        }
-+    }
-+
-+    /// Clear a feature bit in the RTC device.
-+    #[inline]
-+    pub fn clear_feature(&self, feature: u32) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and features is a valid bitmap array with RTC_FEATURE_CNT bits.
-+        let features_bitmap = unsafe {
-+            Bitmap::from_raw_mut(
-+                (*self.as_raw()).features.as_mut_ptr().cast::<usize>(),
-+                bindings::RTC_FEATURE_CNT as usize,
-+            )
-+        };
-+        features_bitmap.clear_bit(feature as usize);
-+    }
 +}
 +
-+impl<Ctx: device::DeviceContext> AsRef<device::Device<Ctx>> for RtcDevice {
-+    fn as_ref(&self) -> &device::Device<Ctx> {
-+        let raw = self.as_raw();
-+        // SAFETY: By the type invariant of `Self`, `self.as_raw()` is a pointer to a valid
-+        // `struct rtc_device`.
-+        let dev = unsafe { &raw mut (*raw).dev };
-+
-+        // SAFETY: `dev` points to a valid `struct device`.
-+        unsafe { device::Device::from_raw(dev) }
-+    }
++/// PL031 RTC driver private data.
++#[pin_data(PinnedDrop)]
++struct Pl031DrvData {
++    #[pin]
++    base: Devres<IoMem<0>>,
++    variant: VendorVariant,
++    /// RTC device reference for interrupt handler.
++    ///
++    /// Set in `init_rtcdevice` and remains valid for the driver's lifetime
++    /// because the RTC device is managed by devres.
++    rtc_device: Option<ARef<RtcDevice>>,
 +}
 +
-+// SAFETY: Instances of `RtcDevice` are always reference-counted via the underlying `device`.
-+// The `struct rtc_device` contains a `struct device dev` as its first field, and the
-+// reference counting is managed through `get_device`/`put_device` on the `dev` field.
-+unsafe impl AlwaysRefCounted for RtcDevice {
-+    fn inc_ref(&self) {
-+        // SAFETY: The existence of a shared reference guarantees that the refcount is non-zero.
-+        // `self.device()` returns a reference to the `dev` field of `struct rtc_device`.
-+        unsafe { bindings::get_device(self.device().as_raw()) };
-+    }
++// SAFETY: `Pl031DrvData` contains only `Send`/`Sync` types: `Devres` (Send+Sync),
++// `VendorVariant` (Copy), and `Option<ARef<RtcDevice>>` (Send+Sync because `RtcDevice` is
++// Send+Sync).
++unsafe impl Send for Pl031DrvData {}
++// SAFETY: `Pl031DrvData` contains only `Send`/`Sync` types: `Devres` (Send+Sync),
++// `VendorVariant` (Copy), and `Option<ARef<RtcDevice>>` (Send+Sync because `RtcDevice` is
++// Send+Sync).
++unsafe impl Sync for Pl031DrvData {}
 +
-+    unsafe fn dec_ref(obj: NonNull<Self>) {
-+        let rtc: *mut bindings::rtc_device = obj.cast().as_ptr();
-+
-+        // SAFETY: By the type invariant of `Self`, `rtc` is a pointer to a valid
-+        // `struct rtc_device`. The `dev` field is the first field of `struct rtc_device`,
-+        // so we can safely access it.
-+        let dev = unsafe { &raw mut (*rtc).dev };
-+
-+        // SAFETY: The safety requirements guarantee that the refcount is non-zero.
-+        unsafe { bindings::put_device(dev) };
-+    }
++/// Vendor-specific data for different PL031 variants.
++#[derive(Copy, Clone)]
++struct Pl031Variant {
++    variant: VendorVariant,
 +}
 +
-+// SAFETY: `RtcDevice` is reference-counted and can be released from any thread.
-+unsafe impl Send for RtcDevice {}
-+
-+// SAFETY: `RtcDevice` can be shared among threads because all immutable methods are
-+// protected by the synchronization in `struct rtc_device` (via `ops_lock` mutex).
-+unsafe impl Sync for RtcDevice {}
-+
-+/// The RTC driver trait.
-+///
-+/// RTC drivers are registered as platform drivers, so they use platform device matching
-+/// (OF and ACPI device IDs).
-+///
-+/// # Examples
-+///
-+///```
-+/// # use kernel::{
-+/// #     acpi,
-+/// #     bindings,
-+/// #     c_str,
-+/// #     device::Core,
-+/// #     of,
-+/// #     platform,
-+/// #     rtc, //
-+/// # };
-+/// use kernel::prelude::*;
-+///
-+/// struct MyRtcDriver;
-+///
-+/// kernel::of_device_table!(
-+///     OF_TABLE,
-+///     MODULE_OF_TABLE,
-+///     <MyRtcDriver as rtc::DriverGeneric<rtc::PlatformBus>>::IdInfo,
-+///     [
-+///         (of::DeviceId::new(c_str!("test,rtc")), ()),
-+///     ]
-+/// );
-+///
-+/// kernel::acpi_device_table!(
-+///     ACPI_TABLE,
-+///     MODULE_ACPI_TABLE,
-+///     <MyRtcDriver as rtc::DriverGeneric<rtc::PlatformBus>>::IdInfo,
-+///     [
-+///         (acpi::DeviceId::new(c_str!("RSTRTC00")), ()),
-+///     ]
-+/// );
-+///
-+/// impl rtc::DriverGeneric<rtc::PlatformBus> for MyRtcDriver {
-+///     type IdInfo = ();
-+///
-+///     fn probe(
-+///         _pdev: &platform::Device<Core>,
-+///         _info: Option<&Self::IdInfo>,
-+///     ) -> impl PinInit<Self, Error> {
-+///         Err(ENODEV)
-+///     }
-+/// }
-+///
-+/// impl rtc::PlatformIdInfos for MyRtcDriver {
-+///     const OF_ID_TABLE: Option<of::IdTable<Self::IdInfo>> = Some(&OF_TABLE);
-+///     const ACPI_ID_TABLE: Option<acpi::IdTable<Self::IdInfo>> = Some(&ACPI_TABLE);
-+/// }
-+///```
-+/// Trait for different bus types that RTC drivers can use.
-+///
-+/// This trait abstracts the differences between different bus types (platform, amba, etc.)
-+/// and provides the necessary types and methods for driver registration.
-+pub trait Bus: Send + Sync + Sized + 'static {
-+    /// The device type for this bus.
-+    type Device;
-+
-+    /// The driver registration type for this bus (e.g., `platform_driver`, `amba_driver`).
-+    type RegType: Default;
-+
-+    /// The raw C device pointer type for probe callbacks.
-+    type RawDevice;
-+
-+    /// The probe function signature for this bus type.
-+    /// Different buses have different probe function signatures:
-+    /// - Platform: `unsafe extern "C" fn(*mut platform_device) -> i32`
-+    /// - AMBA: `unsafe extern "C" fn(*mut amba_device, *const amba_id) -> i32`
-+    type ProbeFn;
-+
-+    /// The remove function signature for this bus type.
-+    /// Currently, all buses use the same remove function signature:
-+    /// `unsafe extern "C" fn(*mut RawDevice)`
-+    type RemoveFn;
-+
-+    /// Get device ID info from a device.
-+    fn id_info<T: DriverGeneric<Self>>(dev: &device::Device) -> Option<&'static T::IdInfo>
-+    where
-+        Self: Sized;
-+
-+    /// Convert raw device pointer to typed device reference.
-+    ///
-+    /// The safety requirements are satisfied by the caller, which ensures that `raw` is a valid
-+    /// pointer to the appropriate device type. The returned reference is valid for the lifetime of
-+    /// the raw pointer.
-+    fn from_raw<'a>(raw: *mut Self::RawDevice) -> &'a Self::Device;
-+
-+    /// Get the underlying device from a bus device.
-+    fn as_device(dev: &Self::Device) -> &device::Device;
-+
-+    /// Register the driver.
-+    ///
-+    /// This is the unified interface for driver registration. It delegates to
-+    /// `register_bus_driver` which is implemented by each specific bus type.
-+    ///
-+    /// The safety requirements are satisfied by the caller (typically `Adapter::register`),
-+    /// which is marked as `unsafe` and ensures that `reg` is a valid pointer to the driver
-+    /// registration structure. The implementation itself only calls non-unsafe functions.
-+    fn register<T: DriverGeneric<Self> + RtcOperations + 'static>(
-+        reg: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+    ) -> Result
-+    where
-+        Self: BusRegistration<T>;
-+
-+    /// Unregister the driver.
-+    ///
-+    /// This is the unified interface for driver unregistration. It delegates to
-+    /// `unregister_bus_driver` which is implemented by each specific bus type.
-+    ///
-+    /// The safety requirements are satisfied by the caller (typically `Adapter::unregister`),
-+    /// which is marked as `unsafe` and ensures that `reg` is a valid pointer that was previously
-+    /// registered with `register`. The implementation itself only calls non-unsafe functions.
-+    fn unregister<T: DriverGeneric<Self> + RtcOperations + 'static>(reg: &Opaque<Self::RegType>)
-+    where
-+        Self: BusRegistration<T>;
-+}
-+
-+/// Trait for bus-specific driver registration.
-+///
-+/// Each bus type (Platform, AMBA, etc.) implements this trait to handle
-+/// bus-specific registration requirements, including device tables and callbacks.
-+/// Different bus types may use different device table types:
-+/// - Platform bus: `of_table` and `acpi_table`
-+/// - AMBA bus: `id_table`
-+pub trait BusRegistration<T: DriverGeneric<Self>>: Bus {
-+    /// Register the bus driver with device tables and callbacks.
-+    ///
-+    /// This method is implemented by each specific bus type (PlatformBus, AmbaBus, etc.)
-+    /// to handle bus-specific registration requirements.
-+    ///
-+    /// The safety requirements are satisfied by the caller (`Bus::register`), which is
-+    /// marked as `unsafe` and ensures that `reg` is a valid pointer to the driver
-+    /// registration structure, and that `probe_fn` and `remove_fn` are valid callback
-+    /// functions.
-+    fn register_bus_driver(
-+        reg: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+        probe_fn: Self::ProbeFn,
-+        remove_fn: Self::RemoveFn,
-+    ) -> Result;
-+
-+    /// Unregister the bus driver.
-+    ///
-+    /// This method is implemented by each specific bus type (PlatformBus, AmbaBus, etc.)
-+    /// to handle bus-specific unregistration.
-+    ///
-+    /// The safety requirements are satisfied by the caller (`Bus::unregister`), which is
-+    /// marked as `unsafe` and ensures that `reg` is a valid pointer that was previously
-+    /// registered with `register_bus_driver`.
-+    fn unregister_bus_driver(reg: &Opaque<Self::RegType>);
-+
-+    /// Get the probe function for the driver.
-+    ///
-+    /// This method is implemented by each bus type to provide the probe function
-+    /// with the appropriate trait bounds.
-+    fn get_probe_fn() -> Self::ProbeFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static;
-+
-+    /// Get the remove function for the driver.
-+    ///
-+    /// This method is implemented by each bus type to provide the remove function
-+    /// with the appropriate trait bounds.
-+    fn get_remove_fn() -> Self::RemoveFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static;
-+}
-+
-+/// Trait for Platform bus driver device tables.
-+///
-+/// Platform bus drivers should implement this trait to provide OF and ACPI device tables.
-+/// This trait requires the driver to also implement `DriverGeneric<PlatformBus>`.
-+pub trait PlatformIdInfos: DriverGeneric<PlatformBus> {
-+    /// The table of OF device ids supported by the driver.
-+    const OF_ID_TABLE: Option<of::IdTable<<Self as DriverGeneric<PlatformBus>>::IdInfo>>;
-+
-+    /// The table of ACPI device ids supported by the driver.
-+    const ACPI_ID_TABLE: Option<acpi::IdTable<<Self as DriverGeneric<PlatformBus>>::IdInfo>>;
-+}
-+
-+/// Macro to generate `impl Bus` for different bus types.
-+///
-+/// This macro reduces code duplication across PlatformBus, AmbaBus, and I2cBus.
-+macro_rules! impl_bus {
-+    (
-+        $bus:ident,
-+        Device = $device:ty,
-+        RegType = $reg_type:ty,
-+        RawDevice = $raw_device:ty,
-+        ProbeFn = $probe_fn:ty,
-+        RemoveFn = $remove_fn:ty,
-+        from_raw_device = $from_raw_device:ty
-+    ) => {
-+        impl Bus for $bus {
-+            type Device = $device;
-+            type RegType = $reg_type;
-+            type RawDevice = $raw_device;
-+            type ProbeFn = $probe_fn;
-+            type RemoveFn = $remove_fn;
-+
-+            fn register<T: DriverGeneric<Self> + RtcOperations + 'static>(
-+                reg: &Opaque<Self::RegType>,
-+                name: &'static CStr,
-+                module: &'static ThisModule,
-+            ) -> Result
-+            where
-+                Self: BusRegistration<T>,
-+            {
-+                // Get callbacks from Adapter
-+                // We use BusRegistration::get_probe_fn and get_remove_fn to get the callbacks
-+                // These methods require the appropriate trait bounds
-+                // The trait bound is satisfied because BusRegistration<T> requires the
-+                // appropriate trait
-+                let probe_fn = <Self as BusRegistration<T>>::get_probe_fn();
-+                let remove_fn = <Self as BusRegistration<T>>::get_remove_fn();
-+
-+                // Delegate to bus-specific registration.
-+                // Each bus type (PlatformBus, AmbaBus, etc.) will extract the appropriate
-+                // device tables from T in its register_bus_driver implementation.
-+                Self::register_bus_driver(reg, name, module, probe_fn, remove_fn)
-+            }
-+
-+            fn id_info<T: DriverGeneric<Self>>(
-+                _dev: &device::Device,
-+            ) -> Option<&'static T::IdInfo> {
-+                // ID info is extracted in `Adapter::probe_callback` instead.
-+                None
-+            }
-+
-+            fn from_raw<'a>(raw: *mut Self::RawDevice) -> &'a Self::Device {
-+                // SAFETY: Caller guarantees `raw` is valid.
-+                // `Device` is `#[repr(transparent)]`, so `CoreInternal` and `Core` have the
-+                // same layout.
-+                unsafe { &*raw.cast::<$from_raw_device>() }
-+            }
-+
-+            fn as_device(dev: &Self::Device) -> &device::Device {
-+                dev.as_ref()
-+            }
-+
-+            fn unregister<T: DriverGeneric<Self> + RtcOperations + 'static>(
-+                reg: &Opaque<Self::RegType>,
-+            ) where
-+                Self: BusRegistration<T>,
-+            {
-+                // Delegate to bus-specific unregistration
-+                Self::unregister_bus_driver(reg)
-+            }
-+        }
++impl Pl031Variant {
++    const ARM: Self = Self {
++        variant: VendorVariant::Arm,
++    };
++    const STV1: Self = Self {
++        variant: VendorVariant::StV1,
++    };
++    const STV2: Self = Self {
++        variant: VendorVariant::StV2,
 +    };
 +}
 +
-+/// Platform bus implementation.
-+pub struct PlatformBus;
++impl Pl031Variant {
++    const fn to_usize(self) -> usize {
++        self.variant as usize
++    }
++}
 +
-+impl_bus!(
-+    PlatformBus,
-+    Device = platform::Device<device::Core>,
-+    RegType = bindings::platform_driver,
-+    RawDevice = bindings::platform_device,
-+    ProbeFn = unsafe extern "C" fn(*mut bindings::platform_device) -> c_int,
-+    RemoveFn = unsafe extern "C" fn(*mut bindings::platform_device),
-+    from_raw_device = platform::Device<device::Core>
++// Use AMBA device table for matching
++kernel::amba_device_table!(
++    ID_TABLE,
++    MODULE_ID_TABLE,
++    <Pl031DrvData as rtc::DriverGeneric<rtc::AmbaBus>>::IdInfo,
++    [
++        (
++            amba::DeviceId::new_with_data(0x00041031, 0x000fffff, Pl031Variant::ARM.to_usize()),
++            Pl031Variant::ARM
++        ),
++        (
++            amba::DeviceId::new_with_data(0x00180031, 0x00ffffff, Pl031Variant::STV1.to_usize()),
++            Pl031Variant::STV1
++        ),
++        (
++            amba::DeviceId::new_with_data(0x00280031, 0x00ffffff, Pl031Variant::STV2.to_usize()),
++            Pl031Variant::STV2
++        ),
++    ]
 +);
 +
-+impl<T: DriverGeneric<PlatformBus> + PlatformIdInfos> BusRegistration<T> for PlatformBus {
-+    fn get_probe_fn() -> Self::ProbeFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static,
-+    {
-+        <Adapter<T, Self>>::probe_callback
-+    }
++impl rtc::DriverGeneric<rtc::AmbaBus> for Pl031DrvData {
++    type IdInfo = Pl031Variant;
 +
-+    fn get_remove_fn() -> Self::RemoveFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static,
-+    {
-+        <Adapter<T, Self>>::remove_callback
-+    }
++    fn probe(
++        adev: &amba::Device<device::Core>,
++        id_info: Option<&Self::IdInfo>,
++    ) -> impl PinInit<Self, Error> {
++        pin_init::pin_init_scope(move || {
++            let io_request = adev.io_request().ok_or(code::ENODEV)?;
 +
-+    fn register_bus_driver(
-+        reg: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+        probe_fn: Self::ProbeFn,
-+        remove_fn: Self::RemoveFn,
-+    ) -> Result {
-+        // Get device tables from the driver (platform-specific: OF and ACPI)
-+        let of_table = match <T as PlatformIdInfos>::OF_ID_TABLE {
-+            Some(table) => table.as_ptr(),
-+            None => core::ptr::null(),
-+        };
++            let variant = id_info
++                .map(|info| info.variant)
++                .unwrap_or(VendorVariant::Arm);
 +
-+        let acpi_table = match <T as PlatformIdInfos>::ACPI_ID_TABLE {
-+            Some(table) => table.as_ptr(),
-+            None => core::ptr::null(),
-+        };
-+
-+        // SAFETY: It's safe to set the fields of `struct platform_driver` on initialization.
-+        unsafe {
-+            (*reg.get()).driver.name = name.as_char_ptr();
-+            (*reg.get()).probe = Some(probe_fn);
-+            (*reg.get()).remove = Some(remove_fn);
-+            (*reg.get()).driver.of_match_table = of_table;
-+            (*reg.get()).driver.acpi_match_table = acpi_table;
-+        }
-+
-+        // SAFETY: `reg` is guaranteed to be a valid `RegType`.
-+        to_result(unsafe { bindings::__platform_driver_register(reg.get(), module.0) })
-+    }
-+
-+    fn unregister_bus_driver(reg: &Opaque<Self::RegType>) {
-+        // SAFETY: `reg` is guaranteed to be a valid `RegType` that was previously registered.
-+        unsafe { bindings::platform_driver_unregister(reg.get()) };
-+    }
-+}
-+
-+/// AMBA bus implementation.
-+pub struct AmbaBus;
-+
-+impl_bus!(
-+    AmbaBus,
-+    Device = amba::Device<device::Core>,
-+    RegType = bindings::amba_driver,
-+    RawDevice = bindings::amba_device,
-+    ProbeFn = unsafe extern "C" fn(*mut bindings::amba_device, *const bindings::amba_id) -> c_int,
-+    RemoveFn = unsafe extern "C" fn(*mut bindings::amba_device),
-+    from_raw_device = amba::Device<device::Core>
-+);
-+
-+/// Trait for AMBA bus driver device tables.
-+///
-+/// AMBA bus drivers should implement this trait to provide AMBA device ID tables.
-+/// This trait requires the driver to also implement `DriverGeneric<AmbaBus>`.
-+pub trait AmbaIdInfos: DriverGeneric<AmbaBus> {
-+    /// The table of AMBA device ids supported by the driver.
-+    const ID_TABLE: Option<amba::IdTable<<Self as DriverGeneric<AmbaBus>>::IdInfo>>;
-+}
-+
-+impl<T: DriverGeneric<AmbaBus> + AmbaIdInfos> BusRegistration<T> for AmbaBus {
-+    fn get_probe_fn() -> Self::ProbeFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static,
-+    {
-+        <Adapter<T, Self>>::probe_callback
-+    }
-+
-+    fn get_remove_fn() -> Self::RemoveFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static,
-+    {
-+        <Adapter<T, Self>>::remove_callback
-+    }
-+
-+    fn register_bus_driver(
-+        reg: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+        probe_fn: Self::ProbeFn,
-+        remove_fn: Self::RemoveFn,
-+    ) -> Result {
-+        // Get device table from the driver (AMBA-specific: id_table)
-+        let id_table = match <T as AmbaIdInfos>::ID_TABLE {
-+            Some(table) => table.as_ptr(),
-+            None => core::ptr::null(),
-+        };
-+
-+        // SAFETY: It's safe to set the fields of `struct amba_driver` on initialization.
-+        unsafe {
-+            (*reg.get()).drv.name = name.as_char_ptr();
-+            (*reg.get()).probe = Some(probe_fn);
-+            (*reg.get()).remove = Some(remove_fn);
-+            (*reg.get()).id_table = id_table;
-+        }
-+
-+        // SAFETY: `reg` is guaranteed to be a valid `RegType`.
-+        to_result(unsafe { bindings::__amba_driver_register(reg.get(), module.0) })
-+    }
-+
-+    fn unregister_bus_driver(reg: &Opaque<Self::RegType>) {
-+        // SAFETY: `reg` is guaranteed to be a valid `RegType` that was previously registered.
-+        unsafe { bindings::amba_driver_unregister(reg.get()) };
-+    }
-+}
-+
-+/// I2C bus implementation.
-+pub struct I2cBus;
-+
-+impl_bus!(
-+    I2cBus,
-+    Device = i2c::I2cClient<device::Core>,
-+    RegType = bindings::i2c_driver,
-+    RawDevice = bindings::i2c_client,
-+    ProbeFn = unsafe extern "C" fn(*mut bindings::i2c_client) -> c_int,
-+    RemoveFn = unsafe extern "C" fn(*mut bindings::i2c_client),
-+    from_raw_device = i2c::I2cClient<device::Core>
-+);
-+
-+/// Trait for I2C bus driver device tables.
-+///
-+/// I2C bus drivers should implement this trait to provide I2C device ID tables.
-+/// This trait requires the driver to also implement `DriverGeneric<I2cBus>`.
-+pub trait I2cIdInfos: DriverGeneric<I2cBus> {
-+    /// The table of I2C device ids supported by the driver.
-+    const I2C_ID_TABLE: Option<i2c::IdTable<<Self as DriverGeneric<I2cBus>>::IdInfo>>;
-+    /// The table of OF device ids supported by the driver.
-+    const OF_ID_TABLE: Option<of::IdTable<<Self as DriverGeneric<I2cBus>>::IdInfo>> = None;
-+    /// The table of ACPI device ids supported by the driver.
-+    const ACPI_ID_TABLE: Option<acpi::IdTable<<Self as DriverGeneric<I2cBus>>::IdInfo>> = None;
-+}
-+
-+impl<T: DriverGeneric<I2cBus> + I2cIdInfos> BusRegistration<T> for I2cBus {
-+    fn get_probe_fn() -> Self::ProbeFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static,
-+    {
-+        <Adapter<T, Self>>::probe_callback
-+    }
-+
-+    fn get_remove_fn() -> Self::RemoveFn
-+    where
-+        T: DriverGeneric<Self> + RtcOperations + 'static,
-+    {
-+        <Adapter<T, Self>>::remove_callback
-+    }
-+
-+    fn register_bus_driver(
-+        reg: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+        probe_fn: Self::ProbeFn,
-+        remove_fn: Self::RemoveFn,
-+    ) -> Result {
-+        // Get device tables from the driver (I2C-specific: id_table, of_table, acpi_table)
-+        let i2c_table = match <T as I2cIdInfos>::I2C_ID_TABLE {
-+            Some(table) => table.as_ptr(),
-+            None => core::ptr::null(),
-+        };
-+
-+        let of_table = match <T as I2cIdInfos>::OF_ID_TABLE {
-+            Some(table) => table.as_ptr(),
-+            None => core::ptr::null(),
-+        };
-+
-+        let acpi_table = match <T as I2cIdInfos>::ACPI_ID_TABLE {
-+            Some(table) => table.as_ptr(),
-+            None => core::ptr::null(),
-+        };
-+
-+        // SAFETY: It's safe to set the fields of `struct i2c_driver` on initialization.
-+        unsafe {
-+            (*reg.get()).driver.name = name.as_char_ptr();
-+            (*reg.get()).probe = Some(probe_fn);
-+            (*reg.get()).remove = Some(remove_fn);
-+            (*reg.get()).id_table = i2c_table;
-+            (*reg.get()).driver.of_match_table = of_table;
-+            (*reg.get()).driver.acpi_match_table = acpi_table;
-+        }
-+
-+        // SAFETY: `reg` is guaranteed to be a valid `RegType`.
-+        to_result(unsafe { bindings::i2c_register_driver(module.0, reg.get()) })
-+    }
-+
-+    fn unregister_bus_driver(reg: &Opaque<Self::RegType>) {
-+        // SAFETY: `reg` is guaranteed to be a valid `RegType` that was previously registered.
-+        unsafe { bindings::i2c_del_driver(reg.get()) };
-+    }
-+}
-+
-+/// The RTC driver trait, generic over bus type.
-+///
-+/// RTC drivers can be registered on different bus types (platform, amba, etc.).
-+/// The `B` type parameter specifies which bus type the driver uses.
-+///
-+/// For backward compatibility, the `Driver` trait is provided as an alias for
-+/// `DriverGeneric<PlatformBus>`.
-+///
-+/// Note: Device tables (OF, ACPI, etc.) are defined in bus-specific traits
-+/// (e.g., `PlatformIdInfos` for Platform bus).
-+pub trait DriverGeneric<B: Bus>: Send {
-+    /// The type holding driver private data about each device id supported by the driver.
-+    type IdInfo: 'static;
-+
-+    /// RTC driver probe.
-+    ///
-+    /// Called when a new device is bound to this driver.
-+    /// Implementers should initialize the driver's private data here.
-+    /// The RTC device registration is handled automatically by the adapter.
-+    fn probe(dev: &B::Device, id_info: Option<&Self::IdInfo>) -> impl PinInit<Self, Error>;
-+
-+    /// Initialize the RTC device after allocation but before registration.
-+    ///
-+    /// This method is called by the adapter to initialize the RTC device.
-+    /// The `id_info` parameter contains the device ID information that was matched
-+    /// during probe, which can be used to configure device-specific settings.
-+    /// The `drvdata` parameter provides mutable access to the driver's private data,
-+    /// which must be obtained via `Device::drvdata_borrow()`.
-+    /// The `rtc` parameter provides access to the RTC device, from which the parent
-+    /// bus device can be obtained via `rtc.bound_parent_device()`.
-+    /// The default implementation does nothing.
-+    fn init_rtcdevice(
-+        _rtc: &RtcDevice,
-+        _drvdata: &mut Self,
-+        _id_info: Option<&Self::IdInfo>,
-+    ) -> Result {
-+        Ok(())
-+    }
-+
-+    /// Get the RTC device options.
-+    ///
-+    /// Returns the options for creating the RTC device.
-+    fn rtc_options() -> RtcDeviceOptions {
-+        RtcDeviceOptions {
-+            name: crate::c_str!("rtc"),
-+        }
-+    }
-+
-+    /// RTC driver unbind.
-+    ///
-+    /// Called when the device is about to be unbound from this driver.
-+    fn unbind(dev: &B::Device, data: Pin<&Self>) {
-+        let _ = (dev, data);
-+    }
-+}
-+
-+/// An adapter for the registration of RTC drivers.
-+///
-+/// RTC drivers can be registered on different bus types (platform, amba, etc.).
-+/// The adapter wraps the bus-specific driver registration mechanism while providing
-+/// RTC-specific semantics.
-+pub struct Adapter<T: DriverGeneric<B>, B: Bus>(PhantomData<(T, B)>);
-+
-+// SAFETY: A call to `unregister` for a given instance of `RegType` is guaranteed to be valid if
-+// a preceding call to `register` has been successful.
-+unsafe impl<T, B> driver::RegistrationOps for Adapter<T, B>
-+where
-+    T: DriverGeneric<B> + RtcOperations + 'static,
-+    B: Bus + BusRegistration<T>,
-+{
-+    type RegType = B::RegType;
-+
-+    unsafe fn register(
-+        reg: &Opaque<Self::RegType>,
-+        name: &'static CStr,
-+        module: &'static ThisModule,
-+    ) -> Result {
-+        // Delegate to the bus-specific registration.
-+        // The bus implementation will handle device tables and callbacks internally.
-+        B::register::<T>(reg, name, module)
-+    }
-+
-+    unsafe fn unregister(reg: &Opaque<Self::RegType>) {
-+        // Delegate to the bus-specific unregistration.
-+        B::unregister::<T>(reg)
-+    }
-+}
-+
-+// PlatformBus-specific probe callback (single parameter)
-+impl<T: DriverGeneric<PlatformBus> + PlatformIdInfos + RtcOperations + 'static>
-+    Adapter<T, PlatformBus>
-+{
-+    extern "C" fn probe_callback(raw: *mut bindings::platform_device) -> c_int {
-+        // SAFETY: The bus only ever calls the probe callback with a valid pointer.
-+        // `Device` is `#[repr(transparent)]`, so `CoreInternal` and `Core` have the same layout.
-+        let dev = unsafe { &*raw.cast::<platform::Device<device::Core>>() };
-+        let dev_ref = PlatformBus::as_device(dev);
-+
-+        // Get ID info from the bus
-+        let info = PlatformBus::id_info::<T>(dev_ref);
-+
-+        Self::probe_impl(dev, info)
-+    }
-+}
-+
-+// AmbaBus-specific probe callback (two parameters)
-+impl<T: DriverGeneric<AmbaBus> + AmbaIdInfos + RtcOperations + 'static> Adapter<T, AmbaBus> {
-+    extern "C" fn probe_callback(
-+        raw: *mut bindings::amba_device,
-+        id: *const bindings::amba_id,
-+    ) -> c_int {
-+        // SAFETY: The bus only ever calls the probe callback with a valid pointer.
-+        // `Device` is `#[repr(transparent)]`, so `CoreInternal` and `Core` have the same layout.
-+        let dev = unsafe { &*raw.cast::<amba::Device<device::Core>>() };
-+
-+        let info = NonNull::new(id.cast_mut()).and_then(|id_ptr| {
-+            // SAFETY: `DeviceId` is `#[repr(transparent)]` over `amba_id`, so it's safe to cast.
-+            let device_id = unsafe { &*id_ptr.as_ptr().cast::<amba::DeviceId>() };
-+            <T as AmbaIdInfos>::ID_TABLE.map(|table| {
-+                table.info(<amba::DeviceId as crate::device_id::RawDeviceIdIndex>::index(device_id))
-+            })
-+        });
-+
-+        Self::probe_impl(dev, info)
-+    }
-+}
-+
-+// I2cBus-specific probe callback (single parameter)
-+impl<T: DriverGeneric<I2cBus> + I2cIdInfos + RtcOperations + 'static> Adapter<T, I2cBus> {
-+    extern "C" fn probe_callback(raw: *mut bindings::i2c_client) -> c_int {
-+        // SAFETY: The bus only ever calls the probe callback with a valid pointer.
-+        // `Device` is `#[repr(transparent)]`, so `CoreInternal` and `Core` have the same layout.
-+        let dev = unsafe { &*raw.cast::<i2c::I2cClient<device::Core>>() };
-+
-+        // Try I2C ID table first, then fall back to OF/ACPI.
-+        let info = Self::i2c_id_info(dev).or_else(|| {
-+            let dev_ref = I2cBus::as_device(dev);
-+            <Adapter<T, I2cBus> as driver::Adapter>::id_info(dev_ref)
-+        });
-+
-+        Self::probe_impl(dev, info)
-+    }
-+
-+    /// The [`i2c::IdTable`] of the corresponding driver.
-+    fn i2c_id_table() -> Option<i2c::IdTable<<Self as driver::Adapter>::IdInfo>> {
-+        <T as I2cIdInfos>::I2C_ID_TABLE
-+    }
-+
-+    /// Returns the driver's private data from the matching entry in the [`i2c::IdTable`], if any.
-+    ///
-+    /// If this returns `None`, it means there is no match with an entry in the [`i2c::IdTable`].
-+    fn i2c_id_info(dev: &i2c::I2cClient) -> Option<&'static <Self as driver::Adapter>::IdInfo> {
-+        let table = Self::i2c_id_table()?;
-+
-+        let dev_ref = dev.as_ref();
-+        let raw_client = dev_ref.as_raw().cast::<bindings::i2c_client>();
-+
-+        // SAFETY: `table` has static lifetime, hence it's valid for reads.
-+        // `dev` is guaranteed to be valid while it's alive, and so is `raw_client`.
-+        let raw_id = unsafe { bindings::i2c_match_id(table.as_ptr(), raw_client) };
-+
-+        if raw_id.is_null() {
-+            return None;
-+        }
-+
-+        // SAFETY: `DeviceId` is a `#[repr(transparent)]` wrapper of `struct i2c_device_id` and
-+        // does not add additional invariants, so it's safe to cast.
-+        let id = unsafe { &*raw_id.cast::<i2c::DeviceId>() };
-+
-+        Some(table.info(<i2c::DeviceId as crate::device_id::RawDeviceIdIndex>::index(id)))
-+    }
-+}
-+
-+// Common probe implementation
-+impl<T: DriverGeneric<B> + RtcOperations + 'static, B: Bus> Adapter<T, B> {
-+    fn probe_impl(dev: &B::Device, info: Option<&T::IdInfo>) -> c_int {
-+        from_result(|| {
-+            let data = T::probe(dev, info);
-+            let dev_ref = B::as_device(dev);
-+
-+            // Store the driver data in the device first.
-+            // SAFETY: `Device<Core>` and `Device<CoreInternal>` have the same layout, and
-+            // `from_ref(dev_ref)` is guaranteed to be valid.
-+            let dev_internal = unsafe {
-+                &*core::ptr::from_ref(dev_ref).cast::<device::Device<device::CoreInternal>>()
-+            };
-+            dev_internal.set_drvdata(data)?;
-+
-+            // Allocate RTC device.
-+            let dev_raw = dev_ref.as_raw();
-+            // SAFETY: `devm_rtc_allocate_device` returns a pointer to a devm-managed rtc_device.
-+            let rtc: *mut bindings::rtc_device =
-+                unsafe { bindings::devm_rtc_allocate_device(dev_raw) };
-+            if rtc.is_null() {
-+                return Err(code::ENOMEM);
-+            }
-+
-+            // Initialize the RTC device.
-+            // SAFETY: `rtc` is a valid pointer to a newly allocated rtc_device.
-+            // `RtcDevice` is `#[repr(transparent)]` over `Opaque<rtc_device>`, so we can safely
-+            // cast.
-+            let rtc_device = unsafe { &*rtc.cast() };
-+            // SAFETY: `dev_internal` is a valid device with driver data set by `set_drvdata` above.
-+            let drvdata_ptr = unsafe { bindings::dev_get_drvdata(dev_internal.as_raw()) };
-+            // SAFETY: `drvdata_ptr` is a valid pointer to `T` that was set by `set_drvdata` above.
-+            let drvdata = unsafe { &mut *drvdata_ptr.cast::<T>() };
-+            T::init_rtcdevice(rtc_device, drvdata, info)?;
-+
-+            // Set the RTC device ops.
-+            // SAFETY: We just allocated the RTC device, so it's safe to set the ops.
-+            unsafe {
-+                (*rtc).ops = &RtcVTable::<T>::VTABLE;
-+            }
-+
-+            // Register the RTC device.
-+            // SAFETY: The device will be automatically unregistered when the parent device
-+            // is removed (devm cleanup). The helper function uses `THIS_MODULE` internally.
-+            let err = unsafe { bindings::devm_rtc_register_device(rtc) };
-+
-+            if err != 0 {
-+                return Err(Error::from_errno(err));
-+            }
-+
-+            Ok(0)
++            Ok(try_pin_init!(Self {
++                base <- IoMem::new(io_request),
++                variant,
++                // Set in init_rtcdevice
++                rtc_device: None,
++            }))
 +        })
 +    }
 +
-+    extern "C" fn remove_callback(raw: *mut B::RawDevice) {
-+        // The bus only ever calls the remove callback with a valid pointer.
-+        let dev = B::from_raw(raw);
-+
-+        let dev_ref = B::as_device(dev);
-+        // SAFETY: `Device<Core>` and `Device<CoreInternal>` have the same layout.
-+        let dev_internal = unsafe {
-+            &*core::ptr::from_ref(dev_ref).cast::<device::Device<device::CoreInternal>>()
-+        };
-+        // SAFETY: Driver data has been set during probe.
-+        let data = unsafe { dev_internal.drvdata_obtain::<T>() };
-+
-+        T::unbind(dev, data.as_ref());
-+    }
-+}
-+
-+// Implementation for PlatformBus
-+impl<T: DriverGeneric<PlatformBus> + PlatformIdInfos + RtcOperations + 'static> driver::Adapter
-+    for Adapter<T, PlatformBus>
-+{
-+    type IdInfo = T::IdInfo;
-+
-+    fn of_id_table() -> Option<of::IdTable<Self::IdInfo>> {
-+        <T as PlatformIdInfos>::OF_ID_TABLE
-+    }
-+
-+    fn acpi_id_table() -> Option<acpi::IdTable<Self::IdInfo>> {
-+        <T as PlatformIdInfos>::ACPI_ID_TABLE
-+    }
-+}
-+
-+// Implementation for I2cBus
-+impl<T: DriverGeneric<I2cBus> + I2cIdInfos + RtcOperations + 'static> driver::Adapter
-+    for Adapter<T, I2cBus>
-+{
-+    type IdInfo = T::IdInfo;
-+
-+    fn of_id_table() -> Option<of::IdTable<Self::IdInfo>> {
-+        <T as I2cIdInfos>::OF_ID_TABLE
-+    }
-+
-+    fn acpi_id_table() -> Option<acpi::IdTable<Self::IdInfo>> {
-+        <T as I2cIdInfos>::ACPI_ID_TABLE
-+    }
-+}
-+
-+/// Options for creating an RTC device.
-+#[derive(Copy, Clone)]
-+pub struct RtcDeviceOptions {
-+    /// The name of the RTC device.
-+    pub name: &'static CStr,
-+}
-+
-+/// Trait implemented by RTC device operations.
-+///
-+/// This trait defines the operations that an RTC device driver must implement.
-+/// Most methods are optional and have default implementations that return an error.
-+#[vtable]
-+pub trait RtcOperations: Sized {
-+    /// What kind of pointer should `Self` be wrapped in.
-+    type Ptr: ForeignOwnable + Send + Sync;
-+
-+    /// Read the current time from the RTC.
-+    ///
-+    /// This is a required method and must be implemented.
-+    fn read_time(drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>, tm: &mut RtcTime) -> Result;
-+
-+    /// Set the time in the RTC.
-+    ///
-+    /// This is a required method and must be implemented.
-+    ///
-+    /// Note: The parameter is `&mut` to match the C API signature, even though
-+    /// it's conceptually read-only from the Rust side.
-+    fn set_time(drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>, tm: &mut RtcTime) -> Result;
-+
-+    /// Read the alarm time from the RTC.
-+    fn read_alarm(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _alarm: &mut RtcWkAlrm,
++    fn init_rtcdevice(
++        rtc: &RtcDevice,
++        drvdata: &mut Self,
++        id_info: Option<&Self::IdInfo>,
 +    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
++        let parent = rtc.bound_parent_device();
++        let amba_dev_bound: &amba::Device<device::Bound> = parent.try_into()?;
 +
-+    /// Set the alarm time in the RTC.
-+    ///
-+    /// Note: The parameter is `&mut` to match the C API signature, even though
-+    /// it's conceptually read-only from the Rust side.
-+    fn set_alarm(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _alarm: &mut RtcWkAlrm,
-+    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
++        amba_dev_bound.as_ref().init_wakeup()?;
 +
-+    /// Enable or disable the alarm interrupt.
-+    ///
-+    /// `enabled` is non-zero to enable, zero to disable.
-+    fn alarm_irq_enable(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _enabled: u32,
-+    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
++        let variant = id_info
++            .map(|info| info.variant)
++            .unwrap_or(VendorVariant::Arm);
 +
-+    /// Handle custom ioctl commands.
-+    fn ioctl(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _cmd: u32,
-+        _arg: c_ulong,
-+    ) -> Result<c_int> {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
-+
-+    /// Show information in /proc/driver/rtc.
-+    fn proc(_drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>, _seq: &mut SeqFile) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
-+
-+    /// Read the time offset.
-+    fn read_offset(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _offset: &mut i64,
-+    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
-+
-+    /// Set the time offset.
-+    fn set_offset(_drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>, _offset: i64) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
-+
-+    /// Get an RTC parameter.
-+    fn param_get(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _param: &mut RtcParam,
-+    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
-+
-+    /// Set an RTC parameter.
-+    ///
-+    /// Note: The parameter is `&mut` to match the C API signature, even though
-+    /// it's conceptually read-only from the Rust side.
-+    fn param_set(
-+        _drvdata: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
-+        _param: &mut RtcParam,
-+    ) -> Result {
-+        build_error!(VTABLE_DEFAULT_ERROR)
-+    }
-+}
-+
-+/// A vtable for the RTC operations of a Rust RTC device.
-+pub struct RtcVTable<T: RtcOperations>(PhantomData<T>);
-+
-+impl<T: RtcOperations> RtcVTable<T> {
-+    /// Get the vtable for the RTC operations.
-+    pub const fn get() -> &'static bindings::rtc_class_ops {
-+        &Self::VTABLE
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device`
-+    /// (rtc->dev.parent) that has driver_data set to a pointer returned by
-+    /// `T::Ptr::into_foreign`. `tm` must be a valid pointer to a `struct rtc_time`.
-+    unsafe extern "C" fn read_time(
-+        dev: *mut bindings::device,
-+        tm: *mut bindings::rtc_time,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `tm` is valid and writable.
-+        // `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so we can safely cast.
-+        let rtc_tm = unsafe { &mut *tm.cast::<RtcTime>() };
-+
-+        match T::read_time(drvdata, rtc_tm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device`
-+    /// (rtc->dev.parent) that has driver_data set to a pointer returned by
-+    /// `T::Ptr::into_foreign`. `tm` must be a valid pointer to a `struct rtc_time`.
-+    unsafe extern "C" fn set_time(
-+        dev: *mut bindings::device,
-+        tm: *mut bindings::rtc_time,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `tm` is valid and writable.
-+        // `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so we can safely cast.
-+        let rtc_tm = unsafe { &mut *tm.cast::<RtcTime>() };
-+
-+        match T::set_time(drvdata, rtc_tm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device` (rtc->dev.parent)
-+    /// that has driver_data set to a pointer returned by `T::Ptr::into_foreign`.
-+    /// `alarm` must be a valid pointer to a `struct rtc_wkalrm`.
-+    unsafe extern "C" fn read_alarm(
-+        dev: *mut bindings::device,
-+        alarm: *mut bindings::rtc_wkalrm,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `alarm` is valid and writable.
-+        // `RtcWkAlrm` is `#[repr(transparent)]` over `bindings::rtc_wkalrm`, so we can safely cast.
-+        let rtc_alarm = unsafe { &mut *alarm.cast::<RtcWkAlrm>() };
-+
-+        match T::read_alarm(drvdata, rtc_alarm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device` (rtc->dev.parent)
-+    /// that has driver_data set to a pointer returned by `T::Ptr::into_foreign`.
-+    /// `alarm` must be a valid pointer to a `struct rtc_wkalrm`.
-+    unsafe extern "C" fn set_alarm(
-+        dev: *mut bindings::device,
-+        alarm: *mut bindings::rtc_wkalrm,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `alarm` is valid and writable.
-+        // `RtcWkAlrm` is `#[repr(transparent)]` over `bindings::rtc_wkalrm`, so we can safely cast.
-+        let rtc_alarm = unsafe { &mut *alarm.cast::<RtcWkAlrm>() };
-+
-+        match T::set_alarm(drvdata, rtc_alarm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device` (rtc->dev.parent)
-+    /// that has driver_data set to a pointer returned by `T::Ptr::into_foreign`.
-+    unsafe extern "C" fn alarm_irq_enable(dev: *mut bindings::device, enabled: c_uint) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+
-+        match T::alarm_irq_enable(drvdata, enabled) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device` (rtc->dev.parent)
-+    /// that has driver_data set to a pointer returned by `T::Ptr::into_foreign`.
-+    unsafe extern "C" fn ioctl(dev: *mut bindings::device, cmd: c_uint, arg: c_ulong) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+
-+        match T::ioctl(drvdata, cmd, arg) {
-+            Ok(ret) => ret,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device`
-+    /// (rtc->dev.parent) that has driver_data set to a pointer returned by
-+    /// `T::Ptr::into_foreign`. `seq` must be a valid pointer to a `struct seq_file`.
-+    unsafe extern "C" fn proc(dev: *mut bindings::device, seq: *mut bindings::seq_file) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `seq` is valid and writable.
-+        let seq_file = unsafe { &mut *seq.cast::<SeqFile>() };
-+
-+        match T::proc(drvdata, seq_file) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device`
-+    /// (rtc->dev.parent) that has driver_data set to a pointer returned by
-+    /// `T::Ptr::into_foreign`. `offset` must be a valid pointer to a `long`.
-+    unsafe extern "C" fn read_offset(dev: *mut bindings::device, offset: *mut c_long) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `offset` is valid and writable.
-+        let mut offset_val: i64 = unsafe { *offset.cast() };
-+
-+        match T::read_offset(drvdata, &mut offset_val) {
-+            Ok(()) => {
-+                // SAFETY: The caller ensures that `offset` is valid and writable.
-+                unsafe { *offset.cast() = offset_val as c_long };
-+                0
++        // Initialize RTC control register: enable clockwatch (ST variants) or counter (ARM).
++        {
++            let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++            let base = base_guard.deref();
++            let mut data = base.try_read32(RTC_CR)?;
++            if variant.clockwatch() {
++                data |= RTC_CR_CWEN;
++            } else {
++                data |= RTC_CR_EN;
 +            }
-+            Err(err) => err.to_errno(),
++            base.try_write32(data, RTC_CR)?;
 +        }
++
++        rtc.set_range_min(variant.range_min());
++        rtc.set_range_max(variant.range_max());
++
++        // Fix ST weekday hardware bug.
++        if variant.st_weekday() {
++            let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++            let base = base_guard.deref();
++            let bcd_year = base.try_read32(RTC_YDR)?;
++            if bcd_year == 0x2000 {
++                let st_time = base.try_read32(RTC_DR)?;
++                if (st_time & (RTC_MON_MASK | RTC_MDAY_MASK | RTC_WDAY_MASK)) == 0x02120000 {
++                    let fixed_time = st_time | (0x7 << RTC_WDAY_SHIFT);
++                    base.try_write32(0x2000, RTC_YLR)?;
++                    base.try_write32(fixed_time, RTC_LR)?;
++                }
++            }
++        }
++
++        // Store RTC device reference for interrupt handler.
++        drvdata.rtc_device = Some(ARef::from(rtc));
++
++        // Determine IRQ flags: ST v2 shares IRQ with another block.
++        let irq_flags = if variant == VendorVariant::StV2 {
++            kernel::irq::Flags::SHARED | kernel::irq::Flags::COND_SUSPEND
++        } else {
++            kernel::irq::Flags::SHARED
++        };
++
++        // Request IRQ (optional, may not be available).
++        match amba_dev_bound.request_irq_by_index(
++            irq_flags,
++            0,
++            c_str!("rtc-pl031"),
++            try_pin_init!(Pl031IrqHandler {
++                _pin: core::marker::PhantomPinned,
++            }),
++        ) {
++            Ok(init) => {
++                kernel::devres::register(
++                    amba_dev_bound.as_ref(),
++                    init,
++                    kernel::alloc::flags::GFP_KERNEL,
++                )?;
++
++                if let Ok(irq) = amba_dev_bound.irq_by_index(0) {
++                    parent.set_wake_irq(irq.irq() as i32)?;
++                }
++            }
++            Err(_) => {
++                // IRQ not available - clear alarm feature.
++                rtc.clear_feature(bindings::RTC_FEATURE_ALARM);
++            }
++        }
++
++        Ok(())
 +    }
 +
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device` (rtc->dev.parent)
-+    /// that has driver_data set to a pointer returned by `T::Ptr::into_foreign`.
-+    unsafe extern "C" fn set_offset(dev: *mut bindings::device, offset: c_long) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+
-+        match T::set_offset(drvdata, offset as i64) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
++    fn rtc_options() -> RtcDeviceOptions {
++        RtcDeviceOptions {
++            name: c_str!("rtc-pl031"),
 +        }
 +    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device`
-+    /// (rtc->dev.parent) that has driver_data set to a pointer returned by
-+    /// `T::Ptr::into_foreign`. `param` must be a valid pointer to a `struct rtc_param`.
-+    unsafe extern "C" fn param_get(
-+        dev: *mut bindings::device,
-+        param: *mut bindings::rtc_param,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `param` is valid and writable.
-+        // `RtcParam` is `#[repr(transparent)]` over `bindings::rtc_param`, so we can safely cast.
-+        let rtc_param = unsafe { &mut *param.cast::<RtcParam>() };
-+
-+        match T::param_get(drvdata, rtc_param) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the platform device's `struct device`
-+    /// (rtc->dev.parent) that has driver_data set to a pointer returned by
-+    /// `T::Ptr::into_foreign`. `param` must be a valid pointer to a `struct rtc_param`.
-+    unsafe extern "C" fn param_set(
-+        dev: *mut bindings::device,
-+        param: *mut bindings::rtc_param,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is valid and has driver_data set to a pointer
-+        // returned by `T::Ptr::into_foreign`.
-+        let private = unsafe { bindings::dev_get_drvdata(dev) };
-+        if private.is_null() {
-+            return code::ENODEV.to_errno();
-+        }
-+        // SAFETY: RTC operations can borrow the private data of the device.
-+        let drvdata = unsafe { <T::Ptr as ForeignOwnable>::borrow(private) };
-+        // SAFETY: The caller ensures that `param` is valid and writable.
-+        // `RtcParam` is `#[repr(transparent)]` over `bindings::rtc_param`, so we can safely cast.
-+        let rtc_param = unsafe { &mut *param.cast::<RtcParam>() };
-+
-+        match T::param_set(drvdata, rtc_param) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    const VTABLE: bindings::rtc_class_ops = bindings::rtc_class_ops {
-+        read_time: Some(Self::read_time),
-+        set_time: Some(Self::set_time),
-+        read_alarm: if T::HAS_READ_ALARM {
-+            Some(Self::read_alarm)
-+        } else {
-+            None
-+        },
-+        set_alarm: if T::HAS_SET_ALARM {
-+            Some(Self::set_alarm)
-+        } else {
-+            None
-+        },
-+        alarm_irq_enable: if T::HAS_ALARM_IRQ_ENABLE {
-+            Some(Self::alarm_irq_enable)
-+        } else {
-+            None
-+        },
-+        ioctl: if T::HAS_IOCTL {
-+            Some(Self::ioctl)
-+        } else {
-+            None
-+        },
-+        proc_: if T::HAS_PROC { Some(Self::proc) } else { None },
-+        read_offset: if T::HAS_READ_OFFSET {
-+            Some(Self::read_offset)
-+        } else {
-+            None
-+        },
-+        set_offset: if T::HAS_SET_OFFSET {
-+            Some(Self::set_offset)
-+        } else {
-+            None
-+        },
-+        param_get: if T::HAS_PARAM_GET {
-+            Some(Self::param_get)
-+        } else {
-+            None
-+        },
-+        param_set: if T::HAS_PARAM_SET {
-+            Some(Self::param_set)
-+        } else {
-+            None
-+        },
-+    };
 +}
 +
-+/// Declares a kernel module that exposes a single RTC driver.
-+///
-+/// This macro uses `module_driver!` with the RTC-specific [`Adapter`] to register
-+/// an RTC driver. RTC drivers can be registered on different bus types (platform, amba, etc.).
-+///
-+/// # Examples
-+///
-+/// For Platform bus:
-+/// ```ignore
-+/// kernel::module_rtc_driver! {
-+///     bus: PlatformBus,
-+///     type: MyRtcDriver,
-+///     name: "my_rtc",
-+///     authors: ["Author name"],
-+///     description: "My RTC driver",
-+///     license: "GPL v2",
-+/// }
-+/// ```
-+///
-+/// For AMBA bus:
-+/// ```ignore
-+/// kernel::module_rtc_driver! {
-+///     bus: AmbaBus,
-+///     type: MyRtcDriver,
-+///     name: "my_rtc",
-+///     authors: ["Author name"],
-+///     description: "My RTC driver",
-+///     license: "GPL v2",
-+/// }
-+/// ```
-+///
-+/// For I2C bus:
-+/// ```ignore
-+/// kernel::module_rtc_driver! {
-+///     bus: I2cBus,
-+///     type: MyRtcDriver,
-+///     name: "my_rtc",
-+///     authors: ["Author name"],
-+///     description: "My RTC driver",
-+///     license: "GPL v2",
-+/// }
-+/// ```
-+///
-+/// The `bus` parameter is required. Valid bus types are `PlatformBus`, `AmbaBus`, and `I2cBus`.
-+#[macro_export]
-+macro_rules! module_rtc_driver {
-+    // With explicit bus parameter (required)
-+    (bus: $bus:ident, $($f:tt)*) => {
-+        $crate::module_driver!(<T>, $crate::rtc::Adapter<T, $crate::rtc::$bus>, { $($f)* });
-+    };
++impl rtc::AmbaIdInfos for Pl031DrvData {
++    const ID_TABLE: Option<amba::IdTable<Self::IdInfo>> = Some(&ID_TABLE);
++}
++
++#[pinned_drop]
++impl PinnedDrop for Pl031DrvData {
++    fn drop(self: Pin<&mut Self>) {
++        // Resources are automatically cleaned up by devres.
++    }
++}
++
++/// Converts a Gregorian date to ST v2 RTC format.
++fn stv2_tm_to_time(dev: &device::Device, tm: &RtcTime) -> Result<(u32, u32)> {
++    let year = tm.tm_year() + 1900;
++    let mut wday = tm.tm_wday();
++
++    // Hardware wday masking doesn't work, so wday must be valid.
++    if !(-1..=6).contains(&wday) {
++        dev_err!(dev, "invalid wday value {}\n", tm.tm_wday());
++        return Err(code::EINVAL);
++    } else if wday == -1 {
++        // wday is not provided, calculate it here.
++        let time64 = tm.to_time64();
++        let mut calc_tm = RtcTime::default();
++        calc_tm.set_from_time64(time64);
++        wday = calc_tm.tm_wday();
++    }
++
++    // Convert year to BCD.
++    let bcd_year =
++        (u32::from(bin2bcd((year % 100) as u8))) | (u32::from(bin2bcd((year / 100) as u8)) << 8);
++
++    let st_time = ((tm.tm_mon() + 1) as u32) << RTC_MON_SHIFT
++        | (tm.tm_mday() as u32) << RTC_MDAY_SHIFT
++        | ((wday + 1) as u32) << RTC_WDAY_SHIFT
++        | (tm.tm_hour() as u32) << RTC_HOUR_SHIFT
++        | (tm.tm_min() as u32) << RTC_MIN_SHIFT
++        | (tm.tm_sec() as u32) << RTC_SEC_SHIFT;
++
++    Ok((st_time, bcd_year))
++}
++
++/// Converts ST v2 RTC format to a Gregorian date.
++fn stv2_time_to_tm(st_time: u32, bcd_year: u32, tm: &mut RtcTime) {
++    let year_low = bcd2bin((bcd_year & 0xFF) as u8);
++    let year_high = bcd2bin(((bcd_year >> 8) & 0xFF) as u8);
++    tm.set_tm_year(i32::from(year_low) + i32::from(year_high) * 100);
++    tm.set_tm_mon((((st_time & RTC_MON_MASK) >> RTC_MON_SHIFT) - 1) as i32);
++    tm.set_tm_mday(((st_time & RTC_MDAY_MASK) >> RTC_MDAY_SHIFT) as i32);
++    tm.set_tm_wday((((st_time & RTC_WDAY_MASK) >> RTC_WDAY_SHIFT) - 1) as i32);
++    tm.set_tm_hour(((st_time & RTC_HOUR_MASK) >> RTC_HOUR_SHIFT) as i32);
++    tm.set_tm_min(((st_time & RTC_MIN_MASK) >> RTC_MIN_SHIFT) as i32);
++    tm.set_tm_sec(((st_time & RTC_SEC_MASK) >> RTC_SEC_SHIFT) as i32);
++
++    // Values are from valid RTC time structures and are non-negative.
++    tm.set_tm_yday(tm.year_days());
++    tm.set_tm_year(tm.tm_year() - 1900);
++}
++
++/// Converts a binary value to BCD.
++fn bin2bcd(val: u8) -> u8 {
++    ((val / 10) << 4) | (val % 10)
++}
++
++/// Converts a BCD value to binary.
++fn bcd2bin(val: u8) -> u8 {
++    ((val >> 4) * 10) + (val & 0x0F)
++}
++
++/// IRQ handler for PL031 RTC.
++#[pin_data]
++struct Pl031IrqHandler {
++    #[pin]
++    _pin: core::marker::PhantomPinned,
++}
++
++impl Handler for Pl031IrqHandler {
++    fn handle(&self, dev: &device::Device<device::Bound>) -> IrqReturn {
++        // Get driver data using drvdata.
++        let driver = match dev.drvdata::<Pl031DrvData>() {
++            Ok(driver) => driver,
++            Err(_) => return IrqReturn::None,
++        };
++
++        // Access the MMIO base.
++        let base_guard = match driver.base.try_access() {
++            Some(guard) => guard,
++            None => return IrqReturn::None,
++        };
++        let base = base_guard.deref();
++
++        // Read masked interrupt status.
++        let rtcmis = match base.try_read32(RTC_MIS) {
++            Ok(val) => val,
++            Err(_) => return IrqReturn::None,
++        };
++
++        if (rtcmis & RTC_BIT_AI) != 0 {
++            // Clear the interrupt.
++            if base.try_write32(RTC_BIT_AI, RTC_ICR).is_err() {
++                return IrqReturn::None;
++            }
++
++            // Get RTC device from driver and call rtc_update_irq.
++            if let Some(rtc) = &driver.rtc_device {
++                rtc.update_irq(1, (RTC_AF | RTC_IRQF) as usize);
++            }
++
++            return IrqReturn::Handled;
++        }
++
++        IrqReturn::None
++    }
++}
++
++#[vtable]
++impl RtcOperations for Pl031DrvData {
++    type Ptr = Pin<KBox<Self>>;
++
++    fn read_time(drvdata: Pin<&Self>, tm: &mut RtcTime) -> Result {
++        let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++        let base = base_guard.deref();
++
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time32: u32 = base.try_read32(RTC_DR)?;
++                let time64 = i64::from(time32);
++                tm.set_from_time64(time64);
++            }
++            VendorVariant::StV2 => {
++                let st_time = base.try_read32(RTC_DR)?;
++                let bcd_year = base.try_read32(RTC_YDR)?;
++                stv2_time_to_tm(st_time, bcd_year, tm);
++            }
++        }
++
++        Ok(())
++    }
++
++    fn set_time(drvdata: Pin<&Self>, tm: &mut RtcTime) -> Result {
++        let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++        let base = base_guard.deref();
++        let rtc_dev = drvdata.base.device();
++
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time64 = tm.to_time64();
++                base.try_write32(time64 as u32, RTC_LR)?;
++            }
++            VendorVariant::StV2 => {
++                let (st_time, bcd_year) = stv2_tm_to_time(rtc_dev, tm)?;
++                base.try_write32(bcd_year, RTC_YLR)?;
++                base.try_write32(st_time, RTC_LR)?;
++            }
++        }
++
++        Ok(())
++    }
++
++    fn read_alarm(drvdata: Pin<&Self>, alarm: &mut RtcWkAlrm) -> Result {
++        let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++        let base = base_guard.deref();
++
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time32: u32 = base.try_read32(RTC_MR)?;
++                let time64 = i64::from(time32);
++                crate::rtc::RtcTime::time64_to_tm(time64, alarm.get_time_mut());
++            }
++            VendorVariant::StV2 => {
++                let st_time = base.try_read32(RTC_MR)?;
++                let bcd_year = base.try_read32(RTC_YMR)?;
++                stv2_time_to_tm(st_time, bcd_year, alarm.get_time_mut());
++            }
++        }
++
++        alarm.set_pending(if (base.try_read32(RTC_RIS)? & RTC_BIT_AI) != 0 {
++            1
++        } else {
++            0
++        });
++        alarm.set_enabled(if (base.try_read32(RTC_IMSC)? & RTC_BIT_AI) != 0 {
++            1
++        } else {
++            0
++        });
++
++        Ok(())
++    }
++
++    fn set_alarm(drvdata: Pin<&Self>, alarm: &mut RtcWkAlrm) -> Result {
++        let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++        let base = base_guard.deref();
++        let rtc_dev = drvdata.base.device();
++
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time64 = alarm.get_time().to_time64();
++                base.try_write32(time64 as u32, RTC_MR)?;
++            }
++            VendorVariant::StV2 => {
++                let (st_time, bcd_year) = stv2_tm_to_time(rtc_dev, alarm.get_time())?;
++                base.try_write32(bcd_year, RTC_YMR)?;
++                base.try_write32(st_time, RTC_MR)?;
++            }
++        }
++
++        Self::alarm_irq_enable(drvdata, u32::from(alarm.enabled()))
++    }
++
++    fn alarm_irq_enable(drvdata: Pin<&Self>, enabled: u32) -> Result {
++        let base_guard = drvdata.base.try_access().ok_or(code::ENXIO)?;
++        let base = base_guard.deref();
++
++        // Clear any pending alarm interrupts.
++        base.try_write32(RTC_BIT_AI, RTC_ICR)?;
++
++        let mut imsc = base.try_read32(RTC_IMSC)?;
++        if enabled == 1 {
++            imsc |= RTC_BIT_AI;
++        } else {
++            imsc &= !RTC_BIT_AI;
++        }
++        base.try_write32(imsc, RTC_IMSC)?;
++
++        Ok(())
++    }
++}
++
++kernel::module_rtc_driver! {
++    bus: AmbaBus,
++    type: Pl031DrvData,
++    name: "rtc-pl031-rust",
++    authors: ["Ke Sun <sunke@kylinos.cn>"],
++    description: "Rust PL031 RTC driver",
++    license: "GPL v2",
 +}
 -- 
 2.43.0
