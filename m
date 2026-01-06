@@ -1,161 +1,212 @@
-Return-Path: <linux-rtc+bounces-5656-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5657-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E8D6CF89BB
-	for <lists+linux-rtc@lfdr.de>; Tue, 06 Jan 2026 14:52:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00766CF8AAE
+	for <lists+linux-rtc@lfdr.de>; Tue, 06 Jan 2026 15:05:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D2B75303F7D1
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 Jan 2026 13:52:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9F64F30C900C
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 Jan 2026 13:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D35133A71A;
-	Tue,  6 Jan 2026 13:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QhwZ0vfx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06CFD338918;
+	Tue,  6 Jan 2026 13:40:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631FF33A714;
-	Tue,  6 Jan 2026 13:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05D33375CD;
+	Tue,  6 Jan 2026 13:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767706381; cv=none; b=lekT/gP+jORFYbI37Xu6+GvCqKB7cMURmcMh8/gyin5l3Bm8cbQxmyfccsc164rPjfeD3GeVk+QNUqXm/lfIES+7H4iog3Kt+nfC9Vf2KCE/EocvPkPT79KvhYMcT3vlqRg8Q+2vEHpsTN4veX8KAKIDDIMiqWpRUtQPJgIIpys=
+	t=1767706836; cv=none; b=pgUBMMlC68D2yd6ZdK9ZDmcstQank6i+kc7vl2IAfCEalOpOg9pgqEnjvGop/xymVb5s3ILxMlTrtwUW/h5+/fErQcn5j4rZGntov4rWeVlrEbQUHp31xvTsOPFBUJ66PUdGYkudy7fyLNn2tyAi3B1kXSBn4tX9yvGUrCeryL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767706381; c=relaxed/simple;
-	bh=9sq5ACv/SxacQbu8HCx4EhgIvWo56sdX1yGcs5nJRFk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=CQHPh913Iue31X9FY5vpr8lcSnysaE9MBi+x2F7HJk3D3DBVNBak81euoBInxBB8GwcVcWiiu5cEILObdvDYCg++adjwX6RodKYltVjff+HUbD2knSV/A2YNbT8IfghjosZFXxo+SJn03K75wzvb/j5TmiVhLbGQlVcoA7CIGxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QhwZ0vfx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17657C116C6;
-	Tue,  6 Jan 2026 13:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767706381;
-	bh=9sq5ACv/SxacQbu8HCx4EhgIvWo56sdX1yGcs5nJRFk=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=QhwZ0vfxDaEzXZGscsJB9jJBYblMpoen0OVVTJyPlPLwaLbY7lu4OTvjoFcgFqyDk
-	 pENFx4Ph9t+C6NZ+1CoB97mZVCTYZCAqy1m6UcCZ2ykZyg9MsRI7lrFi4B5EXMPkd9
-	 aEwFrvtGhp4hsQ2B+3Hn/7t1jrPS8TziI7UE3D/J1yAf9csNaCTQPSL5pVHl1YxbgO
-	 P+PcdJ4QiuXmSngSSMynuhab/sOniBsb5gBJnRS0WoEDCbgGP48tTXbzU5iZK1ySks
-	 Kh1a2smAP1DWvaJT3YOYFvrvO2Hm/b/h1kAlrkPVi7bUlcObeX046Q4cUgWUl1tRpq
-	 TOaxa0pt5rsMQ==
+	s=arc-20240116; t=1767706836; c=relaxed/simple;
+	bh=riYTKJoFQ1Amngen0HhfQApbfcrmFFwHT6saLPWenhg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LxKIvuKSh9bsY+tZnvXYnwJqi90/AXcRxfDQoTGWcsSGUKFkdcQsx8JlALIqmIlvKl4AjftaZfJZc86/kvtoiBxWQsSiOF7UNpisFYgHpjaTy6ijU6R3cfW+CWf0sscRzgH0jNmImpaLuZoKYiXZQlbio/2ujD0xDn8/UXBy1qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA5E7497;
+	Tue,  6 Jan 2026 05:40:24 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.197.51])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D1043F6A8;
+	Tue,  6 Jan 2026 05:40:25 -0800 (PST)
+Date: Tue, 6 Jan 2026 13:40:23 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Jens Wiklander <jens.wiklander@linaro.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org, linux-mips@vger.kernel.org,
+	netdev@vger.kernel.org, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <aV0Qx5BOso5co3tm@bogus>
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+ <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
+ <20251218135332f323fa91@mail.local>
+ <CAHUa44GpW5aO26GDyL9RZub9vVYvVcJ7etwO0yXBN_mUi0W4AA@mail.gmail.com>
+ <CAHUa44HqRbCJTXsrTCm0G5iwtkQtq+Si=yOspCjpAn-N2uVSVg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 06 Jan 2026 14:32:56 +0100
-Message-Id: <DFHJM2HAG7Q3.1HGZ3P7H55FD2@kernel.org>
-Subject: Re: [RFC PATCH v1 4/4] rust: add PL031 RTC driver
-Cc: "Ke Sun" <sunke@kylinos.cn>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, <linux-rtc@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>
-To: "Ke Sun" <sk.alvin.x@gmail.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260104060621.3757812-1-sunke@kylinos.cn>
- <20260104060621.3757812-5-sunke@kylinos.cn>
- <DFFTVRMAFF3S.13N6WCNAVVR6I@kernel.org>
- <88b1a3dd-e646-4583-bc41-07ff7e9422a7@gmail.com>
-In-Reply-To: <88b1a3dd-e646-4583-bc41-07ff7e9422a7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHUa44HqRbCJTXsrTCm0G5iwtkQtq+Si=yOspCjpAn-N2uVSVg@mail.gmail.com>
 
-(Cc: Greg, Rafael)
+On Mon, Jan 05, 2026 at 10:16:09AM +0100, Jens Wiklander wrote:
+> Hi,
+> 
+> On Thu, Dec 18, 2025 at 5:29 PM Jens Wiklander
+> <jens.wiklander@linaro.org> wrote:
+> >
+> > On Thu, Dec 18, 2025 at 2:53 PM Alexandre Belloni
+> > <alexandre.belloni@bootlin.com> wrote:
+> > >
+> > > On 18/12/2025 08:21:27+0100, Jens Wiklander wrote:
+> > > > Hi,
+> > > >
+> > > > On Mon, Dec 15, 2025 at 3:17 PM Uwe Kleine-König
+> > > > <u.kleine-koenig@baylibre.com> wrote:
+> > > > >
+> > > > > Hello,
+> > > > >
+> > > > > the objective of this series is to make tee driver stop using callbacks
+> > > > > in struct device_driver. These were superseded by bus methods in 2006
+> > > > > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> > > > > methods.")) but nobody cared to convert all subsystems accordingly.
+> > > > >
+> > > > > Here the tee drivers are converted. The first commit is somewhat
+> > > > > unrelated, but simplifies the conversion (and the drivers). It
+> > > > > introduces driver registration helpers that care about setting the bus
+> > > > > and owner. (The latter is missing in all drivers, so by using these
+> > > > > helpers the drivers become more correct.)
+> > > > >
+> > > > > v1 of this series is available at
+> > > > > https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylibre.com
+> > > > >
+> > > > > Changes since v1:
+> > > > >
+> > > > >  - rebase to v6.19-rc1 (no conflicts)
+> > > > >  - add tags received so far
+> > > > >  - fix whitespace issues pointed out by Sumit Garg
+> > > > >  - fix shutdown callback to shutdown and not remove
+> > > > >
+> > > > > As already noted in v1's cover letter, this series should go in during a
+> > > > > single merge window as there are runtime warnings when the series is
+> > > > > only applied partially. Sumit Garg suggested to apply the whole series
+> > > > > via Jens Wiklander's tree.
+> > > > > If this is done the dependencies in this series are honored, in case the
+> > > > > plan changes: Patches #4 - #17 depend on the first two.
+> > > > >
+> > > > > Note this series is only build tested.
+> > > > >
+> > > > > Uwe Kleine-König (17):
+> > > > >   tee: Add some helpers to reduce boilerplate for tee client drivers
+> > > > >   tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+> > > > >   tee: Adapt documentation to cover recent additions
+> > > > >   hwrng: optee - Make use of module_tee_client_driver()
+> > > > >   hwrng: optee - Make use of tee bus methods
+> > > > >   rtc: optee: Migrate to use tee specific driver registration function
+> > > > >   rtc: optee: Make use of tee bus methods
+> > > > >   efi: stmm: Make use of module_tee_client_driver()
+> > > > >   efi: stmm: Make use of tee bus methods
+> > > > >   firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+> > > > >   firmware: arm_scmi: Make use of tee bus methods
+> > > > >   firmware: tee_bnxt: Make use of module_tee_client_driver()
+> > > > >   firmware: tee_bnxt: Make use of tee bus methods
+> > > > >   KEYS: trusted: Migrate to use tee specific driver registration
+> > > > >     function
+> > > > >   KEYS: trusted: Make use of tee bus methods
+> > > > >   tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+> > > > >   tpm/tpm_ftpm_tee: Make use of tee bus methods
+> > > > >
+> > > > >  Documentation/driver-api/tee.rst             | 18 +----
+> > > > >  drivers/char/hw_random/optee-rng.c           | 26 ++----
+> > > > >  drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
+> > > > >  drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
+> > > > >  drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
+> > > > >  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
+> > > > >  drivers/rtc/rtc-optee.c                      | 27 ++-----
+> > > > >  drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
+> > > > >  include/linux/tee_drv.h                      | 12 +++
+> > > > >  security/keys/trusted-keys/trusted_tee.c     | 17 ++--
+> > > > >  10 files changed, 164 insertions(+), 138 deletions(-)
+> > > > >
+> > > > > base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> > > > > --
+> > > > > 2.47.3
+> > > > >
+> > > >
+> > > > Thank you for the nice cleanup, Uwe.
+> > > >
+> > > > I've applied patch 1-3 to the branch tee_bus_callback_for_6.20 in my
+> > > > tree at https://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git/
+> > > >
+> > > > The branch is based on v6.19-rc1, and I'll try to keep it stable for
+> > > > others to depend on, if needed. Let's see if we can agree on taking
+> > > > the remaining patches via that branch.
+> > >
+> > > 6 and 7 can go through your branch.
+> >
+> > Good, I've added them to my branch now.
+> 
+> This entire patch set should go in during a single merge window. I
+> will not send any pull request until I'm sure all patches will be
+> merged.
+> 
+> So far (if I'm not mistaken), only the patches I've already added to
+> next have appeared next. I can take the rest of the patches, too, but
+> I need OK for the following:
+> 
 
-On Tue Jan 6, 2026 at 3:51 AM CET, Ke Sun wrote:
-> Following the platform driver implementation, the AMBA driver stores its=
-=20
-> drvdata in amba_device->dev. However,
-> the RTC driver also stores its drvdata in the parent device (which is=20
-> also amba_device->dev), causing a conflict.
+[...]
 
-A simple driver usually has two devices to deal with:
+> 
+> Sudeep, you seem happy with the following patches
+> - firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+> - firmware: arm_scmi: Make use of tee bus methods
+> OK if I take them via my tree, or would you rather take them yourself?
+>
 
-  (1) The bus device, which represents the actual physical device sitting o=
-n
-      some bus, e.g. PCI or platform.
+I am happy if you want to take all of them in one go. I think I have
+already acked it. Please shout if you need anything else from me, happy to
+help in anyway to make it easier to handle this change set.
 
-  (2) A class device, which represents the higher level functionality - i.e=
-. the
-      class the device belongs to - to the upper layers, e.g. RTC, DRM, PWM=
-,
-      etc.
-
-The bus device does not belong to the driver per se, it only gets bound to =
-a
-driver.  This relationship remains until the driver itself is unregistered,=
- the
-physical device falls off the bus or they are manually unbound from each ot=
-her.
-
-The driver's bus device private data only lives as long as the two are boun=
-d and
-the lifetime is managed by the bus abstraction, e.g. platform or AMBA.
-
-The class device is created by the driver to represent its functionality to=
- the
-upper layers; its lifetime is defined by the driver.
-
-Other than the bus device private data, the class device private data typic=
-ally
-lives as long as the class device itself.
-
-In the relationship between the two, the bus device becomes the parent devi=
-ce of
-the class device.
-
-If the class device implementation guarantees that it is unregistered when =
-the
-parent (bus) device is unbound (which is the most common case), i.e. no mor=
-e
-class device callbacks happen afterwards, the abstraction can treat the par=
-ent
-device as &Device<Bound>, which allows drivers to directly access device
-resources from the parent device without further synchronization.
-
-The short answer for your question is, store the class device private data
-within the class device itself, not within the parent device.
-
-Alternatively, if the class device implementation does guarantee that in al=
-l its
-callbacks the parent device is bound, i.e. you have a &Device<Bound>, you c=
-an
-also access the bus device private data with Device<Bound>::drvdata().
-
-In this case you can technically also omit having separate private data for=
- the
-class device at all.
-
-However, while this is actually been done in quite some C drivers, I do not
-recommend this:
-
-  - At least in C this can become pretty error prone, given that bus device
-    resources are only valid to access as long as the device is bound to th=
-e
-    driver; in Rust we do protect against device resource accesses after dr=
-iver
-    unbind though.
-
-  - Separating the private data properly encourages driver authors to actua=
-lly
-    think about ownership and lifetime of objects, eventually leading to be=
-tter
-    driver design.
-
-A common pattern you will see in drivers is that the data relevant for the =
-class
-device goes into the class device private data and the class device itself =
-is
-stored within the bus device private data.
-
-I hope this helps!
-
-- Danilo
+-- 
+Regards,
+Sudeep
 
