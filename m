@@ -1,62 +1,62 @@
-Return-Path: <linux-rtc+bounces-5670-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5671-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04854CFE5EC
-	for <lists+linux-rtc@lfdr.de>; Wed, 07 Jan 2026 15:46:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 080ECCFE7C7
+	for <lists+linux-rtc@lfdr.de>; Wed, 07 Jan 2026 16:10:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 265BA3009D5F
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jan 2026 14:45:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8E471310274F
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jan 2026 15:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F6F34889F;
-	Wed,  7 Jan 2026 14:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AEF3491F6;
+	Wed,  7 Jan 2026 14:38:28 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8511346ACF
-	for <linux-rtc@vger.kernel.org>; Wed,  7 Jan 2026 14:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673C33491D3
+	for <linux-rtc@vger.kernel.org>; Wed,  7 Jan 2026 14:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767796701; cv=none; b=cXW+PWBgYUkQQwU4LGBYkXPpmJIfDg79a8aG7J+dTz53O14I0tp4ES/MwTMdqYZ5Mi5A0+u7/OHU5nrXAaTIcoxInMRAPgcMGHvjiX65KCN5bAKbxzCqMm4PQMx9IdXN9CZjqt4adkxAiN6yKoouJzw4OVjZL5ZoYl/ARBwX1e8=
+	t=1767796708; cv=none; b=LOnoT+N+ncAfh2uittUOI1h3whg5CtH2AsU0pX9hnyugRhS2pg1pESP9C0nTAIvRCemyXp9UufL597ouoO5DkvUc6KKdvCQui+p3zMrXWR0Ht8yFsZffwACch28p7pcLoAlxc5QgpwXf2upCR+cDopQWPi6+cMbfaEnBtZ9632A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767796701; c=relaxed/simple;
-	bh=uaR1sbb2HZO1tdbhaBC8ct9z39oZMPQvCp6ldn2IkC0=;
+	s=arc-20240116; t=1767796708; c=relaxed/simple;
+	bh=pIdN6U9CrFYIGw3EHXmdMMyDKJw2lJEc8EnQ9zEGx/M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EvTFtySVzPsJLCZVyhliqaaoeSBNSb4GDtD8Q5pgu1OWpNgUOV9Xa3UwKzjFpiHpxZBblOaZRfsYdifqmF1YSC+yJco+TYPSljZwZNphKaozNXqRkF0V75AsN+/g/uMdifzdkVvistwevw7YsQkqsKw/mhYWkSklBg8C8PHGMJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.175
+	 MIME-Version; b=Dls2vY7Mkp4iaQygOFhEugPhwt3t5WM0sndhopWp04++0UMS1+yOY1+CtlcMjalA2V/vm3wJhZtRF2wIUmHvVFcN0tfkeSrr6KhhL2SvQ//vadKQp0o7Kbji75Z7OBCEq5MOwleb53dHIOceX3bxzMlRtMBN7XMcsJ52jJSMf4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7e1651ae0d5so1531617b3a.1
-        for <linux-rtc@vger.kernel.org>; Wed, 07 Jan 2026 06:38:18 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7f121c00dedso2061728b3a.0
+        for <linux-rtc@vger.kernel.org>; Wed, 07 Jan 2026 06:38:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767796698; x=1768401498;
+        d=1e100.net; s=20230601; t=1767796704; x=1768401504;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6peG7G5QtdthAeObky62kxMpqL2WJe4D2Aex1Qd7f18=;
-        b=S1neTLd4LUrUp3AWaC6kjQWW9Xmz0u2nwcfd5nYGP82C4IO1c2I56MB1Ty96sh+uPv
-         vcv7H/U6SUMUZ+FF4GrxCVrOUyonLswNXk/3hk+/7YTyrTH8FkbrtPPCoOHa6+qgV/8+
-         fdOuRD61aJ8o/GWvvyA7oJI6qGKuxaq7Bq19/XtA40+WGfHLzYHqtBKswUhOb2Y5689m
-         dM6Uq6MJCFE6ezN2HgqQLDTLqPD/3dj2Srm9mKkTYFD0gwYFAyvCRrAjTG3Y6eYIERNI
-         3ys4Ci3gNIP9H8m62VrR3qwChOjfzAd3mheH/W4htk66yEtef8RyOydwhrxxwfdZ5nap
-         ry0Q==
-X-Gm-Message-State: AOJu0Yx2Gy5NmpjDw0h5LA9H9ZTOtezy3xodAd3ffLLk0F9RkViTP3w5
-	mTwtcp7RQ+1MckK22PvCPp/5IsrH58c1m0+QtSaE6EsJcjKmIyT0lIxSMEv4LxfXmpw=
-X-Gm-Gg: AY/fxX6KBoudEoFlvbiiLXt/88A/8RLQkUje3bFHMRqIJjK/wyUKcDDPVEAMpjfmndL
-	vx0wxloW0QoK4oq5mJs4zGQtkROeMQVXAJlAyE9pj3EpDH9HtIhNyD3MPEQ5LGSjU5Ft7oopmC2
-	6q4tfgqlNrPG/YfP5z4De3wBkm8x3aPSjsBXUCr9co7MrawjG0szzr11/Dv66M8kDisNDpuGbYl
-	gH469zFCuDJBnHyhjeSjK9g7Y7SaDLPO7oQy0DSBK1KhxYm/zGdnZIWk/9XgeVIgqc8aD5Lzwlu
-	/gVkFHwrTEOLkiEcaxoZKOda3HU2sza2nUKOVtoCHKRvI05V89R9knYCYgMVSo4EPz3k7lBYfIV
-	OQk08GJFOzWt6xUDVJPMGKeB32ebwdfyCNwsu9tfIoHLt/OqyZ5lfJWxznJlk4W1e6mXh+0GE9Q
-	CPI1A6D1mHKnddOsfGBCnk
-X-Google-Smtp-Source: AGHT+IFTdGL8+TaICcERd5PKcmP97tLZrQ2FKbfqOYlSkhwMnRIzP8373MS3Cdr4TzY2qH6JoryN2g==
-X-Received: by 2002:a05:6a20:3ca2:b0:366:14b2:30c with SMTP id adf61e73a8af0-3898f9cf510mr2482789637.63.1767796697526;
-        Wed, 07 Jan 2026 06:38:17 -0800 (PST)
+        bh=PrhFrf9kc03oj78KXqlcEPCqfgItK/ec4ZMc4LcJuaE=;
+        b=OXEMPXDgNvRrGdVwLqPUtxh0MFF0kiAO12tyEWAmxKXpcd3c4qncvDKYkhMIwvO9hK
+         SkdCaDwxfsmIIu7Dcmki/WZ+Ixw8+nGYEvr4q2tvbc5kVMEl3vTMVTXChqpY+ztA4fQQ
+         txe/JlQkSlt2ELdnobckBrfqMwE9Au4D6sH0+wLSfDDl2D4n3XlNQ91urOjiXEuxHHdE
+         Y5D4Kn4oHPtQNKEliZh49qWwcQGHUx8yaewpPetwhR60OOd37kzpVPkCw7+wruD6gRub
+         ZZ9Ns0PzSBQUMfp8B7CbIIN83zhzdjDWheaqu0kVwf9Vbp3uym5t7glNEwSd3S+GliIA
+         ANbA==
+X-Gm-Message-State: AOJu0Yz0Q/JqL5Dt2DHkS/jnUV1leQ1SK2ZrHcsPuTBArF9S7h1GMO4f
+	IekX7G8AkHtQ2w8h3pah9Dw+0M75Ce3fKPUGafXpV/plFDX0csajCpQZ
+X-Gm-Gg: AY/fxX6D+WNe5/pcnmdCLWmOWcIaN5zhLVZK7uB224ffuYjAg08+XoHWDosQdtIa6sW
+	B3VtbJsMo2qgOlO4tRQGcEDIUaSm44o/x89L6yr7stc+5NDJjTAZQqWHvahVXnT4KH1MenV042f
+	27Aw64k8iGBytET9vcAdbNt9xsMKIAZ98PS9qDDaHPTCQs7o06YVIzi9LluG0Ix7Uh/ZV4oflcq
+	BF1CkVZ1xjbeWeBjk232wRWJqqQFtd72bLDuI5rLvCxcWsxGMfY2ljhQEZK79BnA9Y1FtimVcoB
+	vYAQptIiFyTkfCFSmqFMK1z1J2f1r/zs9etHTfQcZgmzbrWLyNlQrWAWM+mq1MV4t1zQe9GCGCq
+	OrIR/oPdSHWvMGeiCKFQ1FWJNWSfa1JerAisxbQY93Q7d2zJeaF9vzjKpGAMH1N7IPFQC3GDKPF
+	Gg9qhU182wznzGUPM23GKz
+X-Google-Smtp-Source: AGHT+IHiOMqMlEIBpoz97Z4RwQ+PQ10eXWYXhdnsrW8y/+yxuvQqgkJE8HM/9wxjmiP2sTmJKlPqAw==
+X-Received: by 2002:a05:6a00:8c01:b0:7ab:5e68:e204 with SMTP id d2e1a72fcca58-81b7e259264mr2364768b3a.29.1767796703914;
+        Wed, 07 Jan 2026 06:38:23 -0800 (PST)
 Received: from localhost.localdomain ([195.245.219.232])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cbf28faa9sm5470352a12.2.2026.01.07.06.38.11
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cbf28faa9sm5470352a12.2.2026.01.07.06.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 06:38:16 -0800 (PST)
+        Wed, 07 Jan 2026 06:38:23 -0800 (PST)
 From: Ke Sun <sunke@kylinos.cn>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Miguel Ojeda <ojeda@kernel.org>,
@@ -72,9 +72,9 @@ Cc: linux-rtc@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	Alvin Sun <sk.alvin.x@gmail.com>,
 	Ke Sun <sunke@kylinos.cn>
-Subject: [RFC PATCH v2 4/5] rust: add RTC core abstractions and data structures
-Date: Wed,  7 Jan 2026 22:37:36 +0800
-Message-ID: <20260107143738.3021892-5-sunke@kylinos.cn>
+Subject: [RFC PATCH v2 5/5] rust: add PL031 RTC driver
+Date: Wed,  7 Jan 2026 22:37:37 +0800
+Message-ID: <20260107143738.3021892-6-sunke@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260107143738.3021892-1-sunke@kylinos.cn>
 References: <20260107143738.3021892-1-sunke@kylinos.cn>
@@ -86,1050 +86,556 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Rust abstractions for RTC subsystem, including RtcDevice,
-RtcTime, RtcWkAlrm data structures, RtcOps trait for driver
-operations, and devm-managed device registration support.
+Add Rust implementation of the PL031 RTC driver.
 
 Signed-off-by: Ke Sun <sunke@kylinos.cn>
 ---
- rust/helpers/helpers.c |   1 +
- rust/helpers/rtc.c     |   9 +
- rust/kernel/lib.rs     |   2 +
- rust/kernel/rtc.rs     | 985 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 997 insertions(+)
- create mode 100644 rust/helpers/rtc.c
- create mode 100644 rust/kernel/rtc.rs
+ drivers/rtc/Kconfig           |   9 +
+ drivers/rtc/Makefile          |   1 +
+ drivers/rtc/rtc_pl031_rust.rs | 503 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 513 insertions(+)
+ create mode 100644 drivers/rtc/rtc_pl031_rust.rs
 
-diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-index 79c72762ad9c4..1a5c103fb24ba 100644
---- a/rust/helpers/helpers.c
-+++ b/rust/helpers/helpers.c
-@@ -48,6 +48,7 @@
- #include "rcu.c"
- #include "refcount.c"
- #include "regulator.c"
-+#include "rtc.c"
- #include "scatterlist.c"
- #include "security.c"
- #include "signal.c"
-diff --git a/rust/helpers/rtc.c b/rust/helpers/rtc.c
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 50dc779f7f983..137cea1824edd 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1591,6 +1591,15 @@ config RTC_DRV_PL031
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called rtc-pl031.
+ 
++config RTC_DRV_PL031_RUST
++	tristate "ARM AMBA PL031 RTC (Rust)"
++	depends on RUST && RTC_CLASS
++	help
++	  This is the Rust implementation of the PL031 RTC driver.
++	  It provides the same functionality as the C driver but is
++	  written in Rust for improved memory safety. The driver supports
++	  ARM, ST v1, and ST v2 variants of the PL031 RTC controller.
++
+ config RTC_DRV_AT91RM9200
+ 	tristate "AT91RM9200 or some AT91SAM9 RTC"
+ 	depends on ARCH_AT91 || COMPILE_TEST
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 6cf7e066314e1..10f540e7409b4 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -139,6 +139,7 @@ obj-$(CONFIG_RTC_DRV_PCF8583)	+= rtc-pcf8583.o
+ obj-$(CONFIG_RTC_DRV_PIC32)	+= rtc-pic32.o
+ obj-$(CONFIG_RTC_DRV_PL030)	+= rtc-pl030.o
+ obj-$(CONFIG_RTC_DRV_PL031)	+= rtc-pl031.o
++obj-$(CONFIG_RTC_DRV_PL031_RUST)	+= rtc_pl031_rust.o
+ obj-$(CONFIG_RTC_DRV_PM8XXX)	+= rtc-pm8xxx.o
+ obj-$(CONFIG_RTC_DRV_POLARFIRE_SOC)	+= rtc-mpfs.o
+ obj-$(CONFIG_RTC_DRV_PS3)	+= rtc-ps3.o
+diff --git a/drivers/rtc/rtc_pl031_rust.rs b/drivers/rtc/rtc_pl031_rust.rs
 new file mode 100644
-index 0000000000000..862cd61670bfc
+index 0000000000000..f3cca5c6daa1b
 --- /dev/null
-+++ b/rust/helpers/rtc.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/rtc.h>
-+
-+int rust_helper_devm_rtc_register_device(struct rtc_device *rtc)
-+{
-+	return __devm_rtc_register_device(THIS_MODULE, rtc);
-+}
-+
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 3e557335fc5fe..1390073e4ae27 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -135,6 +135,8 @@
- pub mod rbtree;
- pub mod regulator;
- pub mod revocable;
-+#[cfg(CONFIG_RTC_CLASS)]
-+pub mod rtc;
- pub mod scatterlist;
- pub mod security;
- pub mod seq_file;
-diff --git a/rust/kernel/rtc.rs b/rust/kernel/rtc.rs
-new file mode 100644
-index 0000000000000..0c662b94b96f4
---- /dev/null
-+++ b/rust/kernel/rtc.rs
-@@ -0,0 +1,985 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! RTC (Real-Time Clock) device support.
++++ b/drivers/rtc/rtc_pl031_rust.rs
+@@ -0,0 +1,503 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++//! Rust ARM AMBA PrimeCell 031 RTC driver
 +//!
-+//! C headers: [`include/linux/rtc.h`](srctree/include/linux/rtc.h).
-+//!
-+//! Reference: <https://www.kernel.org/doc/html/latest/driver-api/rtc.html>
-+use crate::{
-+    bindings,
-+    bitmap::Bitmap,
-+    device::{
-+        self,
-+        AsBusDevice, //
-+    },
-+    devres,
-+    error::Error,
-+    prelude::*,
-+    seq_file::SeqFile,
-+    sync::aref::{
-+        ARef, //
-+        AlwaysRefCounted,
-+    },
-+    types::{
-+        ForeignOwnable,
-+        Opaque, //
-+    }, //
-+};
++//! This driver provides Real Time Clock functionality for ARM AMBA PrimeCell 031
++//! RTC controllers and their ST Microelectronics derivatives.
 +
 +use core::{
-+    ffi::c_void,
-+    marker::PhantomData,
-+    ptr::NonNull, //
++    marker::PhantomPinned,
++    ops::Deref, //
++};
++use kernel::{
++    amba,
++    bindings,
++    c_str,
++    device::{
++        self,
++        Core, //
++    },
++    devres::Devres,
++    io::mem::IoMem,
++    irq::{
++        Handler,
++        IrqReturn, //
++    },
++    prelude::*,
++    rtc::{
++        self,
++        Registration,
++        RtcDevice,
++        RtcOps,
++        RtcTime,
++        RtcWkAlrm, //
++    },
++    sync::aref::ARef, //
 +};
 +
-+/// RTC time structure.
-+///
-+/// Wraps the C `struct rtc_time` from `include/uapi/linux/rtc.h`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct RtcTime(pub bindings::rtc_time);
++// Register offsets
++const RTC_DR: usize = 0x00;
++const RTC_MR: usize = 0x04;
++const RTC_LR: usize = 0x08;
++const RTC_CR: usize = 0x0c;
++const RTC_IMSC: usize = 0x10;
++const RTC_RIS: usize = 0x14;
++const RTC_MIS: usize = 0x18;
++const RTC_ICR: usize = 0x1c;
++// ST variants have additional timer functionality
++#[allow(dead_code)]
++const RTC_TDR: usize = 0x20;
++#[allow(dead_code)]
++const RTC_TLR: usize = 0x24;
++#[allow(dead_code)]
++const RTC_TCR: usize = 0x28;
++const RTC_YDR: usize = 0x30;
++const RTC_YMR: usize = 0x34;
++const RTC_YLR: usize = 0x38;
++const PL031_REG_SIZE: usize = RTC_YLR + 4;
 +
-+impl RtcTime {
-+    /// Creates a new `RtcTime` from a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    pub fn from_time64(time: i64) -> Self {
-+        let mut tm = Self(pin_init::zeroed());
-+        // SAFETY: `rtc_time64_to_tm` is a pure function that only writes to the provided
-+        // `struct rtc_time` pointer. The pointer is valid because `tm.0` is a valid mutable
-+        // reference, and the function does not retain any references to it.
-+        unsafe {
-+            bindings::rtc_time64_to_tm(time, &mut tm.0);
++// Control register bits
++const RTC_CR_EN: u32 = 1 << 0;
++const RTC_CR_CWEN: u32 = 1 << 26;
++
++#[allow(dead_code)]
++const RTC_TCR_EN: u32 = 1 << 1;
++
++// Interrupt status and control register bits
++const RTC_BIT_AI: u32 = 1 << 0;
++#[allow(dead_code)]
++const RTC_BIT_PI: u32 = 1 << 1;
++
++// RTC event flags
++#[allow(dead_code)]
++const RTC_AF: u32 = bindings::RTC_AF;
++#[allow(dead_code)]
++const RTC_IRQF: u32 = bindings::RTC_IRQF;
++
++// ST v2 time format bit definitions
++const RTC_SEC_SHIFT: u32 = 0;
++const RTC_SEC_MASK: u32 = 0x3F << RTC_SEC_SHIFT;
++const RTC_MIN_SHIFT: u32 = 6;
++const RTC_MIN_MASK: u32 = 0x3F << RTC_MIN_SHIFT;
++const RTC_HOUR_SHIFT: u32 = 12;
++const RTC_HOUR_MASK: u32 = 0x1F << RTC_HOUR_SHIFT;
++const RTC_WDAY_SHIFT: u32 = 17;
++const RTC_WDAY_MASK: u32 = 0x7 << RTC_WDAY_SHIFT;
++const RTC_MDAY_SHIFT: u32 = 20;
++const RTC_MDAY_MASK: u32 = 0x1F << RTC_MDAY_SHIFT;
++const RTC_MON_SHIFT: u32 = 25;
++const RTC_MON_MASK: u32 = 0xF << RTC_MON_SHIFT;
++
++/// Vendor-specific variant identifier for PL031 RTC controllers.
++#[derive(Copy, Clone, PartialEq)]
++enum VendorVariant {
++    /// Original ARM version with 32-bit Unix timestamp format.
++    Arm,
++    /// First ST derivative with clockwatch mode and weekday support.
++    StV1,
++    /// Second ST derivative with packed BCD time format and year register.
++    StV2,
++}
++
++impl VendorVariant {
++    fn clockwatch(&self) -> bool {
++        matches!(self, VendorVariant::StV1 | VendorVariant::StV2)
++    }
++
++    #[allow(dead_code)]
++    fn st_weekday(&self) -> bool {
++        matches!(self, VendorVariant::StV1 | VendorVariant::StV2)
++    }
++
++    #[allow(dead_code)]
++    fn range_min(&self) -> i64 {
++        match self {
++            VendorVariant::Arm | VendorVariant::StV1 => 0,
++            VendorVariant::StV2 => bindings::RTC_TIMESTAMP_BEGIN_0000,
 +        }
-+        tm
 +    }
 +
-+    /// Converts this `RtcTime` to a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    pub fn to_time64(&self) -> i64 {
-+        // SAFETY: `rtc_tm_to_time64` is a pure function that only reads from the provided
-+        // `struct rtc_time` pointer. The pointer is valid because `self.0` is a valid reference,
-+        // and the function does not retain any references to it.
-+        unsafe { bindings::rtc_tm_to_time64(core::ptr::from_ref(&self.0).cast_mut()) }
-+    }
-+
-+    /// Sets this `RtcTime` from a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    pub fn set_from_time64(&mut self, time: i64) {
-+        // SAFETY: `rtc_time64_to_tm` is a pure function that only writes to the provided
-+        // `struct rtc_time` pointer. The pointer is valid because `self.0` is a valid mutable
-+        // reference, and the function does not retain any references to it.
-+        unsafe {
-+            bindings::rtc_time64_to_tm(time, &mut self.0);
++    #[allow(dead_code)]
++    fn range_max(&self) -> u64 {
++        match self {
++            VendorVariant::Arm | VendorVariant::StV1 => u64::from(u32::MAX),
++            VendorVariant::StV2 => bindings::RTC_TIMESTAMP_END_9999,
 +        }
-+    }
-+
-+    /// Converts a time64_t value to an RTC time structure.
-+    #[inline]
-+    pub fn time64_to_tm(time: i64, tm: &mut Self) {
-+        tm.set_from_time64(time);
-+    }
-+
-+    /// Converts an RTC time structure to a time64_t value (seconds since 1970-01-01 00:00:00 UTC).
-+    #[inline]
-+    pub fn tm_to_time64(tm: &Self) -> i64 {
-+        tm.to_time64()
-+    }
-+
-+    /// Calculates the day of the year (0-365) from the date components.
-+    #[inline]
-+    pub fn year_days(&self) -> i32 {
-+        // SAFETY: `rtc_year_days` is a pure function that only performs calculations based on
-+        // the provided parameters. The values should be from valid RTC time structures and
-+        // non-negative, but the function itself is safe to call with any values.
-+        unsafe {
-+            bindings::rtc_year_days(
-+                self.0.tm_mday as u32,
-+                self.0.tm_mon as u32,
-+                self.0.tm_year as u32,
-+            )
-+        }
-+    }
-+
-+    /// Returns the seconds field (0-59).
-+    #[inline]
-+    pub fn tm_sec(&self) -> i32 {
-+        self.0.tm_sec
-+    }
-+
-+    /// Sets the seconds field (0-59).
-+    #[inline]
-+    pub fn set_tm_sec(&mut self, sec: i32) {
-+        self.0.tm_sec = sec;
-+    }
-+
-+    /// Returns the minutes field (0-59).
-+    #[inline]
-+    pub fn tm_min(&self) -> i32 {
-+        self.0.tm_min
-+    }
-+
-+    /// Sets the minutes field (0-59).
-+    #[inline]
-+    pub fn set_tm_min(&mut self, min: i32) {
-+        self.0.tm_min = min;
-+    }
-+
-+    /// Returns the hours field (0-23).
-+    #[inline]
-+    pub fn tm_hour(&self) -> i32 {
-+        self.0.tm_hour
-+    }
-+
-+    /// Sets the hours field (0-23).
-+    #[inline]
-+    pub fn set_tm_hour(&mut self, hour: i32) {
-+        self.0.tm_hour = hour;
-+    }
-+
-+    /// Returns the day of the month (1-31).
-+    #[inline]
-+    pub fn tm_mday(&self) -> i32 {
-+        self.0.tm_mday
-+    }
-+
-+    /// Sets the day of the month (1-31).
-+    #[inline]
-+    pub fn set_tm_mday(&mut self, mday: i32) {
-+        self.0.tm_mday = mday;
-+    }
-+
-+    /// Returns the month (0-11, where 0 is January).
-+    #[inline]
-+    pub fn tm_mon(&self) -> i32 {
-+        self.0.tm_mon
-+    }
-+
-+    /// Sets the month (0-11, where 0 is January).
-+    #[inline]
-+    pub fn set_tm_mon(&mut self, mon: i32) {
-+        self.0.tm_mon = mon;
-+    }
-+
-+    /// Returns the year (years since 1900).
-+    #[inline]
-+    pub fn tm_year(&self) -> i32 {
-+        self.0.tm_year
-+    }
-+
-+    /// Sets the year (years since 1900).
-+    #[inline]
-+    pub fn set_tm_year(&mut self, year: i32) {
-+        self.0.tm_year = year;
-+    }
-+
-+    /// Returns the day of the week (0-6, where 0 is Sunday).
-+    #[inline]
-+    pub fn tm_wday(&self) -> i32 {
-+        self.0.tm_wday
-+    }
-+
-+    /// Sets the day of the week (0-6, where 0 is Sunday).
-+    #[inline]
-+    pub fn set_tm_wday(&mut self, wday: i32) {
-+        self.0.tm_wday = wday;
-+    }
-+
-+    /// Returns the day of the year (0-365).
-+    #[inline]
-+    pub fn tm_yday(&self) -> i32 {
-+        self.0.tm_yday
-+    }
-+
-+    /// Sets the day of the year (0-365).
-+    #[inline]
-+    pub fn set_tm_yday(&mut self, yday: i32) {
-+        self.0.tm_yday = yday;
-+    }
-+
-+    /// Returns the daylight saving time flag.
-+    #[inline]
-+    pub fn tm_isdst(&self) -> i32 {
-+        self.0.tm_isdst
-+    }
-+
-+    /// Sets the daylight saving time flag.
-+    #[inline]
-+    pub fn set_tm_isdst(&mut self, isdst: i32) {
-+        self.0.tm_isdst = isdst;
 +    }
 +}
 +
-+impl Default for RtcTime {
-+    fn default() -> Self {
-+        Self(pin_init::zeroed())
-+    }
++/// The driver's private data struct. It holds all necessary devres managed resources.
++#[pin_data(PinnedDrop)]
++struct Pl031DrvData {
++    #[pin]
++    base: Devres<IoMem<PL031_REG_SIZE>>,
++    variant: VendorVariant,
 +}
 +
-+/// RTC wake alarm structure.
-+///
-+/// Wraps the C `struct rtc_wkalrm` from `include/uapi/linux/rtc.h`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct RtcWkAlrm(pub bindings::rtc_wkalrm);
++// SAFETY: `Pl031DrvData` contains only `Send`/`Sync` types: `Devres` (Send+Sync)
++// and `VendorVariant` (Copy).
++unsafe impl Send for Pl031DrvData {}
++// SAFETY: `Pl031DrvData` contains only `Send`/`Sync` types: `Devres` (Send+Sync)
++// and `VendorVariant` (Copy).
++unsafe impl Sync for Pl031DrvData {}
 +
-+impl Default for RtcWkAlrm {
-+    fn default() -> Self {
-+        Self(pin_init::zeroed())
-+    }
++/// Vendor-specific variant identifier used in AMBA device table.
++#[derive(Copy, Clone)]
++struct Pl031Variant {
++    variant: VendorVariant,
 +}
 +
-+impl RtcWkAlrm {
-+    /// Returns a reference to the alarm time.
-+    #[inline]
-+    pub fn get_time(&self) -> &RtcTime {
-+        // SAFETY: `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so the memory
-+        // layout is identical. We can safely reinterpret the reference.
-+        unsafe { &*(&raw const self.0.time).cast::<RtcTime>() }
-+    }
-+
-+    /// Returns a mutable reference to the alarm time.
-+    #[inline]
-+    pub fn get_time_mut(&mut self) -> &mut RtcTime {
-+        // SAFETY: `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so the memory
-+        // layout is identical. We can safely reinterpret the reference.
-+        unsafe { &mut *(&raw mut self.0.time).cast::<RtcTime>() }
-+    }
-+
-+    /// Sets the alarm time from a `RtcTime` value.
-+    #[inline]
-+    pub fn set_time(&mut self, time: RtcTime) {
-+        self.0.time = time.0;
-+    }
-+
-+    /// Returns the enabled field.
-+    #[inline]
-+    pub fn enabled(&self) -> u8 {
-+        self.0.enabled
-+    }
-+
-+    /// Sets the `enabled` field.
-+    #[inline]
-+    pub fn set_enabled(&mut self, enabled: u8) {
-+        self.0.enabled = enabled;
-+    }
-+
-+    /// Returns the pending field.
-+    #[inline]
-+    pub fn pending(&self) -> u8 {
-+        self.0.pending
-+    }
-+
-+    /// Sets the `pending` field.
-+    #[inline]
-+    pub fn set_pending(&mut self, pending: u8) {
-+        self.0.pending = pending;
-+    }
++impl Pl031Variant {
++    const ARM: Self = Self {
++        variant: VendorVariant::Arm,
++    };
++    const STV1: Self = Self {
++        variant: VendorVariant::StV1,
++    };
++    const STV2: Self = Self {
++        variant: VendorVariant::StV2,
++    };
 +}
 +
-+/// RTC parameter structure.
-+///
-+/// Wraps the C `struct rtc_param` from `include/uapi/linux/rtc.h`.
-+#[repr(transparent)]
-+#[derive(Clone, Copy)]
-+pub struct RtcParam(pub bindings::rtc_param);
++// Use AMBA device table for matching
++kernel::amba_device_table!(
++    ID_TABLE,
++    MODULE_ID_TABLE,
++    <Pl031AmbaDriver as amba::Driver>::IdInfo,
++    [
++        (
++            amba::DeviceId::new(0x00041031, 0x000fffff),
++            Pl031Variant::ARM
++        ),
++        (
++            amba::DeviceId::new(0x00180031, 0x00ffffff),
++            Pl031Variant::STV1
++        ),
++        (
++            amba::DeviceId::new(0x00280031, 0x00ffffff),
++            Pl031Variant::STV2
++        ),
++    ]
++);
 +
-+impl Default for RtcParam {
-+    fn default() -> Self {
-+        Self(pin_init::zeroed())
-+    }
-+}
++struct Pl031AmbaDriver;
 +
-+/// A Rust wrapper for the C `struct rtc_device`.
-+///
-+/// This type provides safe access to RTC device operations. The underlying `rtc_device`
-+/// is managed by the kernel and remains valid for the lifetime of the `RtcDevice`.
-+///
-+/// # Invariants
-+///
-+/// A [`RtcDevice`] instance holds a pointer to a valid [`struct rtc_device`] that is
-+/// registered and managed by the kernel.
-+///
-+/// # Examples
-+///
-+/// ```rust
-+/// # use kernel::{
-+/// #     prelude::*,
-+/// #     rtc::RtcDevice, //
-+/// # };
-+/// // Example: Set the time range for the RTC device
-+/// // rtc.set_range_min(0);
-+/// // rtc.set_range_max(u64::MAX);
-+/// //     Ok(())
-+/// // }
-+/// ```
-+///
-+/// [`struct rtc_device`]: https://docs.kernel.org/driver-api/rtc.html
-+#[repr(transparent)]
-+pub struct RtcDevice<T: 'static = ()>(Opaque<bindings::rtc_device>, PhantomData<T>);
++impl amba::Driver for Pl031AmbaDriver {
++    type IdInfo = Pl031Variant;
++    const AMBA_ID_TABLE: Option<amba::IdTable<Self::IdInfo>> = Some(&ID_TABLE);
 +
-+impl<T: 'static> RtcDevice<T> {
-+    /// Obtain the raw [`struct rtc_device`] pointer.
-+    #[inline]
-+    pub fn as_raw(&self) -> *mut bindings::rtc_device {
-+        self.0.get()
-+    }
++    fn probe(
++        adev: &amba::Device<Core>,
++        id_info: Option<&Self::IdInfo>,
++    ) -> impl PinInit<Self, Error> {
++        let dev = adev.as_ref();
++        let io_request = adev.io_request().ok_or(ENODEV)?;
++        let variant = id_info
++            .map(|info| info.variant)
++            .unwrap_or(VendorVariant::Arm);
 +
-+    /// Set the minimum time range for the RTC device.
-+    #[inline]
-+    pub fn set_range_min(&self, min: i64) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only writing to the `range_min` field.
-+        unsafe {
-+            (*self.as_raw()).range_min = min;
++        let rtcdev = RtcDevice::<Pl031DrvData>::new(
++            dev,
++            try_pin_init!(Pl031DrvData {
++                base <- IoMem::new(io_request),
++                variant,
++            }),
++        )?;
++
++        dev.devm_init_wakeup()?;
++
++        let drvdata = rtcdev.drvdata()?;
++        let base_guard = drvdata.base.try_access().ok_or(ENXIO)?;
++        let base = base_guard.deref();
++
++        let mut cr = base.read32(RTC_CR);
++        if variant.clockwatch() {
++            cr |= RTC_CR_CWEN;
++        } else {
++            cr |= RTC_CR_EN;
 +        }
-+    }
++        base.write32(cr, RTC_CR);
 +
-+    /// Set the maximum time range for the RTC device.
-+    #[inline]
-+    pub fn set_range_max(&self, max: u64) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only writing to the `range_max` field.
-+        unsafe {
-+            (*self.as_raw()).range_max = max;
++        if variant.st_weekday() {
++            let bcd_year = base.read32(RTC_YDR);
++            if bcd_year == 0x2000 {
++                let st_time = base.read32(RTC_DR);
++                if (st_time & (RTC_MON_MASK | RTC_MDAY_MASK | RTC_WDAY_MASK)) == 0x02120000 {
++                    base.write32(0x2000, RTC_YLR);
++                    base.write32(st_time | (0x7 << RTC_WDAY_SHIFT), RTC_LR);
++                }
++            }
 +        }
-+    }
 +
-+    /// Get the minimum time range for the RTC device.
-+    #[inline]
-+    pub fn range_min(&self) -> i64 {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only reading the `range_min` field.
-+        unsafe { (*self.as_raw()).range_min }
-+    }
++        rtcdev.set_range_min(variant.range_min());
++        rtcdev.set_range_max(variant.range_max());
 +
-+    /// Get the maximum time range for the RTC device.
-+    #[inline]
-+    pub fn range_max(&self) -> u64 {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and we're only reading the `range_max` field.
-+        unsafe { (*self.as_raw()).range_max }
-+    }
-+
-+    /// Notify the RTC framework that an interrupt has occurred.
-+    ///
-+    /// Should be called from interrupt handlers. Schedules work to handle the interrupt
-+    /// in process context.
-+    #[inline]
-+    pub fn update_irq(&self, num: usize, events: usize) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`. The rtc_update_irq function handles NULL/ERR checks internally.
-+        unsafe {
-+            bindings::rtc_update_irq(self.as_raw(), num, events);
-+        }
-+    }
-+
-+    /// Clear a feature bit in the RTC device.
-+    #[inline]
-+    pub fn clear_feature(&self, feature: u32) {
-+        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
-+        // `struct rtc_device`, and features is a valid bitmap array with RTC_FEATURE_CNT bits.
-+        let features_bitmap = unsafe {
-+            Bitmap::from_raw_mut(
-+                (*self.as_raw()).features.as_mut_ptr().cast::<usize>(),
-+                bindings::RTC_FEATURE_CNT as usize,
-+            )
++        let irq_flags = if variant == VendorVariant::StV2 {
++            kernel::irq::Flags::SHARED | kernel::irq::Flags::COND_SUSPEND
++        } else {
++            kernel::irq::Flags::SHARED
 +        };
-+        features_bitmap.clear_bit(feature as usize);
-+    }
-+}
 +
-+impl<T: 'static, Ctx: device::DeviceContext> AsRef<device::Device<Ctx>> for RtcDevice<T> {
-+    fn as_ref(&self) -> &device::Device<Ctx> {
-+        let raw = self.as_raw();
-+        // SAFETY: By the type invariant of `Self`, `self.as_raw()` is a pointer to a valid
-+        // `struct rtc_device`.
-+        let dev = unsafe { &raw mut (*raw).dev };
++        let rtcdev_clone = rtcdev.clone();
++        let init = adev.request_irq_by_index(
++            irq_flags,
++            0,
++            c_str!("rtc-pl031"),
++            try_pin_init!(Pl031IrqHandler {
++                _pin: PhantomPinned,
++                rtcdev: rtcdev_clone,
++            }),
++        );
 +
-+        // SAFETY: `dev` points to a valid `struct device`.
-+        unsafe { device::Device::from_raw(dev) }
-+    }
-+}
-+
-+// SAFETY: `RtcDevice` is a transparent wrapper of `struct rtc_device`.
-+// The offset is guaranteed to point to a valid device field inside `RtcDevice`.
-+unsafe impl<T: 'static, Ctx: device::DeviceContext> device::AsBusDevice<Ctx> for RtcDevice<T> {
-+    const OFFSET: usize = core::mem::offset_of!(bindings::rtc_device, dev);
-+}
-+
-+// SAFETY: Instances of `RtcDevice` are always reference-counted via the underlying `device`.
-+// The `struct rtc_device` contains a `struct device dev` as its first field, and the
-+// reference counting is managed through `get_device`/`put_device` on the `dev` field.
-+unsafe impl<T: 'static> AlwaysRefCounted for RtcDevice<T> {
-+    fn inc_ref(&self) {
-+        let dev: &device::Device = self.as_ref();
-+        // SAFETY: The existence of a shared reference guarantees that the refcount is non-zero.
-+        // `dev.as_raw()` is a valid pointer to a `struct device` with a non-zero refcount.
-+        unsafe { bindings::get_device(dev.as_raw()) };
-+    }
-+
-+    unsafe fn dec_ref(obj: NonNull<Self>) {
-+        let rtc: *mut bindings::rtc_device = obj.cast().as_ptr();
-+
-+        // SAFETY: By the type invariant of `Self`, `rtc` is a pointer to a valid
-+        // `struct rtc_device`. The `dev` field is the first field of `struct rtc_device`,
-+        // so we can safely access it.
-+        let dev = unsafe { &raw mut (*rtc).dev };
-+
-+        // SAFETY: The safety requirements guarantee that the refcount is non-zero.
-+        unsafe { bindings::put_device(dev) };
-+    }
-+}
-+
-+// SAFETY: `RtcDevice` is reference-counted and can be released from any thread.
-+unsafe impl<T: 'static> Send for RtcDevice<T> {}
-+
-+// SAFETY: `RtcDevice` can be shared among threads because all immutable methods are
-+// protected by the synchronization in `struct rtc_device` (via `ops_lock` mutex).
-+unsafe impl<T: 'static> Sync for RtcDevice<T> {}
-+
-+impl<T: RtcOps> RtcDevice<T> {
-+    /// Allocates a new RTC device managed by devres.
-+    ///
-+    /// This function allocates an RTC device and sets the driver data. The device will be
-+    /// automatically freed when the parent device is removed.
-+    pub fn new(
-+        parent_dev: &device::Device,
-+        init: impl PinInit<T, Error>,
-+    ) -> Result<ARef<Self>> {
-+        // SAFETY: `Device<Bound>` and `Device<CoreInternal>` have the same layout.
-+        let dev_internal: &device::Device<device::CoreInternal> =
-+            unsafe { &*core::ptr::from_ref(parent_dev).cast() };
-+
-+        // Allocate RTC device.
-+        // SAFETY: `devm_rtc_allocate_device` returns a pointer to a devm-managed rtc_device.
-+        // We use `dev_internal.as_raw()` which is `pub(crate)`, but we can access it through
-+        // the same device pointer.
-+        let rtc: *mut bindings::rtc_device =
-+            unsafe { bindings::devm_rtc_allocate_device(dev_internal.as_raw()) };
-+        if rtc.is_null() {
-+            return Err(ENOMEM);
++        match kernel::devres::register(dev, init, GFP_KERNEL) {
++            Ok(()) => {
++                if let Ok(irq) = adev.irq_by_index(0) {
++                    irq.set_wake_irq()?;
++                }
++            }
++            Err(_) => rtcdev.clear_feature(bindings::RTC_FEATURE_ALARM),
 +        }
 +
-+        // Set the RTC device ops.
-+        // SAFETY: We just allocated the RTC device, so it's safe to set the ops.
-+        unsafe {
-+            (*rtc).ops = Adapter::<T>::VTABLE.as_raw();
-+        }
++        Registration::<Pl031DrvData>::register(dev, rtcdev)?;
++        Ok(Pl031AmbaDriver)
++    }
++}
 +
-+        // SAFETY: `rtc` is a valid pointer to a newly allocated rtc_device.
-+        // `RtcDevice` is `#[repr(transparent)]` over `Opaque<rtc_device>`, so we can safely cast.
-+        let rtc_device = unsafe { ARef::from_raw(NonNull::new_unchecked(rtc.cast::<Self>())) };
-+        rtc_device.set_drvdata(init)?;
-+        Ok(rtc_device)
++#[pinned_drop]
++impl PinnedDrop for Pl031DrvData {
++    fn drop(self: Pin<&mut Self>) {
++        // Resources are automatically cleaned up by devres.
++    }
++}
++
++/// Converts a Gregorian date to ST v2 RTC packed BCD format.
++///
++/// Returns a tuple of (packed_time, bcd_year) where packed_time contains
++/// month, day, weekday, hour, minute, and second in a single 32-bit value.
++fn stv2_tm_to_time(tm: &RtcTime) -> Result<(u32, u32)> {
++    let year = tm.tm_year() + 1900;
++    let mut wday = tm.tm_wday();
++
++    // Hardware wday masking doesn't work, so wday must be valid.
++    if !(-1..=6).contains(&wday) {
++        return Err(EINVAL);
++    } else if wday == -1 {
++        // wday is not provided, calculate it here.
++        let time64 = tm.to_time64();
++        let mut calc_tm = RtcTime::default();
++        calc_tm.set_from_time64(time64);
++        wday = calc_tm.tm_wday();
 +    }
 +
-+    /// Store a pointer to the bound driver's private data.
-+    pub fn set_drvdata(&self, data: impl PinInit<T, Error>) -> Result {
-+        let data = KBox::pin_init(data, GFP_KERNEL)?;
-+        let dev: &device::Device<device::Bound> = self.as_ref();
++    // Convert year to BCD.
++    let bcd_year =
++        (u32::from(bin2bcd((year % 100) as u8))) | (u32::from(bin2bcd((year / 100) as u8)) << 8);
 +
-+        // SAFETY: `self.as_raw()` is a valid pointer to a `struct rtc_device`.
-+        unsafe { bindings::dev_set_drvdata(dev.as_raw(), data.into_foreign().cast()) };
++    let st_time = ((tm.tm_mon() + 1) as u32) << RTC_MON_SHIFT
++        | (tm.tm_mday() as u32) << RTC_MDAY_SHIFT
++        | ((wday + 1) as u32) << RTC_WDAY_SHIFT
++        | (tm.tm_hour() as u32) << RTC_HOUR_SHIFT
++        | (tm.tm_min() as u32) << RTC_MIN_SHIFT
++        | (tm.tm_sec() as u32) << RTC_SEC_SHIFT;
++
++    Ok((st_time, bcd_year))
++}
++
++/// Converts ST v2 RTC packed BCD format to a Gregorian date.
++///
++/// Extracts time components from the packed 32-bit value and BCD year register,
++/// then populates the RtcTime structure.
++fn stv2_time_to_tm(st_time: u32, bcd_year: u32, tm: &mut RtcTime) {
++    let year_low = bcd2bin((bcd_year & 0xFF) as u8);
++    let year_high = bcd2bin(((bcd_year >> 8) & 0xFF) as u8);
++    tm.set_tm_year(i32::from(year_low) + i32::from(year_high) * 100);
++    tm.set_tm_mon((((st_time & RTC_MON_MASK) >> RTC_MON_SHIFT) - 1) as i32);
++    tm.set_tm_mday(((st_time & RTC_MDAY_MASK) >> RTC_MDAY_SHIFT) as i32);
++    tm.set_tm_wday((((st_time & RTC_WDAY_MASK) >> RTC_WDAY_SHIFT) - 1) as i32);
++    tm.set_tm_hour(((st_time & RTC_HOUR_MASK) >> RTC_HOUR_SHIFT) as i32);
++    tm.set_tm_min(((st_time & RTC_MIN_MASK) >> RTC_MIN_SHIFT) as i32);
++    tm.set_tm_sec(((st_time & RTC_SEC_MASK) >> RTC_SEC_SHIFT) as i32);
++
++    // Values are from valid RTC time structures and are non-negative.
++    tm.set_tm_yday(tm.year_days());
++    tm.set_tm_year(tm.tm_year() - 1900);
++}
++
++/// Converts a binary value to BCD.
++fn bin2bcd(val: u8) -> u8 {
++    ((val / 10) << 4) | (val % 10)
++}
++
++/// Converts a BCD value to binary.
++fn bcd2bin(val: u8) -> u8 {
++    ((val >> 4) * 10) + (val & 0x0F)
++}
++
++/// Interrupt handler for PL031 RTC alarm events.
++#[pin_data]
++struct Pl031IrqHandler {
++    #[pin]
++    _pin: PhantomPinned,
++    rtcdev: ARef<RtcDevice<Pl031DrvData>>,
++}
++
++impl Handler for Pl031IrqHandler {
++    fn handle(&self, _dev: &device::Device<device::Bound>) -> IrqReturn {
++        // Get driver data using drvdata.
++        let drvdata = match self.rtcdev.drvdata() {
++            Ok(drvdata) => drvdata,
++            Err(_) => return IrqReturn::None,
++        };
++
++        // Access the MMIO base.
++        let base_guard = match drvdata.base.try_access() {
++            Some(guard) => guard,
++            None => return IrqReturn::None,
++        };
++        let base = base_guard.deref();
++
++        // Read masked interrupt status.
++        let rtcmis = base.read32(RTC_MIS);
++
++        if (rtcmis & RTC_BIT_AI) != 0 {
++            base.write32(RTC_BIT_AI, RTC_ICR);
++            self.rtcdev.update_irq(1, (RTC_AF | RTC_IRQF) as usize);
++            return IrqReturn::Handled;
++        }
++
++        IrqReturn::None
++    }
++}
++
++#[vtable]
++impl RtcOps for Pl031DrvData {
++    fn read_time(rtcdev: &RtcDevice<Self>, tm: &mut RtcTime) -> Result {
++        let drvdata = rtcdev.drvdata()?;
++        let base_guard = drvdata.base.try_access().ok_or(ENXIO)?;
++        let base = base_guard.deref();
++
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time32: u32 = base.read32(RTC_DR);
++                let time64 = i64::from(time32);
++                tm.set_from_time64(time64);
++            }
++            VendorVariant::StV2 => {
++                let st_time = base.read32(RTC_DR);
++                let bcd_year = base.read32(RTC_YDR);
++                stv2_time_to_tm(st_time, bcd_year, tm);
++            }
++        }
++
 +        Ok(())
 +    }
 +
-+    /// Borrow the driver's private data bound to this [`RtcDevice`].
-+    pub fn drvdata(&self) -> Result<Pin<&T>> {
-+        let dev: &device::Device<device::Bound> = self.as_ref();
++    fn set_time(rtcdev: &RtcDevice<Self>, tm: &mut RtcTime) -> Result {
++        let dev: &device::Device<device::Bound> = rtcdev.as_ref();
++        let drvdata = rtcdev.drvdata()?;
++        let base_guard = drvdata.base.try_access().ok_or(ENXIO)?;
++        let base = base_guard.deref();
 +
-+        // SAFETY: `self.as_raw()` is a valid pointer to a `struct device`.
-+        let ptr = unsafe { bindings::dev_get_drvdata(dev.as_raw()) };
-+
-+        if ptr.is_null() {
-+            return Err(ENOENT);
-+        }
-+
-+        // SAFETY: The caller ensures that `ptr` is valid and writable.
-+        Ok(unsafe { Pin::<KBox<T>>::borrow(ptr.cast()) })
-+    }
-+}
-+
-+impl<T: 'static> Drop for RtcDevice<T> {
-+    fn drop(&mut self) {
-+        let dev: &device::Device<device::Bound> = self.as_ref();
-+        // SAFETY: By the type invariants, `self.as_raw()` is a valid pointer to a `struct device`.
-+        let ptr: *mut c_void = unsafe { bindings::dev_get_drvdata(dev.as_raw()) };
-+
-+        // SAFETY: By the type invariants, `self.as_raw()` is a valid pointer to a `struct device`.
-+        unsafe { bindings::dev_set_drvdata(dev.as_raw(), core::ptr::null_mut()) };
-+
-+        if !ptr.is_null() {
-+            // SAFETY: `ptr` comes from a previous call to `into_foreign()`, and
-+            // `dev_get_drvdata()` guarantees to return the same pointer given to
-+            // `dev_set_drvdata()`.
-+            unsafe { drop(Pin::<KBox<T>>::from_foreign(ptr.cast())) };
-+        }
-+    }
-+}
-+
-+/// A resource guard that ensures the RTC device is properly registered.
-+///
-+/// This struct is intended to be managed by the `devres` framework by transferring its ownership
-+/// via [`devres::register`]. This ties the lifetime of the RTC device registration
-+/// to the lifetime of the underlying device.
-+pub struct Registration<T: 'static> {
-+    #[allow(dead_code)]
-+    rtc_device: ARef<RtcDevice<T>>,
-+}
-+
-+impl<T: 'static> Registration<T> {
-+    /// Registers an RTC device with the RTC subsystem.
-+    ///
-+    /// Transfers its ownership to the `devres` framework, which ties its lifetime
-+    /// to the parent device.
-+    /// On unbind of the parent device, the `devres` entry will be dropped, automatically
-+    /// cleaning up the RTC device. This function should be called from the driver's `probe`.
-+    pub fn register(dev: &device::Device<device::Bound>, rtc_device: ARef<RtcDevice<T>>) -> Result {
-+        let rtc_dev: &device::Device = rtc_device.as_ref();
-+        let rtc_parent = rtc_dev.parent().ok_or(EINVAL)?;
-+        if dev.as_raw() != rtc_parent.as_raw() {
-+            return Err(EINVAL);
-+        }
-+
-+        // Registers an RTC device with the RTC subsystem.
-+        // SAFETY: The device will be automatically unregistered when the parent device
-+        // is removed (devm cleanup). The helper function uses `THIS_MODULE` internally.
-+        let err = unsafe { bindings::devm_rtc_register_device(rtc_device.as_raw()) };
-+        if err != 0 {
-+            return Err(Error::from_errno(err));
-+        }
-+
-+        let registration = Registration { rtc_device };
-+
-+        devres::register(dev, registration, GFP_KERNEL)
-+    }
-+}
-+
-+/// Options for creating an RTC device.
-+#[derive(Copy, Clone)]
-+pub struct RtcDeviceOptions {
-+    /// The name of the RTC device.
-+    pub name: &'static CStr,
-+}
-+
-+/// Trait implemented by RTC device operations.
-+///
-+/// This trait defines the operations that an RTC device driver must implement.
-+/// Most methods are optional and have default implementations that return an error.
-+#[vtable]
-+pub trait RtcOps: Sized + 'static {
-+    /// Read the current time from the RTC.
-+    ///
-+    /// This is a required method and must be implemented.
-+    fn read_time(_rtcdev: &RtcDevice<Self>, _tm: &mut RtcTime) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Set the time in the RTC.
-+    ///
-+    /// This is a required method and must be implemented.
-+    ///
-+    /// Note: The parameter is `&mut` to match the C API signature, even though
-+    /// it's conceptually read-only from the Rust side.
-+    fn set_time(_rtcdev: &RtcDevice<Self>, _tm: &mut RtcTime) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Read the alarm time from the RTC.
-+    fn read_alarm(_rtcdev: &RtcDevice<Self>, _alarm: &mut RtcWkAlrm) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Set the alarm time in the RTC.
-+    ///
-+    /// Note: The parameter is `&mut` to match the C API signature, even though
-+    /// it's conceptually read-only from the Rust side.
-+    fn set_alarm(_rtcdev: &RtcDevice<Self>, _alarm: &mut RtcWkAlrm) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Enable or disable the alarm interrupt.
-+    ///
-+    /// `enabled` is non-zero to enable, zero to disable.
-+    fn alarm_irq_enable(_rtcdev: &RtcDevice<Self>, _enabled: u32) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Handle custom ioctl commands.
-+    fn ioctl(_rtcdev: &RtcDevice<Self>, _cmd: u32, _arg: c_ulong) -> Result<c_int> {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Show information in /proc/driver/rtc.
-+    fn proc(_rtcdev: &RtcDevice<Self>, _seq: &mut SeqFile) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Read the time offset.
-+    fn read_offset(_rtcdev: &RtcDevice<Self>, _offset: &mut i64) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Set the time offset.
-+    fn set_offset(_rtcdev: &RtcDevice<Self>, _offset: i64) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Get an RTC parameter.
-+    fn param_get(_rtcdev: &RtcDevice<Self>, _param: &mut RtcParam) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+
-+    /// Set an RTC parameter.
-+    ///
-+    /// Note: The parameter is `&mut` to match the C API signature, even though
-+    /// it's conceptually read-only from the Rust side.
-+    fn param_set(_rtcdev: &RtcDevice<Self>, _param: &mut RtcParam) -> Result {
-+        Err(ENOTSUPP)
-+    }
-+}
-+
-+struct Adapter<T: RtcOps> {
-+    _p: PhantomData<T>,
-+}
-+
-+impl<T: RtcOps> Adapter<T> {
-+    const VTABLE: RtcOpsVTable = create_rtc_ops::<T>();
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `tm` must be a valid pointer to a `struct rtc_time`.
-+    unsafe extern "C" fn read_time(
-+        dev: *mut bindings::device,
-+        tm: *mut bindings::rtc_time,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `tm` is valid and writable.
-+        // `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so we can safely cast.
-+        let rtc_tm = unsafe { &mut *tm.cast::<RtcTime>() };
-+
-+        match T::read_time(rtc_dev, rtc_tm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `tm` must be a valid pointer to a `struct rtc_time`.
-+    unsafe extern "C" fn set_time(
-+        dev: *mut bindings::device,
-+        tm: *mut bindings::rtc_time,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `tm` is valid and writable.
-+        // `RtcTime` is `#[repr(transparent)]` over `bindings::rtc_time`, so we can safely cast.
-+        let rtc_tm = unsafe { &mut *tm.cast::<RtcTime>() };
-+
-+        match T::set_time(rtc_dev, rtc_tm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `alarm` must be a valid pointer to a `struct rtc_wkalrm`.
-+    unsafe extern "C" fn read_alarm(
-+        dev: *mut bindings::device,
-+        alarm: *mut bindings::rtc_wkalrm,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `alarm` is valid and writable.
-+        // `RtcWkAlrm` is `#[repr(transparent)]` over `bindings::rtc_wkalrm`, so we can safely cast.
-+        let rtc_alarm = unsafe { &mut *alarm.cast::<RtcWkAlrm>() };
-+
-+        match T::read_alarm(rtc_dev, rtc_alarm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `alarm` must be a valid pointer to a `struct rtc_wkalrm`.
-+    unsafe extern "C" fn set_alarm(
-+        dev: *mut bindings::device,
-+        alarm: *mut bindings::rtc_wkalrm,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `alarm` is valid and writable.
-+        // `RtcWkAlrm` is `#[repr(transparent)]` over `bindings::rtc_wkalrm`, so we can safely cast.
-+        let rtc_alarm = unsafe { &mut *alarm.cast::<RtcWkAlrm>() };
-+
-+        match T::set_alarm(rtc_dev, rtc_alarm) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    unsafe extern "C" fn alarm_irq_enable(dev: *mut bindings::device, enabled: c_uint) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+
-+        match T::alarm_irq_enable(rtc_dev, enabled) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    unsafe extern "C" fn ioctl(dev: *mut bindings::device, cmd: c_uint, arg: c_ulong) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+
-+        match T::ioctl(rtc_dev, cmd, arg) {
-+            Ok(ret) => ret,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `seq` must be a valid pointer to a `struct seq_file`.
-+    unsafe extern "C" fn proc(dev: *mut bindings::device, seq: *mut bindings::seq_file) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `seq` is valid and writable.
-+        let seq_file = unsafe { &mut *seq.cast::<SeqFile>() };
-+
-+        match T::proc(rtc_dev, seq_file) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
-+        }
-+    }
-+
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `offset` must be a valid pointer to a `long`.
-+    unsafe extern "C" fn read_offset(dev: *mut bindings::device, offset: *mut c_long) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `offset` is valid and writable.
-+        let mut offset_val: i64 = unsafe { *offset.cast() };
-+
-+        match T::read_offset(rtc_dev, &mut offset_val) {
-+            Ok(()) => {
-+                // SAFETY: The caller ensures that `offset` is valid and writable.
-+                unsafe { *offset.cast() = offset_val as c_long };
-+                0
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time64 = tm.to_time64();
++                base.write32(time64 as u32, RTC_LR);
 +            }
-+            Err(err) => err.to_errno(),
++            VendorVariant::StV2 => {
++                let (st_time, bcd_year) = stv2_tm_to_time(tm).inspect_err(|&err| {
++                    if err == EINVAL {
++                        dev_err!(dev, "invalid wday value {}\n", tm.tm_wday());
++                    }
++                })?;
++                base.write32(bcd_year, RTC_YLR);
++                base.write32(st_time, RTC_LR);
++            }
 +        }
++
++        Ok(())
 +    }
 +
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    unsafe extern "C" fn set_offset(dev: *mut bindings::device, offset: c_long) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
++    fn read_alarm(rtcdev: &RtcDevice<Self>, alarm: &mut RtcWkAlrm) -> Result {
++        let drvdata = rtcdev.drvdata()?;
++        let base_guard = drvdata.base.try_access().ok_or(ENXIO)?;
++        let base = base_guard.deref();
 +
-+        match T::set_offset(rtc_dev, offset as i64) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time32: u32 = base.read32(RTC_MR);
++                let time64 = i64::from(time32);
++                crate::rtc::RtcTime::time64_to_tm(time64, alarm.get_time_mut());
++            }
++            VendorVariant::StV2 => {
++                let st_time = base.read32(RTC_MR);
++                let bcd_year = base.read32(RTC_YMR);
++                stv2_time_to_tm(st_time, bcd_year, alarm.get_time_mut());
++            }
 +        }
++
++        alarm.set_pending(if (base.read32(RTC_RIS) & RTC_BIT_AI) != 0 {
++            1
++        } else {
++            0
++        });
++        alarm.set_enabled(if (base.read32(RTC_IMSC) & RTC_BIT_AI) != 0 {
++            1
++        } else {
++            0
++        });
++
++        Ok(())
 +    }
 +
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `param` must be a valid pointer to a `struct rtc_param`.
-+    unsafe extern "C" fn param_get(
-+        dev: *mut bindings::device,
-+        param: *mut bindings::rtc_param,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `param` is valid and writable.
-+        // `RtcParam` is `#[repr(transparent)]` over `bindings::rtc_param`, so we can safely cast.
-+        let rtc_param = unsafe { &mut *param.cast::<RtcParam>() };
++    fn set_alarm(rtcdev: &RtcDevice<Self>, alarm: &mut RtcWkAlrm) -> Result {
++        let dev: &device::Device<device::Bound> = rtcdev.as_ref();
++        let drvdata = rtcdev.drvdata()?;
++        let base_guard = drvdata.base.try_access().ok_or(ENXIO)?;
++        let base = base_guard.deref();
 +
-+        match T::param_get(rtc_dev, rtc_param) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
++        match drvdata.variant {
++            VendorVariant::Arm | VendorVariant::StV1 => {
++                let time64 = alarm.get_time().to_time64();
++                base.write32(time64 as u32, RTC_MR);
++            }
++            VendorVariant::StV2 => {
++                let (st_time, bcd_year) =
++                    stv2_tm_to_time(alarm.get_time()).inspect_err(|&err| {
++                        if err == EINVAL {
++                            dev_err!(dev, "invalid wday value {}\n", alarm.get_time().tm_wday());
++                        }
++                    })?;
++                base.write32(bcd_year, RTC_YMR);
++                base.write32(st_time, RTC_MR);
++            }
 +        }
++
++        Self::alarm_irq_enable(rtcdev, u32::from(alarm.enabled()))
 +    }
 +
-+    /// # Safety
-+    ///
-+    /// `dev` must be a valid pointer to the `struct device` embedded in a `struct rtc_device`.
-+    /// `param` must be a valid pointer to a `struct rtc_param`.
-+    unsafe extern "C" fn param_set(
-+        dev: *mut bindings::device,
-+        param: *mut bindings::rtc_param,
-+    ) -> c_int {
-+        // SAFETY: The caller ensures that `dev` is a valid pointer to a `struct device`.
-+        let device_dev: &device::Device = unsafe { device::Device::from_raw(dev) };
-+        // SAFETY: `dev` is embedded in a `struct rtc_device`, so we can use
-+        // `AsBusDevice` to get it.
-+        let rtc_dev = unsafe { RtcDevice::<T>::from_device(device_dev) };
-+        // SAFETY: The caller ensures that `param` is valid and writable.
-+        // `RtcParam` is `#[repr(transparent)]` over `bindings::rtc_param`, so we can safely cast.
-+        let rtc_param = unsafe { &mut *param.cast::<RtcParam>() };
++    fn alarm_irq_enable(rtcdev: &RtcDevice<Self>, enabled: u32) -> Result {
++        let drvdata = rtcdev.drvdata()?;
++        let base_guard = drvdata.base.try_access().ok_or(ENXIO)?;
++        let base = base_guard.deref();
 +
-+        match T::param_set(rtc_dev, rtc_param) {
-+            Ok(()) => 0,
-+            Err(err) => err.to_errno(),
++        // Clear any pending alarm interrupts.
++        base.write32(RTC_BIT_AI, RTC_ICR);
++
++        let mut imsc = base.read32(RTC_IMSC);
++        if enabled == 1 {
++            imsc |= RTC_BIT_AI;
++        } else {
++            imsc &= !RTC_BIT_AI;
 +        }
++        base.write32(imsc, RTC_IMSC);
++
++        Ok(())
 +    }
 +}
 +
-+/// VTable structure wrapper for RTC operations.
-+/// Mirrors [`struct rtc_class_ops`](srctree/include/linux/rtc.h).
-+#[repr(transparent)]
-+pub struct RtcOpsVTable(bindings::rtc_class_ops);
-+
-+// SAFETY: RtcOpsVTable is Send. The vtable contains only function pointers,
-+// which are simple data types that can be safely moved across threads.
-+// The thread-safety of calling these functions is handled by the kernel's
-+// locking mechanisms.
-+unsafe impl Send for RtcOpsVTable {}
-+
-+// SAFETY: RtcOpsVTable is Sync. The vtable is immutable after it is created,
-+// so it can be safely referenced and accessed concurrently by multiple threads
-+// e.g. to read the function pointers.
-+unsafe impl Sync for RtcOpsVTable {}
-+
-+impl RtcOpsVTable {
-+    /// Returns a raw pointer to the underlying `rtc_class_ops` struct.
-+    pub(crate) const fn as_raw(&self) -> *const bindings::rtc_class_ops {
-+        &self.0
-+    }
-+}
-+
-+/// Creates an RTC operations vtable for a type `T` that implements `RtcOps`.
-+///
-+/// This is used to bridge Rust trait implementations to the C `struct rtc_class_ops`
-+/// expected by the kernel.
-+pub const fn create_rtc_ops<T: RtcOps>() -> RtcOpsVTable {
-+    let mut ops: bindings::rtc_class_ops = pin_init::zeroed();
-+
-+    ops.read_time = if T::HAS_READ_TIME {
-+        Some(Adapter::<T>::read_time)
-+    } else {
-+        None
-+    };
-+    ops.set_time = if T::HAS_SET_TIME {
-+        Some(Adapter::<T>::set_time)
-+    } else {
-+        None
-+    };
-+    ops.read_alarm = if T::HAS_READ_ALARM {
-+        Some(Adapter::<T>::read_alarm)
-+    } else {
-+        None
-+    };
-+    ops.set_alarm = if T::HAS_SET_ALARM {
-+        Some(Adapter::<T>::set_alarm)
-+    } else {
-+        None
-+    };
-+    ops.alarm_irq_enable = if T::HAS_ALARM_IRQ_ENABLE {
-+        Some(Adapter::<T>::alarm_irq_enable)
-+    } else {
-+        None
-+    };
-+    ops.ioctl = if T::HAS_IOCTL {
-+        Some(Adapter::<T>::ioctl)
-+    } else {
-+        None
-+    };
-+    ops.proc_ = if T::HAS_PROC {
-+        Some(Adapter::<T>::proc)
-+    } else {
-+        None
-+    };
-+    ops.read_offset = if T::HAS_READ_OFFSET {
-+        Some(Adapter::<T>::read_offset)
-+    } else {
-+        None
-+    };
-+    ops.set_offset = if T::HAS_SET_OFFSET {
-+        Some(Adapter::<T>::set_offset)
-+    } else {
-+        None
-+    };
-+    ops.param_get = if T::HAS_PARAM_GET {
-+        Some(Adapter::<T>::param_get)
-+    } else {
-+        None
-+    };
-+    ops.param_set = if T::HAS_PARAM_SET {
-+        Some(Adapter::<T>::param_set)
-+    } else {
-+        None
-+    };
-+
-+    RtcOpsVTable(ops)
-+}
-+
-+/// Declares a kernel module that exposes a single RTC AMBA driver.
-+///
-+/// # Examples
-+///
-+///```ignore
-+/// kernel::module_rtc_amba_driver! {
-+///     type: MyDriver,
-+///     name: "Module name",
-+///     authors: ["Author name"],
-+///     description: "Description",
-+///     license: "GPL v2",
-+/// }
-+///```
-+#[macro_export]
-+macro_rules! module_rtc_amba_driver {
-+    ($($user_args:tt)*) => {
-+        $crate::module_amba_driver! {
-+            $($user_args)*
-+            imports_ns: ["RTC"],
-+        }
-+    };
++kernel::module_rtc_amba_driver! {
++    type: Pl031AmbaDriver,
++    name: "rtc-pl031-rust",
++    authors: ["Ke Sun <sunke@kylinos.cn>"],
++    description: "Rust PL031 RTC driver",
++    license: "GPL v2",
 +}
 -- 
 2.43.0
