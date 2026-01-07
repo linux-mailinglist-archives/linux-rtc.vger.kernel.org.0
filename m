@@ -1,156 +1,203 @@
-Return-Path: <linux-rtc+bounces-5662-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5663-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1A96CFB962
-	for <lists+linux-rtc@lfdr.de>; Wed, 07 Jan 2026 02:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96EC1CFCF19
+	for <lists+linux-rtc@lfdr.de>; Wed, 07 Jan 2026 10:44:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6CBE3300F586
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jan 2026 01:22:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D8F4E3067661
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jan 2026 09:39:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D311624C5;
-	Wed,  7 Jan 2026 01:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934FB2EAB6E;
+	Wed,  7 Jan 2026 09:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AfE20v5h"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PhseDA4r"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322CC8405C
-	for <linux-rtc@vger.kernel.org>; Wed,  7 Jan 2026 01:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0423F2D8DA8
+	for <linux-rtc@vger.kernel.org>; Wed,  7 Jan 2026 09:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767748977; cv=none; b=N2UpcDspKLgQzafRHRs76FX+xO/Xp4pYNVlvWyfli82P/Mc9yT1GHZNNT/TK5ZAgS9aVFCzT46vwCYjZBm9/xRiipGwVMMZ1ukRvB1+HNyraIpeeKXlfMstzbEjj/0bmQ4QsCpaLnM2uvQgsJ4QHUvlgtgARJgfbZYNxbL2e3lU=
+	t=1767778591; cv=none; b=HjzLaX25JWkL2H/bnmkwHC2gBK1TJeRowe+pz7RJqJVqC7zsREpbmJEfPFRfpgNFjBcLmerX7qyqH3bJe2DQ1Mao2xKPP2kbRTycxyUSJKqan0Qz6zXHNANSI1s64q15uGuqburgqAQFZpfKq4rcEnfGPEtE4/5nsOJ83V77LLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767748977; c=relaxed/simple;
-	bh=w68wXr5ticdVcWVVKaG3ZzO4fx1vzPS9uhBCrz5e59U=;
+	s=arc-20240116; t=1767778591; c=relaxed/simple;
+	bh=BvNOm3NYbiU+ikXbwLgo3IoCKmUPU46BKkQ49BFiqJ8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q5sSSkjzjM2V6iaUf1N5U9g0uuS+EQqFTWhA3FYLx0ucisxKJd7uXWCHjLhFMJ2Xw3/Fs4gMGbMOtYyb2z4vpyUYh/HW3SOvT3uQV5+krfGtjkgkbXkWYo0zwUxCTqnGCek2Dg51YrJ7zs6CjUsU2OjwGEXkFJvFqHs7leJubQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AfE20v5h; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b843e8a4fbfso114198566b.0
-        for <linux-rtc@vger.kernel.org>; Tue, 06 Jan 2026 17:22:55 -0800 (PST)
+	 To:Cc:Content-Type; b=ONQ525G9l2Qm8aImctaEYqO/N4ZeN/746rXBbbZ+YvtofL/tTwg93+psdV+0cRNO0kWi+/Qu/SlW4i9+NwW4B+5EKxv1NpoRSCNyTS6MKtahdb/mmW5Rm2fi57WS8gBpFtm8ljIb6Km/ISWa0fwmUZTDH+Jek/BnyfEJ/D5HFKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PhseDA4r; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-65d1a094185so791056eaf.1
+        for <linux-rtc@vger.kernel.org>; Wed, 07 Jan 2026 01:36:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767748974; x=1768353774; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1767778587; x=1768383387; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0tsd9UwM4vLqBKUeV9xw/hj4H2ka06I0/7uWJwrkW5U=;
-        b=AfE20v5hY4zXpvqBPLdiBoaZIs/i0+NHPNy0ghWxy7ZLenzS/fgYrVOFzST6frSBzN
-         jx0NC4Ss45cCKeVdlv+MHCrrU0jJ4+b/j1speO5cuq4zTFRZY3ZfvrAeWb/gg6ZNNDbI
-         flUxocJKhnOQ+q4sDOV4cyXETHZaFJcba2teT9Tg2Qfdp29CTiaCL8X/tKHdo8CKVgOL
-         qqbanC2uA68VH16Mr0sCDBMYbr/nf0qoAW9Q/MzjxR5fNFctwoDkkvpWEgpUqbLhcQr0
-         O7Au1xBBvAgt9lZ2mzGywp7LFlCD/ANH1XR7EXCwtneiOv3vtsySXQWgpmsxd28e56Lr
-         XJOQ==
+        bh=GAJ5e65k3z1Bl84v4hSYV5jHbNZ5QqotFXMyK4sLylU=;
+        b=PhseDA4rqOuGczQm8OI6ScQU96wNFWhck5YtuZvI3HSw+b+MsyyRb890d3laSxoB3e
+         QFMpjN6aTvp+kbwyhLQo2J9od15tVdqXeg59qbxlSb2KYBiiePlcD4da/NZp15pAKkBy
+         Mk1tudHrk3NEZlkxU0REHb8ECZjHYoNl+keMpMdQ8J1+7BWavYQN1EE+0Q2ZubgyH3cb
+         9q7tX7boJlgSoFQqNjwa2K7JwHtBqMT7CB+3UG+mFjwSA01TAfkwDnk4noi5e4tQfzrH
+         kz3GB4HSeiNTKvHacsIsX4s+4xZ7qV5xS1hoE6TuLlj8MomLoCEBFuyuvnfIZdE9Vpkz
+         rY3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767748974; x=1768353774;
+        d=1e100.net; s=20230601; t=1767778587; x=1768383387;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0tsd9UwM4vLqBKUeV9xw/hj4H2ka06I0/7uWJwrkW5U=;
-        b=B5vxuBU6GAPEdcTPyVL3Uu0RIJ2hkG6WPTypCVOQCgET6tF0pn0LDPbEMGGakfJEG5
-         f7uw64lVpxzU+VizS3Z+ajCpsJjLGAGdesZyQaBc1p9/Qwv9LL8A7g3vsYQgyYsTa5zH
-         jnpyqjdpYRJVExHM6+jBlRripXxscKu9kzqMPyo/YLHLjvFCEm4g0/oYSwXoyjuIiZoM
-         fK1osE2hBz/cH7vNBZGLtCE6UzVTHVEcSq9aBnsUn1212BqINQEN3bYOxLPYaIMUNwcO
-         yF5ka8kG8+i4XK/zvD2Xw0IvcMXz51dm08ygq0l4lN/PdRg9wdplmy8ZfJdErfTsjqYD
-         OQYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrfUySda5vGpNhr8vvg+Lol9ga9on9pLsWNQNjFJrua50fvdhrF6MMurtRR27vQMaI7QUO5fstZFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmPluY5G8m//ZR9MJsgUtr6VVRFWnA6rqnhqPgtDp5eJz9p8UR
-	J598lTUzBrfOueDJjwDPX9uRt8SgAbV9dl9PS8AZ6863CqDcEpDvirmfGZhfmKiWVmMBpf/9WSK
-	wiIrLeDiSpcWj6HizlQ6nASDoalHZlHY=
-X-Gm-Gg: AY/fxX7cX/P0f0agkF7kdiJCJmFShSdNg+acU+NH025AqkbRhmlKUipj6+uJhY0LziJ
-	g3BGTPo2fsc5B4/fcW28yEY/fMQjnWrmg6PDMoaPimcYT6iuQ9nrn4kWDN5S6C5o0NtBOEJTj3t
-	JQa+6B2CA0mQpgCrRjRZO+hRn1AfEYJs8HtrPUKxAaIfTjMD7ddTQzjQH0JIzUfz4pJjZsN3B5G
-	XUpnFrjK3rWLUFcIGUXf41cvkoq9/RhUqnIUsKpvQU3tVqMQMkHUKt2hZ2NgO9c29AS2Sf4
-X-Google-Smtp-Source: AGHT+IHAqq5ImNkLGtB8Y1d2kLRKMdYzQ9MRuExrpqABDFBjUdXj3NxrF87jFkiZlC4Jeb6TBNib1kZQOqxBCF1a1Z8=
-X-Received: by 2002:a17:907:70e:b0:b73:758c:c96f with SMTP id
- a640c23a62f3a-b844539fc89mr86070866b.52.1767748974057; Tue, 06 Jan 2026
- 17:22:54 -0800 (PST)
+        bh=GAJ5e65k3z1Bl84v4hSYV5jHbNZ5QqotFXMyK4sLylU=;
+        b=RT9JcYbZTBu2TGMZ4zyeOUilWDPip1scn5y/XX93ZzX/GLRHkOM9vBypXPPkMhbwjH
+         NIWD3klq701bJyGqVXYYyhSevX0Ln+lVJTw4TRlf6kE7SsuaHdxo+rJOO7Z+oKrkiuj1
+         xR+vLv7OU7oYtOtvO9rZ6a7BTP4Jbup+CfZ1I2A/AlfvljZGhj9Q/xhgr+wbS8iIYjnW
+         Kz6EowhmTPpBIWYsejU0QBxtFiaraQ/ltM2WPLLA8hnABPv+2EMeMlHo93rsuaXnng/8
+         yfARZwwX7un27K3I8OrRR72UNHqedeGNPeuVUQoy5Gs7Inu/Sb38P2qbaewwZKHJgpQ4
+         AuiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUy7B3VPnzekLQMRCG6Ckk7HJ07jzZMANmUzhmRcb17XrcwYSw1IP9UfRpCHZ6RLhOPKvOeWaSThxc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznKNFv9o6jPgT/Iwl2+d0Pu+dbqdM7OB3b4Jt9TX1X0zZ+rftu
+	6bhUtdug/HPSx6k0pTXZIgfPTsXmllCjZBFW6tOml4IV902Lm9OcHuXT9sYoFrLjzLS9sm+l55B
+	uglxDU1sE5L8M0RkWtzhQ8K58u++9fYfZ3Ddafc+Vhg==
+X-Gm-Gg: AY/fxX6IpqepGIO5nWcDuyp7tBqaHTzmLi1ExyqEZTVfRP9z04ZHlFCYYq0FNKGSf0o
+	t1MPvY7lLRARlKYI+lcmng1mlaMl0BnTYAg2DnwefUyqaXWaXabnOTIFzVl02OpmV7uDmBbkr8c
+	npE4XWSZyfbTrSvDGKZOV+ss7CUK2fPEgnF8FZmgNupF6RD/B9V9vMvU65bCdzBVFGXMc71e8p3
+	lnEbnGWXIb56n+G/9KcHKoO3UypufbLzN2ebu0bXZLA6AWo9jNzWgIo9i+dR+zkHJmPofMZ2uQv
+	9JvclgXvewfzpgdOXhZeSXceHw==
+X-Google-Smtp-Source: AGHT+IH8mMrbtH032ZDWJFlkRThntfnwmPEqUqd2JDeL8NGsufG7LDpL42U7yHJF4QJdKPnzDUAc6fHTBjr7gAIIOLU=
+X-Received: by 2002:a4a:ba13:0:b0:659:9a49:8f89 with SMTP id
+ 006d021491bc7-65f55085418mr579167eaf.78.1767778586821; Wed, 07 Jan 2026
+ 01:36:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1767663073.git.zhoubinbin@loongson.cn> <8876bebaf08121bb5edd2500f5289284b75df011.1767663073.git.zhoubinbin@loongson.cn>
- <20260106191314.GA2568583-robh@kernel.org>
-In-Reply-To: <20260106191314.GA2568583-robh@kernel.org>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Wed, 7 Jan 2026 09:22:41 +0800
-X-Gm-Features: AQt7F2rx2FP62gHMLs01g481K6zXg39jS3zpWijBpVZVQd9ZycV4AZkWto4-qZQ
-Message-ID: <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-binding: rtc: loongson: Document
- Loongson-2K0300 compatible
-To: Rob Herring <robh@kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-mips@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com> <d14a9c41-9df7-438f-bb58-097644d5d93f@nvidia.com>
+In-Reply-To: <d14a9c41-9df7-438f-bb58-097644d5d93f@nvidia.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Wed, 7 Jan 2026 10:36:15 +0100
+X-Gm-Features: AQt7F2pWAOmWwJm8vdt2KOCYOYr18EvzYgjBZjv21zyTW_ttRjt9UA8BFElgUTo
+Message-ID: <CAHUa44Hhyz_zF5JtCz00YqbgoPTLK2iS7NBT8UwOLpAz=3VZAA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver callbacks
+To: Jon Hunter <jonathanh@nvidia.com>
+Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Sumit Garg <sumit.garg@kernel.org>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, 
+	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, 
+	linux-mips@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>, 
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Rob:
+Hi Jon,
 
-Thanks for your review.
-
-On Wed, Jan 7, 2026 at 3:13=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
+On Tue, Jan 6, 2026 at 10:40=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> w=
+rote:
 >
-> On Tue, Jan 06, 2026 at 09:33:32AM +0800, Binbin Zhou wrote:
-> > Add "loongson,ls2k0300-rtc" dedicated compatible to represent the RTC
-> > interface of the Loongson-2K0300 chip.
-> >
-> > Its hardware design is similar to that of the Loongson-1B, but it does
-> > not support the alarm feature.
+> Hi Uwe,
 >
-> But you are requiring the interrupt property for it? Isn't it no alarm
-> feature means no interrupt?
-
-Yes, the `interrupts` attribute is not required without the alarm feature.
-
-But my judgment condition is `not contains` (added in patch-1[1]).
-There are only a few SoCs on the Loongson platform that don't support
-the RTC alarm feature, so I think `not contains` looks cleaner and
-simpler.
-
-[1]: https://lore.kernel.org/all/8876bebaf08121bb5edd2500f5289284b75df011.1=
-767663073.git.zhoubinbin@loongson.cn/
-
+> On 15/12/2025 14:16, Uwe Kleine-K=C3=B6nig wrote:
+> > Hello,
+> >
+> > the objective of this series is to make tee driver stop using callbacks
+> > in struct device_driver. These were superseded by bus methods in 2006
+> > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> > methods.")) but nobody cared to convert all subsystems accordingly.
+> >
+> > Here the tee drivers are converted. The first commit is somewhat
+> > unrelated, but simplifies the conversion (and the drivers). It
+> > introduces driver registration helpers that care about setting the bus
+> > and owner. (The latter is missing in all drivers, so by using these
+> > helpers the drivers become more correct.)
+> >
+> > v1 of this series is available at
+> > https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylib=
+re.com
+> >
+> > Changes since v1:
+> >
+> >   - rebase to v6.19-rc1 (no conflicts)
+> >   - add tags received so far
+> >   - fix whitespace issues pointed out by Sumit Garg
+> >   - fix shutdown callback to shutdown and not remove
+> >
+> > As already noted in v1's cover letter, this series should go in during =
+a
+> > single merge window as there are runtime warnings when the series is
+> > only applied partially. Sumit Garg suggested to apply the whole series
+> > via Jens Wiklander's tree.
+> > If this is done the dependencies in this series are honored, in case th=
+e
+> > plan changes: Patches #4 - #17 depend on the first two.
+> >
+> > Note this series is only build tested.
+> >
+> > Uwe Kleine-K=C3=B6nig (17):
+> >    tee: Add some helpers to reduce boilerplate for tee client drivers
+> >    tee: Add probe, remove and shutdown bus callbacks to tee_client_driv=
+er
+> >    tee: Adapt documentation to cover recent additions
+> >    hwrng: optee - Make use of module_tee_client_driver()
+> >    hwrng: optee - Make use of tee bus methods
+> >    rtc: optee: Migrate to use tee specific driver registration function
+> >    rtc: optee: Make use of tee bus methods
+> >    efi: stmm: Make use of module_tee_client_driver()
+> >    efi: stmm: Make use of tee bus methods
+> >    firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+> >    firmware: arm_scmi: Make use of tee bus methods
+> >    firmware: tee_bnxt: Make use of module_tee_client_driver()
+> >    firmware: tee_bnxt: Make use of tee bus methods
+> >    KEYS: trusted: Migrate to use tee specific driver registration
+> >      function
+> >    KEYS: trusted: Make use of tee bus methods
+> >    tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+> >    tpm/tpm_ftpm_tee: Make use of tee bus methods
 >
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  Documentation/devicetree/bindings/rtc/loongson,rtc.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml b/=
-Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > index 8a2520f963d8..b62419c33fd5 100644
-> > --- a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > @@ -23,6 +23,7 @@ properties:
-> >            - loongson,ls1b-rtc
-> >            - loongson,ls1c-rtc
-> >            - loongson,ls7a-rtc
-> > +          - loongson,ls2k0300-rtc
-> >            - loongson,ls2k1000-rtc
-> >        - items:
-> >            - enum:
-> > @@ -49,6 +50,7 @@ if:
-> >          contains:
-> >            enum:
-> >              - loongson,ls1c-rtc
-> > +            - loongson,ls2k0300-rtc
-> >
-> >  then:
-> >    required:
-> > --
-> > 2.47.3
-> >
+>
+> On the next-20260105 I am seeing the following warnings ...
+>
+>   WARNING KERN Driver 'optee-rng' needs updating - please use bus_type me=
+thods
+>   WARNING KERN Driver 'scmi-optee' needs updating - please use bus_type m=
+ethods
+>   WARNING KERN Driver 'tee_bnxt_fw' needs updating - please use bus_type =
+methods
+>
+> I bisected the first warning and this point to the following
+> commit ...
+>
+> # first bad commit: [a707eda330b932bcf698be9460e54e2f389e24b7] tee: Add s=
+ome helpers to reduce boilerplate for tee client drivers
+>
+> I have not bisected the others, but guess they are related
+> to this series. Do you observe the same?
 
---=20
-Thanks.
-Binbin
+Yes, I see the same.
+
+I'm sorry, I didn't realize that someone might bisect this when I took
+only a few of the patches into next. I've applied all the patches in
+this series now.
+
+Thanks,
+Jens
 
