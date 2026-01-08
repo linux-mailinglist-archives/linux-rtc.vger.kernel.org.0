@@ -1,191 +1,250 @@
-Return-Path: <linux-rtc+bounces-5708-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5709-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0D3D05B06
-	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 19:57:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1774DD063B7
+	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 22:17:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 397853028188
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 18:48:11 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 90780302E3CB
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 21:17:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D312BEC4A;
-	Thu,  8 Jan 2026 18:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312D43358B2;
+	Thu,  8 Jan 2026 21:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="qRlwf+iN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JxU0u2rA";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="p+4ri8QJ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11020082.outbound.protection.outlook.com [52.101.193.82])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6EA2FD7D5;
-	Thu,  8 Jan 2026 18:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767898090; cv=fail; b=QpMjwL5nzXfrxyvW4RPshmKRPeh3Iw+w4Qexw/TbaPMoD84P4BllrKJU+rjUYTvCobc7MavYMGff/d2uMYjhxTtMKlHg1kAADk8wQYpWmIqaldDF9K0/I45HjC5FQ8JxyRr54yHH1yI6LOZBOTUlWoNBKPjx+R0mAMG9bf6BKXM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767898090; c=relaxed/simple;
-	bh=bBsHgI0wYvBXzfB/lp6Vp+vK1BrjVTscn6f/+fQeau0=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=lD7/8jk5RxDG7mFg39lYGOZZCxdN9xsVu8c9IvkzZMWhLD9tgwAAc/lzbMVORehPBtofFWaZfJZjeh61M7qHxtc2kJ+vy9Y2CXdN+6rvgzPcJuYolPQ9mtLfGnTKwd9j5nVIJFnuaX9c8e8/u4yKZ1SLSgGosbUWLjuUdDFFXq8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=qRlwf+iN; arc=fail smtp.client-ip=52.101.193.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xauMS6+uL++GmQcJIL4cdP8EvCSjkeDeMhIgmAsHgERYWgAnkHaGl2j4GgYtfkeHKPB7HIfqg/idKAMiod3G+8S/5fL3Zuf76HcOZ4vcHbQ2cFxqDpj+TUshTWPeTyJBXnNauDMU7N2BFlFQHaBFkN/Zx5AfHar8FJUsCeWJkc4MQzlLLKxFrYEC9am6tCJ6VXN8ZzHSR/fCa9Bg7buNnCRkO5qBNHmBmr61MxmuV9Ba1wNRG4I42HY3Zm7yz92g6tzbXdN5CjBvAkN6RCrg8xa711GzP2zCrwup1Kt5A3oHa1gGO2F9/FquPj+OZ+cF1NG8SjjGsV55YYGlJ8J5vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dDmNJ42jpE/juAEBtxTmIGNleKfvfNHjfXnenJhN8zI=;
- b=D1J95ix6przPfHLOKnkvhfjwd7pQBpg76NjpqcMfBxXCLo/M21/9BA8WVbasW6HHu74inxhz1v/oNDnX25UGEY2RM89m9cu5N0pigk88oU4zQI+iUKGZaxR/TP4elXJWK2PRA/ZZJvnrU3S+d2JJrVz/EnmzTmgcuwbRK9sBfMQz8BQv+RnBUwjix1JyeSG+SFOEBO1EzdHwOuucT49hb9D0DgHP0kCUiNlBE1XY5e1TFE6vKIQJTb6E5y4DW9XHxNre2eqaYZCelAtwQ28aRMmAFEyfmPtj8YMXXp/lLy3mQ/dh/a8wgjzgZ+zmjWE1eSUSsi9whO19Vvuhh3p+Sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dDmNJ42jpE/juAEBtxTmIGNleKfvfNHjfXnenJhN8zI=;
- b=qRlwf+iNAP8bUZq2uR6RqeznCcTad8vD3xsyrjCCUxC682qmz28FlhNFZ+3gyZIY37ivyCoG7nzZiaPaz1xkPIW+FlS2TM5Lb5zDtEZDNLWrau9zb5wNSGvLBvEYz2vVHhBrqLHgwtdA5+skC0LyrlmWF+MuB3DPSohpAaMDlJM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by CH0PR08MB7306.namprd08.prod.outlook.com (2603:10b6:610:113::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.1; Thu, 8 Jan
- 2026 18:48:05 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%4]) with mapi id 15.20.9520.000; Thu, 8 Jan 2026
- 18:48:05 +0000
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: linux-rtc@vger.kernel.org
-Cc: John Keeping <jkeeping@inmusicbrands.com>,
-	stable@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: pcf8563: use correct of_node for output clock
-Date: Thu,  8 Jan 2026 18:47:48 +0000
-Message-ID: <20260108184749.3413348-1-jkeeping@inmusicbrands.com>
-X-Mailer: git-send-email 2.52.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO0P123CA0007.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:354::16) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89589335568
+	for <linux-rtc@vger.kernel.org>; Thu,  8 Jan 2026 21:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767907033; cv=none; b=lybLd+XnpjEJyhGEUkOjtz/8QxKEL7iUEmIH8ZzsCV3XZhPWypn496QmqmeeLgMjs/R56DfXPOBHoY1DoNgc2IfN5fujoKO5Kwc6fIHh6+hioVs4KjF/UkmEaUkNLeCMk6OLOeBZH21hxjoOR9SAj2iLVBi4ezHaKZEWPL9ryC4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767907033; c=relaxed/simple;
+	bh=5gEzfGrJrZBcK9ab2+97vww3qO4uDY2TibGccFpsz3I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dRD1kLJZqqrM8Fi79ZVSqOZfI1Vwy88q68oUq1/m05sZ+u2PuGmJMCHBmhD9K3EXMcq6QAIAp1lHONs7xj6s2n2yczaH4t1Eb/TTtklh+cYijeYmPKw+mXyNy3Rqf2bWmEUrn0wKWtvCt6ILpNVMOOzWnww3FZZ/nRk7nUNRDtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JxU0u2rA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=p+4ri8QJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767907026;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ne57iAfUngCEZ/eJnFXNUIoW6Gx1gYxdMUdG2ktOUNY=;
+	b=JxU0u2rAqLLgObICtO/LydX4/F68sVrdPi7tDQ8qIcYcf/4q4vTBeCQt8APznRlIc3irsA
+	mSc/8w1RSNM7WyKl/gEBKqBqeEZiGg3L+W8KZTE0V1EFK+kEMthHtMnwyKbSXzJ262L/Fp
+	8K4OjlHCkk3MEkwSd5785vNfEzVmoCs=
+Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
+ [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-393-5zrQeeLaOg2QrrYgfOoOgg-1; Thu, 08 Jan 2026 16:17:05 -0500
+X-MC-Unique: 5zrQeeLaOg2QrrYgfOoOgg-1
+X-Mimecast-MFC-AGG-ID: 5zrQeeLaOg2QrrYgfOoOgg_1767907025
+Received: by mail-ua1-f71.google.com with SMTP id a1e0cc1a2514c-93f69d06fe4so3663765241.0
+        for <linux-rtc@vger.kernel.org>; Thu, 08 Jan 2026 13:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1767907025; x=1768511825; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ne57iAfUngCEZ/eJnFXNUIoW6Gx1gYxdMUdG2ktOUNY=;
+        b=p+4ri8QJwFCJ26x1u00s5MsGP+cATPO+y4dg/CSbkLtgP1aFco1DKB91M7p0KftLC/
+         mGm27JaaOQ/rnaFqLgVWW7x8VjzYWnY7z2D+C5fk9lUi9vHufcCgvnGco7loOi3meeW1
+         dbYB+Ben0m/aMErLqW+NhK4m7EjWeUaKgVFZVKEVZHAI1cUzas3j/h6Li5rzWcAolraD
+         ES64kaYiuYl+aRXFGBI7oDqHQmXELo4+6n/1tLehB50KDpOEmvpsxu6XfLvzAVscaasi
+         FWyKV8fz81qfL2AdE26ljrHoXP3VoDl6aIIBCf1/Xk1TcGGAHa75RsQGJF8Tt1WSPM6G
+         +RSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767907025; x=1768511825;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ne57iAfUngCEZ/eJnFXNUIoW6Gx1gYxdMUdG2ktOUNY=;
+        b=rxLBftAg45hG5jovHTR9ZiCoQBbGh1nRH7eA1Yuy0VgrXhSGsUMOxpOHijehO88LGH
+         nlXINcrw+0e4zt+jJVAY6KU5C+GOZSR98+qIMa5Y58at4r9EfTpThnDP+x1Wqctibwv6
+         1mKEdPgG5LD5f0SY17B/pw4W0xREVNLfwQdNf6gHK0s2Ig33BRHg3l03hYcR10FJmbxQ
+         MoT2mp6JwGWG1rKhP1nSavOSq+bzmbqZg5Z7SIPqy5j5qHpQs5Nao8ZfoROPzPy/eD1G
+         em3pw7LVUZfFAfo719IjBEiRqAXWqBUGvAp+MhS9DGvJzUnp6NUs2D8uGCvUTSNL/eUM
+         0qGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUD+ZolYkNDTnoO/CCZF80h5WXg1vvQsVm8xtNJEp8SepCfOxEcArs+14N7AZyy6hHU1cqUb+TMYBw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbH1VBlriUMATNz0FL+x0Dm2FNCVmPqmpiPpsCIM1fJejuI6q7
+	40tlndgVhezewIvhITGt9pOww/ZxRKQoZ+XK5scbwSwcbNPQsqxxk38GrMNXXh4GAsmUTwVd5RO
+	XmKufryz263geNE1tpkLj9IHd4tx7C9Y2HztmVB6g+xGrGmWcWT3Rx9n3VP/tZA==
+X-Gm-Gg: AY/fxX6nIBiBH/7D50QZ3nvO6pgLUzETw5hpA8kRRdBriQ+xk17/lB3E7eL5CHO6rT5
+	HiYxGUaBcCNxgTis3vxJ8F+pKF9otiegpGTIOBUq5HJtgQONuzgisJTmYXFXNXwdIbl/5NPcZVE
+	1mVMD7Y154/Qm1kmW1SPcVeyU/P1q1mx3VO+Tkd716jWJl2gAF1htDCMwrgZWeEPem4q+pRbqFK
+	EXUIKO9q/r31Q6KLPzYm6WHblRtsgJgNq61EANipUHKA2qgCsAV86Cx35zHflv+JK1Z+Fc1vk0Q
+	nU7n5eQQjeuBGd9LdPF5LQL6j+RZw6l9624XJAQ4C4uLjlvgDfNFyQlDG0xIDZw9VjZC4+uFbdM
+	dyxJr4ksVGvUSGbI=
+X-Received: by 2002:a05:6102:554b:b0:5ea:67f4:c1ad with SMTP id ada2fe7eead31-5ecb68aff05mr2988610137.21.1767907024802;
+        Thu, 08 Jan 2026 13:17:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFz/p7kGP9fvfk2vXLPq3R9VUjKVw1cdN6NrP5mq/P0PGpCjqA4/hKeGKMrVWaYIPrb1wIVZw==
+X-Received: by 2002:a05:6102:554b:b0:5ea:67f4:c1ad with SMTP id ada2fe7eead31-5ecb68aff05mr2988572137.21.1767907024314;
+        Thu, 08 Jan 2026 13:17:04 -0800 (PST)
+Received: from [10.30.226.224] ([2600:382:811f:d757:daa5:b867:12a3:9d12])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ec77064e86sm7623329137.7.2026.01.08.13.16.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 13:17:03 -0800 (PST)
+From: Brian Masney <bmasney@redhat.com>
+Subject: [PATCH 00/27] clk: remove deprecated API divider_round_rate() and
+ friends
+Date: Thu, 08 Jan 2026 16:16:18 -0500
+Message-Id: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|CH0PR08MB7306:EE_
-X-MS-Office365-Filtering-Correlation-Id: c674db2d-12a4-43bd-a1e1-08de4ee6751e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?u3v7G44XoGVIC4OOIauB7+ps/LUh0ugQXqX8xzsgULxOcq5sZOUTw/9NcK1F?=
- =?us-ascii?Q?yjO1UbZcvTbeOh5qOXCioAQnw7oWuGoMG98/XIhjPwWUp9+bCADgk9tIHMnz?=
- =?us-ascii?Q?EMUcvHU1yHXRGfnVOh6cxyhoNi6crO7NOk6uN75OG9YluoGJpuTXh4+COzUJ?=
- =?us-ascii?Q?m+2bISylFzZKUWQDYuvGtltl1UfD2Y4VTQ5Xa/hK9I7/kPCDnF7BYUznKf+Q?=
- =?us-ascii?Q?1KahLD6gkYF1reEb+jg0jnraMNI0vqgpy62b5Z0lUtF8kJ9/P/7DCzdXK0p3?=
- =?us-ascii?Q?rQAqBhsmq4sRbuj7499NLhe5O6W/97CrNMvIskR0M2whGMGemUEEv0ld7jLP?=
- =?us-ascii?Q?dHnuFz2CS9AWZB/rzgMTATHv0JQks/xrNp576lSTgXQWndTk36ekoS7o3d7L?=
- =?us-ascii?Q?VhQGvdxABnyNN+yo+fptNv2i8ERTzX7v0LR8wWmpQlpTuYVZVSo1psqTq6sO?=
- =?us-ascii?Q?/NEXV5SShLpi1m5s+i3FAIoHLTML8S08rOquNS8ONNYmTKlSzYeFrcitYeVE?=
- =?us-ascii?Q?xQddGnenydfpMteQNgTYkWFWrQD2rD/o+9sSRYshLjX8n/4TGyoTSUzGvdCr?=
- =?us-ascii?Q?OH3X0+5fEdbb8A1q8uxf/3/byytozL0MnKwDs5egrW1jPXBT9sW013pAUn0+?=
- =?us-ascii?Q?759TbgTD1etw08/P2rOOhE26b4rDrzWDeXuQ+Ph0cEFmrE80SWsdSPP7KfqV?=
- =?us-ascii?Q?G9R/Dkz2zEuUpCNw0BDLdwBPEzFywha3bQnUT4ZgOSwjaXGczfMuZJHv08Il?=
- =?us-ascii?Q?skSMzDLFHyz12gG5ki1HSkuguJo8KQT9/81dUQ81nmfUs3BIZKYQDNkGdRJW?=
- =?us-ascii?Q?vI9MKfydVBvK9NvQxE36EcvNGuOL8fFzWKvoECrHaSTNfREvuvlwcG8RLlFW?=
- =?us-ascii?Q?Zq3S8Jzil6ZaK//wGsRl9i3PwCUvl+ptYCMhY96/x1WVZvm2ZlUvNeJPLTxd?=
- =?us-ascii?Q?yYWKpDmD1rxlnHAucHZoy+xNTaYPzrKL7WN/EtxarDg4Z2Mg5cktNo8kM+y/?=
- =?us-ascii?Q?s2SLvJK1y6WYn6KjvFdkQa/8cLI4YV3LBHd9QtjxS5xdUuwD7XXF06jAkqYC?=
- =?us-ascii?Q?JAVP9WArSQB+ri4T2Hfr4OaY4geeppqXAccKzvV4QKFLmnl4pYWz2HPmBdVg?=
- =?us-ascii?Q?X4DJHiVS69jgT6NRVZCGwhSdmEcMVBNKBl4nGYrP64C17rY4BcRF/aRV7SsP?=
- =?us-ascii?Q?kReox4fX8cvFntQkhGGJ4MhkNV2/kROK7fN4tMyASRcpaKDdk9Q1VKLn3DuS?=
- =?us-ascii?Q?IpCMZ0QwYCVjTFfIZh54cUiJ8Ug7M6gvagy13Wzv/XNHNwJbVjnkys6p27q9?=
- =?us-ascii?Q?ZaIeI/AaqpO/fvKRrO7RhQCvl09gophCRbbX+0KYGiBkHPZP26KlSYZiwxBW?=
- =?us-ascii?Q?z/19tvPXqQLL7PyOKU0ilkouGUYoNBSxoCv+tiaJVtvxPJpkup55Rn99KTfx?=
- =?us-ascii?Q?HgdxLQCeVT+yYsSvZquTng4ky68gDWBZbTL7FpTaE48eVykgyA+IViNLChrQ?=
- =?us-ascii?Q?Wmp/s9mmYCf0FID+1l1JQQxU9w3MZEPQxArc?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/LvSeT8lEs28hvEvrFve87qa9OMb7lt/TFULyqWrLHBrn1j9hTKmycy1VLGW?=
- =?us-ascii?Q?O/91S7+VDlh9rDyPQJQpYHbgJYbz+GxTURNMVZfdweJ+rOk92ChXgFer4uqB?=
- =?us-ascii?Q?jzDGeLOGmySqgd+6eFaPfb3ggA2BE6elXnda4+OQ46xjN3nmhnsaRRNeQpbu?=
- =?us-ascii?Q?P4JOb3TQWNfGCrod1hDq1Nmym1Ijy1ab9Hb/w7nGAkcliA9BTOaGNqT/djY7?=
- =?us-ascii?Q?LwfZu0QRp3ubcFQP9W8E9O/BqlHCDyjfQqRf///4fu8pu57CPNWwe1OGTEkS?=
- =?us-ascii?Q?/1crGqIeLwEfk8FChF2VaboKLPDabzzvtBf65S4OT5kVZYgDlNgQW3LtDlo3?=
- =?us-ascii?Q?bw/v8UUC1X6TslCpu8ArpQVjXvlixl3YzDAkKUnJlOnJSeKZSyYMhOnuR/SX?=
- =?us-ascii?Q?yumHsRq4Fz+QGp1grTs2DE7u5g+e1WUhKjBWVZd1otmssFO1VUHhc/pP5Fla?=
- =?us-ascii?Q?pjsru/CQ+eHRpjH5eHQPtacvVHH2KiKBniet8mpSer0KPT8fLmyNnjrI4ByM?=
- =?us-ascii?Q?6ZhTSyC27I/rvi4Qm7Ja9s5FugZabHo6Eo/5i5zD7cd5CDPfFyPIiNWjnv9m?=
- =?us-ascii?Q?2H+lnTRYKYGGxJXht63cEKlxlVUXSBfiCh8h+fRpkAoKAwt2dRwAk8JtlKBY?=
- =?us-ascii?Q?jKWUqhYNREVEZcmznVAXLSiK6XwensCA+YKa6P5/YeutsdijGfIrWyL5wKE1?=
- =?us-ascii?Q?1+mg86bMfn0DYONEMmOyBj6mWAmHe3hgcz4fIzRA+RdizAfLUcy5/oRHGZrV?=
- =?us-ascii?Q?not1Xt2MHABrOHMc9FPo73Hn36FqgLyZZCtJtADAcQ98RG5h5HoRkMJJMNd8?=
- =?us-ascii?Q?nWS7pD/qat1bMLpQWuTFc8g3PomE44mZ9AQ7msp2r2hYLSrGBaORENqY+0kC?=
- =?us-ascii?Q?idxfAFEE1A61nTMdgA+dPIp3TwuPDFDJEzwGFnCC19N3b/5jLAibhTQCEkVk?=
- =?us-ascii?Q?bqkilWHeJUyvhGmnyKTGiooPzOEqqnl1ZwCU0FlhXbWUAbUzHmBvfCHd69vh?=
- =?us-ascii?Q?u1qUKY9DVJF2fBYNEtSVD7L22G+KvAKTQ2vTKKJ9pgQA0P5mgqeEPB7Zto6c?=
- =?us-ascii?Q?H0kgtwPO1j9Ebi1WAjD7CMTAoG4e7g5UlRoTKDive6EzyQ/UWnIiNbOW2Mkx?=
- =?us-ascii?Q?BJzMVnwq1JW8G55R/cUczyg8enLGdaSYWidUz+OkG/VH98kwnr8EBagAS0Cx?=
- =?us-ascii?Q?5NJ3gbg1AfXNrrHhviDN0n1IofGAFCUTTXIYNni4v+QGqD3LQVpOV6oJWALM?=
- =?us-ascii?Q?xi427mtZWGidbjRQ2d43yME6iPrjJnz7F9I0r8Us4pqZUAiLt4uPwr5EtRLy?=
- =?us-ascii?Q?YHL+yhreGVDWckVf9lVDE9H8RMzJophw2vItTdhSs2v1D8xPfH6NY1hmX9fh?=
- =?us-ascii?Q?Jp9Qlpuoeu5pW5Al81niDjoU+VGrne/BN6XE4Veu75w4cukKudOwCrkvbR5U?=
- =?us-ascii?Q?HeLlNEMnXHrvlfG3i3asZ9DeVgdhNtvBA3pKKSX4fdZ7ojOjvj18UNiYlqWs?=
- =?us-ascii?Q?qml7vJZ8C98R63aRfO3cjmRFuPyYBLm0aMpMGqHBRw5QqgmJbxCEbRrOQWcy?=
- =?us-ascii?Q?XkLN1za9yoVrUtXAqbEc5W0xevm9WnGszYZfpuxoXiA4rUWS1nUNBIAsAdKK?=
- =?us-ascii?Q?pfGbmT2jktNq0HBFe1HwcTIAbbJ7q8xve2jVH7q3NTVD7apJnVzD/Z/oCQiu?=
- =?us-ascii?Q?d7JmIKIPpklzLDuuyuLVtWdwguSo6iBGMtajByZYL8jJqyMG7P4JEU8X9BXd?=
- =?us-ascii?Q?eojCHSnCVPJNxCuUoi8suN/gkOtFY4s=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c674db2d-12a4-43bd-a1e1-08de4ee6751e
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 18:48:05.1426
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xz8zz5zUdUyhoF1/etixiRrceYEJ9XJEwsGRayS8GRcZEO9wLjE59cX9c2yqGP+CLnX8PKVeC6hwGaJGLj9ltY9Uxm/AKppsXIqB9NBU9mo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR08MB7306
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MwQqDMAyA4VeRnA0kHizsVcYO2kQNG3WkKkLpu
+ 6/s+B3+v0BWN83w6Aq4XpZtTw3cdxC3Ka2KJs0w0DASU8D4eaPYZaKOvp9J0KdDkeMizGGmMRC
+ 0+Ou62P0fP1+1/gDlVpEzaAAAAA==
+X-Change-ID: 20260107-clk-divider-round-rate-1cfd117b0670
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Brian Masney <bmasney@redhat.com>, Chen Wang <unicorn_wang@outlook.com>, 
+ Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev, 
+ Chen-Yu Tsai <wens@kernel.org>, Maxime Ripard <mripard@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-rtc@vger.kernel.org, 
+ =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+ Manivannan Sadhasivam <mani@kernel.org>, linux-actions@lists.infradead.org, 
+ Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org, 
+ Taichi Sugaya <sugaya.taichi@socionext.com>, 
+ Takao Orito <orito.takao@socionext.com>, Jacky Huang <ychuang3@nuvoton.com>, 
+ Shan-Chun Hung <schung@nuvoton.com>, Vladimir Zapolskiy <vz@mleia.com>, 
+ Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
+ Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, 
+ Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ Michal Simek <michal.simek@amd.com>, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Dmitry Baryshkov <lumag@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, Abhinav Kumar <abhinav.kumar@linux.dev>, 
+ Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>, 
+ Marijn Suijten <marijn.suijten@somainline.org>, 
+ dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+ Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+ linux-phy@lists.infradead.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5523; i=bmasney@redhat.com;
+ s=20250903; h=from:subject:message-id;
+ bh=5gEzfGrJrZBcK9ab2+97vww3qO4uDY2TibGccFpsz3I=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT5Lb+j2COyZDSrq1aGtHuW3Hnjb6jSZa7wqEZi1UKM
+ +/wfPfoKGVhEONikBVTZFmSa1QQkbrK9t4dTRaYOaxMIEMYuDgFYCLePxj+cE8JZ4ir1XC94hPf
+ wLfqhfvjO0u5RdiClDPF9/n9TrNyZGT4NKcq8ciUz4qK0XG3a+4381Zd+31jtWu5nMfx+TvuVsY
+ xAAA=
+X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
+ fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
-When switching to regmap, the i2c_client pointer was removed from struct
-pcf8563 so this function switched to using the RTC device instead.  But
-the RTC device is a child of the original I2C device and does not have
-an associated of_node.
+Here's a series that gets rid of the deprecated APIs
+divider_round_rate(), divider_round_rate_parent(), and
+divider_ro_round_rate_parent() since these functions are just wrappers
+for the determine_rate variant.
 
-Reference the correct device's of_node to ensure that the output clock
-can be found when referenced by other devices and so that the override
-clock name is read correctly.
+Note that when I converted some of these drivers from round_rate to
+determine_rate, this was mistakenly converted to the following in some
+cases:
 
-Cc: stable@vger.kernel.org
-Fixes: 00f1bb9b8486b ("rtc: pcf8563: Switch to regmap")
-Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+    req->rate = divider_round_rate(...)
+
+This is invalid in the case when an error occurs since it can set the
+rate to a negative value. So this series fixes those bugs and removes
+the deprecated APIs all in one go.
+
+Three of the patches ended up being a more complicated migration, and I
+put them as the first three patches in this series (clk: sophgo:
+cv18xx-ip), (clk: sunxi-ng), and (rtc: ac100). The remaining patches I
+feel are all straight forward.
+
+Merge strategy
+==============
+
+Only three of the patches are outside of drivers/clk (drm/msm, phy, and
+rtc). For simplicity, I think it would be easiest if Stephen takes this
+whole series through the clk tree. Subsystem maintainers please leave an
+Acked-by for Stephen. Thanks!
+
+Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/rtc/rtc-pcf8563.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Brian Masney (27):
+      clk: sophgo: cv18xx-ip: convert from divider_round_rate() to divider_determine_rate()
+      clk: sunxi-ng: convert from divider_round_rate_parent() to divider_determine_rate()
+      rtc: ac100: convert from divider_round_rate() to divider_determine_rate()
+      clk: actions: owl-composite: convert from owl_divider_helper_round_rate() to divider_determine_rate()
+      clk: actions: owl-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: bm1880: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: bm1880: convert from divider_round_rate() to divider_determine_rate()
+      clk: hisilicon: clkdivider-hi6220: convert from divider_round_rate() to divider_determine_rate()
+      clk: loongson1: convert from divider_round_rate() to divider_determine_rate()
+      clk: milbeaut: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: milbeaut: convert from divider_round_rate() to divider_determine_rate()
+      clk: nuvoton: ma35d1-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: nxp: lpc32xx: convert from divider_round_rate() to divider_determine_rate()
+      clk: qcom: alpha-pll: convert from divider_round_rate() to divider_determine_rate()
+      clk: qcom: regmap-divider: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: qcom: regmap-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: sophgo: sg2042-clkgen: convert from divider_round_rate() to divider_determine_rate()
+      clk: sprd: div: convert from divider_round_rate() to divider_determine_rate()
+      clk: stm32: stm32-core: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: stm32: stm32-core: convert from divider_round_rate_parent() to divider_determine_rate()
+      clk: versaclock3: convert from divider_round_rate() to divider_determine_rate()
+      clk: x86: cgu: convert from divider_round_rate() to divider_determine_rate()
+      clk: zynqmp: divider: convert from divider_round_rate() to divider_determine_rate()
+      drm/msm/dsi_phy_14nm: convert from divider_round_rate() to divider_determine_rate()
+      phy: ti: phy-j721e-wiz: convert from divider_round_rate() to divider_determine_rate()
+      clk: divider: remove divider_ro_round_rate_parent()
+      clk: divider: remove divider_round_rate() and divider_round_rate_parent()
 
-diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
-index 4e61011fb7a96..b281e9489df1d 100644
---- a/drivers/rtc/rtc-pcf8563.c
-+++ b/drivers/rtc/rtc-pcf8563.c
-@@ -424,7 +424,7 @@ static const struct clk_ops pcf8563_clkout_ops = {
- 
- static struct clk *pcf8563_clkout_register_clk(struct pcf8563 *pcf8563)
- {
--	struct device_node *node = pcf8563->rtc->dev.of_node;
-+	struct device_node *node = pcf8563->rtc->dev.parent->of_node;
- 	struct clk_init_data init;
- 	struct clk *clk;
- 	int ret;
+ drivers/clk/actions/owl-composite.c        |  11 +--
+ drivers/clk/actions/owl-divider.c          |  17 +---
+ drivers/clk/actions/owl-divider.h          |   5 -
+ drivers/clk/clk-bm1880.c                   |  13 +--
+ drivers/clk/clk-divider.c                  |  44 ---------
+ drivers/clk/clk-loongson1.c                |   5 +-
+ drivers/clk/clk-milbeaut.c                 |  15 +--
+ drivers/clk/clk-versaclock3.c              |   7 +-
+ drivers/clk/hisilicon/clkdivider-hi6220.c  |   6 +-
+ drivers/clk/nuvoton/clk-ma35d1-divider.c   |   7 +-
+ drivers/clk/nxp/clk-lpc32xx.c              |   6 +-
+ drivers/clk/qcom/clk-alpha-pll.c           |  21 ++--
+ drivers/clk/qcom/clk-regmap-divider.c      |  16 +--
+ drivers/clk/sophgo/clk-cv18xx-ip.c         | 154 ++++++++++++++++-------------
+ drivers/clk/sophgo/clk-sg2042-clkgen.c     |  15 +--
+ drivers/clk/sprd/div.c                     |   6 +-
+ drivers/clk/stm32/clk-stm32-core.c         |  42 +++-----
+ drivers/clk/sunxi-ng/ccu_div.c             |  25 +++--
+ drivers/clk/sunxi-ng/ccu_mp.c              |  26 ++---
+ drivers/clk/sunxi-ng/ccu_mult.c            |  16 +--
+ drivers/clk/sunxi-ng/ccu_mux.c             |  49 +++++----
+ drivers/clk/sunxi-ng/ccu_mux.h             |   8 +-
+ drivers/clk/sunxi-ng/ccu_nkm.c             |  25 ++---
+ drivers/clk/x86/clk-cgu.c                  |   6 +-
+ drivers/clk/zynqmp/divider.c               |   5 +-
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c |   7 +-
+ drivers/phy/ti/phy-j721e-wiz.c             |   5 +-
+ drivers/rtc/rtc-ac100.c                    |  75 +++++++-------
+ include/linux/clk-provider.h               |  28 ------
+ 29 files changed, 257 insertions(+), 408 deletions(-)
+---
+base-commit: f8f97927abf7c12382dddc93a144fc9df7919b77
+change-id: 20260107-clk-divider-round-rate-1cfd117b0670
+
+Best regards,
 -- 
-2.52.0
+Brian Masney <bmasney@redhat.com>
 
 
