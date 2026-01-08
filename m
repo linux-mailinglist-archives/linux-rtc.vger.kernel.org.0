@@ -1,65 +1,65 @@
-Return-Path: <linux-rtc+bounces-5698-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5699-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E74B4D02F15
-	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 14:17:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E195AD0335D
+	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 15:01:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 592FA3006738
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 13:17:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A28183201625
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 13:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB0F4EAC89;
-	Thu,  8 Jan 2026 13:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246CB4D1644;
+	Thu,  8 Jan 2026 13:45:43 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60E74E2A33
-	for <linux-rtc@vger.kernel.org>; Thu,  8 Jan 2026 13:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BDE4D162C
+	for <linux-rtc@vger.kernel.org>; Thu,  8 Jan 2026 13:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767878274; cv=none; b=qgJKzWnNoVMriwN22xrrVMtNPzmMxFBPuXxonrB+FQSaSrTdT4MfP9OSSHBFLkvBo0WZX7VbLEGqOY5sRKUm9cceyT9o3+s0v7WoGxpCwVh4IOuyt5lNBDDR6q1msNutWQRoWwKYLtYSiML+zh3tNRO/MoZCpIEggT5TBdCaoVY=
+	t=1767879942; cv=none; b=T3YgLtwyGR72cosSMtRR5K9db7hkAas/vbYNQZPUWFNj9JncmAYZJnVRg3L7SeQwlRop9qgM7gjQ3kFK6SkXm3F+lb6S0xpktF2BKm/133VarlovpodY11bW08xVafRA++fxwsXdG4UvyGUJR1de3ooEiiDjjU2uDAOmIW+WUD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767878274; c=relaxed/simple;
-	bh=dtWa+YGtzddfNIUwkFmFlIOlV9VWXlUrri3DNFVZWpA=;
+	s=arc-20240116; t=1767879942; c=relaxed/simple;
+	bh=GrmvpqiziF56Q0Dk05a0FV54bdVuh4XlxV7dyFtow+k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IREBJ/zZZuKtNDD4I7uaadYDHeI9Jvf+CIf9LBlffe0Wj/Y213rIKneWEpYQcoGyA3xKnPgWnDrHhpgUTswrXPMJycuASGhf0ay6Ax1iKJF9FR4+I0UpYtxgFi0zNRjmlpsjWYMIIK/g/y0EXWd7KXRxLtTZLD7YBuFAU9fn3x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:Content-Type; b=hwxepPUrInOHYPn4YnWB5O7g4dDTyLqCIjT8/dA0wWKzim2fSQXSRMEQdiWVQ1A5fUMPQ+B7q4eU4cXtS8BHiTCK/gidfIPYavJq7P0j4AuntS5s8j/r0qR0sGQ4y2zSP5//5sXElk4FiWHlCkzdYFuivs4yFXTJ2NXDEOd27j4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a0d06ffa2aso24581145ad.3
-        for <linux-rtc@vger.kernel.org>; Thu, 08 Jan 2026 05:17:50 -0800 (PST)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-81c72659e6bso1036537b3a.0
+        for <linux-rtc@vger.kernel.org>; Thu, 08 Jan 2026 05:45:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767878269; x=1768483069;
+        d=1e100.net; s=20230601; t=1767879937; x=1768484737;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zmEjhzYCxeCjE/oSSYNX31iUbZURZ9YpqT93kz8/CW8=;
-        b=RkBMttAY9Q8xfLAVe8er8sAoQWopk5W72gJG7crZSInjf+u+G0zo/SkpTQcMFtsPtt
-         VUC6vN5vyG3A03Y4MIsbiAQ/78N33ZHz1gXkMXWL1fSt9/maz/lTOdhd+4zJN54PSrtn
-         YwScQqrRxMfXxhTTGJmP1PQPjf2Ff2URJReOQiBsk9w46qXJ+Z7ghlcIU7/iYF2DW1NZ
-         A14L//vht8KZ1akuSxXXI9k5E/py/P6t8c9CUktbZ+PZnUPd+IQJlOiOMyt6mD0YTSu1
-         A/9EsYUZzD5ZemAUAmTCVYfI8WbfI+OZcPwTqG6i2TgO/kJsjbZvAEYufX7TZE/3geue
-         jJZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXrTlTRq4pusdNLFMZUW52Iq0HhQxruzwXt6AeFUDFkQAV0p4BcXxzsIRWaVuALEFd9s89zQQo4BRw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/N3d1Hnu3l2fMfyc/4BEITqkMODC5fZdIuANk5Wht4lO3C4tY
-	VKyPp4zzT2i3iq020g8lzEbsmx/+FvIvx2gx8uPVudNuldtnquKJtqNe
-X-Gm-Gg: AY/fxX59hM0cwIQm5AhOoJzZqgRf1Uw6rtGlz8Aln3/829MIxEcT5QlKTS2/5vInj6b
-	kgWtqPkPZTx4uCR+9cWU4OUgux4j3HZ7HyTySo7JytnekGNQkqLNtMKNXxnZ3CSO91W/tsr33AA
-	q9nroGa1tJ9Jkn/dh+c0fWFwnUXGBc0DrvZ/4PrP60eMvK6KUgzh3mfbAMHYjtIKOcthbB3b00s
-	iCXWqVIOTcil/pF4aZlkJVsmzm3iDVFq8Aj3H+9p3VkHDrJGiysV46JfeCeckAPEkNirAsiR6GK
-	A8L/SQ3y5hWCRRZ0sG1FUXO90bLpDPf58Ce7qACBRFUzC8Wz41jadMkzKBG+V07zvxJe6TMv4BL
-	rbNs1ScG9irzvs41o83Ot4lXw5OZS2N1VRF0L7bZ0BTVTrQ/kplPqRlgLA85qtNldp9/lyiJfDT
-	FDoZVYs+MCqVW7JkE3WjZfmdg=
-X-Google-Smtp-Source: AGHT+IEObFGUSFZADO3xkr1oXwRAkd6d18XHZKIq6Q9weG1w6TkFFMBEPsdYdjbgida6bF4M6xEeOw==
-X-Received: by 2002:a17:903:1250:b0:24c:da3b:7376 with SMTP id d9443c01a7336-2a3ee43a15fmr56497845ad.26.1767878268870;
-        Thu, 08 Jan 2026 05:17:48 -0800 (PST)
-Received: from [192.168.200.2] ([45.142.165.250])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a4fcsm80637585ad.12.2026.01.08.05.17.43
+        bh=1e5OPUc4ALFm6BKAa3GGC2+rxUwWfa6AC5HZABAAJgY=;
+        b=mEtqOxnmNIeVBTeOUKFDAtd7xo0zFD8t/x/o6PBGjqZOU8gDzv/ybhG/30uqhPfLBR
+         5zM6iCKAWyaiz7BEwY9R3bZBOYTsP1SRW3OuIuJfVhAj+3sDwXb8ZWEmX5Mr45f8l2m4
+         dWRk6TdB9VtxZ3JcEe0dDxxe68x8Y4bNkjr7B19prxr0QQ867hTG2rkpN9yMMMlqoxtj
+         zME3KZf/dQXoDJ04nqy+WQE0PnonWX1bsk7txbRwGA4xkU81dcXpb/MrWhu3HTk9LBge
+         7zJeHJExDuLxDb+hrR8cz8XSy5W3P/IgPQqFfYUoIp8eky7E3a6570JTD4LBBga5lf5k
+         IYhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXRR5LECwLDvyd6DxnHOeYyiqIZY4TjiT860P052sD8q0pvvCMzv1CRVI3ifyJwNNZI+wgS261+fSQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9PP1oxxFTfRbJuaux7TxDKEajoY2aBwM4oTjF6de8RFq5+5IZ
+	Jm9jxiIPpFuhRcvj8CkrjoWLKYCVX9rGiPyOgNRnBINKvZ5mVOd3vgm5
+X-Gm-Gg: AY/fxX5P2dGKx54msrDw/aFKOVuI6qypiE/QzsWrXnR4w8idC63Vo+w9Pyc9Swch0Bk
+	0aiNoDuZ1LxumGh5OqG/n2WmPOpV6KSZ8OYysQ0j3Ss+gZjQPiaTuHqpLSllSC4ODhDBCZcyQaE
+	ryp++FbEsZ4mMMqZhhZ20rZ2RNoOTawRRkA7f/eptcKeDZVvd219E0t/svKGfgSOoMRezMFQL12
+	JebGzjNNdAsh3tn1OaNUp/sYk5NWaPTvnP+Rkk1CG+axQMKd3/FQPiYZtn4zgkzeolf1CTW1j1I
+	4A0+h7V5F597DNkrdRjyOKwmZ6dI4uydHV9zI4zt3b25j6SHyYeFEMxKI37Eod7ujr1ilisV1+f
+	mqhQynuE87Ls0Ei3wxrnIAI1TSFDYSW+1K1y3nm8uRI47WmIqF0xi3b4KD74ru7BkNKPei8LAN0
+	ckugfFKpSI9f4n1Cjrfz1y736JyUn6wLK9P1fqL8d4BAgo4IU=
+X-Google-Smtp-Source: AGHT+IErqk5YtJqJoDcrNKDl/R4uJ3+oA5O9puPvRka960BgDpPlxRbK+hoKFRMiLIiXbpB3Oaqj5A==
+X-Received: by 2002:a05:6a00:801b:b0:7ff:9f67:d47b with SMTP id d2e1a72fcca58-81b7d95cfb7mr6092802b3a.8.1767879936835;
+        Thu, 08 Jan 2026 05:45:36 -0800 (PST)
+Received: from [192.168.200.2] (61-221-120-114.hinet-ip.hinet.net. [61.221.120.114])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819ab137711sm7938637b3a.0.2026.01.08.05.45.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 05:17:48 -0800 (PST)
-Message-ID: <b69749e0-e66d-425f-9d95-2d1bd4104e19@kylinos.cn>
-Date: Thu, 8 Jan 2026 21:17:41 +0800
+        Thu, 08 Jan 2026 05:45:36 -0800 (PST)
+Message-ID: <c834ef20-2d4b-46aa-94ed-310c077a4495@kylinos.cn>
+Date: Thu, 8 Jan 2026 21:45:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -67,8 +67,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 4/5] rust: add RTC core abstractions and data
- structures
+Subject: Re: [RFC PATCH v2 1/5] rtc: migrate driver data to RTC device
 To: Danilo Krummrich <dakr@kernel.org>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
@@ -78,274 +77,58 @@ Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
  Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org,
  rust-for-linux@vger.kernel.org, Alvin Sun <sk.alvin.x@gmail.com>
 References: <20260107143738.3021892-1-sunke@kylinos.cn>
- <20260107143738.3021892-5-sunke@kylinos.cn>
- <DFJ6P0ITWD1O.2PAYKPU63UFFC@kernel.org>
+ <20260107143738.3021892-2-sunke@kylinos.cn>
+ <DFJ5VOQOFLJO.1YI2NXC3B8P7L@kernel.org>
 From: Ke Sun <sunke@kylinos.cn>
-In-Reply-To: <DFJ6P0ITWD1O.2PAYKPU63UFFC@kernel.org>
+In-Reply-To: <DFJ5VOQOFLJO.1YI2NXC3B8P7L@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
-On 1/8/26 19:50, Danilo Krummrich wrote:
+On 1/8/26 19:12, Danilo Krummrich wrote:
 > On Wed Jan 7, 2026 at 3:37 PM CET, Ke Sun wrote:
->> +/// A Rust wrapper for the C `struct rtc_device`.
->> +///
->> +/// This type provides safe access to RTC device operations. The underlying `rtc_device`
->> +/// is managed by the kernel and remains valid for the lifetime of the `RtcDevice`.
->> +///
->> +/// # Invariants
->> +///
->> +/// A [`RtcDevice`] instance holds a pointer to a valid [`struct rtc_device`] that is
->> +/// registered and managed by the kernel.
->> +///
->> +/// # Examples
->> +///
->> +/// ```rust
->> +/// # use kernel::{
->> +/// #     prelude::*,
->> +/// #     rtc::RtcDevice, //
->> +/// # };
->> +/// // Example: Set the time range for the RTC device
->> +/// // rtc.set_range_min(0);
->> +/// // rtc.set_range_max(u64::MAX);
->> +/// //     Ok(())
->> +/// // }
-> This example looks pretty odd, and I don't think it does compile. Did you test
-> with CONFIG_RUST_KERNEL_DOCTESTS=y?
-Yes. Dirk suggested doctest in another patch series, which I enabled. I also
+>> diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
+>> index baf1a8ca8b2b1..0f62ba9342e3e 100644
+>> --- a/drivers/rtc/dev.c
+>> +++ b/drivers/rtc/dev.c
+>> @@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
+>>   		}
+>>   		default:
+>>   			if (rtc->ops->param_get)
+>> -				err = rtc->ops->param_get(rtc->dev.parent, &param);
+>> +				err = rtc->ops->param_get(&rtc->dev, &param);
+> It would make more sense to just pass a struct rtc_device than the embedded
+> struct device in the RTC callbacks.
+I considered passing struct rtc_device directly, but chose &rtc->dev
+to minimize changes to existing drivers, since most callbacks use
+dev_get_drvdata() on the device parameter.
+>
+>> @@ -369,7 +364,7 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
+>>   		goto out;
+>>   
+>>   	if (adev->irq[0]) {
+>> -		ret = request_irq(adev->irq[0], pl031_interrupt,
+>> +		ret = devm_request_irq(&adev->dev, adev->irq[0], pl031_interrupt,
+>>   				  vendor->irqflags, "rtc-pl031", ldata);
+> As Greg already mentioned that change should be a separate patch.
+>
+> You also have to be careful with the devres order when using devm_request_irq().
+>
+> In your case, you pass ldata, so you have to ensure that ldata (and its
+> contents) remain valid until the devres callback frees the IRQ request.
 
-run clippy checks and QEMU tests for every change.
+I'll only start modifying other RTC drivers after I have a clear
 
+understanding of all the details, and I'll minimize any functional
 
-❯ cat .config| grep DOCTEST
-CONFIG_RUST_KERNEL_DOCTESTS=y
-❯ make Image CLIPPY=1
-   CALL    scripts/checksyscalls.sh
-
->
->> +/// ```
->> +///
->> +/// [`struct rtc_device`]: https://docs.kernel.org/driver-api/rtc.html
->> +#[repr(transparent)]
->> +pub struct RtcDevice<T: 'static = ()>(Opaque<bindings::rtc_device>, PhantomData<T>);
->> +
->> +impl<T: 'static> RtcDevice<T> {
->> +    /// Obtain the raw [`struct rtc_device`] pointer.
->> +    #[inline]
->> +    pub fn as_raw(&self) -> *mut bindings::rtc_device {
->> +        self.0.get()
->> +    }
->> +
->> +    /// Set the minimum time range for the RTC device.
->> +    #[inline]
->> +    pub fn set_range_min(&self, min: i64) {
->> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
->> +        // `struct rtc_device`, and we're only writing to the `range_min` field.
->> +        unsafe {
->> +            (*self.as_raw()).range_min = min;
->> +        }
->> +    }
->> +
->> +    /// Set the maximum time range for the RTC device.
->> +    #[inline]
->> +    pub fn set_range_max(&self, max: u64) {
->> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
->> +        // `struct rtc_device`, and we're only writing to the `range_max` field.
->> +        unsafe {
->> +            (*self.as_raw()).range_max = max;
->> +        }
->> +    }
->> +
->> +    /// Get the minimum time range for the RTC device.
->> +    #[inline]
->> +    pub fn range_min(&self) -> i64 {
->> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
->> +        // `struct rtc_device`, and we're only reading the `range_min` field.
->> +        unsafe { (*self.as_raw()).range_min }
->> +    }
->> +
->> +    /// Get the maximum time range for the RTC device.
->> +    #[inline]
->> +    pub fn range_max(&self) -> u64 {
->> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
->> +        // `struct rtc_device`, and we're only reading the `range_max` field.
->> +        unsafe { (*self.as_raw()).range_max }
->> +    }
->> +
->> +    /// Notify the RTC framework that an interrupt has occurred.
->> +    ///
->> +    /// Should be called from interrupt handlers. Schedules work to handle the interrupt
->> +    /// in process context.
->> +    #[inline]
->> +    pub fn update_irq(&self, num: usize, events: usize) {
->> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
->> +        // `struct rtc_device`. The rtc_update_irq function handles NULL/ERR checks internally.
->> +        unsafe {
->> +            bindings::rtc_update_irq(self.as_raw(), num, events);
->> +        }
->> +    }
->> +
->> +    /// Clear a feature bit in the RTC device.
->> +    #[inline]
->> +    pub fn clear_feature(&self, feature: u32) {
->> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
->> +        // `struct rtc_device`, and features is a valid bitmap array with RTC_FEATURE_CNT bits.
->> +        let features_bitmap = unsafe {
->> +            Bitmap::from_raw_mut(
->> +                (*self.as_raw()).features.as_mut_ptr().cast::<usize>(),
->> +                bindings::RTC_FEATURE_CNT as usize,
->> +            )
->> +        };
->> +        features_bitmap.clear_bit(feature as usize);
->> +    }
->> +}
->> +
->> +impl<T: 'static, Ctx: device::DeviceContext> AsRef<device::Device<Ctx>> for RtcDevice<T> {
-> This should just be
->
-> 	impl<T: 'static> AsRef<device::Device> for RtcDevice<T>
->
-> as class devices do not have a device context.
->
->> +    fn as_ref(&self) -> &device::Device<Ctx> {
->> +        let raw = self.as_raw();
->> +        // SAFETY: By the type invariant of `Self`, `self.as_raw()` is a pointer to a valid
->> +        // `struct rtc_device`.
->> +        let dev = unsafe { &raw mut (*raw).dev };
->> +
->> +        // SAFETY: `dev` points to a valid `struct device`.
->> +        unsafe { device::Device::from_raw(dev) }
->> +    }
->> +}
->> +
->> +// SAFETY: `RtcDevice` is a transparent wrapper of `struct rtc_device`.
->> +// The offset is guaranteed to point to a valid device field inside `RtcDevice`.
->> +unsafe impl<T: 'static, Ctx: device::DeviceContext> device::AsBusDevice<Ctx> for RtcDevice<T> {
->> +    const OFFSET: usize = core::mem::offset_of!(bindings::rtc_device, dev);
->> +}
-> Please do not abuse this trait as container_of!(), as the name implies, it is
-> only for bus devices (hence also the device context generic). RTC devices are
-> class devices.
->
->> +impl<T: RtcOps> RtcDevice<T> {
->> +    /// Allocates a new RTC device managed by devres.
->> +    ///
->> +    /// This function allocates an RTC device and sets the driver data. The device will be
->> +    /// automatically freed when the parent device is removed.
->> +    pub fn new(
->> +        parent_dev: &device::Device,
-> This must be a &Device<Bound>, otherwise you are not allowed to pass it to
-> devm_rtc_allocate_device().
->
->> +        init: impl PinInit<T, Error>,
->> +    ) -> Result<ARef<Self>> {
->> +        // SAFETY: `Device<Bound>` and `Device<CoreInternal>` have the same layout.
->> +        let dev_internal: &device::Device<device::CoreInternal> =
->> +            unsafe { &*core::ptr::from_ref(parent_dev).cast() };
->> +
->> +        // Allocate RTC device.
->> +        // SAFETY: `devm_rtc_allocate_device` returns a pointer to a devm-managed rtc_device.
->> +        // We use `dev_internal.as_raw()` which is `pub(crate)`, but we can access it through
->> +        // the same device pointer.
->> +        let rtc: *mut bindings::rtc_device =
->> +            unsafe { bindings::devm_rtc_allocate_device(dev_internal.as_raw()) };
->> +        if rtc.is_null() {
->> +            return Err(ENOMEM);
->> +        }
->> +
->> +        // Set the RTC device ops.
->> +        // SAFETY: We just allocated the RTC device, so it's safe to set the ops.
->> +        unsafe {
->> +            (*rtc).ops = Adapter::<T>::VTABLE.as_raw();
->> +        }
->> +
->> +        // SAFETY: `rtc` is a valid pointer to a newly allocated rtc_device.
->> +        // `RtcDevice` is `#[repr(transparent)]` over `Opaque<rtc_device>`, so we can safely cast.
->> +        let rtc_device = unsafe { ARef::from_raw(NonNull::new_unchecked(rtc.cast::<Self>())) };
->> +        rtc_device.set_drvdata(init)?;
->> +        Ok(rtc_device)
->> +    }
->> +
->> +    /// Store a pointer to the bound driver's private data.
->> +    pub fn set_drvdata(&self, data: impl PinInit<T, Error>) -> Result {
-> This should not be public, as you should only use it in RtcDevice::new().
->
->> +        let data = KBox::pin_init(data, GFP_KERNEL)?;
->> +        let dev: &device::Device<device::Bound> = self.as_ref();
->> +
->> +        // SAFETY: `self.as_raw()` is a valid pointer to a `struct rtc_device`.
->> +        unsafe { bindings::dev_set_drvdata(dev.as_raw(), data.into_foreign().cast()) };
->> +        Ok(())
->> +    }
-> <snip>
->
->> +/// A resource guard that ensures the RTC device is properly registered.
->> +///
->> +/// This struct is intended to be managed by the `devres` framework by transferring its ownership
->> +/// via [`devres::register`]. This ties the lifetime of the RTC device registration
->> +/// to the lifetime of the underlying device.
->> +pub struct Registration<T: 'static> {
->> +    #[allow(dead_code)]
->> +    rtc_device: ARef<RtcDevice<T>>,
->> +}
->> +
->> +impl<T: 'static> Registration<T> {
->> +    /// Registers an RTC device with the RTC subsystem.
->> +    ///
->> +    /// Transfers its ownership to the `devres` framework, which ties its lifetime
->> +    /// to the parent device.
->> +    /// On unbind of the parent device, the `devres` entry will be dropped, automatically
->> +    /// cleaning up the RTC device. This function should be called from the driver's `probe`.
->> +    pub fn register(dev: &device::Device<device::Bound>, rtc_device: ARef<RtcDevice<T>>) -> Result {
->> +        let rtc_dev: &device::Device = rtc_device.as_ref();
->> +        let rtc_parent = rtc_dev.parent().ok_or(EINVAL)?;
->> +        if dev.as_raw() != rtc_parent.as_raw() {
->> +            return Err(EINVAL);
->> +        }
->> +
->> +        // Registers an RTC device with the RTC subsystem.
->> +        // SAFETY: The device will be automatically unregistered when the parent device
->> +        // is removed (devm cleanup). The helper function uses `THIS_MODULE` internally.
->> +        let err = unsafe { bindings::devm_rtc_register_device(rtc_device.as_raw()) };
->> +        if err != 0 {
->> +            return Err(Error::from_errno(err));
->> +        }
->> +
->> +        let registration = Registration { rtc_device };
->> +
->> +        devres::register(dev, registration, GFP_KERNEL)
-> You are using devm_rtc_register_device() above already, hence you neither need
-> an instance of Registration, nor do you need to manage this Registration with
-> devres through devres::register().
->
->> +    }
->> +}
->> +
->> +/// Options for creating an RTC device.
->> +#[derive(Copy, Clone)]
->> +pub struct RtcDeviceOptions {
->> +    /// The name of the RTC device.
->> +    pub name: &'static CStr,
->> +}
->> +
->> +/// Trait implemented by RTC device operations.
->> +///
->> +/// This trait defines the operations that an RTC device driver must implement.
->> +/// Most methods are optional and have default implementations that return an error.
->> +#[vtable]
->> +pub trait RtcOps: Sized + 'static {
-> Please utilize the AsBusDevice trait to be able to provide the parent device of
-> the RTC device as &Device<Bound>, similarly to what is done in [1].
->
-> [1] https://lore.kernel.org/all/20260106-rust_leds-v10-1-e0a1564884f9@posteo.de/
-Some code was implemented by mimicking existing patterns without fully
-understanding the rationale behind them.
+changes.
 
 
-Thanks for the detailed review. I'll carefully go through your comments.
+These C RTC refactoring patches will be sent as a new patch series
+
+to the RTC mailing list.
 
 
 Best regards,
-
 Ke Sun
 
