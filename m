@@ -1,134 +1,124 @@
-Return-Path: <linux-rtc+bounces-5699-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5700-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E195AD0335D
-	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 15:01:30 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79217D03578
+	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 15:28:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A28183201625
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 13:55:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 59B4130000BD
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 14:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246CB4D1644;
-	Thu,  8 Jan 2026 13:45:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A938445533;
+	Thu,  8 Jan 2026 13:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ivv0g3zJ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BDE4D162C
-	for <linux-rtc@vger.kernel.org>; Thu,  8 Jan 2026 13:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F74F4418EB
+	for <linux-rtc@vger.kernel.org>; Thu,  8 Jan 2026 13:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767879942; cv=none; b=T3YgLtwyGR72cosSMtRR5K9db7hkAas/vbYNQZPUWFNj9JncmAYZJnVRg3L7SeQwlRop9qgM7gjQ3kFK6SkXm3F+lb6S0xpktF2BKm/133VarlovpodY11bW08xVafRA++fxwsXdG4UvyGUJR1de3ooEiiDjjU2uDAOmIW+WUD8=
+	t=1767880208; cv=none; b=aWM+7Wx992RSq64UfldYGJKQXgNdpsLYrWx5mHWhMGLVeI9SCd+RFL/Q9MKYzNZeTZqmPyHmezqqyhk/7axvuA7uQKsd4B8EGVXBebzqRjK4IG26bbzqUfspVL9nVKtA5DwlygBsmwWD8duzKNGFA+0KuBiIfij4BZOs41JSkCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767879942; c=relaxed/simple;
-	bh=GrmvpqiziF56Q0Dk05a0FV54bdVuh4XlxV7dyFtow+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hwxepPUrInOHYPn4YnWB5O7g4dDTyLqCIjT8/dA0wWKzim2fSQXSRMEQdiWVQ1A5fUMPQ+B7q4eU4cXtS8BHiTCK/gidfIPYavJq7P0j4AuntS5s8j/r0qR0sGQ4y2zSP5//5sXElk4FiWHlCkzdYFuivs4yFXTJ2NXDEOd27j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+	s=arc-20240116; t=1767880208; c=relaxed/simple;
+	bh=pZ8sWmgn5Szz2S9wM8ZeSlEMU+2Rg4zjY9JZiOFFGZg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S8rXcdIw5En9cKZKYGGhcs0TAdC+4gXJN1y2YpYow2nQOHgAvnYW91rEXPyvd+HW8/Bn5+68vSAQ0MNDmGchiWfhSusjpOXvfwA2/RtPR7jD2vgpE6ZXWAf/XAGmBuAKfHOSjX40ui/CSZnk6W1WLvciHNz+bS3x4bnHzR42SZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ivv0g3zJ; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-81c72659e6bso1036537b3a.0
-        for <linux-rtc@vger.kernel.org>; Thu, 08 Jan 2026 05:45:37 -0800 (PST)
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-11ddccf4afdso222790c88.3
+        for <linux-rtc@vger.kernel.org>; Thu, 08 Jan 2026 05:50:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767880201; x=1768485001; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lNqmz5VIJro5vLTRF9gMBu7RK4uMDgE6f1BI3kJZrQw=;
+        b=ivv0g3zJwtN5MzveBkQAQsgztPWMscD6T159X0ZU1pLR8vtY2McFYeLuCKLKMNUnVf
+         5sm1pFtxzERhmZk3nX+Hrpgj/MMJpZ0+r8rmK6RwZzNr7o2udgSW0uk7ZofvxTUleNhk
+         rm/lWiZHgEJrrZuIvAC/KzCUlSbdRj4aSihUo7yO8ICv0mOixnVaz9rZqMva8RlIfL8E
+         RQjgMVhlkVcWw8TZPm0x/H8J1AxRBrRwFxS4L6qeiM2mx4w/bzi5XgXi8UHE4nAOTjt7
+         J41zxkGrSpXijqAfPe1R+Zi2AAMFuNfuEZGr0TPEBGqre4YhzD0Xlbp10wa9Fu58SG30
+         UbdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767879937; x=1768484737;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1e5OPUc4ALFm6BKAa3GGC2+rxUwWfa6AC5HZABAAJgY=;
-        b=mEtqOxnmNIeVBTeOUKFDAtd7xo0zFD8t/x/o6PBGjqZOU8gDzv/ybhG/30uqhPfLBR
-         5zM6iCKAWyaiz7BEwY9R3bZBOYTsP1SRW3OuIuJfVhAj+3sDwXb8ZWEmX5Mr45f8l2m4
-         dWRk6TdB9VtxZ3JcEe0dDxxe68x8Y4bNkjr7B19prxr0QQ867hTG2rkpN9yMMMlqoxtj
-         zME3KZf/dQXoDJ04nqy+WQE0PnonWX1bsk7txbRwGA4xkU81dcXpb/MrWhu3HTk9LBge
-         7zJeHJExDuLxDb+hrR8cz8XSy5W3P/IgPQqFfYUoIp8eky7E3a6570JTD4LBBga5lf5k
-         IYhg==
-X-Forwarded-Encrypted: i=1; AJvYcCXRR5LECwLDvyd6DxnHOeYyiqIZY4TjiT860P052sD8q0pvvCMzv1CRVI3ifyJwNNZI+wgS261+fSQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9PP1oxxFTfRbJuaux7TxDKEajoY2aBwM4oTjF6de8RFq5+5IZ
-	Jm9jxiIPpFuhRcvj8CkrjoWLKYCVX9rGiPyOgNRnBINKvZ5mVOd3vgm5
-X-Gm-Gg: AY/fxX5P2dGKx54msrDw/aFKOVuI6qypiE/QzsWrXnR4w8idC63Vo+w9Pyc9Swch0Bk
-	0aiNoDuZ1LxumGh5OqG/n2WmPOpV6KSZ8OYysQ0j3Ss+gZjQPiaTuHqpLSllSC4ODhDBCZcyQaE
-	ryp++FbEsZ4mMMqZhhZ20rZ2RNoOTawRRkA7f/eptcKeDZVvd219E0t/svKGfgSOoMRezMFQL12
-	JebGzjNNdAsh3tn1OaNUp/sYk5NWaPTvnP+Rkk1CG+axQMKd3/FQPiYZtn4zgkzeolf1CTW1j1I
-	4A0+h7V5F597DNkrdRjyOKwmZ6dI4uydHV9zI4zt3b25j6SHyYeFEMxKI37Eod7ujr1ilisV1+f
-	mqhQynuE87Ls0Ei3wxrnIAI1TSFDYSW+1K1y3nm8uRI47WmIqF0xi3b4KD74ru7BkNKPei8LAN0
-	ckugfFKpSI9f4n1Cjrfz1y736JyUn6wLK9P1fqL8d4BAgo4IU=
-X-Google-Smtp-Source: AGHT+IErqk5YtJqJoDcrNKDl/R4uJ3+oA5O9puPvRka960BgDpPlxRbK+hoKFRMiLIiXbpB3Oaqj5A==
-X-Received: by 2002:a05:6a00:801b:b0:7ff:9f67:d47b with SMTP id d2e1a72fcca58-81b7d95cfb7mr6092802b3a.8.1767879936835;
-        Thu, 08 Jan 2026 05:45:36 -0800 (PST)
-Received: from [192.168.200.2] (61-221-120-114.hinet-ip.hinet.net. [61.221.120.114])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819ab137711sm7938637b3a.0.2026.01.08.05.45.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 05:45:36 -0800 (PST)
-Message-ID: <c834ef20-2d4b-46aa-94ed-310c077a4495@kylinos.cn>
-Date: Thu, 8 Jan 2026 21:45:30 +0800
+        d=1e100.net; s=20230601; t=1767880201; x=1768485001;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lNqmz5VIJro5vLTRF9gMBu7RK4uMDgE6f1BI3kJZrQw=;
+        b=XISoJRZ+62ioPhBNIzpn5ZM/jhMLeGTKWJifoGCIiagHa8Guw+GEiwlyVj4jtimx4I
+         SDeKjVO5ibXG8ud/Br1lCw00Mm6QnEu/kk4AH9cAJFJ4yGJ0IUlTz3Dacmq0RnebD8R/
+         TgsKv+HceqDxQpwJMyKGXtQbj2Mq5qyDe62czelIehZpUEVFtALkV10O1twMbhMH0HDG
+         uHV1+o3HWiiy2lS+rdA7f6ngipiYbZGaayLavisri067xFHdcdmkoqLdTgzsMkGeCfzj
+         lgm/bPTtlyxztcT3sLwLhQM5HWsKs5Vc3F+Cyh6lNozwukwZ1Ee64SoJ+g9MoaCsxowo
+         PhEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKVH3nenlYF9bjk6jRQe/nBhSVdIyJnqGQ23tp2NsANbXHZJKwArBVJAXhNBP8/B8Vc2zCn/RR3NY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3Jg2aNAxo8sAW7FDRUAji0NnOU82ARP0agANkW3SvLD1FI1L2
+	FjwM65DNZ2HGhj8E/Wyru5osWbbB1KIGw4b1C5zVUUxZQJ8M2rI3cenO/aJf3zdpXeUgstaVLnB
+	DGgkMsHStJvNtqp/zR2q8fn6qGi6RwyI=
+X-Gm-Gg: AY/fxX69B6ltfJUJt/3qDI5MBi43gEaHahnU5C8F9WtdEZ0mUayKYTYwnwThivCQo1x
+	qCRg6WUX1sLJ2zLQYiBzpokaOhsNhSa0vgc1AR6d1KSEk378yl/kKoC9ZUqA9BXzusuWCzWDMDm
+	SyOAJ4ATo1RuLJGtrtPgzbL5suBkdMKKVBuT/C2FNIYiXaPxJOfEyvN/pwsrIus34M5Jyny3oJk
+	FD+rNrPPukuGmGcVggyROBKKAk/94zuluQUT8EOyDv2T/s2prPVVeK1Zf0cjoHv3PGGBpYGDqvU
+	i9u8U5TEHW+jK1P4jHga/ZKgaJEQDPLuA3TDAUPhXO96yhw3o3Jj62eG/lXZ4fu78eCvO6MkPzL
+	88E/P9Aum/sFJ
+X-Google-Smtp-Source: AGHT+IEf9VXNdpjywRFf4w/O/Nbcw55l9wMQR2XTrKMp518i7tM67NlvcL8MZSEGle8gb0yrWDNNafGEgxFZDu5ILjk=
+X-Received: by 2002:a05:7301:2422:b0:2a4:3593:2c0a with SMTP id
+ 5a478bee46e88-2b17d23c5f4mr1920286eec.3.1767880201324; Thu, 08 Jan 2026
+ 05:50:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 1/5] rtc: migrate driver data to RTC device
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org,
- rust-for-linux@vger.kernel.org, Alvin Sun <sk.alvin.x@gmail.com>
-References: <20260107143738.3021892-1-sunke@kylinos.cn>
- <20260107143738.3021892-2-sunke@kylinos.cn>
- <DFJ5VOQOFLJO.1YI2NXC3B8P7L@kernel.org>
-From: Ke Sun <sunke@kylinos.cn>
-In-Reply-To: <DFJ5VOQOFLJO.1YI2NXC3B8P7L@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260107143738.3021892-1-sunke@kylinos.cn> <20260107143738.3021892-5-sunke@kylinos.cn>
+ <DFJ6P0ITWD1O.2PAYKPU63UFFC@kernel.org> <b69749e0-e66d-425f-9d95-2d1bd4104e19@kylinos.cn>
+In-Reply-To: <b69749e0-e66d-425f-9d95-2d1bd4104e19@kylinos.cn>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 8 Jan 2026 14:49:48 +0100
+X-Gm-Features: AQt7F2ojznbjt0eB09XGOEyPyR-nyV2pLf2UI9BlLq3Ug1ABy33etzDn1uq85Ks
+Message-ID: <CANiq72nbBKpa_n8i1pwoC7yiurDYJQtY1efRqkvtXMZ1sXSfJg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 4/5] rust: add RTC core abstractions and data structures
+To: Ke Sun <sunke@kylinos.cn>
+Cc: Danilo Krummrich <dakr@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, Alvin Sun <sk.alvin.x@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 1/8/26 19:12, Danilo Krummrich wrote:
-> On Wed Jan 7, 2026 at 3:37 PM CET, Ke Sun wrote:
->> diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
->> index baf1a8ca8b2b1..0f62ba9342e3e 100644
->> --- a/drivers/rtc/dev.c
->> +++ b/drivers/rtc/dev.c
->> @@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
->>   		}
->>   		default:
->>   			if (rtc->ops->param_get)
->> -				err = rtc->ops->param_get(rtc->dev.parent, &param);
->> +				err = rtc->ops->param_get(&rtc->dev, &param);
-> It would make more sense to just pass a struct rtc_device than the embedded
-> struct device in the RTC callbacks.
-I considered passing struct rtc_device directly, but chose &rtc->dev
-to minimize changes to existing drivers, since most callbacks use
-dev_get_drvdata() on the device parameter.
+On Thu, Jan 8, 2026 at 2:17=E2=80=AFPM Ke Sun <sunke@kylinos.cn> wrote:
 >
->> @@ -369,7 +364,7 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
->>   		goto out;
->>   
->>   	if (adev->irq[0]) {
->> -		ret = request_irq(adev->irq[0], pl031_interrupt,
->> +		ret = devm_request_irq(&adev->dev, adev->irq[0], pl031_interrupt,
->>   				  vendor->irqflags, "rtc-pl031", ldata);
-> As Greg already mentioned that change should be a separate patch.
+> Yes. Dirk suggested doctest in another patch series, which I enabled. I a=
+lso
 >
-> You also have to be careful with the devres order when using devm_request_irq().
+> run clippy checks and QEMU tests for every change.
 >
-> In your case, you pass ldata, so you have to ensure that ldata (and its
-> contents) remain valid until the devres callback frees the IRQ request.
+>
+> =E2=9D=AF cat .config| grep DOCTEST
+> CONFIG_RUST_KERNEL_DOCTESTS=3Dy
+> =E2=9D=AF make Image CLIPPY=3D1
+>    CALL    scripts/checksyscalls.sh
 
-I'll only start modifying other RTC drivers after I have a clear
+It may be hard to see without syntax highlighting, but the code is
+commented out:
 
-understanding of all the details, and I'll minimize any functional
+    /// // rtc.set_range_min(0);
 
-changes.
+So that is why the example "builds". That `rtc` variable is not defined.
 
+It is also not well-formatted.
 
-These C RTC refactoring patches will be sent as a new patch series
+Please manually double-check.
 
-to the RTC mailing list.
+Thanks!
 
-
-Best regards,
-Ke Sun
+Cheers,
+Miguel
 
