@@ -1,230 +1,125 @@
-Return-Path: <linux-rtc+bounces-5679-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5680-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12B55D0129B
-	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 06:46:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75A28D01B90
+	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 10:03:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C87CA300FE0A
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 05:46:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0BF1B300A9B4
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 09:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04097325728;
-	Thu,  8 Jan 2026 05:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B0E36E485;
+	Thu,  8 Jan 2026 08:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BARUGa/6"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="Ah9iicQ3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D6022B5AD;
-	Thu,  8 Jan 2026 05:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A329936AB7A;
+	Thu,  8 Jan 2026 08:39:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767851212; cv=none; b=GvQ+wU6rt80OANf/k8fxcBb40xiTuZUKnHeOi2cRFjAb44uIvzry/g07LiIU7YRtkngyJNvs6U7uIjut0hiZUB6k+XLVsj/d8PY0aeBolREiLXbJ4Kiu+iC4XwYEte4FNVE6K8TBcIcnv/kV2hcrC3wYY/YcM75VA/eZkRLYm6Q=
+	t=1767861557; cv=none; b=ALXgl4SYWsmlIBdsNEs18+EWeLCC5Q2+StMSyWNeSGXU4ZxvS+KNZEwmCC+TKVnFR50cEzIPT/NK7SvpDEBQlJ7+ihywioCQPuR1ThiftYtO7qm75QKUPmreZuZ48U+OCizyZxiXpwuyHFAMhK2w2n5XMLKITC1P1UMg5YnvXCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767851212; c=relaxed/simple;
-	bh=J0Q3xEYWVHnodVp9oIx+cGdGJy34Uhtg3xaiPlkcgxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SDCgOu/8tExV2kPdqSYWM6auu5ojMNey6k313ar+wfoB5+hawI+kL/riDVMOHQe8tfZcr69Lpqq8TcXaySItPGBRjxLuk4VERQn/oFmAlBIi05My50znf3q+mWMlLe6uGsu6gFy+/5kX5qdaFWW5ORfxYCAkllL+ItSSsnI+lis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BARUGa/6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B27C116C6;
-	Thu,  8 Jan 2026 05:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1767851212;
-	bh=J0Q3xEYWVHnodVp9oIx+cGdGJy34Uhtg3xaiPlkcgxI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BARUGa/6udecdPXP97QIPajIRLyKrDeydOWEuvBV/Z6KqQ8LaGJlzD2/wAHganE5L
-	 OcKFcejkPL7Z5faTtq5mYBpkcaKOWj1FRn3DVEZFf9Wmamc0P1F7sGmGp1WkYlAAcE
-	 iqiKblclU+4mXfWG0XloYmasmUtCsgB2VhJIM1Bo=
-Date: Thu, 8 Jan 2026 06:46:48 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Ke Sun <sunke@kylinos.cn>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, linux-rtc@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, Alvin Sun <sk.alvin.x@gmail.com>
-Subject: Re: [RFC PATCH v2 1/5] rtc: migrate driver data to RTC device
-Message-ID: <2026010841-accuracy-skimmed-9f0b@gregkh>
-References: <20260107143738.3021892-1-sunke@kylinos.cn>
- <20260107143738.3021892-2-sunke@kylinos.cn>
- <2026010757-fester-unissued-6e5f@gregkh>
- <a95aff4b-5dbf-4def-803a-d5aea84113a5@kylinos.cn>
+	s=arc-20240116; t=1767861557; c=relaxed/simple;
+	bh=IiRNSVJmhy8MrOZ1LUM3AjhCQcMWkKuilr5Lzf2ajGs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ji5DxDNPXUv6IKJp8Pk1GuopzNYLc3a45tHTzoGN2bZ9Qbs1SFm66IWosInHnpCivUwNa9Hm3HKNOin+HJCvPvEkBBb3PPVaFeEOyqTChjsW0EdZGxq2MPrf/yJzsEx2TI7dbUfNHlxGz3oZBpf8bFr9psxPNtxod8Dwf+70E/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=Ah9iicQ3; arc=none smtp.client-ip=52.59.177.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1767861542;
+	bh=oXpcYu7/BiXLtInxfeyZ/crAJL6uNMHTLPJTzMs80uI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:To;
+	b=Ah9iicQ3FC4MBCJuOlBQzvx9f2OoyuaUNk1OhaEFnGGLCej4C9YtW/2+icSg31C4p
+	 7N/q2FE/SGJT11XrbhUCeDq/QD2rBaHFqcJO2MO0Q3kRjwG+4ENohOJ9fOKkD19RTN
+	 4Nqm0RhHUF23F7337WQag33lhkYlH2AVzr55JQrs=
+X-QQ-mid: esmtpsz16t1767861537taf7cee1c
+X-QQ-Originating-IP: rdQrMLWx957NdWeuu2zefdcqwwSrn5/h1cgo2IbQ/aU=
+Received: from = ( [120.239.196.107])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 08 Jan 2026 16:38:55 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8314994872385934692
+EX-QQ-RecipientCnt: 13
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Subject: [PATCH v5 0/3] spacemit: fix P1 sub-device Kconfig defaults and
+ dependencies
+Date: Thu, 08 Jan 2026 16:38:53 +0800
+Message-Id: <20260108-p1-kconfig-fix-v5-0-6fe19f460269@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a95aff4b-5dbf-4def-803a-d5aea84113a5@kylinos.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB1tX2kC/3XO3YrCMBCG4VuRHDuSmSRtukd7H4sHzU91WG1L4
+ xZFeu+mgih2PXw/mIe5ihQHjkl8ra5iiCMn7tocZr0Sfl+3uwgccguSZFASQo/w67u24R00fIY
+ ikDNVkMrZRuSjfoh5voM/29x7TqduuNz9Eef1QdE7NSIgeNQUDEZ00n4fuP07b1Jf+3jk08Z3R
+ zGbI7065cIhkKCrwtpGSVfHz456Ooh24ajsWKsqb2pvglMfHf10iMzC0fM/2hUlWcTS47/ONE0
+ 31tGXFo0BAAA=
+X-Change-ID: 20251021-p1-kconfig-fix-6d2b59d03b8f
+To: Lee Jones <lee@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, Andi Shyti <andi.shyti@kernel.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ spacemit@lists.linux.dev, linux-i2c@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, Troy Mitchell <troy.mitchell@linux.spacemit.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767861535; l=720;
+ i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
+ bh=IiRNSVJmhy8MrOZ1LUM3AjhCQcMWkKuilr5Lzf2ajGs=;
+ b=RLp6iu8x/w5+nOe4WWHQNaTOD5AC2s2LIosBXD/a6Yz1hezUBXGiId9ylmi7ViesR1b25DVvy
+ +EkeP6Oe0D3CAZp5T6EiHELbz1ymNvZWTJCOaj6YdVKqutjRhJaKPMe
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:linux.spacemit.com:qybglogicsvrgz:qybglogicsvrgz3a-0
+X-QQ-XMAILINFO: NcdRvUr+zm/y2iZOWcnG/0TAszi5r1cwnKLKU2rss2ADESF2yg7dHpEf
+	/yRV0zBptz3+wHDVCuBdBN4ZUXHptf/OxQszpM0Gn8Xiw6OvCPof3q+e6YJ+zMpUe8jI4nd
+	36b2Fu1PfxcV/KtY+AwisijM6uxk9HUINUspaWZ35KGspGXnCruZ8NLWpvNax3Q0qUykU7c
+	hjIkmoDTMOKGXBH6nAZfcccRsnbXvq1Qly6d92BwEFG5G/cW3ke5ogPRt63HlJAIbqbvHC6
+	mxTS+nrMADks8MABBNu6DvVhnUsFMSjLnHRyMjG0DnlW3TAHaH7hzm7vK4Y2gGwkjzxmY0w
+	wnji0JJSunu3s/3jvp8upa4zvap3FInJa3NYLYbIoFtNCTpqrEm1Wz1mjlLpEhZ331rRVX7
+	7YL2bP9YoHsuXna4wUXVG3bAEAnklVVOKCG8jnoSxMJaw3LiPdBrN8Xdu/079B1BD+KfeJT
+	16Go7uxQv5jGpr9T6Is2LIUi0zQnDmTORRvbBsUUCTP8efBakyzuKT2/MJQZMGRb3u4wfrA
+	Wy32AUImRWn6EjK2yUPfYo+N7cc/q9BVtrf2d/RzgoLVqI+yXt/FYdl9S7jLE9c1XRGKm+l
+	VK7r3pamewe6rmfq0NRdsn+dsmOxA86KyMPf+jleIrMlb5pmdyN0+BCzk1cklTv/mk62JS7
+	+AL32VooOcSq7SjPRYdPFjTQLZPSZUI0SXksRyXFMDsQ1grHs1yPJOjJf9JFDfQmsh202Hv
+	D+RrXK1FDKHazu4LlsIal7NqQQ9DNyRbKajmADWuK1nzOFp/ApgSP+V3NzonptgvWCHd71/
+	3ig+2NVWBzq1JO3b9g8yRt5aYBhpmAaIW9pf8QPmw5jnltOo5CXKn3VZ/KyYrkntMyiUGpg
+	TAJTmJ9jR4jrTOeEcZIScXcyWHjbe9V0y1XjBHwN1nzCd0A6aN5oK3pXNz/K+OrRnAUXL6H
+	rqF70g7S5tsqNazNhf53yXX/JElFT5KyKhS6CajjI7eGa8p5cBClYgQRE+4mtsW4Cni7qBH
+	SbSSW5/M3G9ynGji79kx+EwMGocDDZrJK4PsAEZt1WpCkBRIxZwjq7cV4HXzbMDr5HcEoNk
+	g==
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
 
-On Thu, Jan 08, 2026 at 07:18:30AM +0800, Ke Sun wrote:
-> 
-> On 1/8/26 00:12, Greg KH wrote:
-> > On Wed, Jan 07, 2026 at 10:37:33PM +0800, Ke Sun wrote:
-> > > Unify RTC driver interface by storing driver data on the RTC device
-> > > instead of the parent device. Update RTC ops callbacks to pass the RTC
-> > > device itself rather than its parent. This change enables better
-> > > support for Rust RTC drivers that store data on the RTC device.
-> > > 
-> > > Signed-off-by: Ke Sun <sunke@kylinos.cn>
-> > > ---
-> > >   drivers/rtc/dev.c       |  4 ++--
-> > >   drivers/rtc/interface.c | 18 +++++++++---------
-> > >   drivers/rtc/rtc-pl031.c |  9 ++-------
-> > >   3 files changed, 13 insertions(+), 18 deletions(-)
-> > > 
-> > > diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
-> > > index baf1a8ca8b2b1..0f62ba9342e3e 100644
-> > > --- a/drivers/rtc/dev.c
-> > > +++ b/drivers/rtc/dev.c
-> > > @@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
-> > >   		}
-> > >   		default:
-> > >   			if (rtc->ops->param_get)
-> > > -				err = rtc->ops->param_get(rtc->dev.parent, &param);
-> > > +				err = rtc->ops->param_get(&rtc->dev, &param);
-> > >   			else
-> > >   				err = -EINVAL;
-> > >   		}
-> > > @@ -440,7 +440,7 @@ static long rtc_dev_ioctl(struct file *file,
-> > >   		default:
-> > >   			if (rtc->ops->param_set)
-> > > -				err = rtc->ops->param_set(rtc->dev.parent, &param);
-> > > +				err = rtc->ops->param_set(&rtc->dev, &param);
-> > >   			else
-> > >   				err = -EINVAL;
-> > >   		}
-> > > diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> > > index b8b298efd9a9c..783a3ec3bb93d 100644
-> > > --- a/drivers/rtc/interface.c
-> > > +++ b/drivers/rtc/interface.c
-> > > @@ -91,7 +91,7 @@ static int __rtc_read_time(struct rtc_device *rtc, struct rtc_time *tm)
-> > >   		err = -EINVAL;
-> > >   	} else {
-> > >   		memset(tm, 0, sizeof(struct rtc_time));
-> > > -		err = rtc->ops->read_time(rtc->dev.parent, tm);
-> > > +		err = rtc->ops->read_time(&rtc->dev, tm);
-> > >   		if (err < 0) {
-> > >   			dev_dbg(&rtc->dev, "read_time: fail to read: %d\n",
-> > >   				err);
-> > > @@ -155,7 +155,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
-> > >   	if (!rtc->ops)
-> > >   		err = -ENODEV;
-> > >   	else if (rtc->ops->set_time)
-> > > -		err = rtc->ops->set_time(rtc->dev.parent, tm);
-> > > +		err = rtc->ops->set_time(&rtc->dev, tm);
-> > >   	else
-> > >   		err = -EINVAL;
-> > > @@ -200,7 +200,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
-> > >   		alarm->time.tm_wday = -1;
-> > >   		alarm->time.tm_yday = -1;
-> > >   		alarm->time.tm_isdst = -1;
-> > > -		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
-> > > +		err = rtc->ops->read_alarm(&rtc->dev, alarm);
-> > >   	}
-> > >   	mutex_unlock(&rtc->ops_lock);
-> > > @@ -441,7 +441,7 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
-> > >   	else if (!test_bit(RTC_FEATURE_ALARM, rtc->features))
-> > >   		err = -EINVAL;
-> > >   	else
-> > > -		err = rtc->ops->set_alarm(rtc->dev.parent, alarm);
-> > > +		err = rtc->ops->set_alarm(&rtc->dev, alarm);
-> > >   	/*
-> > >   	 * Check for potential race described above. If the waiting for next
-> > > @@ -568,7 +568,7 @@ int rtc_alarm_irq_enable(struct rtc_device *rtc, unsigned int enabled)
-> > >   	else if (!test_bit(RTC_FEATURE_ALARM, rtc->features) || !rtc->ops->alarm_irq_enable)
-> > >   		err = -EINVAL;
-> > >   	else
-> > > -		err = rtc->ops->alarm_irq_enable(rtc->dev.parent, enabled);
-> > > +		err = rtc->ops->alarm_irq_enable(&rtc->dev, enabled);
-> > >   	mutex_unlock(&rtc->ops_lock);
-> > > @@ -618,7 +618,7 @@ int rtc_update_irq_enable(struct rtc_device *rtc, unsigned int enabled)
-> > >   		rtc->uie_rtctimer.period = ktime_set(1, 0);
-> > >   		err = rtc_timer_enqueue(rtc, &rtc->uie_rtctimer);
-> > >   		if (!err && rtc->ops && rtc->ops->alarm_irq_enable)
-> > > -			err = rtc->ops->alarm_irq_enable(rtc->dev.parent, 1);
-> > > +			err = rtc->ops->alarm_irq_enable(&rtc->dev, 1);
-> > >   		if (err)
-> > >   			goto out;
-> > >   	} else {
-> > > @@ -874,7 +874,7 @@ static void rtc_alarm_disable(struct rtc_device *rtc)
-> > >   	if (!rtc->ops || !test_bit(RTC_FEATURE_ALARM, rtc->features) || !rtc->ops->alarm_irq_enable)
-> > >   		return;
-> > > -	rtc->ops->alarm_irq_enable(rtc->dev.parent, false);
-> > > +	rtc->ops->alarm_irq_enable(&rtc->dev, false);
-> > >   	trace_rtc_alarm_irq_enable(0, 0);
-> > >   }
-> > > @@ -1076,7 +1076,7 @@ int rtc_read_offset(struct rtc_device *rtc, long *offset)
-> > >   		return -EINVAL;
-> > >   	mutex_lock(&rtc->ops_lock);
-> > > -	ret = rtc->ops->read_offset(rtc->dev.parent, offset);
-> > > +	ret = rtc->ops->read_offset(&rtc->dev, offset);
-> > >   	mutex_unlock(&rtc->ops_lock);
-> > >   	trace_rtc_read_offset(*offset, ret);
-> > > @@ -1111,7 +1111,7 @@ int rtc_set_offset(struct rtc_device *rtc, long offset)
-> > >   		return -EINVAL;
-> > >   	mutex_lock(&rtc->ops_lock);
-> > > -	ret = rtc->ops->set_offset(rtc->dev.parent, offset);
-> > > +	ret = rtc->ops->set_offset(&rtc->dev, offset);
-> > >   	mutex_unlock(&rtc->ops_lock);
-> > >   	trace_rtc_set_offset(offset, ret);
-> > > diff --git a/drivers/rtc/rtc-pl031.c b/drivers/rtc/rtc-pl031.c
-> > > index eab39dfa4e5fe..a605034d44cb7 100644
-> > > --- a/drivers/rtc/rtc-pl031.c
-> > > +++ b/drivers/rtc/rtc-pl031.c
-> > > @@ -284,10 +284,6 @@ static int pl031_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
-> > >   static void pl031_remove(struct amba_device *adev)
-> > >   {
-> > > -	struct pl031_local *ldata = dev_get_drvdata(&adev->dev);
-> > > -
-> > > -	if (adev->irq[0])
-> > > -		free_irq(adev->irq[0], ldata);
-> > >   	amba_release_regions(adev);
-> > >   }
-> > > @@ -320,8 +316,6 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
-> > >   		goto out;
-> > >   	}
-> > > -	amba_set_drvdata(adev, ldata);
-> > > -
-> > >   	dev_dbg(&adev->dev, "designer ID = 0x%02x\n", amba_manf(adev));
-> > >   	dev_dbg(&adev->dev, "revision = 0x%01x\n", amba_rev(adev));
-> > > @@ -356,6 +350,7 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
-> > >   		ret = PTR_ERR(ldata->rtc);
-> > >   		goto out;
-> > >   	}
-> > > +	dev_set_drvdata(&ldata->rtc->dev, ldata);
-> > >   	if (!adev->irq[0])
-> > >   		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
-> > > @@ -369,7 +364,7 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
-> > >   		goto out;
-> > >   	if (adev->irq[0]) {
-> > > -		ret = request_irq(adev->irq[0], pl031_interrupt,
-> > > +		ret = devm_request_irq(&adev->dev, adev->irq[0], pl031_interrupt,
-> > >   				  vendor->irqflags, "rtc-pl031", ldata);
-> > Are you _SURE_ you can use devm for this?  it is a functional change,
-> 
-> Since ldata's lifecycle is now tied to the RTC device (stored via
-> dev_set_drvdata(&ldata->rtc->dev, ldata)), and the RTC device's lifecycle
-> is tied to the amba_device (via devm_rtc_allocate_device(&adev->dev)),
-> using devm_request_irq(&adev->dev, ...) allows us to remove the manual IRQ
-> release in pl031_remove, as the IRQ will be automatically released along
-> with the amba_device lifecycle.
+This series fixes Kconfig default value and dependency handling for
+the SpacemiT P1 PMIC and its sub-devices.
 
-Please test this.  There are loads of race conditions that can happen
-when irqs are bound to devm lifecycles.  You are changing the behavior
-here, so be very careful.
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+---
+Troy Mitchell (3):
+      regulator: spacemit: MFD_SPACEMIT_P1 as dependencies
+      mfd: simple-mfd-i2c: add default value
+      rtc: spacemit: default module when MFD_SPACEMIT_P1 is enabled
 
-And again, this is a change that was not documented in the changelog,
-and should not be part of this patch, it should be stand-alone.
+ drivers/mfd/Kconfig       | 1 +
+ drivers/regulator/Kconfig | 5 ++---
+ drivers/rtc/Kconfig       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+---
+base-commit: b87881a3c93345252ce8559ad763369febfdb75d
+change-id: 20251021-p1-kconfig-fix-6d2b59d03b8f
 
-thanks,
+Best regards,
+-- 
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
 
-greg k-h
 
