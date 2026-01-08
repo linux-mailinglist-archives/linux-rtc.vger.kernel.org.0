@@ -1,227 +1,351 @@
-Return-Path: <linux-rtc+bounces-5696-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5698-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2116D037C0
-	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 15:48:45 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E74B4D02F15
+	for <lists+linux-rtc@lfdr.de>; Thu, 08 Jan 2026 14:17:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E90C93035332
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 14:34:30 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 592FA3006738
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Jan 2026 13:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E322D470F21;
-	Thu,  8 Jan 2026 12:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="I6Rgzg7S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB0F4EAC89;
+	Thu,  8 Jan 2026 13:17:54 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020078.outbound.protection.outlook.com [52.101.84.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A37C470BB2;
-	Thu,  8 Jan 2026 12:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.78
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767876710; cv=fail; b=UjJeE3n/TLmHWdApJF1qHeKdLve3kxPxMNR9TAs3ikhfanCdckwwULtrLEbLYY6jXX6UrpRqAutTzqXmjYYKpa22AKXfXTfqcs7zAn6n9EOr+gAkXMbZEd0jitShXTYa+FcDUdSxhXAgb6/oXViWgBNl6KtmrtDGduymUiB8cqk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767876710; c=relaxed/simple;
-	bh=xcJHTcEfCXb+jBRkFyOSoli47+jFhjgrbnMTeBvuVkE=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=fRGSuUO7+u7W6K84JFfERvpgjeFNBxyTLF+Lz/ANwgehcGVBljcX5Z6reIXRRynaNRkfA5q49kddykr931+CABeul0Pj29aLl3t6llguJl1EXZFTkqtJAj20zvsU+15Q96ZnI4gUGxEXfHAuCXZJZsM3qBYSm7xVM9HSLSc59fU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=I6Rgzg7S; arc=fail smtp.client-ip=52.101.84.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vaisala.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaisala.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ORnrmgEXWc+x6rZCmF2DrVqeIZj1HktlRlJZaY3Zmi1ZbKpaIl4gXuGkpRB1ToGlyIL19CS1IA6HrZJsv8a5s9G4q9Yg69+7GciqT9Wqivf94YQYQLykdJucviGncfzIRs1pxbm1QNrFObZ0Gd4U40xN7NVkEiSX1LuOGa/qrzrUCmy216xSfZ7Ght9WKG+W5NGcEyVU9TD5gu8YSgktiJXPIZpKPq1KxMc9opwhuDffWNj9Q8wX6WHrHOe7WUW5hOeaottYO2w41Zq6S/bHmmmrKvb7F7ZANoLW78O1TbXrhp+BGMZx9psCCOvJIP7/ZSPPVhCVtUrxJ8X9JSdsYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TBFhZiP5Y1rc2+q6LJMyKBdzm+wX2wim0POeSQ12yRA=;
- b=gWMUSNjVUN3wN8ixZXGnGcCuKRMi+c3bnmW5gYQuXb1lPXCi2ZU7SvA2B11AM2geGjZkf948u/neyZRtRtKVL5HY6cT0JlqYWANskOm5fMzChk7VoY4YmI1Xc9X+kG1tXPLd3tUCI0EXlm/dvsbPhVgglGKqb7hUobsP19lg1iiJ9LmWrw/WQz1pi1KMO1wIWxhoCXifh4ObPHnv+/Nx8mv/JF9JlUIeZjQTLX0ySjtd1QHsbYWXwnou0ewg9EGaUacbL69FiQYj7UTwtzj/FQqvBnnYfbRwi69neoTTlV8zEIqnQO+3W+NCKdNajpeblZClS5NIBfI3WCPyCj5Rqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
- dkim=pass header.d=vaisala.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TBFhZiP5Y1rc2+q6LJMyKBdzm+wX2wim0POeSQ12yRA=;
- b=I6Rgzg7Sy6RREWkZWu8hP92wH5EV1PPt7uBtdCAZE0/hBX/jKAOBGR5kHAF11hRPxBD84Fq7XLIdl8pAyfTkN0mPDryH1YIlTazzu2gIX6BYIWk9aiarXvcLSWAj56EcfU+PIt1/QS2YNzpb8b+BL1lBjISrhkpTO2RNlhO+Ln7oigycYAyup5dNAfZj96IE3R/7qaO4fZd/zdT/SiHPiQWK790YnPWkILUrOjPWMZyufjA6LJnWOgzsRrrJP8gaph/pt7cB0b2rDueQvzhTp4f/tHRcn3rwiirJ8YsuUQsHvuyYtGGrjc/1+YxPbUC8iHUBc6Hs6aqteNPjpKjzAA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vaisala.com;
-Received: from AMBPR06MB10365.eurprd06.prod.outlook.com (2603:10a6:20b:6f0::7)
- by PAXPR06MB7456.eurprd06.prod.outlook.com (2603:10a6:102:151::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.3; Thu, 8 Jan
- 2026 12:51:29 +0000
-Received: from AMBPR06MB10365.eurprd06.prod.outlook.com
- ([fe80::4606:8e25:96e6:bede]) by AMBPR06MB10365.eurprd06.prod.outlook.com
- ([fe80::4606:8e25:96e6:bede%5]) with mapi id 15.20.9499.003; Thu, 8 Jan 2026
- 12:51:29 +0000
-From: Tomas Melin <tomas.melin@vaisala.com>
-Date: Thu, 08 Jan 2026 12:51:16 +0000
-Subject: [PATCH v2 5/5] rtc: zynqmp: use dynamic max and min offset ranges
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-zynqmp-rtc-updates-v2-5-864c161fa83d@vaisala.com>
-References: <20260108-zynqmp-rtc-updates-v2-0-864c161fa83d@vaisala.com>
-In-Reply-To: <20260108-zynqmp-rtc-updates-v2-0-864c161fa83d@vaisala.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Michal Simek <michal.simek@amd.com>
-Cc: linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Tomas Melin <tomas.melin@vaisala.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767876686; l=1367;
- i=tomas.melin@vaisala.com; s=20251125; h=from:subject:message-id;
- bh=xcJHTcEfCXb+jBRkFyOSoli47+jFhjgrbnMTeBvuVkE=;
- b=FZgXQvliZQmlS1TRj8O0CPydVoufSGUWZoqvyZgJYfcmGBjCgfibaFyfTrD7VmOBOZAbUuRud
- B27YoXyFzq7CFfhoqxA5oZlsNt2KPUeFBOmK5PqXBMgH2AtZMQ2jjIv
-X-Developer-Key: i=tomas.melin@vaisala.com; a=ed25519;
- pk=6lMiecjZ+OeyZuxYsDm/ADy9D1JKvYrKdsYv58PMepU=
-X-ClientProxiedBy: GV2PEPF00007567.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:401::3e5) To AMBPR06MB10365.eurprd06.prod.outlook.com
- (2603:10a6:20b:6f0::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60E74E2A33
+	for <linux-rtc@vger.kernel.org>; Thu,  8 Jan 2026 13:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767878274; cv=none; b=qgJKzWnNoVMriwN22xrrVMtNPzmMxFBPuXxonrB+FQSaSrTdT4MfP9OSSHBFLkvBo0WZX7VbLEGqOY5sRKUm9cceyT9o3+s0v7WoGxpCwVh4IOuyt5lNBDDR6q1msNutWQRoWwKYLtYSiML+zh3tNRO/MoZCpIEggT5TBdCaoVY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767878274; c=relaxed/simple;
+	bh=dtWa+YGtzddfNIUwkFmFlIOlV9VWXlUrri3DNFVZWpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IREBJ/zZZuKtNDD4I7uaadYDHeI9Jvf+CIf9LBlffe0Wj/Y213rIKneWEpYQcoGyA3xKnPgWnDrHhpgUTswrXPMJycuASGhf0ay6Ax1iKJF9FR4+I0UpYtxgFi0zNRjmlpsjWYMIIK/g/y0EXWd7KXRxLtTZLD7YBuFAU9fn3x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a0d06ffa2aso24581145ad.3
+        for <linux-rtc@vger.kernel.org>; Thu, 08 Jan 2026 05:17:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767878269; x=1768483069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zmEjhzYCxeCjE/oSSYNX31iUbZURZ9YpqT93kz8/CW8=;
+        b=RkBMttAY9Q8xfLAVe8er8sAoQWopk5W72gJG7crZSInjf+u+G0zo/SkpTQcMFtsPtt
+         VUC6vN5vyG3A03Y4MIsbiAQ/78N33ZHz1gXkMXWL1fSt9/maz/lTOdhd+4zJN54PSrtn
+         YwScQqrRxMfXxhTTGJmP1PQPjf2Ff2URJReOQiBsk9w46qXJ+Z7ghlcIU7/iYF2DW1NZ
+         A14L//vht8KZ1akuSxXXI9k5E/py/P6t8c9CUktbZ+PZnUPd+IQJlOiOMyt6mD0YTSu1
+         A/9EsYUZzD5ZemAUAmTCVYfI8WbfI+OZcPwTqG6i2TgO/kJsjbZvAEYufX7TZE/3geue
+         jJZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXrTlTRq4pusdNLFMZUW52Iq0HhQxruzwXt6AeFUDFkQAV0p4BcXxzsIRWaVuALEFd9s89zQQo4BRw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/N3d1Hnu3l2fMfyc/4BEITqkMODC5fZdIuANk5Wht4lO3C4tY
+	VKyPp4zzT2i3iq020g8lzEbsmx/+FvIvx2gx8uPVudNuldtnquKJtqNe
+X-Gm-Gg: AY/fxX59hM0cwIQm5AhOoJzZqgRf1Uw6rtGlz8Aln3/829MIxEcT5QlKTS2/5vInj6b
+	kgWtqPkPZTx4uCR+9cWU4OUgux4j3HZ7HyTySo7JytnekGNQkqLNtMKNXxnZ3CSO91W/tsr33AA
+	q9nroGa1tJ9Jkn/dh+c0fWFwnUXGBc0DrvZ/4PrP60eMvK6KUgzh3mfbAMHYjtIKOcthbB3b00s
+	iCXWqVIOTcil/pF4aZlkJVsmzm3iDVFq8Aj3H+9p3VkHDrJGiysV46JfeCeckAPEkNirAsiR6GK
+	A8L/SQ3y5hWCRRZ0sG1FUXO90bLpDPf58Ce7qACBRFUzC8Wz41jadMkzKBG+V07zvxJe6TMv4BL
+	rbNs1ScG9irzvs41o83Ot4lXw5OZS2N1VRF0L7bZ0BTVTrQ/kplPqRlgLA85qtNldp9/lyiJfDT
+	FDoZVYs+MCqVW7JkE3WjZfmdg=
+X-Google-Smtp-Source: AGHT+IEObFGUSFZADO3xkr1oXwRAkd6d18XHZKIq6Q9weG1w6TkFFMBEPsdYdjbgida6bF4M6xEeOw==
+X-Received: by 2002:a17:903:1250:b0:24c:da3b:7376 with SMTP id d9443c01a7336-2a3ee43a15fmr56497845ad.26.1767878268870;
+        Thu, 08 Jan 2026 05:17:48 -0800 (PST)
+Received: from [192.168.200.2] ([45.142.165.250])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a4fcsm80637585ad.12.2026.01.08.05.17.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 05:17:48 -0800 (PST)
+Message-ID: <b69749e0-e66d-425f-9d95-2d1bd4104e19@kylinos.cn>
+Date: Thu, 8 Jan 2026 21:17:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMBPR06MB10365:EE_|PAXPR06MB7456:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0eab42b4-4bbd-45e2-082e-08de4eb4a434
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VlZrZ05ucE9PL2psYXVRQlVNV3V4azVHVGhaTkJCYTFhTFNQTDlUcitGY2JZ?=
- =?utf-8?B?QlQrMnRiaE9JZHhOQ2F4WHpXbmkxY014VXF6VVhvRjNkNHpQT0xRWVNZdHlj?=
- =?utf-8?B?S1Y4MW5lSGtuSVhyeEp3MXRGbEVkQUh3eGl4NkRoRHlYTzNJcHJJWS8wUTVh?=
- =?utf-8?B?ZTQ4eFp1d2c3dWtRQURYN3dZNUc0dG9vNXlsUVVITG41VW52U2xuVXJXRGNK?=
- =?utf-8?B?MzhwdU5xNXR0RTIwa2I2U2JiYWNnTno0bVVDcmRGYU1rR25QV3NSQmV0cVRW?=
- =?utf-8?B?SDZOelJUSW1NcmZWc3JRRm03WWNGNEVxRHVXTnIvOFFTWTFHL2RQc3FENUY1?=
- =?utf-8?B?K1E3M1RBRjRVQWRDcldrSW5vTm9wd3pkQi9XM2NIMTFGQkpNUm1INHo0SGZO?=
- =?utf-8?B?TmZaTXU1dkpwTmdqNzlqOHozZFlFWU14b08wdDZNVFBvdk5zekpJdTNURVBQ?=
- =?utf-8?B?ZzRjTWh5ZGNMZHhlS1F2Z0EzL2w1V0thTzJQVE05ZlM2WVhlQUFYRUNTOWVo?=
- =?utf-8?B?V0Nvb0lrN3lsZndZaHVOMVNGZXpJK0JJZENTcG1KVTlBVHd4cHFWSHRLWU95?=
- =?utf-8?B?TWRNNnBMNjEvQU5uZzdESkpuUWRqTjRlZzhaL2kwR1Rtb1pneVN0RTJBOWwx?=
- =?utf-8?B?VkNmWHNXUnVsbWUvelV1ek9uYk1CRlIvS084dzFoa3NkbkRNYXlLem9EaDRV?=
- =?utf-8?B?aXpjaGVuL0tpOFRGdUQ1WXM1MUhlcHZWNW9MMHBPUjRZZnE5MDdFdng0T0l5?=
- =?utf-8?B?NFVhUU9ZMmdkTjJPdXBqUCt6eGlyOFNvUDhaRVQxNzJWa3ZqS05VeU1QVk5M?=
- =?utf-8?B?M2NkS2RIUW9VNS9VWVJMcHlmR01HU2l5d1hxSnQ4RHlOYVlTTTZSUXg2NDFE?=
- =?utf-8?B?OXhXZnQ3N0Z0V1M1SGQvaFlmdTc1ZnRwVGo2VGRTc2J6elNLOWhic0F1T29K?=
- =?utf-8?B?dGRZV2RSVU5BYm9GbS85VEU0OWZpUGlZSjQ2UGFDQ3IvSlRQa21rZStHMG10?=
- =?utf-8?B?aVNoVGtFU1B0bklScFJHRFFjQThrMWcyYjE5WEV0TERHdUpuRGZ1ejIwWGQy?=
- =?utf-8?B?Q2hsRXJJeGl5VTdtWXpmTmZQTHN3eXVOZVkvMzhDN2h1bk8zc1ZHcWtWSHgz?=
- =?utf-8?B?MExHejFUeHgreVJ6bTRBN0lIV091N0Y4UXZndHBBVkFFWDZCdDFsd3MrbjNH?=
- =?utf-8?B?eVlXR0hQS2NndkIzZ2lTT2ZKVzg2Tld3NVNyZUk5QzYyYVZBN3d5Z3NhZmdx?=
- =?utf-8?B?NTQwOUlJR0d0TzJlOWozMERVUWN3K0ZWSW9TQUZob3l1Y2szeHJBbVZybHF6?=
- =?utf-8?B?NHpoUnNGZTVLWEhHbzZ4NUxMUE1mUFFCRFUvTTVOYWd2ZHdhbWFRSmdVWlhh?=
- =?utf-8?B?c3B5SW03c1A5NEZtTE1sOHNKUTBvQVhza05mNm5nenIwMTI5bEZaYnpGd1BD?=
- =?utf-8?B?OXpBdlNlQjdmWUFUWEdqZUhQQ0ZVYUJZdWowdUdHaG1UdDlJQkRRTk5ydTJF?=
- =?utf-8?B?WHE1cGwrMDlYSXFMU05jYjRhcHhHS2sxWS9JeEdkSTdlMytlcHJxYXNFNldJ?=
- =?utf-8?B?ZEdzVU16U1daT05QcDB5YzB0cldoN2doaUwyVWdMblFJcFJFNUtUV0ZXc2oy?=
- =?utf-8?B?NjNEaUFCbWJMbTZibHhJNWVVMzFYZ2FxYXZkL0crY3VNUXVpV1N4Uk9yM3pO?=
- =?utf-8?B?YkRmR0s3dUgyRnNLT0QxYmtJL2ZEeWJoTUh6WEs4REtteWJnWWwvWUt1UzY1?=
- =?utf-8?B?NUh3ZTU4SzE5LzdLUlJEajJ4aUlZdXVnYVdxTUlvTkhsMTE0b0NJR0hCN0h0?=
- =?utf-8?B?aWRjcExySmFFTk80UjBLa1NDV1NFSzFEZTFjZENsdzVaSC9NNmkxZWVNUzlZ?=
- =?utf-8?B?UkRQOW9DTlE5dG9GeGFTQU5KTEFwUXhtSlpvNGxEYi9wcUdBRU9DVURVd2dy?=
- =?utf-8?B?VDNGOFVCbk81VkZ1YmIyNlZ3b2pDelovdk5xVEtMNldMZmVFU2NIcFZmMjQ1?=
- =?utf-8?B?NCs1Z1lCaS9lSHVxYU95Ujc3Y0NXVzlaQUtHOHN3ak1NdGt4QURtSGpzRlNs?=
- =?utf-8?Q?se/UIu?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AMBPR06MB10365.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QU8wRk1ud0FlNHkvc3ZFSzFGb09pbDd2OGlFOFU3WGR4eWV4LzBuNG9GQThL?=
- =?utf-8?B?Z3dLNGNERitqY3NIQUdwUE0rL3REaStxSkJMNFplY1RTbjcxSHp1N2lwVWRX?=
- =?utf-8?B?OU94UDVCZG5uT3dOOEY5emNGeTMxdGxhdDJNbkxFektWK3BrVHZ0TXVoRHNC?=
- =?utf-8?B?YzBtb0JFbGhRZmE3SzlsU0x6N2xnTVUyMTFwbWpTczNNSnRFOS9jQ2h4R1kr?=
- =?utf-8?B?OFRBZ0RHRzdyczZwTGRmNncyV0ZLdmxFenVXc3A2QWNBL0Y4eXVxTThnb3Jw?=
- =?utf-8?B?WkI1Y3hoVjNlZVVkN2V1YUhYdy9qbjlrUkJxOC8xQzNTYjVtdkhVSWRvS25q?=
- =?utf-8?B?TGlXYUVIcnEwUGtWZW1hQWpLV0tZdVgydlhrSGtIalcyNHdoZG96Qmk0Q29N?=
- =?utf-8?B?YjFHVDRwellvbEg2WUFWQzIwdDAxcFVhakNKKzVyY3BkL21GcjlySlFFUS9Y?=
- =?utf-8?B?ZTdjQTVJSXdzaG1tTHl4SnVXT3ZZRmI2N1JwMGxvWm5lSytvcnZIRnk1bEVX?=
- =?utf-8?B?cDE4R0VlTEltRHdsMktENDNPY1RSS1RHQ1pZR21Ua09pSUxxSXVLRkJlKzR2?=
- =?utf-8?B?SG1HZ1NRU0gwRFBPa0hxeXZzaGRYK1NjZ1UyR2FMenFyWEc4NkpiWFI1RVZi?=
- =?utf-8?B?RGdxL244ZXVzVWxuTCtSTzlMYkJJNDRBekp4TjF0RHlwZjRUNmtZclpSdmJN?=
- =?utf-8?B?SjlheHJYV3VrZHBxWWtqMUdMNlhvTFNzWndyNjJrNDVGSHRNaDNiVnpBRi9T?=
- =?utf-8?B?UEhpUE5zY1hPZzVjMU1MT0txNm8yb2llblJ3MC9BcEFQZXZ4b25MZFUxc2Vj?=
- =?utf-8?B?SFQrWnBOYmxMaFU4c0p5c29raEdTQUpobTVBQ0x2bGlzMGZ4K0NFRDZ6MkJT?=
- =?utf-8?B?TGJsdnhZOWlFVjg1L0hhbGtVSXNJS3ZXRkFwNitqRXlsb2J5RDlpVWZCWjM3?=
- =?utf-8?B?alhCQnFNNlNqWXluS2hUaFZwNVJIYlF0MGk5a290cTFVbTlDWXViZzQ1Tm16?=
- =?utf-8?B?aGIzd2w0NUNlZFVsVFZwVi80U3dCZ3k4Uk52NlkxSXA0MldYamMvYVE4N3Jp?=
- =?utf-8?B?TDNGK1pUVmlJdy9iblFhMjkzUU1Ud3Q2Wlk5TmErSnE3NnBmZEVwRjNkVnpT?=
- =?utf-8?B?alk1dStpeGQ5QmRDTDlJYWtrQ25oV0IrN0JYbkl5M2pNYXl1L042ZktHbXRh?=
- =?utf-8?B?M3pwSTY2amhWYXA5V3FpeFdockZuMUJvMWdoOENqWW9LYzBITFovTVVvUXRP?=
- =?utf-8?B?Yndwc24xZjVWNlpOK0tMcjhBRW9yaEZQZFM3Q1RFL1J2dU9lU0xuWnhrY0dH?=
- =?utf-8?B?dnYrcmtMd25wNWllQys0KzVxVjB0Uzg0blJFV1VVRDBRT2tqNWRIRTEyQlVF?=
- =?utf-8?B?ZHlYUlNSWXZWZmVPT1lrU2lCVk42RnN4Si9OdTZ1RDFjUlpoM3RTbkdaaWYy?=
- =?utf-8?B?SllGVXlkRmNCNXhNb2ZGY0QvZ1JsZCtCeFJIbHVSWHRhbTQrYmttZkJrVG1t?=
- =?utf-8?B?akc5bmwwa1BjVE1MdDFFNkRDTCs3MVRmMC8zMnBUQzNMSHlRRlZBQWg5VlZr?=
- =?utf-8?B?NXFIQURNSzF1VU9CRHJKSkxPc3FzY01SL3RYbTdEN3lPOERUd2h3RUV6T2ty?=
- =?utf-8?B?ZFArQmJteWZxaFRhQUJja2MrZS9Ec2tuY0MwbU1WK0FNa0RHTEwvdlFkNjBm?=
- =?utf-8?B?ZndRdERQUXd5ek1UTXJaRThhVE90bitTSTljdWltYkprQkRCTi90WDlaSGtP?=
- =?utf-8?B?TnBveW9BWTdpR1JHOVVCMSs1akduRUFTM2hPTWtjT3RRZkdNalJYTFQ2N01y?=
- =?utf-8?B?VDE4QmZtSVRKR1BNR21jOFB0dGs4T2gwRWIrSU1LS3poUmhXNXlCWUxTVmFY?=
- =?utf-8?B?R3hCeXd0cmUxdDVsNEdZUUtqSHRHQ0RkUXZxWm1lWGJQR1dqVXFiYkhXeVJG?=
- =?utf-8?B?TjFKUWsyKzBZbG14RjMwQkpxQ1dvUGxQbUpsaHc2bWVhZDFNL2RYVnBpYU9X?=
- =?utf-8?B?T0tSa2NWZ0VpKytUTS84RUR3b1RkUDd4VFBWS1R1cFIvRXZ4RElJaE5Dbk9M?=
- =?utf-8?B?ZGhZWG91VDlEbVdGb0JtVFE0d3BzYnJRaW1HenEzNHFwUzNFMjhvNjhWdmNy?=
- =?utf-8?B?ZkQxWm5yaEM0TmpCOWw2N3VXY0NoWDZmQ2dQVEZRNzBrbFRMZm1lSWZrWTBU?=
- =?utf-8?B?elpzbnFwSUsvY205ZWxxZzhXSk9YQmN0eHFiamx0ZEROZm1NSXdwbUovelVV?=
- =?utf-8?B?empPc1Rac0pySDlaMDVPTHdiakhhSEU5Mk1DQkYrNERuamlNTlMyWUU3WCtP?=
- =?utf-8?B?aDdQK05aNU1NL21RYzVCK0RsbGsvc29yMEk4b0tNRjVBcFNmR1dxc1A2YWNa?=
- =?utf-8?Q?G44BaW+qbPYNuHbg=3D?=
-X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0eab42b4-4bbd-45e2-082e-08de4eb4a434
-X-MS-Exchange-CrossTenant-AuthSource: AMBPR06MB10365.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 12:51:28.9980
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N0FWhqpLoDbvGOf2fM84P0QZT3e8QwqXpHFxeJUS1ihuJ+FbVLAp6LpX2ad42ROdms2ZmW5zQIW4A5jJVgL2ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR06MB7456
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 4/5] rust: add RTC core abstractions and data
+ structures
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, Alvin Sun <sk.alvin.x@gmail.com>
+References: <20260107143738.3021892-1-sunke@kylinos.cn>
+ <20260107143738.3021892-5-sunke@kylinos.cn>
+ <DFJ6P0ITWD1O.2PAYKPU63UFFC@kernel.org>
+From: Ke Sun <sunke@kylinos.cn>
+In-Reply-To: <DFJ6P0ITWD1O.2PAYKPU63UFFC@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Maximum and minimum offsets in ppb that can be handled are dependent on
-the rtc clock frequency and what can fit in the 16-bit register field.
 
-Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
----
- drivers/rtc/rtc-zynqmp.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+On 1/8/26 19:50, Danilo Krummrich wrote:
+> On Wed Jan 7, 2026 at 3:37 PM CET, Ke Sun wrote:
+>> +/// A Rust wrapper for the C `struct rtc_device`.
+>> +///
+>> +/// This type provides safe access to RTC device operations. The underlying `rtc_device`
+>> +/// is managed by the kernel and remains valid for the lifetime of the `RtcDevice`.
+>> +///
+>> +/// # Invariants
+>> +///
+>> +/// A [`RtcDevice`] instance holds a pointer to a valid [`struct rtc_device`] that is
+>> +/// registered and managed by the kernel.
+>> +///
+>> +/// # Examples
+>> +///
+>> +/// ```rust
+>> +/// # use kernel::{
+>> +/// #     prelude::*,
+>> +/// #     rtc::RtcDevice, //
+>> +/// # };
+>> +/// // Example: Set the time range for the RTC device
+>> +/// // rtc.set_range_min(0);
+>> +/// // rtc.set_range_max(u64::MAX);
+>> +/// //     Ok(())
+>> +/// // }
+> This example looks pretty odd, and I don't think it does compile. Did you test
+> with CONFIG_RUST_KERNEL_DOCTESTS=y?
+Yes. Dirk suggested doctest in another patch series, which I enabled. I also
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index d15c256e7ae56058ddc38849af6424cd29b8965e..f508c61f4046e906d9569cc779a1360474a85fd2 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -44,8 +44,6 @@
- #define RTC_FR_MASK		0xF0000
- #define RTC_FR_MAX_TICKS	16
- #define RTC_PPB			1000000000LL
--#define RTC_MIN_OFFSET		-32768000
--#define RTC_MAX_OFFSET		32767000
- 
- struct xlnx_rtc_dev {
- 	struct rtc_device	*rtc;
-@@ -215,12 +213,12 @@ static int xlnx_rtc_set_offset(struct device *dev, long offset)
- 
- 	/* Tick to offset multiplier */
- 	tick_mult = DIV_ROUND_CLOSEST(RTC_PPB, xrtcdev->freq);
--	if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
--		return -ERANGE;
--
- 	/* Number ticks for given offset */
- 	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
- 
-+	if (freq + max_tick > RTC_TICK_MASK || (freq + max_tick < 1))
-+		return -ERANGE;
-+
- 	/* Number fractional ticks for given offset */
- 	if (fract_offset) {
- 		fract_part = DIV_ROUND_UP(tick_mult, RTC_FR_MAX_TICKS);
+run clippy checks and QEMU tests for every change.
 
--- 
-2.47.3
 
+❯ cat .config| grep DOCTEST
+CONFIG_RUST_KERNEL_DOCTESTS=y
+❯ make Image CLIPPY=1
+   CALL    scripts/checksyscalls.sh
+
+>
+>> +/// ```
+>> +///
+>> +/// [`struct rtc_device`]: https://docs.kernel.org/driver-api/rtc.html
+>> +#[repr(transparent)]
+>> +pub struct RtcDevice<T: 'static = ()>(Opaque<bindings::rtc_device>, PhantomData<T>);
+>> +
+>> +impl<T: 'static> RtcDevice<T> {
+>> +    /// Obtain the raw [`struct rtc_device`] pointer.
+>> +    #[inline]
+>> +    pub fn as_raw(&self) -> *mut bindings::rtc_device {
+>> +        self.0.get()
+>> +    }
+>> +
+>> +    /// Set the minimum time range for the RTC device.
+>> +    #[inline]
+>> +    pub fn set_range_min(&self, min: i64) {
+>> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
+>> +        // `struct rtc_device`, and we're only writing to the `range_min` field.
+>> +        unsafe {
+>> +            (*self.as_raw()).range_min = min;
+>> +        }
+>> +    }
+>> +
+>> +    /// Set the maximum time range for the RTC device.
+>> +    #[inline]
+>> +    pub fn set_range_max(&self, max: u64) {
+>> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
+>> +        // `struct rtc_device`, and we're only writing to the `range_max` field.
+>> +        unsafe {
+>> +            (*self.as_raw()).range_max = max;
+>> +        }
+>> +    }
+>> +
+>> +    /// Get the minimum time range for the RTC device.
+>> +    #[inline]
+>> +    pub fn range_min(&self) -> i64 {
+>> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
+>> +        // `struct rtc_device`, and we're only reading the `range_min` field.
+>> +        unsafe { (*self.as_raw()).range_min }
+>> +    }
+>> +
+>> +    /// Get the maximum time range for the RTC device.
+>> +    #[inline]
+>> +    pub fn range_max(&self) -> u64 {
+>> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
+>> +        // `struct rtc_device`, and we're only reading the `range_max` field.
+>> +        unsafe { (*self.as_raw()).range_max }
+>> +    }
+>> +
+>> +    /// Notify the RTC framework that an interrupt has occurred.
+>> +    ///
+>> +    /// Should be called from interrupt handlers. Schedules work to handle the interrupt
+>> +    /// in process context.
+>> +    #[inline]
+>> +    pub fn update_irq(&self, num: usize, events: usize) {
+>> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
+>> +        // `struct rtc_device`. The rtc_update_irq function handles NULL/ERR checks internally.
+>> +        unsafe {
+>> +            bindings::rtc_update_irq(self.as_raw(), num, events);
+>> +        }
+>> +    }
+>> +
+>> +    /// Clear a feature bit in the RTC device.
+>> +    #[inline]
+>> +    pub fn clear_feature(&self, feature: u32) {
+>> +        // SAFETY: By the type invariants, self.as_raw() is a valid pointer to a
+>> +        // `struct rtc_device`, and features is a valid bitmap array with RTC_FEATURE_CNT bits.
+>> +        let features_bitmap = unsafe {
+>> +            Bitmap::from_raw_mut(
+>> +                (*self.as_raw()).features.as_mut_ptr().cast::<usize>(),
+>> +                bindings::RTC_FEATURE_CNT as usize,
+>> +            )
+>> +        };
+>> +        features_bitmap.clear_bit(feature as usize);
+>> +    }
+>> +}
+>> +
+>> +impl<T: 'static, Ctx: device::DeviceContext> AsRef<device::Device<Ctx>> for RtcDevice<T> {
+> This should just be
+>
+> 	impl<T: 'static> AsRef<device::Device> for RtcDevice<T>
+>
+> as class devices do not have a device context.
+>
+>> +    fn as_ref(&self) -> &device::Device<Ctx> {
+>> +        let raw = self.as_raw();
+>> +        // SAFETY: By the type invariant of `Self`, `self.as_raw()` is a pointer to a valid
+>> +        // `struct rtc_device`.
+>> +        let dev = unsafe { &raw mut (*raw).dev };
+>> +
+>> +        // SAFETY: `dev` points to a valid `struct device`.
+>> +        unsafe { device::Device::from_raw(dev) }
+>> +    }
+>> +}
+>> +
+>> +// SAFETY: `RtcDevice` is a transparent wrapper of `struct rtc_device`.
+>> +// The offset is guaranteed to point to a valid device field inside `RtcDevice`.
+>> +unsafe impl<T: 'static, Ctx: device::DeviceContext> device::AsBusDevice<Ctx> for RtcDevice<T> {
+>> +    const OFFSET: usize = core::mem::offset_of!(bindings::rtc_device, dev);
+>> +}
+> Please do not abuse this trait as container_of!(), as the name implies, it is
+> only for bus devices (hence also the device context generic). RTC devices are
+> class devices.
+>
+>> +impl<T: RtcOps> RtcDevice<T> {
+>> +    /// Allocates a new RTC device managed by devres.
+>> +    ///
+>> +    /// This function allocates an RTC device and sets the driver data. The device will be
+>> +    /// automatically freed when the parent device is removed.
+>> +    pub fn new(
+>> +        parent_dev: &device::Device,
+> This must be a &Device<Bound>, otherwise you are not allowed to pass it to
+> devm_rtc_allocate_device().
+>
+>> +        init: impl PinInit<T, Error>,
+>> +    ) -> Result<ARef<Self>> {
+>> +        // SAFETY: `Device<Bound>` and `Device<CoreInternal>` have the same layout.
+>> +        let dev_internal: &device::Device<device::CoreInternal> =
+>> +            unsafe { &*core::ptr::from_ref(parent_dev).cast() };
+>> +
+>> +        // Allocate RTC device.
+>> +        // SAFETY: `devm_rtc_allocate_device` returns a pointer to a devm-managed rtc_device.
+>> +        // We use `dev_internal.as_raw()` which is `pub(crate)`, but we can access it through
+>> +        // the same device pointer.
+>> +        let rtc: *mut bindings::rtc_device =
+>> +            unsafe { bindings::devm_rtc_allocate_device(dev_internal.as_raw()) };
+>> +        if rtc.is_null() {
+>> +            return Err(ENOMEM);
+>> +        }
+>> +
+>> +        // Set the RTC device ops.
+>> +        // SAFETY: We just allocated the RTC device, so it's safe to set the ops.
+>> +        unsafe {
+>> +            (*rtc).ops = Adapter::<T>::VTABLE.as_raw();
+>> +        }
+>> +
+>> +        // SAFETY: `rtc` is a valid pointer to a newly allocated rtc_device.
+>> +        // `RtcDevice` is `#[repr(transparent)]` over `Opaque<rtc_device>`, so we can safely cast.
+>> +        let rtc_device = unsafe { ARef::from_raw(NonNull::new_unchecked(rtc.cast::<Self>())) };
+>> +        rtc_device.set_drvdata(init)?;
+>> +        Ok(rtc_device)
+>> +    }
+>> +
+>> +    /// Store a pointer to the bound driver's private data.
+>> +    pub fn set_drvdata(&self, data: impl PinInit<T, Error>) -> Result {
+> This should not be public, as you should only use it in RtcDevice::new().
+>
+>> +        let data = KBox::pin_init(data, GFP_KERNEL)?;
+>> +        let dev: &device::Device<device::Bound> = self.as_ref();
+>> +
+>> +        // SAFETY: `self.as_raw()` is a valid pointer to a `struct rtc_device`.
+>> +        unsafe { bindings::dev_set_drvdata(dev.as_raw(), data.into_foreign().cast()) };
+>> +        Ok(())
+>> +    }
+> <snip>
+>
+>> +/// A resource guard that ensures the RTC device is properly registered.
+>> +///
+>> +/// This struct is intended to be managed by the `devres` framework by transferring its ownership
+>> +/// via [`devres::register`]. This ties the lifetime of the RTC device registration
+>> +/// to the lifetime of the underlying device.
+>> +pub struct Registration<T: 'static> {
+>> +    #[allow(dead_code)]
+>> +    rtc_device: ARef<RtcDevice<T>>,
+>> +}
+>> +
+>> +impl<T: 'static> Registration<T> {
+>> +    /// Registers an RTC device with the RTC subsystem.
+>> +    ///
+>> +    /// Transfers its ownership to the `devres` framework, which ties its lifetime
+>> +    /// to the parent device.
+>> +    /// On unbind of the parent device, the `devres` entry will be dropped, automatically
+>> +    /// cleaning up the RTC device. This function should be called from the driver's `probe`.
+>> +    pub fn register(dev: &device::Device<device::Bound>, rtc_device: ARef<RtcDevice<T>>) -> Result {
+>> +        let rtc_dev: &device::Device = rtc_device.as_ref();
+>> +        let rtc_parent = rtc_dev.parent().ok_or(EINVAL)?;
+>> +        if dev.as_raw() != rtc_parent.as_raw() {
+>> +            return Err(EINVAL);
+>> +        }
+>> +
+>> +        // Registers an RTC device with the RTC subsystem.
+>> +        // SAFETY: The device will be automatically unregistered when the parent device
+>> +        // is removed (devm cleanup). The helper function uses `THIS_MODULE` internally.
+>> +        let err = unsafe { bindings::devm_rtc_register_device(rtc_device.as_raw()) };
+>> +        if err != 0 {
+>> +            return Err(Error::from_errno(err));
+>> +        }
+>> +
+>> +        let registration = Registration { rtc_device };
+>> +
+>> +        devres::register(dev, registration, GFP_KERNEL)
+> You are using devm_rtc_register_device() above already, hence you neither need
+> an instance of Registration, nor do you need to manage this Registration with
+> devres through devres::register().
+>
+>> +    }
+>> +}
+>> +
+>> +/// Options for creating an RTC device.
+>> +#[derive(Copy, Clone)]
+>> +pub struct RtcDeviceOptions {
+>> +    /// The name of the RTC device.
+>> +    pub name: &'static CStr,
+>> +}
+>> +
+>> +/// Trait implemented by RTC device operations.
+>> +///
+>> +/// This trait defines the operations that an RTC device driver must implement.
+>> +/// Most methods are optional and have default implementations that return an error.
+>> +#[vtable]
+>> +pub trait RtcOps: Sized + 'static {
+> Please utilize the AsBusDevice trait to be able to provide the parent device of
+> the RTC device as &Device<Bound>, similarly to what is done in [1].
+>
+> [1] https://lore.kernel.org/all/20260106-rust_leds-v10-1-e0a1564884f9@posteo.de/
+Some code was implemented by mimicking existing patterns without fully
+understanding the rationale behind them.
+
+
+Thanks for the detailed review. I'll carefully go through your comments.
+
+
+Best regards,
+
+Ke Sun
 
