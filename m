@@ -1,128 +1,195 @@
-Return-Path: <linux-rtc+bounces-5718-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5720-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F583D0A60C
-	for <lists+linux-rtc@lfdr.de>; Fri, 09 Jan 2026 14:22:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B78DD0B57A
+	for <lists+linux-rtc@lfdr.de>; Fri, 09 Jan 2026 17:45:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8220C3038893
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jan 2026 13:04:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D26FD3023C83
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jan 2026 16:42:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA4635B159;
-	Fri,  9 Jan 2026 13:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F9C364E90;
+	Fri,  9 Jan 2026 16:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="RKCtpPEi"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HXxVKYat";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z52+5WQI"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BF833C1A3;
-	Fri,  9 Jan 2026 13:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F743644CB
+	for <linux-rtc@vger.kernel.org>; Fri,  9 Jan 2026 16:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767963861; cv=none; b=kBjCHv7QwKWFwzmvb6DH6BSRpBOIi4vmW2iAkESuXDUgd+IDyArF4DULhNsw9UwC1G6Vr3ZeGvYbpt4YPzjeNlckwV6UkVkZZ06qZ7qdBzDmme6hyJ/vQfCX6Aw/VJ8vuK9wZIK+6uxyiHA+pjTaeoNGPLTi/qqRXmXbzJP/wwI=
+	t=1767976916; cv=none; b=uNSR7RYlUM7wWEcpXsmQoyyVANp8u7SGstQP7EZLql/Av7eAbzZKsWkZC4/0ttyHs4Vr+sPKO6KYJNa8TC+jrJq6SqzD37tLdYrL0lJCKzl8ihnxAZd4O1Nqj8DZSXm13cLsAO6sUgtJ+6mCAiFTVV3O9JcNUwfnXM6DWjmisIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767963861; c=relaxed/simple;
-	bh=dnNwzyAdDwT0QcUrCttuAhXpKn9kQgbD7etuOywvWuQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l12pVco7DoSg1n7mAn7qITPlYWJh6d8iCXd4YbyYQn4KkxaFGxDcHZWNMzowqoxo1FPOF0IDHaPLdVnFNL6jM831ax3aoHIXTebZoLPfuWR2xhTP4vofI062SuVdhV3WYox8jOuRgTCgKR2Sk/r5mlsja2CiP80+FPDsOpODRBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=RKCtpPEi; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=xBYm0tKHHeQAfZTn0/2r2fANxyL6ov2/UFOEdRE7jlg=; t=1767963859;
-	x=1768395859; b=RKCtpPEiwzgW0KVI2FYOqW3OW4m40woWkUMO2W3OmPLmp5siqdO3iFkFk5qTv
-	rEg6eev74GidyBUKOBtzYwGXIitpigwtfE3DLK2od66/BJJveq8lQWo42+ASv+GlDlKSmrOGisiem
-	HmLEhiUS1w2WsM/eG0H9VkxfZ+mhP37b1FmUmMfQ723tp2TbvBMC9BaC+s8QCKaf3hdZbSW5HiEO4
-	1f9jrw4BEitEqCbSbyse5KFCtMoXaRGuavc9ca7MB7pPm5TKoHxFwGTBHU6tz8gO2dddvPJ/73G/F
-	R/E0FRFNVZ+Xrko6Z8/CX+sgD5LYEkrpgWpFnKHDo8dvXxxAbA==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1veCA5-00EfB0-0H;
-	Fri, 09 Jan 2026 14:04:17 +0100
-Message-ID: <1789c8b3-9688-4ded-b206-aa24540624d8@leemhuis.info>
-Date: Fri, 9 Jan 2026 14:04:16 +0100
+	s=arc-20240116; t=1767976916; c=relaxed/simple;
+	bh=ZysjqcFEA2M52Cw6hzhfoy4Mp8j+YWw+AXypIoyErFM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HulrmmXFGA/NKHADDmFguO5BZjs1S75joCt1pzbNaYm/vqvvQF4V7ehX/U9WzBX76u4gV/9hkEfbo9kT2GUWP4T8Tqp7d6RSXgDKAXERlDc57kLDXolJB6lZh9N7VumjtvEeRQP5tlse5dB6OBm6SnvBDdMiIRMOHZfst8tnDXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HXxVKYat; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z52+5WQI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767976912;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8wvKExavjc6j+4IOpY8QllHRKJuz9b57L79LV3iAB+c=;
+	b=HXxVKYateK/T2k8aoqO07GCmoBj5hV4PxMaMPEzdEdLNNQ089pL7BSEu07uHMJBnEAaw1p
+	MdPFMNncytSSUQUgfgDA8STKS5/t51HUI0ZAdYR2w6EpzY8Q/qeHvMcMIxPn/2iA/iPqGJ
+	hWsf5fS/TZke4LgNLWTkywAhKEln3S8=
+Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
+ [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-676-Ms014_ktPR6kPgkhpEz2nA-1; Fri, 09 Jan 2026 11:41:51 -0500
+X-MC-Unique: Ms014_ktPR6kPgkhpEz2nA-1
+X-Mimecast-MFC-AGG-ID: Ms014_ktPR6kPgkhpEz2nA_1767976910
+Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-56364ccf7e4so695407e0c.1
+        for <linux-rtc@vger.kernel.org>; Fri, 09 Jan 2026 08:41:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1767976910; x=1768581710; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wvKExavjc6j+4IOpY8QllHRKJuz9b57L79LV3iAB+c=;
+        b=Z52+5WQI+NN5g3ZT6jt162y4fhE8bjrlrctINmJih1kHaPLLc9eUSP0dOG0lK3DgrZ
+         ZCRGRt/I/jRLSdSzlg03dqs5XvU/b6YUQOhwcc8FjoV3mm8XVb6MfUOaDgcgAssWKlEX
+         xi6Ke8VjgQZM1FdR9we6sXQPitzTZ1LNxCDxlyULEKfCoe8QLsP95y7b4e2yxGfDuGXu
+         zp/jTYWvmjfMMUGdOPC8sSZS/N6OwFANfSJ9Jn6ZJdk1it/lhkoEKhaFxrzie1hRPYbe
+         Q3QOsj+M/6SD3g33Bc8xn04Db7+e9DhwfBoeNT/lcZmrSks0kOzfJ/+BNz/rtgf4Ht7p
+         HurA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767976910; x=1768581710;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wvKExavjc6j+4IOpY8QllHRKJuz9b57L79LV3iAB+c=;
+        b=PzCWT1Z9BMdtiYc0mQxqWbqC9kgv0bCxyymqaGf7q4qNgZUUg5z9Yvw5Rrrb8574nY
+         eH5roYw33O6fQGf2rAI8D/JM1mK/VGmXHjTalPwVTt7tTogsLqF1Jz1sGkfr7UpBKTdA
+         D+VduMRqKx8/+u/USe74q04Mw82Tg3tpFDJdyUllz4489wrNwiFcUFgG2eFKIhck4S2q
+         eeYJokJISXFcOLIzq+gyxSfofKVn/AOfMbTaD9t5HCp4ew8ujN/+glRpNiXMUD8w2A/x
+         hhZKLfcdOIxfSZLUOA6XsyNuxXZ2HPIL6Bn54V7Px/RKu39x4rOyln9t74zVhvpo1pQZ
+         iMyg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0S6G5xQHITW+upYOCJDj7H9Yg5NQGTdJLegzLaBqGzaYXFqM054KkSb3KHDy95SA9AxW3PjW8DAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/7f3fezgk4DrNpZkpJeIGaN78agNYelu2aGIhncQjlg5Ndajp
+	0cKM4ZXHdYnR+umnDLEFGnwo4L1fnKsaw9Y024sqZWJu7A1G0uCx0HwKwkF9uonIvCJfaMWIReg
+	nMgnYSXuNF8HUUmRzpQfFcr3zpZSqWP1nWqs11CV4StjSeXn/n0Ex8sfqKuGPCA==
+X-Gm-Gg: AY/fxX7jzlN4aJ3mlhfwqAS5RNK48mFKf76I8p7qZZy9agKuf3PxQyuILduqnJfRsqW
+	2LoQ9MZ8bRh8jeEqVnWI1SCHy++WRiMrC4kW9whfGjgfuyqMCOpLnPxG1TAsLsqVo5wRQesMpYV
+	8sHkQ48pZ0AmrCWgjzx0UZVGRwX4ghQmu4LJxKmwd3wpDzPyT1lQWnMs1UYMv7aLCDORs34pOB5
+	HHyFGfUxL1PNSu05l4DoXmaDephqTsPIlxkOGvZzH61fvyaaIqRydrL2GtOAw4HtpPqgYS0Dcxs
+	YPR9ixq0C4NpPke2hie5AWrXfK12W6fpwiqvPdIw7CUcnlKBcCWanaZGvrimuZMw4qGux7xWuk7
+	aTjrR/BFuR/J0wWzzuvO1hyARQzYvMbaRXAV+rdntqoSiLjz0
+X-Received: by 2002:a05:6122:208a:b0:54a:a048:45a4 with SMTP id 71dfb90a1353d-56347fd2b82mr3687421e0c.16.1767976910329;
+        Fri, 09 Jan 2026 08:41:50 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHg2rR4icyXwYT9jLl1J1KKobpfXOb/9BW52Be/PiSmJMg278XTtW66CrE9UzYOdog/JJ04yQ==
+X-Received: by 2002:a05:6122:208a:b0:54a:a048:45a4 with SMTP id 71dfb90a1353d-56347fd2b82mr3687412e0c.16.1767976909849;
+        Fri, 09 Jan 2026 08:41:49 -0800 (PST)
+Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.41.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jan 2026 08:41:49 -0800 (PST)
+From: Brian Masney <bmasney@redhat.com>
+Subject: [PATCH 00/13] MIPS: move pic32.h header file from asm to
+ platform_data
+Date: Fri, 09 Jan 2026 11:41:13 -0500
+Message-Id: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rtc: interface: Alarm race handling should not discard
- preceding error
-To: Esben Haabendal <esben@geanix.com>
-Cc: "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
- Nick Bowler <nbowler@draconx.ca>,
- "Anthony Pighin (Nokia)" <anthony.pighin@nokia.com>,
- "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
- Linux kernel regressions list <regressions@lists.linux.dev>
-References: <BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com>
- <80e7450d-d842-49ca-8219-a995c8ce8bfe@leemhuis.info>
- <g3phtogna3a55vzah6olpxekdcmi322q5lzzwxwq5za4oi4plr@js34hr72bemi>
- <g-ieyuLeDFTGFtwouEWeB6MrjQrUKtHEFHJ54X6mIFcHbsNLLLQyfejb9G2HRQ5xNam8jPp_RTli5Y6LSaF7Dg==@protonmail.internalid>
- <45d14eb4-9495-4aa8-9382-8d756c0ae39e@leemhuis.info>
- <87o6n3c5fh.fsf@geanix.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: de-DE, en-US
-In-Reply-To: <87o6n3c5fh.fsf@geanix.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1767963859;d690020e;
-X-HE-SMSGID: 1veCA5-00EfB0-0H
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQqAIBBA0avIrBswI8OuEi0GnXIWlShIEN09a
+ fkW/z9QOAsXmNUDmasUuc6GvlPgI507o4RmMNpY3WuHh6SCSfxgMDIFznhcldGSd86ORJMmaHH
+ KvMn9j5f1fT/DtL17aAAAAA==
+X-Change-ID: 20260109-mips-pic32-header-move-6ac9965aa70a
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Brian Masney <bmasney@redhat.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org, 
+ Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-rtc@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3223; i=bmasney@redhat.com;
+ s=20250903; h=from:subject:message-id;
+ bh=ZysjqcFEA2M52Cw6hzhfoy4Mp8j+YWw+AXypIoyErFM=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y8EPa6d/eBUAWMdbxCjsnf/NJeXP46LxMTuD2UoM
+ b9WPPNiRykLgxgXg6yYIsuSXKOCiNRVtvfuaLLAzGFlAhnCwMUpABP56sDIsGifX88aoTcC29l8
+ X7Bt/R7AtmvV9N0yR16d+cM+137JaVZGhu1L75968Cv7yO6mN9p5XJdDWrLOvyqsX7/+lL7/L89
+ tczgA
+X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
+ fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
+There are currently some pic32 MIPS drivers that are in tree, and are
+only configured to be compiled on the MIPS pic32 platform. There's a
+risk of breaking some of these drivers when migrating drivers away from
+legacy APIs. It happened to me with a pic32 clk driver.
 
+Let's go ahead and move the pic32.h from the asm to the platform_data
+include directory in the tree. This will make it easier, and cleaner to
+enable COMPILE_TEST for some of these pic32 drivers.
 
-On 1/9/26 13:54, Esben Haabendal wrote:
-> "Thorsten Leemhuis" <regressions@leemhuis.info> writes:
-> 
->> On 12/16/25 16:09, Nick Bowler wrote:
->>> On Tue, Dec 16, 2025 at 11:51:30AM +0100, Thorsten Leemhuis wrote:
->>>> Lo! FWIW, Nick Bowler (now CCed) reported that below patch fixes a
->>>> regression for him caused by the commit from Esben (now also CCed) the
->>>> Fixes: tag mentions. See "hwclock busted w/ M48T59 RTC (regression)" for
->>>> details:
->>>> https://lore.kernel.org/all/2t6bhs4udbu55ctbemkhlluchz2exrwown7kmu2gss6zukaxdm@ughygemahmem/
->>>> and
->>>>
->>>> Nick, could you maybe provide a tested-by tag here? Maybe that would
->>>> motivate someone to get this en route to mainline.
->>>>
->>>> Adding a "Cc: <stable@vger.kernel.org>" would be great, too, as Nick
->>>> encountered this on earlier series, as it was backported all the way to
->>>> 5.15.y
->>>
->>> It was backported to 5.10.y and 5.4.y too, but only after I had reported
->>> this regression back in October (and I guess 5.4.y is EOL now).
->>>
->>> Tested-by: Nick Bowler <nbowler@draconx.ca>
->>
->> Esben (author of the culprit) and Alexandre (who merged it): do you
->> still have reviewing/applying the patch at the start of this thread (
->> https://lore.kernel.org/all/BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com/#t)
->> on your todo list?
->>
->> Sorry for nagging, would just be good to finally get this 6.18-rc1
->> regression fixed in mainline so the fix can be backported to stable,
->> too. And due to the holidays I thought a quick reminder might be wise.
->>
->> Or was this fixed somehow and I just missed it?
-> 
-> Sorry for introducing this error.
+I included a patch at the end that shows enabling COMPILE_TEST for a
+pic32 clk driver.
 
-Happens, no worries.
+Merge Strategy
+==============
+- Patches 1-12 can go through the MIPS tree.
+- Patch 13 I can repost to Claudiu after patches 1-12 are in Linus's
+  tree after the next merge window. There is a separate patch set that
+  fixes a compiler error I unintentionally introduced via the clk tree.
+  https://lore.kernel.org/linux-clk/CABx5tq+eOocJ41X-GSgkGy6S+s+Am1yCS099wqP695NtwALTmg@mail.gmail.com/T/
 
-> The fix looks good to me. I have added my Reviewed-by to it.
+Signed-off-by: Brian Masney <bmasney@redhat.com>
+---
+Brian Masney (13):
+      MIPS: copy pic32.h header file from asm/mach-pic32/ to include/platform-data/
+      MAINTAINERS: add include/linux/platform_data/pic32.h to MIPS entry
+      MIPS: update include to use pic32.h from platform_data
+      clk: microchip: core: update include to use pic32.h from platform_data
+      irqchip/irq-pic32-evic: update include to use pic32.h from platform_data
+      mmc: sdhci-pic32: update include to use pic32.h from platform_data
+      pinctrl: pic32: update include to use pic32.h from platform_data
+      rtc: pic32: update include to use pic32.h from platform_data
+      serial: pic32_uart: update include to use pic32.h from platform_data
+      watchdog: pic32-dmt: update include to use pic32.h from platform_data
+      watchdog: pic32-wdt: update include to use pic32.h from platform_data
+      MIPS: drop unused pic32.h header
+      clk: microchip: core: allow driver to be compiled with COMPILE_TEST
 
-Thx!
+ MAINTAINERS                                             |  1 +
+ arch/mips/pic32/common/reset.c                          |  2 +-
+ arch/mips/pic32/pic32mzda/config.c                      |  3 +--
+ arch/mips/pic32/pic32mzda/early_clk.c                   |  2 +-
+ arch/mips/pic32/pic32mzda/early_console.c               |  2 +-
+ drivers/clk/microchip/Kconfig                           |  2 +-
+ drivers/clk/microchip/clk-core.c                        |  6 +++++-
+ drivers/irqchip/irq-pic32-evic.c                        |  2 +-
+ drivers/mmc/host/sdhci-pic32.c                          |  2 +-
+ drivers/pinctrl/pinctrl-pic32.c                         |  3 +--
+ drivers/rtc/rtc-pic32.c                                 |  3 +--
+ drivers/tty/serial/pic32_uart.c                         |  3 +--
+ drivers/watchdog/pic32-dmt.c                            |  3 +--
+ drivers/watchdog/pic32-wdt.c                            |  3 +--
+ .../mach-pic32 => include/linux/platform_data}/pic32.h  | 17 +++++++++--------
+ 15 files changed, 27 insertions(+), 27 deletions(-)
+---
+base-commit: f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
+change-id: 20260109-mips-pic32-header-move-6ac9965aa70a
 
-> Am I correct in that it also fixes the problem reported by Nick Bowler?
+Best regards,
+-- 
+Brian Masney <bmasney@redhat.com>
 
-Yes, see the "Tested-by" quoted above.
-
-Ciao, Thorsten
 
