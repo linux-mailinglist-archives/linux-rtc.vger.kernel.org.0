@@ -1,109 +1,111 @@
-Return-Path: <linux-rtc+bounces-5716-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5717-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96C59D0A254
-	for <lists+linux-rtc@lfdr.de>; Fri, 09 Jan 2026 14:02:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50FF5D0A331
+	for <lists+linux-rtc@lfdr.de>; Fri, 09 Jan 2026 14:07:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 82CFD31C014B
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jan 2026 12:51:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D957F30CF5A0
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 Jan 2026 12:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6020E35BDDE;
-	Fri,  9 Jan 2026 12:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB72D31A069;
+	Fri,  9 Jan 2026 12:54:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="qLSJfgM3"
+	dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b="mUO1cokS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-08.mail-europe.com (mail-08.mail-europe.com [57.129.93.249])
+Received: from mail-07.mail-europe.com (mail-0701.mail-europe.com [51.83.17.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA6C35BDDD
-	for <linux-rtc@vger.kernel.org>; Fri,  9 Jan 2026 12:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.129.93.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B8F50094A
+	for <linux-rtc@vger.kernel.org>; Fri,  9 Jan 2026 12:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.83.17.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767963022; cv=none; b=Rs7oRuyrqBTNDNix1zHXctFQ7HTBzKr/CEHLixovaivc+E6RgMq+6S7xTvHqB4O6W/DiE2Z5kJUBwq/0mW56kEUscVLJXOQuy/VJETaaF5DwHXJ3PApWwYIghIopS5YInT6HZjGH0eoBhZt/JTBu11sh5FQW7UNw40UzmIb0y48=
+	t=1767963286; cv=none; b=Uy+QuO8gAP9WFdb/O1snZeUxaeEDGlh3u7hdoTbovpYahYCdC4eTUnmmtTU8Vj8vQct+WdAUT0BQBGRXYRBPocUUxdSFU7p+KO0+xcYcxXbqgUl6Pm3W48TZH/E0zVjNVFKgJtGXtMrh35LSuj96+ztsxM6+DB4FNWdu28Yn9OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767963022; c=relaxed/simple;
-	bh=09aBCOlmjiSpSAUEJSYh4zX8TNKn3DhWbXsBcGvmMcc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UmI8kPYNyHapf7YFQYmFv7BXsvyBt9LXbtiyLCobZo4MTfyFUFsIgh8CpykwRL146l8GZzWihx8umFj4mIA/uJvczcPMrcC2tz76AMMppm1fwAXLbG69gnnI/fEhq69m1S1ht8c8+eJQYC1H+af9NhlqAnJgzQBRYWOuH7PWdVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=pass smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=qLSJfgM3; arc=none smtp.client-ip=57.129.93.249
+	s=arc-20240116; t=1767963286; c=relaxed/simple;
+	bh=3P6N9VFu+Ns23kDG3VeKvtOIn9dAHn55AaRPFk8Nd2w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AVCjbrZrbx0f8cRwUq8/m8N9RJjYyOSq5zll8jVoDzmFUkgYkotedSxj/Cq9N2OHrpgMif87bnC3utp9DT7951WT9g/qq0fSFo1e7KhF+4ENnhlg2F4erk14HOpBeRtwkE9VmrgMDzTMvlhHHizXgbUnR+EQSnmVlt+1OKDhXjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com; spf=fail smtp.mailfrom=geanix.com; dkim=pass (2048-bit key) header.d=geanix.com header.i=@geanix.com header.b=mUO1cokS; arc=none smtp.client-ip=51.83.17.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=geanix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=geanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=geanix.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=geanix.com;
-	s=protonmail2; t=1767963005; x=1768222205;
-	bh=09aBCOlmjiSpSAUEJSYh4zX8TNKn3DhWbXsBcGvmMcc=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=qLSJfgM3Ed+24SxlgNIW6nx/+2PXLyxgLinGaY+u/PD5cbt5deWacWf5yIxhO2KQP
-	 RbOPU0WFsXXUbh/8KJkLh1qrWLfDNJjs1XaMwIeQI6UdT/oWFpzByukXFZ6BSB6xwJ
-	 60pyxq2E4n5JbbfPHj3QD/HHRqbZ/MyAMJZlvAaxLT+GjXitYqEXN8E4R/UBnIeMpb
-	 a/XTO8HTgE8N3gYBmnPgLwHch621FQ/JJg4EOOzJkxoyb+h4oRtXgfkhhrdH+X9iRb
-	 UcUm/iyoZa1ipfS/updpgmQZ3E3pVJs60i+YuiTWPx9uprjqySqEIe8DyMk7e2Hwzu
-	 ZbMnd4u3MqstQ==
-Date: Fri, 09 Jan 2026 12:50:02 +0000
-To: "Anthony Pighin (Nokia)" <anthony.pighin@nokia.com>
+	s=protonmail2; t=1767963268; x=1768222468;
+	bh=3P6N9VFu+Ns23kDG3VeKvtOIn9dAHn55AaRPFk8Nd2w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:From:To:
+	 Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=mUO1cokS4hogWoSrjn6OXrzhTJeBEJGv6ZJl/MzXAlop9bo6/0xn7J5APRetAdayr
+	 mZdW2Sl+6gCl+4/zfNMxfo7beOFo41MU8rAnQBBgR6boHrmBUOfs4BlxNYoHtR+Cc9
+	 ABZUoPIIqdluIrMd5/s05K9kyXMAxPSME9COnZXAepBlbozyvrBeh6ZGcz/qFhnbmu
+	 rLCCPWkiSH6fA1+SytM2uCgrL1NSS4DC41SMk+/43jfyDPgskJN8NMhzW+lQM4eOX6
+	 5kPYJxLUi+0xKMa0labeu4ZrdpCdzBptLdE653jbYgrTPie28lY+WwmU/Sgfs+ofPv
+	 MIbjRhr9SE1Qg==
+X-Pm-Submission-Id: 4dnhYb21Lsz1DHSC
 From: Esben Haabendal <esben@geanix.com>
-Cc: "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>, "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] rtc: interface: Alarm race handling should not discard preceding error
-Message-ID: <1lX8JrkfAkOKCEc0GkvmCDlh4iSKAsk-KwnT9WaL71NCwPyw4vUCayXNFgACqOyzZLLCzs3X2_q3H6m5m1e-Y4QTnoym3Jdk233ctrcqBL0=@geanix.com>
-In-Reply-To: <BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com>
+To: "Thorsten Leemhuis" <regressions@leemhuis.info>
+Cc: "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,  "Nick
+ Bowler" <nbowler@draconx.ca>,  "Anthony Pighin (Nokia)"
+ <anthony.pighin@nokia.com>,  "linux-rtc@vger.kernel.org"
+ <linux-rtc@vger.kernel.org>,  "Linux kernel regressions list"
+ <regressions@lists.linux.dev>
+Subject: Re: [PATCH] rtc: interface: Alarm race handling should not discard
+ preceding error
+In-Reply-To: <45d14eb4-9495-4aa8-9382-8d756c0ae39e@leemhuis.info> (Thorsten
+	Leemhuis's message of "Fri, 09 Jan 2026 13:18:29 +0100")
 References: <BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com>
-Feedback-ID: 133791852:user:proton
-X-Pm-Message-ID: c4b7e10096dec97f16a5ecf3a521c021291150f0
+	<80e7450d-d842-49ca-8219-a995c8ce8bfe@leemhuis.info>
+	<g3phtogna3a55vzah6olpxekdcmi322q5lzzwxwq5za4oi4plr@js34hr72bemi>
+	<g-ieyuLeDFTGFtwouEWeB6MrjQrUKtHEFHJ54X6mIFcHbsNLLLQyfejb9G2HRQ5xNam8jPp_RTli5Y6LSaF7Dg==@protonmail.internalid>
+	<45d14eb4-9495-4aa8-9382-8d756c0ae39e@leemhuis.info>
+Date: Fri, 09 Jan 2026 13:54:26 +0100
+Message-ID: <87o6n3c5fh.fsf@geanix.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tuesday, November 25th, 2025 at 18:35, Anthony Pighin (Nokia) <anthony.p=
-ighin@nokia.com> wrote:
+"Thorsten Leemhuis" <regressions@leemhuis.info> writes:
 
-> Commit 795cda8338ea ("rtc: interface: Fix long-standing race when setting
-> alarm") should not discard any errors from the preceding validations.
->=20
-> Prior to that commit, if the alarm feature was disabled, or the
-> set_alarm failed, a meaningful error code would be returned to the
-> caller for further action.
->=20
-> After, more often than not, the __rtc_read_time will cause a success
-> return code instead, misleading the caller.
->=20
-> An example of this is when timer_enqueue is called for a rtc-abx080x
-> device. Since that driver does not clear the alarm feature bit, but
-> instead relies on the set_alarm operation to return invalid, the discard
-> of the return code causes very different behaviour; i.e.
-> hwclock: select() to /dev/rtc0 to wait for clock tick timed out
->=20
-> Fixes: 795cda8338ea ("rtc: interface: Fix long-standing race when setting=
- alarm")
-> Signed-off-by: Anthony Pighin anthony.pighin@nokia.com
->=20
-> ---
-> drivers/rtc/interface.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> index b8b298efd9a9..1906f4884a83 100644
-> --- a/drivers/rtc/interface.c
-> +++ b/drivers/rtc/interface.c
-> @@ -457,7 +457,7 @@ static int __rtc_set_alarm(struct rtc_device *rtc, st=
-ruct rtc_wkalrm *alarm)
-> * are in, we can return -ETIME to signal that the timer has already
-> * expired, which is true in both cases.
-> */
-> - if ((scheduled - now) <=3D 1) {
-> + if (!err && (scheduled - now) <=3D 1) {
-> err =3D __rtc_read_time(rtc, &tm);
-> if (err)
-> return err;
-> --
-> 2.43.0
+> On 12/16/25 16:09, Nick Bowler wrote:
+>> On Tue, Dec 16, 2025 at 11:51:30AM +0100, Thorsten Leemhuis wrote:
+>>> Lo! FWIW, Nick Bowler (now CCed) reported that below patch fixes a
+>>> regression for him caused by the commit from Esben (now also CCed) the
+>>> Fixes: tag mentions. See "hwclock busted w/ M48T59 RTC (regression)" for
+>>> details:
+>>> https://lore.kernel.org/all/2t6bhs4udbu55ctbemkhlluchz2exrwown7kmu2gss6zukaxdm@ughygemahmem/
+>>> and
+>>>
+>>> Nick, could you maybe provide a tested-by tag here? Maybe that would
+>>> motivate someone to get this en route to mainline.
+>>>
+>>> Adding a "Cc: <stable@vger.kernel.org>" would be great, too, as Nick
+>>> encountered this on earlier series, as it was backported all the way to
+>>> 5.15.y
+>>
+>> It was backported to 5.10.y and 5.4.y too, but only after I had reported
+>> this regression back in October (and I guess 5.4.y is EOL now).
+>>
+>> Tested-by: Nick Bowler <nbowler@draconx.ca>
+>
+> Esben (author of the culprit) and Alexandre (who merged it): do you
+> still have reviewing/applying the patch at the start of this thread (
+> https://lore.kernel.org/all/BN0PR08MB6951415A751F236375A2945683D1A@BN0PR08MB6951.namprd08.prod.outlook.com/#t)
+> on your todo list?
+>
+> Sorry for nagging, would just be good to finally get this 6.18-rc1
+> regression fixed in mainline so the fix can be backported to stable,
+> too. And due to the holidays I thought a quick reminder might be wise.
+>
+> Or was this fixed somehow and I just missed it?
 
-Sorry about the slow response. And thanks for the fix :)
-Reviewed-by: Esben Haabendal <esben@geanix.com>
+Sorry for introducing this error. The fix looks good to me. I have added
+my Reviewed-by to it.
+
+Am I correct in that it also fixes the problem reported by Nick Bowler?
+
+/Esben
 
