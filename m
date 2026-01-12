@@ -1,156 +1,145 @@
-Return-Path: <linux-rtc+bounces-5737-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5738-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1E35D12724
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jan 2026 13:04:55 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E441D12BDB
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jan 2026 14:23:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C251B303BC18
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jan 2026 12:04:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 16BBE300F666
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jan 2026 13:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872F435770A;
-	Mon, 12 Jan 2026 12:04:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9146358D19;
+	Mon, 12 Jan 2026 13:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Miz1fiQ/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UbiC6jaH"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35A92D23B6
-	for <linux-rtc@vger.kernel.org>; Mon, 12 Jan 2026 12:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D73242D7C
+	for <linux-rtc@vger.kernel.org>; Mon, 12 Jan 2026 13:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768219493; cv=none; b=ilWJNmXhxOmXR3XiPGwErf+BIryMEh3NwQdZevnbY4uPysl5WlKLcmK5PXPSiHtwPiNi/lcBpzCVkly1ZA7I9xZiembSBOuTPlUDh6NNAGd+yTZp26WJ2tbr/rMV/lXLFLce93i3UUhSL9bDwwdIjKCivHKhz1dqfNsyCYpA9LI=
+	t=1768224144; cv=none; b=A9a5GkHzf3vWbt18J9gzdTqdNuFZjmigKLi+dEZmNIJeSTwGWpuA2jMxvh30feqTMLMD3AK/T0wiDzD7IuoAASUi1vRA9yEx0Ox8sZ5BjLduQIzJY+ifLKgMOndjrBqQSdvPSm8I5Hz+To6t0z/dMzPhcIHQATb0tiSrS1WBYWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768219493; c=relaxed/simple;
-	bh=7xtefCug/qYG2+PCm4VdtHs8ee1KPuhKc3l5IX/hhTg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e0574zM4BQwRs1HLx6Qtegfn7S53eQlIbpbFF8uotuN5wcguz9KCbrkTtEMG/CCyQCmL3ZkDA47T8oZAUwfWkDI+0ByIXdawVROwdIULg3XRXDtWHvfz7pMkw5i8bd++W/V9OFxjF0VxmQqSjmrXsw8QZwkzoreud8R1ZMjM8uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Miz1fiQ/; arc=none smtp.client-ip=209.85.167.50
+	s=arc-20240116; t=1768224144; c=relaxed/simple;
+	bh=Moxv5L6gKitMqxtkTShK6QbHpBnPl23MhttLnlpHmCM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aGHEy2nc/GCY2Q7r4VLit4SnlGFm091SGsMI38ZvEM34JYs+dnE4UktmEKKiyp2lK90ks+UBM9ypV0++brD9AzGYet0Slk2WvHJ6HEYZq/PvhvNkpccThjPcZ74YRsa5u7PVKQiEqHnpv0uUgkKdL00CYs7216dOXN7kDvaz5hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UbiC6jaH; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59b786b2a5dso4904468e87.3
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Jan 2026 04:04:51 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4779ce2a624so53505055e9.2
+        for <linux-rtc@vger.kernel.org>; Mon, 12 Jan 2026 05:22:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768219490; x=1768824290; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L5B9VOs5SZcPSzW1v2/zOZ9gYxEwx3VMLCzV7S6TNwM=;
-        b=Miz1fiQ/s3yr7JPIyhbRUthuw1t/U/xArJLxzMcdLcpt6EHnp6JhZcRuG/WtaX9DLF
-         RDa95ZFP412Xf6s0s1G4QySo4PBu0qsIuSUmAWq3OhtCAJYqQ/bMMYfa2+fs8JCNMwpe
-         Mjg2yVmmVAXC29dus4/jJYLqPjabb7DARB6WlLWxFvbfJPCDHVYl0n49/rzvxozt/gWy
-         JpRo3c5L2UHerrRQlOAVR36936H8oJq7zhc7hdeptsF7ivdP5ItlUCcYrhDpJCMcywen
-         Tu5Y84HkHrhRVaxmfhw0MNPPnp+NfQ7QSM5eTI5brSsbMi4qWPQRN9Ahny0etX7Epju3
-         WBBA==
+        d=gmail.com; s=20230601; t=1768224141; x=1768828941; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zbNybK+wu77HDIdVk759hzyCoUVJOdCnedcWHepqb5A=;
+        b=UbiC6jaHw/bLwRx+55G54OrKjMCmamUJ/6EMPZodWt8O9Bvpk2Bnrf+DT5N9QWmPjo
+         hpjEnzohRF4MRsXws32mHnI0Agr3/aOIbg3t/mb+eXBvsToyJZQWt8JxkhXS7gU3wK5p
+         UMUWM3+yr8P+4dcSJA/45yStdmrNGbKMYsFsbOJTD3IfrCuN+5WpoTWqRkZBR7ZvhoWg
+         Z0jw+46r/Rcjz9h7DfcLBb10LbC0Gbviw2Jb7C9IkRClwM8gvjwlmall5a2subD2WUto
+         JSYeuYroBRbB5rxNi2pQbFn+nMBgnNKc1b+sTEFkQqal7gHV9FIpipG6mEUTZbOrKWY5
+         TMrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768219490; x=1768824290;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L5B9VOs5SZcPSzW1v2/zOZ9gYxEwx3VMLCzV7S6TNwM=;
-        b=JZVCQ3UqwGHYOqXWpkRY4UMvfL9G6q6qFxce7oteHiibOCjBdynewmfokPbR/48/4+
-         d7c4fjAkd2CZnM7S/23m0dQ/RDTmevNKJOtFrYl5uVemhfO1A/QYkKAM3q4PPlzw8QXs
-         U3WA2Tjag2zUxQbpA1F9zqKx/ApxMDs6hQfc2dv3ULSmm35jYUNax48sQ0j/hsjsU5wt
-         o1fS9Tbo75oV+KBRWDxqQp5CjBdX1mF4P/vp6JqJrnNEUHU1se4BYYdhJo6GMqbl1Qn7
-         qjqJt1WDBJYoXnKFuyE4ppbSKInLNKri135eYcJl9G0xFOn5jK4TCISzNlRKXcFQtAaB
-         QVpA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6p2iSF+jSUkAkldSrzDmFTdopnnLEurFpyCp/rTnqrXMb0d7ReLYtGwqHv72weHYz3O2DdujZCS4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdoBuDB4mH7CUyl7hicwM8bg1cliVh1yHXRsQoIC7NeMMXfZ6r
-	srSpVVxNK8umh1ZeeLvUTmVrH/xP9YXZi6S/1/MC3+j/l9azqjO//or8
-X-Gm-Gg: AY/fxX68KPcG1YtdjSwasEfOLptE654/nRHP7gqtBpZM2MOTetnViz6OA/xdC5O6jg4
-	lsSiJ+QIflJcWUnnJbLubHWXd+AGHECJP7X0N0XVhPFbR5+uvivgwU2FVhOYigLUKEL/ktzzgyX
-	P8i1CifKIOZ3PlUtvc3BPBYHXhnIFa7WQTbeJMQwKtUvGSOQcbOSjfI4qXcV5jW/E13RFPpwrci
-	bZgcpwjHQeD0xAKPRE4viPMrJmDXgVValPYfWJggu2wMfmoyvo9pJgFwcvhFnNQkQd/xddcfhjf
-	ceK53iQ3Cm3O9WA5n79M5DbpSJElXiLV8oNM9pv02QfiZUDzD1VwP+6JxTZA66RBjIOpPAwWntL
-	uqiXsG/E4Fw6jm+Wi+Cifadlg/Gjt3ucnk7UTAV+6Z70ARlYnQ89QcBD9aDhS/JulznUyJer8Qc
-	9geUivA82rGKT9XuGQ4SMe7O2lmUYoMk600QNNZFZRxUxkoQpK8vJ1uCTr2FE9YiE9s3Uf
-X-Google-Smtp-Source: AGHT+IHIOma4TS1LvpaF0nAI7hxAzfTZfER7LKZt7Et+nsHWkt6YVR8gJlh4cjrPjzNGz/ehF3S4wQ==
-X-Received: by 2002:a05:6512:3093:b0:599:11a5:54fd with SMTP id 2adb3069b0e04-59b6ef028e5mr6174554e87.4.1768219489595;
-        Mon, 12 Jan 2026 04:04:49 -0800 (PST)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b6ac0a769sm4379781e87.21.2026.01.12.04.04.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 04:04:48 -0800 (PST)
-Message-ID: <ebb14cef-9927-4211-94ef-2f209abeb406@gmail.com>
-Date: Mon, 12 Jan 2026 14:04:47 +0200
+        d=1e100.net; s=20230601; t=1768224141; x=1768828941;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zbNybK+wu77HDIdVk759hzyCoUVJOdCnedcWHepqb5A=;
+        b=o/jkWA+JdxVYULH920aMA7KyTYdDmuz7gUzE5gCLUY9a/qymN5bs0ZN1PNNmHa9git
+         QKwOTSracR4pkuaZQguVerTab8kFgb6l+XuIqMmjS4buPYIfyEHADZwNl17kfX0iYrVz
+         MY7YPd+zBU3+YUhQCX862ypwJM0bMtKu5NQE3VBtjQW2wT00I5YRPZ5K8Cn6tDzlKptI
+         mOTBp+s3EilpqfIhzFaOgsQHs6TTyplNUwf6JHlXgQtbPqW79sKKLpdBencRvaINVynq
+         CYDYhkB/GQG/Gy9AZqSzPtlGFFyGy2Eg4FRrErSXnfU6/ZGcyZbHHddA1CK+GzI31Ga4
+         qXsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgNPH85+86C7EbkZ8DKGXysjAq+Nt/lqZaPVfBAtGqUhOJVnFZCY9FGeWEgoSo3sQ+0z1IcIpxP70=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1zgEITfCcHA/icsTxR71xQHLFZnXDMemP09OVCzT/s6DDTIwp
+	VO4xpSqkuU5bB6HnU4fsChIAhZk/n6/hLYd3FQYf+tOGfK9pRtR294ef
+X-Gm-Gg: AY/fxX4Rjg4LXcdo9KaSJBe3hFuLCVhLroXj2krrvYbzFRgcoKHf0sL1eH9OIgEqjWL
+	MmO5QQFTNJtwnPkWLyX+Jw8TETLlF7GjZ/qn0XfmbOUCM2fKEPpaiysFeT8CLGtATa1iOZiePqq
+	6oQk7i81nUdL+9uCDvRP6SNC8qaT2daSYR1F059acgrAFcsvs7NirXULavPhm/wTvVPRn3/8ynF
+	/LibuqoVO3UHPTAnZJsfnZKVSFtqYem+NXFp2GwjUMemKtlAeR4rqPDKxAWLeEukD5Rb9CaQb/F
+	e20FEXtbn/nbCRZNZ1EynEO5+TFZxWGF1VqT/7tKI0e6HVa3efuK8Sxh1ZgzIOay6uivem2PeNt
+	gOSNkxoXfrMbqniDuGa3T33mYVjBN9hRltxeOKVW6as8d7ehxm4tp4etlZIdlrFqyQZGksdEFRK
+	y/Eli4siGTGWcTj/Ib83daYREJhiXxdg==
+X-Google-Smtp-Source: AGHT+IFmeX6pltjb+KA7Z0DIhwZiW2tH4kpei0Oyh7aeIf5bNLDc0BBRwzlMJAUBrb1pUoIf4jR59w==
+X-Received: by 2002:a05:600d:103:b0:47d:403e:9cd5 with SMTP id 5b1f17b1804b1-47d84b1fce2mr151146825e9.11.1768224141333;
+        Mon, 12 Jan 2026 05:22:21 -0800 (PST)
+Received: from [192.168.1.187] ([161.230.67.253])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f70bc4fsm352464595e9.15.2026.01.12.05.22.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 05:22:21 -0800 (PST)
+Message-ID: <a9a59334e29ecf10ed8e6d737e5b918580446a69.camel@gmail.com>
+Subject: Re: [PATCH] rtc: max31335: use correct CONFIG symbol in
+ IS_REACHABLE()
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc: Antoniu Miclaus <antoniu.miclaus@analog.com>, Alexandre Belloni
+	 <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
+Date: Mon, 12 Jan 2026 13:23:03 +0000
+In-Reply-To: <20260108045432.2705691-1-rdunlap@infradead.org>
+References: <20260108045432.2705691-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v6 00/17] Support ROHM BD72720 PMIC
-To: Sebastian Reichel <sebastian.reichel@collabora.com>,
- Lee Jones <lee@kernel.org>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-References: <cover.1765804226.git.mazziesaccount@gmail.com>
- <20260108172735.GK302752@google.com>
- <63bc889a-b97e-43c3-9f46-9ca444873b70@gmail.com>
- <20260109093831.GB1118061@google.com> <aWRFs3CJvd37BaoH@venus>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <aWRFs3CJvd37BaoH@venus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 12/01/2026 02:53, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Jan 09, 2026 at 09:38:31AM +0000, Lee Jones wrote:
->> [...]
->>>> The MFD parts LGTM.
->>>
->>> Thanks Lee!
->>>
->>>> What Acks are you waiting on? What's the merge strategy?
->>>
->>> I think everything else has been acked by maintainers, except the
->>> power-supply parts. I think those have only been looked at by Andreas and
->>> Linus W. Haven't heard anything from Sebastian :(
-> 
-> Yes, I'm lacking behind quite a bit, sorry for that.
-> 
->>> I would love to see the patches 1 - 14 and 17 to be merged (via MFD?). I
->>> could then re-spin the 15 and 16 to limited audience as I hope Sebastian had
->>> time to take a look at them. However, I don't think any of the other patches
->>> in the series depend on the last .
-> 
-> Sounds good to me.
+On Wed, 2026-01-07 at 20:54 -0800, Randy Dunlap wrote:
+> IS_REACHABLE() is meant to be used with full symbol names from a kernel
+> .config file, not the shortened symbols used in Kconfig files, so
+> change HWMON to CONFIG_HWMON in 3 places.
+>=20
+> Fixes: dedaf03b99d6 ("rtc: max31335: add driver support")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> ---
 
-Ah. Since the 15/17:
-"[PATCH RESEND v6 15/17] power: supply: bd71828: Support wider register 
-addresses"
-was now acked by Sebastian, then it can also go via MFD?
+Acked-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
-Also, if it is Ok to address all the "dev_err() + return ERRNO" => 
-"return dev_err_probe(,ERRNO,)" conversions in a follow-up, then I guess 
-the whole series, including 16/17 is good to go? If this is the case, 
-please just let me know and I'll send the follow-up. Otherwise, I will 
-re-spin the 16/17 and add a new patch for the remaining "dev_err() + 
-return ERRNO" => "return dev_err_probe(,ERRNO,)" case(s).
-
-Yours,
-   -- Matti
-
--- 
----
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+> Cc: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: linux-rtc@vger.kernel.org
+>=20
+> =C2=A0drivers/rtc/rtc-max31335.c |=C2=A0=C2=A0=C2=A0 6 +++---
+> =C2=A01 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> --- linux-next-20260107.orig/drivers/rtc/rtc-max31335.c
+> +++ linux-next-20260107/drivers/rtc/rtc-max31335.c
+> @@ -591,7 +591,7 @@ static struct nvmem_config max31335_nvme
+> =C2=A0	.size =3D MAX31335_RAM_SIZE,
+> =C2=A0};
+> =C2=A0
+> -#if IS_REACHABLE(HWMON)
+> +#if IS_REACHABLE(CONFIG_HWMON)
+> =C2=A0static int max31335_read_temp(struct device *dev, enum hwmon_sensor=
+_types type,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 attr, int channel, long *val)
+> =C2=A0{
+> @@ -672,7 +672,7 @@ static int max31335_clkout_register(stru
+> =C2=A0static int max31335_probe(struct i2c_client *client)
+> =C2=A0{
+> =C2=A0	struct max31335_data *max31335;
+> -#if IS_REACHABLE(HWMON)
+> +#if IS_REACHABLE(CONFIG_HWMON)
+> =C2=A0	struct device *hwmon;
+> =C2=A0#endif
+> =C2=A0	const struct chip_desc *match;
+> @@ -727,7 +727,7 @@ static int max31335_probe(struct i2c_cli
+> =C2=A0		return dev_err_probe(&client->dev, ret,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0 "cannot register rtc nvmem\n");
+> =C2=A0
+> -#if IS_REACHABLE(HWMON)
+> +#if IS_REACHABLE(CONFIG_HWMON)
+> =C2=A0	if (max31335->chip->temp_reg) {
+> =C2=A0		hwmon =3D devm_hwmon_device_register_with_info(&client->dev, clie=
+nt->name,
+> max31335,
+> =C2=A0							=C2=A0=C2=A0=C2=A0=C2=A0 &max31335_chip_info, NULL);
 
