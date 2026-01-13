@@ -1,160 +1,103 @@
-Return-Path: <linux-rtc+bounces-5740-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5741-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A966DD15A7C
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jan 2026 23:51:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C577D18EFD
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jan 2026 13:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 33DC930BA4E9
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jan 2026 22:49:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0422231C7B96
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jan 2026 12:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874B631076A;
-	Mon, 12 Jan 2026 22:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1858D3921CB;
+	Tue, 13 Jan 2026 12:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D3evCyFU";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="pPfWKFvv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnIVFfJw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E6C2C0F8E
-	for <linux-rtc@vger.kernel.org>; Mon, 12 Jan 2026 22:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E618438FEE3;
+	Tue, 13 Jan 2026 12:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768258152; cv=none; b=SaqmMO4ttrHByF4LESeRZb/4cjU7cXb6rDpm/2g/i5pUlFQLiT9GtEKeYcR2d+RO9G4X/EP902u54gxLNR9j+H11kIjmZcryB1lrLtAwGH1Vyj7aJi9LhMf30v/47SilQDKTtlW8Ri2mTKLdfQ0IUOyoJordhiUxRIrFJEJoGCg=
+	t=1768308167; cv=none; b=ocm/iuBMpWBfYa6hGgkRuUZIigAae1BkzGgkkj9OkjLLJKOv64otKdl7VyCbItdY6zwUUAfHk7LXEnrUWT/OIawfpm9qXQR4UwtXglSYbhOr8vHRsM2M/np9hwkVG/taTwS0hQ34jumUWQDFbs9TzxDPdE1/F7xRVbVqJRItcVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768258152; c=relaxed/simple;
-	bh=8IMXCPMTE7nWCwGw7DSN/szFjEIz9vzn9vkbLs++LAs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T59rnTRRR4AiulTdoMSaEeN1fHLyNe+wC/LKi1S3H7W2YgrwR43y/gfN3iESrbtYmolZFNDTCmEAYCKCEYCXt4c0I+Pu7I8KeKFzEHXqWD26M9MJq8q8p4v5hc8CdsFAgyLjTXBYSqdN4iWQ8NE1mK6Maoww7W6IrEK1vCALmcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D3evCyFU; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=pPfWKFvv; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768258145;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yPbAFjft8aMjpLSNQcauX/qROUVfiz1VsQKyCz3BUAc=;
-	b=D3evCyFUIzMAPrY1aHECuF2kr/50qw7D/gcEjmq6qDmLH3x7CqG+z9fQNYgRaY3mE/BB+r
-	LtKE5BvpW+wxt5LOrOAqtE79SbBiq3YafkIPCrhsZLZvgISuLgjl8A61LLydVD+mcmERT4
-	/6eMN1WSMis1duPEpO0NFMRvROuG148=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-315-evQvSvAiPsmVvYfdrf6Azg-1; Mon, 12 Jan 2026 17:49:04 -0500
-X-MC-Unique: evQvSvAiPsmVvYfdrf6Azg-1
-X-Mimecast-MFC-AGG-ID: evQvSvAiPsmVvYfdrf6Azg_1768258143
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-88a3929171bso145745906d6.3
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Jan 2026 14:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768258143; x=1768862943; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yPbAFjft8aMjpLSNQcauX/qROUVfiz1VsQKyCz3BUAc=;
-        b=pPfWKFvvqJ7TjT0l6mM+ignyK7Ov0y+AIykx61uJEZ1ejadXZ/sYcYgJ61xwkfag0a
-         CsQ8U60LlvHCGaq+QaAgK+AR/YKfNjtRux9Soq4OMjoxAq7Kp3pS7ED9QKQNiYuGeETP
-         JNUs4qngcUlPlE7nEVb0aV3JifxtAIN1iHIOvfVgjLw8e5j6mm71EvE6wLqMFK2VRGVZ
-         UIwjv0cxiAIzY+FCGPxBQc0SoSDqyMF/7RByodciJ1AZfnZhWsnyaGoXoNnZF+kOiqxp
-         fre1UPHG26Xz8+Y9rv1BPWROyQi76tMaEK4Z3ZQOIexpOZtR6vWeaZq2zOljyJNcZQ2i
-         X49Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768258143; x=1768862943;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yPbAFjft8aMjpLSNQcauX/qROUVfiz1VsQKyCz3BUAc=;
-        b=pJCmkEnUrULMdy9Cu45GwSvsURf9fsZOFcEjGsfBhuB3RDoUvDx1N5o6zFnLsW/VNB
-         miDr0YD3PvnoJnt4vJWxH3HedW1o+V+clRr58ualJxSjrUdRMm5jylyun9HXK2cK76MC
-         jkpvUZli5Wl1XbUSDqhIaRv0HIG4Jj+nFFMMtYOG9DGAiA6r8fppdSv/KCDCW06wrCSG
-         ZZWmPMzVKtkj377+ZcryY668j00FDJ6PyFNPglj+o70cFG+JUNtX4rL4xLelELwxZiAQ
-         OhHBKM9cMsYZKsFqWHMrhgfFIepT4X5oj/zy2t+viy9swPeMRf1p08pPikdndAku+7co
-         3CMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVTu0L7JL1zyrwvNRd0+sZn5K+f+ChxX7uj9eKdGK+luu4j5sjCiqpfUjliG0Vm22qx6AWSeRsDnPw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhJdf/OUKIzCzfZu5KOLyGyL/yn+V2NJFR93bne1ojEseWxu+T
-	v6CkALOGN90mHyVY63Jr+mbDG5Yym61ePWIY5iXZ/0TV6B/GyvCqp8Y5QK98BqiQ84yzPTQ5aT1
-	wiCd/ccEoWtBjVersyvVR+6Lw655oFNv/6fn2ZNRiICJ1OKj+NvbukDQMrp8qmA==
-X-Gm-Gg: AY/fxX5dKNGVbA9XsSHbHEuxbC2wuvcw3vVtIvujJW1n7njYMumGEgC10CIdO7t+Wr8
-	FDcPTnDvL6xi2NXWv5YONDI7nupzWYTJ4PApAKYJwLfIXFjUeJm3CGm+NhLHppCMWtJyKgq1zqN
-	e3Ww/E4xOFuLW+WyRo1sixpNrJtJDt5J30G8q2E+pb4rUhYzEMx/CNfEYMwRQs3iIax2XgbY5Lg
-	MWUyaj8RqKgrwpbXYlEtlEtLaO3qdpqDPgAfWXQm2xZkMuIXeEW802eETp/Pssl8FpMLhBR4EKb
-	CCc1R50BxQHLxt5xGz4YS8Ibsq12hjZw3S4XUuE/Z2xu3MMm2p/q70vfHqF6dLxlXk6rtAx9gqo
-	NJN18o+CcAktVeujtbFd4PyukK8v90jDQyMp34QbMz6HZVPRFSg==
-X-Received: by 2002:a05:6214:c62:b0:88a:35b0:aa8d with SMTP id 6a1803df08f44-890842b2608mr286072396d6.63.1768258143652;
-        Mon, 12 Jan 2026 14:49:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEJw0a5Pc9eHOYgh7o5mLlq4wOuDLH/LQCgLhENbsbMy6QXfNzs9IvoDmjS1XsoGwdRRF8ghA==
-X-Received: by 2002:a05:6214:c62:b0:88a:35b0:aa8d with SMTP id 6a1803df08f44-890842b2608mr286072146d6.63.1768258143330;
-        Mon, 12 Jan 2026 14:49:03 -0800 (PST)
-Received: from [192.168.1.15] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c37f4a6145sm1580930385a.5.2026.01.12.14.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 14:49:02 -0800 (PST)
-From: Brian Masney <bmasney@redhat.com>
-Date: Mon, 12 Jan 2026 17:48:05 -0500
-Subject: [PATCH v2 11/16] rtc: pic32: update include to use pic32.h from
- platform_data
+	s=arc-20240116; t=1768308167; c=relaxed/simple;
+	bh=P2uVOyvO0aRD4x+AWbtaIRkMuZiJS26sqB6OLBNwyiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HsqZLi1PDPnFakNekFV15TUhZX8o1JhmRtDwZs9G0zvLKgAnMpW6WsCXk/CbuODReESSfQJoP3RRve1nBgxErIlJ3p1QgxwAJ8VL0iutR2DIm7oE0hGL5Wp/OWu0dL/neJZyW4v+ot0oFiJmeIzURe/kuDLfRF5ydokXiQxWvX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnIVFfJw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460D0C116C6;
+	Tue, 13 Jan 2026 12:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768308166;
+	bh=P2uVOyvO0aRD4x+AWbtaIRkMuZiJS26sqB6OLBNwyiU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZnIVFfJwKm6rxZumFVPVq1zTue8z1VtgFnbUgg2XbDd49RMaa2Z6KjHDZi8nXSp4g
+	 kfVmKo4xo9sbtlHDtg7L6RRdDJHVfrOEUTNwuV8iEZz5mYpuv/WidxtUCWt/P4bbmx
+	 ZHxAJiyx9ShQJ3Ujs4OWCMXyGaZQqNV5ecyVAODAanZUDLr2ByhsrPsNYBUmPqauld
+	 vFsWskQcaWrWPfippVT8t4mSDcwMPaLue3lrLcWXs7mZkDaPp5RF5MBRy69FbXVZl/
+	 Qh0q6Gfz8XYf5Am1ah08RfRepEx0wnfkIysMMXovx2N6qZ93wpHpxSWLVDYVmkqxyr
+	 Fxz7wAlc5s6jA==
+Date: Tue, 13 Jan 2026 12:42:41 +0000
+From: Lee Jones <lee@kernel.org>
+To: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Cc: Yixun Lan <dlan@gentoo.org>, Alex Elder <elder@riscstar.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] mfd: simple-mfd-i2c: add default value
+Message-ID: <20260113124241.GB2842980@google.com>
+References: <20260108-p1-kconfig-fix-v5-0-6fe19f460269@linux.spacemit.com>
+ <20260108-p1-kconfig-fix-v5-2-6fe19f460269@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260112-mips-pic32-header-move-v2-11-927d516b1ff9@redhat.com>
-References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
-In-Reply-To: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Brian Masney <bmasney@redhat.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- linux-rtc@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1045; i=bmasney@redhat.com;
- s=20250903; h=from:subject:message-id;
- bh=8IMXCPMTE7nWCwGw7DSN/szFjEIz9vzn9vkbLs++LAs=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDJTq7wj181NyHsScXbngQd5kdm31CZN+GQQO1Mnh/39w
- 11Sr6e96ChlYRDjYpAVU2RZkmtUEJG6yvbeHU0WmDmsTCBDGLg4BWAixZwM/8OFe9dUzNOQ+lvW
- 1Zio2/m6Z73CxVf+sTaph5SCG93jljH8Lz20J7lrXuLHsCSx70ptzByv9xg4Rd7TPt5795t8Xup
- OBgA=
-X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
- fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260108-p1-kconfig-fix-v5-2-6fe19f460269@linux.spacemit.com>
 
-Use the linux/platform_data/pic32.h include instead of
-asm/mach-pic32/pic32.h so that the asm variant can be dropped. This
-is in preparation for allowing some drivers to be compiled on other
-architectures with COMPILE_TEST enabled.
+On Thu, 08 Jan 2026, Troy Mitchell wrote:
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Brian Masney <bmasney@redhat.com>
+> The default value of the P1 sub-device depends on the value
+> of P1, so P1 should have a default value here.
+> 
+> Acked-by: Alex Elder <elder@riscstar.com>
+> Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+> ---
+> Change log in v5:
+> - nothing
+> - Link to v4: https://lore.kernel.org/all/20251225-p1-kconfig-fix-v4-2-44b6728117c1@linux.spacemit.com/
+> 
+> Change log in v4:
+> - default m if ARCH_SPACEMIT instead of default ARCH_SPACEMIT
+> - Link to v3: https://lore.kernel.org/all/20251118-p1-kconfig-fix-v3-4-8839c5ac5db3@linux.spacemit.com/
+> ---
+>  drivers/mfd/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index aace5766b38aa5e46e32a8a7b42eea238159fbcf..c757bc365029dc794c658fc5b10084a0f29ac9b6 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1276,6 +1276,7 @@ config MFD_SPACEMIT_P1
+>  	depends on ARCH_SPACEMIT || COMPILE_TEST
+>  	depends on I2C
+>  	select MFD_SIMPLE_MFD_I2C
+> +	default m if ARCH_SPACEMIT
+>  	help
+>  	  This option supports the I2C-based SpacemiT P1 PMIC, which
+>  	  contains regulators, a power switch, GPIOs, an RTC, and more.
 
----
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/rtc/rtc-pic32.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-pic32.c b/drivers/rtc/rtc-pic32.c
-index 52c11532bc3a3696359ca56349b42860aa90c966..3c7a38a4ac08eb0f5a44ae4e470c208a9d1dd599 100644
---- a/drivers/rtc/rtc-pic32.c
-+++ b/drivers/rtc/rtc-pic32.c
-@@ -15,8 +15,7 @@
- #include <linux/clk.h>
- #include <linux/rtc.h>
- #include <linux/bcd.h>
--
--#include <asm/mach-pic32/pic32.h>
-+#include <linux/platform_data/pic32.h>
- 
- #define PIC32_RTCCON		0x00
- #define PIC32_RTCCON_ON		BIT(15)
+I already applied v4.
 
 -- 
-2.52.0
-
+Lee Jones [李琼斯]
 
