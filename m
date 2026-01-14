@@ -1,106 +1,137 @@
-Return-Path: <linux-rtc+bounces-5756-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5757-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 795B6D213FF
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jan 2026 22:00:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA680D21C0C
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 00:23:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C15430361CF
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jan 2026 20:58:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A93043011007
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jan 2026 23:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C7535773B;
-	Wed, 14 Jan 2026 20:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SCcvHs7d"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01CB2392C4A;
+	Wed, 14 Jan 2026 23:23:29 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126842F25F3;
-	Wed, 14 Jan 2026 20:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22708381704
+	for <linux-rtc@vger.kernel.org>; Wed, 14 Jan 2026 23:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768424337; cv=none; b=J6sYqK/wr50BI2883dpCL6rvAkzWaxePXkAaXkKS5l0fn+e/E2qaXf3Y3YAfE/UD6DJDd5ObzSTOwuD638+je8UrjgG5mS1LgWWYWFCyQprkzQmqmEeCRS1NteSRlZ/j//1QggcEqWO/g/bUM5XqLGzVpQhki46/hf0MHyJuXmk=
+	t=1768433005; cv=none; b=iPQtP6ICh0S7GkSQBFeqztVbG85q85PF4TESwPoXrEKq8wruZS4R1Gb3MuuGV5IRiDG1KvXIf4rqnasXxXVmbFZlke3ro9Mw84okvlNHukxfS+OAP+59A4nZxIBZFYM2kK+9k1WJ7pBrIeSlVFp89ifjtfroyt3BYgN5J0p8QUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768424337; c=relaxed/simple;
-	bh=t15mgHwN+WGpwIYDNelTtRTVGa0I3MDtGvlcDLcbvYY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SSx7EEvYv/8+DULftnhv/pYV6/x4yo2y4PExe0fPreAvfgdOrjI6iGx7EEurGMS2bVj/uSTGrmD+Yconfzg0IHxV9V2/fDdmuroWt0CNOJkqz7VGn17xBDC1XWaTVF383kQyNSu6OjXiCe773a8WAG/OEiabfpOrnqZ0IegeKRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SCcvHs7d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852BEC4CEF7;
-	Wed, 14 Jan 2026 20:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768424336;
-	bh=t15mgHwN+WGpwIYDNelTtRTVGa0I3MDtGvlcDLcbvYY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SCcvHs7dfJFVxcq4dLHWL6gXUCCRWKtNiONjkzm/PR+KtBnxQlLSt1vJe3/CtfXRC
-	 6SaMBDntB34hDv1r+JdiAEb40VnpctKNWoW8bEjRO7I8Qiq1b24XtV2TprW+/f5kfR
-	 BcdhgHmi0dM6njT1NLDuxb53WSetxHmjUsJdUC7Ws/3HVEv7W0CyswhtXo8JamHYFw
-	 DXY8CMnAZ1Jo+uPvJ4pkrvFES59VrDwCAwGngHPjvF9UMRnqk+coXC7W1fU09bjgs6
-	 /m255OisvcgKH1GbuzzEMEfkRz+w3cCW+q+HKlRWrJWDZ5B+mA4E16mKOFEdoL02yx
-	 05I6Onq2/LF+Q==
-Date: Wed, 14 Jan 2026 14:58:55 -0600
-From: Rob Herring <robh@kernel.org>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-	Keguang Zhang <keguang.zhang@gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-binding: rtc: loongson: Document
- Loongson-2K0300 compatible
-Message-ID: <20260114205855.GA3190839-robh@kernel.org>
-References: <cover.1767663073.git.zhoubinbin@loongson.cn>
- <8876bebaf08121bb5edd2500f5289284b75df011.1767663073.git.zhoubinbin@loongson.cn>
- <20260106191314.GA2568583-robh@kernel.org>
- <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
+	s=arc-20240116; t=1768433005; c=relaxed/simple;
+	bh=CWRh1mqzGd74sTVRy1BVS1j1Pdc2oQHYsaaSIcffke8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cMOfJweGAA6Sqbf5sI83S5ZVE4x2+3gpq9Kyi815W7hbSMn8WQORAuD4adTEt/Dpmq4QRuqljTlMbvGzFGO8n4uBzYz/iv/Jq+wg/W/JZR/rv9D0Et0of1altDiPpQVdnU4pBTYAo7sp8cwttshXLgIo5qIFF4bkWgBZxxINhns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-790992528f6so3070207b3.1
+        for <linux-rtc@vger.kernel.org>; Wed, 14 Jan 2026 15:23:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768432994; x=1769037794;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tQkIGw10WYd18JYf2abTgmvRXHkfDdPrkiazjFeBx98=;
+        b=hs5NGDY8A8WWJsoT8w+LUb00pgCaeEA+aHydz+ro+0SbeLWzhkoJt8GAK4qnO4Ir4O
+         Dv/fVcG5JaVx6DD8XpxTmHH76JBGOKqXyi5RVBwpH9c1fY1GeCoXGFIB7IweofPohhUM
+         Kj3Mvf0a19mH8+b4085aCHepH483LdbjHm1bGAtFctxFWX/k0aUmTAAWKtK1Mss3vnXE
+         bNJyypIS82nq8euSa4Nf/orOpmdlQPNIiNwTcWgLFbLOijWFKjuzcOBceMRdGzkgnz2T
+         1z2R+Ie9S7m//weQij4LyKPFlAHMPzb3MFTDJ2RzB0EaYqNGxonzHBLX1OG5rmTsxlOo
+         B7eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3FnFZdr4dJoIjMUBkJ23VBFVV7foanfBIysebJ3/E/jadcQitdWDHKi94s3ZUiOIiC24BRYizicI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQelgB7x6mpv+f+OddWrokV8gKZsCYZRqc89d/Box4XK4SJH2T
+	oeRxBU+513aKqhDzyfsnhmQ3wOp3cTTjv3pRYF7eNwaZV7+Hx+8ytPIBr89PvmZy
+X-Gm-Gg: AY/fxX4/PFL8MCgQsQrLcPamS4rqsyWbe1bBdbr17kuTMfCtTlbwtscHai/2Du+ozwD
+	gsqbLTzGwJFKSrLkwRdrQa7waYs5Sn0Rb1f86LnZOxEzb+zgyGdC0ASKfDrtlINaout7ZlXB9Jc
+	kbJlGI8T0xaSmFt4zgyYBDkmtDv9WSJZgzdInQMVeSNe4s4mWXp76m0wiG1o6lmcSD/biyh0ZtR
+	hVg2eY3Gor4tYtXKGUd/ZKVFxiGbX/F56fiu09Per5COdecliDZIf3Sn4k9TSHIr6LUJ3AMSqIW
+	BBQIxjOtrGh50kPj/cu0mJM0ER50nlgqb62uhXSsL1j0moP9Q+wrikdBwi4Icnk+Fa3n9yitccJ
+	MUxCfwsc7hp6f1shLE7C0GfamEXsRTwXQx7mn1eZDf7ZRJgeeYZfuaLXf8yVSoRR7l2dzcOrYjJ
+	RUC1U8Ga3DQLaNa8J2+Ie93gi08gfHVD31e9mK
+X-Received: by 2002:a05:690c:387:b0:78f:b044:edab with SMTP id 00721157ae682-793a1d183c9mr32488347b3.32.1768432994588;
+        Wed, 14 Jan 2026 15:23:14 -0800 (PST)
+Received: from [192.168.200.2] (104.244.95.48.16clouds.com. [104.244.95.48])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-790b1be88dcsm90437347b3.47.2026.01.14.15.23.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jan 2026 15:23:13 -0800 (PST)
+Message-ID: <f426f19d-a14c-4d9c-8587-2f7b4290024a@kylinos.cn>
+Date: Thu, 15 Jan 2026 07:23:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 1/5] rtc: migrate driver data to RTC device
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Danilo Krummrich <dakr@kernel.org>, Greg KH <gregkh@linuxfoundation.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, Alvin Sun <sk.alvin.x@gmail.com>
+References: <20260107143738.3021892-1-sunke@kylinos.cn>
+ <20260107143738.3021892-2-sunke@kylinos.cn>
+ <DFJ5VOQOFLJO.1YI2NXC3B8P7L@kernel.org>
+ <c834ef20-2d4b-46aa-94ed-310c077a4495@kylinos.cn>
+ <DFJ99UZAU51H.JP1VEERVR81W@kernel.org> <202601081401239bbfff9d@mail.local>
+From: Ke Sun <sunke@kylinos.cn>
+In-Reply-To: <202601081401239bbfff9d@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
 
-On Wed, Jan 07, 2026 at 09:22:41AM +0800, Binbin Zhou wrote:
-> Hi Rob:
-> 
-> Thanks for your review.
-> 
-> On Wed, Jan 7, 2026 at 3:13 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Tue, Jan 06, 2026 at 09:33:32AM +0800, Binbin Zhou wrote:
-> > > Add "loongson,ls2k0300-rtc" dedicated compatible to represent the RTC
-> > > interface of the Loongson-2K0300 chip.
-> > >
-> > > Its hardware design is similar to that of the Loongson-1B, but it does
-> > > not support the alarm feature.
-> >
-> > But you are requiring the interrupt property for it? Isn't it no alarm
-> > feature means no interrupt?
-> 
-> Yes, the `interrupts` attribute is not required without the alarm feature.
-> 
-> But my judgment condition is `not contains` (added in patch-1[1]).
-> There are only a few SoCs on the Loongson platform that don't support
-> the RTC alarm feature, so I think `not contains` looks cleaner and
-> simpler.
 
-I should have said allowing rather than requiring.
+On 1/8/26 22:01, Alexandre Belloni wrote:
+> On 08/01/2026 14:52:08+0100, Danilo Krummrich wrote:
+>> On Thu Jan 8, 2026 at 2:45 PM CET, Ke Sun wrote:
+>>> On 1/8/26 19:12, Danilo Krummrich wrote:
+>>>> On Wed Jan 7, 2026 at 3:37 PM CET, Ke Sun wrote:
+>>>>> diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
+>>>>> index baf1a8ca8b2b1..0f62ba9342e3e 100644
+>>>>> --- a/drivers/rtc/dev.c
+>>>>> +++ b/drivers/rtc/dev.c
+>>>>> @@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
+>>>>>    		}
+>>>>>    		default:
+>>>>>    			if (rtc->ops->param_get)
+>>>>> -				err = rtc->ops->param_get(rtc->dev.parent, &param);
+>>>>> +				err = rtc->ops->param_get(&rtc->dev, &param);
+>>>> It would make more sense to just pass a struct rtc_device than the embedded
+>>>> struct device in the RTC callbacks.
+>>> I considered passing struct rtc_device directly, but chose &rtc->dev
+>>> to minimize changes to existing drivers, since most callbacks use
+>>> dev_get_drvdata() on the device parameter.
+>> No, you should not expose the embedded base device. For accessing the private
+>> data you should add helpers like rtc_get_drvdata(). This is what other
+>> subsystems do as well, e.g. [1].
+>>
+>> [1] https://elixir.bootlin.com/linux/v6.18.3/source/include/linux/i2c.h#L371
+> This is not a correct example as i2c is a bus, just like amba is...
+> Actually, I don't think the rework is necessary at all or this would
+> mean we need to rewor most of our existing subsystems.
+RTC ops callbacks receive struct device * as the first parameter. 
+Traditionally this is rtc->dev.parent
+(the physical bus device), but Rust drivers store driver data on 
+rtc->dev itself, so callbacks need &rtc->dev
+  to access it. We considered switching all callbacks to use rtc->dev 
+directly, but that would require modifying
+  182 RTC drivers and extensive testing/validation work. Instead, we 
+propose an alternative approach:
 
-You are allowing (though not requiring) 'interrupts' for Loongson-1B and 
-Loongson-2K0300. In patch 1, you made it required for other platforms 
-which is an ABI change. That's fine if it was a mistake and is truly 
-required.
+- Added RTC_OPS_USE_RTC_DEV flag (currently stored in rtc->features bitmap)
+- Created rtc_ops_dev() helper that returns &rtc->dev if flag is set, 
+otherwise
+    rtc->dev.parent. Default behavior (returning rtc->dev.parent) maintains
+    backward compatibility
+- Updated all rtc->ops->callback call sites to use rtc_ops_dev(rtc)
 
-Rob
+Best regard,
+Ke Sun
+>
+>
 
