@@ -1,129 +1,120 @@
-Return-Path: <linux-rtc+bounces-5758-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5759-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59F95D21C8C
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 00:49:07 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29436D21E05
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 01:42:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 849BA300C359
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jan 2026 23:49:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EC2883009D67
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 00:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D4A33D6DE;
-	Wed, 14 Jan 2026 23:49:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFA01A073F;
+	Thu, 15 Jan 2026 00:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICaNNi/e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RAE7WdvS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EC733A9E7;
-	Wed, 14 Jan 2026 23:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DA624B28;
+	Thu, 15 Jan 2026 00:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768434544; cv=none; b=PWmU6w1+HWk3kyyuZUMAc6yft4A119QA6M5eMrMeau4Sa8aSRELzAn0fIVzAV9o+EeTxL6iQJpsM5Y89xNSlRsbw0KZZncL4nQh5fi62cNBdSODcBrdY4YbnqRQfRLIvbBd4HPuRm2dzj8Zel4fbjbDzydWdQwLrAlG45/A+5NM=
+	t=1768437757; cv=none; b=Sf58izQ2dXVY8KsENloieTHWz32NyC2U1M8AHwOYQvJKCpMEKLKfIj2V/GwxsWcxF2YiuO8YvEeiOynpZTSQ/ojuwVZeYs2cpSlWTfqMDkkaKSQM68uqwv+W/qR1QoBHY2OaSYw8TAJqvEQkZuDwDOuj+SPE7dSchJYmSGzwJJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768434544; c=relaxed/simple;
-	bh=WrU0nd30cE62l7IFXBP/o4olc05IiEIAwIvtEDhil/Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=GmFKP5B87dfOn365qDNyAP5VuASyv1dCdiUwaDAukHuReK2T15cG+gIwfMWodttBYj5kMzYC+tXyWXD2ty820Ga2FIrNyNrMkhoamonAIm0ORkAcgECN+5OvWBxI512o7cu01y7lP/ujQo2LXRSfOi06uCfMxY3he4Qrr85iPaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICaNNi/e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71EE9C4CEF7;
-	Wed, 14 Jan 2026 23:49:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768434544;
-	bh=WrU0nd30cE62l7IFXBP/o4olc05IiEIAwIvtEDhil/Y=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=ICaNNi/eMbhz4vSJw9R1pyrpCUDSTG740pNOysXqGyiATrOZ/rz1AAKpQVWuOh/ee
-	 dzMHU2iHfnPLf944MXBlbKHZDwStU3QiaM0VjoDZeCBqudOuzIY2Swf4i1cije07WJ
-	 ZhqZV1N6lcse6O9zHt/SuPA0T/h6t+AUg1QQcqDrmOYup2/nRWlg6jmGzh0khrVaSJ
-	 XpMmcxFdhUEd6iYCDkkjq8ybiZ3EkHkCOawTjqtBVxS7fOuqQJOWX38/MXVujyJLrm
-	 7CDdkAUGPVkUVr4aS8jI3edyatgayjXPY7s5o2GXjHM4DXyu03LS13JTWAqpLWgVw0
-	 o/6iy55wXlvXw==
+	s=arc-20240116; t=1768437757; c=relaxed/simple;
+	bh=46ZrE0WMU4jUx8qBB1E6yFTcAcqcMpFbiNSws0WY6xE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SXHfA9RdDvl+OTUe5cHCYYCWzSbapvIBQ36G+99nisU3raaHOzsBJUMc35v2VaREJc5xik7WcycGLvdAD9yFy4Hv2ED6BRnyhpJUOBcgdmrc04XK5S75xPv/67Y2AnQ1fguU0fxeAfTSh3VuBlhxuGPK2zthoV+Jv+zmGYCYXrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RAE7WdvS; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768437757; x=1799973757;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=46ZrE0WMU4jUx8qBB1E6yFTcAcqcMpFbiNSws0WY6xE=;
+  b=RAE7WdvSi2dpIvU9TvzRTdpgMJU30e5U5mNIE885OlSRHVod19BYH2m0
+   qy03n7Crpav4AQmaPAckPWJrFhHWsWVVfcQzcIEs6x8LdBT3QabyClsMj
+   qX4YWJv9R4n/M+20TtjTtNqQ/YsDhwCPymcPWZXt1lYXtTkMb0b+iX+bd
+   nZ8dQvC57fK0FdsLBzc3ONEt4RuDrTvjUrkPE4Cdnq9obPsNQiSrHcjMS
+   wsEwt3CsZRuoXoZJApxzXwvMyTzpbgs6kjq4RA5iF1GZ9kcbD4BAGb/jB
+   C6hJvk8XgKx1+YcWD566y2cmax2rdgokL7K8nyigXeONdICcdYTdhXmmt
+   Q==;
+X-CSE-ConnectionGUID: NuL7KKmcSPeyQ8Lk/HoSBw==
+X-CSE-MsgGUID: 0Z7JCxrOQXmjWF8uAWFZmw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="92418345"
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="92418345"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 16:42:37 -0800
+X-CSE-ConnectionGUID: A342G+IkTnKFu9368MOmLg==
+X-CSE-MsgGUID: 4sccYvdRSD+XgoGS7afEUA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="235541231"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 14 Jan 2026 16:42:34 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgBRY-00000000HGq-0FRf;
+	Thu, 15 Jan 2026 00:42:32 +0000
+Date: Thu, 15 Jan 2026 08:42:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tomas Melin <tomas.melin@vaisala.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Michal Simek <monstr@monstr.eu>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Tomas Melin <tomas.melin@vaisala.com>
+Subject: Re: [PATCH v2 3/5] rtc: zynqmp: rework read_offset
+Message-ID: <202601150836.Yk8DcSZW-lkp@intel.com>
+References: <20260108-zynqmp-rtc-updates-v2-3-864c161fa83d@vaisala.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 15 Jan 2026 00:48:59 +0100
-Message-Id: <DFOPQ45F1X6O.12KGJHFREKNED@kernel.org>
-Subject: Re: [RFC PATCH v2 1/5] rtc: migrate driver data to RTC device
-Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Greg KH"
- <gregkh@linuxfoundation.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun
- Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-rtc@vger.kernel.org>, <rust-for-linux@vger.kernel.org>, "Alvin Sun"
- <sk.alvin.x@gmail.com>
-To: "Ke Sun" <sunke@kylinos.cn>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260107143738.3021892-1-sunke@kylinos.cn>
- <20260107143738.3021892-2-sunke@kylinos.cn>
- <DFJ5VOQOFLJO.1YI2NXC3B8P7L@kernel.org>
- <c834ef20-2d4b-46aa-94ed-310c077a4495@kylinos.cn>
- <DFJ99UZAU51H.JP1VEERVR81W@kernel.org> <202601081401239bbfff9d@mail.local>
- <f426f19d-a14c-4d9c-8587-2f7b4290024a@kylinos.cn>
-In-Reply-To: <f426f19d-a14c-4d9c-8587-2f7b4290024a@kylinos.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260108-zynqmp-rtc-updates-v2-3-864c161fa83d@vaisala.com>
 
-On Thu Jan 15, 2026 at 12:23 AM CET, Ke Sun wrote:
-> RTC ops callbacks receive struct device * as the first parameter.
-> Traditionally this is rtc->dev.parent (the physical bus device), but Rust
-> drivers store driver data on rtc->dev itself,
+Hi Tomas,
 
-This is not only about Rust. Class device private data should be stored in =
-the
-driver_data field of the struct device embedded in the class device in gene=
-ral.
+kernel test robot noticed the following build errors:
 
-> so callbacks need &rtc->dev =C2=A0to access it.
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on xilinx-xlnx/master linus/master v6.19-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Class device callbacks should just carry the class device itself, rather th=
-an
-the embedded struct device.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomas-Melin/rtc-zynqmp-check-calibration-max-value/20260108-223800
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20260108-zynqmp-rtc-updates-v2-3-864c161fa83d%40vaisala.com
+patch subject: [PATCH v2 3/5] rtc: zynqmp: rework read_offset
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20260115/202601150836.Yk8DcSZW-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601150836.Yk8DcSZW-lkp@intel.com/reproduce)
 
-> We considered switching all callbacks to use rtc->dev directly, but that =
-would
-> require modifying =C2=A0182 RTC drivers and extensive testing/validation =
-work.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601150836.Yk8DcSZW-lkp@intel.com/
 
-I don't know if it's that bad, the change would be trivial. You just need t=
-o
-repeat it pretty often. :) Tools like Coccinelle [1] can help a lot with su=
-ch
-refactorings.
+All errors (new ones prefixed by >>):
 
-> Instead, we propose an alternative approach:
->
-> - Added RTC_OPS_USE_RTC_DEV flag (currently stored in rtc->features bitma=
-p)
-> - Created rtc_ops_dev() helper that returns &rtc->dev if flag is set,=20
-> otherwise
->  =C2=A0 =C2=A0rtc->dev.parent. Default behavior (returning rtc->dev.paren=
-t) maintains
->  =C2=A0 =C2=A0backward compatibility
-> - Updated all rtc->ops->callback call sites to use rtc_ops_dev(rtc)
+   arm-linux-gnueabi-ld: drivers/spi/spi-amlogic-spifc-a4.o: in function `aml_sfc_set_bus_width':
+   spi-amlogic-spifc-a4.c:(.text.aml_sfc_set_bus_width+0x8c): undefined reference to `__ffsdi2'
+   arm-linux-gnueabi-ld: spi-amlogic-spifc-a4.c:(.text.aml_sfc_set_bus_width+0xac): undefined reference to `__ffsdi2'
+   arm-linux-gnueabi-ld: spi-amlogic-spifc-a4.c:(.text.aml_sfc_set_bus_width+0xcc): undefined reference to `__ffsdi2'
+   arm-linux-gnueabi-ld: drivers/rtc/rtc-zynqmp.o: in function `xlnx_rtc_read_offset':
+>> rtc-zynqmp.c:(.text.xlnx_rtc_read_offset+0xd0): undefined reference to `__aeabi_ldivmod'
+>> arm-linux-gnueabi-ld: rtc-zynqmp.c:(.text.xlnx_rtc_read_offset+0x15c): undefined reference to `__aeabi_ldivmod'
 
-Not sure if that intermediate step is needed, but it doesn't seem unreasona=
-ble
-to me.
-
-While eventually this is up to the RTC subsystem maintainer, from a driver-=
-core
-perspective this refactoring is encouraged:
-
-Drivers should generally distinguish between stuff that is stored in the pr=
-ivate
-data of the bus device and private data of the class device, e.g. since the=
-y
-have independent lifecycles and not all data might be relevant in all scope=
-s.
-
-Forcing drivers to also store the class device private data in the parent b=
-us
-device private data can be considered an anti-pattern.
-
-[1] https://docs.kernel.org/dev-tools/coccinelle.html
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
