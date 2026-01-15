@@ -1,139 +1,156 @@
-Return-Path: <linux-rtc+bounces-5763-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5764-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0A7BD24CF2
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 14:50:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30BF1D26061
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 18:02:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 09CAC301412F
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 13:49:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9AE40306EEC2
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 17:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE1D239E6FF;
-	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AFC52D238A;
+	Thu, 15 Jan 2026 17:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7e6QAJ4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwaUqa3N"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660130EF95;
-	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DFF3A35A4
+	for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 17:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768484983; cv=none; b=MFnJ5269ePCELYGKSn2Zd7ABE58JFVdJQWsjVpfWyAQI25t9bFo8Eoa0hFqk0lZjUF8Xu6Fy7qkLbDouyNRzWJenyzMpiAEnrU+VPRU/lOAKI2wTaJQxhIjThafrYlVfyBY2EWsR4TfXUYGnw+9nLq7oijn5UwLBOaINh3gKcL8=
+	t=1768496424; cv=none; b=ErOCaQKwIMkcRQE7Rx/+a/DMNub2O1h2YvbW7ktnRcaeWA/o96wCTkHnKpRNSSeV77oNbnwEsbv6BdMjHgXczEWjV4evVmiGx5eZw5mq9x/PBeVqUgp8xYVEsnoHROKqdhE4IW6aD6/+z2Z/PUD+zl7cR0ukiBVUeDTsDyXw75k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768484983; c=relaxed/simple;
-	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UcJbkkZErsXkElGBl80yYZBS7cAvD1duJ6Y487f+VD+vkoKxTXG67cq4Uj1nlydmGPGuaWZo8G/rXos242lNRjEU4xaLp0L6dqZfFzlpFpW3cQfVqlsJsM3dhHQ8XoG2x0av9voji1GkyUGKGA4YyRAWD00uKGXBwEZwnbYV3YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7e6QAJ4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46A6C116D0;
-	Thu, 15 Jan 2026 13:49:38 +0000 (UTC)
+	s=arc-20240116; t=1768496424; c=relaxed/simple;
+	bh=ZXnoivxVBUQa2U3uRATn/SAEZubNzQew1oqA4+pLE1I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PoeECos4HzWrJq2s+y3tLnO2CHGShWO62aa+9oDEB7PcZk9F+CF4pRskR5G9uYvkKeovpRMUhzQXG7uHKXUEjTeHS8Z4RCryemDRICQ4dl7WuXGyHEGP04au2BiQ3Oy2cES2Sd+9f83mZ9qjU+CubMBDfI5i+J+8KofRfzZij0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwaUqa3N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8D4C116D0
+	for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 17:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768484983;
-	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i7e6QAJ44Bf2JaIwbYSBiJpGbCRthi2VIqme1Ke1ACn2O5pMFo2NNQIQRSedVmmnC
-	 4KRmtTWiuXjx+zMOqoflPZ7CIjshWguMaz0biDqMMujSveVX2Jp/xlQXZicZi2dwiw
-	 fa+G9LKOcSF9JgrPyf2X9FgxE2sN7N8MMkVsPn1SZoZqcjc54W5rudRiKPyYoOZAZC
-	 Sz7VayUPxIYPaO1ACAL99ztt1iBUUQ9tawYYDfsEnmbSZJutfz0mWGRnjR3NtSc6Jj
-	 0a6z10JdqG3JfovaLgaXg2zg5zD64tPyxVGTRrShfqI8iLsk+kwXper360+6MEiig2
-	 BxYKjFdkDiwBA==
-Date: Thu, 15 Jan 2026 13:49:35 +0000
-From: Lee Jones <lee@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [GIT PULL] Immutable branch between MFD, Clk, GPIO, Power, Regulator
- and RTC due for the v6.20 merge window
-Message-ID: <20260115134935.GD2842980@google.com>
-References: <cover.1765804226.git.mazziesaccount@gmail.com>
+	s=k20201202; t=1768496424;
+	bh=ZXnoivxVBUQa2U3uRATn/SAEZubNzQew1oqA4+pLE1I=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KwaUqa3N5MzyHETdvT2mPcVS8jRrm0YeaLIe6ZPK+DahEERMWC0gPniHyNpLbgjro
+	 Sk986J+djKhtr6EEt12xJL87pfgCdmMegeYjPYEgDNPmyL8FGqv+6ucl48fl+w1me1
+	 zo9ApbdcdKVfWx2jl73W0IR+PPKiocd9s99nLT1BImeEhoupBo/XF3CFkMxBruh693
+	 blCAKLJiWo6CDoaxQGFQ8T7u2iRgKRpOFAmlXmG0KuSw7ffJd0/XbuxduIUyJirb6u
+	 sikbja9QjcJru7ukHpAogSPQynD0INALMm2KRK9MIcrpGiVkAvkjJKsN9gWiR/Jx+k
+	 IvLbSnxVDQBeA==
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b8768225837so170729266b.2
+        for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 09:00:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXdIzrB3cZRRahFHwHvxa3pXwZy4N2NZY7TH02sGC/mZPYXvKwKYAZlAbIErfNmit2G6f6Z5ttxt24=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLHM0nFL9uV38iJB1YVd+Ph+KhYvCz5c2mXDCRSHmmQKA0iL7q
+	c18bpJBIFx+CL636Kgbu3HcCCQI+SgimlyJz7Ws3+sgALWOgXcbvk0jlOaXyBA7rwS0cf6mOeUl
+	oMTT4w7Hj8zB2oHfdLGRmpcJBrJ4xaw==
+X-Received: by 2002:a17:907:a48:b0:b87:2f29:2062 with SMTP id
+ a640c23a62f3a-b8792dcdf4amr22448466b.19.1768496422244; Thu, 15 Jan 2026
+ 09:00:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
+References: <cover.1767663073.git.zhoubinbin@loongson.cn> <8876bebaf08121bb5edd2500f5289284b75df011.1767663073.git.zhoubinbin@loongson.cn>
+ <20260106191314.GA2568583-robh@kernel.org> <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
+ <20260114205855.GA3190839-robh@kernel.org> <CAMpQs4+v=KhLW_Cru801p06vmpjJFotvyDfKBALg6mbwxFU5-A@mail.gmail.com>
+In-Reply-To: <CAMpQs4+v=KhLW_Cru801p06vmpjJFotvyDfKBALg6mbwxFU5-A@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 15 Jan 2026 11:00:10 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJVD3o41Zch6fMY6s-qmyd9cQg6CJ+iya+3kdtuqvNMoA@mail.gmail.com>
+X-Gm-Features: AZwV_QhH7fbAW1uy00b0PiEt9cxyR0HtWiRhvd3H6Ah7cjw_EUJkNE0JYevgxT8
+Message-ID: <CAL_JsqJVD3o41Zch6fMY6s-qmyd9cQg6CJ+iya+3kdtuqvNMoA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dt-binding: rtc: loongson: Document
+ Loongson-2K0300 compatible
+To: Binbin Zhou <zhoubb.aaron@gmail.com>
+Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
+	Xiaochuang Mao <maoxiaochuan@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-mips@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Enjoy!
+On Thu, Jan 15, 2026 at 1:39=E2=80=AFAM Binbin Zhou <zhoubb.aaron@gmail.com=
+> wrote:
+>
+> Hi Rob:
+>
+> Thanks for your reply.
+>
+> On Thu, Jan 15, 2026 at 4:58=E2=80=AFAM Rob Herring <robh@kernel.org> wro=
+te:
+> >
+> > On Wed, Jan 07, 2026 at 09:22:41AM +0800, Binbin Zhou wrote:
+> > > Hi Rob:
+> > >
+> > > Thanks for your review.
+> > >
+> > > On Wed, Jan 7, 2026 at 3:13=E2=80=AFAM Rob Herring <robh@kernel.org> =
+wrote:
+> > > >
+> > > > On Tue, Jan 06, 2026 at 09:33:32AM +0800, Binbin Zhou wrote:
+> > > > > Add "loongson,ls2k0300-rtc" dedicated compatible to represent the=
+ RTC
+> > > > > interface of the Loongson-2K0300 chip.
+> > > > >
+> > > > > Its hardware design is similar to that of the Loongson-1B, but it=
+ does
+> > > > > not support the alarm feature.
+> > > >
+> > > > But you are requiring the interrupt property for it? Isn't it no al=
+arm
+> > > > feature means no interrupt?
+> > >
+> > > Yes, the `interrupts` attribute is not required without the alarm fea=
+ture.
+> > >
+> > > But my judgment condition is `not contains` (added in patch-1[1]).
+> > > There are only a few SoCs on the Loongson platform that don't support
+> > > the RTC alarm feature, so I think `not contains` looks cleaner and
+> > > simpler.
+> >
+> > I should have said allowing rather than requiring.
+> >
+> > You are allowing (though not requiring) 'interrupts' for Loongson-1B an=
+d
+> > Loongson-2K0300. In patch 1, you made it required for other platforms
+> > which is an ABI change. That's fine if it was a mistake and is truly
+> > required.
+>
+> Emm, it's true that for the binding interface, Patch-1 is indeed an
+> ABI change, but it's more of a fixed patch.
+>
+> Throughout all existing Loongson DTS{i}, RTC nodes decide whether to
+> include the `interrupts` property or not based on the alarm feature.
+> Loongson-1c rtc nodes do not include the `interrupts` attribute [1],
+> while all other Loongson chip rtc nodes do [2].
+>
+> So, while this is an ABI change, I don't think it affects existing
+> Loongson DTS{i} rtc nodes. Also, it more accurately describes the
+> features of the corresponding RTC device.
+>
+> Therefore, I would like to clarify it in the Patch-1 commit message of
+> the next patch version and fix the error in the commit title:
+> dt-binding -> dt-bindings.
+>
+> How do you feel about that?
 
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+That's fine, but you also need:
 
-  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+else:
+  properties:
+    interrupts: false
 
-are available in the Git repository at:
+So that on the 2 platforms without an interrupt(alarm), 'interrupts'
+is not allowed.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-clk-gpio-power-regulator-rtc-v6.20
+With that, you might as well just drop the 'not' and flip the 'then'
+and 'else' schemas around.
 
-for you to fetch changes up to e39951f8ad500648b9ab132f8042d6e47da441cf:
-
-  MAINTAINERS: Add ROHM BD72720 PMIC (2026-01-13 12:50:37 +0000)
-
-----------------------------------------------------------------
-Immutable branch between MFD, Clk, GPIO, Power, Regulator and RTC due for the v6.20 merge window
-
-----------------------------------------------------------------
-Matti Vaittinen (17):
-      dt-bindings: regulator: ROHM BD72720
-      dt-bindings: battery: Clarify trickle-charge
-      dt-bindings: battery: Add trickle-charge upper limit
-      dt-bindings: battery: Voltage drop properties
-      dt-bindings: mfd: ROHM BD72720
-      dt-bindings: leds: bd72720: Add BD72720
-      mfd: rohm-bd71828: Use regmap_reg_range()
-      mfd: rohm-bd71828: Use standard file header format
-      mfd: rohm-bd71828: Support ROHM BD72720
-      regulator: bd71828: rename IC specific entities
-      regulator: bd71828: Support ROHM BD72720
-      gpio: Support ROHM BD72720 gpios
-      clk: clk-bd718x7: Support BD72720 clk gate
-      rtc: bd70528: Support BD72720 rtc
-      power: supply: bd71828: Support wider register addresses
-      power: supply: bd71828-power: Support ROHM BD72720
-      MAINTAINERS: Add ROHM BD72720 PMIC
-
- .../bindings/leds/rohm,bd71828-leds.yaml           |    7 +-
- .../devicetree/bindings/mfd/rohm,bd72720-pmic.yaml |  339 +++++++
- .../devicetree/bindings/power/supply/battery.yaml  |   33 +-
- .../bindings/regulator/rohm,bd72720-regulator.yaml |  148 +++
- MAINTAINERS                                        |    2 +
- drivers/clk/Kconfig                                |    4 +-
- drivers/clk/clk-bd718x7.c                          |   10 +-
- drivers/gpio/Kconfig                               |    9 +
- drivers/gpio/Makefile                              |    1 +
- drivers/gpio/gpio-bd72720.c                        |  281 ++++++
- drivers/mfd/Kconfig                                |   18 +-
- drivers/mfd/rohm-bd71828.c                         |  555 ++++++++++-
- drivers/power/supply/bd71828-power.c               |  160 ++-
- drivers/regulator/Kconfig                          |    8 +-
- drivers/regulator/bd71828-regulator.c              | 1025 +++++++++++++++++++-
- drivers/rtc/Kconfig                                |    3 +-
- drivers/rtc/rtc-bd70528.c                          |   21 +-
- include/linux/mfd/rohm-bd72720.h                   |  634 ++++++++++++
- include/linux/mfd/rohm-generic.h                   |    1 +
- 19 files changed, 3127 insertions(+), 132 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
- create mode 100644 drivers/gpio/gpio-bd72720.c
- create mode 100644 include/linux/mfd/rohm-bd72720.h
-
--- 
-Lee Jones [李琼斯]
+Rob
 
