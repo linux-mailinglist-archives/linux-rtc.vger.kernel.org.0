@@ -1,196 +1,202 @@
-Return-Path: <linux-rtc+bounces-5765-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5766-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA850D289D0
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 22:06:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D9F1D298EF
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Jan 2026 02:16:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C14AC30393DB
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jan 2026 21:05:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 349983027E16
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Jan 2026 01:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA8C327210;
-	Thu, 15 Jan 2026 21:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D5331196D;
+	Fri, 16 Jan 2026 01:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LcyP4ZgH";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SkH5SnJ3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WGAdR3nK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5BF325725
-	for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 21:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B8832939A
+	for <linux-rtc@vger.kernel.org>; Fri, 16 Jan 2026 01:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768511155; cv=none; b=WkKHt7suwJBcMhjRs9yryd1rd6p3MhpXMuld7qKWzfTm/ouZ8z67C6GlwDRQO7DpLG+Yzh/dqKubSd/xFsGbX5CQcAIUeQ5Z2D3qPV5pY3cTqNfjdyX+GrHpYlsRJSr9qUg6ofBnxel75TRgFhDd+58zLwERvja9qFT8vI7ZUds=
+	t=1768526119; cv=none; b=cHqdBQflcN17qr4/tv8xYXbH+5H48NN38Jf4PErVDDf+CuLQVJIgeR28/t6ShmygmHlnB8f/iS9K/DP4OKEh2rRcNuRRngkku0H0L321rt8tdcA4bmaeLo77ktQ+03WdHSgOcKrEbd1UIJVfkt3dvqi0F9CldZiKmwNBZexk+Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768511155; c=relaxed/simple;
-	bh=ENmGoObji0+Hq4MublklfZhpzGxYbI0JiS47cctdDv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MroEJwv8eLodYEE0y1aPqpk0C5AeJNw4kzdAWFAjcs+KBFMqU6XbcF2D3Ki9nTTdq2SxDLTHawMW2tn7eF3OJA+Qe+TyJcx3cMZtbO6vMLoUN+wKvB3NWg4WqiEmLHwvx3orLhQlm3f2efbfQ/URQxNuQWdmwtirv9pS9XwyOcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LcyP4ZgH; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SkH5SnJ3; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60FFYM1F2866863
-	for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 21:05:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	WLhM43u7KTCNMftZSAW1g9y9SRicJ/aCzV4l0MaawTE=; b=LcyP4ZgHar0lfCNc
-	erfRehhLm+Jly3LD5YZe+gnbNWLMPpKpCHqXWqbxOusksc+bO9tXicyW7jh//NJi
-	usIGfOEjO9AEv9gpfGj/98YCcHfrTukl/zYmQLydJsdQKttHrSPAJdyOP2ZwhZgo
-	JBQMEwdzMGLiVdBk1W/SXyZVvNdc5NRZT+FM7qpEx7/7NvdPOy5frXysA8s0gU8J
-	ZqNYay2ewVXzcLHlbBz3ecFwu6edWv5ajyjydAsDG19/Yj+LuCA7AN0opCmt5loq
-	k4QJeBZL720AEGIBMtghVzSNUa8Qz2OgpGPhh0XGju56X61amGvdnRG64wNypL3C
-	6E2Taw==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bptu2jfg5-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 21:05:51 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8c52f07fbd0so603665685a.2
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 13:05:51 -0800 (PST)
+	s=arc-20240116; t=1768526119; c=relaxed/simple;
+	bh=ROU4R67s950GbA7GHKQWHktozeFvbhpGduCMWOOF/Io=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VjL6bpkN1IXj+GkF4PFPdPlVk0qW62fJRQUoQtj7dSIiepmAHPopT3nQg0lG6ejrBo7t5M03hKtT5vYWmOxL9cimbKxMaT/6eZOJFP8LkB1W2Q5+HxHuRWPLOadYWEIfIWt5Tq9D4+UnRl1wYoLRXV7jLJt8rutc37+dvKDRL4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WGAdR3nK; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64bea6c5819so2591062a12.3
+        for <linux-rtc@vger.kernel.org>; Thu, 15 Jan 2026 17:15:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768511151; x=1769115951; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1768526105; x=1769130905; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WLhM43u7KTCNMftZSAW1g9y9SRicJ/aCzV4l0MaawTE=;
-        b=SkH5SnJ379fWvURX63Vxc3HKwmbQ79q3DlQeJxE9g4FlrriS9zaYSuSuPMlmUCV4QK
-         DpRNVNewpczX1tlQzgDUQOZnvKg+Nphjndr5bm9yha71Zjs5lJsVbkaqMfRzVKFh+xgX
-         X/fcOZiCyUht3n94f+7rX0GtudAaecYxgAQHimpeo0VQKQOOj2CVRnvJTLDcp7nVz4Jl
-         oAKptckF98NDSVGF0+cRhCVSG7cu4FJ5noowFbqGQDYohVwmWbAF92FGZ8t5J648GMHC
-         Ckf8ygMXs3kivXkLEAwByI1qSB9WDyHuy6J5s/SCjoxa50JQWtGsy+Uka2rBOLBVnrL2
-         pbVw==
+        bh=KS5A6hdws9JgSg5NdQLN8SLz4AQmGLJR4UdFXen0ylY=;
+        b=WGAdR3nKFmzxe9lIyP+fL2kMNvgUvbY6wKC8CqaQzX82a+RL56V18+r/CLd1LqW9Hb
+         x/uiER+JeOClJ0qZ5qc4VoI8MkTyRRB2tC+8mcZTqlNG3UmszeTRYshboIw6Xb4HSSjj
+         MHv/tizZeQGg7VKyEUZIdnC8xV/AWcOhjSZwuCd/c1EhEju/xP01UuqF5Se8yjfBsWWz
+         Ovy2pth/gNaiUsVj/nYmxR7A72aWwI9fbT1cD5KLdvIDZe6J/DS1kM9dU5iW7rSFK9Yz
+         KY2ZHf8MK8VWXesRwdMUpgbazedJKdA6rg3jAlR3M3WoQ51EWlIhCSAdmroHSvzU0JnD
+         hUig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768511151; x=1769115951;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1768526105; x=1769130905;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WLhM43u7KTCNMftZSAW1g9y9SRicJ/aCzV4l0MaawTE=;
-        b=OOk+zhpGwp6SwTm5P0q2TgRb/l475gvnKhFsX+zUtdcVUE9DGLK+CfAI/LOE9XxZJ0
-         mbseI/ugNax6tx2Myy5DCvAJMO9JoKUnWBDb4ngeIfdDBqW8dGKN0IyPO9EW7hPwZdPB
-         kqg9NZpVlN5gKwAy1bHBuG1kP2YhxhJnWF15A8VKBjuMKNYmYRfoAGxLcPMx/Pn8ZbnN
-         0XTA1LdAPRXzMV2kld3ehALeiJwhJv8nIdFqsf5lIhB70bBRJQrVKKSXx0I8VeDhFllb
-         fQ6GztFuknM/0ZHR/0xv/RoGhewhOL3WZ1TfC08erfeDuyN7hgaDZo4pHjkcQqmgfGoI
-         S8Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0Tbo6J1qeOqia0rvuhiGK9qh708RZSFfagqBLLVSeXszXkD3bRcwDKrjIioMZg4wVorpFP2WxNpA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwycOgmUs+d/JGCtlw7knyNSonAX2tPZn87mnhrxV/LzmvhGAV
-	q57V+OB983RlQJM1dEXpgwJ+9v1eAqQR3JuNDeAJaUi4f8ksIazSKYVpE1qM2LdQvzVivWmE+WD
-	vzEFgCqvJ+oltlVx0mUfyngKZLttz1G16m2sowzEnw9emI/0LViO4SzxVhgwriVs=
-X-Gm-Gg: AY/fxX5iyQtK2JeQW/ar6NW8BjXP7jpPrzTWZ5QmYrE6xRllsvcWK3Pq7s0Y4ygq2BV
-	8VwNfZJojkUafozjSJsJLs706vODdYAuqlWKgLSW9Q+fG0YZ3BlHSllWp5oEprTML6RPaokE5Jb
-	BFSSoc72v9OZGLg4E/CNNiKl0xXYPmYUgQaVZ97/5hGEpbstOiIci2RM5A+T1Zj8bMMqJPw9efK
-	qfsYWLf3zUxmQdAYMfA5hbO629NysLIu+WtjNZn+rJ0Q/dU1W3KlK/6wAxqVqAfXV95cDavfYIh
-	tpoV6rbfUDkdvFMGAXIRZRZvDDt5tMk60AJNGEHv/jBc0eM9Mo25AzVZPWUYt/DrCIr3GPOzWHV
-	VEXqqNVSTymUAjeJZBD3yqKw9M0DmfJoSn5eNYiegpyh61sMAzErHRtbJIv9dXaEpsXvq98VSGE
-	gR1yVB33mxDstdN4jUeQ41EWo=
-X-Received: by 2002:a05:620a:1723:b0:8b2:dfda:66c4 with SMTP id af79cd13be357-8c6a68d2f67mr120080485a.8.1768511150922;
-        Thu, 15 Jan 2026 13:05:50 -0800 (PST)
-X-Received: by 2002:a05:620a:1723:b0:8b2:dfda:66c4 with SMTP id af79cd13be357-8c6a68d2f67mr120072385a.8.1768511150340;
-        Thu, 15 Jan 2026 13:05:50 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59baf397672sm155740e87.61.2026.01.15.13.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 13:05:49 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen Wang <unicorn_wang@outlook.com>,
-        Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev,
-        Chen-Yu Tsai <wens@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-actions@lists.infradead.org,
-        Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Jacky Huang <ychuang3@nuvoton.com>,
-        Shan-Chun Hung <schung@nuvoton.com>, Vladimir Zapolskiy <vz@mleia.com>,
-        Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-        Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Michal Simek <michal.simek@amd.com>,
-        Rob Clark <robin.clark@oss.qualcomm.com>,
-        Dmitry Baryshkov <lumag@kernel.org>, David Airlie <airlied@gmail.com>,
-        Simona Vetter <simona@ffwll.ch>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH 00/27] clk: remove deprecated API divider_round_rate() and friends
-Date: Thu, 15 Jan 2026 23:05:48 +0200
-Message-ID: <176851027322.3933285.17869583744437773979.b4-ty@oss.qualcomm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
-References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
+        bh=KS5A6hdws9JgSg5NdQLN8SLz4AQmGLJR4UdFXen0ylY=;
+        b=SpHZHP1fZqPfUjPxhMGB9rJcFeWAEpB1dXb8+2TwOuOVTqgh1dly1TC9yX8Y3u2szp
+         tU8fqVpf1l78Suyo8FtcV7mUlVP3mEn7QWZU29gCkG61HjbciqQlb5qAmFmjVA49yCG3
+         ZxMD/KUpy5vn0HRo8lPETn5slG1Sl7B4/Oh8cE3xPq+BSRn4Avu0FKjOPKuD/iN+nNdT
+         BzCPvmaop2TuHED0w4TEXUdvDWSXA8jaMCTwXydNhYI1ToTQmOhu5BMFRNlxxJjtMYkB
+         i8Azbs2BRcN0rU8AK/MAIhjYk6Y0dH5QQ21Tyl5Zta5RIOis8pB3YQPy+JNg1TNMcT9N
+         b7hg==
+X-Forwarded-Encrypted: i=1; AJvYcCV7pbV5YTjT3rE3tWwxzwqEMUUq6BBQDAiOTH6f0SYDxPpdKfp9CKurst+Q9uXRUPdHHiIaIvgdAE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzgwq5HmuNivysC2fHwY+IbDCe7J7VImWC6yHmgLsQ9v+Dp51DP
+	67e1Fq7gXp/4ERF4ClKt2lTHl7auRLyQFI3R24NwdAE4CxhKMJOiZ2eKCMMak057GCW6FFr17Wc
+	lISoYcQgeoWvxcK5GlXLOzVfDAhgxRRA=
+X-Gm-Gg: AY/fxX48TyabHlKyhLs4qGZ/O5PtErxT2iLRBy6CpJuCH48H7OxQySle6IUOCKk7IC7
+	Lvf/QOlQjBKgzxlkmetBCy95eKS1vQrf3CX5Oc3q8XhoXfva+WXwRzc1PKJEsPo4Bo75TNcBO+M
+	Wtl1igJ9oERT62wxQ5oeOna4Yheuj2N5RXRBMLAy6NTK65/t3J4alov8WzA9i8bAzLcnqPknHUj
+	vULiCui2ZooQUSO6TNWWEBw7Me3t1euAqQzd6Hwxy7w6pcSn+qPwN08/ZOtpLrunxcq+jSRAUp1
+	1MPJu5k=
+X-Received: by 2002:a05:6402:51c9:b0:645:1078:22aa with SMTP id
+ 4fb4d7f45d1cf-65452acb341mr974597a12.19.1768526105360; Thu, 15 Jan 2026
+ 17:15:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDE2NSBTYWx0ZWRfX2dZdjraYqkNK
- 1wswPcQa+dv2du3CsUKDWf556VnFD8og9BLYm6k06TvrZ4LA4iH7nUxqTx4vCpIVGd/Z3G5wRew
- OMn/gHUGs/zoteT0vagcE+VjeHmTpmAiwe4SahaX0m479j8UBEM0Z/jEGJtySJoG5TeqZ0/fvQK
- V3zJ/U+6LdF7fuXFD2k0RN5y4q304bZC2UUNiFcPZNUq20uUgEwD+IIMpEm2WTo4zSuEx201owr
- DciinNKbadc2bsi5LhbqgcqSjsw2gx9/OeOhU8HszYV9s9v8Sym4ztOd0T1B663bLWBLrzdW0F9
- 5R1mDj67bp9AHolJdVl/oDuJ7T0kP56HydkVYLIewQWWrEf0uBxHZzwAuXAQswlPuW5iUU4l7Jn
- LnDK1iIqzYXWEYQ4S4/T4TJdd6stp2Zhv6W6ObBJSlDQD5iIN8bZmC4DSTYxvk51BG0eo5LIPVW
- Jeh5HHczXKBkboU2Cmg==
-X-Proofpoint-ORIG-GUID: B-jkBvDELYFaIVZBp3F_dQwqrWcqNpJt
-X-Authority-Analysis: v=2.4 cv=W6Y1lBWk c=1 sm=1 tr=0 ts=696956af cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=e5mUnYsNAAAA:8 a=whp_R4xS9ENlu3RGya8A:9 a=QEXdDO2ut3YA:10
- a=bTQJ7kPSJx9SKPbeHEYW:22 a=Vxmtnl_E_bksehYqCbjh:22
-X-Proofpoint-GUID: B-jkBvDELYFaIVZBp3F_dQwqrWcqNpJt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-15_06,2026-01-15_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 impostorscore=0 malwarescore=0 clxscore=1011
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601150165
+References: <cover.1767663073.git.zhoubinbin@loongson.cn> <8876bebaf08121bb5edd2500f5289284b75df011.1767663073.git.zhoubinbin@loongson.cn>
+ <20260106191314.GA2568583-robh@kernel.org> <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
+ <20260114205855.GA3190839-robh@kernel.org> <CAMpQs4+v=KhLW_Cru801p06vmpjJFotvyDfKBALg6mbwxFU5-A@mail.gmail.com>
+ <CAL_JsqJVD3o41Zch6fMY6s-qmyd9cQg6CJ+iya+3kdtuqvNMoA@mail.gmail.com>
+In-Reply-To: <CAL_JsqJVD3o41Zch6fMY6s-qmyd9cQg6CJ+iya+3kdtuqvNMoA@mail.gmail.com>
+From: Binbin Zhou <zhoubb.aaron@gmail.com>
+Date: Fri, 16 Jan 2026 09:14:52 +0800
+X-Gm-Features: AZwV_QhUFfli37YKjCtOZoZJEFk_EN3-i1wZz_UWr78liB25i8-qldPEHYjcGIE
+Message-ID: <CAMpQs4JuGXvNA+gbo3LHeqEw+JZ2JNnmgfLZZQNV+A62e+psdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dt-binding: rtc: loongson: Document
+ Loongson-2K0300 compatible
+To: Rob Herring <robh@kernel.org>
+Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
+	Xiaochuang Mao <maoxiaochuan@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
+	linux-mips@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 08 Jan 2026 16:16:18 -0500, Brian Masney wrote:
-> Here's a series that gets rid of the deprecated APIs
-> divider_round_rate(), divider_round_rate_parent(), and
-> divider_ro_round_rate_parent() since these functions are just wrappers
-> for the determine_rate variant.
-> 
-> Note that when I converted some of these drivers from round_rate to
-> determine_rate, this was mistakenly converted to the following in some
-> cases:
-> 
-> [...]
+Hi Rob:
 
-Applied to msm-next, thanks!
+Thanks for your reply.
 
-[24/27] drm/msm/dsi_phy_14nm: convert from divider_round_rate() to divider_determine_rate()
-        https://gitlab.freedesktop.org/lumag/msm/-/commit/1d232f793d4d
+On Fri, Jan 16, 2026 at 1:00=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Thu, Jan 15, 2026 at 1:39=E2=80=AFAM Binbin Zhou <zhoubb.aaron@gmail.c=
+om> wrote:
+> >
+> > Hi Rob:
+> >
+> > Thanks for your reply.
+> >
+> > On Thu, Jan 15, 2026 at 4:58=E2=80=AFAM Rob Herring <robh@kernel.org> w=
+rote:
+> > >
+> > > On Wed, Jan 07, 2026 at 09:22:41AM +0800, Binbin Zhou wrote:
+> > > > Hi Rob:
+> > > >
+> > > > Thanks for your review.
+> > > >
+> > > > On Wed, Jan 7, 2026 at 3:13=E2=80=AFAM Rob Herring <robh@kernel.org=
+> wrote:
+> > > > >
+> > > > > On Tue, Jan 06, 2026 at 09:33:32AM +0800, Binbin Zhou wrote:
+> > > > > > Add "loongson,ls2k0300-rtc" dedicated compatible to represent t=
+he RTC
+> > > > > > interface of the Loongson-2K0300 chip.
+> > > > > >
+> > > > > > Its hardware design is similar to that of the Loongson-1B, but =
+it does
+> > > > > > not support the alarm feature.
+> > > > >
+> > > > > But you are requiring the interrupt property for it? Isn't it no =
+alarm
+> > > > > feature means no interrupt?
+> > > >
+> > > > Yes, the `interrupts` attribute is not required without the alarm f=
+eature.
+> > > >
+> > > > But my judgment condition is `not contains` (added in patch-1[1]).
+> > > > There are only a few SoCs on the Loongson platform that don't suppo=
+rt
+> > > > the RTC alarm feature, so I think `not contains` looks cleaner and
+> > > > simpler.
+> > >
+> > > I should have said allowing rather than requiring.
+> > >
+> > > You are allowing (though not requiring) 'interrupts' for Loongson-1B =
+and
+> > > Loongson-2K0300. In patch 1, you made it required for other platforms
+> > > which is an ABI change. That's fine if it was a mistake and is truly
+> > > required.
+> >
+> > Emm, it's true that for the binding interface, Patch-1 is indeed an
+> > ABI change, but it's more of a fixed patch.
+> >
+> > Throughout all existing Loongson DTS{i}, RTC nodes decide whether to
+> > include the `interrupts` property or not based on the alarm feature.
+> > Loongson-1c rtc nodes do not include the `interrupts` attribute [1],
+> > while all other Loongson chip rtc nodes do [2].
+> >
+> > So, while this is an ABI change, I don't think it affects existing
+> > Loongson DTS{i} rtc nodes. Also, it more accurately describes the
+> > features of the corresponding RTC device.
+> >
+> > Therefore, I would like to clarify it in the Patch-1 commit message of
+> > the next patch version and fix the error in the commit title:
+> > dt-binding -> dt-bindings.
+> >
+> > How do you feel about that?
+>
+> That's fine, but you also need:
+>
+> else:
+>   properties:
+>     interrupts: false
+>
+> So that on the 2 platforms without an interrupt(alarm), 'interrupts'
+> is not allowed.
+>
+> With that, you might as well just drop the 'not' and flip the 'then'
+> and 'else' schemas around.
 
-Best regards,
--- 
-With best wishes
-Dmitry
+OK, I'll fall back to the writeup in the v1 patchset as follows:
 
+if:
+  properties:
+    compatible:
+      contains:
+        enum:
+          - loongson,ls1c-rtc
+          - loongson,ls2k0300-rtc
 
+then:
+  properties:
+    interrupts: false
+
+>
+> Rob
+
+--=20
+Thanks.
+Binbin
 
