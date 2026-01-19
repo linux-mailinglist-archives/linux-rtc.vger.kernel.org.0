@@ -1,709 +1,220 @@
-Return-Path: <linux-rtc+bounces-5780-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5781-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A654D3A28F
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 10:13:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8F6D3A38F
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 10:45:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C551303C2BA
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 09:12:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8F2B230004FC
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 09:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6D3352C3E;
-	Mon, 19 Jan 2026 09:12:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B9B302773;
+	Mon, 19 Jan 2026 09:45:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kdLl8c72"
+	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="1vaY1L0N"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020092.outbound.protection.outlook.com [52.101.84.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E14A34D4D3
-	for <linux-rtc@vger.kernel.org>; Mon, 19 Jan 2026 09:12:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768813954; cv=none; b=Y7mb8WbrQVC6vBh+iAPae8Yb0axJWE55azyF7w7lhkCfvLuMl/57bNIFqlK9gPR6k1LdfyDldj5LoYBZXEq2Qif/1w8376fUt+BUgXB3awuTyto84WxtnjYTdHeRMMtr3LTN9UbObfEAZnI4IQvU1AsFqLQxd4IDJ8vPNmcSlmE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768813954; c=relaxed/simple;
-	bh=n1Xeq2dsWrUG4EO5/K9HCio/Izm/OChR3nCD8TAYpk4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oDFcL52y9nuWIrM1gpjYAik25SZYxHd5El/kkpj/ak+zaHnUGVr7xchr0es82XfCKUGiX6smyfwrWdjog0E8FysaRIBTXRcIfp362JdcGXzkiwYHxRyVLmQ7sAw4LiLLCuuOhcgLuOShtVBzQaXWt6hCotm64Aj2jtDI1ZV+sJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kdLl8c72; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a0834769f0so27890405ad.2
-        for <linux-rtc@vger.kernel.org>; Mon, 19 Jan 2026 01:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768813952; x=1769418752; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U3HgVHmlXR+QxCl9oRpYyJkpObbkAA1ybD0ABxyDhUM=;
-        b=kdLl8c72qNli/3bTST1gnsyAmEMU2B9E6INUT/3cdBZELobtcYEtmm85MeJ1ukjVsL
-         71FitvlMQzF025zQZ1mdBY15Ybol+mpKRcURH+kNt1eqfimmkgxNazi87QCQmO+eG52q
-         p/kKDPSVQNssk9rR6PmiihSct01efpf5VTeVHTQWWoxgDIYofawpOgkJiPFfjtYwAk67
-         taEZwhsuWcDKpN855xy8/mkRg2MAV+XoR+u5/DfrJh+Jj8xAMI0m89gsud31qa/BEhNY
-         H3txq3C5wKTI4IW35ChraGUTagSaogz5z3QvXonmhOdOJUjTYNBa1yHFfZsV6nIRFO+/
-         rTOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768813952; x=1769418752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U3HgVHmlXR+QxCl9oRpYyJkpObbkAA1ybD0ABxyDhUM=;
-        b=eJtf00bsagC3i3YrNzLn3eGbFUC9OqibKwNMktc06H5uDA8CFu/UAGjb3FiOKHZrfQ
-         nkCwoXmrBG8CJtw6fdEyCtvEXN7M3WvxnhQU2VFdzjmR3wrRxqUCsb4Qy+TeMcazxjdJ
-         GKWP/6SpZZAmBjD8nDMTF14RcLqoEKZbjYy5vz+hDvjSUr6NAmdcH3WjSsZTcS5+V8Ag
-         E0lGcEehAY+KZ8VK3qi6Xl8mcrNNQDxM0pzHikPuzEIPXMT3Khc7GSyBB4BuysGLr+KJ
-         trg+2O8d5CaG7h2qqRvSHjFF6GwJHzAX/ykxaAzzWU7C0z1GsRgdJHpcCy9KroIM9DGm
-         Vq5Q==
-X-Gm-Message-State: AOJu0Yze/dvgB+MR5Hgt63RLHVbuz3SaliZPfIq5ZtPDkvAbALdBdUTm
-	mKPH1e1u+VRrbYs/KYgTfy62A4+QRp3WjRwMMVe8YZ4TOi2vjaiSlGdX
-X-Gm-Gg: AZuq6aIuDu639rvrhCAcLbowrcq9K4ditO8zEqbEexlcuSHYGyM8y0A3xXOlunWsIJV
-	lzl4neqdLGcqWTtyQr46rZnriItqhioWfa/LSshXEhv50tvNm0QDVTRKo2ZzJgf+Hf5nVKSWfDD
-	wlNgRiZQsnjXgNChZR9zkBkJc8zywwILB3a7DnsBqo/KvkbXo8iyPR3Q7av11wZhLbvU3gJpAoR
-	BVnZ/66K1oNhI+/ijsmmLynKqXnS2PfdNUPRb8PJLjlzUOPoBAlrjpS5wYXZ6YcOKrLkwnUS2UY
-	wPzvpgXC+GgUyWDZSq4kydcgagDJht2b+IFDNIEaSL/I2IG+qcUlXj12+gZSXZnyHMXjh1OMvSV
-	ZMdrIgSisUxEyGVVt/0FvnqSB3IYc+W7Th+rQQ+j2B0Lj8c4C45oZb9jtu884exaFxndFm4r7K0
-	6eD7+4RdXRk+rrSZd2eZkAyfAxDe6Wcyf1oZ+i
-X-Received: by 2002:a17:902:e745:b0:2a0:ccee:b350 with SMTP id d9443c01a7336-2a718956cbfmr103572425ad.58.1768813952012;
-        Mon, 19 Jan 2026 01:12:32 -0800 (PST)
-Received: from [10.0.10.3] (104.244.95.48.16clouds.com. [104.244.95.48])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7193dbb37sm87107965ad.46.2026.01.19.01.12.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jan 2026 01:12:31 -0800 (PST)
-Message-ID: <54d8007e-c54e-44a2-8cfe-df10495cda80@gmail.com>
-Date: Mon, 19 Jan 2026 17:12:23 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4C2275861;
+	Mon, 19 Jan 2026 09:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768815933; cv=fail; b=nR6bFRXpzeo/CS2PlX0w6Oa4Xn5B/xJt6xZanOSaBYnYzQvv0hBf2F67rHAHHOrl8E+HucSI7AkwLQ7X9OoT+sDUOHWgIH++CUffI5sYt9mO1q+FKO8m9+DadjWVQkhAQu0tboORVQO8DNc7bckifixfGG8EIqJm8GNWpLgh4rI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768815933; c=relaxed/simple;
+	bh=j06Q4e8dk6g59ajagPFMQg/Pb7bpDiaaaPoUlMu7s5I=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=jw7BvH+SdYPaaIiZgZ04okZigM1Sdo2YmeTsgC/DOaGkC4FEGxAtbupv2xiMW9NAMysN4LMn4VjpQKHEr+4eahiNH2ntFGC/haBpNUFrJyaFFZnM63W3Z2qfYGzPzf82zUYsaI30YF2WHhvgcogu2XKRnLKn8t1d9Qc8NrBwqX0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=1vaY1L0N; arc=fail smtp.client-ip=52.101.84.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vaisala.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaisala.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RcJAPpud3uqBvWTBMr+KmZXyuZky7VpTGyhpqOS9l9pOI64aNBXm3o7RAU3cpuvHHXfO3AZJtqe9Onw4rTAVY9F+ElTmRK2RnlTYblTwyYyghbcsqPOBAOjy7qSzxNuCxvC/YXymYw+TI8NDK9i0kXRl/RfmN4EOxl0lNjZyhB9DUZch99pW1Z3iEEMBvnR6JjXGnekUqHckpif+nvb0zYL63S4eIy1HzE67KJZbtRgt0KDyC5BfUN/y08DTjBo/b6QFkDIfRMBJ1OB4IRmn2d4/wfdU+SdTX6hGgIK4NF9A9rsBbEaa2iPtJlM+kVMfpT6HsKRkiMoKpFUrOkPa9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=39KH8WwQXvSdyLfBdLNMnrKxO/2ZM0EiV17n/s211VU=;
+ b=jzz/kxbtPLeSm057/+vtDBrW7gsFMAKJgliSRm0A0eCuPjd2255FPfkOjay8nPNhaJRtzkpPlQz37loT/4ZkXBXjDtSS1XFIefUYGnolwow1imelkzac0KWtih416bzFROgXoK++N6K3YvfY1IoHDRPskWZGzoUPOjiObZOCaj9ivcVhFcdGvxET0ERV/Ij6gfqnn7JFWcphjATTh9BrGD65M1lohw8eXANgdZlD7fRhvlh839UZFB1YQwV+7fddr/BxeiCqWy7Uv/mHNxXbs/YT4PLxQNFkB8ibe2j53lOc25si0YOmu6BQ5t71rWIAvucJOjzafQQTRrJdAgt88Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
+ dkim=pass header.d=vaisala.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=39KH8WwQXvSdyLfBdLNMnrKxO/2ZM0EiV17n/s211VU=;
+ b=1vaY1L0NIVt8ZRCUJjb50q59JqCjnKMbjVHPH8nJR6JuhR1lAqM7CMmZIyzsma3CuRvhqDU+R1ENIMDsxBzhAPy7h00oiyGmX3b7lxbbVOzsUMlUj6GFTwRpJh2HhBM9ETMJPjlbNKRjQiEp5Geym/dS1GmGT84hPoliIh6w6g35wYKk7xJzI1sM6SpgpYaRE6YzLE72gZA3j9UV+kxXbscXIAL+7p7g4QjQ67T/n/M1LmTpC24UsTVrEplSyg4mdJd6Dj6hm6x+B25LiVWWFPpBzXOEVqd0Cm1jXctm9q0CrP8rz0cFgMQbuOKniIzcUkg3/sNiksL9lJAELeNC4Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vaisala.com;
+Received: from AMBPR06MB10365.eurprd06.prod.outlook.com (2603:10a6:20b:6f0::7)
+ by PA2PR06MB9112.eurprd06.prod.outlook.com (2603:10a6:102:407::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Mon, 19 Jan
+ 2026 09:45:24 +0000
+Received: from AMBPR06MB10365.eurprd06.prod.outlook.com
+ ([fe80::4606:8e25:96e6:bede]) by AMBPR06MB10365.eurprd06.prod.outlook.com
+ ([fe80::4606:8e25:96e6:bede%5]) with mapi id 15.20.9520.009; Mon, 19 Jan 2026
+ 09:45:24 +0000
+Message-ID: <b4bf6cca-2eb6-4961-b9ce-08d9a4565c42@vaisala.com>
+Date: Mon, 19 Jan 2026 11:45:21 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/5] rtc: zynqmp: rework read_offset
+From: Tomas Melin <tomas.melin@vaisala.com>
+To: kernel test robot <lkp@intel.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Michal Simek <monstr@monstr.eu>
+Cc: oe-kbuild-all@lists.linux.dev, linux-rtc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260108-zynqmp-rtc-updates-v2-3-864c161fa83d@vaisala.com>
+ <202601150836.Yk8DcSZW-lkp@intel.com>
+ <fded3e4f-f292-48bf-aea7-0c8e71f7e056@vaisala.com>
+Content-Language: en-US
+In-Reply-To: <fded3e4f-f292-48bf-aea7-0c8e71f7e056@vaisala.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GVYP280CA0005.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:fa::19) To AMBPR06MB10365.eurprd06.prod.outlook.com
+ (2603:10a6:20b:6f0::7)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 5/5] rust: add PL031 RTC driver
-To: Ke Sun <sunke@kylinos.cn>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>
-Cc: linux-rtc@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20260116162203.296844-1-sunke@kylinos.cn>
- <20260116163401.312002-1-sunke@kylinos.cn>
-From: Ke Sun <sk.alvin.x@gmail.com>
-In-Reply-To: <20260116163401.312002-1-sunke@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMBPR06MB10365:EE_|PA2PR06MB9112:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ba23561-e57e-4733-a442-08de573f780a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?U2dZcTFDUFhncGlHWitaTC90QjdWM1hOSzFLcjNHUjNqN1NMWTFPRk0zbXMw?=
+ =?utf-8?B?Q1BGRm9NZ2NJSGh4TFkzanJydTRCQm1qTkxod3I5bkR6SnA4ejBHdnU5eXM0?=
+ =?utf-8?B?dDF1SlNvNjQ5dHNWSVBjeUJiclExQzFTZUtKdmVQL3NlMnRxMDJaZEdxVlhz?=
+ =?utf-8?B?eG02YWd1VlYvQndYWEZ3R0sweEYyYVUvc1BMUkJsT0pCQ1dvTGxSNXhndWdm?=
+ =?utf-8?B?MXNKL3c2OWxxNHFjNHF4Qm91K1c5bHludHQ5OStTeTNYSDlRTVZucUNTRUFN?=
+ =?utf-8?B?L1lvcnNiU2ZiemxULzNpcUFyWEpuZ3QxdTl1dWo1R1BXazFJSUozMXcvMXBs?=
+ =?utf-8?B?RldlMjdJbFZmaFl4bTN4TjdpWWZJai9QSjBMVU0zTldOQ09TK09NajI1WEhV?=
+ =?utf-8?B?Q2M4QmhoWEw5ME5CNXdTakhSNFFMUGE1VWpXeXdIaU1VMkdrdXhrdllmWC9P?=
+ =?utf-8?B?SWkvcThnbmQvNmZsNWd2TThUNDVVMnBoOEZMQ3h6UTFkbHdhMDZRSXVxaGNE?=
+ =?utf-8?B?YjFqQ2dCRng0UUVPM0x5TzhRVzJRQStGaXhXMGNBamhiSUJDSEhydXVGUzZY?=
+ =?utf-8?B?MTBWZDdXb3J4bWlQQ08vSzdrWlhYa2ZUY096NWZNRVErZ2RoZVRNbkwzWDMz?=
+ =?utf-8?B?cTdXREhqdTRUWXY4N3NtVlo2dFRvMDhZTHFTb2dsK01sOHQvS2QvZVcvZFho?=
+ =?utf-8?B?R1lraHJjYkpZNzVFZFRzMlpEUDJGMUVEQnlBK1UvUWFCaTdYUGNGT1hobVlC?=
+ =?utf-8?B?bXJPNWJ5ejcwRGlXS01LOW1oRW14Rm0vK0ZiWUpYV3RyeElwbWZhL1VEdjlB?=
+ =?utf-8?B?alBRRnlNTk9rTTYxYzRJb0dmR0xoK203dkZXczFCOWtmd1IzSEUrU1BVczhp?=
+ =?utf-8?B?UHg2U2RycjR0alFlL0xyU2p4WE56T3ZGRnE2ME5aM0ZMN2lEUGVEWDVsL0VY?=
+ =?utf-8?B?RzRLTEovMm1DUE9GVlBzNTZQUndxVVlGTWJBYmdPTUtOL2pmdmxZS1haeXN1?=
+ =?utf-8?B?Q2tpSFluV09rc3lLMkdJcHlBb05Sc1ZPYlV1dHI5YVhmUm9IczFXT2RqM0Ev?=
+ =?utf-8?B?SEZBUXNNSHF2cEZPL1k4YkYxc294emg3d0pGU09ROGVvTUJWMUtJOG1RcUFZ?=
+ =?utf-8?B?SVZYbXlQQnFHYklyam5FTnNhRG55eDhiZHl6RlVxc1FiR1VYYmlqN3AzblNQ?=
+ =?utf-8?B?R3RsWXNBcmxzOXBEdlUrSTFXcHBvU25PNFovWDBWVWZvLytac2s4UDdIdlpL?=
+ =?utf-8?B?Ym5vc0VBdWxMS2Y3M1NzT0FmYlRiVHcwWmpZdy9KRHRZK3V0L214QjFCaTN5?=
+ =?utf-8?B?YVBSa09tWkttOEtFdWdybE1ZSTZ1eTNxcmxuUUdQUXV0cDl3SnE2YVNIMUlX?=
+ =?utf-8?B?SFNzQTNtUUpqZm8zZTFTdXlqM2FFZ0FOYlc2ZVJkd0Vlb1FYVmxkd1A1aHlm?=
+ =?utf-8?B?U0doOTFHVE8wUGVGaTlsa2UrTExJZnZpRWtVSis0MzJxaENXMS9Gb3dwOGZW?=
+ =?utf-8?B?UmIxTi9VaWRWUDBlSGxrY3E2bHJqR0Q2a3dqMnBLcVpoSHFQQVppNmVzTnBo?=
+ =?utf-8?B?SUgxbjNBRGRma0xCektrMEFLUkdrVkd0SlZVTkJqQ3hEeWQ4ZUxoRHpmOGV5?=
+ =?utf-8?B?aWRId3ZVaXNkN3lkSCsxKzdaOXFRVVFlU2NjY2UwNSsvV2U4cVNUWVVlb3Nx?=
+ =?utf-8?B?bTlHb2FjazR2dHlwYXRCU1VJU1lZdjcwWWJNdXdCaDlzQzB1ZnNYYXo2T0VM?=
+ =?utf-8?B?dVd0L29nb290UlFvYWtyMnZ3TUwvWlk4cjZvU0lOYUVIdU5wQjN6VlNXV29w?=
+ =?utf-8?B?cDlrN2QzUHh2SVhjNDVCemFTQTNnU3oyZ3E5QWxoTGdFaUpVY0wybUI1dlUz?=
+ =?utf-8?B?NzFpQzQxMDdTbHZVcXdDQU1CTGdoZEk2a1ZKd0RkTzNGdGFlNy84QlV3ZGs1?=
+ =?utf-8?B?ZlFtVG5iYVJkaytkNUhDT2pFMy9yM2xpZVFldDNBNnlRQ084UVpiVHAxb3o2?=
+ =?utf-8?B?bWFFUDdtYWJJd29wTWdJeDBYQjBnV3RRbzcvNVBQaWxuZ1YyNUt0N1dENEJC?=
+ =?utf-8?B?SUsxeGpIaWEvSWtHelZrUnFPSlF4eloyN2ZBLzZGcGV3SHJRQlFsZDRnWmxJ?=
+ =?utf-8?Q?7S0U=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AMBPR06MB10365.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?M2cxUDYyVmovZEJqOGw0ZzBXcVNWNzh2WXM5UTFBQUJWWjVEMkwxNUc2MkRz?=
+ =?utf-8?B?NFRablVaQmc1a2NTYzFvZThVNFhZUzBMbEFxbFdialdJSnRVUk52bDM1L0tS?=
+ =?utf-8?B?QzdHaDNpRmFEYzczQ2RrQTZsTk03SkNUV0pnZDUvL2c4cG9kMXhDTVAxMXIr?=
+ =?utf-8?B?RHJqbXd6VzVUUTVJM1BldXBtaXczdUhMT3NleW5UQW5YbzFxR1VBTytIUThL?=
+ =?utf-8?B?NE53bzBnNldhQzlrSm9NcWVWQjNReFRYS3kwQ0tTY2I0TXFGSHNxM29rUlhQ?=
+ =?utf-8?B?RllVSDZ4aDJ0emlaUlVqbnlPbkNXb0FtSWltdlU1djRTUGUrQk1hczlhdy9K?=
+ =?utf-8?B?MlZJczBGbnRPTVc5dWs1a1J4NDRRM0V4ZElTa2ZTTlZDbHZFdmY4NlRlY3Mz?=
+ =?utf-8?B?SWF0anRYN1RZNHE3RlBLMkltdW5vUDJiRVlsdmdkc1BXR3dlbUpQcmtSa0or?=
+ =?utf-8?B?cFgzNklaQWFlT1V6RlVwb243aXdHRXRSUWpHU0dQOE9hN0tENllDMzNhSWxK?=
+ =?utf-8?B?c0wyVmFLTU4zWVlUTEx1Njc3cUh2bHBiVjlDZjV5UVJDRUxXOHJwVVVxWFpO?=
+ =?utf-8?B?SmJVSmZtZUQ3U3ZVcnFEaVAxVjB1cXd4amlsQkdqOGFBL2Zvd2tqcnlDZ1Ni?=
+ =?utf-8?B?UVFHVUxJMml0azBqOTRueTFSQXpnTDVUdTJrMkI4VnRqaEpVUlo2bmFadXJn?=
+ =?utf-8?B?WnpUeGliaGcycUtpaU0zcytaVDIxL1dBOERvenczeWZnUW40VytyWHZnaEE3?=
+ =?utf-8?B?OVFiRVJCSjU2TkxYaURHTTNQY2tVUURNZzBXMGZJbkgzelllT0ZoSWlYVjlV?=
+ =?utf-8?B?WS9kVk5IQmRnQTVwUktKNkVZeGpzVkFwaXNqTi8xT1J0cC93d3dwR3ZPWTln?=
+ =?utf-8?B?dXdVS2ZualY4bmRWWVI4OS8vbU1LVTJmUnNTekJSR0t4T1g2OGZnclhvMVpv?=
+ =?utf-8?B?K1BGZ2V3dUMwZGJCcXJ1NC9zZDZyL3JFcUt2Y005SU1tcnZoTkxvUDZLSThs?=
+ =?utf-8?B?c0t4SFg0VERUVFhjTnY2czlVZ1pDT01meFVkZE0wUWp1R0l6dkRvQW5mMk4r?=
+ =?utf-8?B?ZFY4UzI4Y2o0TVJzamlmQmV1THRPMVZZK1BEZ2lkbHdUT0hoaDF4czNGNmwx?=
+ =?utf-8?B?RHN0azVUVElYYTdwdkIvUmJPejFyZVNzNVVTVUwva1VUaEZXM0ZRcFl2QTJj?=
+ =?utf-8?B?amJjc0lrVXg2ZVBIaWtEZ25uYngwWi93RmpNUjEzZ1N3S0pBOGROcXhPeTV4?=
+ =?utf-8?B?a3FXTC9QcVdlQ0dDL0p0STJSWnpUOHhScnJiL1dqbUhDbVhKbllKdWRrWVl5?=
+ =?utf-8?B?QzdQeG9iRWQ5WUZNeHRrVVRkL3AxSURYMmw2WlZTQUZGQ3RFSHh6ZGV6TnJj?=
+ =?utf-8?B?ekZlMGZlQ3M1eG1NSGZ3UFIzeTUxR3VxNWZUUkNiOC85NTVTRGk0STUrMDlM?=
+ =?utf-8?B?RlNXSUpwTjl4YXFFcmZxdXBscG01U1M3UjEyYkFJd0YrRTR4czJ1WHBhYzZM?=
+ =?utf-8?B?NkI0NDdJTVRmUjJmOVdmck50WXFDUEQrbDJmQXdCN3d2amlGaDRsOG9FbnJq?=
+ =?utf-8?B?UHF5dEF5TmdlY0J0SnhoeGlFOWxIYS9MbWZEbHQ4L2Y0QzA1bkkxdzBqR3lU?=
+ =?utf-8?B?OEFWZ3BWeEZvaE5IbURxTm05YnVZWC9YYkJKdkpIYUxyS2Z4ZHAzU1B5NEQ2?=
+ =?utf-8?B?R01BMC92MzAyTGhJTE80U3gwVE1KMC9QZUhGZVhSU0xBa1REdWRaazVjQ0ti?=
+ =?utf-8?B?R2g3QkxxN3BjWGEwRXJQUEFtVmYzeUFrRWFFYVYyZGdLZklaTlp5cVA5R25W?=
+ =?utf-8?B?ZFRaLy9ocUxBbnVXNlUybzZMZklWUTJhb0tYZ2xZam9sNk9OaUE3akFudVdm?=
+ =?utf-8?B?TWJBcXQxTnFFaTgwN3ZuT2p1OHd6c0xVcFZTR2VyWG9zR2tpSHZEdjhVQ2Ir?=
+ =?utf-8?B?azJyWWlRQ1VRVnZNQTVQUEZUNklpMkRmYmFSYzZkRHlvV2JEenplRGZEVlh1?=
+ =?utf-8?B?aDNxUUdrTVFoZURkb2E4UUxsSmtTUlJzUU9QekQ5TE15Sm8xSkQ4bVJJZzR2?=
+ =?utf-8?B?ZEpLZzIzZ1U1UFdmNlRrZ3kwMUF0OUdBU1R3bVZuNTJQSmovZEx3Qm44MklH?=
+ =?utf-8?B?dkNzbW5ETkVEZTJDNjZnb0lNeXZocDF1N2Z4TVZWNXoxN1BwQTV6OFNZSzdT?=
+ =?utf-8?B?RWoveWl3aWtSZ1JuOVYvcEQxbk1mTlNlTWdJWGxOU3I0V09ZVGloNm5uQlRC?=
+ =?utf-8?B?QWFBeW5sTjdMN05zSUM5aXNNblErd3Z3d0pDbDdsZkt5cDJQVkVnLzZyMnBs?=
+ =?utf-8?B?NE5NUFErNnlEVW1YMlAzY1U2ZHliOTdheUZHTmpMTnUvb2pPYXEwSzBYaHBv?=
+ =?utf-8?Q?Do0Tea8mfLqtA+m0=3D?=
+X-OriginatorOrg: vaisala.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ba23561-e57e-4733-a442-08de573f780a
+X-MS-Exchange-CrossTenant-AuthSource: AMBPR06MB10365.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 09:45:24.2837
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q1besQLFL+s4QzuqWkyZl1IAdkLsCgXVcfJxDrgfoK7L4KKDlCruapQBf1dBx482etkz5fEJ/+r6u1pTX5TL3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA2PR06MB9112
 
-This driver has been tested on QEMU with the following command:
-qemu-system-aarch64 -machine virt,virtualization=on -cpu max -smp 2 -m 4g \
-   -serial mon:stdio -kernel arch/arm64/boot/Image  -hda 
-PATHTO/virtualdisk.qcow2 \
-   -append "root=/dev/vdaX no_console_suspend loglevel=8 console=ttyAMA0" \
-   -display none -nic user,hostfwd=tcp::10022-:22
 
-Test Results:
 
-Driver Registration:
-    [    1.886444][    T1] rtc-pl031-rust 9010000.pl031: registered as rtc0
-    [    1.888070][    T1] rtc-pl031-rust 9010000.pl031: setting system 
-clock to 2026-01-19T08:49:36 UTC (1768812576)
+On 15/01/2026 09:41, Tomas Melin wrote:
+> Hi,
+> 
+> On 15/01/2026 02:42, kernel test robot wrote:
+> 
+>>
+>>    arm-linux-gnueabi-ld: drivers/spi/spi-amlogic-spifc-a4.o: in function `aml_sfc_set_bus_width':
+>>    spi-amlogic-spifc-a4.c:(.text.aml_sfc_set_bus_width+0x8c): undefined reference to `__ffsdi2'
+>>    arm-linux-gnueabi-ld: spi-amlogic-spifc-a4.c:(.text.aml_sfc_set_bus_width+0xac): undefined reference to `__ffsdi2'
+>>    arm-linux-gnueabi-ld: spi-amlogic-spifc-a4.c:(.text.aml_sfc_set_bus_width+0xcc): undefined reference to `__ffsdi2'
+>>    arm-linux-gnueabi-ld: drivers/rtc/rtc-zynqmp.o: in function `xlnx_rtc_read_offset':
+>>>> rtc-zynqmp.c:(.text.xlnx_rtc_read_offset+0xd0): undefined reference to `__aeabi_ldivmod'
+>>>> arm-linux-gnueabi-ld: rtc-zynqmp.c:(.text.xlnx_rtc_read_offset+0x15c): undefined reference to `__aeabi_ldivmod'
+> AFAIU this is related to compiling for arm 32 bit target. Is this error
+> relevant since this driver is for aarch64 zynqmp specifically? If so,
+> what would be correct way of fixing?
 
-Interrupt Registration:
-    # cat /proc/interrupts |grep pl031
-     21:          0          0    GICv2  34 Level     rtc-pl031
+Answering my self, I think correct course of action here is probably to
+limit building of this driver for the zynqmp architecture. I will add
+this in next version.
 
-RTC Time Reading:
-    # hwclock -r
-    2026-01-19 09:03:24.961787+08:00
+Thanks,
+Tomas
 
-Suspend/Resume with Alarm:
-    # rtcwake --mode mem --seconds 5
-    rtcwake: wakeup from "mem" using /dev/rtc0 at Mon Jan 19 09:04:13 2026
-    [  242.699314][ T2832] PM: suspend entry (s2idle)
-    [  242.717296][   T12] Filesystems sync: 0.009 seconds
-    [  242.741471][ T2832] Freezing user space processes
-    [  242.761472][ T2832] Freezing user space processes completed 
-(elapsed 0.019 seconds)
-    [  242.763281][ T2832] OOM killer disabled.
-    [  242.763681][ T2832] Freezing remaining freezable tasks
-    [  242.766629][ T2832] Freezing remaining freezable tasks completed 
-(elapsed 0.002 seconds)
-    [  248.678304][   T82] virtio_blk virtio1: 2/0/0 default/read/poll 
-queues
-    [  248.692577][ T2832] OOM killer enabled.
-    [  248.692724][ T2832] Restarting tasks: Starting
-    [  248.744504][ T2832] Restarting tasks: Done
-    [  248.745530][ T2832] random: crng reseeded on system resumption
-    [  248.746749][ T2832] PM: suspend exit
 
-Driver Rebind:
-    /sys/bus/amba/drivers/rtc-pl031-rust# echo 9010000.pl031 > unbind
-    /sys/bus/amba/drivers/rtc-pl031-rust# echo 9010000.pl031 > bind
-    [  334.060940][ T1837] rtc-pl031-rust 9010000.pl031: registered as rtc1
+> 
+> Thanks,
+> Tomas
+> 
+> 
+> 
+>>
+> 
+> 
 
-All tests passed successfully.
-
-On 1/17/26 00:34, Ke Sun wrote:
-> Add Rust implementation of the PL031 RTC driver.
->
-> Signed-off-by: Ke Sun <sunke@kylinos.cn>
-> ---
->   drivers/rtc/Kconfig           |   9 +
->   drivers/rtc/Makefile          |   1 +
->   drivers/rtc/rtc_pl031_rust.rs | 513 ++++++++++++++++++++++++++++++++++
->   3 files changed, 523 insertions(+)
->   create mode 100644 drivers/rtc/rtc_pl031_rust.rs
->
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 50dc779f7f983..137cea1824edd 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1591,6 +1591,15 @@ config RTC_DRV_PL031
->   	  To compile this driver as a module, choose M here: the
->   	  module will be called rtc-pl031.
->   
-> +config RTC_DRV_PL031_RUST
-> +	tristate "ARM AMBA PL031 RTC (Rust)"
-> +	depends on RUST && RTC_CLASS
-> +	help
-> +	  This is the Rust implementation of the PL031 RTC driver.
-> +	  It provides the same functionality as the C driver but is
-> +	  written in Rust for improved memory safety. The driver supports
-> +	  ARM, ST v1, and ST v2 variants of the PL031 RTC controller.
-> +
->   config RTC_DRV_AT91RM9200
->   	tristate "AT91RM9200 or some AT91SAM9 RTC"
->   	depends on ARCH_AT91 || COMPILE_TEST
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 6cf7e066314e1..10f540e7409b4 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -139,6 +139,7 @@ obj-$(CONFIG_RTC_DRV_PCF8583)	+= rtc-pcf8583.o
->   obj-$(CONFIG_RTC_DRV_PIC32)	+= rtc-pic32.o
->   obj-$(CONFIG_RTC_DRV_PL030)	+= rtc-pl030.o
->   obj-$(CONFIG_RTC_DRV_PL031)	+= rtc-pl031.o
-> +obj-$(CONFIG_RTC_DRV_PL031_RUST)	+= rtc_pl031_rust.o
->   obj-$(CONFIG_RTC_DRV_PM8XXX)	+= rtc-pm8xxx.o
->   obj-$(CONFIG_RTC_DRV_POLARFIRE_SOC)	+= rtc-mpfs.o
->   obj-$(CONFIG_RTC_DRV_PS3)	+= rtc-ps3.o
-> diff --git a/drivers/rtc/rtc_pl031_rust.rs b/drivers/rtc/rtc_pl031_rust.rs
-> new file mode 100644
-> index 0000000000000..8ae48d96d1f94
-> --- /dev/null
-> +++ b/drivers/rtc/rtc_pl031_rust.rs
-> @@ -0,0 +1,513 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +//! Rust ARM AMBA PrimeCell 031 RTC driver
-> +//!
-> +//! This driver provides Real Time Clock functionality for ARM AMBA PrimeCell
-> +//! 031 RTC controllers and their ST Microelectronics derivatives.
-> +
-> +use core::marker::PhantomPinned;
-> +use kernel::{
-> +    amba,
-> +    bindings,
-> +    c_str,
-> +    device::{
-> +        self,
-> +        Core, //
-> +    },
-> +    devres::Devres,
-> +    io::mem::IoMem,
-> +    irq::{
-> +        self,
-> +        Handler,
-> +        IrqReturn, //
-> +    },
-> +    prelude::*,
-> +    rtc::{
-> +        RtcDevice,
-> +        RtcOps,
-> +        RtcTime,
-> +        RtcWkAlrm, //
-> +    },
-> +    sync::aref::ARef, //
-> +};
-> +
-> +// Register offsets
-> +const RTC_DR: usize = 0x00; // Data read register
-> +const RTC_MR: usize = 0x04; // Match register
-> +const RTC_LR: usize = 0x08; // Data load register
-> +const RTC_CR: usize = 0x0c; // Control register
-> +const RTC_IMSC: usize = 0x10; // Interrupt mask and set register
-> +const RTC_RIS: usize = 0x14; // Raw interrupt status register
-> +const RTC_MIS: usize = 0x18; // Masked interrupt status register
-> +const RTC_ICR: usize = 0x1c; // Interrupt clear register
-> +
-> +// ST variants have additional timer functionality
-> +#[allow(dead_code)]
-> +const RTC_TDR: usize = 0x20; // Timer data read register
-> +#[allow(dead_code)]
-> +const RTC_TLR: usize = 0x24; // Timer data load register
-> +#[allow(dead_code)]
-> +const RTC_TCR: usize = 0x28; // Timer control register
-> +const RTC_YDR: usize = 0x30; // Year data read register
-> +const RTC_YMR: usize = 0x34; // Year match register
-> +const RTC_YLR: usize = 0x38; // Year data load register
-> +const PL031_REG_SIZE: usize = RTC_YLR + 4;
-> +
-> +// Control register bits
-> +const RTC_CR_EN: u32 = 1 << 0; // Counter enable bit
-> +const RTC_CR_CWEN: u32 = 1 << 26; // Clockwatch enable bit
-> +
-> +#[allow(dead_code)]
-> +const RTC_TCR_EN: u32 = 1 << 1; // Periodic timer enable bit
-> +
-> +// Interrupt status and control register bits
-> +const RTC_BIT_AI: u32 = 1 << 0; // Alarm interrupt bit
-> +#[allow(dead_code)]
-> +const RTC_BIT_PI: u32 = 1 << 1; // Periodic interrupt bit (ST variants only)
-> +
-> +// RTC event flags
-> +#[allow(dead_code)]
-> +const RTC_AF: u32 = bindings::RTC_AF;
-> +#[allow(dead_code)]
-> +const RTC_IRQF: u32 = bindings::RTC_IRQF;
-> +
-> +// ST v2 time format bit definitions
-> +const RTC_SEC_SHIFT: u32 = 0;
-> +const RTC_SEC_MASK: u32 = 0x3F << RTC_SEC_SHIFT; // Second [0-59]
-> +const RTC_MIN_SHIFT: u32 = 6;
-> +const RTC_MIN_MASK: u32 = 0x3F << RTC_MIN_SHIFT; // Minute [0-59]
-> +const RTC_HOUR_SHIFT: u32 = 12;
-> +const RTC_HOUR_MASK: u32 = 0x1F << RTC_HOUR_SHIFT; // Hour [0-23]
-> +const RTC_WDAY_SHIFT: u32 = 17;
-> +const RTC_WDAY_MASK: u32 = 0x7 << RTC_WDAY_SHIFT; // Day of Week [1-7] 1=Sunday
-> +const RTC_MDAY_SHIFT: u32 = 20;
-> +const RTC_MDAY_MASK: u32 = 0x1F << RTC_MDAY_SHIFT; // Day of Month [1-31]
-> +const RTC_MON_SHIFT: u32 = 25;
-> +const RTC_MON_MASK: u32 = 0xF << RTC_MON_SHIFT; // Month [1-12] 1=January
-> +
-> +/// Converts a binary value to BCD.
-> +fn bin2bcd(val: u8) -> u8 {
-> +    ((val / 10) << 4) | (val % 10)
-> +}
-> +
-> +/// Converts a BCD value to binary.
-> +fn bcd2bin(val: u8) -> u8 {
-> +    ((val >> 4) * 10) + (val & 0x0F)
-> +}
-> +
-> +/// Converts a Gregorian date to ST v2 RTC packed BCD format.
-> +///
-> +/// Returns a tuple of (packed_time, bcd_year) where packed_time contains
-> +/// month, day, weekday, hour, minute, and second in a single 32-bit value.
-> +fn stv2_tm_to_time(tm: &RtcTime) -> Result<(u32, u32)> {
-> +    let year = tm.tm_year() + 1900;
-> +    let mut wday = tm.tm_wday();
-> +
-> +    // Hardware wday masking doesn't work, so wday must be valid.
-> +    if !(-1..=6).contains(&wday) {
-> +        return Err(EINVAL);
-> +    } else if wday == -1 {
-> +        // wday is not provided, calculate it here.
-> +        let time64 = tm.to_time64();
-> +        let mut calc_tm = RtcTime::default();
-> +        calc_tm.set_from_time64(time64);
-> +        wday = calc_tm.tm_wday();
-> +    }
-> +
-> +    // Convert year to BCD.
-> +    let bcd_year =
-> +        (u32::from(bin2bcd((year % 100) as u8))) | (u32::from(bin2bcd((year / 100) as u8)) << 8);
-> +
-> +    let st_time = ((tm.tm_mon() + 1) as u32) << RTC_MON_SHIFT
-> +        | (tm.tm_mday() as u32) << RTC_MDAY_SHIFT
-> +        | ((wday + 1) as u32) << RTC_WDAY_SHIFT
-> +        | (tm.tm_hour() as u32) << RTC_HOUR_SHIFT
-> +        | (tm.tm_min() as u32) << RTC_MIN_SHIFT
-> +        | (tm.tm_sec() as u32) << RTC_SEC_SHIFT;
-> +
-> +    Ok((st_time, bcd_year))
-> +}
-> +
-> +/// Converts ST v2 RTC packed BCD format to a Gregorian date.
-> +///
-> +/// Extracts time components from the packed 32-bit value and BCD year register,
-> +/// then returns an RtcTime structure.
-> +fn stv2_time_to_tm(st_time: u32, bcd_year: u32) -> RtcTime {
-> +    let year_low = bcd2bin((bcd_year & 0xFF) as u8);
-> +    let year_high = bcd2bin(((bcd_year >> 8) & 0xFF) as u8);
-> +    let mut tm = RtcTime::default();
-> +    tm.set_tm_year(i32::from(year_low) + i32::from(year_high) * 100);
-> +    tm.set_tm_mon((((st_time & RTC_MON_MASK) >> RTC_MON_SHIFT) - 1) as i32);
-> +    tm.set_tm_mday(((st_time & RTC_MDAY_MASK) >> RTC_MDAY_SHIFT) as i32);
-> +    tm.set_tm_wday((((st_time & RTC_WDAY_MASK) >> RTC_WDAY_SHIFT) - 1) as i32);
-> +    tm.set_tm_hour(((st_time & RTC_HOUR_MASK) >> RTC_HOUR_SHIFT) as i32);
-> +    tm.set_tm_min(((st_time & RTC_MIN_MASK) >> RTC_MIN_SHIFT) as i32);
-> +    tm.set_tm_sec(((st_time & RTC_SEC_MASK) >> RTC_SEC_SHIFT) as i32);
-> +
-> +    // Values are from valid RTC time structures and are non-negative.
-> +    tm.set_tm_yday(tm.year_days());
-> +    tm.set_tm_year(tm.tm_year() - 1900);
-> +    tm
-> +}
-> +
-> +/// Vendor-specific variant identifier for PL031 RTC controllers.
-> +#[derive(Copy, Clone, PartialEq)]
-> +enum VendorVariant {
-> +    /// Original ARM version with 32-bit Unix timestamp format.
-> +    Arm,
-> +    /// First ST derivative with clockwatch mode and weekday support.
-> +    StV1,
-> +    /// Second ST derivative with packed BCD time format and year register.
-> +    StV2,
-> +}
-> +
-> +impl VendorVariant {
-> +    fn clockwatch(&self) -> bool {
-> +        matches!(self, VendorVariant::StV1 | VendorVariant::StV2)
-> +    }
-> +
-> +    #[allow(dead_code)]
-> +    fn st_weekday(&self) -> bool {
-> +        matches!(self, VendorVariant::StV1 | VendorVariant::StV2)
-> +    }
-> +
-> +    #[allow(dead_code)]
-> +    fn range_min(&self) -> i64 {
-> +        match self {
-> +            VendorVariant::Arm | VendorVariant::StV1 => 0,
-> +            VendorVariant::StV2 => bindings::RTC_TIMESTAMP_BEGIN_0000,
-> +        }
-> +    }
-> +
-> +    #[allow(dead_code)]
-> +    fn range_max(&self) -> u64 {
-> +        match self {
-> +            VendorVariant::Arm | VendorVariant::StV1 => u64::from(u32::MAX),
-> +            VendorVariant::StV2 => bindings::RTC_TIMESTAMP_END_9999,
-> +        }
-> +    }
-> +}
-> +
-> +/// The driver's private data struct. It holds all necessary devres managed
-> +/// resources.
-> +#[pin_data]
-> +struct Pl031DrvData {
-> +    #[pin]
-> +    regs: Devres<IoMem<PL031_REG_SIZE>>,
-> +    hw_variant: VendorVariant,
-> +}
-> +
-> +// SAFETY: `Pl031DrvData` contains only `Send`/`Sync` types: `Devres`
-> +// (Send+Sync) and `VendorVariant` (Copy).
-> +unsafe impl Send for Pl031DrvData {}
-> +// SAFETY: `Pl031DrvData` contains only `Send`/`Sync` types: `Devres`
-> +// (Send+Sync) and `VendorVariant` (Copy).
-> +unsafe impl Sync for Pl031DrvData {}
-> +
-> +/// Vendor-specific variant identifier used in AMBA device table.
-> +#[derive(Copy, Clone)]
-> +struct Pl031Variant {
-> +    variant: VendorVariant,
-> +}
-> +
-> +impl Pl031Variant {
-> +    const ARM: Self = Self {
-> +        variant: VendorVariant::Arm,
-> +    };
-> +    const STV1: Self = Self {
-> +        variant: VendorVariant::StV1,
-> +    };
-> +    const STV2: Self = Self {
-> +        variant: VendorVariant::StV2,
-> +    };
-> +}
-> +
-> +// Use AMBA device table for matching
-> +kernel::amba_device_table!(
-> +    ID_TABLE,
-> +    MODULE_ID_TABLE,
-> +    <Pl031AmbaDriver as amba::Driver>::IdInfo,
-> +    [
-> +        (
-> +            amba::DeviceId::new(0x00041031, 0x000fffff),
-> +            Pl031Variant::ARM
-> +        ),
-> +        (
-> +            amba::DeviceId::new(0x00180031, 0x00ffffff),
-> +            Pl031Variant::STV1
-> +        ),
-> +        (
-> +            amba::DeviceId::new(0x00280031, 0x00ffffff),
-> +            Pl031Variant::STV2
-> +        ),
-> +    ]
-> +);
-> +
-> +#[pin_data]
-> +struct Pl031AmbaDriver {
-> +    #[pin]
-> +    irqreg: irq::Registration<Pl031IrqHandler>,
-> +}
-> +
-> +impl amba::Driver for Pl031AmbaDriver {
-> +    type IdInfo = Pl031Variant;
-> +    const AMBA_ID_TABLE: amba::IdTable<Self::IdInfo> = &ID_TABLE;
-> +
-> +    fn probe(
-> +        adev: &amba::Device<Core>,
-> +        id_info: Option<&Self::IdInfo>,
-> +    ) -> impl PinInit<Self, Error> {
-> +        pin_init::pin_init_scope(move || {
-> +            let dev = adev.as_ref();
-> +            let io_request = adev.io_request().ok_or(ENODEV)?;
-> +            let variant = id_info
-> +                .map(|info| info.variant)
-> +                .unwrap_or(VendorVariant::Arm);
-> +
-> +            let rtcdev = RtcDevice::<Pl031DrvData>::new(
-> +                dev,
-> +                try_pin_init!(Pl031DrvData {
-> +                    regs <- IoMem::new(io_request),
-> +                    hw_variant: variant,
-> +                }),
-> +            )?;
-> +
-> +            dev.devm_init_wakeup()?;
-> +
-> +            let drvdata = rtcdev.drvdata()?;
-> +            let regs = drvdata.regs.access(dev)?;
-> +
-> +            // Enable the clockwatch on ST Variants
-> +            let mut cr = regs.read32(RTC_CR);
-> +            if variant.clockwatch() {
-> +                cr |= RTC_CR_CWEN;
-> +            } else {
-> +                cr |= RTC_CR_EN;
-> +            }
-> +            regs.write32(cr, RTC_CR);
-> +
-> +            // On ST PL031 variants, the RTC reset value does not provide
-> +            // correct weekday for 2000-01-01. Correct the erroneous sunday
-> +            // to saturday.
-> +            if variant.st_weekday() {
-> +                let bcd_year = regs.read32(RTC_YDR);
-> +                if bcd_year == 0x2000 {
-> +                    let st_time = regs.read32(RTC_DR);
-> +                    if (st_time & (RTC_MON_MASK | RTC_MDAY_MASK | RTC_WDAY_MASK)) == 0x02120000 {
-> +                        regs.write32(0x2000, RTC_YLR);
-> +                        regs.write32(st_time | (0x7 << RTC_WDAY_SHIFT), RTC_LR);
-> +                    }
-> +                }
-> +            }
-> +
-> +            rtcdev.set_range_min(variant.range_min());
-> +            rtcdev.set_range_max(variant.range_max());
-> +
-> +            // This variant shares the IRQ with another block and must not
-> +            // suspend that IRQ line.
-> +            let irq_flags = if variant == VendorVariant::StV2 {
-> +                kernel::irq::Flags::SHARED | kernel::irq::Flags::COND_SUSPEND
-> +            } else {
-> +                kernel::irq::Flags::SHARED
-> +            };
-> +
-> +            if adev
-> +                .irq_by_index(0)
-> +                .and_then(|irq| irq.devm_set_wake_irq())
-> +                .is_err()
-> +            {
-> +                rtcdev.clear_feature(bindings::RTC_FEATURE_ALARM);
-> +            }
-> +
-> +            rtcdev.register()?;
-> +
-> +            Ok(try_pin_init!(Pl031AmbaDriver {
-> +                irqreg <- adev.request_irq_by_index(
-> +                    irq_flags,
-> +                    0,
-> +                    c_str!("rtc-pl031"),
-> +                    try_pin_init!(Pl031IrqHandler {
-> +                        _pin: PhantomPinned,
-> +                        rtcdev: rtcdev.clone(),
-> +                    }),
-> +                ),
-> +            }))
-> +        })
-> +    }
-> +}
-> +
-> +/// Interrupt handler for PL031 RTC alarm events.
-> +#[pin_data]
-> +struct Pl031IrqHandler {
-> +    #[pin]
-> +    _pin: PhantomPinned,
-> +    rtcdev: ARef<RtcDevice<Pl031DrvData>>,
-> +}
-> +
-> +impl Handler for Pl031IrqHandler {
-> +    fn handle(&self, dev: &device::Device<device::Bound>) -> IrqReturn {
-> +        // Get driver data using drvdata.
-> +        let drvdata = match self.rtcdev.drvdata() {
-> +            Ok(drvdata) => drvdata,
-> +            Err(_) => return IrqReturn::None,
-> +        };
-> +
-> +        // Access the MMIO registers.
-> +        let regs = match drvdata.regs.access(dev) {
-> +            Ok(regs) => regs,
-> +            Err(_) => return IrqReturn::None,
-> +        };
-> +
-> +        // Read masked interrupt status.
-> +        let rtcmis = regs.read32(RTC_MIS);
-> +
-> +        if (rtcmis & RTC_BIT_AI) != 0 {
-> +            regs.write32(RTC_BIT_AI, RTC_ICR);
-> +            self.rtcdev.update_irq(1, (RTC_AF | RTC_IRQF) as usize);
-> +            return IrqReturn::Handled;
-> +        }
-> +
-> +        IrqReturn::None
-> +    }
-> +}
-> +
-> +#[vtable]
-> +impl RtcOps for Pl031DrvData {
-> +    fn read_time(
-> +        rtcdev: &RtcDevice<Self>,
-> +        tm: &mut RtcTime,
-> +        parent_dev: &device::Device<device::Bound>,
-> +    ) -> Result {
-> +        let drvdata = rtcdev.drvdata()?;
-> +        let regs = drvdata.regs.access(parent_dev)?;
-> +
-> +        match drvdata.hw_variant {
-> +            VendorVariant::Arm | VendorVariant::StV1 => {
-> +                let time32: u32 = regs.read32(RTC_DR);
-> +                let time64 = i64::from(time32);
-> +                tm.set_from_time64(time64);
-> +            }
-> +            VendorVariant::StV2 => {
-> +                let st_time = regs.read32(RTC_DR);
-> +                let bcd_year = regs.read32(RTC_YDR);
-> +                *tm = stv2_time_to_tm(st_time, bcd_year);
-> +            }
-> +        }
-> +
-> +        Ok(())
-> +    }
-> +
-> +    fn set_time(
-> +        rtcdev: &RtcDevice<Self>,
-> +        tm: &RtcTime,
-> +        parent_dev: &device::Device<device::Bound>,
-> +    ) -> Result {
-> +        let dev: &device::Device = rtcdev.as_ref();
-> +        let drvdata = rtcdev.drvdata()?;
-> +        let regs = drvdata.regs.access(parent_dev)?;
-> +
-> +        match drvdata.hw_variant {
-> +            VendorVariant::Arm | VendorVariant::StV1 => {
-> +                let time64 = tm.to_time64();
-> +                regs.write32(time64 as u32, RTC_LR);
-> +            }
-> +            VendorVariant::StV2 => {
-> +                let (st_time, bcd_year) = stv2_tm_to_time(tm).inspect_err(|&err| {
-> +                    if err == EINVAL {
-> +                        dev_err!(dev, "invalid wday value {}\n", tm.tm_wday());
-> +                    }
-> +                })?;
-> +                regs.write32(bcd_year, RTC_YLR);
-> +                regs.write32(st_time, RTC_LR);
-> +            }
-> +        }
-> +
-> +        Ok(())
-> +    }
-> +
-> +    fn read_alarm(
-> +        rtcdev: &RtcDevice<Self>,
-> +        alarm: &mut RtcWkAlrm,
-> +        parent_dev: &device::Device<device::Bound>,
-> +    ) -> Result {
-> +        let drvdata = rtcdev.drvdata()?;
-> +        let regs = drvdata.regs.access(parent_dev)?;
-> +
-> +        match drvdata.hw_variant {
-> +            VendorVariant::Arm | VendorVariant::StV1 => {
-> +                let time32: u32 = regs.read32(RTC_MR);
-> +                let time64 = i64::from(time32);
-> +                RtcTime::time64_to_tm(time64, alarm.get_time_mut());
-> +            }
-> +            VendorVariant::StV2 => {
-> +                let st_time = regs.read32(RTC_MR);
-> +                let bcd_year = regs.read32(RTC_YMR);
-> +                *alarm.get_time_mut() = stv2_time_to_tm(st_time, bcd_year);
-> +            }
-> +        }
-> +
-> +        alarm.set_pending((regs.read32(RTC_RIS) & RTC_BIT_AI) != 0);
-> +        alarm.set_enabled((regs.read32(RTC_IMSC) & RTC_BIT_AI) != 0);
-> +
-> +        Ok(())
-> +    }
-> +
-> +    fn set_alarm(
-> +        rtcdev: &RtcDevice<Self>,
-> +        alarm: &RtcWkAlrm,
-> +        parent_dev: &device::Device<device::Bound>,
-> +    ) -> Result {
-> +        let dev: &device::Device = rtcdev.as_ref();
-> +        let drvdata = rtcdev.drvdata()?;
-> +        let regs = drvdata.regs.access(parent_dev)?;
-> +
-> +        match drvdata.hw_variant {
-> +            VendorVariant::Arm | VendorVariant::StV1 => {
-> +                let time64 = alarm.get_time().to_time64();
-> +                regs.write32(time64 as u32, RTC_MR);
-> +            }
-> +            VendorVariant::StV2 => {
-> +                let (st_time, bcd_year) =
-> +                    stv2_tm_to_time(alarm.get_time()).inspect_err(|&err| {
-> +                        if err == EINVAL {
-> +                            dev_err!(dev, "invalid wday value {}\n", alarm.get_time().tm_wday());
-> +                        }
-> +                    })?;
-> +                regs.write32(bcd_year, RTC_YMR);
-> +                regs.write32(st_time, RTC_MR);
-> +            }
-> +        }
-> +
-> +        Self::alarm_irq_enable(rtcdev, alarm.enabled(), parent_dev)
-> +    }
-> +
-> +    fn alarm_irq_enable(
-> +        rtcdev: &RtcDevice<Self>,
-> +        enabled: bool,
-> +        parent_dev: &device::Device<device::Bound>,
-> +    ) -> Result {
-> +        let drvdata = rtcdev.drvdata()?;
-> +        let regs = drvdata.regs.access(parent_dev)?;
-> +
-> +        // Clear any pending alarm interrupts.
-> +        regs.write32(RTC_BIT_AI, RTC_ICR);
-> +
-> +        let mut imsc = regs.read32(RTC_IMSC);
-> +        if enabled {
-> +            imsc |= RTC_BIT_AI;
-> +        } else {
-> +            imsc &= !RTC_BIT_AI;
-> +        }
-> +        regs.write32(imsc, RTC_IMSC);
-> +
-> +        Ok(())
-> +    }
-> +}
-> +
-> +kernel::module_amba_driver! {
-> +    type: Pl031AmbaDriver,
-> +    name: "rtc-pl031-rust",
-> +    authors: ["Ke Sun <sunke@kylinos.cn>"],
-> +    description: "Rust PL031 RTC driver",
-> +    license: "GPL v2",
-> +    imports_ns: ["RTC"],
-> +}
 
