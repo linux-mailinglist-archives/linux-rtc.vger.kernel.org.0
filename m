@@ -1,58 +1,68 @@
-Return-Path: <linux-rtc+bounces-5777-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5779-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD8DD38BA5
-	for <lists+linux-rtc@lfdr.de>; Sat, 17 Jan 2026 03:28:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4031CD3A0CE
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 08:57:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AAED9303E438
-	for <lists+linux-rtc@lfdr.de>; Sat, 17 Jan 2026 02:27:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 491F430086F1
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 07:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583BB319871;
-	Sat, 17 Jan 2026 02:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A30338931;
+	Mon, 19 Jan 2026 07:57:20 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F017A314B93;
-	Sat, 17 Jan 2026 02:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA86500964
+	for <linux-rtc@vger.kernel.org>; Mon, 19 Jan 2026 07:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768616845; cv=none; b=Z2QKx4L9fO0AvVwlUDoF9j8IQr2EHaIP/8ECfF2J4O2Op9ZW+KAJCH7KXdf/iHFf9LpwEnSVipYEAOIJk6RF3F/rTOi4g/uP0zAQi5e2A0lrdcyN9wRP7VnLjXmU6U/YZICXwXRvb7I8p7fxT5nvcDClSvmAuxHYOHiGHhBMBBw=
+	t=1768809440; cv=none; b=rSLnQMuD6SSjDR0tRw7WGnsaBAKcjtaF3XQPsMkOYU1F5tE+oTHEgTO082eNZ5rdOZ2xxUvwozkNDX6vt/UMk8nUuyp8tT+HMCFhFyhpSMypA0GnYK5UR8dUMWBEX0ds1bAbt/xFjgHPUzm3N0y3UQz6EMNa5YxQFgZFWngXavo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768616845; c=relaxed/simple;
-	bh=TAG9OVTnNO+QpdOQEVxPbs/3BVwx5fE1zOvGMqWSGK0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KrTzma5RHMNFBlsFbeNytn+ez1HkwDAAf+wvuD+TYkwUzNoUYKxJCh8THL/C6HJL1yb34eVc3txZQwxMKvjimjCTqEIuCYGi4hZ7dE53XxnPqQIL4ZR4okExYhkRGKQkSA+y5bg7fU0smZZLa0ZRrHRhTVJ6tymOUHN+K4QUpko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.69.1])
-	by gateway (Coremail) with SMTP id _____8BxmsKA82pp38cJAA--.31811S3;
-	Sat, 17 Jan 2026 10:27:12 +0800 (CST)
-Received: from localhost.localdomain (unknown [223.64.69.1])
-	by front1 (Coremail) with SMTP id qMiowJDxTMJ082ppbNkgAA--.65061S5;
-	Sat, 17 Jan 2026 10:27:11 +0800 (CST)
-From: Binbin Zhou <zhoubinbin@loongson.cn>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org
-Cc: Xiaochuang Mao <maoxiaochuan@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	loongarch@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Binbin Zhou <zhoubinbin@loongson.cn>
-Subject: [PATCH v3 3/3] rtc: loongson: Add Loongson-2K0300 support
-Date: Sat, 17 Jan 2026 10:26:50 +0800
-Message-ID: <abff68dda2fe6a6601a9e58b31e278d941297fce.1768616276.git.zhoubinbin@loongson.cn>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1768616276.git.zhoubinbin@loongson.cn>
-References: <cover.1768616276.git.zhoubinbin@loongson.cn>
+	s=arc-20240116; t=1768809440; c=relaxed/simple;
+	bh=URSIX1L1XRwcnjpDF60ehtlYKjNZ54rdLkHbawaeZ3E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TpjB43d/X+MhE4bz3Jp7E3JzaIk78+CSuyabhsM0zBCzg63qKpakmKJWitfbwo+vBwqw+oSy9btH1uzbzYnuT8qQsPwKLMke5RdwWmJq5bdhC5QEpSaa0XjI3FeZUl+E6tk2UWcA/HetlhwHEwl2SXKJIKWCDgr9pnFeAPiIm/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-81f5381d168so3662987b3a.2
+        for <linux-rtc@vger.kernel.org>; Sun, 18 Jan 2026 23:57:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768809438; x=1769414238;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0r1aVO8rEMV3iAHa78OH6vdU8Vf6tJYYIKfUUGULuyA=;
+        b=SWDDdecsjAXLERkX15M7IkUCEtppugfJK3IU4Fg8pwKDlKQDEST6LGqfuJPwvf9atj
+         T9Vq9k0VIBAWXP4aIlV7u2AOVzIJfsU82Nx6/nCuaskyrgAfFYKoKmBhwE5Wf8R6rCuD
+         hbqPrg43CRaSqpwuexmOhRgnfGFz6x1ul7ve4a0NStPg12BeIa70og+wU/d7qUFNqIUF
+         BQXyM+dKEviTFaH6Bic5CIlffzodglZRLwLr8TJn4fdpGTUsci7nhpBsYgUEshfaLWMb
+         1LOUg/Z+4iisJH1d37uhpKm3VjuWb5rAq7ya5U9QE8yCiLHdcGVHQqePe08g/X7nBkC6
+         G6xQ==
+X-Gm-Message-State: AOJu0YxYl3dn0QTM89gadd2E4VpUpk7JfcPQaV23gH+574M8toLOKowc
+	4Q0Yl3ur6zqz0UiIkwB/sEdN7kQ3uc964Gnj15uxfmNkkZ9ldA4xgqbgi3N7hp0GZ0w=
+X-Gm-Gg: AY/fxX7JStsI03Icyj1+5HR5cqg87/XVySW4i6j77Uxn4N5WCUp8epXOqtnwy5eS6rV
+	UjDFeKd9s7kBM2+ohiitBIA5z5PHVbjKW8stkOM1jwEaumoi/ZH+zfyR/cCeBx09RYiR+3WeZSX
+	cp/ccRGhoYzVclnNjpFKU6bJZaaSiyc42hbKTWaE3FY50L3JufoRPDRRewA0wrkKXmjx6WgsvDP
+	MkIpMQ1ZyGPvv8uR7G4fV4+cBFzklzzTBiDEkpq0QNk9BzSSaYg6GQOLr5hhc2VEXbiylU+1rwx
+	/Q15jzoWDLvqlizGbYEpNd00iOmRU4pibuq7ykx7GdAzkc5f8ZMBK2gUp29aBW3UxHw1S85mBDY
+	r1PWzk+20k7d2TkZtjArfu6kD4RGUq+4iAbzd+VVPSLBE6QnZaupkJGY9ovOdRgOIlVl+L3XGTE
+	94zfLmvR8cfkhQp743SrLZsw4RWzdg2HySlSxSbrsDmYDm
+X-Received: by 2002:a05:6a00:a245:b0:7ff:d378:98f with SMTP id d2e1a72fcca58-81fa01da21cmr9902157b3a.37.1768809438010;
+        Sun, 18 Jan 2026 23:57:18 -0800 (PST)
+Received: from localhost.localdomain (104.244.95.48.16clouds.com. [104.244.95.48])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa1277a15sm8415339b3a.42.2026.01.18.23.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jan 2026 23:57:17 -0800 (PST)
+From: Ke Sun <sunke@kylinos.cn>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
+	Ke Sun <sunke@kylinos.cn>
+Subject: [PATCH v1] rtc: add device selector for rtc_class_ops callbacks
+Date: Mon, 19 Jan 2026 15:57:10 +0800
+Message-ID: <20260119075710.2078816-1-sunke@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -60,173 +70,191 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTMJ082ppbNkgAA--.65061S5
-X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/1tbiAgEKCGlp0xwWWAAAsA
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFW3uw1fKry8GF1kXw17twc_yoW7WF17pw
-	43Aa45Kr4FqF15urs5JayUGF13CryfGa4IqF47K3s2g3sxA34DZr1kKFy3Z3y3AF98ZFW3
-	XFWkGFWfua1UCwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-	XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0epB3UUUUU==
 
-The Loongson-2K0300's rtc hardware design is similar to that of the
-Loongson-1B, but it does not support the alarm feature.
+Add rtc_ops_dev() helper to allow drivers to choose whether
+rtc_class_ops callbacks receive rtc->dev or rtc->dev.parent. This
+enables Rust RTC drivers to store driver data on the RTC device [1].
 
-Introduce `LOONGSON_RTC_ALARM_WORKAROUND`, which indicates a chip that
-does not support the alarm feature, and rewrite the related logic in
-`loongson_rtc_alarm_setting()`.
+The helper checks RTC_OPS_USE_RTC_DEV flag: if set, returns &rtc->dev;
+otherwise returns rtc->dev.parent.
 
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+Update all rtc_class_ops callback invocations to use rtc_ops_dev(rtc)
+instead of directly accessing rtc->dev.parent.
+
+Maintains backward compatibility for existing C drivers.
+
+Link: https://lore.kernel.org/rust-for-linux/DFHJM2HAG7Q3.1HGZ3P7H55FD2@kernel.org/ [1]
+Signed-off-by: Ke Sun <sunke@kylinos.cn>
 ---
- drivers/rtc/rtc-loongson.c | 71 +++++++++++++++++++++++++-------------
- 1 file changed, 47 insertions(+), 24 deletions(-)
+ drivers/rtc/dev.c       |  6 +++---
+ drivers/rtc/interface.c | 18 +++++++++---------
+ drivers/rtc/proc.c      |  2 +-
+ include/linux/rtc.h     | 15 +++++++++++++++
+ 4 files changed, 28 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/rtc/rtc-loongson.c b/drivers/rtc/rtc-loongson.c
-index 2ca7ffd5d7a9..066f0644d1c3 100644
---- a/drivers/rtc/rtc-loongson.c
-+++ b/drivers/rtc/rtc-loongson.c
-@@ -66,7 +66,8 @@
-  * According to the LS1C manual, RTC_CTRL and alarm-related registers are not defined.
-  * Accessing the relevant registers will cause the system to hang.
-  */
--#define LS1C_RTC_CTRL_WORKAROUND	BIT(0)
-+#define LOONGSON_RTC_CTRL_WORKAROUND	BIT(0)
-+#define LOONGSON_RTC_ALARM_WORKAROUND	BIT(1)
+diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
+index baf1a8ca8b2b1..eddcc5a69db3b 100644
+--- a/drivers/rtc/dev.c
++++ b/drivers/rtc/dev.c
+@@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
+ 		}
+ 		default:
+ 			if (rtc->ops->param_get)
+-				err = rtc->ops->param_get(rtc->dev.parent, &param);
++				err = rtc->ops->param_get(rtc_ops_dev(rtc), &param);
+ 			else
+ 				err = -EINVAL;
+ 		}
+@@ -440,7 +440,7 @@ static long rtc_dev_ioctl(struct file *file,
  
- struct loongson_rtc_config {
- 	u32 pm_offset;	/* Offset of PM domain, for RTC alarm wakeup */
-@@ -89,7 +90,7 @@ static const struct loongson_rtc_config ls1b_rtc_config = {
+ 		default:
+ 			if (rtc->ops->param_set)
+-				err = rtc->ops->param_set(rtc->dev.parent, &param);
++				err = rtc->ops->param_set(rtc_ops_dev(rtc), &param);
+ 			else
+ 				err = -EINVAL;
+ 		}
+@@ -450,7 +450,7 @@ static long rtc_dev_ioctl(struct file *file,
+ 	default:
+ 		/* Finally try the driver's ioctl interface */
+ 		if (ops->ioctl) {
+-			err = ops->ioctl(rtc->dev.parent, cmd, arg);
++			err = ops->ioctl(rtc_ops_dev(rtc), cmd, arg);
+ 			if (err == -ENOIOCTLCMD)
+ 				err = -ENOTTY;
+ 		} else {
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index b8b298efd9a9c..4c81130fb0394 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -91,7 +91,7 @@ static int __rtc_read_time(struct rtc_device *rtc, struct rtc_time *tm)
+ 		err = -EINVAL;
+ 	} else {
+ 		memset(tm, 0, sizeof(struct rtc_time));
+-		err = rtc->ops->read_time(rtc->dev.parent, tm);
++		err = rtc->ops->read_time(rtc_ops_dev(rtc), tm);
+ 		if (err < 0) {
+ 			dev_dbg(&rtc->dev, "read_time: fail to read: %d\n",
+ 				err);
+@@ -155,7 +155,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
+ 	if (!rtc->ops)
+ 		err = -ENODEV;
+ 	else if (rtc->ops->set_time)
+-		err = rtc->ops->set_time(rtc->dev.parent, tm);
++		err = rtc->ops->set_time(rtc_ops_dev(rtc), tm);
+ 	else
+ 		err = -EINVAL;
  
- static const struct loongson_rtc_config ls1c_rtc_config = {
- 	.pm_offset = 0,
--	.flags = LS1C_RTC_CTRL_WORKAROUND,
-+	.flags = LOONGSON_RTC_CTRL_WORKAROUND | LOONGSON_RTC_ALARM_WORKAROUND,
- };
+@@ -200,7 +200,7 @@ static int rtc_read_alarm_internal(struct rtc_device *rtc,
+ 		alarm->time.tm_wday = -1;
+ 		alarm->time.tm_yday = -1;
+ 		alarm->time.tm_isdst = -1;
+-		err = rtc->ops->read_alarm(rtc->dev.parent, alarm);
++		err = rtc->ops->read_alarm(rtc_ops_dev(rtc), alarm);
+ 	}
  
- static const struct loongson_rtc_config generic_rtc_config = {
-@@ -97,6 +98,11 @@ static const struct loongson_rtc_config generic_rtc_config = {
- 	.flags = 0,
- };
+ 	mutex_unlock(&rtc->ops_lock);
+@@ -441,7 +441,7 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ 	else if (!test_bit(RTC_FEATURE_ALARM, rtc->features))
+ 		err = -EINVAL;
+ 	else
+-		err = rtc->ops->set_alarm(rtc->dev.parent, alarm);
++		err = rtc->ops->set_alarm(rtc_ops_dev(rtc), alarm);
  
-+static const struct loongson_rtc_config ls2k0300_rtc_config = {
-+	.pm_offset = 0x0,
-+	.flags = LOONGSON_RTC_ALARM_WORKAROUND,
-+};
-+
- static const struct loongson_rtc_config ls2k1000_rtc_config = {
- 	.pm_offset = 0x800,
- 	.flags = 0,
-@@ -153,7 +159,7 @@ static int loongson_rtc_set_enabled(struct device *dev)
- {
- 	struct loongson_rtc_priv *priv = dev_get_drvdata(dev);
+ 	/*
+ 	 * Check for potential race described above. If the waiting for next
+@@ -568,7 +568,7 @@ int rtc_alarm_irq_enable(struct rtc_device *rtc, unsigned int enabled)
+ 	else if (!test_bit(RTC_FEATURE_ALARM, rtc->features) || !rtc->ops->alarm_irq_enable)
+ 		err = -EINVAL;
+ 	else
+-		err = rtc->ops->alarm_irq_enable(rtc->dev.parent, enabled);
++		err = rtc->ops->alarm_irq_enable(rtc_ops_dev(rtc), enabled);
  
--	if (priv->config->flags & LS1C_RTC_CTRL_WORKAROUND)
-+	if (priv->config->flags & LOONGSON_RTC_CTRL_WORKAROUND)
- 		return 0;
+ 	mutex_unlock(&rtc->ops_lock);
  
- 	/* Enable RTC TOY counters and crystal */
-@@ -167,7 +173,7 @@ static bool loongson_rtc_get_enabled(struct device *dev)
- 	u32 ctrl_data;
- 	struct loongson_rtc_priv *priv = dev_get_drvdata(dev);
+@@ -618,7 +618,7 @@ int rtc_update_irq_enable(struct rtc_device *rtc, unsigned int enabled)
+ 		rtc->uie_rtctimer.period = ktime_set(1, 0);
+ 		err = rtc_timer_enqueue(rtc, &rtc->uie_rtctimer);
+ 		if (!err && rtc->ops && rtc->ops->alarm_irq_enable)
+-			err = rtc->ops->alarm_irq_enable(rtc->dev.parent, 1);
++			err = rtc->ops->alarm_irq_enable(rtc_ops_dev(rtc), 1);
+ 		if (err)
+ 			goto out;
+ 	} else {
+@@ -874,7 +874,7 @@ static void rtc_alarm_disable(struct rtc_device *rtc)
+ 	if (!rtc->ops || !test_bit(RTC_FEATURE_ALARM, rtc->features) || !rtc->ops->alarm_irq_enable)
+ 		return;
  
--	if (priv->config->flags & LS1C_RTC_CTRL_WORKAROUND)
-+	if (priv->config->flags & LOONGSON_RTC_CTRL_WORKAROUND)
- 		return true;
+-	rtc->ops->alarm_irq_enable(rtc->dev.parent, false);
++	rtc->ops->alarm_irq_enable(rtc_ops_dev(rtc), false);
+ 	trace_rtc_alarm_irq_enable(0, 0);
+ }
  
- 	ret = regmap_read(priv->regmap, RTC_CTRL_REG, &ctrl_data);
-@@ -299,9 +305,41 @@ static const struct rtc_class_ops loongson_rtc_ops = {
- 	.alarm_irq_enable = loongson_rtc_alarm_irq_enable,
- };
+@@ -1076,7 +1076,7 @@ int rtc_read_offset(struct rtc_device *rtc, long *offset)
+ 		return -EINVAL;
  
-+static int loongson_rtc_alarm_setting(struct platform_device *pdev, void __iomem *regs)
+ 	mutex_lock(&rtc->ops_lock);
+-	ret = rtc->ops->read_offset(rtc->dev.parent, offset);
++	ret = rtc->ops->read_offset(rtc_ops_dev(rtc), offset);
+ 	mutex_unlock(&rtc->ops_lock);
+ 
+ 	trace_rtc_read_offset(*offset, ret);
+@@ -1111,7 +1111,7 @@ int rtc_set_offset(struct rtc_device *rtc, long offset)
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&rtc->ops_lock);
+-	ret = rtc->ops->set_offset(rtc->dev.parent, offset);
++	ret = rtc->ops->set_offset(rtc_ops_dev(rtc), offset);
+ 	mutex_unlock(&rtc->ops_lock);
+ 
+ 	trace_rtc_set_offset(offset, ret);
+diff --git a/drivers/rtc/proc.c b/drivers/rtc/proc.c
+index cbcdbb19d848e..bf688079d0fbb 100644
+--- a/drivers/rtc/proc.c
++++ b/drivers/rtc/proc.c
+@@ -73,7 +73,7 @@ static int rtc_proc_show(struct seq_file *seq, void *offset)
+ 	seq_printf(seq, "24hr\t\t: yes\n");
+ 
+ 	if (ops->proc)
+-		ops->proc(rtc->dev.parent, seq);
++		ops->proc(rtc_ops_dev(rtc), seq);
+ 
+ 	return 0;
+ }
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 95da051fb155d..1dd4a45d0186e 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -83,6 +83,7 @@ struct rtc_timer {
+ /* flags */
+ #define RTC_DEV_BUSY 0
+ #define RTC_NO_CDEV  1
++#define RTC_OPS_USE_RTC_DEV 2
+ 
+ struct rtc_device {
+ 	struct device dev;
+@@ -167,6 +168,20 @@ struct rtc_device {
+ #define rtc_lock(d) mutex_lock(&d->ops_lock)
+ #define rtc_unlock(d) mutex_unlock(&d->ops_lock)
+ 
++/**
++ * rtc_ops_dev - Get the device pointer for RTC ops callbacks
++ * @rtc: RTC device
++ *
++ * Returns &rtc->dev if RTC_OPS_USE_RTC_DEV flag is set,
++ * otherwise returns rtc->dev.parent.
++ */
++static inline struct device *rtc_ops_dev(struct rtc_device *rtc)
 +{
-+	int ret = 0, alarm_irq;
-+	struct device *dev = &pdev->dev;
-+	struct loongson_rtc_priv *priv = dev_get_drvdata(dev);
-+
-+	if (priv->config->flags & LOONGSON_RTC_ALARM_WORKAROUND) {
-+		/* Loongson-1C/Loongson-2K0300 RTC does not support alarm */
-+		clear_bit(RTC_FEATURE_ALARM, priv->rtcdev->features);
-+		return 0;
-+	}
-+
-+	/* Get RTC alarm irq */
-+	alarm_irq = platform_get_irq(pdev, 0);
-+	if (alarm_irq < 0)
-+		return alarm_irq;
-+
-+	ret = devm_request_irq(dev, alarm_irq, loongson_rtc_isr, 0, "loongson-alarm",
-+			       priv);
-+	if (ret < 0)
-+		return ret;
-+
-+	priv->pm_base = regs - priv->config->pm_offset;
-+	device_init_wakeup(dev, true);
-+
-+	if (has_acpi_companion(dev))
-+		acpi_install_fixed_event_handler(ACPI_EVENT_RTC,
-+						 loongson_rtc_handler, priv);
-+
-+	return ret;
++	if (test_bit(RTC_OPS_USE_RTC_DEV, &rtc->flags))
++		return &rtc->dev;
++	return rtc->dev.parent;
 +}
 +
- static int loongson_rtc_probe(struct platform_device *pdev)
- {
--	int ret, alarm_irq;
-+	int ret;
- 	void __iomem *regs;
- 	struct loongson_rtc_priv *priv;
- 	struct device *dev = &pdev->dev;
-@@ -330,25 +368,9 @@ static int loongson_rtc_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(priv->rtcdev),
- 				     "devm_rtc_allocate_device failed\n");
- 
--	/* Get RTC alarm irq */
--	alarm_irq = platform_get_irq(pdev, 0);
--	if (alarm_irq > 0) {
--		ret = devm_request_irq(dev, alarm_irq, loongson_rtc_isr,
--				       0, "loongson-alarm", priv);
--		if (ret < 0)
--			return dev_err_probe(dev, ret, "Unable to request irq %d\n",
--					     alarm_irq);
--
--		priv->pm_base = regs - priv->config->pm_offset;
--		device_init_wakeup(dev, true);
--
--		if (has_acpi_companion(dev))
--			acpi_install_fixed_event_handler(ACPI_EVENT_RTC,
--							 loongson_rtc_handler, priv);
--	} else {
--		/* Loongson-1C RTC does not support alarm */
--		clear_bit(RTC_FEATURE_ALARM, priv->rtcdev->features);
--	}
-+	ret = loongson_rtc_alarm_setting(pdev, regs);
-+	if (ret)
-+		return ret;
- 
- 	/* Loongson RTC does not support UIE */
- 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, priv->rtcdev->features);
-@@ -379,6 +401,7 @@ static const struct of_device_id loongson_rtc_of_match[] = {
- 	{ .compatible = "loongson,ls1b-rtc", .data = &ls1b_rtc_config },
- 	{ .compatible = "loongson,ls1c-rtc", .data = &ls1c_rtc_config },
- 	{ .compatible = "loongson,ls7a-rtc", .data = &generic_rtc_config },
-+	{ .compatible = "loongson,ls2k0300-rtc", .data = &ls2k0300_rtc_config },
- 	{ .compatible = "loongson,ls2k1000-rtc", .data = &ls2k1000_rtc_config },
- 	{ /* sentinel */ }
- };
+ /* useful timestamps */
+ #define RTC_TIMESTAMP_BEGIN_0000	-62167219200ULL /* 0000-01-01 00:00:00 */
+ #define RTC_TIMESTAMP_BEGIN_1900	-2208988800LL /* 1900-01-01 00:00:00 */
 -- 
-2.47.3
+2.43.0
 
 
