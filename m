@@ -1,111 +1,92 @@
-Return-Path: <linux-rtc+bounces-5789-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5790-lists+linux-rtc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 087DCD3AC81
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 15:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A92CD3B57E
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 19:22:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 88572314BF71
-	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 14:32:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7FC0A3065E0F
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Jan 2026 18:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D4222A4E9;
-	Mon, 19 Jan 2026 14:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36EB732ED2F;
+	Mon, 19 Jan 2026 18:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lyvzfcyz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OF2+i5Ak"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EE819CCF5;
-	Mon, 19 Jan 2026 14:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6EA32D0DC;
+	Mon, 19 Jan 2026 18:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768833148; cv=none; b=q0HrUoqN9ouxoqVoYOW65/vLB8k61lTn6Jppi8oEiB2o7tDGSeQkDKUROjRsFfWQ1KADQBjQgTwgjuKss8qGz+6GIkOruKWBUTWPVc0ClU89tWo7nc8G0iEP7du1rR9kg32RCN5XCX0gXpl8Eob28xKdHEY72FZMDwQWRomslVI=
+	t=1768846901; cv=none; b=jDfRD0U8YBOLGBMy3B2NbsDHvfiCU1tpnq6i5Qw4UCxdcXwAlxE7RsxTZDFlzFCDA8bhCM1pdgMd2rcw+H7BZEJtN54IUe7dHzqx4UbdipMyaF+D3kxBpVPbvlR59z9oL7zcPu2+PLUNbzM0Sf/IiAqob/0ohPifydXYYQhOOi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768833148; c=relaxed/simple;
-	bh=DOVGe1NIyTR0/0dJGE7gRKbBILCMt6ySmCJQGd1tO7A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=qEKJ4vXS84Xingw9FYAcu9DcCoa3dlDi72u9BDxXAa5XYtFSNMgZCDNnZiKKWLuIcC4/mYS+G5eAKqlPkVN4uI4p+jg9GUZdUeVHYCJfkOHmoamqrGZU6tJqPNRLK9Qmgs4dWIIXoiQrDuilMRctnInz4/KeBynHGNKC9qLKDk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lyvzfcyz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8551C116C6;
-	Mon, 19 Jan 2026 14:32:24 +0000 (UTC)
+	s=arc-20240116; t=1768846901; c=relaxed/simple;
+	bh=X7wTU9qUYX88IrTzo/aBEN6J2tlC7SxaQembYdHLdJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OyKIcjbu9cmTdeV1zawIFVOhTVHoVkZeIWIEhOGoJeM98tnUExtGrxedPLEga6PpDhNq63pjfjaIOIPFO737alGAIgrjC3TzBIP5mo517jiSOAVKSfLm5gnTnxhOVkS6deLu61F4D5KIWM0ag7g0YzFTKgPCH7MUEaSyUpot8Q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OF2+i5Ak; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6CDC116C6;
+	Mon, 19 Jan 2026 18:21:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768833147;
-	bh=DOVGe1NIyTR0/0dJGE7gRKbBILCMt6ySmCJQGd1tO7A=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=Lyvzfcyz1I5rDltncgzWvv9V49TYZyFu9IyhmlmcaubfejPtgrDbcTgyGbO5nV4q6
-	 aPWO/PYH/yNJHBjKIc8d85a38+d/+RCmtknvf50aR993jQA5p5mPdJl7knCUod0KyO
-	 8+nJcgJ5+PippDOaT3YDjMgGYysR4JqWA7cGvGm6ZaJUQM2CXJkX1OQqQ5OEjGWTBQ
-	 3vEK8E4QeLWeEpEO/vqJyDZcjPCbYKxzb+J+KQ4VzDSBaQzjneVIU1+p5/zmrWra7S
-	 cIunUp1DJty7AM4aahamhM70SwtD7G6a3WlsTIFbgqMYqrJ4qisdUmbu6Mq22P9aVQ
-	 UsdhwP08mm+xA==
+	s=k20201202; t=1768846900;
+	bh=X7wTU9qUYX88IrTzo/aBEN6J2tlC7SxaQembYdHLdJc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OF2+i5AkQwErkla6OReI7YlVenUrB4ZCykDVqlbUteUSMCdT5PG8I/RqL2poasvIx
+	 hOcHd6TMAwqMsOT3sxCW+BBZ1vWK0XZevvismQWUKpHri5AvcQz5lFX1/3Ls5sljve
+	 FFKVy3QQQPdaPAWGOnwZ/dAS4/kElxmg4GKE8JTzd6iGFAX/fvLlhg4cZ1zQxwBeS6
+	 AxNXDawGiohTIP6eV2sK0InpUkovzKsVsmHEyOd22wwLL1hcN1smBb2VDlubIyQ2xN
+	 2WnmR+08i0UGH54ipRlNMsPT0nF8CAmvRC+yVwklS/VYQODzaXML4er96xPXrKffe+
+	 F8eAxual3kWSQ==
+Date: Mon, 19 Jan 2026 18:21:35 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Binbin Zhou <zhoubinbin@loongson.cn>
+Cc: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
+	Xiaochuang Mao <maoxiaochuan@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+	Keguang Zhang <keguang.zhang@gmail.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: rtc: loongson: Document
+ Loongson-2K0300 compatible
+Message-ID: <20260119-dragonish-captivity-10b4c27c5bc1@spud>
+References: <cover.1768616276.git.zhoubinbin@loongson.cn>
+ <0c6a4fd221b5bf05f06cae9bb543a5bf7ea59f57.1768616276.git.zhoubinbin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Jan 2026 15:32:23 +0100
-Message-Id: <DFSN0O9RRVD6.1LCI38JKGO1R0@kernel.org>
-To: "Ke Sun" <sunke@kylinos.cn>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops
- callbacks
-Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, <linux-rtc@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, "Alvin Sun" <sk.alvin.x@gmail.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>
-References: <20260116162203.296844-1-sunke@kylinos.cn>
- <20260116162203.296844-2-sunke@kylinos.cn>
-In-Reply-To: <20260116162203.296844-2-sunke@kylinos.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qbD8GbKWVIFFyAXR"
+Content-Disposition: inline
+In-Reply-To: <0c6a4fd221b5bf05f06cae9bb543a5bf7ea59f57.1768616276.git.zhoubinbin@loongson.cn>
 
-On Fri Jan 16, 2026 at 5:21 PM CET, Ke Sun wrote:
-> diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
-> index baf1a8ca8b2b1..eddcc5a69db3b 100644
-> --- a/drivers/rtc/dev.c
-> +++ b/drivers/rtc/dev.c
-> @@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
->  		}
->  		default:
->  			if (rtc->ops->param_get)
-> -				err =3D rtc->ops->param_get(rtc->dev.parent, &param);
-> +				err =3D rtc->ops->param_get(rtc_ops_dev(rtc), &param);
->  			else
->  				err =3D -EINVAL;
->  		}
 
-<snip>
+--qbD8GbKWVIFFyAXR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +/**
-> + * rtc_ops_dev - Get the device pointer for RTC ops callbacks
-> + * @rtc: RTC device
-> + *
-> + * Returns &rtc->dev if RTC_OPS_USE_RTC_DEV flag is set,
-> + * otherwise returns rtc->dev.parent.
-> + */
-> +static inline struct device *rtc_ops_dev(struct rtc_device *rtc)
-> +{
-> +	if (test_bit(RTC_OPS_USE_RTC_DEV, &rtc->flags))
-> +		return &rtc->dev;
-> +	return rtc->dev.parent;
-> +}
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-I understand that the idea is to gradually convert all drivers to use the R=
-TC
-device, rather than it's parent device in RTC device callbacks.
+--qbD8GbKWVIFFyAXR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-My main concern is that once that has been achieved it's still not what we =
-want
-to have eventually, i.e. RTC device callbacks should ideally take a struct
-rtc_device as argument and not the embedded base struct device.
+-----BEGIN PGP SIGNATURE-----
 
-I.e. we'd kick off a conversion process that won't reach the actual desired
-state.
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaW52LwAKCRB4tDGHoIJi
+0oG+AQDTOiQppr6sRMbNDOqpEbPTbwxSAiRagXRPo194fxfTdgEAq9V6tXFcyUPv
+8bL7qikJ5S+AlhcM939KeMDtKhNvPAQ=
+=zxHu
+-----END PGP SIGNATURE-----
+
+--qbD8GbKWVIFFyAXR--
 
