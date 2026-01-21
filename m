@@ -1,240 +1,242 @@
-Return-Path: <linux-rtc+bounces-5824-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5825-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eJIOAJk4cWnKfQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-5824-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 21:35:37 +0100
+	id 6LBoF3pYcWkNEwAAu9opvQ
+	(envelope-from <linux-rtc+bounces-5825-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 23:51:38 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id A72195D591
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 21:35:36 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C7E75F14E
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 23:51:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 975178664C3
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 18:29:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 574F34F96D4
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 22:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057723A1A4E;
-	Wed, 21 Jan 2026 18:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CC1E423A80;
+	Wed, 21 Jan 2026 22:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pNWsEkZ7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DZgQ9U0+";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="lGivQTIj"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF31839B4BB;
-	Wed, 21 Jan 2026 18:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A60030B52A
+	for <linux-rtc@vger.kernel.org>; Wed, 21 Jan 2026 22:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769020140; cv=none; b=rBje9tnhu7w67LTFnQ2yE3mYfd/wc3J3dOGg4dxQfTXNjYqXo2S00B47jXxzc5417M0JI3wTJF28xEd9vo7NXofsQpzDq1vdR/TNi56MD9s8/WfPm4kUZyZznrhSvFpAzrd6gDPdPB41ajYlbHaqCqIK7EJLytGminUJ1UtewoM=
+	t=1769035874; cv=none; b=uf91khahYf8aldN641rxKApyWdacJjeuPcCQlCbtEgBXhfQlS/tshAWPnU0sgAAZDQDvk2aaSoUZlYHmh+IwyNxOXTkEOH//XJWgbMrO7k9t/P0rmTzCPtHEkr4mxBcZWdNEPLkxdac8Ri06L78q7y8tWeRVJ0gamc/KlIeD7pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769020140; c=relaxed/simple;
-	bh=l6+u6Dylp0WfC6wdeLiE99rgNBwsRoiJbYc85FgW5Fo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CbvN3mqkRNEDZO4WMFGLcLPXprsfohaQZ+E0QMYgL8J7fLkF4JfmibTiPLFPPp9HsHWbY8ADZwOxD8/YZ/UoxF7bBU1cVnx35yLlSCxK+wnZmTELUT7CA/iAfEMvLr42E0l3oE5qL9lKWIZikxTY0KvjDqOZLly3JA3Xi7k4z5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pNWsEkZ7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87027C4CEF1;
-	Wed, 21 Jan 2026 18:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769020140;
-	bh=l6+u6Dylp0WfC6wdeLiE99rgNBwsRoiJbYc85FgW5Fo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pNWsEkZ7St50nxE07dRB0tDto39+JiwHq185jDR4NO8xP6EgsbhJohlntKIrEKYm1
-	 etWasqI2WlRnwHTinOziFVvUPQv9J5OdDk8Xq05bghdF+VUmy4SYdG7yr871dgfoUC
-	 pNmOTv3H6VaioaZ3cfIvePZLY5/nczx1uaneKaDzHmjD3jhgZ9yr15DTgi2UgQ4+yg
-	 IOIISPfDlKydxKEH0/zvhU6+CWGoDjzvtQzxYsOmUTm4tKH82uwDjNzafpILD4F6hV
-	 saPOq6fcNWWvE3KhYJ8/xx89NJcAJ/tf40mxTYvgB9DZ9KfAp0W9U1beU8U8HTBHmY
-	 8zFZ6ib5glnkA==
-Date: Wed, 21 Jan 2026 18:28:54 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-	Keguang Zhang <keguang.zhang@gmail.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: rtc: loongson: Correct Loongson-1C
- interrupts property
-Message-ID: <20260121-sadness-operating-8bffd4250085@spud>
-References: <cover.1768616276.git.zhoubinbin@loongson.cn>
- <b6295c907410f6708115cba4df0959ee6629f8a5.1768616276.git.zhoubinbin@loongson.cn>
- <20260119-tricking-premiere-ada70700f804@spud>
- <20260120075045e7e864ba@mail.local>
- <20260120-cubical-harmonica-a7b7bbb26b08@spud>
- <20260120224920df0cf2ac@mail.local>
- <20260120-proposal-retry-d0a1f3de10ea@spud>
- <CAMpQs4Lm1Oq8L+dY8OnseV-NNUoD3+0QjnZATRkmR-sejCKAdA@mail.gmail.com>
+	s=arc-20240116; t=1769035874; c=relaxed/simple;
+	bh=yWkY+UHjIsVWWucZVtJVRKqou4DthkosLf0vkVsVgXE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Z4XpcYBI8Hrijg6Yv0wRYlfZMWyx8fppXIFM+p1guhb2IiePLsEnMnrRXs/+hpsKWtqLdp/2SyMFllvV+W6NgtOg0gtqFKe9AyFdNmeoii0pZhLLLOpHjwCrk/KvRWgwB8Gq9Ym9HaXb5oueYyF0BWhvYIrUuNzmwka2ns+1X98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DZgQ9U0+; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=lGivQTIj; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769035866;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=Yi8dtRe+OkhFN0mZv7ax8V9fdnQTxFvioYJNH369UP8=;
+	b=DZgQ9U0+04fvZkaINwvyzxkDC1OTvBXnpPS2sDz3YTn0+FlAMKWntJD7Owq6YyJ6tvOMFS
+	xSJMuqLR9YnOMZh95zPc9E+RZNSD4BU9L8kFRgaylPZS8f+kZ6kFt/Kie1jQqJhQOZ8O45
+	hLH5um1T428BCRAwBcZdNRJJnyuz8xE=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-473-lehfC0ywPFuy3IHNzKXftA-1; Wed, 21 Jan 2026 17:51:05 -0500
+X-MC-Unique: lehfC0ywPFuy3IHNzKXftA-1
+X-Mimecast-MFC-AGG-ID: lehfC0ywPFuy3IHNzKXftA_1769035865
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-502d38a3e39so4715041cf.3
+        for <linux-rtc@vger.kernel.org>; Wed, 21 Jan 2026 14:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769035865; x=1769640665; darn=vger.kernel.org;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yi8dtRe+OkhFN0mZv7ax8V9fdnQTxFvioYJNH369UP8=;
+        b=lGivQTIj7cm49qRJ6/5Do0zLSDPU+WF9bgGaTv4Sf9lLWoKihJL79aiwwRAAd0bAau
+         4Z+R4LUDz+/q6H2NqkJ66do95xijaV7Re65A7vPhNPJXpaGi5qSw2ef12n34PnPyENfR
+         rF28jGi7e4tEVsif2uakgy8ZBLCC5jQdxCbQdnyXKtnJIkMmFUEZJY3yUm+YOrqtcU4T
+         5aX0kriW7MohjP5xx/bDrn5h29HYwLw6pkULzN3pybqO170L4KEUOO5H7GYREh2RrcB6
+         jR/31tytsNOb/p3asOSimFOkvCs22i2/w8Xbw8VRR6Lv/EfjEwXwt7jPO6sdjA50Fslw
+         Ttzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769035865; x=1769640665;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yi8dtRe+OkhFN0mZv7ax8V9fdnQTxFvioYJNH369UP8=;
+        b=CBwAos3djmSN4lFznfQyiCOOujqwVBVrcanvpv9WEjEG6Cfsey+26oUCBmEj8cbye5
+         39k9nrcaEnKF0nvLD9H2kzB4y3GIvlrIvJzSf7jIDAR31eHtvc8v3/dR9HzZuuh+A+g7
+         +mg+S81wsmHxmQdfzsRmF87TyBKSLQ0d9BPLYSbVvfl6WcnOOC9jhClmMwE44Z4yXrE3
+         GDaR5+rcFEdRMhkd9F2lSlCoqkW8/gtuN+LboYHnsmGs3LWbjJjtCxGFqC6kDaMd1on2
+         Z6xX4QMfcE6Kbg5HWv4drI13pQ6jyvVPzDepdQhJ7UyDL0UnqnlHpjqzSqG17z2ZMxZw
+         1I0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVsMg0MrmX4BL6Cy6skP9ssNf3VViq8On6fJ9QddW4HsqN2Jz/nks8IrrJ1YkUnkUjhgh3d8yb1gAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOeVZpic+4xyq48d1QQHobX6sqfPG0L8D8CDTOUcp2NckWXWid
+	eg05R0GccPw8iqvE+cGqgCccRhYItOvIELT9P1z4opyGHvK9lOMNJuMZwIbaanRvWCZzpeqdZeX
+	3R+t1lavfw/fa/Kzkrt5bu8MVqunukTdDAOnwUH4gdP3DTttF8VN4f3cVQrPHFp2Ax67EbQ==
+X-Gm-Gg: AZuq6aIGybiuilyu0ABW/2iuxzhxeI9QC598xZDpEtWJlBT+I0Aplyowd4r+KgxQuEu
+	AGn9x7acJ+5jJLoXJOLff5RmAwmyLDbcn/L9YKP+qhDE/fDIyz3xXRKVm7LAob1t+v4xkb9pSfz
+	2Vs2llPK+76IJynDaVWTwUd7dcGI3DNIIJo1cG7OpUfELANsRErZe5KPGkwTGoCqRrJ5FJVvhZt
+	goyvX3v73hW/VzKE9fN60iDAe8SaFC2SI88eGkL8oSkMHU+WMT0eM/xC5wHgvZwR7JNxkZz3lOV
+	VvtNJJ8v9HtrP4wHzEMTbJVae1mu0tg/0h4u056hqL0k3/e5Hd3yf5ToVFdK02IXGM6HOcjGG3g
+	GYMOWRg+v
+X-Received: by 2002:ac8:584f:0:b0:501:3d11:18ce with SMTP id d75a77b69052e-502d8523a03mr93018261cf.65.1769035864753;
+        Wed, 21 Jan 2026 14:51:04 -0800 (PST)
+X-Received: by 2002:ac8:584f:0:b0:501:3d11:18ce with SMTP id d75a77b69052e-502d8523a03mr93018031cf.65.1769035864344;
+        Wed, 21 Jan 2026 14:51:04 -0800 (PST)
+Received: from redhat.com ([2600:382:8125:73a8:e201:8ac3:bd7d:6acd])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1efb0b2sm123098491cf.29.2026.01.21.14.51.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 14:51:02 -0800 (PST)
+Date: Wed, 21 Jan 2026 17:50:59 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: [GIT PULL] clk: remove deprecated API divider_round_rate() and
+ friends for v6.20
+Message-ID: <aXFYU324yQ6uBmk0@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ytcyEvQbqLkTzetR"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMpQs4Lm1Oq8L+dY8OnseV-NNUoD3+0QjnZATRkmR-sejCKAdA@mail.gmail.com>
-X-Spamd-Result: default: False [-2.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	MAILLIST(-0.15)[generic];
-	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5824-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_CC(0.00)[bootlin.com,loongson.cn,kernel.org,vger.kernel.org,xen0n.name,lists.linux.dev,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[loongson.cn:url,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: A72195D591
-X-Rspamd-Action: no action
+User-Agent: Mutt/2.2.14 (2025-02-20)
 X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-1.96 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	DMARC_POLICY_ALLOW(0.00)[redhat.com,quarantine];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	TAGGED_FROM(0.00)[bounces-5825-lists,linux-rtc=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[5];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: 9C7E75F14E
+X-Rspamd-Action: no action
+
+Hi Stephen,
+
+Here's a PULL for this large series that continues the work to remove
+some deprecated round_rate APIs. I used the following b4 command to
+collect up this series:
+
+    b4 am --cherry-pick 1-13,17-23 \
+        20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com
+
+I skipped some of the patches that have already been picked up by
+others. The last two patches in that series that actually remove the
+deprecated functions will need to go in during the next dev cycle.
+
+One thing that I want to call out in this pull is the change to
+drivers/rtc/rtc-ac100.c, which is all clk related.
 
 
---ytcyEvQbqLkTzetR
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
-On Wed, Jan 21, 2026 at 02:52:06PM +0800, Binbin Zhou wrote:
-> Hi Conor & Alexandre:
->=20
-> Thanks for your reply.
->=20
-> On Wed, Jan 21, 2026 at 7:39=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Tue, Jan 20, 2026 at 11:49:20PM +0100, Alexandre Belloni wrote:
-> > > On 20/01/2026 19:24:09+0000, Conor Dooley wrote:
-> > > > On Tue, Jan 20, 2026 at 08:50:45AM +0100, Alexandre Belloni wrote:
-> > > > > On 19/01/2026 18:24:36+0000, Conor Dooley wrote:
-> > > > > > On Sat, Jan 17, 2026 at 10:26:48AM +0800, Binbin Zhou wrote:
-> > > > > > > The `interrupts` property indicates an RTC alarm interrupt, w=
-hich is
-> > > > > > > required for RTCs that support the alarm feature, which is no=
-t supported
-> > > > > > > by the Loongson-1C RTC. We exclude it for a more accurate des=
-cription.
-> > > > > > >
-> > > > > > > Changing the `allowed` property is ABI-breaking behavior, but
-> > > > > > > throughout the existing Loongson DTS{i}, the description of t=
-he RTC
-> > > > > > > nodes conforms to the modified bingding rules.
-> > > > > >
-> > > > > > Right, changing properties is an ABI break, but when following =
-the ABI
-> > > > > > would've produced something non-functional, breaking it is not =
-really
-> > > > > > relevant.
-> > > > >
-> > > > >
-> > > > > But the HW has the interrupt, the fact that is not functional doe=
-sn't
-> > > > > mean it isn't there. I thought we should describe the hardware?
-> > > >
-> > > > Does the hardware have it? My interpretation of the commit message =
-was
-> > > > that it didn't have the alarm feature and thus no interrupt? Unless=
- the
-> > > > interrupt has some other purpose, in which case yeah we shouldn't a=
-ccept
-> > > > this change and only the new device should permit there being no
-> > > > interrupt.
-> > >
-> > > The datasheet shows the interrupt coming out of the RTC and it has the
-> > > proper registers. Why it is not functional is not clear to me.
-> >
-> > Right.. Perhaps Binbin can explain that then? If the interrupt is
-> > actually there then the dts should get fixed instead IMO.
->=20
-> I carefully reviewed the manual again and believe this patch is still nec=
-essary.
->=20
-> First, the Loongson-1C RTC does not define the timing interrupt
-> register (`TOY_MATCH0_REG`)[1], meaning it lacks hardware support for
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
-I don't understand Chinese, so I'll take your word for it that this
-particular model doesn't have this interrupt and that there's no other
-interrupt used by the rtc via a different register :) My ack for the
-patch remains valid.
+are available in the Git repository at:
 
-Also, I looked at the existing binding again, and there's no ABI break
-anyway cos the interrupts property wasn't required in the first place,
-so any driver has to be written to permit the absence of an interrupts
-property. I think you should remove mention of ABI break from the commit
-message, since it's not actually one.
+  https://github.com/masneyb/linux tags/clk-divider-round-rate-v6.20
 
-> alarms. Consequently, `interrupts` are also unnecessary.
-> The Loongson-2K0300 is different. It defines `TOY_MATCH0_REG`, but due
-> to a hardware design flaw, accessing this register causes system
-> crashes. Therefore, I must also classify it as lacking alarm support.
+for you to fetch changes up to 533162201ebcc478739235c6d002971f02f42f19:
 
-This logic also seems fair to me, assuming that this is the only
-interrupt that the device has.
+  clk: zynqmp: divider: convert from divider_round_rate() to divider_determine_rate() (2026-01-21 16:32:09 -0500)
 
-> Additionally, in patch-3 [2], I rewrote the alarm logic to decouple
-> the `interrupts` property from the alarm feature: I defined
-> corresponding workaround bits in `loongson_rtc_config->flags`. This
-> should be considered a SoC-specific attribute.
->=20
-> Finally, two thoughts:
-> 1. Retain this patch; it is correct for Loongson-1C.
-> 2. For Patch-2, still add the `interrupts` property to the
-> Loongson-2K0300 RTC node (as it exists in hardware), combined with the
-> workaround bit setting in patch-3 to avoid the hardware flaw.
+----------------------------------------------------------------
+Here's a series that lays the groundwork to rid of the deprecated APIs
+divider_round_rate(), divider_round_rate_parent(), and
+divider_ro_round_rate_parent() since these functions are just wrappers
+for the determine_rate variant.
 
-Personally, I think what you've done in patch 2 is okay, since that
-interrupt is non-functional.
+We need to wait for some other changes to land in Linus's tree via the
+phy tree before we can actually remove these functions. We should be
+able to do that during the next development cycle.
 
->=20
-> Would this approach be acceptable?
->=20
-> [1]: https://www.loongson.cn/uploads/images/2022051616223977135.%E9%BE%99=
-%E8%8A%AF1C300%E5%A4%84%E7%90%86%E5%99%A8%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%=
-8C.pdf
-> (section 21.2.1)
-> [2]: https://lore.kernel.org/linux-rtc/abff68dda2fe6a6601a9e58b31e278d941=
-297fce.1768616276.git.zhoubinbin@loongson.cn/
->=20
-> --
-> Thanks.
-> Binbin
+Note that when I converted some of these drivers from round_rate to
+determine_rate, this was mistakenly converted to the following in some
+cases:
 
---ytcyEvQbqLkTzetR
-Content-Type: application/pgp-signature; name="signature.asc"
+    req->rate = divider_round_rate(...)
 
------BEGIN PGP SIGNATURE-----
+This is invalid in the case when an error occurs since it can set the
+rate to a negative value. So this series fixes those bugs and removes
+the deprecated APIs all in one go.
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaXEa4wAKCRB4tDGHoIJi
-0r1UAPwNOFlUehj5qXpainyk5Vw+hUB3Cwtlc5EQxTrSF5q6IAD7BzUEiHUCKTUg
-z1kTbYXkiG5phJRz1IVmRBTWgLPA2wM=
-=zJht
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Brian Masney (20):
+      clk: sophgo: cv18xx-ip: convert from divider_round_rate() to divider_determine_rate()
+      clk: sunxi-ng: convert from divider_round_rate_parent() to divider_determine_rate()
+      rtc: ac100: convert from divider_round_rate() to divider_determine_rate()
+      clk: actions: owl-composite: convert from owl_divider_helper_round_rate() to divider_determine_rate()
+      clk: actions: owl-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: bm1880: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: bm1880: convert from divider_round_rate() to divider_determine_rate()
+      clk: hisilicon: clkdivider-hi6220: convert from divider_round_rate() to divider_determine_rate()
+      clk: loongson1: convert from divider_round_rate() to divider_determine_rate()
+      clk: milbeaut: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: milbeaut: convert from divider_round_rate() to divider_determine_rate()
+      clk: nuvoton: ma35d1-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: nxp: lpc32xx: convert from divider_round_rate() to divider_determine_rate()
+      clk: sophgo: sg2042-clkgen: convert from divider_round_rate() to divider_determine_rate()
+      clk: sprd: div: convert from divider_round_rate() to divider_determine_rate()
+      clk: stm32: stm32-core: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: stm32: stm32-core: convert from divider_round_rate_parent() to divider_determine_rate()
+      clk: versaclock3: convert from divider_round_rate() to divider_determine_rate()
+      clk: x86: cgu: convert from divider_round_rate() to divider_determine_rate()
+      clk: zynqmp: divider: convert from divider_round_rate() to divider_determine_rate()
 
---ytcyEvQbqLkTzetR--
+ drivers/clk/actions/owl-composite.c       |  11 +--
+ drivers/clk/actions/owl-divider.c         |  17 +---
+ drivers/clk/actions/owl-divider.h         |   5 -
+ drivers/clk/clk-bm1880.c                  |  13 +--
+ drivers/clk/clk-loongson1.c               |   5 +-
+ drivers/clk/clk-milbeaut.c                |  15 +--
+ drivers/clk/clk-versaclock3.c             |   7 +-
+ drivers/clk/hisilicon/clkdivider-hi6220.c |   6 +-
+ drivers/clk/nuvoton/clk-ma35d1-divider.c  |   7 +-
+ drivers/clk/nxp/clk-lpc32xx.c             |   6 +-
+ drivers/clk/sophgo/clk-cv18xx-ip.c        | 154 +++++++++++++++++-------------
+ drivers/clk/sophgo/clk-sg2042-clkgen.c    |  15 +--
+ drivers/clk/sprd/div.c                    |   6 +-
+ drivers/clk/stm32/clk-stm32-core.c        |  42 +++-----
+ drivers/clk/sunxi-ng/ccu_div.c            |  25 +++--
+ drivers/clk/sunxi-ng/ccu_mp.c             |  26 ++---
+ drivers/clk/sunxi-ng/ccu_mult.c           |  16 ++--
+ drivers/clk/sunxi-ng/ccu_mux.c            |  49 ++++++----
+ drivers/clk/sunxi-ng/ccu_mux.h            |   8 +-
+ drivers/clk/sunxi-ng/ccu_nkm.c            |  25 ++---
+ drivers/clk/x86/clk-cgu.c                 |   6 +-
+ drivers/clk/zynqmp/divider.c              |   5 +-
+ drivers/rtc/rtc-ac100.c                   |  75 ++++++++-------
+ 23 files changed, 245 insertions(+), 299 deletions(-)
+
 
