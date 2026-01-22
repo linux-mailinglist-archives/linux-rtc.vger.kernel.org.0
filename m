@@ -1,146 +1,68 @@
-Return-Path: <linux-rtc+bounces-5826-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5827-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sCjXIhRZcWkNEwAAu9opvQ
-	(envelope-from <linux-rtc+bounces-5826-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 23:54:12 +0100
+	id qBv/D7BucWkPHAAAu9opvQ
+	(envelope-from <linux-rtc+bounces-5827-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 01:26:24 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E045D5F1D0
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 23:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5EBF5FEDD
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 01:26:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B385E90281D
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jan 2026 22:54:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4EBA54E4385
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 00:26:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D05838FF1D;
-	Wed, 21 Jan 2026 22:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A862C0274;
+	Thu, 22 Jan 2026 00:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iHOtLHV1";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GtDoFVbf"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="2eXjaZn+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF0D296BA5
-	for <linux-rtc@vger.kernel.org>; Wed, 21 Jan 2026 22:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAAA2BEC4E
+	for <linux-rtc@vger.kernel.org>; Thu, 22 Jan 2026 00:26:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769036040; cv=none; b=kfqb7TuAh9JdJPLgefhzYHhuTs4pzl8j5/cI+3+yUTyFGKWXGmxyavK4uq012R2vhD+Ol2DiebkABdJ1eBdNcbGcDynoNqB6Gni+sxWDWhFaGKqJx5u3u8uz7hstKxFzKLteBVv0d+yUTs956vXSoUJhMA75/PVC9O+0q180VD4=
+	t=1769041578; cv=none; b=iF8R/3X3Ww10v1llMu5ZQQQ44kGRzQ2xOVAzuF+JTTjEIa24vRHYVFXNdLlz5cAL8RoLJ6C0hAIVzR6SmFtrVH484HPv889mnY1+nFQJfv/2emTY1Re1AOsdJk6Y7NFK/ZzpWxRXjCx962XDnWIhoZNto4h+ej+SL/zA5xjxuX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769036040; c=relaxed/simple;
-	bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
+	s=arc-20240116; t=1769041578; c=relaxed/simple;
+	bh=hP+9fk7VaCo2SPT/AetIm7YfIJIqEA8BJRaRGX3vSrg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uXd4W4WmXTAVy3l/POMq/vIr8go6I5IZY6CIbodhIB/u8JdPxYvuDjfNQoV3f0S2PZQkt2/uct8Nu1HWwtEnPoUB+lhh9DdUppVDmrmlC8v9JxtPgVNQF7E0CMUYqwEjXzd2yF0VWuhT6dWxhX66UXi3r35gHmry1po7Cf48hrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iHOtLHV1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GtDoFVbf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769036032;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
-	b=iHOtLHV1w7oSuPv+8F+UuBYkNIL+S59QcmkP0xKN1x8tnPUz2hkM9BDiW8ESUku4bt3n3V
-	7SjcjFWhdZdVwIE75Xlyu/3mmaYW2VXPTgmxbr2Szk2X59tO/1nrg90gCqlT+QtMgxZEZF
-	SqqmiRbwXzm/wY8vfNOt0LIgaJMzPk4=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-673-4n2YJBPNPAOPxniVCvUR5A-1; Wed, 21 Jan 2026 17:53:51 -0500
-X-MC-Unique: 4n2YJBPNPAOPxniVCvUR5A-1
-X-Mimecast-MFC-AGG-ID: 4n2YJBPNPAOPxniVCvUR5A_1769036031
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-502aaf2d18bso12606481cf.0
-        for <linux-rtc@vger.kernel.org>; Wed, 21 Jan 2026 14:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769036031; x=1769640831; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
-        b=GtDoFVbfPIev6Y45lnUj8xiA8GxcY4vLl7Zc+zcX/Z69kLArm87l/wSqn/UI7DCfSf
-         U30AimhGVESqjkpe/jreBjvHZgsNKn7docRbMu16NEBpLoFzCGFBxuqLQUgyXu5dVQis
-         HaT4reFMxuhHlp5vW+xnI6QoI8md1+lGBpH4Eb4H/yOGB69lkFRTa1lL7OKfKMCx8Ztb
-         SHjmUGudpNV/kOuCkjTFdlmS47bqkS46ZDIM4ORSaYcXzVvSvs2cwZCDSH5+19PCe80n
-         iObPgZrtysxGJfgmz4JJmJvBVw1Pbm/IW6vXLbEl2gCIfT251WTL2usfoDhuCbaPGo68
-         ebYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769036031; x=1769640831;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
-        b=AEz/u3D56jYo8dSjNHZDsp7RVMXdmLZXivsgl/CBtkh9VNzsT9ZuisLTw8ZcpVeSY7
-         ZqcSxLjIh3pqSB6qO/f77lFAylmx84BhPVIhOMfB/59w+XGKFna2q4CyGGVwAcgbsBn4
-         KJXjVguNAAzekFiAcXnxbcnYHjXWa3Y1hvlB9JikLVnFM5DtpiWgPklYspbxYu3wDucZ
-         J3L5KOzxf69eSHMT6g4tkJgxwXKkvvCbXKYycygbObX+EgEqX7ygFA/qqQxapsPUwwDZ
-         PYYimwtNXBi1dWIsfuRg2DPaIWxgwykmSedsZUkjmWGF2OmijKP94d/B/0/bUBVJeBJ9
-         IcsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWkYEuGA+LsOwYjlJ1pVwMIq4/a/BOHZaVjPr7Y0AVSo1ZfpcOARShLrLP11f/phPbzKACToL6vcPk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHK6lbMaaxOHp6EZTqt59n80+8ntHtLmXrqv0XMXKexouVnnk6
-	tekgnxzBHwOCepTjhbUB0xkpxtdHqXxKmq6wfeeaIxL/Dk0DNOHODTs7vLfIhFerL+oE8MHonXk
-	em2tSWlQlxc/t/0VssilXi3rLZamUia8qtGJy8gNlqgSN6HypNt9MpY/tf7m0YQ==
-X-Gm-Gg: AZuq6aL+jXUJI119IOdCXhZMrLfBgqKWjghlbYLdBc/dUCptMEBq52QuRETLewvT4Pm
-	oFAMJBhnzHYpfyrXy7k+XIdTJshypDuwFVa6Jm+mKoUSBQ0ECJKX/cFMr95kdjE9XRfOiZYtEXq
-	RIw1lRUz16R8eOLkH7lTUJ7Ng/BfiBbIoX3okFD5d1y26kncYyD2lZXo0yqsy0G8izGcN+8aVnt
-	71xMknkbewAe6L0vbbKG2VMf3RaLBTH9599Uq6EcnhdufTewcz5XzeAShe0TlhMaGUyz7XqJHGh
-	/1CgntWJ0dIsQAD4vGFNAmSP2W0AQ9G4cgZKCCgWLzpOaQtdX0ShGolmSoSjLnqvBn6iiFt92bN
-	0hTBNY76K
-X-Received: by 2002:ac8:5fca:0:b0:4e7:2210:295f with SMTP id d75a77b69052e-502d84b0ca5mr87957281cf.13.1769036030803;
-        Wed, 21 Jan 2026 14:53:50 -0800 (PST)
-X-Received: by 2002:ac8:5fca:0:b0:4e7:2210:295f with SMTP id d75a77b69052e-502d84b0ca5mr87956771cf.13.1769036030338;
-        Wed, 21 Jan 2026 14:53:50 -0800 (PST)
-Received: from redhat.com ([2600:382:8125:73a8:e201:8ac3:bd7d:6acd])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1f1abb9sm117138811cf.30.2026.01.21.14.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 14:53:49 -0800 (PST)
-Date: Wed, 21 Jan 2026 17:53:44 -0500
-From: Brian Masney <bmasney@redhat.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev,
-	Chen-Yu Tsai <wens@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	linux-actions@lists.infradead.org,
-	Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	linux-arm-msm@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Michal Simek <michal.simek@amd.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-phy@lists.infradead.org
-Subject: Re: [PATCH 00/27] clk: remove deprecated API divider_round_rate()
- and friends
-Message-ID: <aXFY-FxqeBv4BsHd@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=beA7KNagwU/4j4sQliXdaQuL7IWXYFruvtk1L2Te/JQDskTONcR893IobqlGf70t948lOFYq4egSybwFnSlwDdh7rrrtnhFurQMeN2rTgwiP4czi++Zi/TmiVl0HRW2vxfEsLXL+rIem2xBb6dsgfojwGsaBszYjcAGIQjb7oMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=2eXjaZn+; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id BEB2EC21A95;
+	Thu, 22 Jan 2026 00:26:12 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 010EC60711;
+	Thu, 22 Jan 2026 00:26:12 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0D39D102F0B74;
+	Thu, 22 Jan 2026 01:26:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1769041572; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=x4jg29QU41LLNzuVU5AM3L7b1Wlo+jm9c6ZZ5u4Zv4A=;
+	b=2eXjaZn+jaZCAHoQX8mXzr+COm0SdUn4VylHsLTEi0nPXCh+HiD9OdSCL17urswEnm1bPv
+	YICTmjXUKNQB6boklJvHme4rm+WRCTKf3v7PgoIVEr/7W3umx3E0sKLEmcf04TFCdokodY
+	PGmznMvhodZsSnsBu2x1dk2FpiAF4T62Hr4ZXR3q75VaAafPbgAfOVhmOA0Tx1tChHLHi2
+	KA7rD8wPRquZt4IuGB1Wa8owWlvKUaqyD3qTpa7/iqjnAUxY25kSHYJif+G/LAyM8bPwTG
+	sHICX4Igpx2fDePAbJLfnk8PrTM1QO20F7dZsnsI143NZi4Uf0KJT7gZWgxNIg==
+Date: Thu, 22 Jan 2026 01:26:09 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Brian Masney <bmasney@redhat.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 03/27] rtc: ac100: convert from divider_round_rate() to
+ divider_determine_rate()
+Message-ID: <202601220026092a75a45e@mail.local>
 References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
+ <20260108-clk-divider-round-rate-v1-3-535a3ed73bf3@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -149,55 +71,161 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+In-Reply-To: <20260108-clk-divider-round-rate-v1-3-535a3ed73bf3@redhat.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.96 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	FREEMAIL_CC(0.00)[vger.kernel.org,outlook.com,gmail.com,lists.linux.dev,kernel.org,sholland.org,lists.infradead.org,bootlin.com,suse.de,socionext.com,nuvoton.com,mleia.com,timesys.com,linux.alibaba.com,foss.st.com,st-md-mailman.stormreply.com,amd.com,oss.qualcomm.com,ffwll.ch,linux.dev,poorly.run,somainline.org,lists.freedesktop.org,linaro.org];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-5826-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[redhat.com,quarantine];
-	DKIM_TRACE(0.00)[redhat.com:+];
+	DMARC_POLICY_ALLOW(0.00)[bootlin.com,reject];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	TAGGED_FROM(0.00)[bounces-5827-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	RCVD_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: E045D5F1D0
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: A5EBF5FEDD
 X-Rspamd-Action: no action
 
-Hi Stephen,
+Hello,
 
-On Thu, Jan 08, 2026 at 04:16:18PM -0500, Brian Masney wrote:
-> Here's a series that gets rid of the deprecated APIs
-> divider_round_rate(), divider_round_rate_parent(), and
-> divider_ro_round_rate_parent() since these functions are just wrappers
-> for the determine_rate variant.
+On 08/01/2026 16:16:21-0500, Brian Masney wrote:
+> The divider_round_rate() function is now deprecated, so let's migrate
+> to divider_determine_rate() instead so that this deprecated API can be
+> removed.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> 
+> ---
+> To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: linux-rtc@vger.kernel.org
+> ---
+>  drivers/rtc/rtc-ac100.c | 75 +++++++++++++++++++++++++------------------------
+>  1 file changed, 38 insertions(+), 37 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-ac100.c b/drivers/rtc/rtc-ac100.c
+> index 33626311fa781b5ce90dcc472f948dc933bbc897..16aca4431da8c029e6195d8a3c9fe75fa95d0bc0 100644
+> --- a/drivers/rtc/rtc-ac100.c
+> +++ b/drivers/rtc/rtc-ac100.c
+> @@ -140,42 +140,16 @@ static unsigned long ac100_clkout_recalc_rate(struct clk_hw *hw,
+>  				   AC100_CLKOUT_DIV_WIDTH);
+>  }
+>  
+> -static long ac100_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
+> -				    unsigned long prate)
+> -{
+> -	unsigned long best_rate = 0, tmp_rate, tmp_prate;
+> -	int i;
+> -
+> -	if (prate == AC100_RTC_32K_RATE)
+> -		return divider_round_rate(hw, rate, &prate, NULL,
+> -					  AC100_CLKOUT_DIV_WIDTH,
+> -					  CLK_DIVIDER_POWER_OF_TWO);
+> -
+> -	for (i = 0; ac100_clkout_prediv[i].div; i++) {
+> -		tmp_prate = DIV_ROUND_UP(prate, ac100_clkout_prediv[i].val);
+> -		tmp_rate = divider_round_rate(hw, rate, &tmp_prate, NULL,
+> -					      AC100_CLKOUT_DIV_WIDTH,
+> -					      CLK_DIVIDER_POWER_OF_TWO);
+> -
+> -		if (tmp_rate > rate)
+> -			continue;
+> -		if (rate - tmp_rate < best_rate - tmp_rate)
+> -			best_rate = tmp_rate;
+> -	}
+> -
+> -	return best_rate;
+> -}
+> -
+>  static int ac100_clkout_determine_rate(struct clk_hw *hw,
+>  				       struct clk_rate_request *req)
+>  {
+> -	struct clk_hw *best_parent;
+> +	int i, ret, num_parents = clk_hw_get_num_parents(hw);
+> +	struct clk_hw *best_parent = NULL;
+>  	unsigned long best = 0;
+> -	int i, num_parents = clk_hw_get_num_parents(hw);
+>  
+>  	for (i = 0; i < num_parents; i++) {
+>  		struct clk_hw *parent = clk_hw_get_parent_by_index(hw, i);
+> -		unsigned long tmp, prate;
+> +		unsigned long prate;
+>  
+>  		/*
+>  		 * The clock has two parents, one is a fixed clock which is
+> @@ -199,13 +173,40 @@ static int ac100_clkout_determine_rate(struct clk_hw *hw,
+>  
+>  		prate = clk_hw_get_rate(parent);
+>  
+> -		tmp = ac100_clkout_round_rate(hw, req->rate, prate);
+> -
+> -		if (tmp > req->rate)
+> -			continue;
+> -		if (req->rate - tmp < req->rate - best) {
+> -			best = tmp;
+> -			best_parent = parent;
+> +		if (prate == AC100_RTC_32K_RATE) {
+> +			struct clk_rate_request div_req = *req;
+> +
+> +			div_req.best_parent_rate = prate;
+> +
+> +			ret = divider_determine_rate(hw, &div_req, NULL,
+> +						     AC100_CLKOUT_DIV_WIDTH,
+> +						     CLK_DIVIDER_POWER_OF_TWO);
+> +			if (ret != 0 || div_req.rate > req->rate)
+> +				continue;
 
-I sent you a GIT PULL for what can go to Linus for the upcoming merge
-window from this series:
+This leaves a braces inbalance
 
-https://lore.kernel.org/linux-clk/aXFYU324yQ6uBmk0@redhat.com/T/#u
+> +			else if (req->rate - div_req.rate < req->rate - best) {
+> +				best = div_req.rate;
+> +				best_parent = parent;
+> +			}
+> +		} else {
+> +			int j;
+> +
+> +			for (j = 0; ac100_clkout_prediv[j].div; j++) {
+> +				struct clk_rate_request div_req = *req;
+> +				unsigned long tmp_prate;
+> +
+> +				tmp_prate = DIV_ROUND_UP(prate, ac100_clkout_prediv[j].div);
+> +				div_req.best_parent_rate = tmp_prate;
+> +
+> +				ret = divider_determine_rate(hw, &div_req, NULL,
+> +							     AC100_CLKOUT_DIV_WIDTH,
+> +							     CLK_DIVIDER_POWER_OF_TWO);
+> +				if (ret != 0 || div_req.rate > req->rate)
+> +					continue;
 
-Thanks,
+Ditto.
 
-Brian
+> +				else if (req->rate - div_req.rate < req->rate - best) {
+> +					best = div_req.rate;
+> +					best_parent = parent;
+> +				}
+> +			}
+>  		}
+>  	}
 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
