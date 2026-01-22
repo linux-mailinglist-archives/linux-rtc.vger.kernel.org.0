@@ -1,267 +1,252 @@
-Return-Path: <linux-rtc+bounces-5844-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5845-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aETrOtU4cmmadwAAu9opvQ
-	(envelope-from <linux-rtc+bounces-5844-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 15:48:53 +0100
+	id 6MJGMdxKcmnQiQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-5845-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 17:05:48 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E77681CF
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 15:48:53 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EAB2270CD3F
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 13:57:52 +0000 (UTC)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 889B069805
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 17:05:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by tor.lore.kernel.org (Postfix) with ESMTP id 48A473002783
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Jan 2026 16:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C6434C141;
-	Thu, 22 Jan 2026 13:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA271426EA8;
+	Thu, 22 Jan 2026 16:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b="ZtYn1gey"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Eh0vlpRo";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="T0RKbfFw"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11021093.outbound.protection.outlook.com [52.101.65.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B703491C2;
-	Thu, 22 Jan 2026 13:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769090060; cv=fail; b=FoRpchkHDkj0doBZiU8kbJh/jR/8S0iysho1zl0Ebcat08dLTMHPKBEBhu+bbi+RzG0sknqeA7TRvEsWtqPuDgpWwuwZtU7YjmSGhcpABzbuol2kbbG7y01DfBUqngjyxtx15zETGsrereJ47D8mnJtEEaKtZxim5AjELv+9mlY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769090060; c=relaxed/simple;
-	bh=idY8GQS+p8hZb6GymVjyfMRwJ4wEksw4Ml4LKR0RGb4=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=OKLf6Z532NQnKTdEauU6p04SBSgI2g50ACmwQmf6U94DlyHCEdwo8+jopll5znjP+gL4hoVwxIneU4FFNzYJV5xozXTvn9NQamSdmRy+BKzM54EQNzpU+cKhGgLA35cTwmx9qGSIYC+ejTA7Pb41cLNbsH1EUWlNCDnyJ2Y7xsk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vaisala.com; spf=pass smtp.mailfrom=vaisala.com; dkim=pass (2048-bit key) header.d=vaisala.com header.i=@vaisala.com header.b=ZtYn1gey; arc=fail smtp.client-ip=52.101.65.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vaisala.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaisala.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Qn5q01djLWlOMxya5e6qr27MUQ6cmRYnXihrHwXe3EhwT1B1UZLUbIKETSdewWfzNDDKL8e/MuUjNP9Ydmb6nAekpg7xIZO5/yIvqluczg5BnzPtv82YTRrA7tDtehoZYLmEuyTpeXsaIm+uruf8bGC+9hvKGfE5btt0YltnUEvWqAK5+Hea/jYNZloCF9ictMq0YokHZXQiil/bbWrDZuhlivYXwNNcgVSDKZrdgZ2IXmGAhb1b5cQxjj2QTs7Sx0NxBSaapNFaVQ2ATbH+JFtLOjii9BmrKtOBgAv0mTyQTP9BDHvcxlOIdvCKdxcuKbdE3/kO7O53F5WVQI8hnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NLPsm7TlnkzHEQyuIhcwEjezrTctrDju35tFKdHKGqU=;
- b=laxBO/Fd798tZgYLVFVrU4wFBO5Q80dcR7CWXlarEZc4xVfp8ZkgOd078RhQnW69dnCpYPMpP7mqw7+5+asm5S31mKgZ288J3VMY8xm8kKk87P6nnEbNM3D5rfgA+nrpEnpdSWNSSQ7T53YXztw9KPYnNq1it6LTZkmJr71kXChigTXaFw5o6rHFDLrHF5ZtZZAYurxQ8OccT43NNJ+tGo9PROeDL7jngElyIyj/7t97188K0XXyCec8PV4WpJ8MfElqsGjyrjmNoLOxk63Axf+hvA6zm4fRh/Fcm/DKU2buwMwXP6jsCwo9MD+WbSD4q+NyJRTI6+S9YCyL6AFV5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
- dkim=pass header.d=vaisala.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NLPsm7TlnkzHEQyuIhcwEjezrTctrDju35tFKdHKGqU=;
- b=ZtYn1geyuNYWfzaXyWZrAkTNpMD1/sYJgom8vUVx6pUTe+TMCs69kO68ZaD9kc0vqbinB4jouOccsfmyu+fo+CuNDyHZBIXeaAuXQeQrk93QDOGcAwEK3aUnZ2J0O5KSv/LdTPo1FLeYbRDMbIW+gz65joNmboCSqOWMeynL4Jf4nEIheyOey3o9srGiAwaw0CHVGFYZZVnSoNQjShSxkwnVCY0JKo/qWy68xxa9VdZMCNZnA5UwGb+q5qp6Ehf77u4an26pE1VD8wHybwmU0EWutMhdqqZsx0+7rOloG33uPUvuFnWXei6qpLRnLm3hI/MlJoxZcbX3+Ky8jB9rBA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vaisala.com;
-Received: from AMBPR06MB10365.eurprd06.prod.outlook.com (2603:10a6:20b:6f0::7)
- by AS8PR06MB7413.eurprd06.prod.outlook.com (2603:10a6:20b:33d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Thu, 22 Jan
- 2026 13:53:57 +0000
-Received: from AMBPR06MB10365.eurprd06.prod.outlook.com
- ([fe80::4606:8e25:96e6:bede]) by AMBPR06MB10365.eurprd06.prod.outlook.com
- ([fe80::4606:8e25:96e6:bede%5]) with mapi id 15.20.9542.008; Thu, 22 Jan 2026
- 13:53:57 +0000
-From: Tomas Melin <tomas.melin@vaisala.com>
-Date: Thu, 22 Jan 2026 13:53:49 +0000
-Subject: [PATCH v4 5/5] rtc: zynqmp: use dynamic max and min offset ranges
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260122-zynqmp-rtc-updates-v4-5-d4edb966b499@vaisala.com>
-References: <20260122-zynqmp-rtc-updates-v4-0-d4edb966b499@vaisala.com>
-In-Reply-To: <20260122-zynqmp-rtc-updates-v4-0-d4edb966b499@vaisala.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Michal Simek <michal.simek@amd.com>
-Cc: linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Tomas Melin <tomas.melin@vaisala.com>, 
- Harini T <harini.t@amd.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769090032; l=1437;
- i=tomas.melin@vaisala.com; s=20251125; h=from:subject:message-id;
- bh=idY8GQS+p8hZb6GymVjyfMRwJ4wEksw4Ml4LKR0RGb4=;
- b=V9KJcgyeMmlH8gkYgVGPGVyVPNdzx5sEd+17XbdptwZiTDFJ8OsdqfubE66+jWHtY5FhW7jPS
- 3IJmjhGv6fNDZCR0fdI9aKOG6sRnEaMZUjk105vr+ys4L5JNzQWUjbe
-X-Developer-Key: i=tomas.melin@vaisala.com; a=ed25519;
- pk=6lMiecjZ+OeyZuxYsDm/ADy9D1JKvYrKdsYv58PMepU=
-X-ClientProxiedBy: GV2PEPF0000384C.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:144:1:0:9:0:e) To AMBPR06MB10365.eurprd06.prod.outlook.com
- (2603:10a6:20b:6f0::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF464A5B0E
+	for <linux-rtc@vger.kernel.org>; Thu, 22 Jan 2026 16:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769097940; cv=none; b=EKNacen6Kg3D5TT6N+LOq3BwlQ4Fom2wK4ZgrVsgKnfpsEaVCjg9PywCvm4EbFeD+NPEw5QjDbWqUtzBXW2+0NvqqwCuxdINGsl0H0IoQ4twoB7Uppah5mMe+2bLGfbbElt8Si5+dNPodUFhSWxA7TKOjr9mZ9RnRWGXZP84K50=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769097940; c=relaxed/simple;
+	bh=eZ7GtOnPnUjwFAMKpgZVqTk2gRTNJ6uuZdDIiOCCHzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UN5g1DEJcNarEkq5bA9dAJ7Ef05CK69nSeeLZPSw0FQDMjyamhG0JCBbOKNEXckC9hPBoJe0nMo8uFHHmMFmX/UPhqzTHgpoerTHN89iuKZRoTsxocbk1LsDXjCLGGA99HWvzkJI1NpGcBoNYfVTBAE7NlY/vYi50xnP1xaSowU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Eh0vlpRo; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=T0RKbfFw; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769097924;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=8NmUi+JCIHLnFNZPL3W+AznGM/aqprY8hMKt/Ws5doM=;
+	b=Eh0vlpRoxhEA9ZEkZIm0YTjd7TDCrdeGALAKNqEM21rve8auh2wvvnnqG+4pZ56Yv68Tfy
+	MrG3jCl0jQKPY+h0SBKaK6fv6p09BS7ASSwlNVF7rsghc6d7KCJThtKaWVjnjmLq54yVqg
+	ui0M1KlxNvoHG5AxTg+z44tV2c71Nug=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-QqJUmGNgMnahCX1TJOzrHw-1; Thu, 22 Jan 2026 11:05:22 -0500
+X-MC-Unique: QqJUmGNgMnahCX1TJOzrHw-1
+X-Mimecast-MFC-AGG-ID: QqJUmGNgMnahCX1TJOzrHw_1769097921
+Received: by mail-vs1-f72.google.com with SMTP id ada2fe7eead31-5ec338650e0so2402711137.0
+        for <linux-rtc@vger.kernel.org>; Thu, 22 Jan 2026 08:05:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769097921; x=1769702721; darn=vger.kernel.org;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8NmUi+JCIHLnFNZPL3W+AznGM/aqprY8hMKt/Ws5doM=;
+        b=T0RKbfFwPIfU/1E06z0HcHPcqylAeHcm/ZuPiTV5kDv3XvYqq1JH03ZlzLDdfJYmpc
+         zD7TZ5+k2FVZjK6EZlwHa+V9TGlDbCL1mCvZRSpdj7gx4Qz7/UATifQHaagmTsZdMXXp
+         BDFEj9bpTgnZSKc/yO9Vfm/q0ZQxJ3tsAHF6P8xIvr5SfaU1PoGxP4f87mhVYQd5NPs4
+         DIcf0RnHklcYeWwHvGr+RXnXUunkGuFjwZvz98enee6zGLARjuFKZ9U0d6WZ/54i74wk
+         2L1N35J0ElfAni+Jeie4xvx0qi6cuxQtdtRr0fIfFX1DeDNtxVx2O2+NIuOoI7wOBzci
+         cP9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769097921; x=1769702721;
+        h=user-agent:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8NmUi+JCIHLnFNZPL3W+AznGM/aqprY8hMKt/Ws5doM=;
+        b=shDd3N8Tt0RI35L6P62a8mFV07RDQMm/YnXjZTaFbtySTxi6czwfqVq3L3kFd9pzYk
+         8GukUunh2Eg8Uyg+jKFrX0XsrN0XKxgQVLr0aWlD7u9KN5YNbQbEIa9NA3BFHmLL0nMc
+         a9aSlV98sbfVKcZf6YrOwHuP1F7qxmHSLtpflvqGTpP3jvKe3wZ6WARq/oTk24kDLADX
+         lnzvQH2YHZMpltBWpw+sCqQojQOYTfH2j475Mnx6haq2mvzSbrTDBZpSL96gdFgEfvIz
+         NJLLw5XdeNUbZU/l3crOPXOcNRrUIjjd+IBoHeZcOySxvhtOrgOeC8FCX6LqaH6pHKwF
+         syXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSIaApPAdZgUZc3bmms3Y7/GSL91YGJxOu2SiMY91Ospn2bt8u1X0GTe3sknRncadLPa3+zVpGtVw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhDhyJ72nDgpqNcpPkjwGLAnH13FWYJHzlTqwc+J9eLHfhEAxM
+	qJ6t9sZe9hUo1b7K4gYDyGDd5UlCGwrnls1krdbaxkKdBI+Q+47GHYzVa9OdnXHfhL1xQqNXVuG
+	64lVFXU4+b2GY4x8AixWQeLJ3TarEFIzsv/aI6rcIr9fGv6dnAA3EaX/dPgm/aw==
+X-Gm-Gg: AZuq6aJIIJgUmyT0BjmLfBBNxF+oNRUOKT+5petbeS2TGvTYhGwHT8ZDei7leyKwepA
+	e+yL3tdLISuRlCwqIly7kt1/x+ZOQSwrXtx1lkapEnp5DarA7j7AVxCAQzhWkhL9D2IPPj2Gg/E
+	eu2tTKIseWQ7VFO5lLietaPs5nhWxfVP+ZtNQjg5NdbCN9kFuX7QmMKLibUejKLXspdYstPxW3U
+	V69JzYoHejsAhFjIQyY27/WbaAnI4FfAImWmR+E3q3TIs0uTwSLnM7MsA217FKPTIKq1b5mouuz
+	hMa2HqAFLzrkuxFIhnaaCs6QqhW31Oqw5BJmwtGycWacX20B235i3JOLDVxAKUdZhSSAulg/9tb
+	LiXwTy+vLU6vRj34DguRY9boe3oXYbr2aKt/7E/acfwT1
+X-Received: by 2002:a05:6102:2ac4:b0:5ef:a164:ebed with SMTP id ada2fe7eead31-5f54bd36d33mr49646137.43.1769097919966;
+        Thu, 22 Jan 2026 08:05:19 -0800 (PST)
+X-Received: by 2002:a05:6102:2ac4:b0:5ef:a164:ebed with SMTP id ada2fe7eead31-5f54bd36d33mr49576137.43.1769097919200;
+        Thu, 22 Jan 2026 08:05:19 -0800 (PST)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8942e6c9defsm157919766d6.48.2026.01.22.08.05.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 08:05:18 -0800 (PST)
+Date: Thu, 22 Jan 2026 11:05:16 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Stephen Boyd <sboyd@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: [GIT PULL v2] clk: remove deprecated API divider_round_rate() and
+ friends for v6.20
+Message-ID: <aXJKvOJVrBIeCiny@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMBPR06MB10365:EE_|AS8PR06MB7413:EE_
-X-MS-Office365-Filtering-Correlation-Id: de398938-ecb6-4c7c-f163-08de59bdaee6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|376014|366016|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?czdiNm01MksrV1oyTENORGd4TUVJTUdmbDF4L2lWQUlRNEtxWE5vS0xYaCtT?=
- =?utf-8?B?YWROQ29GYUlSMnp1bWxNc1AyT0kyZ0pCR0ZZQUNnenQ3YjV1cS9Id1NxcVJS?=
- =?utf-8?B?cEtJclFTcURNRDVadUk2ZnIzTEJXWnd0WU0xMVNQTm14b3hDbFc2N1N4TjZm?=
- =?utf-8?B?Yk5uR2FIbWphZklKNW9lOEEvaEt3Kzl2Zkx3WWhISXMzL2g4WjB0dnJ0OU0x?=
- =?utf-8?B?K01rRkdlWTUydnhVNDd2SkFGOW8xUVRGWmoxNWNyNlUyYk1rMU5LL2NxalF5?=
- =?utf-8?B?M2ZPTWM1ODdxNEZvbkczNVNCUnRjR2hhejJpYm5xQVpzM253bmNSQzVoL1Fh?=
- =?utf-8?B?TklRbDJkSDRNTkpoV0VDU1hUZkZ6V2dHZEZBdXc4Ti9IYXFXWkQ2Z1RxYjFD?=
- =?utf-8?B?TjM2WlJxYUpQcWZuMGNzMnFpM24yN2xlNDIwSmo3dGtPajVnUUlPRktzSnRB?=
- =?utf-8?B?SzBBeEF1RHNIOW1oc3ZmWjZ6T3RpTWh0TFQxWW4vcHBFbFhFVVR3Tzlqd1Nx?=
- =?utf-8?B?Q081bHN0RXNReE0wOCtCK3hYOXYwaXdFdllsTGlSUGkwcDZHRkp2cEtCMUlo?=
- =?utf-8?B?SmlmT3ViUDB3dy95OXB4RU14U1RDMWgvWm5EdnpCUDNwTlpSNjM2YTRmQ1B5?=
- =?utf-8?B?R1ZGRXFmZEZURHFsRkV5R1V6MEJmKzQxRXRnekZ0MituUDVPdGgrTGt6R0VG?=
- =?utf-8?B?LzRBZlYzZndNaEsrQmNZV2puLzg0OGs2TkY3RE9hOUNiNFlFTEJOS25zaU5s?=
- =?utf-8?B?SUp4V3pQd3o2MWxQUnFOa2luNTFlWGdQd1crd2Y2aGVTMEk4OTZtSUh4Wko1?=
- =?utf-8?B?b0xGQy9lMExXZ3ZYYmc5MU11UU1RVHZQQ2kyYTB2eTIyaUZuaXNvOVM3YS9o?=
- =?utf-8?B?cXY0YVQ5Mk45QW5JRFNCMmdVclZ3WWtpY0xkTlEvU3hQZXV6YXlvWVIzZmgx?=
- =?utf-8?B?OVJUZlRjRU5ydHBQcUROMDNaSEZCQjJ2dGtldURsbHVwamVONDVVOFIyUDR0?=
- =?utf-8?B?OFQrMDJCYkU3a0FOWjVLYkpVZzhTdkRmdHE2anhBT1p3MjFnNHhRajd6QTh1?=
- =?utf-8?B?YmJuWUk1WklNMHR4RC8wa0JEcHc2bEpqbDl1RDZCSjI1cEFveE54REFCQ3pX?=
- =?utf-8?B?WnhhaGkxWURZTXlrRXBYWFRNYm91czV4N2NoMmJoRGluK3dVRFgwa2d5S1lR?=
- =?utf-8?B?VTBaNXpUVTY1dytlSXFQeGlFQUg0OFNvcHBSM2pmbHFzTXpQaW0vTlpwclRp?=
- =?utf-8?B?M2JHMDBUeUYwb1NKaENpeTVmcVk4bVdlazN2SU4vd3l3TzF6ZW5ZdFRVbHg1?=
- =?utf-8?B?T2JXbTlZVkFXM0Y2SHpsMW5vNUpRTlp4Mjl5Um0xT05PU1A0ZDFjUXFSZFpK?=
- =?utf-8?B?clZjdC9MZkVyL29haHBMUUNkQi9kT0FLL3J2dVFtR3Jnb2FHSTRIRGFyS3Mx?=
- =?utf-8?B?eUNHWmRCNmRzbTBNcGs0UVFSeEY1cnZVbmhVV2dmb2d5Z1J6QjVVMzVHcmVp?=
- =?utf-8?B?ZlcwNVIxNFFwTDJuZnU3ZXVrOWNlNkxQSitpa2RUVjZySVRIN0ttM05oTVMw?=
- =?utf-8?B?SlBVZ2pZaXZuTGpMQjFOelFXdTNveFQ5bEJMM2tkNm45YTdLVEdwVzlYN05t?=
- =?utf-8?B?NTNZbjlabEt3MFFaUmovVjB6ZHpsTUhXdW11Vjh3ZE0rTmhudEYwWHE2Z0E1?=
- =?utf-8?B?NWI0blk1dC9uUFhEc3lsejlZenRwdjNYM3NvRmtrT0g1SGttTUJlV3ZlMUNh?=
- =?utf-8?B?THBDZmszYkJRUWFCbDB5VzZXU0dHMVV1b1ovWlhob2lXRlhqNnkwNzBBb0lj?=
- =?utf-8?B?NFAvOEZaYXlvbk1NQVB4amkxRUZRRFJ1M290c2h4SWthKzZqQzRMeWtjU0Y0?=
- =?utf-8?B?eDhNUEdaMWpVWThGSVNPdkJWMVZ6UDVJYjcra0VTeGUrUjFhSFRqSzd6K2l6?=
- =?utf-8?B?RDd4M1BSTHZmQ2MrbUpIaTBGZm1WTy9LcG5UN2pnRU5XNFh1cmVDTVhaUyty?=
- =?utf-8?B?T05kYkdacVI0azc1citDRmorQXBiV0xodzA0cGQ5NFRHazlPa1JRQzlHVE50?=
- =?utf-8?B?akd0YUI2aGptejUrc00wWlJHQXkwdFgxbXEwRjBSaDdOTS8zdUZqc25rZE92?=
- =?utf-8?B?eE5xV2JHMTlaZkNYMXBNZTgvUGUrWmZ0QitacjBhN0JNdUZUTjFaNXZsdHBS?=
- =?utf-8?Q?EXTS4WultVMK2eX0OVylpMA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AMBPR06MB10365.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(376014)(366016)(38350700014)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UC9yU1huZlpVTlZFYno2QTZja2YzSGRYanpCa3Y5ZVB0VlNqS0loVHFKR3ZM?=
- =?utf-8?B?azdjRmlOTWhQdWY4aWVEbEY0Z2lBaGk2Z0J3QktzKzF1WjBsUm4wTjVjd0Jn?=
- =?utf-8?B?MWlLcXJuQWpsOFFPem90RU94dGJvUklhZFRnS1IyRTZTUCtQSUJkZUJlTkhW?=
- =?utf-8?B?cEtLSFkyTSt5b2NtTUhURVdMQWRRREovT1FyWmVNM1EvODdJTlhtc0JLMlBN?=
- =?utf-8?B?MjlvRjl5YlUwOGI4c2NNeEZpZmsxNDhWZVZVUytNRnZ1RmFTSVkwcUFvc3BI?=
- =?utf-8?B?bGZIcG9DekU5d0F1RjFYQytOVXBQL3RJTktBQWEwZWhiY1A2cGorQURzTHZW?=
- =?utf-8?B?SVpzUkZGdm12Y01vTkxVNWtjWGl5NXgxVHNNOXlpZFN2WTI2dnNLS0tJaEha?=
- =?utf-8?B?SmcxNHlaaWhUQk4zS3BqQlhuZUNaalBqNmRBeUpsN3dHVnl3VlNITVhkS2Zl?=
- =?utf-8?B?NHg3N0FZNkRaZE1mbEdqSC9Nb1dkVWZlSzBxUmpCVExCOFNPYmZXelR1ZGhH?=
- =?utf-8?B?cHVMcFhRTm5XTUVxNlhJNTBRZ2ltK1paMmJ6WnZIZkVRVFg1WnpSZ0hzYkhX?=
- =?utf-8?B?R3RJKzR0ZnoxUTY1RGl5dmROMC95K2VERUtob2ZDUTZXSXFSay9SREdwK0F2?=
- =?utf-8?B?QTI0OGtBcTErWkNQWmhKeEFsRzFDVXZXWEp1cTR0ZmVsNjZDbTlBSWRSQzU4?=
- =?utf-8?B?VHh4dDJkODh6anJwdnpIN2x4VTcyai9nT05WRGd4NjBjSDY1NDBYUGtvNHY1?=
- =?utf-8?B?U1ZGdTRKZVFYMHFSeDRBaXhWOXMrU01vVVlPMm9PeVhCS1cwSjlQN1JxOHJC?=
- =?utf-8?B?bjBkOUNRNWYrakxwdlFMbmg1TlhuUHlaaGJsRER5cVgwOWFTYlZ4U2RvUVFY?=
- =?utf-8?B?TS9jS20zVWNFOTMwZWNiYWJxQjdWdFZzNGw5R25ONVhOb3ZvRTFCR0swaWkz?=
- =?utf-8?B?U0M3OHR0U2ZTTVZNdmE5cFJnbmtZSENnWmdsYWFsZDg2YzB5RElsQ1hrajRu?=
- =?utf-8?B?Qlp2ZmZoRnpNZzZZbUFZYnBxKzBLZWovWkZOMEFOUTJtaitNditmYVZPZ2Vk?=
- =?utf-8?B?NnhOR0RXejdIeUpSZmpOWlZ5TTBSM0pYcDFsOGp3WjVJY283dk9UVnBuL0hl?=
- =?utf-8?B?bTBQMVFKSncyTU4xYmYzS2hKQzQ1NW5RU0dYUHpDVFNLR3p6bEE1MmJjenox?=
- =?utf-8?B?UCtTZzFPY1VtNjdFS0VuVmZqRzh5Z1ZrY21sN1JwVTlSS2Y4bWp1cFB4OWVv?=
- =?utf-8?B?Wkk5ZFprR3BWS0pUdWRMd3lWaUZOL0xacGZGSnFKVUxlZFdCM0NieUw4QUgv?=
- =?utf-8?B?Y05YVGY0cmRPci9aTitRMnJIZmZVbG4rc1pkQWEvV1k0Q3NpYWdGT0VhS0hs?=
- =?utf-8?B?UEhhUVBIRmdwR1VYZEFNK01sUllDNTV2a08yU09QT3piQUZ5R0FpMjhXRnBE?=
- =?utf-8?B?OEVYU2dLYmZ6NHpqd3BSRDk1NjczNmJwL21qQzBlT0VmR0I3VWxuSUxOeE1h?=
- =?utf-8?B?S1ZlbjIvRjlqeFZvY0xZc0VkRDBXbHNqdy9QVnlsdk1ua3NnQkNNZThvZFF2?=
- =?utf-8?B?RWRMSnh4VjYycWZOREFvcjg5SkZkVTlOVjZYQVBvVjdZd2h3ZW1FWUVzbE9z?=
- =?utf-8?B?UE9uUFVOMnIxaG5NMW9VcDIvRmN4MGF2UWQ5ZUMwK1lGdXJnbGVhaXRZQkwy?=
- =?utf-8?B?Z0dlbDRKd2ZhN2NXTzNUNDBPVGp2ckFMM0w3SU9MWDlUQ1FwWU1zRDNuVlNJ?=
- =?utf-8?B?QXFxcWFTZ0tnTE5uTDNkWXpHdUhTZWY0M3BnaGhxN0F3WFNqWlhaYy9WZ3pq?=
- =?utf-8?B?OVJQNVNzbTVaa2lHMXdmZVpNaElEWGJzUStJUFBNTFNYcnA0NU54MkxNY2hk?=
- =?utf-8?B?OTQ1WFFzcEJVRmpnQzhSbVhQeC9zNVlyWmlIME9pS29LTDdrZmlkZENoNjBp?=
- =?utf-8?B?MmFhM1RDakRtY2JRY1ZHNlIwanpIMUpZRjEvU1hCNjBHQndMdGhKRlNacTVx?=
- =?utf-8?B?MGFJcFdiTkpqOHVCdy9zMXdoWHI2TEVTNG4vVmNGRmZDblNCVG9uVTJ0dEdJ?=
- =?utf-8?B?Y0J5SndXSGdDQlVhVU1YczRNRFh2NzkwbXRYUFpNZ3FhSTdDOFVRV0JlZnZG?=
- =?utf-8?B?VGZ6dm1XNC9NZi8zVGNsNDNpTDN6dHFzbk9PNWRjODNTQ1JudVNpTjVkSjlw?=
- =?utf-8?B?R05wU05tKzcvb09DT2UyS0ovZlR4YTVubXp5VGg1VW5VZUJRL1dTVzVEbE04?=
- =?utf-8?B?eGxTQjNRVGNrUi9Ga0Vwa2JkUmFWSHJzN3N3MHRLeUgxcTNqMXlGOVNWVXk2?=
- =?utf-8?B?enRUc3B1am1hRVVBU3RxVHZuQUJIMnpnR0g4aVllMXBhSVNuMWJVSmlrd3Q2?=
- =?utf-8?Q?IRlKaqMjVNOZ+fls=3D?=
-X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de398938-ecb6-4c7c-f163-08de59bdaee6
-X-MS-Exchange-CrossTenant-AuthSource: AMBPR06MB10365.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2026 13:53:55.2512
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mcbiSmLarNhr+SqlsWP/zna/JgSZ9kZSkYfH8ACUL0ce8VI9gWslWAS3qbojItQokdrCthVly4sN6Zmt3VuVXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB7413
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/2.2.14 (2025-02-20)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[vaisala.com:s=selector1];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_POLICY_ALLOW(0.00)[vaisala.com,reject];
-	DKIM_TRACE(0.00)[vaisala.com:+];
-	TAGGED_FROM(0.00)[bounces-5844-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5845-lists,linux-rtc=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	TAGGED_RCPT(0.00)[linux-rtc];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tomas.melin@vaisala.com,linux-rtc@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns,vaisala.com:email,vaisala.com:dkim,vaisala.com:mid]
-X-Rspamd-Queue-Id: 62E77681CF
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 889B069805
 X-Rspamd-Action: no action
 
-Maximum and minimum offsets in ppb that can be handled are dependent on
-the rtc clock frequency and what can fit in the 16-bit register field.
+Hi Stephen,
 
-Reviewed-by: Harini T <harini.t@amd.com>
-Tested-by: Harini T <harini.t@amd.com>
-Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
----
- drivers/rtc/rtc-zynqmp.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Here's a PULL for this large series that continues the work to remove
+some deprecated round_rate APIs. I used the following b4 commands to
+collect up this series:
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index f0f5dc63e254799ed99927c259c767b30ee877a4..2ae54804b87a47642d118789dc33191c53b36932 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -44,8 +44,6 @@
- #define RTC_FR_MASK		0xF0000
- #define RTC_FR_MAX_TICKS	16
- #define RTC_PPB			1000000000
--#define RTC_MIN_OFFSET		-32768000
--#define RTC_MAX_OFFSET		32767000
- 
- struct xlnx_rtc_dev {
- 	struct rtc_device	*rtc;
-@@ -215,12 +213,13 @@ static int xlnx_rtc_set_offset(struct device *dev, long offset)
- 
- 	/* Tick to offset multiplier */
- 	tick_mult = DIV_ROUND_CLOSEST(RTC_PPB, freq);
--	if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
--		return -ERANGE;
- 
- 	/* Number ticks for given offset */
- 	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
- 
-+	if (freq + max_tick > RTC_TICK_MASK || (freq + max_tick < 1))
-+		return -ERANGE;
-+
- 	/* Number fractional ticks for given offset */
- 	if (fract_offset) {
- 		fract_part = DIV_ROUND_UP(tick_mult, RTC_FR_MAX_TICKS);
+    b4 am --cherry-pick 1-2,4-13,17-23 \
+        20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com
+    b4 am 20260122-rtc-ac100-divider-round-rate-v2-1-044f8b493c35@redhat.com
 
--- 
-2.47.3
+I skipped the patches that have already been picked up by others. The
+two patches that actually remove the deprecated functions from drivers/clk/
+will need to go in during the next dev cycle.
+
+The only change since the v1 PULL is to drivers/rtc/rtc-ac100.c:
+- Fix two cases of brace inbalances around if/else
+- Picked up an Acked-by from Alexandre
+
+Details are in the signed tag.
+
+Thanks!
+
+
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  https://github.com/masneyb/linux tags/clk-divider-round-rate-v6.20-v2
+
+for you to fetch changes up to ed806240b8975f951c88ccb4bb75813f5fb949df:
+
+  rtc: ac100: convert from divider_round_rate() to divider_determine_rate() (2026-01-22 10:49:10 -0500)
+
+----------------------------------------------------------------
+clk: remove deprecated API divider_round_rate() and friends for v6.20
+
+Here's a series that lays the groundwork to rid of the deprecated APIs
+divider_round_rate(), divider_round_rate_parent(), and
+divider_ro_round_rate_parent() since these functions are just wrappers
+for the determine_rate variant.
+
+We need to wait for some other changes to land in Linus's tree via the
+phy tree before we can actually remove these functions. We should be
+able to do that during the next development cycle.
+
+Note that when I converted some of these drivers from round_rate to
+determine_rate, this was mistakenly converted to the following in some
+cases:
+
+    req->rate = divider_round_rate(...)
+
+This is invalid in the case when an error occurs since it can set the
+rate to a negative value. So this series fixes those bugs and removes
+the deprecated APIs all in one go.
+
+Note that this also contains a clk-specific change to
+drivers/rtc/rtc-ac100.c, and that patch carrys an Acked-by from
+Alexandre.
+
+----------------------------------------------------------------
+Brian Masney (20):
+      clk: sophgo: cv18xx-ip: convert from divider_round_rate() to divider_determine_rate()
+      clk: sunxi-ng: convert from divider_round_rate_parent() to divider_determine_rate()
+      clk: actions: owl-composite: convert from owl_divider_helper_round_rate() to divider_determine_rate()
+      clk: actions: owl-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: bm1880: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: bm1880: convert from divider_round_rate() to divider_determine_rate()
+      clk: hisilicon: clkdivider-hi6220: convert from divider_round_rate() to divider_determine_rate()
+      clk: loongson1: convert from divider_round_rate() to divider_determine_rate()
+      clk: milbeaut: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: milbeaut: convert from divider_round_rate() to divider_determine_rate()
+      clk: nuvoton: ma35d1-divider: convert from divider_round_rate() to divider_determine_rate()
+      clk: nxp: lpc32xx: convert from divider_round_rate() to divider_determine_rate()
+      clk: sophgo: sg2042-clkgen: convert from divider_round_rate() to divider_determine_rate()
+      clk: sprd: div: convert from divider_round_rate() to divider_determine_rate()
+      clk: stm32: stm32-core: convert from divider_ro_round_rate() to divider_ro_determine_rate()
+      clk: stm32: stm32-core: convert from divider_round_rate_parent() to divider_determine_rate()
+      clk: versaclock3: convert from divider_round_rate() to divider_determine_rate()
+      clk: x86: cgu: convert from divider_round_rate() to divider_determine_rate()
+      clk: zynqmp: divider: convert from divider_round_rate() to divider_determine_rate()
+      rtc: ac100: convert from divider_round_rate() to divider_determine_rate()
+
+ drivers/clk/actions/owl-composite.c       |  11 +--
+ drivers/clk/actions/owl-divider.c         |  17 +---
+ drivers/clk/actions/owl-divider.h         |   5 -
+ drivers/clk/clk-bm1880.c                  |  13 +--
+ drivers/clk/clk-loongson1.c               |   5 +-
+ drivers/clk/clk-milbeaut.c                |  15 +--
+ drivers/clk/clk-versaclock3.c             |   7 +-
+ drivers/clk/hisilicon/clkdivider-hi6220.c |   6 +-
+ drivers/clk/nuvoton/clk-ma35d1-divider.c  |   7 +-
+ drivers/clk/nxp/clk-lpc32xx.c             |   6 +-
+ drivers/clk/sophgo/clk-cv18xx-ip.c        | 154 +++++++++++++++++-------------
+ drivers/clk/sophgo/clk-sg2042-clkgen.c    |  15 +--
+ drivers/clk/sprd/div.c                    |   6 +-
+ drivers/clk/stm32/clk-stm32-core.c        |  42 +++-----
+ drivers/clk/sunxi-ng/ccu_div.c            |  25 +++--
+ drivers/clk/sunxi-ng/ccu_mp.c             |  26 ++---
+ drivers/clk/sunxi-ng/ccu_mult.c           |  16 ++--
+ drivers/clk/sunxi-ng/ccu_mux.c            |  49 ++++++----
+ drivers/clk/sunxi-ng/ccu_mux.h            |   8 +-
+ drivers/clk/sunxi-ng/ccu_nkm.c            |  25 ++---
+ drivers/clk/x86/clk-cgu.c                 |   6 +-
+ drivers/clk/zynqmp/divider.c              |   5 +-
+ drivers/rtc/rtc-ac100.c                   |  75 ++++++++-------
+ 23 files changed, 245 insertions(+), 299 deletions(-)
 
 
