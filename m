@@ -1,76 +1,50 @@
-Return-Path: <linux-rtc+bounces-5847-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5848-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UD2rA99dc2l3vAAAu9opvQ
-	(envelope-from <linux-rtc+bounces-5847-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 12:39:11 +0100
+	id sP8yO+O/c2mjyQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-5848-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 19:37:23 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AA8D752EF
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 12:39:10 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 884EB79B37
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 19:37:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8DB08306B7B4
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 11:37:40 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 640B130039B9
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 18:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C193570D2;
-	Fri, 23 Jan 2026 11:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1E523ABBD;
+	Fri, 23 Jan 2026 18:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HFvbAMH0";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TL2boRjs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NRWoCZxZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEF4346AC5;
-	Fri, 23 Jan 2026 11:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC843EBF1B;
+	Fri, 23 Jan 2026 18:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769168243; cv=none; b=Inb+ZfBxCrxBxAlus6UBm68EWp+JG1g3VVgpSBKwA8DkPw69SG1V0tIA8Ap0pf+qwPSWiyaEwwbzKqjEUN7NLoWMi9BYU1tJytWT1NAfZyFl58yaIOB3MYggV8zLU4k9g2m6bSZoD1P8KIw2M58m8MlhhTKEU5fKlRTLapjy+Xo=
+	t=1769193441; cv=none; b=c/T/w+hMd3J+FzdPm+YebWALEHu8uSl/zL+/8f3x6x7zdQCKyX8xQwBLzpbwNS/9c8e1hnMZlKy5CrOTzdW1G3LxaZJo4ObklnD21mB6bgHibia4Ag51Bc8UhZDpwubApPPfgKIdPzFlPkJT9/QpJ+F8UllCkpltHsRSpRlAYNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769168243; c=relaxed/simple;
-	bh=nk24K0bEl4BitwMmxO29WLGaNQeAc4TWqPhaRsUShEQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c5MdBKMpt9s319fXvqRj5aveAdBqDJwOJ9nK633E9pCVV5mulUnKBpCXGwLYyHdFSbdfqobprOjvhvw20eKMw2jfx0wwWqDBFbW5eXMTtU02nmiJe64Y9DUkIfEiFjrxuQDFPB3mGnQawyipjXFDGvuJA4ycMkjxOcu+5DvJd9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HFvbAMH0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TL2boRjs; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769168238;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I5Y2mY6Cv+HBbwUcIy8mBlx4YksTAUnqjMgEz3FoeqU=;
-	b=HFvbAMH0Th2J1NOletGHPbs9P3Zrb7orBaP+xT9w3SFGu2KD1xIuoRW7Gwiqp5a69DarNs
-	ZhIbznmDqinL7Ao4C62KGWzUc0Wo14IZ+BflU70z0PPwc+qcGc3u/eEdw3jseDM1uFBKjN
-	bN8dZNP4/zj6VZDLm0glsL869qZwUEsmXOwZgtvt/1k+Z0PI9Tx2+txthQetlmgdDMRoeb
-	0xF+ogCleu2o+8A+s6GXfgT/QVVVLCDH/4qqhfF1R0OjVx72FFNmGhxOYFesjteozCuoN1
-	WApkITpex4NR7vJrRDvQsg5/ChQHDmXN8Ycn0G1u0c9CL4cLgBFwvRdyIazoJQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769168238;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I5Y2mY6Cv+HBbwUcIy8mBlx4YksTAUnqjMgEz3FoeqU=;
-	b=TL2boRjs4Jahyxe13RnYF5vB6LtjNWpivAhIPpkuT2DBVez0VyqZa/8jAKGzsi1iMdMtl7
-	1S2Pq5GStMwXNWDQ==
-To: linux-kernel@vger.kernel.org
-Cc: linux-rt-devel@lists.linux.dev,
-	Thomas Gleixner <tglx@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Yiting Deng <yiting.deng@amlogic.com>,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-amlogic@lists.infradead.org,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH 14/21] rtc: amlogic-a4: Remove IRQF_ONESHOT
-Date: Fri, 23 Jan 2026 12:37:00 +0100
-Message-ID: <20260123113708.416727-15-bigeasy@linutronix.de>
-In-Reply-To: <20260123113708.416727-1-bigeasy@linutronix.de>
-References: <20260123113708.416727-1-bigeasy@linutronix.de>
+	s=arc-20240116; t=1769193441; c=relaxed/simple;
+	bh=eyrCLTDGqGhzzffyOwiEfQcLhlv2Dptd2OCd1PNPewI=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=jo/q9ucR9N71J0RwWGYKc4aidLNcEf5+cW5WN27Jvfd+be9zArVw8gW8XXpAxRwlRw5vSyjzNsypeO/js7tAMNidGYIu/gNIKJF56KDbzbYt1YuoFnaBYDO4ljxiZ/gh+zMGUOwgF9A97TXpboUg/oUtkW61KPo5vg4qDx9evFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NRWoCZxZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AE0C4CEF1;
+	Fri, 23 Jan 2026 18:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769193441;
+	bh=eyrCLTDGqGhzzffyOwiEfQcLhlv2Dptd2OCd1PNPewI=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=NRWoCZxZBugswe7OL6wUvtXf3QU6qmqtCdcZcm838I1QjFY6WEsk5E2cwxS0+wnhR
+	 W53MTfemDVvthisjXqn1vuF/aBotxgc7EBv1i3XEJWdcLnSTdutHfEhdsQFom85lDF
+	 +tW1S76v99r95StSIb3SQ22kplODjG9gbtBI2uw1IH1fycd0zMFT4Df2wHVq2rFvNh
+	 A9wbu+KcHa6h8y9HeEnTFYuC/zwgSTdc4EPsq2Jewsh/I630rusn1NPDxx3HpUAWEf
+	 l6YUiyjLnghAXfZ/zomqv0Qls0f6SWPiJGP/pK1Kfnd4HvG7Wetcz0Qs0Up25DyGhF
+	 wT90uw2LOliUw==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -78,71 +52,86 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <aXJKvOJVrBIeCiny@redhat.com>
+References: <aXJKvOJVrBIeCiny@redhat.com>
+Subject: Re: [GIT PULL v2] clk: remove deprecated API divider_round_rate() and friends for v6.20
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
+To: Brian Masney <bmasney@redhat.com>, Michael Turquette <mturquette@baylibre.com>
+Date: Fri, 23 Jan 2026 11:37:19 -0700
+Message-ID: <176919343905.4027.446369039299053379@lazor>
+User-Agent: alot/0.11
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[3];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5847-lists,linux-rtc=lfdr.de];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-rtc@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5848-lists,linux-rtc=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.990];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sboyd@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:email,linutronix.de:email,linutronix.de:dkim,linutronix.de:mid,infradead.org:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5AA8D752EF
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 884EB79B37
 X-Rspamd-Action: no action
 
-Passing IRQF_ONESHOT ensures that the interrupt source is masked until
-the secondary (threaded) handler is done. If only a primary handler is
-used then the flag makes no sense because the interrupt can not fire
-(again) while its handler is running.
-The flag also disallows force-threading of the primary handler and the
-irq-core will warn about this.
+Quoting Brian Masney (2026-01-22 09:05:16)
+> Hi Stephen,
+>=20
+> Here's a PULL for this large series that continues the work to remove
+> some deprecated round_rate APIs. I used the following b4 commands to
+> collect up this series:
+>=20
+>     b4 am --cherry-pick 1-2,4-13,17-23 \
+>         20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com
+>     b4 am 20260122-rtc-ac100-divider-round-rate-v2-1-044f8b493c35@redhat.=
+com
+>=20
+> I skipped the patches that have already been picked up by others. The
+> two patches that actually remove the deprecated functions from drivers/cl=
+k/
+> will need to go in during the next dev cycle.
+>=20
+> The only change since the v1 PULL is to drivers/rtc/rtc-ac100.c:
+> - Fix two cases of brace inbalances around if/else
+> - Picked up an Acked-by from Alexandre
+>=20
+> Details are in the signed tag.
+>=20
+> Thanks!
+>=20
+>=20
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1=
+e8:
+>=20
+>   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+>=20
+> are available in the Git repository at:
+>=20
+>   https://github.com/masneyb/linux tags/clk-divider-round-rate-v6.20-v2
+>=20
+> for you to fetch changes up to ed806240b8975f951c88ccb4bb75813f5fb949df:
+>=20
+>   rtc: ac100: convert from divider_round_rate() to divider_determine_rate=
+() (2026-01-22 10:49:10 -0500)
+>=20
+> ----------------------------------------------------------------
 
-Remove IRQF_ONESHOT from irqflags.
-
-Cc: Yiting Deng <yiting.deng@amlogic.com>
-Cc: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-amlogic@lists.infradead.org
-Cc: linux-rtc@vger.kernel.org
-Fixes: c89ac9182ee29 ("rtc: support for the Amlogic on-chip RTC")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/rtc/rtc-amlogic-a4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-amlogic-a4.c b/drivers/rtc/rtc-amlogic-a4.c
-index 123fb372fc9fe..50938c35af36a 100644
---- a/drivers/rtc/rtc-amlogic-a4.c
-+++ b/drivers/rtc/rtc-amlogic-a4.c
-@@ -369,7 +369,7 @@ static int aml_rtc_probe(struct platform_device *pdev)
- 		return PTR_ERR(rtc->rtc_dev);
-=20
- 	ret =3D devm_request_irq(dev, rtc->irq, aml_rtc_handler,
--			       IRQF_ONESHOT, "aml-rtc alarm", rtc);
-+			       0, "aml-rtc alarm", rtc);
- 	if (ret) {
- 		dev_err_probe(dev, ret, "IRQ%d request failed, ret =3D %d\n",
- 			      rtc->irq, ret);
---=20
-2.51.0
-
+Thanks. Pulled into clk-next
 
