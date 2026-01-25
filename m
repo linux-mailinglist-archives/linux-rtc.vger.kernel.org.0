@@ -1,204 +1,198 @@
-Return-Path: <linux-rtc+bounces-5851-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5852-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id VU5zIGKvdWm2HgEAu9opvQ
-	(envelope-from <linux-rtc+bounces-5851-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 06:51:30 +0100
+	id oPlQAQAedmn2LwEAu9opvQ
+	(envelope-from <linux-rtc+bounces-5852-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 14:43:28 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 639217FD59
-	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 06:51:29 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90E3180C14
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 14:43:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 142A03005D33
-	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 05:51:28 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6C5513002504
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 13:43:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB72E3115B5;
-	Sun, 25 Jan 2026 05:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2643203AB;
+	Sun, 25 Jan 2026 13:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="rTR69koY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MTjBm/Yn"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1304D31062C;
-	Sun, 25 Jan 2026 05:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769320287; cv=pass; b=szugmd+y6aGnvuC6dQjhh662EZZAug3N12wkpRaSBRLV7TKK4ybN0DhOctOsLujA5g/cLPsfIQ7KNxHo6v1QWmtD4fmVQ+jtI+eP4CLroTtdO1hOJy62Vl5J9qdyC4UjK6yXWOqKF3voeSuU5K6VrgG5Cr/JN/i4FSbxY3LRbhk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769320287; c=relaxed/simple;
-	bh=vNRFz3rpr1i9Y/8CHvWTW67haKPfB44QKas58pkzPWI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DhDCa+xgDIQ5h4Zb8+E0uj9jSFeWLW1V7LXG4amDJgijUTfI9VT3xcsTTDPWrXifXezbUNqe9r3h8SuoJ38w8DW+p6IMNWdxFMmIPu3iHYt1BTqMyp6YWY+N86KiSppAiA/RBZs2yFiOIe49/VDpdiwfDmMOAi7v8k6htSi10e4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=rTR69koY; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
-ARC-Seal: i=1; a=rsa-sha256; t=1769320254; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=dSTluIUg1ZvuNQajf3SJQZtFC47qgOiCluuPmretAnaYy3qEXXAfw12l1SuinrIkuTIRZfJR31MmYz5r6spPsJxZMoLbjXd+1xdkmxQeHJWZoCwxSDGaUYuXq3kOF7qo9PWdPFRCQ4/6JBiHaTov22Gkxan2PROLvfDtNTd0P3I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1769320254; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=7kmusx+MqkhmDeC3UAb227ZvWFfKqkuZrPt4RmzV95Y=; 
-	b=WBLo2GPooj7hxieZJGDM1Qex0g3hZOSEzMm4I2tFp1ukYCmfFnuM3DqSt27sKBwWn2TV32I6s/OLlyXB2DY6U2/hhhUGqi82QbSx6QFm0LctY+SpVlAX5ZxYla4X7m+X1IT29Njx9sdNitezJuoLhqo/4o9PN3DJ7+ZocAo4ctQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=pigmoral.tech;
-	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
-	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1769320254;
-	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
-	h=Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Date:Message-Id:Message-Id:Cc:Cc:Subject:Subject:From:From:To:To:References:In-Reply-To:Reply-To;
-	bh=7kmusx+MqkhmDeC3UAb227ZvWFfKqkuZrPt4RmzV95Y=;
-	b=rTR69koYL0NpAmYBkVdfpkSYUbKGJBrLW085gQX2D96GmcI/dgw7ortSTm9m6V3k
-	PT91fEUpMbG+8Dqv0q3hbWPewgHn/Vtexj28VcJV8gL/4bu+ozd4NNXgzLh7FwyAlmd
-	sgb05Ra7AgqhnAaPKb8koZaqEd2KKBmDE0tK9YPw=
-Received: by mx.zohomail.com with SMTPS id 1769320251684256.61624132047143;
-	Sat, 24 Jan 2026 21:50:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1138F3191A9
+	for <linux-rtc@vger.kernel.org>; Sun, 25 Jan 2026 13:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769348595; cv=none; b=rkzZSE1ZaN4VZsvEoZ6z2uGAL35phVwv4vKiT8/9uFIMbiDk12W4A/IovfVax2wiIXHUDRd7FIR7xtHH+CdnOwplqhZacr2Q6k5c0Ih+UFuS31Sn/S9U5EnYXyLQx61YeWqDAhAII9XdF+Wc4p8rDzfCKhfqI/0oFn19Keo2Xjw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769348595; c=relaxed/simple;
+	bh=JJjtH9otRLzOZRR9aD+dplHYB+LHXNglPxedcB5O3Ng=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WAQJGSqb5NxPlhPxKWQnvic8/u7gkQDskxE9zitr/94a9hIjn3qcU9p/1ooepINkA0oUKFT5E28nqKpK3G9HdXv6agqd4OMAGVRiPunOaGcBz88jrXISe+tktuu6qqmx/vKkqfiEfN1j9xmVfhyp3iq573NZ54WyXWQZlCp7pwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MTjBm/Yn; arc=none smtp.client-ip=209.85.221.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-435a517be33so2211770f8f.0
+        for <linux-rtc@vger.kernel.org>; Sun, 25 Jan 2026 05:43:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769348591; x=1769953391; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8NUf/i0X9PwsOhEP5BF7TGftifUEandWRzmLdR3A48k=;
+        b=MTjBm/Ynp16NWWrM8ZY/wXQXjKbs4ihg+0O25nBNys6RA66yKbbXtSoXMG84R5NvKn
+         St/U8M8lhig+j+WOEsDASNef8CFFAl1+fQLDWlH334PgF987zQvyrPw/7qaEkZ1LQM19
+         Dz67Lp7engVYWNksAoM7P3eQiYpzS0xrMn5TLppZQXdDUZ4Iai1Y9jgAWC1b30feZxdR
+         qkhRD5GlkLSgUhH8L14n4g1vwCtr/BTDebW+9EvYyBotkpb2zNQSWv72msaFqsO+HFUN
+         DvYOr9tsMhUw8SKJSluK5ZFozXPppPcjKtXjPrDkzs8sY7CHttUxWd3+tH/S7qA8C/6E
+         3o9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769348591; x=1769953391;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8NUf/i0X9PwsOhEP5BF7TGftifUEandWRzmLdR3A48k=;
+        b=pgWYp8vX6shU3odo1qlTL6htAiVhqq1EALA7R6AdB/WOKbZ/xqM0ZntSpxLX73lBmB
+         vftswsE99EOwEnlMj7eL+RNPPxhf4Ctm98Gbjn6I63ki6I8bBFfIYlS2q1jrFSDY5oW0
+         kxeoVSkLAzCqDCz71yem56Gc/xZM3AoPFCkR/fz4te7Cezh/y8MK45RaVNViGqqwTD62
+         39dv6DKzJn4mqUXNt2izOQCWiJe6JS5VRFVolZ/GbIrMXGQu1GxQuSP0JXcQFxups1+L
+         I91B67yrmTcd9LU7DKvxQxHrN0pkAqonMYdHPMXJtSs6bncJTg2r/ewPNII+5aSK8hex
+         W6dg==
+X-Forwarded-Encrypted: i=1; AJvYcCXV7znFqUENRjUAzA+YqRXpYf+eQneDB25AJ/PnYptjKXJqkhcdCZ+pE9g/9kG7PMt9OaTJ2CZRXW8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4ohBR6+W1f9r5RdVaYIL6OXeazJrwvi50GBb8YGU0zD8V84lp
+	jJV0j2dp5Y9BScjn3XZyNhR/KXqCM8tpfyM9vEs7IVF5/UcOU0DlAw4u
+X-Gm-Gg: AZuq6aKjD/OhSfwYJyeyFMMUqopHyOM3ENJnMN0ljf8HSdkr1BlAQNiqcQqwK9Ms9vy
+	tDjbUpgKrxbc7kuO5GCWdVIMxiGMkRkit8TmvSbm08qUcLEZhnbKCcwp9yAcBV4v5vBEAShX/R1
+	L6CE+4E5wu1uJ2rTBOoKR7/tVaU5YCFKqIqdnsq23E9aAQW/HbKOVLbybl5OUUsONiDOHjxr0eT
+	scUqbAm//EaKPyAY25rgLWH96yqZprs+3LmQB1jdpgY8kXaMk6bDxGXQl5OtEYbrBJY6lrcTkrx
+	N8dQsphRMjcHDnkrBFWnmDZ7up1dFGeV4271uqnZIDXWl+HfR8TQDxYyyfAe+9nVRTdbZZXuF33
+	9mVZWv4ZTQ9SvxWnTPCQgGvhdULmQVmatJWWPZvCH/+ZohJFTgG1XfSpl6qWqbWvhGCtTNmOWlh
+	ek
+X-Received: by 2002:a5d:64c4:0:b0:430:f40f:61b9 with SMTP id ffacd0b85a97d-435ca0d3e4emr2467557f8f.4.1769348591411;
+        Sun, 25 Jan 2026 05:43:11 -0800 (PST)
+Received: from xeon ([188.163.112.49])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c246ecsm22459688f8f.10.2026.01.25.05.43.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jan 2026 05:43:11 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Svyatoslav Ryhel <clamor95@gmail.com>,
+	Dixit Parmar <dixitparmar19@gmail.com>,
+	Tony Lindgren <tony@atomide.com>
+Cc: linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH v1 00/10] mfd: cpcap: convert documentation to schema and add Mot board support
+Date: Sun, 25 Jan 2026 15:42:52 +0200
+Message-ID: <20260125134302.45958-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 25 Jan 2026 13:50:41 +0800
-Message-Id: <DFXFOHVB1GAV.3L3EL4FVWFWDC@pigmoral.tech>
-Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Samuel
- Holland" <samuel@sholland.org>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Maxime Ripard" <mripard@kernel.org>,
- <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
- <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 4/7] clk: sunxi-ng: Extract common RTC CCU clock logic
-From: "Junhui Liu" <junhui.liu@pigmoral.tech>
-To: <wens@kernel.org>, "Junhui Liu" <junhui.liu@pigmoral.tech>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260121-a733-rtc-v1-0-d359437f23a7@pigmoral.tech>
- <20260121-a733-rtc-v1-4-d359437f23a7@pigmoral.tech>
- <CAGb2v65aMMVu8W1PW+6NZM+YM72YFV9_FWVWtj6QHJ1CgetEsA@mail.gmail.com>
-In-Reply-To: <CAGb2v65aMMVu8W1PW+6NZM+YM72YFV9_FWVWtj6QHJ1CgetEsA@mail.gmail.com>
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[pigmoral.tech:s=zmail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5851-lists,linux-rtc=lfdr.de];
-	DMARC_NA(0.00)[pigmoral.tech];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5852-lists,linux-rtc=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	FREEMAIL_TO(0.00)[kernel.org,baylibre.com,analog.com,gmail.com,bootlin.com,atomide.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[pigmoral.tech:+];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[junhui.liu@pigmoral.tech,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[baylibre.com,kernel.org,gmail.com,sholland.org,bootlin.com,vger.kernel.org,lists.infradead.org,lists.linux.dev];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,pigmoral.tech:email,pigmoral.tech:dkim,pigmoral.tech:mid]
-X-Rspamd-Queue-Id: 639217FD59
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 90E3180C14
 X-Rspamd-Action: no action
 
-On Sun Jan 25, 2026 at 12:32 PM CST, Chen-Yu Tsai wrote:
-> On Wed, Jan 21, 2026 at 7:04=E2=80=AFPM Junhui Liu <junhui.liu@pigmoral.t=
-ech> wrote:
->>
->> Extract the IOSC and 32k clock logic from ccu-sun6i-rtc into a shared
->> module to simplify adding RTC CCU support for new SoCs. This is needed
->> because newer Allwinner SoCs introduce additional DCXO/HOSC logic that
->> prevents direct reuse of the existing driver.
->>
->> Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
->> ---
->>  drivers/clk/sunxi-ng/Makefile        |   3 +
->>  drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 152 +---------------------------=
--------
->>  drivers/clk/sunxi-ng/ccu_rtc.c       | 136 ++++++++++++++++++++++++++++=
-+++
->>  drivers/clk/sunxi-ng/ccu_rtc.h       |  37 +++++++++
->>  4 files changed, 177 insertions(+), 151 deletions(-)
->>
+The initial goal was only to add support for the CPCAP used in the Mot
+Tegra20 board; however, since the documentation was already partially
+converted, I decided to complete the conversion to schema too.
 
-[...]
+The CPCAP regulator, leds, rtc, pwrbutton and core files were converted
+from TXT to YAML while preserving the original structure. Mot board
+compatibility was added to the regulator and core schema. Since these
+were one-line patches, they were not separated into dedicated commits;
+however, the commit message notes this for both cases.
 
->> +
->> +const struct clk_ops ccu_iosc_ops =3D {
->> +       .enable                 =3D ccu_iosc_enable,
->> +       .disable                =3D ccu_iosc_disable,
->> +       .is_enabled             =3D ccu_iosc_is_enabled,
->> +       .recalc_rate            =3D ccu_iosc_recalc_rate,
->> +       .recalc_accuracy        =3D ccu_iosc_recalc_accuracy,
->> +};
->
-> You need to export the symbol.
+Finally, the CPCAP MFD was slightly refactored to improve support for
+multiple subcell compositions.
 
-Thanks, I will export them.
+Svyatoslav Ryhel (10):
+  dt-bindings: regulator: cpcap-regulator: convert to schema
+  regulator: cpcap-regulator: add support for Mot regulators
+  dt-bindings: iio: adc: cpcap-adc: document Mot ADC
+  iio: adc: cpcap-adc: add support for Mot ADC
+  dt-bindings: leds: leds-cpcap: convert to schema
+  dt-bindings: rtc: cpcap-rtc: convert to schema
+  dt-bindings: input: cpcap-pwrbutton: convert to schema
+  dt-bindings: mfg: motorola-cpcap: convert to schema
+  mfd: motorola-cpcap: diverge configuration per-board
+  mfd: motorola-cpcap: add support for Mot CPCAP composition
 
-[...]
+ .../bindings/iio/adc/motorola,cpcap-adc.yaml  |   1 +
+ .../bindings/input/cpcap-pwrbutton.txt        |  20 -
+ .../input/motorola,cpcap-pwrbutton.yaml       |  32 ++
+ .../devicetree/bindings/leds/leds-cpcap.txt   |  29 --
+ .../bindings/leds/motorola,cpcap-leds.yaml    |  42 ++
+ .../bindings/mfd/motorola,cpcap.yaml          | 389 ++++++++++++++++++
+ .../bindings/mfd/motorola-cpcap.txt           |  78 ----
+ .../bindings/regulator/cpcap-regulator.txt    |  35 --
+ .../regulator/motorola,cpcap-regulator.yaml   |  51 +++
+ .../devicetree/bindings/rtc/cpcap-rtc.txt     |  18 -
+ .../bindings/rtc/motorola,cpcap-rtc.yaml      |  32 ++
+ drivers/iio/adc/cpcap-adc.c                   |  17 +-
+ drivers/mfd/motorola-cpcap.c                  | 134 +++++-
+ drivers/regulator/cpcap-regulator.c           | 105 +++++
+ 14 files changed, 791 insertions(+), 192 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/cpcap-pwrbutton.txt
+ create mode 100644 Documentation/devicetree/bindings/input/motorola,cpcap-pwrbutton.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-cpcap.txt
+ create mode 100644 Documentation/devicetree/bindings/leds/motorola,cpcap-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/motorola,cpcap.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/motorola-cpcap.txt
+ delete mode 100644 Documentation/devicetree/bindings/regulator/cpcap-regulator.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/motorola,cpcap-regulator.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/cpcap-rtc.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/motorola,cpcap-rtc.yaml
 
->> diff --git a/drivers/clk/sunxi-ng/ccu_rtc.h b/drivers/clk/sunxi-ng/ccu_r=
-tc.h
->> new file mode 100644
->> index 000000000000..1c44c2206a25
->> --- /dev/null
->> +++ b/drivers/clk/sunxi-ng/ccu_rtc.h
->> @@ -0,0 +1,37 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (c) 2021 Samuel Holland <samuel@sholland.org>
->> + */
->> +
->> +#ifndef _CCU_RTC_H_
->> +#define _CCU_RTC_H_
->> +
->> +#define IOSC_ACCURACY                  300000000 /* 30% */
->> +#define IOSC_RATE                      16000000
->> +
->> +#define LOSC_RATE                      32768
->> +#define LOSC_RATE_SHIFT                        15
->> +
->> +#define LOSC_CTRL_REG                  0x0
->> +#define LOSC_CTRL_KEY                  0x16aa0000
->> +
->> +#define IOSC_32K_CLK_DIV_REG           0x8
->> +#define IOSC_32K_CLK_DIV               GENMASK(4, 0)
->> +#define IOSC_32K_PRE_DIV               32
->> +
->> +#define IOSC_CLK_CALI_REG              0xc
->> +#define IOSC_CLK_CALI_DIV_ONES         22
->> +#define IOSC_CLK_CALI_EN               BIT(1)
->> +#define IOSC_CLK_CALI_SRC_SEL          BIT(0)
->> +
->> +#define LOSC_OUT_GATING_REG            0x60
->> +
->> +#define DCXO_CTRL_REG                  0x160
->> +#define DCXO_CTRL_CLK16M_RC_EN         BIT(0)
->
-> Please keep all internals in the .c file.
-
-My original thought was to reuse these for the A733. But since doing
-so is not appropriate, I will put them in the .c files separately.
-
->
-> ChenYu
->
-
---=20
-Best regards,
-Junhui Liu
+-- 
+2.51.0
 
 
