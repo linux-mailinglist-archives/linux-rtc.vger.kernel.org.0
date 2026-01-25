@@ -1,137 +1,156 @@
-Return-Path: <linux-rtc+bounces-5848-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5849-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sP8yO+O/c2mjyQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-5848-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 19:37:23 +0100
+	id qIn+GjiXdWlUGgEAu9opvQ
+	(envelope-from <linux-rtc+bounces-5849-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 05:08:24 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 884EB79B37
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 19:37:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B358F7FBBE
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 05:08:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 640B130039B9
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jan 2026 18:37:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AA96C301368C
+	for <lists+linux-rtc@lfdr.de>; Sun, 25 Jan 2026 04:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1E523ABBD;
-	Fri, 23 Jan 2026 18:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66023221DB1;
+	Sun, 25 Jan 2026 04:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NRWoCZxZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fb1ND8Ea"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC843EBF1B;
-	Fri, 23 Jan 2026 18:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842E71373;
+	Sun, 25 Jan 2026 04:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769193441; cv=none; b=c/T/w+hMd3J+FzdPm+YebWALEHu8uSl/zL+/8f3x6x7zdQCKyX8xQwBLzpbwNS/9c8e1hnMZlKy5CrOTzdW1G3LxaZJo4ObklnD21mB6bgHibia4Ag51Bc8UhZDpwubApPPfgKIdPzFlPkJT9/QpJ+F8UllCkpltHsRSpRlAYNE=
+	t=1769314074; cv=none; b=U6NUNnKuyDvjUCyR2Vrxrm1Hz50NX8TcSo0BiX4iaxsc2t1x1oiR9GFEt6xuEEGsPTX2bjCEct3yFVo/Y6Enk4RxPrqiZ2FG682kTTTgIFnndIkBwP6nFTbY9LZr1Yt6Jg+idnQi38CEcav7h6jkHUidTdeCTPQ1v6TC7QCL44s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769193441; c=relaxed/simple;
-	bh=eyrCLTDGqGhzzffyOwiEfQcLhlv2Dptd2OCd1PNPewI=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=jo/q9ucR9N71J0RwWGYKc4aidLNcEf5+cW5WN27Jvfd+be9zArVw8gW8XXpAxRwlRw5vSyjzNsypeO/js7tAMNidGYIu/gNIKJF56KDbzbYt1YuoFnaBYDO4ljxiZ/gh+zMGUOwgF9A97TXpboUg/oUtkW61KPo5vg4qDx9evFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NRWoCZxZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AE0C4CEF1;
-	Fri, 23 Jan 2026 18:37:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769193441;
-	bh=eyrCLTDGqGhzzffyOwiEfQcLhlv2Dptd2OCd1PNPewI=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=NRWoCZxZBugswe7OL6wUvtXf3QU6qmqtCdcZcm838I1QjFY6WEsk5E2cwxS0+wnhR
-	 W53MTfemDVvthisjXqn1vuF/aBotxgc7EBv1i3XEJWdcLnSTdutHfEhdsQFom85lDF
-	 +tW1S76v99r95StSIb3SQ22kplODjG9gbtBI2uw1IH1fycd0zMFT4Df2wHVq2rFvNh
-	 A9wbu+KcHa6h8y9HeEnTFYuC/zwgSTdc4EPsq2Jewsh/I630rusn1NPDxx3HpUAWEf
-	 l6YUiyjLnghAXfZ/zomqv0Qls0f6SWPiJGP/pK1Kfnd4HvG7Wetcz0Qs0Up25DyGhF
-	 wT90uw2LOliUw==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1769314074; c=relaxed/simple;
+	bh=z/Q3Uki5iUeDrYudztHt8sojXXIhjVcCLpsmjGeWo9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BQyDZDAjk7Xa1KJPy+da/y3EmHmYhe776ejokc+bKgr/lzOsKidcIOuWci+DuLygVajzD9qRwRZ5O70lcuV0/XhTjLzcXBAghUtKWsKgRtkjLsQlP84r/b6Ve8aXxUM+2TzRTg54ApC3LtgwakqY6VrQAdXZYmkTPt4de9LH8tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fb1ND8Ea; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769314072; x=1800850072;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z/Q3Uki5iUeDrYudztHt8sojXXIhjVcCLpsmjGeWo9c=;
+  b=Fb1ND8Ea94J+Y4nFNEdPnomrjWCL0q8j0fXJ3xKW6PyKUjmJUVTUstty
+   oX5eB4iXrmc/uXFoMkArZDR3UZMTOwupPNyXqj1Pj0qqfh/l4naG0SJUZ
+   oSj9goCW68oaa9SAZKKdvEyhr/vFm/0rBESgIuuOmoc6Olpwiq+aCj749
+   9LTQ7xyl2EsGu0zkkZD2nOBB6CaDWNoUqIIfOUeZxJnopMB40jRa8Rvn7
+   PlH3OzvuhasO3jI79eQbqYGEBo+hsC/18T0Y5viQcbgfIWATE0FrfJ8Tt
+   RK+hKJEzsrqOoCwWX6TeXzMERDCA5FjufceoFqeXWyHupzePutRWEUzZS
+   g==;
+X-CSE-ConnectionGUID: o/516+K9QF6KreD5GQCXiQ==
+X-CSE-MsgGUID: vDsYl2jXTg+rKeLw/qWl5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11681"; a="70419465"
+X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
+   d="scan'208";a="70419465"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 20:07:51 -0800
+X-CSE-ConnectionGUID: nM2A70SRQ/+OhsvZU2XmIQ==
+X-CSE-MsgGUID: iJHVGoymRpu9ROwGyASi6Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,252,1763452800"; 
+   d="scan'208";a="207798954"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 24 Jan 2026 20:07:47 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vjrPc-00000000Vl4-2R1P;
+	Sun, 25 Jan 2026 04:07:44 +0000
+Date: Sun, 25 Jan 2026 12:07:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Junhui Liu <junhui.liu@pigmoral.tech>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	Junhui Liu <junhui.liu@pigmoral.tech>
+Subject: Re: [PATCH 4/7] clk: sunxi-ng: Extract common RTC CCU clock logic
+Message-ID: <202601251139.9CCmxdok-lkp@intel.com>
+References: <20260121-a733-rtc-v1-4-d359437f23a7@pigmoral.tech>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <aXJKvOJVrBIeCiny@redhat.com>
-References: <aXJKvOJVrBIeCiny@redhat.com>
-Subject: Re: [GIT PULL v2] clk: remove deprecated API divider_round_rate() and friends for v6.20
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
-To: Brian Masney <bmasney@redhat.com>, Michael Turquette <mturquette@baylibre.com>
-Date: Fri, 23 Jan 2026 11:37:19 -0700
-Message-ID: <176919343905.4027.446369039299053379@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260121-a733-rtc-v1-4-d359437f23a7@pigmoral.tech>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5848-lists,linux-rtc=lfdr.de];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5849-lists,linux-rtc=lfdr.de];
+	FREEMAIL_TO(0.00)[pigmoral.tech,baylibre.com,kernel.org,gmail.com,sholland.org,bootlin.com];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sboyd@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 884EB79B37
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid,01.org:url]
+X-Rspamd-Queue-Id: B358F7FBBE
 X-Rspamd-Action: no action
 
-Quoting Brian Masney (2026-01-22 09:05:16)
-> Hi Stephen,
->=20
-> Here's a PULL for this large series that continues the work to remove
-> some deprecated round_rate APIs. I used the following b4 commands to
-> collect up this series:
->=20
->     b4 am --cherry-pick 1-2,4-13,17-23 \
->         20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com
->     b4 am 20260122-rtc-ac100-divider-round-rate-v2-1-044f8b493c35@redhat.=
-com
->=20
-> I skipped the patches that have already been picked up by others. The
-> two patches that actually remove the deprecated functions from drivers/cl=
-k/
-> will need to go in during the next dev cycle.
->=20
-> The only change since the v1 PULL is to drivers/rtc/rtc-ac100.c:
-> - Fix two cases of brace inbalances around if/else
-> - Picked up an Acked-by from Alexandre
->=20
-> Details are in the signed tag.
->=20
-> Thanks!
->=20
->=20
-> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1=
-e8:
->=20
->   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
->=20
-> are available in the Git repository at:
->=20
->   https://github.com/masneyb/linux tags/clk-divider-round-rate-v6.20-v2
->=20
-> for you to fetch changes up to ed806240b8975f951c88ccb4bb75813f5fb949df:
->=20
->   rtc: ac100: convert from divider_round_rate() to divider_determine_rate=
-() (2026-01-22 10:49:10 -0500)
->=20
-> ----------------------------------------------------------------
+Hi Junhui,
 
-Thanks. Pulled into clk-next
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Junhui-Liu/dt-bindings-rtc-sun6i-Add-Allwinner-A733-support/20260121-192151
+base:   24d479d26b25bce5faea3ddd9fa8f3a6c3129ea7
+patch link:    https://lore.kernel.org/r/20260121-a733-rtc-v1-4-d359437f23a7%40pigmoral.tech
+patch subject: [PATCH 4/7] clk: sunxi-ng: Extract common RTC CCU clock logic
+config: arm64-randconfig-002-20260125 (https://download.01.org/0day-ci/archive/20260125/202601251139.9CCmxdok-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260125/202601251139.9CCmxdok-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601251139.9CCmxdok-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "ccu_iosc_32k_ops" [drivers/clk/sunxi-ng/sun6i-rtc-ccu.ko] undefined!
+>> ERROR: modpost: "ccu_iosc_ops" [drivers/clk/sunxi-ng/sun6i-rtc-ccu.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
