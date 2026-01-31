@@ -1,83 +1,84 @@
-Return-Path: <linux-rtc+bounces-5925-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5926-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6LWkOjRefmkjXwIAu9opvQ
-	(envelope-from <linux-rtc+bounces-5925-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 31 Jan 2026 20:55:32 +0100
+	id 4IDlHTpffmliXwIAu9opvQ
+	(envelope-from <linux-rtc+bounces-5926-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 31 Jan 2026 20:59:54 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42E20C3BEF
-	for <lists+linux-rtc@lfdr.de>; Sat, 31 Jan 2026 20:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D017BC3C3A
+	for <lists+linux-rtc@lfdr.de>; Sat, 31 Jan 2026 20:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B35E73010D87
-	for <lists+linux-rtc@lfdr.de>; Sat, 31 Jan 2026 19:55:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B4F3B3029AD0
+	for <lists+linux-rtc@lfdr.de>; Sat, 31 Jan 2026 19:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2224336C0B9;
-	Sat, 31 Jan 2026 19:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0675A36CDEF;
+	Sat, 31 Jan 2026 19:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="rmw5E5Of"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yOaOumtW"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-oa1-f66.google.com (mail-oa1-f66.google.com [209.85.160.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC7736BCEC
-	for <linux-rtc@vger.kernel.org>; Sat, 31 Jan 2026 19:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C7C36C5A6
+	for <linux-rtc@vger.kernel.org>; Sat, 31 Jan 2026 19:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769889330; cv=none; b=n8X0w5Zej7zsTn4LpbHZKzCPOIakU1RZRYSQKEnOt9/kaE6XPWlIEUwYMiowwzFszTKsiXaQZgFIr1Lq9TWfv1CptIFkEYdOob2zqjfTm5qsNqKBP2WQm1T2No45hnvlSUwze8BYt6CxCw3dgIoN+skRIVdqAmjb+D+ymBFImQU=
+	t=1769889579; cv=none; b=hcOCEzFUKBFz5BJLDlx4/icMCHnFblS8tK9By2djNnpNXi8xYorhsPTZw26X1kHZUqvKs+zW15wnZq0Kqf80uOXW9EeiiOWi6OVkaBTEXeZTPcZLFElmBJmMYad9cWMPcN4C8PXixdG2+by0AGHi3VeD3l72FMJ+rWWCVqL358c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769889330; c=relaxed/simple;
-	bh=t24mKOVNxxmWMKS1t9FekxYrZBCi//zHUHXDdl8G0I4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ToBKrWDRQe/npEKfoddc4GnGHIlAc/iiNiw9mbYSjhqcrc3fDngkEzFW0kcdrE2TNnlxmeR0Qj4Lr28hJ1YYh2yOhbXETeeg/Ehq9fTzI6NCSVooiFusXj25HyccNQ7/5LJG4zkYdimBN4l/pv3KqFPSNzmdqbd6gh+00e0QesY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=rmw5E5Of; arc=none smtp.client-ip=209.85.167.176
+	s=arc-20240116; t=1769889579; c=relaxed/simple;
+	bh=y501ybWHBgGRKwznvyi4r3Ot4gsoNEcrqXIf0H2+IFc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T82vmqf/luW9IO8+zzKpUbIeT/HzAP7YdWE2eaa9svdgGu/g1jamSIoLMiOowWEjSIryGlur6Nm3TFi+ON1htVE9JG6AuabCIdN04mBXApu04yQhoO6vxq3ZsYWiXsIoaR/+7RZdbFLD4vejwbpWR2V14E7Yzo39q/6Db+AtXFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yOaOumtW; arc=none smtp.client-ip=209.85.160.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-45c93313721so2127736b6e.2
-        for <linux-rtc@vger.kernel.org>; Sat, 31 Jan 2026 11:55:27 -0800 (PST)
+Received: by mail-oa1-f66.google.com with SMTP id 586e51a60fabf-40423dbe98bso1485176fac.2
+        for <linux-rtc@vger.kernel.org>; Sat, 31 Jan 2026 11:59:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769889327; x=1770494127; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H+VFD3n9uqCeuR5oa2hiu8NEEffv6cHN447B+eVXKTM=;
-        b=rmw5E5OfI+f9amD6CdjrhJUpCNx27t7LETFfGMwZRE2lrMnm+9y2OQjwmxPrPW3man
-         V+6nlU0IVqBn+5Th+W5/mcOEgfotdTkizpd2otLJePaCosTzUajbyhOjOr03lyvDqS1L
-         0vGmSifl5cJkBqZKsOoRj7Ni7bioYTOOF+lhA0tesl//JzQduo+CUjDj4rbSKrgb7CpN
-         NG8VoLCp2bpkgTW7tN+JFY0GA8HV7zzcDFzp/LKq/NFzgTcHbwav50ItqfJBXsGFtsXk
-         oHeBuJ63edbLWvskebiTUHsHfVdTs+Wz7SVoouNmPdwCAO0HOuudFCchDS1w8pa1xZTF
-         lefg==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769889576; x=1770494376; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ElQ4mZrKFvJjO3Pi3PK+S2VsoWxu8vErX54kiEsiHyM=;
+        b=yOaOumtW2KbV4JjPlFFWE8iPUmm0x1fmK1VHg/d1znD2UzoVlBV2D8o67cGSBS6WkV
+         T9azRTRRCU4OUe88g98GcBjFZtUxeHfeax9jOEbAYsS0cz2MMVJf6BmhS3NNUR7eMFbp
+         hqqdzSgzqi4bF6hpw1Jnc0h9t2ga5U8QEzxgOFOauAjLWR1LDDFOLcSA7gsLe/mOgtAz
+         SBdnqtaMDpjMQY2Vg+wkDrBCxhFx3dG1T36scs+wRTI8q2ePNv+eQnjOpHfDtN4vIsty
+         R+GwQpSnDFsjHOe1gwoUceJ1phB4P53OxRWzhN6uwd6F+ndgqw09kWw8o3x2sZJcfa3c
+         Azyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769889327; x=1770494127;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+VFD3n9uqCeuR5oa2hiu8NEEffv6cHN447B+eVXKTM=;
-        b=P08+qDDOSi6YVv28ybrrVWFWEQiIUHSrMmdyqrj9X9e+Az5WdBYORtRf3loc8nNyh0
-         t/Vdv0GZYdPuTw7PPKxWT5VFWYDk9P/i9+l/W7z1ODalHkBd+Mk0ugDQqVrf5spAY3x2
-         ZvBbYzGithHnh2g7Qw7hqzAeSZVOaLgV5+zso5WXg4i0ojVjiRzgAtO8OiYvD9gVZsgr
-         rFgclFyFpwF8Poa7+1dJ4xgAgWWROCvqds95TKBDTXIaFeBDAeU0JqEERCNlBmbPwiJG
-         hYeGPZPrO8DeutR6mIZVj0JRUUXKvnyacGySutwUtwW8ys51BL/R7Hhj/99hAV28fTZW
-         k/fg==
-X-Forwarded-Encrypted: i=1; AJvYcCXnAxbhONLffuvBjw8AOOOwLgYGPVY1/G/ElDbD+tVuBIhgKALYEolJDSK8IpvR1EZkUWEVZTkq9B0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbkdbr53175XWfNVj6+dfKSPtEMg8G8JlNZZA4wuts95nyEn8/
-	7FjmBSl8HMhwPzG1+YjrxogAD2zAncmuXkO5jPWPJoN24Ru6d8z8BA7JStHWiDHTutU=
-X-Gm-Gg: AZuq6aIFhQQWXBVPCOpg/uQQLHKoFpJTmil5K+dqfjSGPWbGzECmDhX/xnbE0RkTd+p
-	FvZgD9ydo6/DUkg1HOWV8+N3x6Po7J6geuITUpN2LaIv/256wgd7p1O2tE+uE87+ChiPZU0o5ON
-	Usx6CU23IJ3bIYzLPedaTqkBdbYow2cS9W6C12GdxEmQfeEKOXY6phtBoCxDCEpfdDie0yg1Z9T
-	aPxlx88zwz3uyyhvu0yM9x42ROBdNdKBN+a/d0h338/An7sLU8BvWfbdXr2k8EuVYxd34lCXwpm
-	WVSJ+YLKOQdIiL8DaoZjptRQanyF87lFSfUt2Cq7HGMZaTPJVq6yQ1K9KzQZvFLG0QfgIBX4aRa
-	SPP1IcuQxHaRAVll+KZpsTnNAybZ5M+FaPtbG+rN2D1VGkbblG+yZVrCwwLMcBz80zm1g3MvB8f
-	WfpHuQBPlzR3N4SHswGMOvx512F7s4CRuLACAOV323bNhnQUOnuVJSE87qU+j2
-X-Received: by 2002:a05:6820:2228:b0:663:8c2:feed with SMTP id 006d021491bc7-6630f3d4c04mr3300269eaf.83.1769889326973;
-        Sat, 31 Jan 2026 11:55:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769889576; x=1770494376;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ElQ4mZrKFvJjO3Pi3PK+S2VsoWxu8vErX54kiEsiHyM=;
+        b=L5sx5y6TKXmlEtafuobhNdl5d52zn/szd/5P/upsYIsHLQTbCEu6ICEMBDpP9AGeQm
+         lS1pFyoNkZr3EQG4wSoFAm/fwB8ogDkkmbmiUsd4z75WQSY1R1Kw0KoB2xpE3G/FRd68
+         h1lsrtn/s7mJg8uEwLTpNuVbYBB+zDbT+/c5L67nheFhwW3anxnJIQqwksB4eo440cpx
+         U1o4+nKfvPkFR1p1CI17zDXkPpQZtnwCagybOr0F0U0xCeKKp/s3vM6l0XWH1ii7x8eB
+         nyGtLMx8/PSvidLaiog/z26v+UmZi7XmQv6P1Nj/tvyNk/zpoSEug2o/VRR+ZWUThuT2
+         CMuw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7zAuRi/zTvUXYO3Muaul6AhHfKYzB6gq/uT76o0pbAkYVCTajD8gmAlURVOxBaahKj+S41FbZ0aQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJzwWn28jcRm5HFLoCtNDRZNlUYJpJe7aLy0X4l3Z3q+71d1Ux
+	j1T9r9zcKWv4qkJd+PGJ4o3dOw88QAk0gsulchNVrDP+Yo7Mc/DN3fHOn027L/eZv6I=
+X-Gm-Gg: AZuq6aKLH+mO2deIqeGB+IKPI3ePdlW7+AmgoSG1lPVGfjS/E9GoCadkh5tdlfgot8o
+	sfdJP6/+MwfDmw7Px2TyWnXPlX2PQ5xkiRXIynxLutWkuXA64QQra566gKuKQlra/6EPHayOfYN
+	e+3VKt0o07nepZ2k2DojYXreVx2eAe6BgcntmjcMD4sgoAtqz9BFY7H5Gf8LMta7Cx8wn3fF0sT
+	w876ReGdQzgGYqGAL+XVaY9QjPISzlCkxARL7C1RLw28wGZFjpLf3Gej1FXvYYbQ3jNHgCwX0DW
+	odIdS2E5ocJnLAxp2ju5xty+z0Z9nNrCKlpTCEayQyTgdA7wVBfPPICimSRPQFXdNIqyR14u20x
+	6/FFXUpD89BPHb75nSnEUOV7gF58lGqqGAmW7E73W3We5h2Pi+tQtne53zMso4irv5ShkIKI4y0
+	LRlMHA46f+97zdUYKjgvLMZt3nRLM68ulE3WwRC6rUhTpi/spbb8RdFpaWYXAq
+X-Received: by 2002:a05:6871:c968:b0:3f1:664f:e8db with SMTP id 586e51a60fabf-409a6ba324emr4043538fac.23.1769889576024;
+        Sat, 31 Jan 2026 11:59:36 -0800 (PST)
 Received: from ?IPV6:2600:8803:e7e4:500:c7ef:51f2:4f7a:6cd7? ([2600:8803:e7e4:500:c7ef:51f2:4f7a:6cd7])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-662f9a49769sm6775854eaf.15.2026.01.31.11.55.24
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-409570f1413sm8612306fac.2.2026.01.31.11.59.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Jan 2026 11:55:25 -0800 (PST)
-Message-ID: <8cedbb9c-9f72-43ae-a23e-705b3feb85fb@baylibre.com>
-Date: Sat, 31 Jan 2026 13:55:24 -0600
+        Sat, 31 Jan 2026 11:59:25 -0800 (PST)
+Message-ID: <51d07338-6ddd-4893-986f-7fab96ff6802@baylibre.com>
+Date: Sat, 31 Jan 2026 13:59:24 -0600
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -85,9 +86,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 01/10] dt-bindings: regulator: cpcap-regulator: convert
- to schema
-From: David Lechner <dlechner@baylibre.com>
+Subject: Re: [PATCH v1 05/10] dt-bindings: leds: leds-cpcap: convert to schema
 To: Svyatoslav Ryhel <clamor95@gmail.com>, Jonathan Cameron
  <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
  Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -101,10 +100,10 @@ Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
  linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org
 References: <20260125134302.45958-1-clamor95@gmail.com>
- <20260125134302.45958-2-clamor95@gmail.com>
- <d7938728-fded-4d5e-b23d-a8346e3fab46@baylibre.com>
+ <20260125134302.45958-6-clamor95@gmail.com>
 Content-Language: en-US
-In-Reply-To: <d7938728-fded-4d5e-b23d-a8346e3fab46@baylibre.com>
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20260125134302.45958-6-clamor95@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
@@ -116,7 +115,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5925-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-5926-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com,kernel.org,analog.com,bootlin.com,atomide.com];
@@ -135,29 +134,111 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre-com.20230601.gappssmtp.com:dkim,baylibre.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 42E20C3BEF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre-com.20230601.gappssmtp.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,devicetree.org:url,baylibre.com:mid]
+X-Rspamd-Queue-Id: D017BC3C3A
 X-Rspamd-Action: no action
 
-On 1/31/26 1:46 PM, David Lechner wrote:
-> On 1/25/26 7:42 AM, Svyatoslav Ryhel wrote:
->> Convert devicetree bindings for the Motorola CPCAP MFD regulator subnode
->> from TXT to YAML format. Main functionality preserved and added compatible
->> for CPCAP regulator set found in the Mot board.
->>
+On 1/25/26 7:42 AM, Svyatoslav Ryhel wrote:
+> Convert leds devicetree bindings for the Motorola CPCAP MFD from TXT to
+> YAML format. This patch does not change any functionality; the bindings
+> remain the same.
+> 
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  .../devicetree/bindings/leds/leds-cpcap.txt   | 29 -------------
+>  .../bindings/leds/motorola,cpcap-leds.yaml    | 42 +++++++++++++++++++
+>  2 files changed, 42 insertions(+), 29 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/leds/leds-cpcap.txt
+>  create mode 100644 Documentation/devicetree/bindings/leds/motorola,cpcap-leds.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/leds-cpcap.txt b/Documentation/devicetree/bindings/leds/leds-cpcap.txt
+> deleted file mode 100644
+> index ebf7cdc7f70c..000000000000
+> --- a/Documentation/devicetree/bindings/leds/leds-cpcap.txt
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -Motorola CPCAP PMIC LEDs
+> -------------------------
+> -
+> -This module is part of the CPCAP. For more details about the whole
+> -chip see Documentation/devicetree/bindings/mfd/motorola-cpcap.txt.
+> -
+> -Requires node properties:
+> -- compatible: should be one of
+> -   * "motorola,cpcap-led-mdl"		(Main Display Lighting)
+> -   * "motorola,cpcap-led-kl"		(Keyboard Lighting)
+> -   * "motorola,cpcap-led-adl"		(Aux Display Lighting)
+> -   * "motorola,cpcap-led-red"		(Red Triode)
+> -   * "motorola,cpcap-led-green"		(Green Triode)
+> -   * "motorola,cpcap-led-blue"		(Blue Triode)
+> -   * "motorola,cpcap-led-cf"		(Camera Flash)
+> -   * "motorola,cpcap-led-bt"		(Bluetooth)
+> -   * "motorola,cpcap-led-cp"		(Camera Privacy LED)
+> -- label: see Documentation/devicetree/bindings/leds/common.txt
+> -- vdd-supply: A phandle to the regulator powering the LED
+> -
+> -Example:
+> -
+> -&cpcap {
+> -	cpcap_led_red: red-led {
+> -		compatible = "motorola,cpcap-led-red";
+> -		label = "cpcap:red";
+> -		vdd-supply = <&sw5>;
+> -	};
+> -};
+> diff --git a/Documentation/devicetree/bindings/leds/motorola,cpcap-leds.yaml b/Documentation/devicetree/bindings/leds/motorola,cpcap-leds.yaml
+> new file mode 100644
+> index 000000000000..8dfc98a1ef99
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/motorola,cpcap-leds.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/motorola,cpcap-leds.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Motorola CPCAP PMIC leds
+> +
+> +maintainers:
+> +  - Svyatoslav Ryhel <clamor95@gmail.com>
+> +
+> +description:
+> +  This module is part of the Motorola CPCAP MFD device. For more details
+> +  see Documentation/devicetree/bindings/mfd/motorola,cpcap.yaml. Leds are
 
-...
+s/Leds/LEDs/
 
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - motorola,cpcap-regulator
->> +      - motorola,mapphone-cpcap-regulator
->> +      - motorola,mot-cpcap-regulator
+> +  represented as sub-nodes of the PMIC node on the device tree.
+> +
+> +allOf:
+> +  - $ref: /schemas/leds/common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - motorola,cpcap-led-adl # Display Lighting
+> +      - motorola,cpcap-led-blue # Blue Triode
+> +      - motorola,cpcap-led-bt # Bluetooth
+> +      - motorola,cpcap-led-cf # Camera Flash
+> +      - motorola,cpcap-led-cp # Camera Privacy LED
+> +      - motorola,cpcap-led-green # Green Triode
+> +      - motorola,cpcap-led-kl # Keyboard Lighting
+> +      - motorola,cpcap-led-mdl # Main Display Lighting
+> +      - motorola,cpcap-led-red # Red Triode
+> +
+> +  vdd-supply: true
+> +
+> +required:
+> +  - compatible
+> +  - label
+> +  - vdd-supply
+> +
+> +unevaluatedProperties: false
+> +
 
-This is what caused me to get confused on the order of the later patches.
+Should keep the example here.
 
-motorola,mot-cpcap-regulator is a new compatible, so would be better as
-a separate patch.
+> +...
 
 
