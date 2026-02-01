@@ -1,97 +1,97 @@
-Return-Path: <linux-rtc+bounces-5929-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5930-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKwBOVL6fmnlhgIAu9opvQ
-	(envelope-from <linux-rtc+bounces-5929-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 01 Feb 2026 08:01:38 +0100
+	id WKE9AGr6fmnlhgIAu9opvQ
+	(envelope-from <linux-rtc+bounces-5930-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 01 Feb 2026 08:02:02 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6009EC50B2
-	for <lists+linux-rtc@lfdr.de>; Sun, 01 Feb 2026 08:01:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 757FDC50DA
+	for <lists+linux-rtc@lfdr.de>; Sun, 01 Feb 2026 08:02:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 87171301484E
-	for <lists+linux-rtc@lfdr.de>; Sun,  1 Feb 2026 07:01:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E69383013ED4
+	for <lists+linux-rtc@lfdr.de>; Sun,  1 Feb 2026 07:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402E62DC337;
-	Sun,  1 Feb 2026 07:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B5F2E11C5;
+	Sun,  1 Feb 2026 07:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jn9EfSA6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JBKejBmS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B251547EE
-	for <linux-rtc@vger.kernel.org>; Sun,  1 Feb 2026 07:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A81284895
+	for <linux-rtc@vger.kernel.org>; Sun,  1 Feb 2026 07:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769929293; cv=pass; b=RROKb1SlRai36IR9SyDN4lAaPRZg6bB/+5wl7ieBz7296rtdbckFnOtvEryKtdFmJd3fCu4Lt6nNj5vzSaLN/RKHnEWKCJh+ni5i4+1V8G9F994GgfnjnY5CsfL56+G1Tm2UnBB5Alk2q/SFiftq2Ifj0fmt5gYXNAHLmtR8/+U=
+	t=1769929314; cv=pass; b=cdflX0l/nzdvo3ffTCHHIMLV/V261Py7GdrGq1xegIF6S7IusEVEL7hjJOEkgB8dX45Po+D3Cfyw5UnG9Y2JBPj710tUsCS2iCWcRNaipMLEBBogLCk5ApfLpMlJKGBdCMgkpL/3h1ga2pGfIxT1wrQQVwvnftn8YcFKmBUwSZo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769929293; c=relaxed/simple;
-	bh=4lwxL+MX5lYgnvQjumgh4AurnaGrE32hCgCl0vhDOYM=;
+	s=arc-20240116; t=1769929314; c=relaxed/simple;
+	bh=bHSVbRQDobR7C2o5P+eolgEypYFQdOgjv1IYhW+8fGA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TpFp6ZyxzFCCvTdhK0Z87DlkmdBjCwEUMcEa77iKq0BDYXj8+7e7BVEevh4B4d6VRVsNQHqOxSXAIKzyTkoIhbugmRZBk/xnLvO3Ihnhx6DQzTqsSN/0MiqjbK3gV1mlDTQxYcvYWA4MDrdPT/OM8p75a0PT24WfVOkMnQqu+fk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jn9EfSA6; arc=pass smtp.client-ip=209.85.221.49
+	 To:Cc:Content-Type; b=g5ZJQVon+Hr5KHmgqmlEqyN5SxAcDyKhIjc/SF21RQ3BEhjAJPQWvZqvD2H5S7sYTLUMR+QUHl6KdG+v2o125VYGRrRCYNiOyDkmau7h1AHxgxmSv2xHpaAjZrd76l+eRXJKokA/YsR0P/LG2kcKwqxKncDyZJVCK2PdWr7s0M8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JBKejBmS; arc=pass smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42fbc305882so2153454f8f.0
-        for <linux-rtc@vger.kernel.org>; Sat, 31 Jan 2026 23:01:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769929290; cv=none;
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b872f1c31f1so441848166b.0
+        for <linux-rtc@vger.kernel.org>; Sat, 31 Jan 2026 23:01:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769929311; cv=none;
         d=google.com; s=arc-20240605;
-        b=h21dQ7BoWeLhker3SO2OG4kc65fjmmFNXRVDbZoJgnsOFXNpdDVaazJ4395IHkyhZV
-         YRr2MveH+LEN57jw02SGufvU/IfM6vKnNGdJlxjoADnZkHaF8tQR6iMamwQPHwk2qGSq
-         8sHje+Piixiew03/0FueBI7JxMOiXwIxRDU0wjXiRURTCVn5Wc+OghsXFVGRDXG+8evp
-         NGBmR7c+fZxsil69fQSgq8jsyxkbPQqQw835ad/3Ze5kC1W+jkprd/613/RrIjIaAmmp
-         ByvHpX+/CmyTrQtun7MYQS9BVZddIMNElOwwgtOkJkXVVcz0+QDFLo7SLQwQYr9UnkBj
-         UYcA==
+        b=W1HdijF0fK02aMx0g+OQTOSbV8rjZE8BOMpdiGB73cTqkniwyPsZLhzoVOomwP2UKA
+         xHgRte2zoC0ENglvDp4z2/A8foyjEKToNgMsuaNNpsCaG2BitnagsUYRl61adEhUTaxb
+         0xFTEm1Mq1TcYmorIxikvZQJlw77JaMKaMOFv7u/EKTzLIDfEobmshH9YOS0I/mwF+Vp
+         BqTFJTxZtUlsgv/zd+xCN9Zci5mXtRnnUMvqpVjlYlRq/gem/02O1H3+bNB8UcQu6Oqh
+         gKv/NdzFR6S1PgC45fWj06Hj/d5NnVLZs1/8yUHhIuBrSzki+fAGW88gZit7H7TRX0Lf
+         RtRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=ru6T+Kx+o+wF1O0sdT4WJIlvaSW/GAs5TSwcPEqdU2s=;
-        fh=ttFeehncSYWBe6emLeJhgEcVeOWjUiXq4MuiYdIcoZk=;
-        b=blEJIAlVBYhD4Hh5FlxHYm5zy7kuE7z2YjuojZkH07cP/T+hyzhwttaEfmDVBiUBXL
-         KDD49LJq63mfoY8zphIOr9+yBD/IFIJj1dkWweXSKigyI0BmCX8ngOQT6vNKBMDZ+ZfB
-         Yl/0igYSDWencQUv/yfi9u/yQmkeR9OqvzB3rFXlXuJIFQ+XXi7YA1NlCRFLwnyss3yM
-         LRsIsstGIpVyiNvCjtmY99kMfOSjRKfCJ4JvIS4F2dGSK6cGLGtYQKA5Wr4z2IgMnU0J
-         9tETrrDdte+BIPKOQzUdbN//V2n5Ovozi0L8GyUzBAZyiBYoS9evOIh6Xvu+1eHH5beg
-         HE6w==;
+        bh=iAWzb9BbFNy/4m/w6Zwd+njIpZ8M14O9H5IZPS16EzA=;
+        fh=S32YrWT3EOSOuA51xDbQRJNS7MI05qA3abP+jXBhphM=;
+        b=KSCl4Pr5BsHF2NSfw9cxI5q6npsHdRkYRPZ95e6NhEQ6CtnldudqglzMSerDygyLZy
+         Sy0mX/CcSW9jMOonjxPtPm595wxGXKXSmuZyN2Djj3DrALNRWQ0Av4RSHzzsg5CdAZ7o
+         s430HVXK0S0WbqBBcWsTMtR17x7XK5y6UoqIjNjx6rQJSdDU97vuhnNQULsTRFGnIeFo
+         k2Xdp6tOuy1NNYZMuYgJi6yoag7pG6GDhhsPXQ5S/H+mCAySQkDWq+D58QyExaBe6M9Q
+         z8yl2Olt6aFW/AJGDrtCme/dbTUtpOBrZrdBcePV3XSKa2Ii036BqMplMGUgc4NYASa4
+         ZSYA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769929290; x=1770534090; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769929311; x=1770534111; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ru6T+Kx+o+wF1O0sdT4WJIlvaSW/GAs5TSwcPEqdU2s=;
-        b=Jn9EfSA6fRuIVKLr4AaDLNSKBNL8pNLIzAn3ZvhMvVaTDKFsq+ipWeCMRNkekMrUgb
-         A0Ln5mZ3LggiURzzV2WBXJxP6cuuWXb9TNIlrGVNUxwCIIaEem1gpptyrSPCZ5IlMDzt
-         5fUbTS5GA6rBJL/oI1+pxmc1I/uBvhnJp+aO2sGBmNMcyl/Xyo7jAV9n5GbMdfk+o807
-         NMKhRMYdWew37MtphMm6TqfcCIju0X+RKLvk8Vsd43Yo681J0zRY+sepZFOjGN7tkDRF
-         PWC+YPRkx8zVPqfVGZwbFfwyirHPDJ+z/+3WyyRp0uY1XpuaRpWj7vuJVPrx6xv4dztz
-         aa4g==
+        bh=iAWzb9BbFNy/4m/w6Zwd+njIpZ8M14O9H5IZPS16EzA=;
+        b=JBKejBmS4EnrDrrSgo2TZcaWiwNko6dejhSRpqB3coSugLXxkgr19crETgfRrA4ZSE
+         oBeD6xlYTYLcRVe2j8yQARiozYUaqztOdjRsLRnjw6x9GbRq/pcR8txFh+Rq9MsR7Bvq
+         euACVxPmpd4Isp2GhT0aYyLA09r5034g7/jP4q7uEbA7mFfHOA8o7JzdvcKNESIbixqx
+         Fhbqy4+MS2BPYXyhurlRpX1od+D8JrHooCPqHJphyqFoq4ML6c8cbhCeMY5Bqk99Mayv
+         PgrnLN9InlhN6UYWN7gwPNxX1hX7WZ99HRl74jlgql3p0F0F9SZfHUTQo8XsqafLeuRN
+         F0ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769929290; x=1770534090;
+        d=1e100.net; s=20230601; t=1769929311; x=1770534111;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ru6T+Kx+o+wF1O0sdT4WJIlvaSW/GAs5TSwcPEqdU2s=;
-        b=qk4uBf+a4wIP9Ul4t65ptgaAldyv8Se7CQ+uJ8I0/trvS3cylFs5PHQpjyLjGCPjKt
-         QDmraDCHa4Pl3k//64j7wrPNZMhhPgF+e4vktmea+42fXaNF/XvB/pb3v4vX7aPbDRVq
-         4fqNlBrKgL7m4IJQzWa7lsiQASLqfp7E5IP2//Xn6YrZ8o29nELoxwxKdOSRutzWhBrH
-         Xu8q5XusYfqdIggs8GXvHNu12KCuWaW7RqOVDP9XSXW5TspBkuG2JyTBj7yAXh8JcK7u
-         vYJSu6vfONxDJrOKydipC/Uux0QZAQ2ISfB+3/3tDqxA4P2vo5DZzitnK7j/I5+fRsib
-         xXCg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTXAKgBxSBc1ox2dqOQk+PPi21/52DN6/n3WxrFPsJWUA5Xvvx3rARy1hKp9C7hCDWLRPlv4V+xk8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEIYS0OerAbd3/kG/gql1RodnrF1uEwa2SAtjGiV89/EihUiMA
-	xVgIsZ3qnn3UppPdAIF+WEnjhIOmZRYdWVhPRgqIn639iAYVIA5hX5Crzvbmh2JNDv20eyYbzYI
-	m2iSRVCmyDlJer9BPF+Ng1nyLQAQHqmM=
-X-Gm-Gg: AZuq6aJgy0TX9T3U9xS6aGM00mJaTZsGs0mx80NhgufV4vaC37ggNTLqqH9dzn3zUQ1
-	gpz94G0z2nMnTcUVM+wFd/yR5zM0EbIiPoF4ajnF17fOAGws02lUndn60raH+/V/US4BnKYn2qb
-	8lHgKVSFozfQ+w+TZmwIDo8o2UYbOej/Wk/OoTNy/HL1CFpfhXx2y4nJ0I7sc8eR3W5A0nLu9sZ
-	puoKol0FLsA4Xg3VcSzPrxPq1S/SqsdmYbxdm8OKHouR/m5ifNgNcNG0ksFi/Qfj9yXOCeh
-X-Received: by 2002:a5d:5f54:0:b0:435:693e:c03e with SMTP id
- ffacd0b85a97d-435f3a7e60emr11130004f8f.19.1769929289499; Sat, 31 Jan 2026
- 23:01:29 -0800 (PST)
+        bh=iAWzb9BbFNy/4m/w6Zwd+njIpZ8M14O9H5IZPS16EzA=;
+        b=O/nE200uSFMqhvq4hasB0AS6EOoUwIlGr7GUrBJjYpnSBlf74RosdFjL7xG8+77W7F
+         VDpOKv0nJ9ckVs+UL6E6D1RwUHFUVXypaGuyDIgbHbEJEEjNIY5bsQitbeCnjCPC+Tjb
+         kwtb9Zwd0vJUeGolyFhqM4Fcw/lJXJLW7yyReF0qPkW+4HwVPGfUz5q9vDrXEGpyLTED
+         /RCC4xqqlF46n99m1W7dJaeALiWIMQPbzWNE525Ds0fxaBpA3N6eCcJexMDGAFsqHLOL
+         /sCfc+D+VAwsfMmoDwa+FRoWZjGF011KF2L1w56Yv47Zkr5dIKdJoeZhB5lgDcrYJItE
+         6cCA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIWsXTYQXZjQ23H7l+3XWRRZffWqjK6lJepOla1OqAOFADFSWyFIO0JDmyaW9tE5vJBprWq3IjxsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznYj5WtbliJ7YCWTujRdQXKEHQtVppNpwj58npJijclYNjjVYd
+	ZfFFSxrVLXER7MXO0y1MgaygFe/ME7fg8avp7nV4EaFVOtTUsQxnJqW2S8TSOGWgritiw01gNk5
+	Msbmb8SlnIhZDPzv5cWDe08x+TOAbCBY=
+X-Gm-Gg: AZuq6aJOHUGgnY5bXpD1H/AO5uEetzjAZebPX4qhG6ee0HWpxDrEh/wK8Dm7SqqyXri
+	NeXA0ru1MMDOl1FILLcEEppgp1a550FM6Y1nFkmJX9ophiUmC1yfBse03n2pBRbFfXiUrBQYH3L
+	nffMUzqVtFAaDDyuuW1qVopInMPz8GT8PnaZ96mg+y2ilZZzT7/NVwTyZRHCs6NeGiA+F88VSEB
+	7I3P6ItwTnvAki9CyDrWuCiKGlVzgxoGHhAA07yI6FgmdqTEE9nqr0JeGDmS6YfH2EYXm8g
+X-Received: by 2002:a17:907:94d0:b0:b87:1839:2601 with SMTP id
+ a640c23a62f3a-b8dff6969b7mr517593266b.40.1769929310797; Sat, 31 Jan 2026
+ 23:01:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -99,12 +99,12 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260125134302.45958-1-clamor95@gmail.com> <20260125134302.45958-2-clamor95@gmail.com>
- <d7938728-fded-4d5e-b23d-a8346e3fab46@baylibre.com>
-In-Reply-To: <d7938728-fded-4d5e-b23d-a8346e3fab46@baylibre.com>
+ <d7938728-fded-4d5e-b23d-a8346e3fab46@baylibre.com> <8cedbb9c-9f72-43ae-a23e-705b3feb85fb@baylibre.com>
+In-Reply-To: <8cedbb9c-9f72-43ae-a23e-705b3feb85fb@baylibre.com>
 From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Sun, 1 Feb 2026 09:01:18 +0200
-X-Gm-Features: AZwV_QgtHi-_En-5pR0mvFW293XW7g0IV-2szoIz-T-UyTapQDFggPFL8QY1fqE
-Message-ID: <CAPVz0n205rKSAq2Jbtahn6xW2MYgSm61qxjRbsSs_4RBSEs34Q@mail.gmail.com>
+Date: Sun, 1 Feb 2026 09:01:38 +0200
+X-Gm-Features: AZwV_QizrzJwmFJ9K3HDRK05t0a_0kaNB1Vjer8WbyjV6HsHfDqBvgFrLolg9pY
+Message-ID: <CAPVz0n1uv=2Hhue2zjnXdG=_PyofBBqEhdU+S84+ysYq2PV+qg@mail.gmail.com>
 Subject: Re: [PATCH v1 01/10] dt-bindings: regulator: cpcap-regulator: convert
  to schema
 To: David Lechner <dlechner@baylibre.com>
@@ -125,12 +125,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5929-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-5930-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
@@ -145,182 +145,39 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-rtc@vger.kernel.org];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,devicetree.org:url]
-X-Rspamd-Queue-Id: 6009EC50B2
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 757FDC50DA
 X-Rspamd-Action: no action
 
-=D1=81=D0=B1, 31 =D1=81=D1=96=D1=87. 2026=E2=80=AF=D1=80. =D0=BE 21:46 Davi=
+=D1=81=D0=B1, 31 =D1=81=D1=96=D1=87. 2026=E2=80=AF=D1=80. =D0=BE 21:55 Davi=
 d Lechner <dlechner@baylibre.com> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> On 1/25/26 7:42 AM, Svyatoslav Ryhel wrote:
-> > Convert devicetree bindings for the Motorola CPCAP MFD regulator subnod=
-e
-> > from TXT to YAML format. Main functionality preserved and added compati=
-ble
-> > for CPCAP regulator set found in the Mot board.
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >  .../bindings/regulator/cpcap-regulator.txt    | 35 -------------
-> >  .../regulator/motorola,cpcap-regulator.yaml   | 51 +++++++++++++++++++
-> >  2 files changed, 51 insertions(+), 35 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/regulator/cpcap-r=
-egulator.txt
-> >  create mode 100644 Documentation/devicetree/bindings/regulator/motorol=
-a,cpcap-regulator.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/regulator/cpcap-regulato=
-r.txt b/Documentation/devicetree/bindings/regulator/cpcap-regulator.txt
-> > deleted file mode 100644
-> > index 36f5e2f5cc0f..000000000000
-> > --- a/Documentation/devicetree/bindings/regulator/cpcap-regulator.txt
-> > +++ /dev/null
-> > @@ -1,35 +0,0 @@
-> > -Motorola CPCAP PMIC voltage regulators
-> > -------------------------------------
-> > -
-> > -Requires node properties:
-> > -- "compatible" value one of:
-> > -    "motorola,cpcap-regulator"
-> > -    "motorola,mapphone-cpcap-regulator"
-> > -    "motorola,xoom-cpcap-regulator"
-> > -
-> > -Required regulator properties:
-> > -- "regulator-name"
-> > -- "regulator-enable-ramp-delay"
-> > -- "regulator-min-microvolt"
-> > -- "regulator-max-microvolt"
-> > -
-> > -Optional regulator properties:
-> > -- "regulator-boot-on"
-> > -
-> > -See Documentation/devicetree/bindings/regulator/regulator.txt
-> > -for more details about the regulator properties.
-> > -
-> > -Example:
-> > -
-> > -cpcap_regulator: regulator {
-> > -     compatible =3D "motorola,cpcap-regulator";
-> > -
-> > -     cpcap_regulators: regulators {
-> > -             sw5: SW5 {
+> On 1/31/26 1:46 PM, David Lechner wrote:
+> > On 1/25/26 7:42 AM, Svyatoslav Ryhel wrote:
+> >> Convert devicetree bindings for the Motorola CPCAP MFD regulator subno=
+de
+> >> from TXT to YAML format. Main functionality preserved and added compat=
+ible
+> >> for CPCAP regulator set found in the Mot board.
+> >>
 >
-> Old example is missing the required regulator-names property.
+> ...
 >
-> > -                     regulator-min-microvolt =3D <5050000>;
-> > -                     regulator-max-microvolt =3D <5050000>;
-> > -                     regulator-enable-ramp-delay =3D <50000>;
-> > -                     regulator-boot-on;
-> > -             };
-> > -     };
-> > -};
-> > diff --git a/Documentation/devicetree/bindings/regulator/motorola,cpcap=
--regulator.yaml b/Documentation/devicetree/bindings/regulator/motorola,cpca=
-p-regulator.yaml
-> > new file mode 100644
-> > index 000000000000..b73d32a86904
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/regulator/motorola,cpcap-regula=
-tor.yaml
-> > @@ -0,0 +1,51 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/regulator/motorola,cpcap-regulator.=
-yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Motorola CPCAP PMIC regulators
-> > +
-> > +maintainers:
-> > +  - Svyatoslav Ryhel <clamor95@gmail.com>
-> > +
-> > +description:
-> > +  This module is part of the Motorola CPCAP MFD device. For more detai=
-ls
-> > +  see Documentation/devicetree/bindings/mfd/motorola,cpcap.yaml. The
-> > +  regulator controller is represented as a sub-node of the PMIC node
-> > +  on the device tree.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - motorola,cpcap-regulator
-> > +      - motorola,mapphone-cpcap-regulator
-> > +      - motorola,mot-cpcap-regulator
-> > +      - motorola,xoom-cpcap-regulator
-> > +
-> > +  regulators:
-> > +    type: object
-> > +
-> > +    patternProperties:
-> > +      "$[A-Z0-9]+^":
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - motorola,cpcap-regulator
+> >> +      - motorola,mapphone-cpcap-regulator
+> >> +      - motorola,mot-cpcap-regulator
 >
-> Why not put the valid names here? Or does the node name not actually matt=
-er?
-> (in which case lower case could be allowed too.)
+> This is what caused me to get confused on the order of the later patches.
 >
->          "^(SW1|SW2|...)$":
->
-> And $,^ are swapped.
+> motorola,mot-cpcap-regulator is a new compatible, so would be better as
+> a separate patch.
 >
 
-This is an interesting suggestion, maybe schema maintainers can
-suggest how to approach this? Node name and case matters, list of
-possible names is in the description.
-
-> > +        $ref: /schemas/regulator/regulator.yaml#
-> > +        type: object
-> > +        description:
-> > +          Valid regulator names are SW1, SW2, SW3, SW4, SW5, VCAM, VCS=
-I,
-> > +          VDAC, VDIG, VFUSE, VHVIO, VSDIO, VPLL, VRF1, VRF2, VRFREF, V=
-WLAN1,
-> > +          VWLAN2, VSIM, VSIMCARD, VVIB, VUSB, VAUDIO
-> > +
->
-> If these apply to the regulator-name property, it can be written instead =
-as:
->
-
-Regulator name does not matter, any name is acceptible.
-
->   properties:
->     regulator-name:
->       enum:
->         - SW1
->         - SW2
->         ...
->
->
-> Not sure if it is strictly needed, but this would document the optional
-> property:
->
->     regulator-boot-on: true
->
-
-this is covered by common regulator schema, along with other possible
-regulator properties
-
-> > +        required:
-> > +          - regulator-name
-> > +          - regulator-enable-ramp-delay
-> > +          - regulator-min-microvolt
-> > +          - regulator-max-microvolt
-> > +
-> > +        unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +
-> > +additionalProperties: false
-> > +
->
-> Example should go here.
->
-> > +...
->
+Rob already cleared this up
 
