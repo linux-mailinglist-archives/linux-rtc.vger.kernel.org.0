@@ -1,212 +1,153 @@
-Return-Path: <linux-rtc+bounces-5954-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5955-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MKxNAzmKiGlbqwQAu9opvQ
-	(envelope-from <linux-rtc+bounces-5954-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 08 Feb 2026 14:06:01 +0100
+	id 2PsAOhtyiWlA9QQAu9opvQ
+	(envelope-from <linux-rtc+bounces-5955-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 09 Feb 2026 06:35:23 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA4D1108B07
-	for <lists+linux-rtc@lfdr.de>; Sun, 08 Feb 2026 14:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 667D910BC83
+	for <lists+linux-rtc@lfdr.de>; Mon, 09 Feb 2026 06:35:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 575F8300B753
-	for <lists+linux-rtc@lfdr.de>; Sun,  8 Feb 2026 13:05:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 302423004C37
+	for <lists+linux-rtc@lfdr.de>; Mon,  9 Feb 2026 05:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07083274FD0;
-	Sun,  8 Feb 2026 13:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C483630AD10;
+	Mon,  9 Feb 2026 05:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J7EhQkTh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7EwS5qd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1AB24634F
-	for <linux-rtc@vger.kernel.org>; Sun,  8 Feb 2026 13:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57116246BBA
+	for <linux-rtc@vger.kernel.org>; Mon,  9 Feb 2026 05:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770555954; cv=none; b=GtfiVghOCDcunBa6YP3VK0r6ayk7wimKI8co3waOVJx3dAG3/5nv99jN0NhTe4xQObYRwtA++L/ACbsq/Ydwg9sCXvRnJMhBvgz6FZrW2KTunI9755FDyLE4Wb1dosyGLiJc23Uu1KG6XYss2gdFgOt3/fiySukyxRVSlix477A=
+	t=1770615320; cv=none; b=QDirLXzdueFcK9DYomoixkuSa57tQJzb2Qaxxt15cZH6Wx/YqGhYveLOjFzmB4clv2OOx5+RfFFsWnHMAegC/RIjXlKG4Dpp4ds4Xwr7ztyNKjoEt7YlKeR+Mjrvynrwtk5TJ7nfefDe+MIzZniOI3jfDw+IbyTCaIsaRHqJLRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770555954; c=relaxed/simple;
-	bh=osT0EUva0gXZ1pK88EukUzwSiu7f4mThiV/KwigTGzQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LkseUiRZ2SapQ19qIFxgyZ1qL8r/0k2Zqp4YetK99+J1Y4l8M1aI0Xn5QDEn0ctSh9cxI21oB/u6E3zv6AzKZXC1hfGg9dg2ATwNKMmw3SC7VuRQAVzjAJlwSDEZ8mbFYgzR98uzzScVG04avAeO2pFDOngYNJZIj9Kz6njZIe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J7EhQkTh; arc=none smtp.client-ip=209.85.128.67
+	s=arc-20240116; t=1770615320; c=relaxed/simple;
+	bh=DQToknmhPB4uKle7SJjsL8qz4bcKmzeaxNJRfEwJ5TE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YF2jF0ZTlkS3ekEO0VOEEIRG2JLEhHyM5vJ279jglTFfn/fL3djqatjomEugMns03hW7/DaXKo5EFuqqmv0xH5pCD6IV998fTtgJLvMs0HAnZ8a1jIl0GZC5AgG4ZuAfsLVFy6TYsCcHsqj/K7H+QDy0rauDIa6IpoTi1OOx834=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7EwS5qd; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-48068127f00so33136305e9.3
-        for <linux-rtc@vger.kernel.org>; Sun, 08 Feb 2026 05:05:54 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so56903045e9.1
+        for <linux-rtc@vger.kernel.org>; Sun, 08 Feb 2026 21:35:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770555953; x=1771160753; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6ZaHSw9LpRz01vg6acbUDvWM+cc8+yuVQwbsTXMnoc=;
-        b=J7EhQkThA2l+rof3AOzI/crRVbSKPsQ3H1oU5Cl77W8vHcmN64O4AW36/L0bBRuYao
-         QA1NJCRLmSI7GzB51Sz1funRAp2CG3svzIxhcwGgnGFkx51hK+drRRm6aEagZYEZvBh8
-         FgoJFbogl6kj7vZ88/Qg+r2GfszxFt2Eh5YPT7L2rZbtll8h5oEOuJT2pWOQuBX5dniJ
-         W+3ZgdEuSqtruad4O3g75HBhtOWYQFXCfUzp9oyaGfkpmpEyDhmgEvNNSulny1rj5vd3
-         xlLpRusLQNtvNGtiDwAr6zWXveOzhbRNtCmvfGKLeQugIS1CWKAk/6BdjmBR/a4ZFE4A
-         TzTQ==
+        d=gmail.com; s=20230601; t=1770615319; x=1771220119; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YO/PiduSuQrsHeimwpiI5IjM8jDW+DYLL+NZXKmBSSM=;
+        b=L7EwS5qdXJLOQQkR8OY4Yo8UXzqB8nEZ8eeX11GKgjBB3vrwrJQB9IHSaC3rqRfV+m
+         +fbRRzlIkXn5muGdSyfhltr3j2/IZ1iGA5ZTs5zCO3RVo6m/gWQhMxDnFTpdAFopPGX/
+         k0indZcFgmS6rzhPu5WVbVXnpkfMXwB6HvhI798Q0z7hAGdzb7E5ceALniPMkQSzEdSi
+         gACwodwSMlq/24mhvZOlYZYeYhIWC0bsmHnwe0rb8PPvw2LQPqgXF41HLN6F7S+6v7U+
+         /6JlRAbrfaV01au0cumDCYCPQkexRLwjguLW86dy2cq+/HZdrULacvva3phflyV3bN57
+         i1Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770555953; x=1771160753;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S6ZaHSw9LpRz01vg6acbUDvWM+cc8+yuVQwbsTXMnoc=;
-        b=FJe2I/QbRvU29+PkyNs1O5yhH0X3UflFRAMY2m1Uu9jH/9ltpuNmloDiTQglM+c/6f
-         iiS+ZUrVpxxPKZnwxy00BJSZsH5lZagIkK0s4XS5iEsY/Q4tf7D7RfhdlJR7gwzy9ZKU
-         C62kxgdvNE0WI270896Fk0t59wMTI/m11AuEcmPtrrTi37IBQXqTfaHnHM7X6eIMLKN5
-         70QQjaKz5/YORXaHze4gdGzRpEl28DJdS8tMcmN2UIA0vr/gPhYBHosdYayAn199w5fq
-         xtGJJ7y16+8TfOd4TnCqR4qpKjPatMhPELnh3r1G0uhcHV/Bs8DS5ncKGsGnCi8GPN5g
-         Z5Rg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVLkdLnImuTbilb96WgDLAvNONYn52zpl/pnrkZTofsQZA7vTdQukdgOu8xDDMVO+RZ158nkCF9UU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaiKw779OipnH0TGbtL8CZP80Q/wqQgxt7oA7HpTM8SPVPm3U2
-	LnEOy9JgzKE3WbkvRlxc29zYjkVpV22flR+L4gJlHP3TG7Z1iqy6OR87
-X-Gm-Gg: AZuq6aJVwOoaBrFIwl34qsaE1zsx4WpDgRqsiCsKpLU0pj3wQs0yQVa9CkZCD/GJ/so
-	E3M9z75SqLe2M1k6KtX8Wqf6LHtoTh4PbC5u6IaksJRpR2crCvlSlw5UAbO3T4/rpY81HG+spV8
-	ozXNx7khpTlhTgGF899IOlIK924O41Lo8m6Hlr7Dxa/o/xBqc+Kbfk+xREvzm4fGq1tggrgbpsZ
-	8A+i2ot1g048o0edszvNxGfA6l+fw9vu8KSTCdn3CCBtjYTIl96oli5H0buflWqT/bbGhjXskFb
-	hOEPHT2Ran6e/ux/XgUSeEAIUt8waFLQTPuzZd79F6YBQ8MAzQOTpz3XBaw/J6Mj8AlcHxbobIQ
-	5KBO9ysJHQCkkGATNYYBPAP3XEGKp/R3CPzTUXAf0eestzOUJ5gbx8H1LDOsWkh/Y2gPmcUrGU2
-	34stVmZ7FtSu0ZtVcOHYUhOLE=
-X-Received: by 2002:a05:600c:4f54:b0:47d:403e:9cd5 with SMTP id 5b1f17b1804b1-4832020df4emr103964445e9.11.1770555952781;
-        Sun, 08 Feb 2026 05:05:52 -0800 (PST)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296b2110sm19201164f8f.3.2026.02.08.05.05.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Feb 2026 05:05:52 -0800 (PST)
-Message-ID: <0033b0b2-1eb3-4486-abe4-62d25f10b22c@gmail.com>
-Date: Sun, 8 Feb 2026 14:05:50 +0100
+        d=1e100.net; s=20230601; t=1770615319; x=1771220119;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YO/PiduSuQrsHeimwpiI5IjM8jDW+DYLL+NZXKmBSSM=;
+        b=scpM4dd9h+i73/msOn8nmDzYyw5q4w07ubEUxOgpxNRGV4bGxnmSuefi8dVIC/rUWG
+         Lx06+BdWzdPLtWOjLe0NGvTBcd+MB11R9DHw9Q9+JN3yNXhoiRMZyQDHPVTQBmQvLLku
+         Kx+wZX1CCus+bL095+z9g5MU7EhrGUEB2ORdsO2sjfIJT5llte5+jDRjDLsu8QhFLZ51
+         fMEy64JFibwlD9EgY6ciEA4dxvekcLbFOYtqYsjBPorwTTY+YhLTpwRH8GMOFxal5R10
+         5XCosNFJEYW1ol3ENn3RECuT6dx7bYt+PHw0ca5ieB6La8yWaZBE2TvcTzafO7wQaD3M
+         xOFA==
+X-Gm-Message-State: AOJu0Yx6Y4WjtOlam4ewg3OiVBxbnH6q+8f7Y7wjkXWz+7pdxc9k3JRD
+	6w/D4njbEuRmCCQzuaZejY5HOQfxZVbheyJLUYKRPuW+vywozL8WlNe2XSwDZpD1
+X-Gm-Gg: AZuq6aIm4uDLSSLXKAIEVpIxAH9faB0sGDWuuUkaBssBP8sq2YIwi6BshS5xrkY9J/O
+	owEQjET/H6anrEMxKya3KjPYQz/ev5Q+3LAkh6VLehKe3vKWcgKBTL3feH5Qyeyj8K7NIYZ0zLG
+	VDuLuzQlUHS2/aOalwbBG92y77iOdC1A5Xor/+CUuvx8N1vNUuHVM97xDokT9AmxKA7AnssMLdS
+	88waBz/YzTAj6ztQj4Da1sPl1zr4Z4NZWUjSPKdueqDvsU5+cN1ELhVBcTUWIBl5Ac974w+19TU
+	JYogH6z3yO8Nr8AlOBxW9dbBAUD2eyKvHQdXAvDltbjdRmK0SFhNgCWrhcOI5S3Jrhz3CRko9bb
+	otv8H31qjkwXytDwYTVZPSlKGa9fiSjaFBiXxMJtCZjxM4UkpP3WfxYg63c+fse+gXUb60vhJVg
+	2bBfCNx7EdUJE/beImx2xifnD4C1FcTWcAr5eZ9Yt+OHfIMzo/fBOZH8Kkro2L0qZaWxQAcF8=
+X-Received: by 2002:a05:600c:8489:b0:477:c478:46d7 with SMTP id 5b1f17b1804b1-48320216cb8mr148076135e9.22.1770615318494;
+        Sun, 08 Feb 2026 21:35:18 -0800 (PST)
+Received: from localhost.localdomain (80-121-54-205.adsl.highway.telekom.at. [80.121.54.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483203e5b63sm135762785e9.1.2026.02.08.21.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Feb 2026 21:35:18 -0800 (PST)
+From: Andreas Gabriel-Platschek <andi.platschek@gmail.com>
+To: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andreas Gabriel-Platschek <andi.platschek@gmail.com>
+Subject: [PATCH] rtc: ds1390: fix number of bytes read from RTC
+Date: Mon,  9 Feb 2026 06:34:39 +0100
+Message-ID: <20260209053439.313825-1-andi.platschek@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/12] dt-bindings: leds: document Samsung S2M series
- PMIC RGB LED device
-To: Kaustabh Chakraborty <kauschluss@disroot.org>,
- Rob Herring <robh@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20260126-s2mu005-pmic-v2-0-78f1a75f547a@disroot.org>
- <20260126-s2mu005-pmic-v2-2-78f1a75f547a@disroot.org>
- <20260206133837.GA157817-robh@kernel.org>
- <DG7XJ6T9I7HU.1UVHH2QWX31O1@disroot.org>
-Content-Language: en-US
-From: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <DG7XJ6T9I7HU.1UVHH2QWX31O1@disroot.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5954-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5955-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jacekanaszewski@gmail.com,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.993];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[andiplatschek@gmail.com,linux-rtc@vger.kernel.org];
 	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: AA4D1108B07
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 667D910BC83
 X-Rspamd-Action: no action
 
-Hi Kaustabh,
+The spi_write_then_read() reads 8 bytes starting from
+DS1390_REG_SECONDS (== 0x01), so the last byte read would already
+be part of the alarm (Tenths and Hundredths of Seconds) feature.
 
-On 2/6/26 14:56, Kaustabh Chakraborty wrote:
-> On 2026-02-06 07:38 -06:00, Rob Herring wrote:
->> On Mon, Jan 26, 2026 at 12:37:09AM +0530, Kaustabh Chakraborty wrote:
->>> Certain Samsung S2M series PMICs have a three-channel LED device with
->>> independent brightness control for each channel, typically used as
->>> status indicators in mobile phones. Document the devicetree schema from
->>> this device.
->>>
->>> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
->>> ---
->>>   .../bindings/leds/samsung,s2mu005-rgb.yaml         | 34 ++++++++++++++++++++++
->>>   1 file changed, 34 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
->>> new file mode 100644
->>> index 0000000000000..6806b6d869ff7
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
->>> @@ -0,0 +1,34 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/leds/samsung,s2mu005-rgb.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: RGB LED Controller for Samsung S2M series PMICs
->>> +
->>> +maintainers:
->>> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
->>> +
->>> +description: |
->>> +  The Samsung S2M series PMIC RGB LED is a three-channel LED device with
->>> +  8-bit brightness control for each channel, typically used as status
->>> +  indicators in mobile phones.
->>> +
->>> +  This is a part of device tree bindings for S2M and S5M family of Power
->>> +  Management IC (PMIC).
->>> +
->>> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
->>> +  additional information and example.
->>> +
->>> +allOf:
->>> +  - $ref: common.yaml#
->>
->> This looks a bit lacking. Don't you need 3 child nodes for each or
->> reference to the multi-color schema?
-> 
-> 	rgb {
-> 		compatible = "samsung,s2mu005-rgb";
-> 		label = "notification:rgb:indicator";
-> 		color = <LED_COLOR_ID_RGB>;
-> 		function = LED_FUNCTION_INDICATOR;
-> 		linux,default-trigger = "pattern";
-> 	};
+However 7 bytes are engouh -- seconds (0x01), minutes (0x02), hours (0x03),
+day (0x04), date (0x05), month/century (0x06) and year (0x07).
 
-Having label together with color and function doesn't make sense.
-Please read label documentation in [0].
+Signed-off-by: Andreas Gabriel-Platschek <andi.platschek@gmail.com>
+---
+ drivers/rtc/rtc-ds1390.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[0] Documentation/devicetree/bindings/leds/common.yaml
-
+diff --git a/drivers/rtc/rtc-ds1390.c b/drivers/rtc/rtc-ds1390.c
+index f46428ca77cc..f7afd6bdeb4a 100644
+--- a/drivers/rtc/rtc-ds1390.c
++++ b/drivers/rtc/rtc-ds1390.c
+@@ -134,7 +134,7 @@ static int ds1390_read_time(struct device *dev, struct rtc_time *dt)
+ 	chip->txrx_buf[0] = DS1390_REG_SECONDS;
+ 
+ 	/* do the i/o */
+-	status = spi_write_then_read(spi, chip->txrx_buf, 1, chip->txrx_buf, 8);
++	status = spi_write_then_read(spi, chip->txrx_buf, 1, chip->txrx_buf, 7);
+ 	if (status != 0)
+ 		return status;
+ 
 -- 
-Best regards,
-Jacek Anaszewski
+2.47.3
 
 
