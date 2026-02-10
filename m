@@ -1,268 +1,216 @@
-Return-Path: <linux-rtc+bounces-5958-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5959-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qJkANh4Di2kMPQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-5958-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 11:06:22 +0100
+	id gB3FKb0ni2m6QQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-5959-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 13:42:37 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BC3E119631
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 11:06:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2531A11AEE9
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 13:42:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7073E302D10D
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 10:03:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B6498303CEEB
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 12:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1209A346A1D;
-	Tue, 10 Feb 2026 10:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A391EE01A;
+	Tue, 10 Feb 2026 12:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EOOlesKt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QJxAFGAy";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IFZWnSsK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84340342534
-	for <linux-rtc@vger.kernel.org>; Tue, 10 Feb 2026 10:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806531D516C
+	for <linux-rtc@vger.kernel.org>; Tue, 10 Feb 2026 12:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770717810; cv=none; b=dByZ4C8YUDikh3maXQtIJjF8rL6ICkvdMRCyuaa8fXH6pe87kC72zkTUPVXeKYJqfVEiXgKPnJUY1ygwxcr6JSALiKH/128UBUEpRqpurXTd1jrLULGTJ1twtOx3cQP4e9rjQbOQbcDoHGuXYORqwmklct+hiCAVVLlpq7CPr84=
+	t=1770727353; cv=none; b=c3RxV1aeavw4BRbyo/8I9ZiEq9h48BYi8f9PoUd9Bzjbt8Mv0398CgRrLCKqRXAlaKqM69LtePU3g/STZSJw5YbweHe4b167HjVzkISHMZ8EOZBIZNfx7lzfcmBgER4gt6Oy9yRGDAqgJULTwcsufIFF9HQ4Qinow4+0FFUAVts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770717810; c=relaxed/simple;
-	bh=ooeVV8I5d2AY+h6j1zoh4cyaCKKTOE9f6ezxXnFdb+w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dHxJVo8kBE8ZGKLYUmJ4RkrBSXROpniSh+zda/zRf4xR+MM/wh/DhApRafFcSJisWiXQLAgAzbEHxjFkcyunbDoi09NOB2zRzwlcIK5yABfFW9YB8suRgNxPbJakXiU0NK03AjXm3CBGzldTh2UMRzog2pIuoOIdAZE2CeExcyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EOOlesKt; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65a196a735eso446483a12.2
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Feb 2026 02:03:28 -0800 (PST)
+	s=arc-20240116; t=1770727353; c=relaxed/simple;
+	bh=GlKpwAqt8FXcLxnYzpl9cDfIBN0bnkDbFsP/hLk3P+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tlvt7oJsn5sOvhqyIJv4c6r1N3WMQgsm01HfF5fUwUoqjT9zUaoH8M7IxCdl5tIbB9YsIdjASR+kPwJTgLnRhwWn5QwUSctzJgM7sg0IxMwmqtRjime/rY8VCNu7367n8ipqG5311G8P0glOm1nHp9Cc4Yxg+GkSXcG6Ofk6c3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QJxAFGAy; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IFZWnSsK; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770727350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WIPR0mr/henT5bqfT/DKonkyulUdL16MgQRnA6kCJNo=;
+	b=QJxAFGAyIKmrh2zuPDOEVxHSSsQ+Jf7L+htFf5vMa5tb/Cu2euhDMn8dx+Byo8R8Hudl9M
+	BpdK0u2HUQIRXeSHGclPm1/WNzXqAF5OCPAl4MHZCloX5odBLEeYrwFTZ/DjeyfEedxfHK
+	MqvZw5fHRmFufbcnVBE5rEz3/axQbn4=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-512-Ui1MOdw2MWqILl3YFmk_KQ-1; Tue, 10 Feb 2026 07:42:29 -0500
+X-MC-Unique: Ui1MOdw2MWqILl3YFmk_KQ-1
+X-Mimecast-MFC-AGG-ID: Ui1MOdw2MWqILl3YFmk_KQ_1770727349
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8947d47793fso257695256d6.2
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Feb 2026 04:42:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770717807; x=1771322607; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ns0DYDWCgMFgOR7nvQ7X66gxpQehvS3KSJ9w3htiepE=;
-        b=EOOlesKtlaSdzc2lmfIXxU7CZxjF+WP1s8qKfaQgZrWodzVRyED/uYw3QGOAy0h5HY
-         TJi8Hhfm6RChdUUVAFUA3MKkEAM2xRhKn6bqQE/SkMUjDnchOE0iL1Qady4At4IWjuo9
-         EIc1qR1tsY4OG9MiKUx4ZQy4pnK2mLYoberzhV6pqsxe1wiCyBy504EKoJA0BIX02rV4
-         CvtHrpD4hQ0ZeK5YKxRUJ9IMgH63hu+/1/DThPxFvNUmWGSpYg2mbC7PoPTeIJ+SFrh1
-         TmC/ovN9RK271JM8oo2kncBN/98+lJ5otLijmTrgsEcisLeu2sfxv+/AUN6lmgH5btTs
-         5Saw==
+        d=redhat.com; s=google; t=1770727349; x=1771332149; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WIPR0mr/henT5bqfT/DKonkyulUdL16MgQRnA6kCJNo=;
+        b=IFZWnSsKBQErk8CB8YJCIzGXGKhz4eZMSqPEtLSbj/uwH1A49Xj8LoEJhF6pcy7d2N
+         wlrMn9/Sn1Mo4z1rC+00Go3UA6lbA3d6Hv4jolfseNvy6ah3yscypptRH74J9Ncsk6t1
+         xD3mQC4Rnp8JTe0NG29vD8wdEU8kt24v6HpCcHydeRNMA6gp8lsgxaOr6upY/soKLji+
+         WQtuTUoh3cqzEHwDKL5M2UpPRLACMunCmNF26lRd+oRTofcRF95ITIIln15DqswXvFOc
+         rMsxu5C/5vi4M81xOYakJto56DcPPVPy8OmgVfkHCHCdcIFUSLgn67uLW3Z7ftTpq6R+
+         6NOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770717807; x=1771322607;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ns0DYDWCgMFgOR7nvQ7X66gxpQehvS3KSJ9w3htiepE=;
-        b=DzzcoU0leeMWvU52dNGIupgePlyaavTdlgZwT2HTOSAbOMzO0Z4NiihifD+p2iI4PW
-         i/Thp8ijZdatBf1mGZ/UnD+q2cbxYklahxeW9YEwdsqWJWsU6n6NEjTovMGwupl3fX24
-         lXbseXfUFsWfHemLOFdTOGjxbE0u+G6t67bpzvb1lgu7r22ps6CRNiAePzIdXDu/q1Pj
-         ZT3yLt0Ob3soCF14VqJItPw3y64+GpVOk/Hga9O1mehDFIcC8Molqvif7VaRDrzTgs5+
-         KYdX4uFDjNa9F3+OZfJfFzViAmBgoC4Gpzml6iFTaFiZGVBaLZ0xVVcdr4qZP6rEVRko
-         AgAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXsAsv/2sMCgNPk/3jkqNX8D08nBZ7Sv31uCUcq5w+hB6j7NezCf5MYz+K9TPiPYyRriZSnE+pBd0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcQWh/hJXqeH7+VZo+eeCX/P8NVMZYdbiWj/ACDg6HukgIw5Qb
-	bssySzl1pn7LdCFq0T6/VIsEkOjzF828Ho636rVx6frHL+ItJjEtc4rMhT44+oSwgQ0=
-X-Gm-Gg: AZuq6aLqScHq/T7fEqM4p0dStrYd7kcOrAblePckxsY+sxOmtfGq+mjxLu1RtN90Z7K
-	yAf+nONOdj+LDLIdZz64S+3Z7DetUOb+vWqoRBC6sb9LGeOsrhkOh+S5LsD329jykYql6bGnYLu
-	72alpOD7ZMWw8z9CMXJv9Y+tUFx7IiN5KkVysEE2Uo5ltDb5qSra1mcB851uVqFfHNL4/HYvZ9K
-	g8BioET3BstP24gJI4eSzDmQ1/cNyAlPV1qAIpv6pHFlUDbafZK+qcHuG9MhA6U8O/eV+3xpMl8
-	4ALsYh5zMWUkna/bbcxR5+GrDoVdSpCGrvPVsW7uIMSOSF5VfLsQRhjNiLo48GiyMh+Xl7jca7Q
-	MYyRT8uGijcrM6SHwjG0xGDunMJ/Qc1d0KmOgxhjRS1xQbR5qfbmRSiw7hirlqMoIh0nQwX3/QZ
-	41NL00eQD9llmIDqRoYCU2+tvUdxYYBg==
-X-Received: by 2002:a05:6402:3507:b0:659:3ff1:58fc with SMTP id 4fb4d7f45d1cf-6598415c2bamr7583421a12.22.1770717806807;
-        Tue, 10 Feb 2026 02:03:26 -0800 (PST)
-Received: from draszik.lan ([212.129.79.225])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-65983eaa4d4sm3635754a12.4.2026.02.10.02.03.24
+        d=1e100.net; s=20230601; t=1770727349; x=1771332149;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WIPR0mr/henT5bqfT/DKonkyulUdL16MgQRnA6kCJNo=;
+        b=qHp+oAO6paIKhWchs8dru6yqE66YkNYLdRjMi1hnZAnztNofa89xdqH9GdP2tvZxjz
+         DKCFlmGyt5QAkypiDNXwiM2IWKA0xJu2IWjWj7+LPb5OWOmmpbwLcaB1KeWbwzia/IR4
+         HYeY6EebBAah+L85sFE3BKgjNlObPxBwj6RgR9wH4+0Dul50QQKsfZZ3a+7Y0/vrOeMD
+         xCd9nInZjNuKwSndnNGVsgWFw4p7uszbbCgpHTeigik3ZVtS7SbtC1reZCk0CqCmcIWl
+         kIcXJO79XrAC5/heENLNPKOQpe2AKSMLuz/0Ec/jUKhjYxZI10EubGLg1YSNUvPOvYVN
+         YzuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJCsKxWjoHAkSA88m1fCL2K4zrGm83IVZth5pEXjwpvcW66vhmYTkx061tbFmwnLHX+rOh5nDRsmY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTeTIwBybSDxpT5A8qgH3iEE8E3IKXrpL1HtLQ8NfwU9ozoI/A
+	EzTbueDJEC6aSMBFRp8x5o/uJ9YTrNrclH0DggAgmJZCJn6+ADiBm+0sTcOYfwtIpyxZU28MWJl
+	a1Z44riHCRwoX1WW9xi1VQ+1BlyoDrp+AHzzlUyN7hxbEyvGV9inY92f5VwM0KA==
+X-Gm-Gg: AZuq6aK9QTGUzEKKorEbo1Sf6GKPmvh+sieXKM+m1CHHBK/6am8Xnf0ZzSRJSCPhieD
+	rrZtuY1Z2B7guIDcJoCGjv5TUXxOZIlIHRS9YRvBlezPI3/+kYopNIB390+OT7iZ6aPe13qkFiY
+	7KFIJqm5yyMOqM6HJjdSh7BoPLDB3TQb1OQe2rkiRuDEPd6l34VOYzL8xE6cQYqGmFEQJ1hyZ1Z
+	s5THireKTCGejKauuuhtQWIVCJ1pNBhzFidszjDwGItxLG3AyghWBb4A//I7p2C+ZhBBcXTi1O6
+	siJynC+rBHANh48ycVJzTg9znPpfm68priITGfoPWmnD361ZWL9tR/sQ7P20sve0DvLkj4aoR5b
+	o7LOTTAEvQmsUfKpNfcYq1swmIYTsnrhTUbkco8ak+63YAbCOJSnZG0v/
+X-Received: by 2002:a0c:f952:0:b0:895:4cc2:8bfe with SMTP id 6a1803df08f44-8954cc28dc4mr97313996d6.48.1770727348927;
+        Tue, 10 Feb 2026 04:42:28 -0800 (PST)
+X-Received: by 2002:a0c:f952:0:b0:895:4cc2:8bfe with SMTP id 6a1803df08f44-8954cc28dc4mr97313856d6.48.1770727348578;
+        Tue, 10 Feb 2026 04:42:28 -0800 (PST)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8953c0599b4sm99582176d6.41.2026.02.10.04.42.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 02:03:25 -0800 (PST)
-Message-ID: <9dad174d88c814d3ad2086a31e8dfc222fd431e4.camel@linaro.org>
-Subject: Re: [PATCH v2 08/12] leds: flash: add support for Samsung S2M
- series PMIC flash LED device
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>, Lee Jones
- <lee@kernel.org>,  Pavel Machek <pavel@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
- <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo
- Choi	 <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Jonathan Corbet	 <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>
-Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Date: Tue, 10 Feb 2026 10:03:52 +0000
-In-Reply-To: <DG75VP6IIUXD.1VA6YSMNTPJQ6@disroot.org>
-References: <20260126-s2mu005-pmic-v2-0-78f1a75f547a@disroot.org>
-	 <20260126-s2mu005-pmic-v2-8-78f1a75f547a@disroot.org>
-	 <e34d429e27392eba894b9592724a77fa82fc8009.camel@linaro.org>
-	 <DG75VP6IIUXD.1VA6YSMNTPJQ6@disroot.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build4 
+        Tue, 10 Feb 2026 04:42:27 -0800 (PST)
+Date: Tue, 10 Feb 2026 07:42:25 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+	Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	linux-watchdog@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH v2 00/16] MIPS: move pic32.h header file from asm to
+ platform_data
+Message-ID: <aYsnsecPa8bWMbaA@redhat.com>
+References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5958-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5959-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:email,linaro.org:mid,linaro.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3BC3E119631
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2531A11AEE9
 X-Rspamd-Action: no action
 
-On Thu, 2026-02-05 at 21:46 +0530, Kaustabh Chakraborty wrote:
-> On 2026-02-04 16:55 +00:00, Andr=C3=A9 Draszik wrote:
-> > Hi,
-> >=20
-> > On Mon, 2026-01-26 at 00:37 +0530, Kaustabh Chakraborty wrote:
-> > > Add support for flash LEDs found in certain Samsung S2M series PMICs.
-> > > The device has two channels for LEDs, typically for the back and fron=
-t
-> > > cameras in mobile devices. Both channels can be independently
-> > > controlled, and can be operated in torch or flash modes.
-> > >=20
-> > > The driver includes initial support for the S2MU005 PMIC flash LEDs.
-> > >=20
-> > > Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> > > ---
-> > > =C2=A0drivers/leds/flash/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0 12 ++
-> > > =C2=A0drivers/leds/flash/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > > =C2=A0drivers/leds/flash/leds-s2m-flash.c | 410 +++++++++++++++++++++=
-+++++++++++++++
-> > > =C2=A03 files changed, 423 insertions(+)
-> > >=20
-> > > diff --git a/drivers/leds/flash/Kconfig b/drivers/leds/flash/Kconfig
-> > > index 5e08102a67841..be62e05277429 100644
-> > > --- a/drivers/leds/flash/Kconfig
-> > > +++ b/drivers/leds/flash/Kconfig
-> > > @@ -114,6 +114,18 @@ config LEDS_RT8515
-> > > =C2=A0	=C2=A0 To compile this driver as a module, choose M here: the =
-module
-> > > =C2=A0	=C2=A0 will be called leds-rt8515.
-> > > =C2=A0
-> > > +config LEDS_S2M_FLASH
-> > > +	tristate "Samsung S2M series PMICs flash/torch LED support"
-> > > +	depends on LEDS_CLASS
-> > > +	depends on MFD_SEC_CORE
-> > > +	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
-> > > +	select REGMAP_IRQ
-> > > +	help
-> > > +	=C2=A0 This option enables support for the flash/torch LEDs found i=
-n
-> > > +	=C2=A0 certain Samsung S2M series PMICs, such as the S2MU005. It ha=
-s
-> > > +	=C2=A0 a LED channel dedicated for every physical LED. The LEDs can
-> > > +	=C2=A0 be controlled in flash and torch modes.
-> > > +
-> > > =C2=A0config LEDS_SGM3140
-> > > =C2=A0	tristate "LED support for the SGM3140"
-> > > =C2=A0	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
-> > > diff --git a/drivers/leds/flash/Makefile b/drivers/leds/flash/Makefil=
-e
-> > > index 712fb737a428e..44e6c1b4beb37 100644
-> > > --- a/drivers/leds/flash/Makefile
-> > > +++ b/drivers/leds/flash/Makefile
-> > > @@ -10,6 +10,7 @@ obj-$(CONFIG_LEDS_MAX77693)	+=3D leds-max77693.o
-> > > =C2=A0obj-$(CONFIG_LEDS_QCOM_FLASH)	+=3D leds-qcom-flash.o
-> > > =C2=A0obj-$(CONFIG_LEDS_RT4505)	+=3D leds-rt4505.o
-> > > =C2=A0obj-$(CONFIG_LEDS_RT8515)	+=3D leds-rt8515.o
-> > > +obj-$(CONFIG_LEDS_S2M_FLASH)	+=3D leds-s2m-flash.o
-> > > =C2=A0obj-$(CONFIG_LEDS_SGM3140)	+=3D leds-sgm3140.o
-> > > =C2=A0obj-$(CONFIG_LEDS_SY7802)	+=3D leds-sy7802.o
-> > > =C2=A0obj-$(CONFIG_LEDS_TPS6131X)	+=3D leds-tps6131x.o
-> > > diff --git a/drivers/leds/flash/leds-s2m-flash.c b/drivers/leds/flash=
-/leds-s2m-flash.c
-> > > new file mode 100644
-> > > index 0000000000000..1be2745c475bf
-> > > --- /dev/null
-> > > +++ b/drivers/leds/flash/leds-s2m-flash.c
-> > > @@ -0,0 +1,410 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Flash and Torch LED Driver for Samsung S2M series PMICs.
-> > > + *
-> > > + * Copyright (c) 2015 Samsung Electronics Co., Ltd
-> > > + * Copyright (c) 2025 Kaustabh Chakraborty <kauschluss@disroot.org>
-> > > + */
-> > > +
-> > > +#include <linux/container_of.h>
-> > > +#include <linux/led-class-flash.h>
-> > > +#include <linux/mfd/samsung/core.h>
-> > > +#include <linux/mfd/samsung/s2mu005.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/regmap.h>
-> > > +#include <media/v4l2-flash-led-class.h>
-> > > +
-> > > +#define MAX_CHANNELS	2
-> > > +
-> > > +struct s2m_fled {
-> > > +	struct device *dev;
-> > > +	struct regmap *regmap;
-> > > +	struct led_classdev_flash cdev;
-> > > +	struct v4l2_flash *v4l2_flash;
-> > > +	struct mutex lock;
-> >=20
-> > Please add a (brief) comment describing what the mutex protects.
->=20
-> The mutex object prevents the concurrent access of flash control
-> registers by the LED and V4L2 subsystems. -- will add this.
->=20
-> > > +
-> > > +	/*
-> > > +	 * Get the LED enable register address. Revision EVT0 has the
-> > > +	 * register at CTRL4, while EVT1 and higher have it at CTRL6.
-> > > +	 */
-> > > +	if (priv->pmic_revision =3D=3D 0)
-> > > +		reg_enable =3D S2MU005_REG_FLED_CTRL4;
-> > > +	else
-> > > +		reg_enable =3D S2MU005_REG_FLED_CTRL6;
-> >=20
-> > You could REG_FIELD() and friends for this and everywhere else with
-> > similar if / else.
-> >=20
->=20
-> REG_FIELD(), from what I understood, is for selecting a bit field inside
-> a single register. However this code chooses between two separate
-> registers. I believe your interpretation was incorrect? Please clarify.
+Hi Thomas,
 
-The first argument to REG_FIELD is the register itself, so reg fields can
-be used to describe this difference. See e.g. drivers/leds/rgb/leds-mt6370-=
-rgb.c
-Of course, you could have a member variable instead to hold the register
-index if all bits are the same in both revisions. Either way would avoid
-having to constantly check the revision during runtime.
+On Mon, Jan 12, 2026 at 05:47:54PM -0500, Brian Masney wrote:
+> There are currently some pic32 MIPS drivers that are in tree, and are
+> only configured to be compiled on the MIPS pic32 platform. There's a
+> risk of breaking some of these drivers when migrating drivers away from
+> legacy APIs. It happened to me with a pic32 clk driver.
+> 
+> Let's go ahead and move the pic32.h from the asm to the platform_data
+> include directory in the tree. This will make it easier, and cleaner to
+> enable COMPILE_TEST for some of these pic32 drivers. To do this requires
+> updating some includes, which I do at the beginning of this series.
+> 
+> This series was compile tested on a centos-stream-10 arm64 host in two
+> different configurations:
+> 
+> - native arm64 build with COMPILE_TEST (via make allmodconfig)
+> - MIPS cross compile on arm64 with:
+>       ARCH=mips CROSS_COMPILE=mips64-linux-gnu- make pic32mzda_defconfig
+> 
+> Note that there is a separate MIPS compile error in linux-next, and I
+> reported it at https://lore.kernel.org/all/aWVs2gVB418WiMVa@redhat.com/
+> 
+> I included a patch at the end that shows enabling COMPILE_TEST for a
+> pic32 clk driver.
+> 
+> Merge Strategy
+> ==============
+> - Patches 1-15 can go through the MIPS tree.
+> - Patch 16 I can repost to Claudiu after patches 1-15 are in Linus's
+>   tree after the next merge window. There is a separate patch set that
+>   fixes a compiler error I unintentionally introduced via the clk tree.
+>   https://lore.kernel.org/linux-clk/CABx5tq+eOocJ41X-GSgkGy6S+s+Am1yCS099wqP695NtwALTmg@mail.gmail.com/T/
 
-Cheers,
-Andre'
+Sorry about the duplicate message. I just wanted to reply to the series
+with MIPS in the header so this message isn't lost.
+
+Can you back out these two patches from your tree in linux-next, and not
+send these to Linus?
+
+clk: microchip: core: allow driver to be compiled with COMPILE_TEST
+https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=026d70dcfe5de1543bb8edb8e50d22dc16863e6b
+
+clk: microchip: fix typo in reference to a config option
+https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=a6ab150deb4b740334721d18e02ad400a9d888f5
+
+See
+https://lore.kernel.org/oe-kbuild-all/202602100954.BAVYq6aC-lkp@intel.com/
+
+All of the other patches with the include changes are good. I have
+patches queued to send out in two weeks to other subsystems once the
+include changes land in Linus's tree.
+
+Thanks,
+
+Brian
+
 
