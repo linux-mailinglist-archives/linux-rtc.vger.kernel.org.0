@@ -1,153 +1,138 @@
-Return-Path: <linux-rtc+bounces-5955-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5956-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2PsAOhtyiWlA9QQAu9opvQ
-	(envelope-from <linux-rtc+bounces-5955-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 09 Feb 2026 06:35:23 +0100
+	id cOH8AZHAimkeNgAAu9opvQ
+	(envelope-from <linux-rtc+bounces-5956-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 06:22:25 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 667D910BC83
-	for <lists+linux-rtc@lfdr.de>; Mon, 09 Feb 2026 06:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 715801170D4
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 06:22:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 302423004C37
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Feb 2026 05:35:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id BB1863032DFE
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Feb 2026 05:22:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C483630AD10;
-	Mon,  9 Feb 2026 05:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6A032AACF;
+	Tue, 10 Feb 2026 05:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L7EwS5qd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OEdxU484"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57116246BBA
-	for <linux-rtc@vger.kernel.org>; Mon,  9 Feb 2026 05:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B435298CC9;
+	Tue, 10 Feb 2026 05:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770615320; cv=none; b=QDirLXzdueFcK9DYomoixkuSa57tQJzb2Qaxxt15cZH6Wx/YqGhYveLOjFzmB4clv2OOx5+RfFFsWnHMAegC/RIjXlKG4Dpp4ds4Xwr7ztyNKjoEt7YlKeR+Mjrvynrwtk5TJ7nfefDe+MIzZniOI3jfDw+IbyTCaIsaRHqJLRM=
+	t=1770700928; cv=none; b=AnkzVbIAe/lnF0TRM5nJHsuoCHvWIPzLbzvl9FYqEJF7a/0gWTX1Cj7U1yMlIYUaMoR7XdeXSW1iYmGvAnkN+eDzwflrocuK0WO1Tm2//+fGuHezuKxk0cQQo1YZetncH2AwqwjJifmNv3SDpRNRBtMPr20L9KA4DcP9kuF0Sf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770615320; c=relaxed/simple;
-	bh=DQToknmhPB4uKle7SJjsL8qz4bcKmzeaxNJRfEwJ5TE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YF2jF0ZTlkS3ekEO0VOEEIRG2JLEhHyM5vJ279jglTFfn/fL3djqatjomEugMns03hW7/DaXKo5EFuqqmv0xH5pCD6IV998fTtgJLvMs0HAnZ8a1jIl0GZC5AgG4ZuAfsLVFy6TYsCcHsqj/K7H+QDy0rauDIa6IpoTi1OOx834=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L7EwS5qd; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so56903045e9.1
-        for <linux-rtc@vger.kernel.org>; Sun, 08 Feb 2026 21:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770615319; x=1771220119; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YO/PiduSuQrsHeimwpiI5IjM8jDW+DYLL+NZXKmBSSM=;
-        b=L7EwS5qdXJLOQQkR8OY4Yo8UXzqB8nEZ8eeX11GKgjBB3vrwrJQB9IHSaC3rqRfV+m
-         +fbRRzlIkXn5muGdSyfhltr3j2/IZ1iGA5ZTs5zCO3RVo6m/gWQhMxDnFTpdAFopPGX/
-         k0indZcFgmS6rzhPu5WVbVXnpkfMXwB6HvhI798Q0z7hAGdzb7E5ceALniPMkQSzEdSi
-         gACwodwSMlq/24mhvZOlYZYeYhIWC0bsmHnwe0rb8PPvw2LQPqgXF41HLN6F7S+6v7U+
-         /6JlRAbrfaV01au0cumDCYCPQkexRLwjguLW86dy2cq+/HZdrULacvva3phflyV3bN57
-         i1Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770615319; x=1771220119;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YO/PiduSuQrsHeimwpiI5IjM8jDW+DYLL+NZXKmBSSM=;
-        b=scpM4dd9h+i73/msOn8nmDzYyw5q4w07ubEUxOgpxNRGV4bGxnmSuefi8dVIC/rUWG
-         Lx06+BdWzdPLtWOjLe0NGvTBcd+MB11R9DHw9Q9+JN3yNXhoiRMZyQDHPVTQBmQvLLku
-         Kx+wZX1CCus+bL095+z9g5MU7EhrGUEB2ORdsO2sjfIJT5llte5+jDRjDLsu8QhFLZ51
-         fMEy64JFibwlD9EgY6ciEA4dxvekcLbFOYtqYsjBPorwTTY+YhLTpwRH8GMOFxal5R10
-         5XCosNFJEYW1ol3ENn3RECuT6dx7bYt+PHw0ca5ieB6La8yWaZBE2TvcTzafO7wQaD3M
-         xOFA==
-X-Gm-Message-State: AOJu0Yx6Y4WjtOlam4ewg3OiVBxbnH6q+8f7Y7wjkXWz+7pdxc9k3JRD
-	6w/D4njbEuRmCCQzuaZejY5HOQfxZVbheyJLUYKRPuW+vywozL8WlNe2XSwDZpD1
-X-Gm-Gg: AZuq6aIm4uDLSSLXKAIEVpIxAH9faB0sGDWuuUkaBssBP8sq2YIwi6BshS5xrkY9J/O
-	owEQjET/H6anrEMxKya3KjPYQz/ev5Q+3LAkh6VLehKe3vKWcgKBTL3feH5Qyeyj8K7NIYZ0zLG
-	VDuLuzQlUHS2/aOalwbBG92y77iOdC1A5Xor/+CUuvx8N1vNUuHVM97xDokT9AmxKA7AnssMLdS
-	88waBz/YzTAj6ztQj4Da1sPl1zr4Z4NZWUjSPKdueqDvsU5+cN1ELhVBcTUWIBl5Ac974w+19TU
-	JYogH6z3yO8Nr8AlOBxW9dbBAUD2eyKvHQdXAvDltbjdRmK0SFhNgCWrhcOI5S3Jrhz3CRko9bb
-	otv8H31qjkwXytDwYTVZPSlKGa9fiSjaFBiXxMJtCZjxM4UkpP3WfxYg63c+fse+gXUb60vhJVg
-	2bBfCNx7EdUJE/beImx2xifnD4C1FcTWcAr5eZ9Yt+OHfIMzo/fBOZH8Kkro2L0qZaWxQAcF8=
-X-Received: by 2002:a05:600c:8489:b0:477:c478:46d7 with SMTP id 5b1f17b1804b1-48320216cb8mr148076135e9.22.1770615318494;
-        Sun, 08 Feb 2026 21:35:18 -0800 (PST)
-Received: from localhost.localdomain (80-121-54-205.adsl.highway.telekom.at. [80.121.54.205])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483203e5b63sm135762785e9.1.2026.02.08.21.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 21:35:18 -0800 (PST)
-From: Andreas Gabriel-Platschek <andi.platschek@gmail.com>
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andreas Gabriel-Platschek <andi.platschek@gmail.com>
-Subject: [PATCH] rtc: ds1390: fix number of bytes read from RTC
-Date: Mon,  9 Feb 2026 06:34:39 +0100
-Message-ID: <20260209053439.313825-1-andi.platschek@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1770700928; c=relaxed/simple;
+	bh=glo5WwPN7zuxUs13l+Gkpb+FSft51JklOnxQCxcPTAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHKM6Y50JcJFJeGrK8oRMB++n9tcBiZvoVgy4HpPmImTwE24zrYX30aOI1EZMoHpisVFN7+biAAq5xq/XQirdZwRaGx65EkJKML+cYBJzQ3457CroxZR/rl7cnpXP3zDr+NhpZajDg0Itt0Ab97Gy/tltxAO11Y6YwKCvhoSmT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OEdxU484; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397D8C19421;
+	Tue, 10 Feb 2026 05:22:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770700927;
+	bh=glo5WwPN7zuxUs13l+Gkpb+FSft51JklOnxQCxcPTAA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OEdxU484MqZsTrEdVZpGu/8ENWII1kfqKlYUu2ZpvWjh0ENVIod2TylMPL/lXF/HT
+	 p9f00xw7EsJYEzngZEiS9V3uGgQMtx4Sh9w1HTfP1hgUn2jOti75rKQrX56MNsWc13
+	 QvmQ6XLFN0L7UQACvaJWNnnRTff7C2wj4/KD9W7Mt9ikfERrd3DLDtEbvDF6LTODAx
+	 GhtDWnt7D0+XLWRu8IK8mhdwxY25VM63RAc9UjDi9YJzR1PzAAlnvnNXUq6JaoifUy
+	 bah01WWs0jULbJUrtePZd4Nsd1i05OGKr1GYk7EHnBAM4XuTxCP6eezRPyijKugl9a
+	 SP5K3pxToywoQ==
+Date: Tue, 10 Feb 2026 10:52:00 +0530
+From: Sumit Garg <sumit.garg@kernel.org>
+To: rouven.czerwinski@linaro.org
+Cc: Jens Wiklander <jens.wiklander@linaro.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/3] optee: simplify OP-TEE context match
+Message-ID: <aYrAeEiqG7iwXm_w@sumit-xelite>
+References: <20260126-optee-simplify-context-match-v1-0-d4104e526cb6@linaro.org>
+ <20260126-optee-simplify-context-match-v1-1-d4104e526cb6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126-optee-simplify-context-match-v1-1-d4104e526cb6@linaro.org>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5955-lists,linux-rtc=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-5956-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_NEQ_ENVFROM(0.00)[andiplatschek@gmail.com,linux-rtc@vger.kernel.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sumit.garg@kernel.org,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 667D910BC83
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:email,linaro.org:email]
+X-Rspamd-Queue-Id: 715801170D4
 X-Rspamd-Action: no action
 
-The spi_write_then_read() reads 8 bytes starting from
-DS1390_REG_SECONDS (== 0x01), so the last byte read would already
-be part of the alarm (Tenths and Hundredths of Seconds) feature.
+On Mon, Jan 26, 2026 at 11:11:24AM +0100, Rouven Czerwinski via B4 Relay wrote:
+> From: Rouven Czerwinski <rouven.czerwinski@linaro.org>
+> 
+> Simplify the TEE implementor ID match by returning the boolean
+> expression directly instead of going through an if/else.
+> 
+> Signed-off-by: Rouven Czerwinski <rouven.czerwinski@linaro.org>
+> ---
+>  drivers/tee/optee/device.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
 
-However 7 bytes are engouh -- seconds (0x01), minutes (0x02), hours (0x03),
-day (0x04), date (0x05), month/century (0x06) and year (0x07).
+Reviewed-by: Sumit Garg <sumit.garg@oss.qualcomm.com>
 
-Signed-off-by: Andreas Gabriel-Platschek <andi.platschek@gmail.com>
----
- drivers/rtc/rtc-ds1390.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-Sumit
 
-diff --git a/drivers/rtc/rtc-ds1390.c b/drivers/rtc/rtc-ds1390.c
-index f46428ca77cc..f7afd6bdeb4a 100644
---- a/drivers/rtc/rtc-ds1390.c
-+++ b/drivers/rtc/rtc-ds1390.c
-@@ -134,7 +134,7 @@ static int ds1390_read_time(struct device *dev, struct rtc_time *dt)
- 	chip->txrx_buf[0] = DS1390_REG_SECONDS;
- 
- 	/* do the i/o */
--	status = spi_write_then_read(spi, chip->txrx_buf, 1, chip->txrx_buf, 8);
-+	status = spi_write_then_read(spi, chip->txrx_buf, 1, chip->txrx_buf, 7);
- 	if (status != 0)
- 		return status;
- 
--- 
-2.47.3
-
+> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
+> index 950b4661d5df..4c85b04d6004 100644
+> --- a/drivers/tee/optee/device.c
+> +++ b/drivers/tee/optee/device.c
+> @@ -13,10 +13,7 @@
+>  
+>  static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
+>  {
+> -	if (ver->impl_id == TEE_IMPL_ID_OPTEE)
+> -		return 1;
+> -	else
+> -		return 0;
+> +	return (ver->impl_id == TEE_IMPL_ID_OPTEE);
+>  }
+>  
+>  static int get_devices(struct tee_context *ctx, u32 session,
+> 
+> -- 
+> 2.52.0
+> 
+> 
+> 
 
