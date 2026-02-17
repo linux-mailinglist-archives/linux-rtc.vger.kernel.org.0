@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-5972-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5973-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iFPQIZrrlGnUIwIAu9opvQ
-	(envelope-from <linux-rtc+bounces-5972-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Feb 2026 23:28:42 +0100
+	id GGtTOK3rlGnUIwIAu9opvQ
+	(envelope-from <linux-rtc+bounces-5973-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Feb 2026 23:29:01 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EB07151762
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Feb 2026 23:28:41 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34849151772
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Feb 2026 23:29:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CB322301AF46
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Feb 2026 22:28:12 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 99BEB300C335
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Feb 2026 22:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA12318ED7;
-	Tue, 17 Feb 2026 22:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7DB2318EE9;
+	Tue, 17 Feb 2026 22:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hx7HbXMt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hRcONCbK"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0C9318B95;
-	Tue, 17 Feb 2026 22:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EA2318B95;
+	Tue, 17 Feb 2026 22:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771367291; cv=none; b=cWH6rsE4giqLwALRnoZ5KAH8obrq4Jsv1FijAIHh9vfh2t6Am7SVsz5cXic5VkqDJD0/G0tdx5RG7aIUtNEkZSGhyxV4qgcOkIMYpQwAjoYBcflAFrRFL3IfV3EdLsWt5DOs9bkeYObDq1L/MQXNjsD2ySKwjUKrBvknZICuUvE=
+	t=1771367338; cv=none; b=RTqpDm9EeXqcXqvr353Dm4ZRWeX+0lcCMNSt404d94osqbCwxpn5RPs/SoQwm7RyamOX5cwIr/qTFeUvHfKp6bdaEckxp0Rln450QxeCS6CROmw/3LecLnsqIfhgWZuGbi3tOeYWkZ81x0MzTOeEYed59fLIsRAjXwV2ex/HtvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771367291; c=relaxed/simple;
-	bh=4ZZzJoUypvXc3Bo+CoJlQaH09sZK2TEHfYssmcfGRMI=;
+	s=arc-20240116; t=1771367338; c=relaxed/simple;
+	bh=nol6tUpy3fHDvQ4vYWXQcCQJwZapDwAPPWkod78PTk0=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Vj25RHAoARQhGPtqyySQuKe5FnI15N1riZPDs1za6qyE9vTnWj+SizIXMHWcGMesoh9QXeMX0mDLTQp9zgckWYGFsygC82iwzMnqAfW/Nncjz6mxJL0IGVj3lot3qgfUvgvN8Em8CrSKjkkDGXCwtc+tLfor+AJjMIiVo5RWrOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hx7HbXMt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6407C4CEF7;
-	Tue, 17 Feb 2026 22:28:08 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=vAk15wOEpI9oNdQr+mH106OHUZy94y2U8zWQDwFT3i2LpFYW4DKyJxPqqk+NxGifnU3O1GpHKcd2+0uXN2c7KwheQ+yPvOmSEROvvwptFth4sXya31w9qdOGxUkMHxqrXfwJGcz4D+aFrBF5DWAhonE+RDylGFf8y3frfoTRhek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hRcONCbK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22621C4CEF7;
+	Tue, 17 Feb 2026 22:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771367291;
-	bh=4ZZzJoUypvXc3Bo+CoJlQaH09sZK2TEHfYssmcfGRMI=;
+	s=k20201202; t=1771367338;
+	bh=nol6tUpy3fHDvQ4vYWXQcCQJwZapDwAPPWkod78PTk0=;
 	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=hx7HbXMtLkovS+AS5uZw9BKiRdnXtksG900F1H4AKrRdPhUtVrMk3YeSHGyy55Kff
-	 EYjJ7Wa8cjJ65wjH8A3yi68kM3hVmKaMbUCXELghbTrNZaSQB8oZcTrIL2GF9DE8fm
-	 IgGKddR8CF56khB8GQ9a0g8UsKJuTxsKvHhtYt23IHpemNLkOMBplPtBWiwwIiSp1U
-	 1oA+Z9O6Ma4MpbBk2h0OfjdIZOmxVqjbruMI2+Z5JOnLlIfhNicYnt5Tkg650iuCFo
-	 auR9lcVnC6NR3YNEUoEchGohW8kp/aS7HQGw1RgLXinLl1eq079N/k9Uc9BhZcJQEq
-	 X6QKANzYZjApw==
-Message-ID: <fc5a4706-c40e-48f4-b0e3-f4bc6970b179@kernel.org>
-Date: Tue, 17 Feb 2026 23:28:07 +0100
+	b=hRcONCbKJtlwa8v0gzedJ4f82ku/U34ySHCXRtPyb/c9A3LN7aVzrUYBVn+k66wiY
+	 Di/z0d1aUxk0NfpZsdRSjKvBrdY4HxdZZXdTzfdLemK3EtY8Wor59DhAaV44Gzkn6q
+	 6gP8kHRnb8OqUGEl9MaMMyT7PsO6THptA0SDa1W7xGtk0jEl9Fty3Pt7XKNFQ7ni6B
+	 nloNsk0ZIQyElYXLM/H/Yrfbvgrragbi1ytfC4Dnnu11m/3gqzV6NSC5kLT2cJYcIw
+	 TjZgs1hjJUSyHLBkaGGBlcKdE7y28K83yLapwSvb7wSuj8A7HeA7wAz9YETTJ4o/6+
+	 zs079Y1ku+bYg==
+Message-ID: <ca6222be-1380-4a1e-a8d0-330caf3748f6@kernel.org>
+Date: Tue, 17 Feb 2026 23:28:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH RFC 04/10] driver: core: constify groups array argument in
- device_add_groups and device_remove_groups
+Subject: [PATCH RFC 05/10] driver core: make struct device member groups a
+ constant array
 From: Heiner Kallweit <hkall@kernel.org>
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -73,12 +73,12 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5972-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-5973-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -89,63 +89,35 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[hkall@kernel.org,linux-rtc@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
 	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0EB07151762
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 34849151772
 X-Rspamd-Action: no action
 
-Now that sysfs_create_groups() and sysfs_remove_groups() allow to
-pass constant groups arrays, we can constify the groups array argument
-also here.
+Constify the groups array, allowing to assign constant arrays.
 
 Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 ---
- drivers/base/core.c    | 5 +++--
- include/linux/device.h | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ include/linux/device.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index f599a1384ee..4db63b2603c 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2831,14 +2831,15 @@ static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(removable);
- 
--int device_add_groups(struct device *dev, const struct attribute_group **groups)
-+int device_add_groups(struct device *dev,
-+		      const struct attribute_group *const *groups)
- {
- 	return sysfs_create_groups(&dev->kobj, groups);
- }
- EXPORT_SYMBOL_GPL(device_add_groups);
- 
- void device_remove_groups(struct device *dev,
--			  const struct attribute_group **groups)
-+			  const struct attribute_group *const *groups)
- {
- 	sysfs_remove_groups(&dev->kobj, groups);
- }
 diff --git a/include/linux/device.h b/include/linux/device.h
-index 0be95294b6e..48a0444ccc1 100644
+index 48a0444ccc1..bfa2ca603c2 100644
 --- a/include/linux/device.h
 +++ b/include/linux/device.h
-@@ -1131,9 +1131,9 @@ device_create_with_groups(const struct class *cls, struct device *parent, dev_t
- void device_destroy(const struct class *cls, dev_t devt);
+@@ -640,7 +640,7 @@ struct device {
+ 	struct list_head	devres_head;
  
- int __must_check device_add_groups(struct device *dev,
--				   const struct attribute_group **groups);
-+				   const struct attribute_group *const *groups);
- void device_remove_groups(struct device *dev,
--			  const struct attribute_group **groups);
-+			  const struct attribute_group *const *groups);
+ 	const struct class	*class;
+-	const struct attribute_group **groups;	/* optional groups */
++	const struct attribute_group *const *groups;	/* optional groups */
  
- static inline int __must_check device_add_group(struct device *dev,
- 					const struct attribute_group *grp)
+ 	void	(*release)(struct device *dev);
+ 	struct iommu_group	*iommu_group;
 -- 
 2.53.0
 
