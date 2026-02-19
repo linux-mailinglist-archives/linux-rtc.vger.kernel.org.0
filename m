@@ -1,154 +1,253 @@
-Return-Path: <linux-rtc+bounces-5983-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5984-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +HvFES1flmn+eQIAu9opvQ
-	(envelope-from <linux-rtc+bounces-5983-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Feb 2026 01:54:05 +0100
+	id YAiEE9ellmmTiQIAu9opvQ
+	(envelope-from <linux-rtc+bounces-5984-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Feb 2026 06:55:35 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7A9415B431
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Feb 2026 01:54:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4D7A15C3BB
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Feb 2026 06:55:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE5793047BD2
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Feb 2026 00:53:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D20863055C8E
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Feb 2026 05:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563DF23AB98;
-	Thu, 19 Feb 2026 00:53:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27FF2D12ED;
+	Thu, 19 Feb 2026 05:51:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PStQ3nA3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gob8dHpg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6A119C553
-	for <linux-rtc@vger.kernel.org>; Thu, 19 Feb 2026 00:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729422D3A93
+	for <linux-rtc@vger.kernel.org>; Thu, 19 Feb 2026 05:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771462424; cv=none; b=ZeH5mA2NHRZ56qdsaG9lsRTjJHf/8lHijAQ3f4sr7ldaLIpOFWpZn30VpB4mg9SDUUxFqCrBpbFszXEJpu7h0OPk2RejeOxJuo4GRnnijETu9AHR98FvIKDU+xQ4iA0colkFwkB4/xe50ykCynUa735MOVJKpbIVoteA3QFBJ14=
+	t=1771480285; cv=none; b=IgTaAJOo2+bD4NMdowvZLcVdoIPr5AGKon4F/j9V86ZqebyR4B23grt4Tr9Ko4fj577Df9GmmJgg3XlPwhf674qgcLbyI17pl/HWhIpxxdDPUZ8VrryDDC5WZa/8tumzo36gI9cUrt5KOZXWrp602rJ/0qHDrYcEgQK+V1QtozU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771462424; c=relaxed/simple;
-	bh=m6jU20WcnewWYKvUIp3/P1bCRaKEllC10X46P1g87r4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iTI+7nI5pShptt0FSPL+lQuVUtTQapg3XMNfWLREnC6M/znJdMe6+Ym2W/a6zEPqGgnvEZgrto3Uli/bnRlB9Ml3HGhHLTgYRhCH0LsyQAZJs/d5sv5uz0EybEmzUMAaa3mW7Hl3Bn5kacaDOJAPhRsmlN3zPYu/0EvOkjlqddg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PStQ3nA3; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <392127ee-11ad-4517-bb72-91af64fd191e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771462409;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KrEmRGC944GsP7Yyeaksj64lgATVALEMxqI+i3nVu7M=;
-	b=PStQ3nA3k1XjLI7RSZE66IuNbAuXdRUzufe4PePop166kxHT9aFwljBfEzjfU/UUvZUh6M
-	h9XYYsbV2kpJBEA6myoP3f676UL3xdhJz52sqhqr5uiIDrWVtxX83Q2CknT03RjKzLxeOZ
-	J+bxNzYtcLTcsOiqYXzNSb0XHbXT07g=
-Date: Wed, 18 Feb 2026 16:53:00 -0800
+	s=arc-20240116; t=1771480285; c=relaxed/simple;
+	bh=htaF1Od6Lb+TxcS2/V/K7m5BHfTrBLHow3IXUGwFe9A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pqcGUNySYeq/eZ3CRwt2ggnYCA9fMUc2MF9SMuRMLnoeaK/FviQ0YVW1+OXu3rWgUocx/W3q1KIsxeX+xs6o5933Ch2r5jn9+VuZKM62F3wq21dKyB1rGNVKzip3IAuSo5/qSsUlx73hdMMbBkTD8RODOp0TamwPYKRORMh86Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gob8dHpg; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-354bc7c2c46so346977a91.0
+        for <linux-rtc@vger.kernel.org>; Wed, 18 Feb 2026 21:51:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771480283; x=1772085083; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOT1TOzEwQYZq5JX0qTFAM3MCuWoZ9r71oq9P6+0W2k=;
+        b=gob8dHpg9AFJwuxTdvp5jXp8dR9sdLLSosSqLFq4TQGzr0FcrvnrHwavfIMtZj9W6J
+         2d9WZ+BWi39blSurBAa10CDD2hIdkIj3rew8+d+ZTcit463SBP3R/Ug8cw/yv0aO7Vz6
+         xnUEmlkad5joZt4LyjN68OU/mxoeeM6vHCB5k5mb7G60iqViAZbXi7J67zGrD5cNsr0q
+         twBwhB+Pm1ZrhklRg/2SKBFT0sizXeE5vw/Vlsxkk3GyWC/bGCTMAJe7uZOkmiXcAaLy
+         HOssF0qqXp3Y8h6lswQ8H2JTNwQNQgZiqsVQJfWYBAj1UezEAAGw9oGguEEsEJqHD+ya
+         goog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771480283; x=1772085083;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oOT1TOzEwQYZq5JX0qTFAM3MCuWoZ9r71oq9P6+0W2k=;
+        b=v7cKriCJ2Cb8HEzcKrmujvXd6S+YJrYQD/Mf2P9CTwJ7o0U1tnprKj2BHaRQa1SOJv
+         u8L3zBDxXc7UCXhWlT3c2ffyWkwV2MjMp9ifwKw/H0urHI76qKIGpuPwZjCpSNaybtWO
+         pmTqgGfkXvWBNOF8ejSO3rRbn3kxFIJuH+TyOtwuRk7JSM/6jX+oAdhNMnkx0JhPF2/3
+         AyIurnuYVTb7mbmj3ZjnVcRopMyrVuBJBKemKCVwCX0hoLg0rKQ6QTUJ7h00BonN6/i5
+         JFW42JAYt2qqQ7U1xKa0M+lQAn/qUYQ2lNRlGilxUIjL4XXznknqBNyeuwO1kn3+EQqv
+         HFEw==
+X-Gm-Message-State: AOJu0YyCgHs54x6V4XB+BzrjgKF1ovBR2WX6CZU9ijKjDasc58J5+5Uu
+	GRKixmFVE3OaaoKDao9v010dtPNkUImdF9VzBWzsP0PAzGglAGSpDNNL
+X-Gm-Gg: AZuq6aKIDCgkMLQRXYM62e+VU/YsJAuwNrW/rHk2AX858Hzd/wbYzo93cOVNQvAStKC
+	tVxy/VSl+ZyFGl+YnRcBqY7Yuiajp8uCB/8zD92leyA4ZfPmmfch+tCuX+pbjv056F+C7FwuWkn
+	1sRcJXTpNpmgHxg4jF7oc0hWIFdunz5nv9r8jA6xNPLEfNT9LyVphlBmb7PjIgjHsfT4sQ7ZAks
+	n5ao5TLoNoNxkaSFkkEvf1FBwWskO2b5JFmiWOMxCTjydR2nX3/FjzNindwtdrYStQ8GZgYpV55
+	tDoT0CYStP4GXx+wK1+SnwnJ28kC5457DRIjrwnAR95RPG/u4iIySKdxUalcOXNIcJNPNe+S6il
+	0VTvUmztaxTRvZqVoFmBoCRJc/vJFi+yA1HHcE3LIauVu7303Ps18vz0tn/5nbtdxAIcRWlJFi6
+	iSiVVAH8pTsSbDhknfBx6itCIc6hlIabLxNyH9oj6HmwcCoC6Du2oBTAlWhv324ycD+va78Dk0P
+	NxN7AdY1uO3VVYdRqviciLXl4PgF19s9ET+iw==
+X-Received: by 2002:a17:90b:586f:b0:34c:a29d:992a with SMTP id 98e67ed59e1d1-356aada821dmr17081014a91.34.1771480282682;
+        Wed, 18 Feb 2026 21:51:22 -0800 (PST)
+Received: from lorddaniel-VivoBook-ASUSLaptop-K3502ZA-S3502ZA.. ([2405:201:31:d01f:321d:fdd0:3c02:de61])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3567e7d95d8sm26300755a91.2.2026.02.18.21.51.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Feb 2026 21:51:22 -0800 (PST)
+From: Piyush Patle <piyushpatle228@gmail.com>
+To: alexandre.belloni@bootlin.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: rtc: isl12026: convert to YAML schema
+Date: Thu, 19 Feb 2026 11:21:15 +0530
+Message-Id: <20260219055115.195302-1-piyushpatle228@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC 02/10] rtc: prepare for struct device member groups
- becoming a constant array
-To: Heiner Kallweit <hkall@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: driver-core@lists.linux.dev,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-rdma@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <5d0951ec-42c9-453f-9966-ecca593c4153@kernel.org>
- <95e5af90-ed53-4009-a4ea-19ed04499ecc@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "yanjun.zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <95e5af90-ed53-4009-a4ea-19ed04499ecc@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5983-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yanjun.zhu@linux.dev,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:mid,linux.dev:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A7A9415B431
+	TAGGED_FROM(0.00)[bounces-5984-lists,linux-rtc=lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[piyushpatle228@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,devicetree.org:url,6f:email]
+X-Rspamd-Queue-Id: E4D7A15C3BB
 X-Rspamd-Action: no action
 
-On 2/17/26 2:26 PM, Heiner Kallweit wrote:
-> This prepares for making struct device member groups a constant array.
-> The assignment groups = rtc->dev.groups would result in a "discarding
-> const qualifier" warning with this change.
-> No functional change intended.
-> 
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->   drivers/rtc/sysfs.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rtc/sysfs.c b/drivers/rtc/sysfs.c
-> index 4ab05e105a7..ae5e1252b4c 100644
-> --- a/drivers/rtc/sysfs.c
-> +++ b/drivers/rtc/sysfs.c
-> @@ -308,7 +308,7 @@ const struct attribute_group **rtc_get_dev_attribute_groups(void)
->   int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
->   {
->   	size_t old_cnt = 0, add_cnt = 0, new_cnt;
-> -	const struct attribute_group **groups, **old;
-> +	const struct attribute_group **groups, *const *old;
->   
->   	if (grps) {
->   		for (groups = grps; *groups; groups++)
-> @@ -320,9 +320,9 @@ int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
->   		return -EINVAL;
->   	}
->   
-> -	groups = rtc->dev.groups;
-> -	if (groups)
-> -		for (; *groups; groups++)
-> +	old = rtc->dev.groups;
-> +	if (old)
-> +		while (*old++)
->   			old_cnt++;
+Convert the ISL12026 RTC binding from text format to YAML schema.
+Remove the legacy text binding.
 
-The change from for (; *groups; groups++) to while (*old++) is not 
-functionally equivalent. In the while version, the post-increment old++ 
-executes even when *old is NULL. This leaves the pointer old pointing 
-one element past the NULL terminator. While old_cnt remains correct, 
-this is a side-effect-heavy idiom that differs from standard kernel 
-patterns and could be fragile if old is used later in the function.
+The new schema enables dtbs_check validation.
+---
+Changes in v2:
+- Fixed schema validation issues pointed out in review
+- Improved example node formatting
+- Removed redundant description text
 
-Best Regards,
-Zhu Yanjun
+Signed-off-by: Piyush Patle <piyushpatle228@gmail.com>
+---
+ .../devicetree/bindings/rtc/isil,isl12026.txt | 28 --------
+ .../bindings/rtc/isil,isl12026.yaml           | 64 +++++++++++++++++++
+ 2 files changed, 64 insertions(+), 28 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/isil,isl12026.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/isil,isl12026.yaml
 
->   
->   	new_cnt = old_cnt + add_cnt + 1;
+diff --git a/Documentation/devicetree/bindings/rtc/isil,isl12026.txt b/Documentation/devicetree/bindings/rtc/isil,isl12026.txt
+deleted file mode 100644
+index 2e0be45193bb..000000000000
+--- a/Documentation/devicetree/bindings/rtc/isil,isl12026.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-ISL12026 I2C RTC/EEPROM
+-
+-ISL12026 is an I2C RTC/EEPROM combination device.  The RTC and control
+-registers respond at bus address 0x6f, and the EEPROM array responds
+-at bus address 0x57.  The canonical "reg" value will be for the RTC portion.
+-
+-Required properties supported by the device:
+-
+- - "compatible": must be "isil,isl12026"
+- - "reg": I2C bus address of the device (always 0x6f)
+-
+-Optional properties:
+-
+- - "isil,pwr-bsw": If present PWR.BSW bit must be set to the specified
+-                   value for proper operation.
+-
+- - "isil,pwr-sbib": If present PWR.SBIB bit must be set to the specified
+-                    value for proper operation.
+-
+-
+-Example:
+-
+-	rtc@6f {
+-		compatible = "isil,isl12026";
+-		reg = <0x6f>;
+-		isil,pwr-bsw = <0>;
+-		isil,pwr-sbib = <1>;
+-	}
+diff --git a/Documentation/devicetree/bindings/rtc/isil,isl12026.yaml b/Documentation/devicetree/bindings/rtc/isil,isl12026.yaml
+new file mode 100644
+index 000000000000..a6822605fd72
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/isil,isl12026.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/isil,isl12026.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Intersil ISL12026 I2C RTC/EEPROM
++
++maintainers:
++  - Piyush Patle <piyushpatle228@gmail.com>
++
++description: |
++  The ISL12026 is a combination RTC and EEPROM device connected via I2C.
++  The RTC and control registers respond at address 0x6f, while the EEPROM
++  array responds at address 0x57. The "reg" property refers to the RTC
++  portion of the device.
++
++select:
++  properties:
++    compatible:
++      const: isil,isl12026
++  required:
++    - compatible
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    const: isil,isl12026
++
++  reg:
++    maxItems: 1
++    description: I2C address of the RTC portion (must be 0x6f)
++
++  isil,pwr-bsw:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Value written to the PWR.BSW bit for proper device operation.
++
++  isil,pwr-sbib:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Value written to the PWR.SBIB bit for proper device operation.
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@6f {
++            compatible = "isil,isl12026";
++            reg = <0x6f>;
++            isil,pwr-bsw = <0>;
++            isil,pwr-sbib = <1>;
++        };
++    };
+-- 
+2.34.1
 
 
