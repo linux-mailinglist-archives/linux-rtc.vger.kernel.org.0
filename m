@@ -1,177 +1,195 @@
-Return-Path: <linux-rtc+bounces-5988-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5989-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMeIF0aSmGkfJwMAu9opvQ
-	(envelope-from <linux-rtc+bounces-5988-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Feb 2026 17:56:38 +0100
+	id 3QaEHwfmmGkYOAMAu9opvQ
+	(envelope-from <linux-rtc+bounces-5989-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Feb 2026 23:53:59 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA87D169839
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Feb 2026 17:56:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7F1616B550
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Feb 2026 23:53:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 95FFD30305F0
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Feb 2026 16:56:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 811A9301C6E5
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Feb 2026 22:53:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596802FD660;
-	Fri, 20 Feb 2026 16:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB552F83B5;
+	Fri, 20 Feb 2026 22:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=svanheule.net header.i=@svanheule.net header.b="Wl8EkULE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wJwKI2uN"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B0D2F49F0
-	for <linux-rtc@vger.kernel.org>; Fri, 20 Feb 2026 16:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.241.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D18119DF8D
+	for <linux-rtc@vger.kernel.org>; Fri, 20 Feb 2026 22:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771606587; cv=none; b=I199F8ceik1kKwkAkOe7QgBHJlFQMGBVgcF0ChTWP9ZplT33UzSeCUzOn3YIvwn127iJwghIFh+xNqDlhuZhA/0978+GeGd+5cWg8pK34UMJ2O6Rw15I0fskxxTZx991TYToqFATAYUAFgridvTxGk4Uuc7SQ8U26OTiwvNhL5g=
+	t=1771628033; cv=none; b=uZy7e2OvNkOeQYsAN6fl7m8ap/bKk5/uxdqXgUgzRagnTT5vtF8XdfedAccQRgizHAr2bBeRWlAIWmX++nCloE2P2YksSvw4nhAttd+i5eI+UnWJdWwuBT9+6H8o8ZDXJg7TQQjDSVwsE2qtHl3JQl9RduzGUiCovipDBZLS+20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771606587; c=relaxed/simple;
-	bh=8D9Y1XXC2qdEK5lv2ngWbb8ZY8WcwD0gpYfssancm0A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WfyP1V3Q6q7vXfDoR4to/tNSB6PS7YdQxxDNFLgNAuMmivNWF0YudmAbXeJIhy/DIPCs3B+CTkZ23t83ejHS/CYj/7Dq0VkEN949jIkkT3/+El/d0z/p1hbmd5+YZGp0bC8N8ZqWtK6iMxyI1Ts5zgBHPmt2WLGNvLAQNH/4w5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svanheule.net; spf=pass smtp.mailfrom=svanheule.net; dkim=pass (2048-bit key) header.d=svanheule.net header.i=@svanheule.net header.b=Wl8EkULE; arc=none smtp.client-ip=84.16.241.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svanheule.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svanheule.net
-Received: from [IPv6:2a02:1812:162c:8f00:1e2d:b404:3319:eba8] (2a02-1812-162c-8f00-1e2d-b404-3319-eba8.ip6.access.telenet.be [IPv6:2a02:1812:162c:8f00:1e2d:b404:3319:eba8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sander@svanheule.net)
-	by polaris.svanheule.net (Postfix) with ESMTPSA id 5DA0B6E86D9;
-	Fri, 20 Feb 2026 17:56:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-	s=mail1707; t=1771606584;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J0lld6vPE30NQltxwTbPT1iVmbe7L/OOthusNPaOsLo=;
-	b=Wl8EkULECxUNWFwP0xk/j1XeHstIdG7Zvpg4HpIoQyf8y/2LFS6WWIY0KlWnGY3YXlPUAP
-	ESbwKUfHUVIJRKVBlqZYUrIpDnnMnSvhnKZS1KMV5imA7mmM9Jat9yGzRXNhEjU212VEEc
-	1CPlZ19uDBa8naXSKQ/AATLbodr8NKksYlWPEHEa0DNdbUcWIu8lBJlsrF7GvhbCtpo5Dc
-	5pbNtFyrGpWnja5OmpOUDh1dEDrqHX9O8kmjIudTc88NB7118VifEtgp1mH+LuqTZIgjHK
-	gYe2a0ru+srsKHnx287wEHeiGi+C1LRxCsBQJVyCY4+K9QsnXd/EkWZOACJdmw==
-Message-ID: <4cf24e281fac45637fedf40944d8b5230c0e22d9.camel@svanheule.net>
-Subject: Re: [PATCH v2 06/12] mfd: sec: add support for S2MU005 PMIC
-From: Sander Vanheule <sander@svanheule.net>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>,  =?ISO-8859-1?Q?Andr=E9?=
- Draszik	 <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>, Pavel
- Machek	 <pavel@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- MyungJoo Ham	 <myungjoo.ham@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>, Krzysztof
- Kozlowski <krzk@kernel.org>, Alexandre Belloni	
- <alexandre.belloni@bootlin.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan	 <skhan@linuxfoundation.org>
-Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Date: Fri, 20 Feb 2026 17:56:22 +0100
-In-Reply-To: <DG74Y3QSCLIO.32Q8ZKCTISXXB@disroot.org>
-References: <20260126-s2mu005-pmic-v2-0-78f1a75f547a@disroot.org>
-	 <20260126-s2mu005-pmic-v2-6-78f1a75f547a@disroot.org>
-	 <69e2c1b1a2f3d2ed5e5da995cc5ee49bb3627597.camel@linaro.org>
-	 <DG74Y3QSCLIO.32Q8ZKCTISXXB@disroot.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	s=arc-20240116; t=1771628033; c=relaxed/simple;
+	bh=XjDluTQhJ5LENdEz712u79ymW6BSEUDMkLC+LmyHe5E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cXuZotNoY2KEFYanaUR1HdiLVI3XgzuBMidpKfnF0h9BmfbCMAEJbt0rQncbWYgQKRJ3uofP3i4o9ZdQMZGocIi/HaxSa9Y3adbbFO8NuamlZ6/4YY0wjnngzixGegCQAZcIkN/7k7jTvK46yar3dQR5xTIdw6E7cuDIAf1KJiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wJwKI2uN; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id DA0021A08D8;
+	Fri, 20 Feb 2026 22:53:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 9F9355FB4D;
+	Fri, 20 Feb 2026 22:53:47 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6788610368D13;
+	Fri, 20 Feb 2026 23:53:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1771628026; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=B9YAVyFhgf8N70zdkaB5FsfHpnFqcT5KgJN3J7jNpD4=;
+	b=wJwKI2uNyCyvGV0EGMx9ZYc0bNoL9LFwrGd4Q07o8En2+ixgMvu6MLzXblIs+s5nfATW3r
+	TatMfBL8l/yMJ7LsTXwErOS1uITTcu9TtVuTrd5G3tSZuyg4dJmCXk5bS5LS//ioH/D0ZF
+	F76xzbchss7MtQT5VH/3c1z8yBJH3QsMpRYx8kvanylNDPjIi4qr+yOEULcfQ7Rm7mpQg5
+	nosg9V1ujbNpkPg3t69Vog4XRpOiDFN3gOde1/jGCVotYElKL5/KZ/QCpr9J3e4nTfY1ry
+	1NZGxiDu8rwKC/rmtEQWZegMR82tXxhElPodXjxXpLionG4Xq5YARJJNnlc4tA==
+Date: Fri, 20 Feb 2026 23:53:41 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ke Sun <sk.alvin.x@gmail.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Ke Sun <sunke@kylinos.cn>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-rtc@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops
+ callbacks
+Message-ID: <20260220225341c5eeb835@mail.local>
+References: <20260116162203.296844-1-sunke@kylinos.cn>
+ <20260116162203.296844-2-sunke@kylinos.cn>
+ <DFSN0O9RRVD6.1LCI38JKGO1R0@kernel.org>
+ <77d373dc-c5f2-4dca-b0d2-b5cee6a21b3b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77d373dc-c5f2-4dca-b0d2-b5cee6a21b3b@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[svanheule.net,none];
-	R_DKIM_ALLOW(-0.20)[svanheule.net:s=mail1707];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-5988-lists,linux-rtc=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-5989-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,kylinos.cn,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sander@svanheule.net,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[svanheule.net:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: CA87D169839
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.local:mid]
+X-Rspamd-Queue-Id: D7F1616B550
 X-Rspamd-Action: no action
 
-Hi,
+On 20/01/2026 16:01:40+0800, Ke Sun wrote:
+> 
+> On 1/19/26 22:32, Danilo Krummrich wrote:
+> > On Fri Jan 16, 2026 at 5:21 PM CET, Ke Sun wrote:
+> > > diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
+> > > index baf1a8ca8b2b1..eddcc5a69db3b 100644
+> > > --- a/drivers/rtc/dev.c
+> > > +++ b/drivers/rtc/dev.c
+> > > @@ -410,7 +410,7 @@ static long rtc_dev_ioctl(struct file *file,
+> > >   		}
+> > >   		default:
+> > >   			if (rtc->ops->param_get)
+> > > -				err = rtc->ops->param_get(rtc->dev.parent, &param);
+> > > +				err = rtc->ops->param_get(rtc_ops_dev(rtc), &param);
+> > >   			else
+> > >   				err = -EINVAL;
+> > >   		}
+> > <snip>
+> > 
+> > > +/**
+> > > + * rtc_ops_dev - Get the device pointer for RTC ops callbacks
+> > > + * @rtc: RTC device
+> > > + *
+> > > + * Returns &rtc->dev if RTC_OPS_USE_RTC_DEV flag is set,
+> > > + * otherwise returns rtc->dev.parent.
+> > > + */
+> > > +static inline struct device *rtc_ops_dev(struct rtc_device *rtc)
+> > > +{
+> > > +	if (test_bit(RTC_OPS_USE_RTC_DEV, &rtc->flags))
+> > > +		return &rtc->dev;
+> > > +	return rtc->dev.parent;
+> > > +}
+> > I understand that the idea is to gradually convert all drivers to use the RTC
+> > device, rather than it's parent device in RTC device callbacks.
+> > 
+> > My main concern is that once that has been achieved it's still not what we want
+> > to have eventually, i.e. RTC device callbacks should ideally take a struct
+> > rtc_device as argument and not the embedded base struct device.
+> > 
+> > I.e. we'd kick off a conversion process that won't reach the actual desired
+> > state.
+> Hi Danilo,
+> 
+> This is indeed an intermediate step.
+> 
+> Full cleanup is in progress, but it's large and untested. I'm working on a
+> complete cleanup involving ~190+ files across arch/, drivers/rtc/, and
+> drivers/virtio/. Most changes are straightforward interface replacements,
+> but some drivers need additional modifications. Given the scale, I haven't
+> fully tested everything and can't guarantee correctness yet.
+> 
+> The intermediate step enables gradual migration, allowing us to:
+> - Clean up and test each rtc driver incrementally
+> - Ensure correctness through gradual changes
+> - Avoid breaking existing functionality
+> 
+> Once all cleanup is complete and tested, changing all rtc_class_ops
+> callbacks to use struct rtc_device * will be much simpler and safer.
+> 
+> Currently there seem to be only these two approaches. I'm still waiting
+> for Alexandre's suggestion on how to proceed specifically, but haven't
+> received a response yet.
 
-On Thu, 2026-02-05 at 21:02 +0530, Kaustabh Chakraborty wrote:
-> On 2026-02-04 15:23 +00:00, Andr=C3=A9 Draszik wrote:
-> > On Mon, 2026-01-26 at 00:37 +0530, Kaustabh Chakraborty wrote:
-> > > +static const struct regmap_config s2mu005_regmap_config =3D {
-> > > +	.reg_bits =3D 8,
-> > > +	.val_bits =3D 8,
-> > > +};
-> >=20
-> > No cache? And what is the .max_register value?
-> >=20
->=20
-> This was in the previous revision, but I ended up removing it because
-> (at least I thought at that time) interfered with interrupts firing in
-> some way. The actual issue was unrelated, so I will add it back.
->=20
-> However, there is also another thing I see in logs:
->=20
-> sec-pmic-i2c 2-003d: using zero-initialized flat cache, this may cause
-> unexpected behavior
->=20
-> This is due to REGCACHE_FLAT, I am not sure if I should just ignore
-> this.
+I'm sorry, I still don't see the point of doing this. The driver will
+almost always need to set its driver data in the parent device because
+we need to be able to handle interrupts, suspend/resume or .remove(). So
+while intellectually, this would be more satisfying to have the
+callbacks take a struct rtc_device, functionally this doesn't have any
+purpose because we need to use the parent drvdata anyway.
 
-Sorry to be late to the party, but I'm somewhat responsible for that warnin=
-g, so
-allow me to chime in :-)
+Said differently, you should explain why a device driver must not call
+amba_set_drvdata() ?
+Out of 29 drivers, 18 are doing so.
 
-What you are might have been seeing is REGCACHE_FLAT giving you "cached" va=
-lues
-of 0x0, while the hardware actually has something else. This can cause omit=
-ted
-writes, existing (bootloader) config to overwritten, etc.
-
-As Andr=C3=A9 suggested, using .num_reg_defaults_raw is a possibility, but =
-then you
-have to remember that the register defaults are taken to be what the hardwa=
-re
-state is at that moment, including pre-probe changes. These defaults are us=
-ed to
-seed the cache (so far, so good), but this may break the contract of
-regmap_sync() if you ever want to use that after actually resetting the PMI=
-C.
-
-If you want to use the flat cache, I would suggest you use REGCACHE_FLAT_S,
-which will track what has already been read from/written to hardware. You w=
-ill
-also need to specifiy .max_register.
-
-I see the other regmap_config-s in this driver also use REGCACHE_FLAT, so y=
-ou
-may want to consider switching those over as well if these are also showing=
- the
-new warning.
-
-
-Best,
-Sander
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
