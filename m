@@ -1,156 +1,135 @@
-Return-Path: <linux-rtc+bounces-5994-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5995-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id W1QgN+eUmWnzVAMAu9opvQ
-	(envelope-from <linux-rtc+bounces-5994-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 12:20:07 +0100
+	id 4DidAbuymWn3WAMAu9opvQ
+	(envelope-from <linux-rtc+bounces-5995-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 14:27:23 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3740116CC00
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 12:20:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D95E16CE89
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 14:27:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 01A7D300D918
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 11:20:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EE8DB3013795
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 13:27:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8062034F478;
-	Sat, 21 Feb 2026 11:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0F91B4244;
+	Sat, 21 Feb 2026 13:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3X9ezXI"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="k9ahXrda"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF5B2F747A
-	for <linux-rtc@vger.kernel.org>; Sat, 21 Feb 2026 11:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733D317A2FA;
+	Sat, 21 Feb 2026 13:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771672799; cv=none; b=HlEaUS7OGS9FJDjlLTXx94ueVIU41uy0YgZMM5S6UiQo8+dboqMORNfGtcJ9ZnarJQjxivN7eUNzuOIoTXkJ5AuaYkpOfI/5NWD7Xs056WJQ+E1PCHXdBhD8lwZh1IewElJZrg2KfBUFMy+olNKCWv+rYtovrWNMVb8orOtEB60=
+	t=1771680440; cv=none; b=PmdQPXHXDVPhoKx6PpVCwJQpDuVb8iGuRxeHraIJowbdpAAoPZ6eQpquuLMcrUptJWEU42j5FFePusOXmVGupgwr9ESFNmdOVk6345CrMgZkuZ0CNH2TBOLmMUp716kPwi2ena0mDFuoP2ncFqyfQck2AVi9bJv8eRYwKm01yv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771672799; c=relaxed/simple;
-	bh=6muKgQ8aEVIrHd4tRfSWiRy6tgoiQ0Swt7PxdEI0YDg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hriEzpDlup4/F1E+nueMheYgw7R1+xch6XtYi4wyzU5IyHXru1OtjvVKBW4blkKF4BRIF7uw+EuvAes99P6MyWl2rbv6/82QAiYwdEmDL4aBld5enqzRJIbyS5ELU4KhGcJOslqnBWp54f7+O0oXGSr0CCTDnKeix4D12hoUUhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3X9ezXI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D671BC2BC87
-	for <linux-rtc@vger.kernel.org>; Sat, 21 Feb 2026 11:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771672798;
-	bh=6muKgQ8aEVIrHd4tRfSWiRy6tgoiQ0Swt7PxdEI0YDg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=A3X9ezXI6Z6b/r3cK4QvXROX0FaAlsy8sm47GzF0SWRJ7Za31CU8ly6HfAjeICHqV
-	 D3h6LJd0TUaZ3hol2fmno27uTgvZjclrSOrKC0JICDcn0AAU2xTJQoUkw60RKhsrUn
-	 QInUSGjL6fJj1aF4S6MxDYe4DsweWbDMhGS+Q6vWCUNJ1VQnmHN2AFhOSw39QI1LzC
-	 q1FeN21XLc2/ixWuvY+hNSuPTDVcDhG0FNw6HxI8xJ1Lmv0nfGWgIBS+hhhcXYPnXB
-	 hmefyfixkmnGdTiosl8YNToAFpu9+yA33WS3K0GpiFHiG9FR3fwFHxtodnnZamEMKC
-	 TwBT9qQrzjf9Q==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-413acc82f38so1090301fac.0
-        for <linux-rtc@vger.kernel.org>; Sat, 21 Feb 2026 03:19:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVPX4YQAagh+aAtZoTyxs5whkjfqxBllh6rLezxbn/2dg4JiHmJdE+J5hrdX9Pfp5qomLfoK7+aZMA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm5e/gr1rPFizXj/lJbpmFYRPMjqvadMkAA36XiouGqUIhNmtn
-	rOEQfj5dHddaI/bCru0GlH1uNcWa1jXJ4FjM5+27pOg0Ah+QfS1EXSrmvNrS8LS5clKHg1mkeen
-	8w7OTW9mfrgf5mvbTE8GcKqxNlJZX9gg=
-X-Received: by 2002:a05:687c:408f:b0:3f5:74a6:b99f with SMTP id
- 586e51a60fabf-4157b0b6a84mr1785227fac.29.1771672797766; Sat, 21 Feb 2026
- 03:19:57 -0800 (PST)
+	s=arc-20240116; t=1771680440; c=relaxed/simple;
+	bh=+RLhKizSUU0RD82hH4IJ3BEYEuDBffSzSEqmHdM/tjI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iwuZS1K5JcG6izAHq7CHSSwxJQRVFPBNI5OCoOKy1ONlwfJnobnxehCcxHrdl0+EF4933Y575vBOfrrzyH0pYerypiaY9WUTyZ95AR5yd/NKNAQ24baBgfQeq0z/zICKK5SxDbCrfqsUD5YmRA/flDtn//WJETQ0XHCjiCJzCgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=k9ahXrda; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1771680430;
+	bh=+RLhKizSUU0RD82hH4IJ3BEYEuDBffSzSEqmHdM/tjI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k9ahXrdaR+dTDJ3SEmQ6t2D6DQDuE9fH2bWPRdwz5XAUa5/OICpXn+PeHCNLtUN7k
+	 nBdSLAgXpeJ9ZvtK4u6DLa2aSbgxtJUh+2Ac+h0s7PgPyoUo5y9fjsWJy1R0S5LciR
+	 in7sfp35zZLzcjHj7FXnhIZjmrExZKMzL5RinId4=
+Date: Sat, 21 Feb 2026 14:27:09 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Heiner Kallweit <hkall@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, driver-core@lists.linux.dev, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-rdma@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH RFC 10/10] kobject: make struct kobject member
+ default_groups a constant array
+Message-ID: <f18e8c2f-28b0-4905-87c2-a16dd54c53d1@t-8ch.de>
+References: <5d0951ec-42c9-453f-9966-ecca593c4153@kernel.org>
+ <04c85242-dc51-4ddf-9920-4dab57f2498f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260116162203.296844-1-sunke@kylinos.cn> <20260116162203.296844-2-sunke@kylinos.cn>
- <DFSN0O9RRVD6.1LCI38JKGO1R0@kernel.org> <77d373dc-c5f2-4dca-b0d2-b5cee6a21b3b@gmail.com>
- <20260220225341c5eeb835@mail.local> <d1c9e33b-e1f3-41c6-af5e-a85fe2b86d10@linux.dev>
- <20260221111619162a41a1@mail.local>
-In-Reply-To: <20260221111619162a41a1@mail.local>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 21 Feb 2026 12:19:46 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
-X-Gm-Features: AaiRm532RkVV7APDNxPiwoMpbGuwl1XMnPW-TD2JejrLflaFiynJVycwzEFC0k8
-Message-ID: <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops callbacks
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alvin Sun <alvin.sun@linux.dev>, Danilo Krummrich <dakr@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04c85242-dc51-4ddf-9920-4dab57f2498f@kernel.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5994-lists,linux-rtc=lfdr.de];
-	FREEMAIL_CC(0.00)[linux.dev,kernel.org,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
+	TAGGED_FROM(0.00)[bounces-5995-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	DKIM_TRACE(0.00)[weissschuh.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[i2c.rs:url,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3740116CC00
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,t-8ch.de:mid]
+X-Rspamd-Queue-Id: 4D95E16CE89
 X-Rspamd-Action: no action
 
-On Sat, Feb 21, 2026 at 12:16=E2=80=AFPM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 21/02/2026 17:31:09+0800, Alvin Sun wrote:
-> > As in platform.rs [1] and i2c.rs [2], set_drvdata is always called by
-> > the bus Adapter's probe_callback, not by the device driver.
-> >
-> > [1]:
-> > https://elixir.bootlin.com/linux/v6.19-rc5/source/rust/kernel/platform.=
-rs#L80
-> > [2]:
-> > https://elixir.bootlin.com/linux/v6.19-rc5/source/rust/kernel/i2c.rs#L1=
-60
-> >
-> > In Rust the Adapter already sets drvdata on the bus device in probe. If
-> > the driver also calls amba_set_drvdata() there, it overwrites that
-> > pointer; on remove/shutdown the framework then gets wrong data and can
-> > hit use-after-free or crashes. So only the framework must set drvdata
-> > on the bus device.
->
-> But this is wrong, how do you then handle the class device on
-> suspend/resume or on .remove?
->
-> >
-> > This applies only to the Rust implementation; in C, calling
-> > amba_set_drvdata() is fine. In the Rust design the bus device owns the
-> > bus device's drvdata and the class device owns the class device's
-> > drvdata, so the class driver must not set drvdata on the bus device.
-> >
-> > This is my understanding of the Rust device driver abstraction design.
-> > Danilo is the authority on this.
-> >
-> > Best regards,
-> > Ke Sun
-> >
-> > > Out of 29 drivers, 18 are doing so.
+Hello Heiner,
 
-+1
+On 2026-02-17 23:32:46+0100, Heiner Kallweit wrote:
+> Constify the default_groups array, allowing to assign constant arrays.
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-The vast majority of around 50 platform drivers I've inspected
-recently use platform_set_drvdata() or equivalent in probe.
+(The patch author/From header and Signed-off-by line do not match)
+
+> ---
+>  include/linux/kobject.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+> index c8219505a79..e45ee843931 100644
+> --- a/include/linux/kobject.h
+> +++ b/include/linux/kobject.h
+> @@ -116,7 +116,7 @@ char *kobject_get_path(const struct kobject *kobj, gfp_t flag);
+>  struct kobj_type {
+>  	void (*release)(struct kobject *kobj);
+>  	const struct sysfs_ops *sysfs_ops;
+> -	const struct attribute_group **default_groups;
+> +	const struct attribute_group *const *default_groups;
+
+Thanks for working on this!
+
+Personally I try to constify the attribute structures together with
+their corresponding callbacks. This ensures that no structure is
+constified which its callback then tries to modify.
+Currently there is no support for const arguments to the callbacks of
+'struct kobj_attribute' and 'struct device_attribute'. I am wondering
+if the changes to kobject and device groups should be kept out for now
+and be added together with the support for their const callback arguments.
+
+
+Thomas
+
+>  	const struct kobj_ns_type_operations *(*child_ns_type)(const struct kobject *kobj);
+>  	const void *(*namespace)(const struct kobject *kobj);
+>  	void (*get_ownership)(const struct kobject *kobj, kuid_t *uid, kgid_t *gid);
 
