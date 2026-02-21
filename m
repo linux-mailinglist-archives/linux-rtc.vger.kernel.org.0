@@ -1,71 +1,68 @@
-Return-Path: <linux-rtc+bounces-5997-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-5998-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IEkxM1TCmWlhWgMAu9opvQ
-	(envelope-from <linux-rtc+bounces-5997-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 15:33:56 +0100
+	id IECjATTemWmJXAMAu9opvQ
+	(envelope-from <linux-rtc+bounces-5998-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 17:32:52 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B78716D087
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 15:33:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F47016D459
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 17:32:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 45374300998C
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 14:33:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E5D3B302BE11
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Feb 2026 16:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CA51DF965;
-	Sat, 21 Feb 2026 14:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE8C31BC94;
+	Sat, 21 Feb 2026 16:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r6gwKZLV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KSu0NGqF"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B028D262BD;
-	Sat, 21 Feb 2026 14:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE06B21D3CD
+	for <linux-rtc@vger.kernel.org>; Sat, 21 Feb 2026 16:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771684433; cv=none; b=uo9Pn6NRSjvk3p3IUtabAGoCe6eROSE0W4KqLNiHy4NKoR8YjGxY2fO9Y8/L0yc20QS3BOISreaJ5Rp6u4E/lOMAx3lp6eCjcwGuEi5jhsLvoagv0OUsU9cC9mH+W0+J8yFFM3x42Q6wtjgIAjTk9iu6bpGwVRK9hytkPilC65Y=
+	t=1771691569; cv=none; b=DIqEB8ZpnrU4EEgecdOYx7s625w2dCS0ZpPl7ImHUtSwM5vRMaDCWN3qN5pi6bN1cRKo0H+llSfsla1+HjiME7Q3cJp+2ptP48L8UUiuwXQh8ePVBY6SFXeb3k/8rwePEidUPDa3NtQQylQqQzHp4Sw0sLHybqqRW6/1eJmvu+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771684433; c=relaxed/simple;
-	bh=XjVc8WYemFdIrSWOiPIohhWHiePuI0UIIDF7cj68pOI=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:To:From:Mime-Version:
-	 References:In-Reply-To; b=qJCaMOK9rWy8eaXmjgGAa+65n/ZfIuwQdiYEvibG6H1Kh9/CzfZ+dYfrNTt6m2249hBYxHdK5tnrEfr62CJpb23B6S1sC0PABRNG2gbAcay5zdvvhVFOZgd+L+XaUzlQgESfnSPZYpZjiR3df9rTTYUZqLdInqmsSDG+aiG28aE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r6gwKZLV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A80C4C4CEF7;
-	Sat, 21 Feb 2026 14:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771684433;
-	bh=XjVc8WYemFdIrSWOiPIohhWHiePuI0UIIDF7cj68pOI=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=r6gwKZLVAflZJ3PuTTea9qwjjWph1YstDpXWnqB93u8SNqCnf9oV3ACQFp+v61B7H
-	 xKcCQiNx7GM4E/ms8f4YgCeERa/7RIokIkXL/DA9G19tIHp+4qcOgk1Xs6Z9AXS48F
-	 CyiwkS4la5EtoNNa6hs6p70iF1S+QO7nVrQmf9V8LDqohOIDogYDS8jM6FnJycSQcP
-	 YY+RmBA4GyVnvyiJ2KnOm/qNByRGxP/AM8xjg2wDTssvVokLufaTB7OGZvHmcnyHH3
-	 aDD4fjwK7xEI/CFBTfXZTsD+ZgpVgs1xeTFzf88GphKglA7iIGBR6njXCNu8xRHEaX
-	 bR022rZKyIPXg==
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 21 Feb 2026 15:33:48 +0100
-Message-Id: <DGKPPQI0QE73.S8I1M5NCI2BV@kernel.org>
-Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops
- callbacks
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
- "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, <linux-rtc@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>, "Alvin Sun" <alvin.sun@linux.dev>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1771691569; c=relaxed/simple;
+	bh=T++o4PIPrW3bDyoXB1Mtj2wlyorw9tXJy62Q+71FGEk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PRVbviWd2kAe4ClybieVEKckmq47eZTyKPncuzPh+fLzg23ku7iIirqBhk1XLxLL0FThK1azB4Rq2QcLN2JpM8uUWbBO0u5Gnr2Bry3iSPad+3gvmHPxykfMm4WUQCbA2uqo3FNhqPUzn5O3pFrrsij3qopuU9LTrEBzrYTwyq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KSu0NGqF; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <70d2f54c-a107-40b4-b90e-f4705cb8699c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771691555;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T++o4PIPrW3bDyoXB1Mtj2wlyorw9tXJy62Q+71FGEk=;
+	b=KSu0NGqFbCqbrcMXuENZwNVDFUOHh1k2R5OmKbWkKrncbHUa5+F7el8miNr5qfSAdS9lzw
+	KnBcjRG9zbwlTTDtvuLMEZhbXhBFtdj9rKHUnxgRUadDMDTC3Qn9egeVsYUUvfk+rcyq2O
+	0zBbZa3vULNMeEREu0kJORkfcoaG2SM=
+Date: Sun, 22 Feb 2026 00:32:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops
+ callbacks
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ linux-rtc@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
 References: <20260116162203.296844-1-sunke@kylinos.cn>
  <20260116162203.296844-2-sunke@kylinos.cn>
  <DFSN0O9RRVD6.1LCI38JKGO1R0@kernel.org>
@@ -73,146 +70,82 @@ References: <20260116162203.296844-1-sunke@kylinos.cn>
  <20260220225341c5eeb835@mail.local>
  <d1c9e33b-e1f3-41c6-af5e-a85fe2b86d10@linux.dev>
  <20260221111619162a41a1@mail.local>
- <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Alvin Sun <alvin.sun@linux.dev>
+In-Reply-To: <20260221111619162a41a1@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-5997-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-5998-lists,linux-rtc=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_CC(0.00)[kernel.org,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
 	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4B78716D087
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alvin.sun@linux.dev,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,i2c.rs:url,gitlab.freedesktop.org:url]
+X-Rspamd-Queue-Id: 5F47016D459
 X-Rspamd-Action: no action
 
-On Sat Feb 21, 2026 at 12:19 PM CET, Rafael J. Wysocki wrote:
-> On Sat, Feb 21, 2026 at 12:16=E2=80=AFPM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
->> > > Out of 29 drivers, 18 are doing so.
+
+On 2/21/26 19:16, Alexandre Belloni wrote:
+> On 21/02/2026 17:31:09+0800, Alvin Sun wrote:
+>> As in platform.rs [1] and i2c.rs [2], set_drvdata is always called by
+>> the bus Adapter's probe_callback, not by the device driver.
+>>
+>> [1]:
+>> https://elixir.bootlin.com/linux/v6.19-rc5/source/rust/kernel/platform.rs#L80
+>> [2]:
+>> https://elixir.bootlin.com/linux/v6.19-rc5/source/rust/kernel/i2c.rs#L160
+>>
+>> In Rust the Adapter already sets drvdata on the bus device in probe. If
+>> the driver also calls amba_set_drvdata() there, it overwrites that
+>> pointer; on remove/shutdown the framework then gets wrong data and can
+>> hit use-after-free or crashes. So only the framework must set drvdata
+>> on the bus device.
+> But this is wrong, how do you then handle the class device on
+> suspend/resume or on .remove?
+
+There is a patch adding runtime PM for Tyr (platform device driver):
+
+https://gitlab.freedesktop.org/panfrost/linux/-/merge_requests/60/diffs#dbdd2c5024317f2c80128c91a823e224b3a41550_240_256
+
+If you are interested in adding Rust support for RTC, We can do some
+research on top of it for RTC Rust drivers.
+
 >
-> The vast majority of around 50 platform drivers I've inspected
-> recently use platform_set_drvdata() or equivalent in probe.
-
-This thread seems to contain quite a bit of confusion and misunderstandings=
- --
-let me try to clarify.
-
-  (1) How Rust handles bus device private data.
-
-  In Rust the probe() function of a bus implementation (platform, PCI, etc.=
-)
-  returns an initializer (impl PinInit<T, Error>) for the driver's device
-  private data.
-
-  The bus implementation takes this initializer and passes it (together wit=
-h the
-  underlying struct device) to the driver-core. The driver-core allocates t=
-he
-  required memory, initializes the memory with the given initializer and st=
-ores
-  a pointer to the corresponding object with dev_set_drvdata().
-
-  So, technically, in Rust all platform drivers call platform_set_drvdata()=
-.
-
-  (Note that this is also true when the driver's device private data type i=
-s
-  empty (i.e. it has no fields). In this case it could still have a destruc=
-tor
-  that must be called when the device private data structure is destroyed. =
-Of
-  course there is no real memory allocation when the struct's size is zero.=
-)
-
-  The driver's device private data can only be accessed when the bus device=
- is
-  bound to the driver, i.e. the driver can only access it with a &Device<Bo=
-und>;
-  it (the driver's device private data) is automatically freed by the
-  driver-core when remove() and all devres callbacks have been completed.
-
-  I.e. the rules are - of course - the same as on the C side, but they are
-  enforced by the type system and the driver-core code.
-
-  (2) Bus device private data vs. class device private data.
-
-  The change to pass a struct rtc_device in class device callbacks of RTC,
-  rather than the base struct device of the corresponding bus device (e.g. =
-AMBA,
-  platform, etc.) should not aim at storing all data in rtc->dev.private_da=
-ta
-  that was previously stored in rtc->dev.parent->private_data.
-
-  Instead, it gives drivers the option to differentiate in terms of ownersh=
-ip
-  and lifetime.
-
-  While the bus device private data has a very defined lifetime from probe(=
-)
-  until the device is unbound from the driver, class device private data mi=
-ght
-  live shorter than this, or might even out-live driver unbind in some case=
-s. It
-  really depends on the lifetime of the class device itself, which is not
-  generally defined.
-
-  Now, from a C side point of view this may not look like a big deal, as it
-  (unfortunately) is not that uncommon that struct fields are just initiali=
-zed
-  and destroyed whenever needed and the code just takes it into account.
-
-  But at the same time, this is what leads to a lot of lifetime problems an=
-d
-  memory bugs and it is one of those things that Rust aims at avoiding by b=
-eing
-  very strict about initialization, ownership and lifetimes.
-
-  However, I do also recognize that drivers creating an RTC device are typi=
-cally
-  very simple and in practice I would not be surprised if it turns out that=
- it
-  happens that drivers keep the struct rtc_device alive from probe() until =
-the
-  bus device is unbound from the driver, i.e. lifetimes just end up being a=
-lmost
-  the same. But I don't know if that's always the case.
-
-  Regardless of that, I think it would be good to keep driver authors findi=
-ng a
-  common pattern, where class device callbacks carry the corresponding clas=
-s
-  device struct (instead of the parent base struct device).
-
-  Especially on the Rust side we now have the chance to make the experience=
- of
-  writing drivers as consistent as possible, which should help (new) driver
-  authors a lot in terms of learning the driver lifetime patterns.
-
-I hope this helps.
-
-- Danilo
+>> This applies only to the Rust implementation; in C, calling
+>> amba_set_drvdata() is fine. In the Rust design the bus device owns the
+>> bus device's drvdata and the class device owns the class device's
+>> drvdata, so the class driver must not set drvdata on the bus device.
+>>
+>> This is my understanding of the Rust device driver abstraction design.
+>> Danilo is the authority on this.
+>>
+>> Best regards,
+>> Ke Sun
+>>
+>>> Out of 29 drivers, 18 are doing so.
+>>>
 
