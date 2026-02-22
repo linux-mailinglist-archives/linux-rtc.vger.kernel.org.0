@@ -1,232 +1,190 @@
-Return-Path: <linux-rtc+bounces-6000-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6001-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id rom+NnhImmldaQMAu9opvQ
-	(envelope-from <linux-rtc+bounces-6000-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 22 Feb 2026 01:06:16 +0100
+	id mM/QMPNcmmnxawMAu9opvQ
+	(envelope-from <linux-rtc+bounces-6001-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 22 Feb 2026 02:33:39 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 358C716E4CA
-	for <lists+linux-rtc@lfdr.de>; Sun, 22 Feb 2026 01:06:15 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D75E916E62D
+	for <lists+linux-rtc@lfdr.de>; Sun, 22 Feb 2026 02:33:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CDE97300E3FD
-	for <lists+linux-rtc@lfdr.de>; Sun, 22 Feb 2026 00:06:14 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2CAC23015143
+	for <lists+linux-rtc@lfdr.de>; Sun, 22 Feb 2026 01:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E3A3EBF33;
-	Sun, 22 Feb 2026 00:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A42C286A7;
+	Sun, 22 Feb 2026 01:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BauXhT9Q"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NARpWJgm"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F3B3EBF1F
-	for <linux-rtc@vger.kernel.org>; Sun, 22 Feb 2026 00:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB072770A;
+	Sun, 22 Feb 2026 01:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771718774; cv=none; b=jyMucG+gWR53sr2Ra4u/UMB8lXP67nq5aMEd3Q8vk4Moc3XcPDS+M19R5fqnmgi8giex6b8y3WhLE/h+aORMLAjjpdV61AoGzTWVyALFV2f16afE7MitlvkSVjLw2giUchOIx+rcgKYA+kKmWz8WtyM0gjuKKP0hjSHdgk7n4TU=
+	t=1771724014; cv=none; b=HEvmmqGomjmFKrVkZ7gIDkSVMoRNHszGv7OCM97U2oC8BHAvbe+Ynvs5deST3BVhnVxWLLNmDGRbv4Q3DAag0Gsa9M3ajHwYTLf8NyWZJugL7ZCINycLdvsIhxOXtb/Nd2l9hiueup2/YIfvfiKFuPcaVuJ6Q921eANC7Rb8zXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771718774; c=relaxed/simple;
-	bh=Ah8lo4WZpBkjeZopq0IefC6nsaLNmX3a+jrUT83i3JQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fhxy/NgwysDnwEBWxs82dwaLm/eO+dpoNFnTpx5UwJIqtS3jRfX6jRD891FaP9XkKFUlMQrX2kpgOi/1LEfni7RSC1/TKlYdxC5cvurntP0wkCljDAT13i1tDjSOpHK+HSyDXxucIg2jSaDJhA9YTXUnvcB/96CZkS3snB8PLYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BauXhT9Q; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1771724014; c=relaxed/simple;
+	bh=PgMsUsk+Ewggq9glQtE3QATk9ugpYDGiFu9td9lbBDk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QPw+FwxG7sIQqND+OIHpb64NK/c6AmysCiNjGrOnLaGC28HveJpFDpBSp5ToRAZsQuvwXAZEqAq1oEhkiiBEjru/2Xkobrl6VJ98LDhGdGa/ObWjb39pf7iuNhbhmJu/FB9AhAdiU/tK1KHSUe4LML9VyLz+Om2ID9/Tks2pQqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NARpWJgm; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 579404E40C17;
-	Sun, 22 Feb 2026 00:06:03 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 5389A1A10C9;
+	Sun, 22 Feb 2026 01:33:29 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 22CA25FB54;
-	Sun, 22 Feb 2026 00:06:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B02EB103684CE;
-	Sun, 22 Feb 2026 01:05:58 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id F23F45FB83;
+	Sun, 22 Feb 2026 01:33:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 91414103686F8;
+	Sun, 22 Feb 2026 02:33:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1771718762; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=W22sLyGdJ4g2zxHmS6kFaDnO3wQ9l1d2YFN5dAquDGk=;
-	b=BauXhT9QmML3Wq1Yyyyc3k2XFP+BrMwuJqOEliKoNNYr/E0nQOjezEdRlBN8FIazUbrtgo
-	1fBHFIvd45hWs7n6uRv/eBOxaqy5+U4yaqge6uIK0Ld1jpaWHhLfLDgRIxVlqpPo3f7LH6
-	1MgA6P4qB8lehHmAKCE3W3IrfeXAQK14OSJhwlejI37N6SG6GJI5v6THwTr9cH7cwT0mTp
-	5goQPjYP1kyLPIPRqx9S8SWKDsnq0aJmKZCZPZd1xBmBV7Ihp686CIgbOwZbh8VYwYGsTC
-	sX1sVV2EmbkHPxJBX3CXue0jpGX+a8ld0BInehbl4J9VjN671yjbHLEuXAnpcg==
-Date: Sun, 22 Feb 2026 01:05:56 +0100
+	t=1771724008; h=from:subject:date:message-id:to:cc:mime-version:content-type;
+	bh=ffySmP+0YskEb42LKsPYlHCfH9DSQO6FOL0ioZFF0Bs=;
+	b=NARpWJgmIvsDW2WB2TzV2QkojRZxpzMdQZZBSPh1oF2gkVx3CpZFzIXUuYUyHFutk3u/LT
+	ObZqOKeqoD17tUenjTGS6JgLqREv6ORSo/8PZk150YXaRVD82j28IfEGMVoEQ3AXuS0BKp
+	ySt/mzRvqnaiZqufQ6zJeeOxt5wNXr/oZyGzGYsfHToE8X+25DuTroJgOQvNG+n5n+GHiO
+	iEPzItFPZ3VYYffu6q+xlnk5gxTgDa/O0Qv+3PUu8/qY4GBpLBKn3jvHzC2hT0tCt7URqO
+	CR+86/k3nDnQbuZ/sm+z3p/78HP96ybukSX+hgc4M/iusJKQqfLRSAy47IJ3/w==
+Date: Sun, 22 Feb 2026 02:33:26 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linux-rtc@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops
- callbacks
-Message-ID: <20260222000556ea1938c0@mail.local>
-References: <20260116162203.296844-1-sunke@kylinos.cn>
- <20260116162203.296844-2-sunke@kylinos.cn>
- <DFSN0O9RRVD6.1LCI38JKGO1R0@kernel.org>
- <77d373dc-c5f2-4dca-b0d2-b5cee6a21b3b@gmail.com>
- <20260220225341c5eeb835@mail.local>
- <d1c9e33b-e1f3-41c6-af5e-a85fe2b86d10@linux.dev>
- <20260221111619162a41a1@mail.local>
- <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
- <DGKPPQI0QE73.S8I1M5NCI2BV@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 7.0
+Message-ID: <202602220133264688bffa@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DGKPPQI0QE73.S8I1M5NCI2BV@kernel.org>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6000-lists,linux-rtc=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux.dev,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6001-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	RCPT_COUNT_THREE(0.00)[3];
 	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:url,bootlin.com:email]
-X-Rspamd-Queue-Id: 358C716E4CA
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.local:mid]
+X-Rspamd-Queue-Id: D75E916E62D
 X-Rspamd-Action: no action
 
-On 21/02/2026 15:33:48+0100, Danilo Krummrich wrote:
-> On Sat Feb 21, 2026 at 12:19 PM CET, Rafael J. Wysocki wrote:
-> > On Sat, Feb 21, 2026 at 12:16 PM Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> >> > > Out of 29 drivers, 18 are doing so.
-> >
-> > The vast majority of around 50 platform drivers I've inspected
-> > recently use platform_set_drvdata() or equivalent in probe.
-> 
-> This thread seems to contain quite a bit of confusion and misunderstandings --
-> let me try to clarify.
-> 
->   (1) How Rust handles bus device private data.
-> 
->   In Rust the probe() function of a bus implementation (platform, PCI, etc.)
->   returns an initializer (impl PinInit<T, Error>) for the driver's device
->   private data.
-> 
->   The bus implementation takes this initializer and passes it (together with the
->   underlying struct device) to the driver-core. The driver-core allocates the
->   required memory, initializes the memory with the given initializer and stores
->   a pointer to the corresponding object with dev_set_drvdata().
-> 
->   So, technically, in Rust all platform drivers call platform_set_drvdata().
-> 
->   (Note that this is also true when the driver's device private data type is
->   empty (i.e. it has no fields). In this case it could still have a destructor
->   that must be called when the device private data structure is destroyed. Of
->   course there is no real memory allocation when the struct's size is zero.)
-> 
->   The driver's device private data can only be accessed when the bus device is
->   bound to the driver, i.e. the driver can only access it with a &Device<Bound>;
->   it (the driver's device private data) is automatically freed by the
->   driver-core when remove() and all devres callbacks have been completed.
-> 
->   I.e. the rules are - of course - the same as on the C side, but they are
->   enforced by the type system and the driver-core code.
-> 
+Hello Linus,
 
-This still doesn't explain how you get the class private data that you
-need when you are in a driver callback that is called from the bus (e.g.
-suspend/resume) from what you explain, the driver doesn't have any
-chance to pass it. The whole goal of a device driver is to be the glue
-between a class device and a bus device as essentially this is the exact
-physical device, just represented differently.
+Here is the RTC subsystem pull request for 7.0. There are a few fixes
+and improvement this cycle.
 
-An i2c RTC is not either an i2c device or an RTC, it is a single device
-and we need to be able to tell the framework when something happens on
-the bus or we need to be able to talk on the bus when we want to do
-something with the device.
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
 
->   (2) Bus device private data vs. class device private data.
-> 
->   The change to pass a struct rtc_device in class device callbacks of RTC,
->   rather than the base struct device of the corresponding bus device (e.g. AMBA,
->   platform, etc.) should not aim at storing all data in rtc->dev.private_data
->   that was previously stored in rtc->dev.parent->private_data.
-> 
+are available in the Git repository at:
 
-But what you explain here is that the drive is forbidden to use
-rtc->dev.parent->private_data at all because the rust core is already
-using it. What I'm saying is that it won't work because more than half
-of the drivers currently need it.
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-7.0
 
-I get that you are trying to avoid most of the issues by using devres
-but I'm pretty sure there are cases where this doesn't work.
+for you to fetch changes up to 969c3cca0f3b88682cd833cee4cf01b0915629a3:
 
->   Instead, it gives drivers the option to differentiate in terms of ownership
->   and lifetime.
-> 
->   While the bus device private data has a very defined lifetime from probe()
->   until the device is unbound from the driver, class device private data might
->   live shorter than this, or might even out-live driver unbind in some cases. It
->   really depends on the lifetime of the class device itself, which is not
->   generally defined.
-> 
->   Now, from a C side point of view this may not look like a big deal, as it
->   (unfortunately) is not that uncommon that struct fields are just initialized
->   and destroyed whenever needed and the code just takes it into account.
-> 
->   But at the same time, this is what leads to a lot of lifetime problems and
->   memory bugs and it is one of those things that Rust aims at avoiding by being
->   very strict about initialization, ownership and lifetimes.
-> 
->   However, I do also recognize that drivers creating an RTC device are typically
->   very simple and in practice I would not be surprised if it turns out that it
->   happens that drivers keep the struct rtc_device alive from probe() until the
->   bus device is unbound from the driver, i.e. lifetimes just end up being almost
->   the same. But I don't know if that's always the case.
-> 
->   Regardless of that, I think it would be good to keep driver authors finding a
->   common pattern, where class device callbacks carry the corresponding class
->   device struct (instead of the parent base struct device).
-> 
->   Especially on the Rust side we now have the chance to make the experience of
->   writing drivers as consistent as possible, which should help (new) driver
->   authors a lot in terms of learning the driver lifetime patterns.
-> 
+  rtc: ds1390: fix number of bytes read from RTC (2026-02-20 23:12:25 +0100)
 
-The whole point of the RTC is to outlive the system but as Linux can't do
-anything with the RTC unless it has a bus device to talk to, the class
-device and the bus device have the exact same lifetime and we do handle
-device appearing and disappearing from the bus. You may think RTC
-drivers afe simple but there are plenty of lifetime issues that you will
-never get with any other devices because they simply die with the
-system.
+----------------------------------------------------------------
+RTC for 7.0
 
+Drivers:
+ - loongson: Loongson-2K0300 support
+ - s35390a: nvmem support
+ - zynqmp: rework calibration
+
+----------------------------------------------------------------
+Andreas Gabriel-Platschek (1):
+      rtc: ds1390: fix number of bytes read from RTC
+
+Anthony Pighin (Nokia) (1):
+      rtc: interface: Alarm race handling should not discard preceding error
+
+Binbin Zhou (3):
+      dt-bindings: rtc: loongson: Correct Loongson-1C interrupts property
+      dt-bindings: rtc: loongson: Document Loongson-2K0300 compatible
+      rtc: loongson: Add Loongson-2K0300 support
+
+Jinjie Ruan (1):
+      rtc: class: Remove duplicate check for alarm
+
+John Keeping (1):
+      rtc: pcf8563: use correct of_node for output clock
+
+Lorenz Brun (1):
+      rtc: s35390a: implement nvmem support
+
+Ovidiu Panait (1):
+      dt-bindings: rtc: renesas,rz-rtca3: Add RZ/V2N support
+
+Peter Robinson (1):
+      rtc: nvvrs: Add ARCH_TEGRA to the NV VRS RTC driver
+
+Randy Dunlap (1):
+      rtc: max31335: use correct CONFIG symbol in IS_REACHABLE()
+
+Rouven Czerwinski (1):
+      rtc: optee: simplify OP-TEE context match
+
+Sebastian Andrzej Siewior (1):
+      rtc: amlogic-a4: Remove IRQF_ONESHOT
+
+Svyatoslav Ryhel (1):
+      dt-bindings: rtc: cpcap: convert to schema
+
+Tomas Melin (5):
+      rtc: zynqmp: correct frequency value
+      rtc: zynqmp: check calibration max value
+      rtc: zynqmp: rework read_offset
+      rtc: zynqmp: rework set_offset
+      rtc: zynqmp: use dynamic max and min offset ranges
+
+ .../devicetree/bindings/rtc/cpcap-rtc.txt          | 18 ------
+ .../devicetree/bindings/rtc/loongson,rtc.yaml      | 13 ++++
+ .../bindings/rtc/motorola,cpcap-rtc.yaml           | 32 +++++++++
+ .../devicetree/bindings/rtc/renesas,rz-rtca3.yaml  |  5 +-
+ drivers/rtc/Kconfig                                |  1 +
+ drivers/rtc/class.c                                |  2 +-
+ drivers/rtc/interface.c                            |  2 +-
+ drivers/rtc/rtc-amlogic-a4.c                       |  2 +-
+ drivers/rtc/rtc-ds1390.c                           |  2 +-
+ drivers/rtc/rtc-loongson.c                         | 71 +++++++++++++-------
+ drivers/rtc/rtc-max31335.c                         |  6 +-
+ drivers/rtc/rtc-optee.c                            |  5 +-
+ drivers/rtc/rtc-pcf8563.c                          |  2 +-
+ drivers/rtc/rtc-s35390a.c                          | 32 +++++++++
+ drivers/rtc/rtc-zynqmp.c                           | 75 ++++++++++++----------
+ 15 files changed, 179 insertions(+), 89 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/cpcap-rtc.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/motorola,cpcap-rtc.yaml
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
