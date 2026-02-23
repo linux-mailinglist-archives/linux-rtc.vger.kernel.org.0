@@ -1,307 +1,228 @@
-Return-Path: <linux-rtc+bounces-6023-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6032-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UJQ6CXJznGmcGAQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6023-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 16:34:10 +0100
+	id QCh4C59+nGm6IQQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6032-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 17:21:51 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD03178C67
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 16:34:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A2CA179A31
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 17:21:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 437FD302CC30
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 15:33:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5580F30ACF1F
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 16:17:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6932EA16A;
-	Mon, 23 Feb 2026 15:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3704430F532;
+	Mon, 23 Feb 2026 16:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oB29jXXI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpUNSPJm"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1795927FB18;
-	Mon, 23 Feb 2026 15:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A3930EF80;
+	Mon, 23 Feb 2026 16:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771860826; cv=none; b=GAzG54lIx5Wk5/TkxaDBPvsh24h9I93r1UsjqejL9Z8bstZGewFl96YMOSgm9l7f9x+uRjYibIyAVZ8g6FPgs48SlhfIb1QAtusP8uLR/68HiPl65HlOTBwalHW43aFawJmmkBIJvuN9wDaKJ3WvQt3PueotHpwqd/Kw4RnJmKY=
+	t=1771863433; cv=none; b=qMnzW5lmrOVwNh6ahO0Nps7Imm1JRF5D7IgXfi8bFtlx2+C8i2lNm0hRnnUk5uKkJA+xW5unaIGCmWYyMN8cLcDskjVvcbeQMhYyEkf1uIop/5KkS5czVYFStmb/6aUP7M4cA3dLyHRzxeBRkGKFVCkz6DP/RR4ryCOwn3Vx2rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771860826; c=relaxed/simple;
-	bh=VzZrU/dFnGsRih3TvDfo18RrYRZGPj+QUNCUV0TW0y4=;
+	s=arc-20240116; t=1771863433; c=relaxed/simple;
+	bh=XK+PXadn+TlLWZTmix1ykoVvNzE32bv+ynARqf+1YAo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rTmDzdCZDRD+w9ttv2wDyqiIxjk1NIk5YQJrY5QK+SpK2PMFjVnbosxq6SfWO9hYpJ4TFZaTp6QXV27Qu0T7RWyrPAqi3uIjxCKqpunQd2p+QZjMFFG3mezFnZnX30yEsXGP9QoKenLwiR7qmXq3eJnKeYOCRGtFW4wLmStl3BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oB29jXXI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A615EC116C6;
-	Mon, 23 Feb 2026 15:33:44 +0000 (UTC)
+	 MIME-Version; b=oh/5vC/AyvvL9t4G+zjDo5e2hiwzurtv2qYLweG/21vcmBk+nY7FINs8aZJN1/9/aEKqlN+ZtRFC+i/N4TOPZIKWiLnDzxULV3XogeumrsqXhsTwx3XQul0R+k1lzMixQOwj4FvPNrtzngMl4IiFTuq1pNKATmvTmy8w/myAMlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpUNSPJm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA44C19423;
+	Mon, 23 Feb 2026 16:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771860826;
-	bh=VzZrU/dFnGsRih3TvDfo18RrYRZGPj+QUNCUV0TW0y4=;
+	s=k20201202; t=1771863432;
+	bh=XK+PXadn+TlLWZTmix1ykoVvNzE32bv+ynARqf+1YAo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oB29jXXI85Qi8bkSIQxI6BfOOSwmVFQHsjcVAOm2fMgA6WmMHrH1tyW7ALPSBHqzq
-	 SkOwXKVYmFVVGWd0QSslhb0GDColqLWPvPECCbjqrZlqt/2CyvUWR7s0E1hDm/g0XS
-	 MmJroJPf6u1UJgnU+2q8idDVBu4i157JWHWo88VUYOIsqAEzV6ICGG63X3j/zBEKX+
-	 yXiC9YgQVsOssJ1dnZv+BifwFySPAZ1QOrMDzHtswCmHRy5EMW58jRhJ7jEc7uYKqk
-	 Cf0wS0fa9eYpYEmC8+rsNCXLcgqYy6yuYv2jJV7bsImWAWUlMGv1ekMj6IcLQdFHlD
-	 D/ziDC1Ap+7LA==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, x86 Maintainers <x86@kernel.org>,
- linux-rtc@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject:
- [PATCH v1 8/8] ACPI: TAD/x86: cmos_rtc: Consolidate address space handler
- setup
-Date: Mon, 23 Feb 2026 16:33:27 +0100
-Message-ID: <23028644.EfDdHjke4D@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <5983325.DvuYhMxLoT@rafael.j.wysocki>
-References: <5983325.DvuYhMxLoT@rafael.j.wysocki>
+	b=hpUNSPJmNO7oPx/1iv/Q7WtE3cARfWvR0y2ySUTfgf5bdL2nHfEk+dK/sDhplawEN
+	 J0dCp5+lFXmvytXDBKY4QCSY7Tcd0ZIXIkj8o4JlU0DDJnc97Iejvoe0gn+w8BUeGV
+	 R3C3oOmoj2/rDG3w8G8FypdJa13OWTpyoro/uoTyhNSPBqFrJhquzXNwOU7md11KYk
+	 w4mk0U7uWEI8ph2hqKIMOsW72qsjjpgr0jaFbvMgmkBU7MRQyWGO+AblsbsA9e3jkH
+	 a3BO7HYxCm9D/duUF5PYygBqtHCYnjP208JLJYxKpT1J7buMio5Ye267xQxGwj/WbG
+	 MganSQkzHrk8g==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Tomas Melin <tomas.melin@vaisala.com>,
+	Harini T <harini.t@amd.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.19-6.1] rtc: zynqmp: correct frequency value
+Date: Mon, 23 Feb 2026 11:17:07 -0500
+Message-ID: <20260223161707.2714732-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260223161707.2714732-1-sashal@kernel.org>
+References: <20260223161707.2714732-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.19.3
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	CTE_CASE(0.50)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6032-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ORG_HEADER(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6023-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,rafael.j.wysocki:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8DD03178C67
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:email,msgid.link:url,amd.com:email]
+X-Rspamd-Queue-Id: 9A2CA179A31
 X-Rspamd-Action: no action
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+From: Tomas Melin <tomas.melin@vaisala.com>
 
-On x86, as a rule the CMOS RTC address space handler is set up by the
-CMOS RTC ACPI scan handler attach callback, acpi_cmos_rtc_attach(),
-but if the ACPI namespace does not contain a CMOS RTC device object,
-the CMOS RTC address space handler installation is taken care of the
-ACPI TAD (Timer and Alarm Device) driver.
+[ Upstream commit 2724fb4d429cbb724dcb6fa17953040918ebe3a2 ]
 
-This is not particularly straightforward and can be avoided by adding
-the ACPI TAD device ID to the CMOS RTC ACPI scan handler which will
-cause it to create a platform device for ACPI TAD after installing
-the CMOS RTC address space handler.  One related detail that needs to
-be taken care of, though, is that the creation of an ACPI TAD platform
-device should not cause cmos_rtc_platform_device_present to be set,
-since this may cause add_rtc_cmos() to suppress the creation of a
-fallback CMOS RTC platform device which may not be the right thing
-to do (for instance, due to the fact that the ACPI TAD driver is
-missing an RTC class device interface).
+Fix calibration value in case a clock reference is provided.
+The actual calibration value written into register is
+frequency - 1.
 
-After doing the above, the CMOS RTC address space handler installation
-and removal can be dropped from the ACPI TAD driver (which allows it to
-be simplified quite a bit), acpi_remove_cmos_rtc_space_handler() can
-be dropped and acpi_install_cmos_rtc_space_handler() can be made static.
-
-Update the code as per the above.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Harini T <harini.t@amd.com>
+Tested-by: Harini T <harini.t@amd.com>
+Signed-off-by: Tomas Melin <tomas.melin@vaisala.com>
+Acked-by: Michal Simek <michal.simek@amd.com>
+Link: https://patch.msgid.link/20260122-zynqmp-rtc-updates-v4-1-d4edb966b499@vaisala.com
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpi_tad.c     | 27 +++++----------------------
- drivers/acpi/x86/cmos_rtc.c | 26 +++++---------------------
- include/acpi/acpi_bus.h     |  9 ---------
- 3 files changed, 10 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
-index 6d870d97ada6..4f5089fc023d 100644
---- a/drivers/acpi/acpi_tad.c
-+++ b/drivers/acpi/acpi_tad.c
-@@ -563,7 +563,6 @@ static int acpi_tad_disable_timer(struct device *dev, u32 timer_id)
- static void acpi_tad_remove(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	acpi_handle handle = ACPI_HANDLE(dev);
- 	struct acpi_tad_driver_data *dd = dev_get_drvdata(dev);
- 
- 	device_init_wakeup(dev, false);
-@@ -587,7 +586,6 @@ static void acpi_tad_remove(struct platform_device *pdev)
- 
- 	pm_runtime_suspend(dev);
- 	pm_runtime_disable(dev);
--	acpi_remove_cmos_rtc_space_handler(handle);
- }
- 
- static int acpi_tad_probe(struct platform_device *pdev)
-@@ -599,11 +597,6 @@ static int acpi_tad_probe(struct platform_device *pdev)
- 	unsigned long long caps;
- 	int ret;
- 
--	ret = acpi_install_cmos_rtc_space_handler(handle);
--	if (ret < 0) {
--		dev_info(dev, "Unable to install space handler\n");
--		return -ENODEV;
--	}
- 	/*
- 	 * Initialization failure messages are mostly about firmware issues, so
- 	 * print them at the "info" level.
-@@ -611,27 +604,22 @@ static int acpi_tad_probe(struct platform_device *pdev)
- 	status = acpi_evaluate_integer(handle, "_GCP", NULL, &caps);
- 	if (ACPI_FAILURE(status)) {
- 		dev_info(dev, "Unable to get capabilities\n");
--		ret = -ENODEV;
--		goto remove_handler;
-+		return -ENODEV;
+LLM Generated explanations, may be completely bogus:
+
+## Analysis
+
+### What the commit fixes
+
+This commit fixes an off-by-one error in the RTC calibration value when
+the frequency is obtained from a clock reference (via `clk_get_rate()`).
+The ZynqMP RTC hardware register expects a calibration value of
+`frequency - 1`, but the code was writing the raw frequency value
+directly.
+
+**Evidence:**
+- `RTC_CALIB_DEF` = `0x7FFF` = 32767 = 32768 - 1 (the default is already
+  correctly decremented)
+- The `"calibration"` DT property presumably provides the register-ready
+  value (already freq-1)
+- But `clk_get_rate()` returns the raw clock rate (e.g., 32768), so it
+  needs the `-1` adjustment
+- Without the fix, the RTC counts one extra tick per second, causing
+  time drift
+
+### Code change assessment
+
+The fix adds an `else` branch with `xrtcdev->freq--` when the frequency
+comes from `clk_get_rate()` (i.e., when `xrtcdev->freq` is non-zero from
+the clock). This is a 2-line addition, surgically targeted.
+
+### Dependency analysis
+
+The clock name fix `2a388ff22d2cb` ("rtc: zynqmp: Fix optional clock
+name property") was already tagged `Cc: stable@kernel.org` and is
+targeted at v6.14-rc1. Before that fix, the driver was looking for clock
+name "rtc_clk" instead of "rtc" (matching the DT binding), so the clock-
+based frequency path was effectively dead code. With `2a388ff22d2cb`
+being backported to stable, the clock can now actually be found, making
+this off-by-one bug reachable.
+
+The underlying calibration infrastructure was introduced in
+`07dcc6f9c762` (v6.0-rc1), so stable trees v6.1.y and later have the
+affected code.
+
+### Stable criteria evaluation
+
+- **Fixes a real bug:** Yes - incorrect RTC calibration causes time
+  drift
+- **Obviously correct:** Yes - the register needs freq-1, this subtracts
+  1
+- **Small and contained:** Yes - 2 lines in one file
+- **No new features:** Correct - purely fixes calibration logic
+- **Tested:** Yes - has Tested-by and Reviewed-by from AMD engineer,
+  Acked-by from Michal Simek
+
+### Risk assessment
+
+**Very low risk.** The change only affects the path where a clock
+reference provides the frequency. It cannot break the default path
+(`RTC_CALIB_DEF`) or the DT `"calibration"` property path. The worst
+case if something were wrong would be an RTC running at the wrong rate -
+exactly the same as the current bug.
+
+### Verification
+
+- Read the full driver source: confirmed `RTC_CALIB_DEF` = 0x7FFF =
+  32767 (line 40)
+- Verified `clk_get_rate()` returns raw frequency, not register value,
+  per kernel API
+- `git show 85cab027d4e31`: confirmed previous calibration fix changed
+  default from 0x198233 to 0x7FFF (32768-1)
+- `git show 07dcc6f9c762`: confirmed this is the commit that introduced
+  clock-based calibration (v6.0-rc1)
+- `git describe --contains 2a388ff22d2cb`: confirmed clock name fix is
+  in v6.14-rc1, already tagged for stable
+- `git describe --contains 07dcc6f9c762`: confirmed calibration support
+  is in v6.0-rc1, present in all current stable trees
+- The fix directly corresponds to the relationship: `RTC_CALIB_DEF`
+  (default) = 0x7FFF = 32768 - 1, confirming the register semantics
+
+This is a small, well-tested fix for incorrect RTC timekeeping. It's a
+companion to the already-stable-tagged clock name fix. Without this fix,
+any board using the ZynqMP RTC with a clock reference will have
+incorrect time calibration.
+
+**YES**
+
+ drivers/rtc/rtc-zynqmp.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+index 3baa2b481d9f2..856bc1678e7d3 100644
+--- a/drivers/rtc/rtc-zynqmp.c
++++ b/drivers/rtc/rtc-zynqmp.c
+@@ -345,7 +345,10 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
+ 					   &xrtcdev->freq);
+ 		if (ret)
+ 			xrtcdev->freq = RTC_CALIB_DEF;
++	} else {
++		xrtcdev->freq--;
  	}
- 
- 	if (!(caps & ACPI_TAD_AC_WAKE)) {
- 		dev_info(dev, "Unsupported capabilities\n");
--		ret = -ENODEV;
--		goto remove_handler;
-+		return -ENODEV;
- 	}
- 
- 	if (!acpi_has_method(handle, "_PRW")) {
- 		dev_info(dev, "Missing _PRW\n");
--		ret = -ENODEV;
--		goto remove_handler;
-+		return -ENODEV;
- 	}
- 
- 	dd = devm_kzalloc(dev, sizeof(*dd), GFP_KERNEL);
--	if (!dd) {
--		ret = -ENOMEM;
--		goto remove_handler;
--	}
-+	if (!dd)
-+		return -ENOMEM;
- 
- 	dd->capabilities = caps;
- 	dev_set_drvdata(dev, dd);
-@@ -673,11 +661,6 @@ static int acpi_tad_probe(struct platform_device *pdev)
- 
- fail:
- 	acpi_tad_remove(pdev);
--	/* Don't fallthrough because cmos rtc space handler is removed in acpi_tad_remove() */
--	return ret;
--
--remove_handler:
--	acpi_remove_cmos_rtc_space_handler(handle);
- 	return ret;
- }
- 
-diff --git a/drivers/acpi/x86/cmos_rtc.c b/drivers/acpi/x86/cmos_rtc.c
-index a6df5b991c96..ced334e19896 100644
---- a/drivers/acpi/x86/cmos_rtc.c
-+++ b/drivers/acpi/x86/cmos_rtc.c
-@@ -18,13 +18,12 @@
- #include "../internal.h"
- 
- static const struct acpi_device_id acpi_cmos_rtc_ids[] = {
-+	{ "ACPI000E", 1 }, /* ACPI Time and Alarm Device (TAD) */
- 	ACPI_CMOS_RTC_IDS
- };
- 
- bool cmos_rtc_platform_device_present;
- 
--static bool cmos_rtc_space_handler_present __read_mostly;
--
- static acpi_status acpi_cmos_rtc_space_handler(u32 function,
- 					       acpi_physical_address address,
- 					       u32 bits, u64 *value64,
-@@ -56,8 +55,9 @@ static acpi_status acpi_cmos_rtc_space_handler(u32 function,
- 	return AE_BAD_PARAMETER;
- }
- 
--int acpi_install_cmos_rtc_space_handler(acpi_handle handle)
-+static int acpi_install_cmos_rtc_space_handler(acpi_handle handle)
- {
-+	static bool cmos_rtc_space_handler_present __read_mostly;
- 	acpi_status status;
- 
- 	if (cmos_rtc_space_handler_present)
-@@ -76,22 +76,6 @@ int acpi_install_cmos_rtc_space_handler(acpi_handle handle)
- 
- 	return 1;
- }
--EXPORT_SYMBOL_GPL(acpi_install_cmos_rtc_space_handler);
--
--void acpi_remove_cmos_rtc_space_handler(acpi_handle handle)
--{
--	acpi_status status;
--
--	if (cmos_rtc_space_handler_present)
--		return;
--
--	status = acpi_remove_address_space_handler(handle,
--						   ACPI_ADR_SPACE_CMOS,
--						   acpi_cmos_rtc_space_handler);
--	if (ACPI_FAILURE(status))
--		pr_err("Failed to remove CMOS-RTC address space handler\n");
--}
--EXPORT_SYMBOL_GPL(acpi_remove_cmos_rtc_space_handler);
- 
- static int acpi_cmos_rtc_attach(struct acpi_device *adev,
- 				const struct acpi_device_id *id)
-@@ -103,9 +87,9 @@ static int acpi_cmos_rtc_attach(struct acpi_device *adev,
- 		return ret;
- 
- 	if (IS_ERR_OR_NULL(acpi_create_platform_device(adev, NULL))) {
--		pr_err("Failed to create CMOS-RTC platform device\n");
-+		pr_err("Failed to create a platform device for %s\n", (char *)id->id);
- 		return 0;
--	} else {
-+	} else if (!id->driver_data) {
- 		cmos_rtc_platform_device_present = true;
- 	}
- 	return 1;
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index aad1a95e6863..be6d9032a161 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -760,8 +760,6 @@ int acpi_disable_wakeup_device_power(struct acpi_device *dev);
- #ifdef CONFIG_X86
- bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *status);
- bool acpi_quirk_skip_acpi_ac_and_battery(void);
--int acpi_install_cmos_rtc_space_handler(acpi_handle handle);
--void acpi_remove_cmos_rtc_space_handler(acpi_handle handle);
- int acpi_quirk_skip_serdev_enumeration(struct device *controller_parent, bool *skip);
- #else
- static inline bool acpi_device_override_status(struct acpi_device *adev,
-@@ -773,13 +771,6 @@ static inline bool acpi_quirk_skip_acpi_ac_and_battery(void)
- {
- 	return false;
- }
--static inline int acpi_install_cmos_rtc_space_handler(acpi_handle handle)
--{
--	return 1;
--}
--static inline void acpi_remove_cmos_rtc_space_handler(acpi_handle handle)
--{
--}
- static inline int
- acpi_quirk_skip_serdev_enumeration(struct device *controller_parent, bool *skip)
- {
++
+ 	ret = readl(xrtcdev->reg_base + RTC_CALIB_RD);
+ 	if (!ret)
+ 		writel(xrtcdev->freq, (xrtcdev->reg_base + RTC_CALIB_WR));
 -- 
 2.51.0
-
-
-
 
 
