@@ -1,184 +1,155 @@
-Return-Path: <linux-rtc+bounces-6022-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6031-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AJFUKQdenGmkEwQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6022-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 15:02:47 +0100
+	id eJ4dEtBznGmcGAQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6031-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 16:35:44 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10137177A32
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 15:02:46 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B9CB178CE5
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 16:35:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 111D5308A437
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 13:57:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 225473048D90
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 15:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3398226A1AF;
-	Mon, 23 Feb 2026 13:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838BC2F9985;
+	Mon, 23 Feb 2026 15:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="jrkSoxxO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGKA0CmT"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81F418CBE1;
-	Mon, 23 Feb 2026 13:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6048F2F6918;
+	Mon, 23 Feb 2026 15:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771855038; cv=none; b=hXO8bzssOr2Zsh/zuQZupCxOTBw10LqLR8DWiC8HtALJXZo87Pj3bFXpN4cH74jBtBTxiSGL3v4Q552P0VvgigZeMoPjrj34oyIvUNjs4c+BVZBBv8gbojKWoEsJ83wg7zNshklxKPvCQEUIjsK8/uYRhVHfX0qAeCpGeEYRinM=
+	t=1771860855; cv=none; b=LGuFRnkQYF0XRLJybGE3Qn7L5HifrsL27hcYUx39lIGnpQoQlpzO0EnmmCpz5Tm7gZNdFs/7JfsnFrgyFDPGxt+RfMplGdUdbNaIom1Ce70XmtgbTBM8jsvNPnNEY4xX3WYPJRq3eQBPx4oLhJyUgoB8ROv+TyOJbHVE7QSA/AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771855038; c=relaxed/simple;
-	bh=jimk4cgA6P8145WtS7AypZKTzXi7xwx6dJcxj5oDHJY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=flwX8tugJZOx7xSqPu0CutCC/fPCD4FZ+kzc8geM8szI5DQ5GMxbZ/dsGzzyVSkDOPwyyyuN042Ag4S9Do+JcN5VkSh4H+oBrBGSZsWuJnS+qyZZL4N7ULQFuyrw0qZOso7k+D98tB9mAX8KccdPqFmxTGdXPKVAOwvW2ss374Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=jrkSoxxO; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id A9C0B27E35;
-	Mon, 23 Feb 2026 14:57:07 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tac2RrMprsBW; Mon, 23 Feb 2026 14:57:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1771855027; bh=jimk4cgA6P8145WtS7AypZKTzXi7xwx6dJcxj5oDHJY=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To;
-	b=jrkSoxxOqv98EFGeGJpGTfbWycO470StieDpHkpvwSVYOdO+ixUJHSH0/2Txy8R4/
-	 bCEG7Sh9Ln/4+uBuszgWxdqJp0az+MJT2XJ2HTdPUFqkGvbXlKF2zGG0nrE/bbBkpc
-	 06Ps65NKVetf/+bipRD8EqrhjOi2Km7fG1yvBDhUUN7p7SJOleCLskPp7UyvMqRj8U
-	 yxrZARhKFgIx+l3MGQOLUht/nEYFJc875duDxCvM9BEAs0iGuIueRmgF67tCP9T3Ff
-	 HzjS4vtY86VAjSKqWBLiHJUFhdMfiuM0G6doeDKLSyUx73VJAvVZi7xajZdGJmdyAV
-	 V9p7G+qb5lXLw==
+	s=arc-20240116; t=1771860855; c=relaxed/simple;
+	bh=s6a2z9qba9B+ONUvseftMp8bheho8l6Zjw7fwTs9awU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WPiGkn3llurIGV82zRfuNg4vZxPTtax2IH+o7+T/4RlMj2dE4FE2clsnPEZGBfb/EnhgwNfIWEAwG9OdGOvyjmt1JsAijCTz/Ap4oqRXhN1g5Bg0LlZmHLrtnQdfmznWMeOttIT7zlWfnnAAdl5ut4y4eKzfB9aax6axhD6uzFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGKA0CmT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BD3C19424;
+	Mon, 23 Feb 2026 15:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771860855;
+	bh=s6a2z9qba9B+ONUvseftMp8bheho8l6Zjw7fwTs9awU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JGKA0CmT49l66gDwUvk4LFy1an0ZHeCCKRXLvYDhJ0Oaln07L4EBSe9obd6hSn38M
+	 5DvSAPnfyqw3yamsJBx3GHRaqSPJvIdChei9PoPD+AsXmHHPHaCE187nlVBDdSeDsr
+	 E7W2R4Onw4e8z1aTocK0qxSoO0/OVWCsd+IxwchshR8VFWa7alDpI6nBDkvDktFZCZ
+	 H6ZnEscQIS8YLb9poDewHy2R0VF4Fo2IS0UA/KkUTLh8/FF8r+lEw3y5JxGwJnHsVI
+	 9bc78k0iyt6YIyhk6xaOIDNaLY7sQEWjJ0J9OxGR3x5KZ2mkSAM0VpbnZ9CXVHDf48
+	 XNOjPeLvXfk0g==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, x86 Maintainers <x86@kernel.org>,
+ linux-rtc@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v1 0/8] ACPI: x86/rtc-cmos: Bind rtc-cmos to platform devices
+Date: Mon, 23 Feb 2026 16:27:16 +0100
+Message-ID: <5983325.DvuYhMxLoT@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Feb 2026 19:26:52 +0530
-Message-Id: <DGME6JKOXQN9.3GQ7SEI0D8A5U@disroot.org>
-Cc: <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
- <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v2 06/12] mfd: sec: add support for S2MU005 PMIC
-From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
-To: "Sander Vanheule" <sander@svanheule.net>, "Kaustabh Chakraborty"
- <kauschluss@disroot.org>, =?utf-8?q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, "Lee Jones" <lee@kernel.org>, "Pavel Machek"
- <pavel@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>, "MyungJoo Ham"
- <myungjoo.ham@samsung.com>, "Chanwoo Choi" <cw00.choi@samsung.com>,
- "Sebastian Reichel" <sre@kernel.org>, "Krzysztof Kozlowski"
- <krzk@kernel.org>, "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <skhan@linuxfoundation.org>
-References: <20260126-s2mu005-pmic-v2-0-78f1a75f547a@disroot.org>
- <20260126-s2mu005-pmic-v2-6-78f1a75f547a@disroot.org>
- <69e2c1b1a2f3d2ed5e5da995cc5ee49bb3627597.camel@linaro.org>
- <DG74Y3QSCLIO.32Q8ZKCTISXXB@disroot.org>
- <4cf24e281fac45637fedf40944d8b5230c0e22d9.camel@svanheule.net>
-In-Reply-To: <4cf24e281fac45637fedf40944d8b5230c0e22d9.camel@svanheule.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
-	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	CTE_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6022-lists,linux-rtc=lfdr.de];
-	URIBL_MULTI_FAIL(0.00)[sea.lore.kernel.org:server fail,disroot.org:server fail];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
+	RCVD_COUNT_THREE(0.00)[4];
+	HAS_ORG_HEADER(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6031-lists,linux-rtc=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[disroot.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,disroot.org:mid,disroot.org:dkim]
-X-Rspamd-Queue-Id: 10137177A32
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,rafael.j.wysocki:mid]
+X-Rspamd-Queue-Id: 1B9CB178CE5
 X-Rspamd-Action: no action
 
-On 2026-02-20 17:56 +01:00, Sander Vanheule wrote:
-> Hi,
->
-> On Thu, 2026-02-05 at 21:02 +0530, Kaustabh Chakraborty wrote:
->> On 2026-02-04 15:23 +00:00, Andr=C3=A9 Draszik wrote:
->> > On Mon, 2026-01-26 at 00:37 +0530, Kaustabh Chakraborty wrote:
->> > > +static const struct regmap_config s2mu005_regmap_config =3D {
->> > > +	.reg_bits =3D 8,
->> > > +	.val_bits =3D 8,
->> > > +};
->> >=20
->> > No cache? And what is the .max_register value?
->> >=20
->>=20
->> This was in the previous revision, but I ended up removing it because
->> (at least I thought at that time) interfered with interrupts firing in
->> some way. The actual issue was unrelated, so I will add it back.
->>=20
->> However, there is also another thing I see in logs:
->>=20
->> sec-pmic-i2c 2-003d: using zero-initialized flat cache, this may cause
->> unexpected behavior
->>=20
->> This is due to REGCACHE_FLAT, I am not sure if I should just ignore
->> this.
->
-> Sorry to be late to the party, but I'm somewhat responsible for that warn=
-ing, so
-> allow me to chime in :-)
->
-> What you are might have been seeing is REGCACHE_FLAT giving you "cached" =
-values
-> of 0x0, while the hardware actually has something else. This can cause om=
-itted
-> writes, existing (bootloader) config to overwritten, etc.
->
-> As Andr=C3=A9 suggested, using .num_reg_defaults_raw is a possibility, bu=
-t then you
-> have to remember that the register defaults are taken to be what the hard=
-ware
-> state is at that moment, including pre-probe changes. These defaults are =
-used to
-> seed the cache (so far, so good), but this may break the contract of
-> regmap_sync() if you ever want to use that after actually resetting the P=
-MIC.
->
-> If you want to use the flat cache, I would suggest you use REGCACHE_FLAT_=
-S,
-> which will track what has already been read from/written to hardware. You=
- will
-> also need to specifiy .max_register.
+Currently, on x86 the CMOS RTC is represented by a PNP device which
+generally works, but the amount of avoidable code entanglement related
+to that is a bit over the top.
 
-I had figured that out by going through the logs, thanks. :)
+First of all, in order to create a PNP device for the CMOS RTC, the ACPI
+PNP meta-driver needs to be aware of that device, but adding the CMOS
+RTC device IDs to acpi_pnp_device_ids[] was not sufficient for this
+purpose because of the CMOS RTC ACPI address space driver that added an
+ACPI scan handler for the CMOS RTC.  That scan handler simply installs
+the requisite ACPI address space handler for the CMOS RTC address space,
+but it also claims the CMOS RTC device which prevents the ACPI PNP scan
+handler from taking care of it.  That's why there is is_cmos_rtc_device()
+that needs to be additionally called by acpi_is_pnp_device().
 
->
-> I see the other regmap_config-s in this driver also use REGCACHE_FLAT, so=
- you
-> may want to consider switching those over as well if these are also showi=
-ng the
-> new warning.
->
->
-> Best,
-> Sander
+Second, add_rtc_cmos() needs to check whether or not the CMOS RTC device
+is present so it knows whether or not to create a fallback platform
+device for the CMOS RTC.  The way it does that is somewhat less than
+elegant.
+
+Finally, the rtc-cmos driver carries a PNP driver interface so it can
+bind to the CMOS RTC device.
+
+Moreover, on some systems the CMOS RTC device is the only PNP device in
+use, so if it is represented by a device of a different type, the PNP
+subsystem can be compiled out entirely on those systems.
+
+That can be achieved with the help of the observation that the rtc-cmos
+driver actually can work with platform devices already and the only
+change that needs to be made to it in order to make that happen on x86
+is to add CMOS RTC device IDs to it along with the related
+MODULE_DEVICE_TABLE() declaration, which is done in patch [4/8].
+
+However, for the above to work, the requisite platform devices actually
+need to be created and patch [3/8] updates the CMOS RTC ACPI scan
+handler used by the CMOS RTC ACPI address space handler to do just that.
+It also adds a bool variable to be used by add_rtc_cmos() to check
+whether or not to add a fallback platform device for the CMOS RTC.
+
+Before that happens, patches [1-2/8] prepare the CMOS RTC ACPI address
+space handler for the subsequent changes by rearranging it and fixing
+its interactions with the ACPI time and alarm device (TAD) driver.
+
+The next three patches, [5-7/8] simply drop some code that is not
+necessary any more.  Patch [5/8] drops CMOS RTC support from the ACPI
+PNP meta-driver, patch [6/8] drops the walk over PNP devices from
+add_rtc_cmos(), and patch [7/8] drops the PNP driver interface from
+the rtc-cmos driver.
+
+Patch [8/8] is a bonus cleanup adding the ACPI TAD device ID to the
+CMOS RTC ACPI scan handler in the CMOS RTC address space driver, so
+it will create an ACPI TAD platform device after installing the CMOS
+RTC address space handler.  After that change, the ACPI TAD driver
+doesn't need to attempt to install the CMOS RTC ACPI address space
+handler any more and can be simplified quite a bit.
+
+After all of that, the CMOS RTC device IDs are only used in 2 places
+(instead of 5) and well over 100 lines of code that is not super-nice
+go away.
+
+
 
 
