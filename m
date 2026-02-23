@@ -1,81 +1,81 @@
-Return-Path: <linux-rtc+bounces-6034-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6035-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oHpaMCaMnGl8JQQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6034-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 18:19:34 +0100
+	id kFBdOkaMnGmdJQQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6035-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 18:20:06 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39E3917A9FC
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 18:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C3117AA3F
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 18:20:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1326A3094A02
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 17:17:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1A4B3309EE1B
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Feb 2026 17:17:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB3433067A;
-	Mon, 23 Feb 2026 17:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2767B330D54;
+	Mon, 23 Feb 2026 17:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LQCdL8TH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPuSI1sc"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C258248B
-	for <linux-rtc@vger.kernel.org>; Mon, 23 Feb 2026 17:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF84A32FA2F
+	for <linux-rtc@vger.kernel.org>; Mon, 23 Feb 2026 17:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771867041; cv=none; b=i23P6S7QPOx7jhaiIhZPTmD0Xz+FutxHZmE35LIRpRo6X411HcaU8lozKKJ7Pcc7XrlMWrGsc1zORENbLoINfW/9hTPn0Q0JWfoplllQHBPgNW6HP9bZMaHT/0uDjwaGvT6lmaEO3iPeJwlOo11R3zZPpuC4na2YuvrgfEr6sow=
+	t=1771867053; cv=none; b=BHY9gMj694SZ1f3VPeYKk/A4EYfcZ9bWjfUasW2vMJo7cejEpRpRRsiw1sQed6wpNLPLVrCfmoYU3ENkwWiZCcrn6XMBPVlFs16fUE4A12KWhumzbUZJdwBNkWwkZALZV+OqdP71tNvmS90nQIYkUKx0vpMBDH6P6TkfoqWvhdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771867041; c=relaxed/simple;
-	bh=vJOr9ewXibzfb3H7LhY3fT3XdYMp+tyABiqtgW4H+/4=;
+	s=arc-20240116; t=1771867053; c=relaxed/simple;
+	bh=OZfaPFSqbA2C31QZTHgklz9lyeFU0Jd8/jlpq+HGvJI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JtHpSfmtjoCMACZSERkAwL/oT1GVoD6g5Ti+OFoN2rWGOOWk3grsdJLWTSxkofaCNwRbyrY1QgHbb8ddjRtgQCfX6BrQN6fly1qul78wcbxIJ2iWKl4i2qmIG+oXh/ieYUaC+UVnErVYLJN6vX0hwZVzLu8/gGYWUaFE5IIbqZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LQCdL8TH; arc=none smtp.client-ip=209.85.221.48
+	 MIME-Version; b=r6xUXOZiiRB1yX0T/1Pi9E/8pMzJH6WclckzIF4WKftftWlx3k/PsiYezxOiesjbtCGz+CnMrMScZMp3j8fQT74M8nmrx65pbAMnylk+br1Uo7w+9PHFiJNHFK0v2tLuDKYxJccu/Uabtvif98GysPiaHv1mo+VfJBedi72a0d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gPuSI1sc; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-437711e9195so3018437f8f.1
-        for <linux-rtc@vger.kernel.org>; Mon, 23 Feb 2026 09:17:20 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43767807cf3so3472674f8f.1
+        for <linux-rtc@vger.kernel.org>; Mon, 23 Feb 2026 09:17:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771867039; x=1772471839; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771867049; x=1772471849; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+jf6/GdPMgEPudu5Ub5QM0YH/lbZT9UmvVkra65sIm8=;
-        b=LQCdL8THtSx20n8arg5+THT/3yXUfYGFN36M5mv1CHRiBfcBnnBjKsWzt4KZ/l8hEl
-         JUBVirKsXyYSKp1S+8qa/+evoRTaUkN4/w2zRwmt1aNHsD246HV8cayjJgc4XNX0KNeM
-         y1lpNSa4kI5Yr4j3/hE/ASnQ3nTp1WYeh1PSxnPEaYoTPZPXtToJhZitCw1Ltok0ptbf
-         ZmyU3EBdFzgF4plaEDrPss3CLBfGUwmqsAbA0DsAkFHdQLIu5Q/Ok3XYb7kojUNY72w/
-         yof8bTbhrUDAwOgb0tu2mLVhpWxPx0ek/jALUw50aOCBSlziykHhiwsGb/mUtU7U7d8E
-         xaOg==
+        bh=qfSw/YyZxtWdt6T+0h8WzqJ7g3THGU6LxAxLY8xoIzw=;
+        b=gPuSI1scwCWzlR8FBeZxbwSrPM+9HXa9Pgv+N3SySO1xN4xE3RclTXWEPoKXdIuUGt
+         c6tJwU3RdZ+hyeBO4b8J5be5POhh5wlMtmUGIgcIPW19bdabM0TfZGeOmbR21aDa+r+a
+         DB9uAVjN7rOHQ8pfNFzRiPhCCyVyWhJJb0igFgYKzAFE7pPTMnrvvBmqla9sHo5fG4s7
+         0OOpIexnPfbua2ARxQt20UtF/+wyqimd97WtszzGUPox+HfDxVRjr98j5SFL6h2q0HI7
+         mByQM4T6sHDK7RtRv8DkROMYKsf22cIk/q62bSI5btAVLglwRzkf8t0HjxrLVPemgF5X
+         yLmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771867039; x=1772471839;
+        d=1e100.net; s=20230601; t=1771867049; x=1772471849;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+jf6/GdPMgEPudu5Ub5QM0YH/lbZT9UmvVkra65sIm8=;
-        b=Xs7ttINxh3BPjmw1KyUuTgVPk4wfWhh5IUK4C4J+luQJ3BflQJeBKKNmlwR+RStZK1
-         6wrvVB93SnSq6Ioob51/K9J8sSNZ8N4NsSGiBZaiGaBQmiwrdDN5jUgl3bc/boRy0viD
-         sYJlDXSyqzbQmeVQQxXcmSExOxKNOFbT2AlGPAcfUXDgY5mVSaIMmP6/ZBpV7Zp5sypq
-         FrsoBef3a08k3x+HNougVs04LQd87rQ8BHR761YAYclr9yQXqvTMZuDBhpUhmVdDikmI
-         h20pLQvC73bIdgfGiqh3cvn8WTOQpZLBOU2FfPmHXlruK2xVM0KG6zzOtBpTz2LJ37Qc
-         wnPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVSesUVhYjjc6vXciwTeDEZcx5oXiyluFmJsYs6uKdhzSfm+8j7s3Vq4kN8b0QJO6VUqZatqj4Btus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbZdhxjkRjQOosozS2e8ZVgWWwUN+UtoXoKfUyIwCgAIi3+Gq+
-	wnEdQv5RMXFM52kR4RDRR/BDp8Dd8ulGLPu43DzF1uUoWixQrsfjlal2
-X-Gm-Gg: ATEYQzzf4XEN71e/h31QGSKLsgSQhv4qtEFgeOJ/offj05rN7F8sqCLQFJRBb3Rx45E
-	oOri3t72Qo2vZfTXVDLF5NwYdGuPot6TCblR3tmTEupcK9X0Fi4gTCnSfpCjv5MqhMhjpXUTGNX
-	KiZ+q+2Fr49CT8iqACHUg0MGdrVtegKwIKYnL4RBnAdDr/nk8t31lnduWGaY8swtOfV4qvg0Ig3
-	Nl8y/dK0yveCj9QphGeBkxOnOX0potCgIN1wc7iKv/B/x9K4SDBovfqWOhe8UWOXKg9t73Ax50G
-	7PsSqgbn9oAaAVwhld5Zq2UaUOtIz+/NNsX9zzZbYHPbyc2KbgFxkCERdmfF5jO5tZOT9y3YkSX
-	B7vh/lOhkss4Rumne3plgQrgMbBkFP9oYZ3ygvqwvhcpSIqBiGvl3Jtb/9TGIoadSN7aQvjFmF7
-	6HeUuXvm2AP7mYcR44oPrTun1eSknUJQ==
-X-Received: by 2002:a05:6000:604:b0:435:97f6:4f44 with SMTP id ffacd0b85a97d-4396f1a97fcmr18768298f8f.56.1771867038655;
-        Mon, 23 Feb 2026 09:17:18 -0800 (PST)
+        bh=qfSw/YyZxtWdt6T+0h8WzqJ7g3THGU6LxAxLY8xoIzw=;
+        b=Jazy66Py6CWmAXO/2DO5G/rNk1oB76vtfknWnOs7TK3bDNIbV87xyKrXII8kCcPbVx
+         jdG7a+mJYJbgOSWqqWvccukh47edO3fa3NqujUsdTdVf7LafqFl3dybkMtupMxLYi4EG
+         uJQIvTu3e17/rb2mshhqtnZAvfSESmUQ24YIsH8n10mphp6E7hSXLephzBsGLX0dyDJj
+         44L2+NoML1rTi+HFHI9bXfthq9G4eY1gFiPMPXcXoHl6nrmY2GUFSTc7+j6RyAxKJ3Ju
+         1L17crleoH8ubXtrHNUQz8AuU37Gzqwg7/N/iAvv9Gqkxvcn+S9Mch3bRmGOmaZ7wzX/
+         BrFw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7hs+M3/nRpHR/rr36FlljScO/CGNmV5qhgIHlQgiB+FhImkQhZWX6+V6XhNFimbNey+1PMAnyBSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yybfv1A3zuHCPstpcUhmSWGzxPNV9MzqydABeLeehLRb+LPEwhY
+	5bVIb5yXr7QuEbsjBZNRixy3GKO9Kc4zwq6mAk0R4tXwrffz9e4+2lis
+X-Gm-Gg: ATEYQzyJV0Q6hjC7/agdeaHvdUWenYRs0NCXXwpegS9AN1Rb9Te6O9Oxv/7Tw7FQn8o
+	qcfBeMOORsWZwVq4wLLLWgKZhgiYgB5H1d1Uuv5BprDIy3/bF4ZSkb1XiTUNUoXHexbLrPp7LBj
+	ZyitR0AVVr2uEPcmpwz8EXz69/hb6jxfKwhBUmReXKofpCTa3X1K25SOXqCum7AjXkeqPptLApm
+	kUq8eBV1hjp3NC5g/2b90+jdcGPCWpTr4kBU51olQGbF6UZanoY2Hxvp58RkwfGDSpj9D0diDJx
+	P8/1DAdUzz6a0i3xP4Ob34/3JXXQ4VyUFJCqykfpl80frnbIKk2vnBdVhPDR/F0mcIF7Er5b9QD
+	KlKC9S9vALLmvmmGjsTD9yrHtgVfUBYrGYaLuNOeHFdm7zTN6ymNbSHtOeil0OUwhsSO5b9W6KH
+	AKOFna/mYqyHU1jA+OtuE=
+X-Received: by 2002:a05:6000:188e:b0:437:9d2f:8bf1 with SMTP id ffacd0b85a97d-4396f17ce2cmr17527562f8f.38.1771867049261;
+        Mon, 23 Feb 2026 09:17:29 -0800 (PST)
 Received: from luca-vm.lan ([154.61.61.58])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d4c982sm20871454f8f.31.2026.02.23.09.17.17
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d4c982sm20871454f8f.31.2026.02.23.09.17.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 09:17:18 -0800 (PST)
+        Mon, 23 Feb 2026 09:17:28 -0800 (PST)
 From: Luca Leonardo Scorcia <l.scorcia@gmail.com>
 To: linux-mediatek@lists.infradead.org
 Cc: Fabien Parent <parent.f@gmail.com>,
@@ -95,9 +95,9 @@ Cc: Fabien Parent <parent.f@gmail.com>,
 	Mark Brown <broonie@kernel.org>,
 	Eddie Huang <eddie.huang@mediatek.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Gary Bisson <bisson.gary@gmail.com>,
 	Julien Massot <julien.massot@collabora.com>,
 	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+	Gary Bisson <bisson.gary@gmail.com>,
 	Chen Zhong <chen.zhong@mediatek.com>,
 	linux-input@vger.kernel.org,
 	devicetree@vger.kernel.org,
@@ -105,9 +105,9 @@ Cc: Fabien Parent <parent.f@gmail.com>,
 	linux-pm@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rtc@vger.kernel.org
-Subject: [PATCH 1/9] dt-bindings: mfd: mt6397: Add bindings for MT6392 PMIC
-Date: Mon, 23 Feb 2026 17:12:40 +0000
-Message-ID: <c5ce038359583c5318c2d5ee341287c213aef880.1771865015.git.l.scorcia@gmail.com>
+Subject: [PATCH 2/9] dt-bindings: regulator: add support for MT6392
+Date: Mon, 23 Feb 2026 17:12:41 +0000
+Message-ID: <b7664f4d9a7b038b0603b6bba79cfab4e18cbdd6.1771865015.git.l.scorcia@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1771865014.git.l.scorcia@gmail.com>
 References: <cover.1771865014.git.l.scorcia@gmail.com>
@@ -134,7 +134,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FREEMAIL_CC(0.00)[gmail.com,packett.cool,kernel.org,mediatek.com,collabora.com,bootlin.com,vger.kernel.org,lists.infradead.org];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6034-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6035-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
@@ -149,38 +149,30 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,packett.cool:email]
-X-Rspamd-Queue-Id: 39E3917A9FC
+X-Rspamd-Queue-Id: A1C3117AA3F
 X-Rspamd-Action: no action
 
 From: Fabien Parent <parent.f@gmail.com>
 
-Add the currently supported bindings for the MT6392 PMIC.
+Add binding documentation of the regulator for MT6392 SoCs.
 
 Signed-off-by: Fabien Parent <parent.f@gmail.com>
 Signed-off-by: Val Packett <val@packett.cool>
 Signed-off-by: Luca Leonardo Scorcia <l.scorcia@gmail.com>
 ---
- Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
-index 6a89b479d10f..5f422d311d4d 100644
+index 5f422d311d4d..b61fce8f09c0 100644
 --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
 +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
-@@ -39,6 +39,7 @@ properties:
-           - mediatek,mt6328
-           - mediatek,mt6358
-           - mediatek,mt6359
-+          - mediatek,mt6392
-           - mediatek,mt6397
-       - items:
-           - enum:
-@@ -67,6 +68,7 @@ properties:
-               - mediatek,mt6323-rtc
-               - mediatek,mt6331-rtc
-               - mediatek,mt6358-rtc
-+              - mediatek,mt6392-rtc
-               - mediatek,mt6397-rtc
+@@ -94,6 +94,7 @@ properties:
+               - mediatek,mt6328-regulator
+               - mediatek,mt6358-regulator
+               - mediatek,mt6359-regulator
++              - mediatek,mt6392-regulator
+               - mediatek,mt6397-regulator
            - items:
                - enum:
 -- 
