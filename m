@@ -1,278 +1,175 @@
-Return-Path: <linux-rtc+bounces-6075-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6076-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cIFNDMokn2mPZAQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6075-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 17:35:22 +0100
+	id SFUUNdY5n2m5ZQQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6076-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 19:05:10 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9872419ABD3
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 17:35:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2E819BFC9
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 19:05:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 51C893006D53
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 16:26:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 19F33304605C
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 18:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C20B3D5227;
-	Wed, 25 Feb 2026 16:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931F52DECA1;
+	Wed, 25 Feb 2026 18:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGexLGMP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k6hCDJWB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBF43D4110;
-	Wed, 25 Feb 2026 16:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB8433B3;
+	Wed, 25 Feb 2026 18:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772036811; cv=none; b=bU1xEMPLAOdmIiFSN5+BwhefhlXuUll0oaJGRnJsNl6c8mN/CpSJEgokvYNR0CkYzaLmUDcyhuNztDeU6Izq9f2iLNNew6gMdHpc/9NHXiWQ67bmZnHVzrPXEFtAkduYaB12ywp8ZC5ypry+LYIxpnfdB5KHT10q+V/BUFo1oIY=
+	t=1772042506; cv=none; b=t6JpS6R3FjPbgays4u7c5cbXAA+e5dV4r760dYVg6ncQ8oplQ9S+/Iv/52rELsZLekjifzDIUVgAc2N+fol9Umch51vd0aPkHCcezYoD1Y2CgCI4c4vrkRrNxBSsQc4cNILqiwkQe4PHy+UIzKTVmbqN95Ozeq6WLBplkV+mEFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772036811; c=relaxed/simple;
-	bh=YUN9M0AR4tx7LcUF/R+6u5VZbMi7IE1VKfYANVdBxkI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=fbS0x6L6SV3gv7uirZi/Drxx6MNbvSUGpgyqpOZQHwNGYp/cSynR38dP2nkxh2XHdydQwPbrddPuSCsh4aWz82kTEOUNzu34whVcgRthOz7RryidJgCiWqrcGVw/RAOZDYe60XXSen5YhdUl0ukzLjcxiKnETIOr+Y53ze7asbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGexLGMP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB2EC116D0;
-	Wed, 25 Feb 2026 16:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772036810;
-	bh=YUN9M0AR4tx7LcUF/R+6u5VZbMi7IE1VKfYANVdBxkI=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=GGexLGMPjLpx0LmPFOJBELVinx2geWAs5rZ8WmuSl4lCq/BfvAHDQ/AQr3OSko5BL
-	 +auam0L7mAlBPzgKtNJnDZo4gAb1l5OhnhK8H0l+5D3fHNne9EmsyUbUL7S0kWVE30
-	 clrXPdUlXaceDAfY80CHRwuku0iGO0foydZJVSonas1xbM6unQZPBxwFoyHSje+oxV
-	 oSXoW3JKB8KJYXPao82ei8zZAjGeyPNTndN4cGpTUvo44F0ckr5Hf11MdRuW190ZBX
-	 HxgO7i03bgVuF0IY9hsGuPetTadNQVC8FqFNewrq1+6olwWoACgzx942rFUMaSww9R
-	 Tde+TjXStwiUg==
+	s=arc-20240116; t=1772042506; c=relaxed/simple;
+	bh=JiAGReSfZKuZMVg8YvgotK7FHeThSTrinMxzxW9ZrpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gazCm1xjaqzyyUce5VdM14T13+5RzBtK+fEZdd/CwxIAgwOCf1xVquJFenM5eX5gQRT4kqg7BUdj6pSRxDe/aP/g4SfOOrHlIwoemdEQOF7NrFzQB8+4v8pH6V6KO18UXuJ5shhfmjz+ICzdmCjYTSc5Az4yGaOMY9noiu2Z6Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k6hCDJWB; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772042504; x=1803578504;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JiAGReSfZKuZMVg8YvgotK7FHeThSTrinMxzxW9ZrpA=;
+  b=k6hCDJWB2RWSb47lclsSdCO40cIbTcDcEA9lbX9QY7vt6rAjIcx6R6Ih
+   uoVHKjVuujGacMnB13ElVfzJXPNu4NXGXY/AFAJZxfZqq7WGiYFurLtRJ
+   4MpxjsFAc5+e8KsmjFLPurw2pj4ZBpfwELbsjBv8d1bgQBhRCq4yg+hVa
+   q9b7KRS6XDRZa5rBnRyu8eA18V204U0nyiL+feU03OKWYWLt7eofGEfb1
+   I+a0F6J/KhqGTFDJqne2uoV6NIhkFQhSB8su7WBiu5z/L8T7pdmGbsHER
+   iPkZcaguaOzcwz3X+VKJGyKol4CvXX099uJeeBc691cUfQuzz7qdX65OA
+   Q==;
+X-CSE-ConnectionGUID: RsLFGqyVTH+ptOcv7TkeyA==
+X-CSE-MsgGUID: i4j4638sT72JhijouYaLqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="83422082"
+X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
+   d="scan'208";a="83422082"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 10:01:39 -0800
+X-CSE-ConnectionGUID: IzecNPveRYuKMKYfAvcTQQ==
+X-CSE-MsgGUID: btb71okpRLuVNEZhd+p1Dg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
+   d="scan'208";a="246862819"
+Received: from aduenasd-mobl5.amr.corp.intel.com (HELO [10.125.111.87]) ([10.125.111.87])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 10:01:39 -0800
+Message-ID: <6b751b23-ded2-4343-bf29-103f4a7ab6ba@intel.com>
+Date: Wed, 25 Feb 2026 10:01:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 6/8] x86: rtc: Drop PNP device check
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, x86 Maintainers <x86@kernel.org>,
+ linux-rtc@vger.kernel.org, Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <5983325.DvuYhMxLoT@rafael.j.wysocki>
+ <8660687.T7Z3S40VBb@rafael.j.wysocki>
+Content-Language: en-US
+From: Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <8660687.T7Z3S40VBb@rafael.j.wysocki>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Feb 2026 17:26:46 +0100
-Message-Id: <DGO6MEKIIHGH.3L06QJ47CP3CU@kernel.org>
-Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops
- callbacks
-Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Alvin Sun"
- <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-rtc@vger.kernel.org>, <rust-for-linux@vger.kernel.org>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260221111619162a41a1@mail.local>
- <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
- <DGKPPQI0QE73.S8I1M5NCI2BV@kernel.org> <20260222000556ea1938c0@mail.local>
- <DGLI4H9M0T6D.25RTLDVU5JRBE@kernel.org>
- <CAJZ5v0gtiQxBCknkaOzLKrDqUQfhKh_UjQkvgxJBL4UthbCOkg@mail.gmail.com>
- <DGLMGEZTM7E2.Y8VV9I6LI1P6@kernel.org>
- <DGMR9XOWP1V0.3C9219TYPXV6J@kernel.org> <2026022415010804e28202@mail.local>
- <DGNC6GEH8EV7.2WWAQ8DNCLRAB@kernel.org> <20260224172822de7f4569@mail.local>
- <DGNJKZA00MNT.2C7NAQYG597MO@kernel.org>
- <CAJZ5v0iA88G0ZRVB347dXEu2y8mT=d+aWd42cB2tpO5pLVpKuQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iA88G0ZRVB347dXEu2y8mT=d+aWd42cB2tpO5pLVpKuQ@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6075-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[bootlin.com,linux.dev,kernel.org,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-0.970];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,bootlin.com:url]
-X-Rspamd-Queue-Id: 9872419ABD3
+	TAGGED_FROM(0.00)[bounces-6076-lists,linux-rtc=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3A2E819BFC9
 X-Rspamd-Action: no action
 
-On Wed Feb 25, 2026 at 2:33 PM CET, Rafael J. Wysocki wrote:
-> On Tue, Feb 24, 2026 at 11:23=E2=80=AFPM Danilo Krummrich <dakr@kernel.or=
-g> wrote:
->> Here's also some sketched up code for what I wrote above:
->>
->>         fn probe(pdev: &pci::Device<Core>, info: &Self::IdInfo) -> impl =
-PinInit<Self, Error> {
->>             let dev =3D pdev.as_ref();
->>
->>             let rtc_data =3D impl_pin_init!(SampleRtcData {
->>                 io: pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar=
-0")?,
->>                 hw_variant: VendorVariant::StV1,
->>                 irq <- irq::Registration::new(...),
->>             });
->>
->>             let rtc =3D rtc::Device::new(dev, rtc_data)?;
->>
->>             rtc::Registration::register(rtc)?;
->>
->>             Ok(Self { rtc })
->>         }
->>
->> Note that if any of the RTC callbacks would ever need to call irq.synchr=
-onize(),
->> irq.disable(), etc. the compiler would enforce correct ordering, as ther=
-e would
->> not be any other possibility to put the irq::Registration other than int=
-o the
->> rtc_data that goes into rtc::Device::new().
->
-> IIUC, the interrupt handler can only access the rtc_data because the
-> parent's driver_data may not exist yet when it runs.  Or am I missing
-> something?
+On 2/23/26 07:31, Rafael J. Wysocki wrote:
+> Previous changes effectively prevented PNP devices from being created
+> for the CMOS RTC on x86 with ACPI.
+> 
+> Although in principle a CMOS RTC PNP device may exist on an x86 system
+> without ACPI (that is, an x86 system where there is no ACPI at all, not
+> one booted with ACPI disabled), such systems were there in the field ~30
+> years ago and most likely they would not be able to run a contemporary
+> Linux kernel.
+> 
+> For the above reasons, drop the PNP device check from add_rtc_cmos().
 
-In the code above the IRQ handler can also not access rtc_data, as struct
-SampleRtcData might not be fully initialized when it runs, i.e.
+If someone had one of these devices, what would they see after applying
+this? Would they just not be able to detect the RTC any longer?
 
-	let rtc_data =3D impl_pin_init!(SampleRtcData {
-	    io: pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0")?,
-	    hw_variant: VendorVariant::StV1,
-	    irq <- irq::Registration::new(..., rtc_data),
-	});
+In any case, this does seem obscure enough to not worry about any more:
 
-would not compile in the first place.
-
-irq::Registration, for this purpose, has its own private data on the handle=
-r
-itself, see also [1]. In fact, the C code has the same concept with the dev=
-_id
-argument in request_threaded_irq() [2].
-
-The difference is that the C compiler does not ensure that the IRQ handler
-actually owns the data behind the dev_id pointer. I.e. the driver has to so=
-mehow
-ensure that whatever is behind the dev_id pointer remains valid for the dur=
-ation
-the IRQ handler is registered.
-
-In the Rust implementation the compiler does ensure that what is behind the
-dev_id pointer remains valid for the duration of the lifetime of the
-irq::Registration.
-
-Having that said, I assume you wonder what we would pass into the
-irq::Registration instead, if it is not rtc_data.
-
-The answer is it depends; it depends on what's actually needed, what other
-entities interact with the IRQ (e.g. some scheduled work, etc.) and maybe e=
-ven
-preference to some extend.
-
-Here is one example:
-
-	let irq_data =3D impl_pin_init!(SampleIrqData {
-	    io <- pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0")?,
-	    hw_variant: VendorVariant::StV1,
-	});
-
-	let rtc_data =3D impl_pin_init!(SampleRtcData {
-	    irq <- irq::Registration::new(..., irq_data),
-	    ...,
-	});
-
-	let rtc =3D rtc::Device::new(dev, rtc_data)?;
-
-This would compile as it ensures that irq_data (struct SampleIrqData) is fu=
-lly
-initialized before irq::Registration::new() is called.
-
-At a first glance this might look like we need an additional allocation, on=
-e for
-irq_data and one for rtc_data, but that is not the case. irq_data is an
-initializer that is passed to another initializer, i.e. rtc_data is still a=
-n
-initializer.
-
-The actual (single) allocation happens in rtc::Device::new().
-
-In terms of accessing it through the the rtc::Device in an RTC device callb=
-ack,
-we would likely use accessor methods to make it a bit more convinient, i.e.
-
-	    fn read_time(
-	        rtc: &rtc::Device<SampleRtcData>
-	        parent: &platform::Device<Bound>,
-	        time: &mut rtc::Time,
-	    ) -> Result {
-	        let io =3D rtc.io().access(parent)?;
-
-	        match rtc.hw_variant() {
-	            VendorVariant::Arm | VendorVariant::StV1 =3D> {
-	                let my_time =3D io.read(...);
-
-	                my_time.write_into(time);
-	            },
-	            VendorVariant::StV2 =3D> { ... },
-	        }
-	    }
-
-As mentioned above there are a few other options to implement this, dependi=
-ng on
-what's required, etc.
-
-For instance, if the I/O bar is actually shared between multiple entities w=
-e
-might want to initialize it within an Arc [3] (reference count it) for shar=
-ed
-ownership.
-
-For the future we will also be able to support references within initialize=
-rs to
-other pinned fields, which make things a bit more convinient, so you could =
-do
-things like this:
-
-	let irq_data =3D impl_pin_init!(SampleIrqData {
-	    io <- pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0")?,
-	    hw_variant: VendorVariant::StV1,
-	});
-
-	let rtc_data =3D impl_pin_init!(SampleRtcData {
-	    irq <- irq::Registration::new(..., irq_data),
-	    io: &irq.io,
-	    ...,
-	});
-
-	let rtc =3D rtc::Device::new(dev, rtc_data)?;
-
-Note the additional `io: &irq.io,` in the rtc_data initializer. This would =
-be
-legal as we know that `irq` is pinned within `rtc_data`, hence it is valid =
-to
-hold a reference to one of its pinned fields.
-
-I am not sure how far we are from having this supported, I assume Benno and=
- Gary
-can say more about this.
-
-I hope this helps, and thanks for asking those questions!
-
-[1] https://rust.docs.kernel.org/kernel/irq/struct.Registration.html
-[2] https://elixir.bootlin.com/linux/v6.19.3/source/kernel/irq/manage.c#L20=
-90
-[3] https://rust.docs.kernel.org/kernel/sync/struct.Arc.html
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # x86
 
