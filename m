@@ -1,128 +1,180 @@
-Return-Path: <linux-rtc+bounces-6072-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6073-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gOxgAKjSnmnwXQQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6072-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 11:44:56 +0100
+	id AHX/MEjlnmkCXwQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6073-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 13:04:24 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B466E195F2C
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 11:44:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26C42196F57
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 13:04:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id ABA1B3025C4D
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 10:44:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 004253027B5C
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 12:02:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF15B3939A7;
-	Wed, 25 Feb 2026 10:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F723ACEFA;
+	Wed, 25 Feb 2026 12:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlVqE54u"
+	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="k9FhMGUz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B6A38F946;
-	Wed, 25 Feb 2026 10:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772016289; cv=none; b=glo6dKXy1Dt8C8FmB4uuvRmKH9gBSoqURFrYPn5qbTT2Y9LR00k44L8BBXsEZegeuhNGYvwH1mzz/Veu8VQV+0xcOhJPPxBLNbbtNEyKdr/V/kUv3dPJtBT0+m7ykzG9jGuYRgFcDgr85z0uWtKd93PWW2TO2nX8Zduby6McwCw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772016289; c=relaxed/simple;
-	bh=KyCLMU3AVldJTAilKqpLlpOgqYOCYCEaaZ7788+5WuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JTGzZRnc+BhPstS5UCPo6uVnFtQQeB8mhHbL22or920lP4ExGqqUvw4ScAlPgwPDZkO0y8dbjAuKkfQbOEjVP+J6ckcUNGgnt5paXpcLl4JpAx8/KO7cbmvBMz96KYoUYkmzV8wt3f7usa8GQXlKT3PzT4tVH+XWQl7u4efx82M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlVqE54u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36CDC116D0;
-	Wed, 25 Feb 2026 10:44:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772016289;
-	bh=KyCLMU3AVldJTAilKqpLlpOgqYOCYCEaaZ7788+5WuI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YlVqE54ukITA0aDTd8VxkGNArXaXsfsan4niE0yvhPtNYg8YE0zoKR2vGZa864lmQ
-	 fcfsjVPzN0CEKBLqaXr5arlX18IO8g0vQ4vp6gbyoOhd10j0mcx98409m8N3ulX/xM
-	 lcDiDSt/ZVpM+9s3Z8VEh61vEtcy3qUrP488XNMge0f+3/tdVqgbxx4OLMqLhENMOX
-	 xSNGRqcx3VQi74lehWIEgMw8XoLFpCX07AoKUo7yGjdf3J1tI5AufxSguTSUQDDOzG
-	 x8Wl601lTLfubip+dMuyTrh13zBS55aHPv5psqMk7s2GCg76OXPKCfEv5x7Wmni7eN
-	 ct3oopxr12Xnw==
-Date: Wed, 25 Feb 2026 11:44:46 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
-	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Nam Tran <trannamatk@gmail.com>, linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 04/13] dt-bindings: power: supply: document Samsung
- S2M series PMIC charger device
-Message-ID: <20260225-secret-amusing-cuttlefish-d3bee5@quoll>
-References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
- <20260225-s2mu005-pmic-v3-4-b4afee947603@disroot.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D6C3ACF09;
+	Wed, 25 Feb 2026 12:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772020976; cv=pass; b=Ehd79A5dbX++skq+KdGuIL+dqtQhn7dPaezt1z8pyV2DvTnJKuwvITj5ggH2tguQ4pymAdn6c9J5jnwaBjiu7cA9b7hLeixlPm68+GZFi0ITPO+z8pmzwrw41V3qDhsskR9uOJpq3MAQfAyGAybuYLAv00c2dklRHSbPkQ9d7IA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772020976; c=relaxed/simple;
+	bh=pFySQZzI6I4KvcpNAB0tfMmhto9X1h0vL/C8Z7OeDG8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=dE6tXj+qnH+0Bt5KgIQTFMc1d3VauDYC1x/P6eJPWIIBMYSblabRIfUXmUK2vy97Q5uXMMY/tB3ewyXadVPeuMb/ChbkLsm37mNpUD8zwm8b3f8zsfXFpy4FCLHz6yrCadaowN0rxaOxESE2QSdgc+V+UTldvQyLuwSr/RibwSY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=k9FhMGUz; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
+ARC-Seal: i=1; a=rsa-sha256; t=1772020938; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=TNJv7kHvKUjGqmcwqmsA3x0Le/gXxWBaVPK9MVwLfT0THMVAbnnQafEgk4xL24tsUzOtwk5HHaO7z/S46vhBpb1zdwWLVPIMrGQpcUeBP29lrbkbUywNE9BJqL5Hd2FNpTvxF0nz23wenBDorGxfuwYEshJOxbVn+mh+ru9ski4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1772020938; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=IizUq26mU0IFus36KtptiQJycd4Ah24lnhNyzSKAepg=; 
+	b=OCSRMenj1mEEe8LNXJ4se7RyUl8bq3NAXYRIYzTPesWb0vXEPNFzJAGKLYUT1NMPmZlLloEjQhlTlP2CjrKMUqI4zblo60nLKvGf5u1Qk6hVU/VpsAWQ6mzhb4g+H2xhGtbRlY2qJULoJMmyZHwx3ZJZEqiPT36/nqnKWaDkCCM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=pigmoral.tech;
+	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
+	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772020938;
+	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
+	h=Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Date:Message-Id:Message-Id:Cc:Cc:Subject:Subject:From:From:To:To:References:In-Reply-To:Reply-To;
+	bh=IizUq26mU0IFus36KtptiQJycd4Ah24lnhNyzSKAepg=;
+	b=k9FhMGUzjDF6Zv9rpTWG7kHQfLXoH3dpXC1A2r40o3ZV9uctEqbdPyvh4ZjlJm61
+	XiS2C33j+JVBS8KJcrVPa1IAnBN/LojPSdNyOTuPC8LmkUYWJChQmOEdwQ6/YoHc7Ls
+	Ggv2L55nMYeb7L2cx03R245+LsUb0Hx+5OBs7Ux0=
+Received: by mx.zohomail.com with SMTPS id 177202093493336.86441168143767;
+	Wed, 25 Feb 2026 04:02:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260225-s2mu005-pmic-v3-4-b4afee947603@disroot.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Feb 2026 20:02:03 +0800
+Message-Id: <DGO0ZQ827ZV8.4EO0ONZBR8CL@pigmoral.tech>
+Cc: <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+ <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 0/7] rtc: sun6i: Add support for Allwinner A733 SoC
+From: "Junhui Liu" <junhui.liu@pigmoral.tech>
+To: =?utf-8?q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>, "Michael
+ Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
+ "Chen-Yu Tsai" <wens@kernel.org>, "Samuel Holland" <samuel@sholland.org>,
+ "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, "Maxime Ripard" <mripard@kernel.org>,
+ "Junhui Liu" <junhui.liu@pigmoral.tech>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260121-a733-rtc-v1-0-d359437f23a7@pigmoral.tech>
+ <5061953.GXAFRqVoOG@jernej-laptop>
+In-Reply-To: <5061953.GXAFRqVoOG@jernej-laptop>
+X-ZohoMailClient: External
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[pigmoral.tech:s=zmail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6072-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	FREEMAIL_TO(0.00)[gmail.com,baylibre.com,kernel.org,sholland.org,bootlin.com,pigmoral.tech];
+	TAGGED_FROM(0.00)[bounces-6073-lists,linux-rtc=lfdr.de];
+	DMARC_NA(0.00)[pigmoral.tech];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[junhui.liu@pigmoral.tech,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[pigmoral.tech:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B466E195F2C
+	NEURAL_HAM(-0.00)[-0.995];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 26C42196F57
 X-Rspamd-Action: no action
 
-On Wed, Feb 25, 2026 at 12:45:06AM +0530, Kaustabh Chakraborty wrote:
-> +
-> +  This is a part of device tree bindings for S2M and S5M family of Power
-> +  Management IC (PMIC).
-> +
-> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-> +  additional information and example.
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - samsung,s2mu005-charger
+Hi Jernej,
+Thanks for your review.
 
-Review from v1 still applies. I think you ignored several reviews, so I
-will mark entire patchset as changes requested.
+On Sun Feb 22, 2026 at 6:41 PM CST, Jernej =C5=A0krabec wrote:
+> Hi!
+>
+> Dne sreda, 21. januar 2026 ob 11:59:06 Srednjeevropski standardni =C4=8Da=
+s je Junhui Liu napisal(a):
+>> Add support for the Allwinner A733 RTC and its internal Clock Control
+>> Unit (CCU). Reuse the rtc-sun6i rtc driver while introducing a new
+>> SoC-specific RTC CCU driver to handle the hardware's evolved clock
+>> structure.
+>>=20
+>> To facilitate this addition and improve driver modularity, transition
+>> the binding between the RTC and its internal CCU from direct
+>> cross-subsystem function calls to the auxiliary bus. Also extract shared
+>> IOSC and 32kHz clock logic into a standalone ccu_rtc module for reuse
+>> across newer SoC generations.
+>>=20
+>> The A733 implementation supports hardware detection of three external
+>> crystal frequencies (19.2MHz, 24MHz and 26MHz), which is represented in
+>> the driver via read-only mux operations. Implement logic to derive a
+>> normalized 32kHz reference from these DCXO sources using fixed
+>> pre-dividers. Additionally, provide several new DCXO gate clocks for
+>> peripherals, including SerDes, HDMI, and UFS.
+>
+> This work looks nice, but I have some questions/comments:
+> - you're missing RTC SPI clock, which is needed for RTC, at least accordi=
+ng
+>   to vendor 5.15 DT. Could it be that this bit set by vendor U-Boot so yo=
+u
+>   missed it during testing? Manual says that it's disabled by default.
 
+You're right! I tried disabling the RTC SPI clock in U-Boot and found
+that the output of UART became garbled during booting kernel. I will add
+it in the next version.
+
+> - Vendor DT has strange RTC CCU phandles for UFS and HDMI. In first case
+>   uses RTC wakeup and in second DCXO, which doesn't make any sense. Did y=
+ou
+>   do any experimentation with these clocks? It wouldn't be the first time
+>   that either code or manual contained some kind of error.
+
+Regarding UFS, I am still working on getting UFS functional on the
+mainline kernel. I will investigate the actual relationship between the
+RTC wakeup clock and UFS during this process.
+
+As for HDMI, I believe it actually requires the hosc_hdmi_clk
+(DCXO_HDMI_GATING in the manual) provided by the RTC module.
+
+>
+> Btw, switch last two patches. With current order during bisection you wou=
+ld
+> get a complaint that A733 RTC CCU driver is not present.
+
+Okay, I will do it.
+
+>
+> Best regards,
+> Jernej
+
+--=20
 Best regards,
-Krzysztof
+Junhui Liu
 
 
