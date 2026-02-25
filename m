@@ -1,180 +1,191 @@
-Return-Path: <linux-rtc+bounces-6073-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6074-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AHX/MEjlnmkCXwQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6073-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 13:04:24 +0100
+	id 6LbLMEj6nmm+YAQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6074-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 14:34:00 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26C42196F57
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 13:04:24 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA6901981FC
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 14:33:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 004253027B5C
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 12:02:57 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 817A030028E9
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 13:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F723ACEFA;
-	Wed, 25 Feb 2026 12:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15F733B8D7C;
+	Wed, 25 Feb 2026 13:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="k9FhMGUz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cIn/x4xi"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D6C3ACF09;
-	Wed, 25 Feb 2026 12:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772020976; cv=pass; b=Ehd79A5dbX++skq+KdGuIL+dqtQhn7dPaezt1z8pyV2DvTnJKuwvITj5ggH2tguQ4pymAdn6c9J5jnwaBjiu7cA9b7hLeixlPm68+GZFi0ITPO+z8pmzwrw41V3qDhsskR9uOJpq3MAQfAyGAybuYLAv00c2dklRHSbPkQ9d7IA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772020976; c=relaxed/simple;
-	bh=pFySQZzI6I4KvcpNAB0tfMmhto9X1h0vL/C8Z7OeDG8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=dE6tXj+qnH+0Bt5KgIQTFMc1d3VauDYC1x/P6eJPWIIBMYSblabRIfUXmUK2vy97Q5uXMMY/tB3ewyXadVPeuMb/ChbkLsm37mNpUD8zwm8b3f8zsfXFpy4FCLHz6yrCadaowN0rxaOxESE2QSdgc+V+UTldvQyLuwSr/RibwSY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=k9FhMGUz; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
-ARC-Seal: i=1; a=rsa-sha256; t=1772020938; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=TNJv7kHvKUjGqmcwqmsA3x0Le/gXxWBaVPK9MVwLfT0THMVAbnnQafEgk4xL24tsUzOtwk5HHaO7z/S46vhBpb1zdwWLVPIMrGQpcUeBP29lrbkbUywNE9BJqL5Hd2FNpTvxF0nz23wenBDorGxfuwYEshJOxbVn+mh+ru9ski4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1772020938; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=IizUq26mU0IFus36KtptiQJycd4Ah24lnhNyzSKAepg=; 
-	b=OCSRMenj1mEEe8LNXJ4se7RyUl8bq3NAXYRIYzTPesWb0vXEPNFzJAGKLYUT1NMPmZlLloEjQhlTlP2CjrKMUqI4zblo60nLKvGf5u1Qk6hVU/VpsAWQ6mzhb4g+H2xhGtbRlY2qJULoJMmyZHwx3ZJZEqiPT36/nqnKWaDkCCM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=pigmoral.tech;
-	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
-	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772020938;
-	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
-	h=Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Date:Message-Id:Message-Id:Cc:Cc:Subject:Subject:From:From:To:To:References:In-Reply-To:Reply-To;
-	bh=IizUq26mU0IFus36KtptiQJycd4Ah24lnhNyzSKAepg=;
-	b=k9FhMGUzjDF6Zv9rpTWG7kHQfLXoH3dpXC1A2r40o3ZV9uctEqbdPyvh4ZjlJm61
-	XiS2C33j+JVBS8KJcrVPa1IAnBN/LojPSdNyOTuPC8LmkUYWJChQmOEdwQ6/YoHc7Ls
-	Ggv2L55nMYeb7L2cx03R245+LsUb0Hx+5OBs7Ux0=
-Received: by mx.zohomail.com with SMTPS id 177202093493336.86441168143767;
-	Wed, 25 Feb 2026 04:02:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FAB39281E
+	for <linux-rtc@vger.kernel.org>; Wed, 25 Feb 2026 13:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772026431; cv=none; b=kBjqXIw5FRNyCCAv6trl9Fdo5XzcG8t567jHr+MwCMQxwnCo2jEJVpMuIGM5PbNIhkOo970kXhuALDPjmMp15k1M1wjkiAmrokM4yx++OkzQ1F8j3rBZ3T+1YI3yHTQkVqMWnQdAcGb+h8wu0PprbRPVtSnUnItFvFOZgdsAJhI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772026431; c=relaxed/simple;
+	bh=fxRVFKCwX8I+j+b3TCx6cy0PI0PLWyaChhkog07Gd7g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XarHDCHWAlARy5pMjPBNEKoPpZ9rMeIdjmkuzFc00vM4cPjgN31C4Ysb/qmRW+gmS7glq67iC8HzeZ7cXB4Ye72c7g0Sqh5jx8/MbevH8ZaIxOAy21eb586WEPv0MJW7nejQ2d5dVv7oGdqmZdqT+nwgjf1rfce54XM2+gk1mcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cIn/x4xi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C889DC2BC9E
+	for <linux-rtc@vger.kernel.org>; Wed, 25 Feb 2026 13:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772026430;
+	bh=fxRVFKCwX8I+j+b3TCx6cy0PI0PLWyaChhkog07Gd7g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=cIn/x4xiPwsCX6h9l6rMe60v0cRheHyaHVNtpjh9gSKRFlSnXsEE09TUAkrLT/4BZ
+	 opzwGZxCka3WPg5CVK/oGY6mCWbAUa16Xt4afQEE66NG4S5Y0KT5wLgjaRmjdAxpZS
+	 xy+tIyyReyjatmo8IbwIMnf6MibqipGH48WNn6+B0W5BK1qP570S7TVTRXdDQBdwLJ
+	 mwwRyH+2m2RXYo52+G4eDhapfF0df7kAbuINryUBa3gKhf8aXwxMSxqZBVv56qE0pC
+	 gMPRkIpfFDfsv2Gad8lW63bYhF1rJBG6u65RRZblIwcO90inzqExAMKS7CGuxwvj91
+	 zvyR3hlz4l2mQ==
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7d4be94eeacso2024692a34.2
+        for <linux-rtc@vger.kernel.org>; Wed, 25 Feb 2026 05:33:50 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUvEZOCNZParlpmYnLkzVkzOXSJXrXwb/3Rz+jcI+ciy5D1pyS5p8yvLtOJDPfjcI1Qmh4vJNrXUNE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1zdJ/2M3N12huMxOy/LhQnWKz3gwX95zgGWnW5v+Irp3XVvKj
+	ZxwJ1G6n8L1oypZWef2B/DZnmYzkpaEP+WLpun2XR4HHb8DmXTkJlLWGD1ueKEq+ELKVDmmlBZ1
+	inigpmFpRoW1CgOBZMDVfteqn8ugUoSo=
+X-Received: by 2002:a05:6820:1513:b0:676:9ba8:e479 with SMTP id
+ 006d021491bc7-679c44ebc6dmr8126202eaf.43.1772026429804; Wed, 25 Feb 2026
+ 05:33:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260221111619162a41a1@mail.local> <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
+ <DGKPPQI0QE73.S8I1M5NCI2BV@kernel.org> <20260222000556ea1938c0@mail.local>
+ <DGLI4H9M0T6D.25RTLDVU5JRBE@kernel.org> <CAJZ5v0gtiQxBCknkaOzLKrDqUQfhKh_UjQkvgxJBL4UthbCOkg@mail.gmail.com>
+ <DGLMGEZTM7E2.Y8VV9I6LI1P6@kernel.org> <DGMR9XOWP1V0.3C9219TYPXV6J@kernel.org>
+ <2026022415010804e28202@mail.local> <DGNC6GEH8EV7.2WWAQ8DNCLRAB@kernel.org>
+ <20260224172822de7f4569@mail.local> <DGNJKZA00MNT.2C7NAQYG597MO@kernel.org>
+In-Reply-To: <DGNJKZA00MNT.2C7NAQYG597MO@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 25 Feb 2026 14:33:38 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iA88G0ZRVB347dXEu2y8mT=d+aWd42cB2tpO5pLVpKuQ@mail.gmail.com>
+X-Gm-Features: AaiRm50DZMILBW-wLKDoD58lo9J1yR9vKtsMMhsnWbbjvffTLfzdQ6k9D1NO_Sc
+Message-ID: <CAJZ5v0iA88G0ZRVB347dXEu2y8mT=d+aWd42cB2tpO5pLVpKuQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops callbacks
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Feb 2026 20:02:03 +0800
-Message-Id: <DGO0ZQ827ZV8.4EO0ONZBR8CL@pigmoral.tech>
-Cc: <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
- <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 0/7] rtc: sun6i: Add support for Allwinner A733 SoC
-From: "Junhui Liu" <junhui.liu@pigmoral.tech>
-To: =?utf-8?q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>, "Michael
- Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Chen-Yu Tsai" <wens@kernel.org>, "Samuel Holland" <samuel@sholland.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>, "Rob Herring"
- <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
- Dooley" <conor+dt@kernel.org>, "Maxime Ripard" <mripard@kernel.org>,
- "Junhui Liu" <junhui.liu@pigmoral.tech>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260121-a733-rtc-v1-0-d359437f23a7@pigmoral.tech>
- <5061953.GXAFRqVoOG@jernej-laptop>
-In-Reply-To: <5061953.GXAFRqVoOG@jernej-laptop>
-X-ZohoMailClient: External
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[pigmoral.tech:s=zmail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,baylibre.com,kernel.org,sholland.org,bootlin.com,pigmoral.tech];
-	TAGGED_FROM(0.00)[bounces-6073-lists,linux-rtc=lfdr.de];
-	DMARC_NA(0.00)[pigmoral.tech];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6074-lists,linux-rtc=lfdr.de];
+	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,linux.dev,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[junhui.liu@pigmoral.tech,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[pigmoral.tech:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	NEURAL_HAM(-0.00)[-0.995];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 26C42196F57
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EA6901981FC
 X-Rspamd-Action: no action
 
-Hi Jernej,
-Thanks for your review.
-
-On Sun Feb 22, 2026 at 6:41 PM CST, Jernej =C5=A0krabec wrote:
-> Hi!
+On Tue, Feb 24, 2026 at 11:23=E2=80=AFPM Danilo Krummrich <dakr@kernel.org>=
+ wrote:
 >
-> Dne sreda, 21. januar 2026 ob 11:59:06 Srednjeevropski standardni =C4=8Da=
-s je Junhui Liu napisal(a):
->> Add support for the Allwinner A733 RTC and its internal Clock Control
->> Unit (CCU). Reuse the rtc-sun6i rtc driver while introducing a new
->> SoC-specific RTC CCU driver to handle the hardware's evolved clock
->> structure.
->>=20
->> To facilitate this addition and improve driver modularity, transition
->> the binding between the RTC and its internal CCU from direct
->> cross-subsystem function calls to the auxiliary bus. Also extract shared
->> IOSC and 32kHz clock logic into a standalone ccu_rtc module for reuse
->> across newer SoC generations.
->>=20
->> The A733 implementation supports hardware detection of three external
->> crystal frequencies (19.2MHz, 24MHz and 26MHz), which is represented in
->> the driver via read-only mux operations. Implement logic to derive a
->> normalized 32kHz reference from these DCXO sources using fixed
->> pre-dividers. Additionally, provide several new DCXO gate clocks for
->> peripherals, including SerDes, HDMI, and UFS.
+> On Tue Feb 24, 2026 at 6:28 PM CET, Alexandre Belloni wrote:
+> > On 24/02/2026 17:35:23+0100, Danilo Krummrich wrote:
+> >> (I did not have any specific hardware in mind when sketching this up (=
+e.g. an
+> >> IRQ could also only be needed in bus device callbacks, e.g. for loadin=
+g firmware
+> >> etc.). But for RTC it obviously is common that it is relevant to the c=
+lass
+> >> device too.)
+> >>
+> >> So, I assume you mean because there could already be an ioctl before t=
+he IRQ has
+> >> been successfully registered, and this ioctl may wait for an IRQ?
+> >>
+> >> In this case the irq::Registration should go into rtc_data instead to =
+account
+> >> for this dependency. Unfortunately, this is a semantic dependency that=
+ we can't
+> >> always catch at compile time.
+> >>
+> >> The reason we sometimes can is because, if you would need access to th=
+e
+> >> irq::Registration from ioctls (e.g. for calling synchronize(), enable(=
+),
+> >> disable() etc.) it would be caught, because you couldn't access it wit=
+hout it
+> >> being in rtc_data in the first place, and being forced to have it in r=
+tc_data
+> >> guarantees that the ordering can't be wrong.
+> >
+> > No, once you register the rtc, the character device will appear in
+> > userspace and may be opened, at this point, probe is not allowed to fai=
+l
+> > anymore which you are allowing by trying to register the IRQ so late.
 >
-> This work looks nice, but I have some questions/comments:
-> - you're missing RTC SPI clock, which is needed for RTC, at least accordi=
-ng
->   to vendor 5.15 DT. Could it be that this bit set by vendor U-Boot so yo=
-u
->   missed it during testing? Manual says that it's disabled by default.
-
-You're right! I tried disabling the RTC SPI clock in U-Boot and found
-that the output of UART became garbled during booting kernel. I will add
-it in the next version.
-
-> - Vendor DT has strange RTC CCU phandles for UFS and HDMI. In first case
->   uses RTC wakeup and in second DCXO, which doesn't make any sense. Did y=
-ou
->   do any experimentation with these clocks? It wouldn't be the first time
->   that either code or manual contained some kind of error.
-
-Regarding UFS, I am still working on getting UFS functional on the
-mainline kernel. I will investigate the actual relationship between the
-RTC wakeup clock and UFS during this process.
-
-As for HDMI, I believe it actually requires the hosc_hdmi_clk
-(DCXO_HDMI_GATING in the manual) provided by the RTC module.
-
+> This does not seem to correspond to my previous reply -- may I kindly ask=
+ you to
+> read it again?
 >
-> Btw, switch last two patches. With current order during bisection you wou=
-ld
-> get a complaint that A733 RTC CCU driver is not present.
-
-Okay, I will do it.
-
+> Here's also some sketched up code for what I wrote above:
 >
-> Best regards,
-> Jernej
+>         fn probe(pdev: &pci::Device<Core>, info: &Self::IdInfo) -> impl P=
+inInit<Self, Error> {
+>             let dev =3D pdev.as_ref();
+>
+>             let rtc_data =3D impl_pin_init!(SampleRtcData {
+>                 io: pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0=
+")?,
+>                 hw_variant: VendorVariant::StV1,
+>                 irq <- irq::Registration::new(...),
+>             });
+>
+>             let rtc =3D rtc::Device::new(dev, rtc_data)?;
+>
+>             rtc::Registration::register(rtc)?;
+>
+>             Ok(Self { rtc })
+>         }
+>
+> Note that if any of the RTC callbacks would ever need to call irq.synchro=
+nize(),
+> irq.disable(), etc. the compiler would enforce correct ordering, as there=
+ would
+> not be any other possibility to put the irq::Registration other than into=
+ the
+> rtc_data that goes into rtc::Device::new().
 
---=20
-Best regards,
-Junhui Liu
-
+IIUC, the interrupt handler can only access the rtc_data because the
+parent's driver_data may not exist yet when it runs.  Or am I missing
+something?
 
