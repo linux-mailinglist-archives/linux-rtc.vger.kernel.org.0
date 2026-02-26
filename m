@@ -1,58 +1,58 @@
-Return-Path: <linux-rtc+bounces-6079-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6080-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EESeEpdmn2lRagQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6079-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 22:16:07 +0100
+	id 4G9bMXo8oGmagwQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6080-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 13:28:42 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5CF319DBC2
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 22:16:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 341371A5B08
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 13:28:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 17E973035018
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Feb 2026 21:15:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 48FD73017031
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 12:28:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D909F30CDB6;
-	Wed, 25 Feb 2026 21:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5132363C75;
+	Thu, 26 Feb 2026 12:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ih0Gf01V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHkG/2EP"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A0B2D839C
-	for <linux-rtc@vger.kernel.org>; Wed, 25 Feb 2026 21:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CEB34F48D
+	for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 12:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772054136; cv=none; b=WCBsKIzGeyBYV3ip8FqXf90R4Yje+VFTrMhyh5KM4qruzqyRV2df67BT4STIz4cRoMvcdh0gP9V6hMAO4HS8vA6z0cn4fIuA0Y2u9dxY+UoqYcByrvacHgd1b6eB+yAghd9UOaiw6zVvfDrOfHVdfB75VsOD6mfVLwhhB50jGIc=
+	t=1772108903; cv=none; b=G2lVXQ2EBRomB+hauSqz9eWtn/iPHx2ZPhkAu39A6gBkkzhT7XwEkoFRczGYycgGasYQ54WmiLCtUJ6A8kHn70KD742OB0SaIC37akKe60KID5JrR4LcAGmPfMcivTKIx9baVHH49q1+/IyPq5zaTs0uzidhGmOrudbx+7aeEHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772054136; c=relaxed/simple;
-	bh=z+DlvjYWMPDQTmDpWzttaYmRaVtwEVuc2YhqCyYm9ro=;
+	s=arc-20240116; t=1772108903; c=relaxed/simple;
+	bh=suoYzminA3YKvZbZA3gZl3vI0+8D+6GmcsMdqFGnHyY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IKniqMYmb3kqQs4fFsSZdRSprDJ3oKpYOze0uUXZMG/pIpi2HRDrQqn1RVO75a9km+cSWL+y3Y6m55rejGpWpmlRn1UOpJgH5ibtZ0r61x020ryb9DQPZA2//WiVoBxNi8ZWocP3/Mofsz/7sIFKcWSedbkNS6Sie/geNiQOiYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ih0Gf01V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F3DAC19422
-	for <linux-rtc@vger.kernel.org>; Wed, 25 Feb 2026 21:15:36 +0000 (UTC)
+	 To:Cc:Content-Type; b=F2GOAahaI/90U6KFVIBkJ9PqIIJ3FcxP6g7hCgWfdlQYJektmqeEsxFoaTeBz9CgZzYZdx5d1Ghfb+vWj8sT6gf4LiuoiRWqV3GKGBjo1S8phzI+IwqxA2kHEx+S49WiLIhwMD1GC7L6cTyape9pcqW/+EgwGC5UiymqVpjurXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHkG/2EP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59541C2BC9E
+	for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 12:28:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772054136;
-	bh=z+DlvjYWMPDQTmDpWzttaYmRaVtwEVuc2YhqCyYm9ro=;
+	s=k20201202; t=1772108903;
+	bh=suoYzminA3YKvZbZA3gZl3vI0+8D+6GmcsMdqFGnHyY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ih0Gf01VMg1kh8vyFaCbNT4KpoTECSVi+GHss1CxELIv/RsFIcoNN47vRdiziJAnL
-	 hffuDgaXE3zJwjexAP7eWS+o3jLgPgL6QJQgx+VP7/jfYG1Lxhl/VWnboU/hsmbDYa
-	 vfBGal8BK9kk/y+UbQx4jRAxXqwixMBCsyoxeICncJ3Oj2FH6UvtWV98r9agoh7WCV
-	 JCvpqWvAE0pneh3WgSrJMKz7uDZwi7bomfszhIyYzM1VSL5mU8nJhrSZoKsdL/tArA
-	 K6hczuIe/fmfaxf0ZF+B3EC9KAHiV6a1vlh4CutLIMMyinhfVC6N6BOCyZ0CIKm7Ts
-	 ave4NsVuhpMLw==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-463208653d6so120402b6e.3
-        for <linux-rtc@vger.kernel.org>; Wed, 25 Feb 2026 13:15:36 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUiCYbGWFVj3qYvFRt8v6SjnFkSX41oC2geQuknzktw0KLWOAAHVG+wokoxQd9iH97Ms7D9s1XqYwo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkPrWZeS1o+mp48aLJlPCzKQ+8aD05h1xz8a8nh6wv5hEOafRA
-	tdQ6ywLbSE3lR81BWWVjyQOLhvTRmwAmMr952MGqDCFoewNi4gIpRxfarh0zrsTZIWJ0Ulo6H/R
-	fT+BFACuDGdwjI+PDzrkvqtWmX5SpUMg=
-X-Received: by 2002:a05:6808:878b:b0:464:a066:aa6a with SMTP id
- 5614622812f47-464a066b160mr763959b6e.45.1772054135325; Wed, 25 Feb 2026
- 13:15:35 -0800 (PST)
+	b=DHkG/2EPhYf07XsGNT9zk/2OnpWzg8R7N4HS9oWWrBPgTEPd1n5ftxT6NYCFmREtv
+	 gh6Odsg0wWNZ10/lRKwW2dvrVikB+cZR+DqKNUjIEYhIwkZaunLnQJfZzqDyAhyRuN
+	 6S69wH2VW5b1gphTnhaq6KrAMwSaH99ne7TGLHQnsp1l72OyYxOdfp8KGUkO46fsEu
+	 Td7LFlv9iLL5o+YULiTebSJ8GnTTr7rFSfI6fUuvk4SVY3jX2kz1XtPm4vK/dHEOFc
+	 BhoCKGMNJSHxBk+hnJpeRX0rAk0HTBcjp/Krbcxql0+qUsgU8ing/WfT9q7Hjiagar
+	 JmXwFsjihtzQQ==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7d4c65d772cso348184a34.1
+        for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 04:28:23 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX0LgmrIBgOCN2bBhxFTqnTFgkubnh2v0h0ZtGKEhuxzhy+ooKd2wBZ+U+lmzdsQKlxUGMD3Urxm44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxP/uu9nmQX1sHNzTeKiAj0ZHT2dcsiDcSVS0Rbf6oRkWuKS9Gy
+	lCdX+MeS/aU2ZigNcIsEc8lHCdbVuVHBH+9VNzeVsRfr4tsb1fCY48xiVLBY2svjWkoaWaYPzq0
+	nV/pogMoQ95VpAadbocM/dUuRJouimW8=
+X-Received: by 2002:a05:6830:6d0f:b0:7cf:dbb4:320a with SMTP id
+ 46e09a7af769-7d586f561ccmr997621a34.27.1772108902360; Thu, 26 Feb 2026
+ 04:28:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -68,10 +68,10 @@ References: <20260221111619162a41a1@mail.local> <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaV
  <CAJZ5v0iA88G0ZRVB347dXEu2y8mT=d+aWd42cB2tpO5pLVpKuQ@mail.gmail.com> <DGO6MEKIIHGH.3L06QJ47CP3CU@kernel.org>
 In-Reply-To: <DGO6MEKIIHGH.3L06QJ47CP3CU@kernel.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 25 Feb 2026 22:15:22 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hAF5qwv6wDAviqkkZSza7Dj-p_AGCrAzXjFrMOhDKAMg@mail.gmail.com>
-X-Gm-Features: AaiRm52YfPaPRjAqJHfFoPr_qwe67MHx8wdiZzY3CovJZo-BOto2n_ITHC6YYKk
-Message-ID: <CAJZ5v0hAF5qwv6wDAviqkkZSza7Dj-p_AGCrAzXjFrMOhDKAMg@mail.gmail.com>
+Date: Thu, 26 Feb 2026 13:28:10 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iRrfvV5nsfQ=YkhLjp4tOTOzSXHq-sQntf2QMuAW1Lfg@mail.gmail.com>
+X-Gm-Features: AaiRm529vrDRa30sD66S8_1_FN511oOwBqQFehS0XzC3HnrG7t02i2PwgmEGgBY
+Message-ID: <CAJZ5v0iRrfvV5nsfQ=YkhLjp4tOTOzSXHq-sQntf2QMuAW1Lfg@mail.gmail.com>
 Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops callbacks
 To: Danilo Krummrich <dakr@kernel.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
@@ -90,11 +90,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6079-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6080-lists,linux-rtc=lfdr.de];
 	FREEMAIL_CC(0.00)[kernel.org,bootlin.com,linux.dev,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -108,12 +108,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.996];
+	NEURAL_HAM(-0.00)[-0.998];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:url]
-X-Rspamd-Queue-Id: B5CF319DBC2
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 341371A5B08
 X-Rspamd-Action: no action
 
 On Wed, Feb 25, 2026 at 5:26=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
@@ -220,7 +220,28 @@ one for
 > initializer.
 >
 > The actual (single) allocation happens in rtc::Device::new().
->
+
+I think that the key observation here is that C and Rust are
+substantially different with respect to how things get initialized.
+
+In C, we first allocate memory, then initialize it, and then start
+services that will refer to it.  All of these steps need to be taken
+explicitly and separately in the right order and the compiler simply
+processes the high-level language into CPU instructions.  On the way
+out, all of that needs to be cleaned up directly, most of the time in
+reverse order.  If anything is missed or forgotten, or the ordering is
+messed up, troubles ensue.
+
+In Rust, IIUC, the compiler is essentially told about what data will
+be there in the memory, how to initialize it and what services to
+start and all of that happens in one go when memory gets allocated
+(so, apparently, a good part of the code doesn't even produce CPU
+instructions at all, as it is all about feeding the information to the
+compiler).  So long as the compiler has complete information, it can
+figure out the right ordering automatically and it will complain if
+something is not right.  The difficulty here is to find a way to
+provide the compiler with complete information.
+
 > In terms of accessing it through the the rtc::Device in an RTC device cal=
 lback,
 > we would likely use accessor methods to make it a bit more convinient, i.=
@@ -284,9 +305,7 @@ nd Gary
 > can say more about this.
 >
 > I hope this helps, and thanks for asking those questions!
-
-Well, I'm using an opportunity to learn something, thank you!
-
+>
 > [1] https://rust.docs.kernel.org/kernel/irq/struct.Registration.html
 > [2] https://elixir.bootlin.com/linux/v6.19.3/source/kernel/irq/manage.c#L=
 2090
