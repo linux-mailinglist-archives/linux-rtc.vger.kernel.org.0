@@ -1,313 +1,224 @@
-Return-Path: <linux-rtc+bounces-6080-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6081-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4G9bMXo8oGmagwQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6080-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 13:28:42 +0100
+	id SFM6DJREoGmrhAQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6081-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 14:03:16 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 341371A5B08
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 13:28:41 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 079DE1A6099
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 14:03:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 48FD73017031
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 12:28:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2C42B30216E6
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Feb 2026 13:01:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5132363C75;
-	Thu, 26 Feb 2026 12:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6438C3016E5;
+	Thu, 26 Feb 2026 13:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHkG/2EP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xg4W7SQk"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CEB34F48D
-	for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 12:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711452FF67F
+	for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 13:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772108903; cv=none; b=G2lVXQ2EBRomB+hauSqz9eWtn/iPHx2ZPhkAu39A6gBkkzhT7XwEkoFRczGYycgGasYQ54WmiLCtUJ6A8kHn70KD742OB0SaIC37akKe60KID5JrR4LcAGmPfMcivTKIx9baVHH49q1+/IyPq5zaTs0uzidhGmOrudbx+7aeEHk=
+	t=1772110901; cv=none; b=cXiEKaryuQi0sGr1Sd5TGHqOL8dgJv2H1bWPzGQtEtSDhRNOZenMP70X4HZNCMBRKy/zlJMHSzhT8hdYECrJYfPIT3r5JIOwnU9s0aCRTrrJkXGot9EmUZyINFaBQaZLtv6Wr6/0DD7yV8gXy7Z1aYTNda3Sc5beTk9fZYf8Exc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772108903; c=relaxed/simple;
-	bh=suoYzminA3YKvZbZA3gZl3vI0+8D+6GmcsMdqFGnHyY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F2GOAahaI/90U6KFVIBkJ9PqIIJ3FcxP6g7hCgWfdlQYJektmqeEsxFoaTeBz9CgZzYZdx5d1Ghfb+vWj8sT6gf4LiuoiRWqV3GKGBjo1S8phzI+IwqxA2kHEx+S49WiLIhwMD1GC7L6cTyape9pcqW/+EgwGC5UiymqVpjurXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHkG/2EP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59541C2BC9E
-	for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 12:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772108903;
-	bh=suoYzminA3YKvZbZA3gZl3vI0+8D+6GmcsMdqFGnHyY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DHkG/2EPhYf07XsGNT9zk/2OnpWzg8R7N4HS9oWWrBPgTEPd1n5ftxT6NYCFmREtv
-	 gh6Odsg0wWNZ10/lRKwW2dvrVikB+cZR+DqKNUjIEYhIwkZaunLnQJfZzqDyAhyRuN
-	 6S69wH2VW5b1gphTnhaq6KrAMwSaH99ne7TGLHQnsp1l72OyYxOdfp8KGUkO46fsEu
-	 Td7LFlv9iLL5o+YULiTebSJ8GnTTr7rFSfI6fUuvk4SVY3jX2kz1XtPm4vK/dHEOFc
-	 BhoCKGMNJSHxBk+hnJpeRX0rAk0HTBcjp/Krbcxql0+qUsgU8ing/WfT9q7Hjiagar
-	 JmXwFsjihtzQQ==
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7d4c65d772cso348184a34.1
-        for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 04:28:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX0LgmrIBgOCN2bBhxFTqnTFgkubnh2v0h0ZtGKEhuxzhy+ooKd2wBZ+U+lmzdsQKlxUGMD3Urxm44=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP/uu9nmQX1sHNzTeKiAj0ZHT2dcsiDcSVS0Rbf6oRkWuKS9Gy
-	lCdX+MeS/aU2ZigNcIsEc8lHCdbVuVHBH+9VNzeVsRfr4tsb1fCY48xiVLBY2svjWkoaWaYPzq0
-	nV/pogMoQ95VpAadbocM/dUuRJouimW8=
-X-Received: by 2002:a05:6830:6d0f:b0:7cf:dbb4:320a with SMTP id
- 46e09a7af769-7d586f561ccmr997621a34.27.1772108902360; Thu, 26 Feb 2026
- 04:28:22 -0800 (PST)
+	s=arc-20240116; t=1772110901; c=relaxed/simple;
+	bh=2pWog8lpZCEHEdP1o6GJY7uGCaGGAibTb0zWl+12Y+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G+4D3LnX5Njd1buTqkwctQ2WSlaYknFMswEtSmgion7L992Ip+Eclzqo7qhmh5jcPzS1vKsxbY/7de20G+Rh/IZ/mMeEkGMevsfgqxmxrfZR9Q+sCwkX/Ly8m7LmBkGSO1b9umZcbIcl1apIsfEZ7ze5Of7sZYVSRIbSSLjZGhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xg4W7SQk; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 16221C40693
+	for <linux-rtc@vger.kernel.org>; Thu, 26 Feb 2026 13:01:53 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 960805FDEB;
+	Thu, 26 Feb 2026 13:01:37 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 96DD510369367;
+	Thu, 26 Feb 2026 14:01:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772110896; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=rQUDWq1dNhEE9RGk8XjDrcqNsZM4DRVnAsm9ZzB/kaQ=;
+	b=xg4W7SQkq5IiM5XaweHk4qlCO1o7jxUzNrdn+/xXMh896pCxyiFL4GnEWslbU/plI5AaGT
+	3nOgePQcxHW0S283gZPPQlPlhCFutZQYH0QuwD56IU94wvpsEOxLp3gaXuNA7eXmLfJCzV
+	uXGOiKmyRElqkLgD6zzWlbTqq4IOLn8ttucsqNYerqWOcH7Bv5rbwXxqbCssRxPS0TG28f
+	WAlq4S7yyrEVUO2ufWbK3tmFqcU0YEBlm87p8K0jrlR40keVuBDU7HuvnKyVicO0SXBo/X
+	oOVhayya9A3yMclxceOhV9RY+8wn5CqDJatZheoSUMUa9PQem1WIBslts+vzNw==
+Date: Thu, 26 Feb 2026 14:01:34 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	x86 Maintainers <x86@kernel.org>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 4/8] ACPI: x86/rtc-cmos: Use platform device for
+ driver binding
+Message-ID: <20260226130134aa75696e@mail.local>
+References: <5983325.DvuYhMxLoT@rafael.j.wysocki>
+ <13969123.uLZWGnKmhe@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260221111619162a41a1@mail.local> <CAJZ5v0jo2sLKWVOBJz7QP9x_aMZbaVx+ES7QwYWkTzHp7d2xLQ@mail.gmail.com>
- <DGKPPQI0QE73.S8I1M5NCI2BV@kernel.org> <20260222000556ea1938c0@mail.local>
- <DGLI4H9M0T6D.25RTLDVU5JRBE@kernel.org> <CAJZ5v0gtiQxBCknkaOzLKrDqUQfhKh_UjQkvgxJBL4UthbCOkg@mail.gmail.com>
- <DGLMGEZTM7E2.Y8VV9I6LI1P6@kernel.org> <DGMR9XOWP1V0.3C9219TYPXV6J@kernel.org>
- <2026022415010804e28202@mail.local> <DGNC6GEH8EV7.2WWAQ8DNCLRAB@kernel.org>
- <20260224172822de7f4569@mail.local> <DGNJKZA00MNT.2C7NAQYG597MO@kernel.org>
- <CAJZ5v0iA88G0ZRVB347dXEu2y8mT=d+aWd42cB2tpO5pLVpKuQ@mail.gmail.com> <DGO6MEKIIHGH.3L06QJ47CP3CU@kernel.org>
-In-Reply-To: <DGO6MEKIIHGH.3L06QJ47CP3CU@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 26 Feb 2026 13:28:10 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iRrfvV5nsfQ=YkhLjp4tOTOzSXHq-sQntf2QMuAW1Lfg@mail.gmail.com>
-X-Gm-Features: AaiRm529vrDRa30sD66S8_1_FN511oOwBqQFehS0XzC3HnrG7t02i2PwgmEGgBY
-Message-ID: <CAJZ5v0iRrfvV5nsfQ=YkhLjp4tOTOzSXHq-sQntf2QMuAW1Lfg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 1/5] rtc: add device selector for rtc_class_ops callbacks
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-rtc@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13969123.uLZWGnKmhe@rafael.j.wysocki>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6080-lists,linux-rtc=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,bootlin.com,linux.dev,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,vger.kernel.org,linuxfoundation.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6081-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 341371A5B08
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:url,bootlin.com:email,mail.local:mid,intel.com:email]
+X-Rspamd-Queue-Id: 079DE1A6099
 X-Rspamd-Action: no action
 
-On Wed, Feb 25, 2026 at 5:26=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
->
-> On Wed Feb 25, 2026 at 2:33 PM CET, Rafael J. Wysocki wrote:
-> > On Tue, Feb 24, 2026 at 11:23=E2=80=AFPM Danilo Krummrich <dakr@kernel.=
-org> wrote:
-> >> Here's also some sketched up code for what I wrote above:
-> >>
-> >>         fn probe(pdev: &pci::Device<Core>, info: &Self::IdInfo) -> imp=
-l PinInit<Self, Error> {
-> >>             let dev =3D pdev.as_ref();
-> >>
-> >>             let rtc_data =3D impl_pin_init!(SampleRtcData {
-> >>                 io: pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/b=
-ar0")?,
-> >>                 hw_variant: VendorVariant::StV1,
-> >>                 irq <- irq::Registration::new(...),
-> >>             });
-> >>
-> >>             let rtc =3D rtc::Device::new(dev, rtc_data)?;
-> >>
-> >>             rtc::Registration::register(rtc)?;
-> >>
-> >>             Ok(Self { rtc })
-> >>         }
-> >>
-> >> Note that if any of the RTC callbacks would ever need to call irq.sync=
-hronize(),
-> >> irq.disable(), etc. the compiler would enforce correct ordering, as th=
-ere would
-> >> not be any other possibility to put the irq::Registration other than i=
-nto the
-> >> rtc_data that goes into rtc::Device::new().
-> >
-> > IIUC, the interrupt handler can only access the rtc_data because the
-> > parent's driver_data may not exist yet when it runs.  Or am I missing
-> > something?
->
-> In the code above the IRQ handler can also not access rtc_data, as struct
-> SampleRtcData might not be fully initialized when it runs, i.e.
->
->         let rtc_data =3D impl_pin_init!(SampleRtcData {
->             io: pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0")?,
->             hw_variant: VendorVariant::StV1,
->             irq <- irq::Registration::new(..., rtc_data),
->         });
->
-> would not compile in the first place.
->
-> irq::Registration, for this purpose, has its own private data on the hand=
-ler
-> itself, see also [1]. In fact, the C code has the same concept with the d=
-ev_id
-> argument in request_threaded_irq() [2].
->
-> The difference is that the C compiler does not ensure that the IRQ handle=
-r
-> actually owns the data behind the dev_id pointer. I.e. the driver has to =
-somehow
-> ensure that whatever is behind the dev_id pointer remains valid for the d=
-uration
-> the IRQ handler is registered.
->
-> In the Rust implementation the compiler does ensure that what is behind t=
-he
-> dev_id pointer remains valid for the duration of the lifetime of the
-> irq::Registration.
->
-> Having that said, I assume you wonder what we would pass into the
-> irq::Registration instead, if it is not rtc_data.
->
-> The answer is it depends; it depends on what's actually needed, what othe=
-r
-> entities interact with the IRQ (e.g. some scheduled work, etc.) and maybe=
- even
-> preference to some extend.
->
-> Here is one example:
->
->         let irq_data =3D impl_pin_init!(SampleIrqData {
->             io <- pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0")=
-?,
->             hw_variant: VendorVariant::StV1,
->         });
->
->         let rtc_data =3D impl_pin_init!(SampleRtcData {
->             irq <- irq::Registration::new(..., irq_data),
->             ...,
->         });
->
->         let rtc =3D rtc::Device::new(dev, rtc_data)?;
->
-> This would compile as it ensures that irq_data (struct SampleIrqData) is =
-fully
-> initialized before irq::Registration::new() is called.
->
-> At a first glance this might look like we need an additional allocation, =
-one for
-> irq_data and one for rtc_data, but that is not the case. irq_data is an
-> initializer that is passed to another initializer, i.e. rtc_data is still=
- an
-> initializer.
->
-> The actual (single) allocation happens in rtc::Device::new().
+On 23/02/2026 16:30:21+0100, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> 
+> Modify the rtc-cmos driver to bind to a platform device on systems with
+> ACPI via acpi_match_table and advertise the CMOST RTC ACPI device IDs
+> for driver auto-loading.  Note that adding the requisite device IDs to
+> it and exposing them via MODULE_DEVICE_TABLE() is sufficient for this
+> purpose.
+> 
+> Since the ACPI device IDs in question are the same as for the CMOS RTC
+> ACPI scan handler, put them into a common header file and use the
+> definition from there in both places.
+> 
+> Additionally, to prevent a PNP device from being created for the CMOS
+> RTC if a platform one is present already, make is_cmos_rtc_device()
+> check cmos_rtc_platform_device_present introduced previously.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-I think that the key observation here is that C and Rust are
-substantially different with respect to how things get initialized.
+> ---
+>  drivers/acpi/acpi_pnp.c     |  2 +-
+>  drivers/acpi/x86/cmos_rtc.c |  5 +----
+>  drivers/rtc/rtc-cmos.c      | 10 ++++++++++
+>  include/linux/acpi.h        |  6 ++++++
+>  4 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/acpi/acpi_pnp.c b/drivers/acpi/acpi_pnp.c
+> index 85d9f78619a2..4ad8f56d1a5d 100644
+> --- a/drivers/acpi/acpi_pnp.c
+> +++ b/drivers/acpi/acpi_pnp.c
+> @@ -368,7 +368,7 @@ static int is_cmos_rtc_device(struct acpi_device *adev)
+>  		{ "PNP0B02" },
+>  		{""},
+>  	};
+> -	return !acpi_match_device_ids(adev, ids);
+> +	return !cmos_rtc_platform_device_present && !acpi_match_device_ids(adev, ids);
+>  }
+>  
+>  bool acpi_is_pnp_device(struct acpi_device *adev)
+> diff --git a/drivers/acpi/x86/cmos_rtc.c b/drivers/acpi/x86/cmos_rtc.c
+> index bdd66dfd4a44..a6df5b991c96 100644
+> --- a/drivers/acpi/x86/cmos_rtc.c
+> +++ b/drivers/acpi/x86/cmos_rtc.c
+> @@ -18,10 +18,7 @@
+>  #include "../internal.h"
+>  
+>  static const struct acpi_device_id acpi_cmos_rtc_ids[] = {
+> -	{ "PNP0B00" },
+> -	{ "PNP0B01" },
+> -	{ "PNP0B02" },
+> -	{}
+> +	ACPI_CMOS_RTC_IDS
+>  };
+>  
+>  bool cmos_rtc_platform_device_present;
+> diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+> index 0743c6acd6e2..7457f42fd6f0 100644
+> --- a/drivers/rtc/rtc-cmos.c
+> +++ b/drivers/rtc/rtc-cmos.c
+> @@ -27,6 +27,7 @@
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+> +#include <linux/acpi.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/init.h>
+> @@ -1476,6 +1477,14 @@ static __init void cmos_of_init(struct platform_device *pdev)
+>  #else
+>  static inline void cmos_of_init(struct platform_device *pdev) {}
+>  #endif
+> +
+> +#ifdef CONFIG_ACPI
+> +static const struct acpi_device_id acpi_cmos_rtc_ids[] = {
+> +	ACPI_CMOS_RTC_IDS
+> +};
+> +MODULE_DEVICE_TABLE(acpi, acpi_cmos_rtc_ids);
+> +#endif
+> +
+>  /*----------------------------------------------------------------*/
+>  
+>  /* Platform setup should have set up an RTC device, when PNP is
+> @@ -1530,6 +1539,7 @@ static struct platform_driver cmos_platform_driver = {
+>  		.name		= driver_name,
+>  		.pm		= &cmos_pm_ops,
+>  		.of_match_table = of_match_ptr(of_cmos_match),
+> +		.acpi_match_table = ACPI_PTR(acpi_cmos_rtc_ids),
+>  	}
+>  };
+>  
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 2bdb801cee01..5ecdcdaf31aa 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -791,6 +791,12 @@ const char *acpi_get_subsystem_id(acpi_handle handle);
+>  int acpi_mrrm_max_mem_region(void);
+>  #endif
+>  
+> +#define ACPI_CMOS_RTC_IDS	\
+> +	{ "PNP0B00", },		\
+> +	{ "PNP0B01", },		\
+> +	{ "PNP0B02", },		\
+> +	{ "", }
+> +
+>  extern bool cmos_rtc_platform_device_present;
+>  
+>  #else	/* !CONFIG_ACPI */
+> -- 
+> 2.51.0
+> 
+> 
+> 
+> 
 
-In C, we first allocate memory, then initialize it, and then start
-services that will refer to it.  All of these steps need to be taken
-explicitly and separately in the right order and the compiler simply
-processes the high-level language into CPU instructions.  On the way
-out, all of that needs to be cleaned up directly, most of the time in
-reverse order.  If anything is missed or forgotten, or the ordering is
-messed up, troubles ensue.
-
-In Rust, IIUC, the compiler is essentially told about what data will
-be there in the memory, how to initialize it and what services to
-start and all of that happens in one go when memory gets allocated
-(so, apparently, a good part of the code doesn't even produce CPU
-instructions at all, as it is all about feeding the information to the
-compiler).  So long as the compiler has complete information, it can
-figure out the right ordering automatically and it will complain if
-something is not right.  The difficulty here is to find a way to
-provide the compiler with complete information.
-
-> In terms of accessing it through the the rtc::Device in an RTC device cal=
-lback,
-> we would likely use accessor methods to make it a bit more convinient, i.=
-e.
->
->             fn read_time(
->                 rtc: &rtc::Device<SampleRtcData>
->                 parent: &platform::Device<Bound>,
->                 time: &mut rtc::Time,
->             ) -> Result {
->                 let io =3D rtc.io().access(parent)?;
->
->                 match rtc.hw_variant() {
->                     VendorVariant::Arm | VendorVariant::StV1 =3D> {
->                         let my_time =3D io.read(...);
->
->                         my_time.write_into(time);
->                     },
->                     VendorVariant::StV2 =3D> { ... },
->                 }
->             }
->
-> As mentioned above there are a few other options to implement this, depen=
-ding on
-> what's required, etc.
->
-> For instance, if the I/O bar is actually shared between multiple entities=
- we
-> might want to initialize it within an Arc [3] (reference count it) for sh=
-ared
-> ownership.
->
-> For the future we will also be able to support references within initiali=
-zers to
-> other pinned fields, which make things a bit more convinient, so you coul=
-d do
-> things like this:
->
->         let irq_data =3D impl_pin_init!(SampleIrqData {
->             io <- pdev.iomap_region_sized::<BAR0_SIZE>(0, c"my_rtc/bar0")=
-?,
->             hw_variant: VendorVariant::StV1,
->         });
->
->         let rtc_data =3D impl_pin_init!(SampleRtcData {
->             irq <- irq::Registration::new(..., irq_data),
->             io: &irq.io,
->             ...,
->         });
->
->         let rtc =3D rtc::Device::new(dev, rtc_data)?;
->
-> Note the additional `io: &irq.io,` in the rtc_data initializer. This woul=
-d be
-> legal as we know that `irq` is pinned within `rtc_data`, hence it is vali=
-d to
-> hold a reference to one of its pinned fields.
->
-> I am not sure how far we are from having this supported, I assume Benno a=
-nd Gary
-> can say more about this.
->
-> I hope this helps, and thanks for asking those questions!
->
-> [1] https://rust.docs.kernel.org/kernel/irq/struct.Registration.html
-> [2] https://elixir.bootlin.com/linux/v6.19.3/source/kernel/irq/manage.c#L=
-2090
-> [3] https://rust.docs.kernel.org/kernel/sync/struct.Arc.html
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
