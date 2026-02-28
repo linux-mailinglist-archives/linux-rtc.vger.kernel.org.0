@@ -1,254 +1,165 @@
-Return-Path: <linux-rtc+bounces-6088-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6089-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WDwaGg/qomlG8AQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6088-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 14:13:51 +0100
+	id q0m/IALtomnT8AQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6089-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 14:26:26 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0A231C32BB
-	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 14:13:50 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DCA81C337F
+	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 14:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 56EC9307D612
-	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 13:13:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7A8F1302A9E7
+	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 13:26:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D1843E4AB;
-	Sat, 28 Feb 2026 13:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B159726E16C;
+	Sat, 28 Feb 2026 13:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RyIzCvaL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSOS8yM/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E09429831
-	for <linux-rtc@vger.kernel.org>; Sat, 28 Feb 2026 13:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890BB243367;
+	Sat, 28 Feb 2026 13:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772284400; cv=none; b=TH3tH07WNwy13GshzgEZny2/5ZxzGF0KaOmfjGjn8v6Cv7L7lXNXZkq78Zj8lysyySMSJcfCnITlhdoWOQ41O5VJpXlsxWZzS14lAYGyvXNs4joS8t2RaSbaoP8eLimM/JIz6rvXBpiyUNnY+h7xtZqbErkoxAa/52Xlt9gkncU=
+	t=1772285182; cv=none; b=QxuU7NQtr+K88hevrYxQyXDX8AZp80g2/8nwBYtKao8UxIdfRXr+eWIPNV2p80k0xWI3KugbZDyEtiW4VNiw21TQQm5MVvGmN9qprAjc0b2tbeYbzOXQ79xQQT5uZ2qXU7yrq17hekdpJJax/JxFiTFD6I/HNLWEKfs8tjT5vis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772284400; c=relaxed/simple;
-	bh=vpPZDNWyaRiIeiEZ6dBWdMfSdrhuE1MFqlDWuu8feTg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FlSgtXPygFpeQCOoBcZMAVtJzdyxJN/KAt4h/2r0sQqATgLz2OPajEcQjI/VuOo0RzejPvSjr9zrua5j6Z36Zi3qfmu5KJz3Tyl6nE7IFvdu5eCbqzfTFvNzysEHHZlwEebrtGrDyQhQUvEuSLDT23IJBtowItal8LbjhN9AchY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RyIzCvaL; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ad9a9be502so20783015ad.0
-        for <linux-rtc@vger.kernel.org>; Sat, 28 Feb 2026 05:13:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772284399; x=1772889199; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e+OXOGPWktoMpqTrgoZHnGiYGl+B7CZqSTFyHXnY8iM=;
-        b=RyIzCvaLJNGNV2dhAyqGOrb18eHaT5svJePZTIOMi3nXvYnjuRl0oJuG2nCTC1/YmE
-         sH2CEWxGg26EQZ9WqOs9XfwV9Y9ILXE3c4Kp8rqWuN/Fl4freq347DUtRMBkzB0CWAxg
-         xDyLFrYvi2smrw9FFBPelPhfkccdO94osGkJhDeX/znX/cOVST8KFo4KWzpVYffxmQOX
-         D5mRdnjMP1G3G2Bunbc3+9rTX7XQlOkbERGp7Dl3v2yOruzoJ4ZvgvoTP6BQuIKJsgsu
-         UVHIOjJOQUdGAphXbsnydWHn5PovJkJM5BM3eoV4pQ4CgbSRrNNQ9amGbOn9c2eGSIn5
-         jESg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772284399; x=1772889199;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e+OXOGPWktoMpqTrgoZHnGiYGl+B7CZqSTFyHXnY8iM=;
-        b=uWVEqdLNN6xPH+7RFEYjuuw7NXR3Qdoa8+5nLh1wjzbt7EBvzA07i02SbpvidayqXS
-         WHal4EFesdmU3ej3GqbK+l8QnvyGTQQAGzNJt8otd65bznoGjAWmpeCV/rmN6kokcEAX
-         Zn0//UOo+snG3OWfTfWkqybqyt8lNACH9p5LXHtu+NE9eagCRuOHXBU8/4oXzESREqJy
-         dtnmM8vwd/WkanBY6ZfPJiswa8vgWws+mPDqAfjH3keNgsTl+Av0L81mIcm/k5oVN8Hi
-         7aDjB3DjcmdMwTVxojVYdPOCUZFE1ClAXLJnZ83DRESOnUHFMk5D1cXvLr+UvBAqmrw2
-         EpnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXoiXOJ4l/LH+DOAr0DiT8Oxq4YFKv3jOPa8ENVvicoAHjHHe/ZTs9/8dWQsKovdu4vMaMnqLkDoy8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/uTq+h5XxxbUI/BuvKWPLqbluvByeiyEuOe6QNc4y8Oj2TCZ1
-	4HnA6JVMwJr3Yd2tPwRLnk4ruvI2Gh3IgqcEvZVM2jIYvZL2VBhC+14I
-X-Gm-Gg: ATEYQzx2TBicElAn/IjoFj4JXR7Q06MLuQ2NkXnGmVfQO7BL8fYquP9kqR5Hxd96qsZ
-	RzJbvbrWEShX89WCv5J+GGMKv3+fHiRpzXb4awnqYymk/jENaHSXgq0KoMghtlMrNEq8tTkqMFv
-	ipoTZPxO7FtuXnUSgKkbzCs00P9fXcd9F3MrFMY//PRD3P2uTRsXi3Ac0oxNO3UdDrEQDooqqSC
-	ZjYHslOC26j+WMJX8103chnws2hql6Ko71kl0mT7/bOT4T8mKUfuHtl374yBSOTDXedLEMg1HsK
-	VMq19JD7oT62Ol5Wmx4eAxHqIfj2/BLduMDFvT/rI/rrG6l0Kavt0OutX9blOJLcSUgb5s48Y0y
-	q5A51jD0HMx2xKqeVRju/1yTZy57WC8v88/mj2wiSoXOx7+JRAx/R0ocMYLm43G9f1xH+qrPgPI
-	Q6U4lfUd9Oztc0DxyvLLnzSJZlZJVknZaC/aR3mIWX6raNq+2S+M66d1Dd8wM2vtF1230YwbSwb
-	cuIdPgz+Ue62Ow2IA3zbTid0c1+fHgp4uyttDyxfrCE0kW9
-X-Received: by 2002:a17:903:2b04:b0:2a9:62ce:1c12 with SMTP id d9443c01a7336-2ae2e4da12bmr73263415ad.53.1772284398824;
-        Sat, 28 Feb 2026 05:13:18 -0800 (PST)
-Received: from lorddaniel-VivoBook-ASUSLaptop-K3502ZA-S3502ZA.. ([2405:201:31:d01f:38e8:e688:575f:115f])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb6f3436sm133656725ad.88.2026.02.28.05.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 05:13:18 -0800 (PST)
-From: Piyush Patle <piyushpatle228@gmail.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: rtc: isl12026: convert to YAML schema
-Date: Sat, 28 Feb 2026 18:43:11 +0530
-Message-Id: <20260228131311.37169-1-piyushpatle228@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1772285182; c=relaxed/simple;
+	bh=6DXwNPA65k+7EadP/D86GEpH/gXZm5YIq6LUsaaw9g8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X+cacrMTHuyXudWyJ/EuQ3xP/PkyjWKjj+JObBTvjiyCg1IlVaOb1sY+AZdjyH8G4LuYNHmh+bjbFwQNI0dJTedXN3x2gsIgINolRwgicdLsKd2GTZBOXtMKtN9jlyX0eG44JvVw1KfjAXS6glLNji31usaDQ0KiZQpKln9yCH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSOS8yM/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F5C7C116D0;
+	Sat, 28 Feb 2026 13:26:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772285182;
+	bh=6DXwNPA65k+7EadP/D86GEpH/gXZm5YIq6LUsaaw9g8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=TSOS8yM/8Q3VBPTxI3n9STOIvXhVw2W9sUo1TRqUcmcwNWJTmSdhOi1qoTjf6Kuu/
+	 jQh2vvnxhYW0NCNWHfZbwpoEEm77iFQ3r6XraTBxNVDhz5HJDYg6ZBPgW6yb3L6331
+	 tkwbDJOM7KoiImjSL8gssv2sgsi6SqBW/kuUabqNBcXghWr7gRzdwNIc1U1H8185wN
+	 xAHIfjPlYVua8XMbzxP91tLwXi1LclIYiLwIvVeZ0iskYrWj0Vw8rWYeawGCNBnlrT
+	 qkJ5T51mspbOyljmWGPVr+VnbZejfPFDPnvgqOu+p8/VzvYxidtLXJudUpSHZVfBXe
+	 JbwCmjKug2cjQ==
+Message-ID: <4a772a56-2d00-4f57-b7c0-87d98c495222@kernel.org>
+Date: Sat, 28 Feb 2026 14:26:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] dt-bindings: rtc: isl12026: convert to YAML schema
+To: Piyush Patle <piyushpatle228@gmail.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260228131311.37169-1-piyushpatle228@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20260228131311.37169-1-piyushpatle228@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6088-lists,linux-rtc=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6089-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,bootlin.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[piyushpatle228@gmail.com,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C0A231C32BB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1DCA81C337F
 X-Rspamd-Action: no action
 
-Convert the ISL12026 RTC binding from text format to YAML schema.
-Remove the legacy text binding.
+On 28/02/2026 14:13, Piyush Patle wrote:
+> Convert the ISL12026 RTC binding from text format to YAML schema.
+> Remove the legacy text binding.
+> 
+> The new schema enables dtbs_check validation.
+> 
+> Signed-off-by: Piyush Patle <piyushpatle228@gmail.com>
+> 
+> ---
+> 
+> Changes in v3:
 
-The new schema enables dtbs_check validation.
 
-Signed-off-by: Piyush Patle <piyushpatle228@gmail.com>
+You already sent it and you got review, so now that duplicate posting
+AFTER my review basically removes it.
 
----
+I will not be doing work twice.
 
-Changes in v3:
-- Removed unsupported select section
+NAK for this patch
 
-Changes in v2:
-- Fixed dt_binding_check warnings
-- Improved example formatting
-
----
- .../devicetree/bindings/rtc/isil,isl12026.txt | 28 ---------
- .../bindings/rtc/isil,isl12026.yaml           | 59 +++++++++++++++++++
- 2 files changed, 59 insertions(+), 28 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/isil,isl12026.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/isil,isl12026.yaml
-
-diff --git a/Documentation/devicetree/bindings/rtc/isil,isl12026.txt b/Documentation/devicetree/bindings/rtc/isil,isl12026.txt
-deleted file mode 100644
-index 2e0be45193bb..000000000000
---- a/Documentation/devicetree/bindings/rtc/isil,isl12026.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--ISL12026 I2C RTC/EEPROM
--
--ISL12026 is an I2C RTC/EEPROM combination device.  The RTC and control
--registers respond at bus address 0x6f, and the EEPROM array responds
--at bus address 0x57.  The canonical "reg" value will be for the RTC portion.
--
--Required properties supported by the device:
--
-- - "compatible": must be "isil,isl12026"
-- - "reg": I2C bus address of the device (always 0x6f)
--
--Optional properties:
--
-- - "isil,pwr-bsw": If present PWR.BSW bit must be set to the specified
--                   value for proper operation.
--
-- - "isil,pwr-sbib": If present PWR.SBIB bit must be set to the specified
--                    value for proper operation.
--
--
--Example:
--
--	rtc@6f {
--		compatible = "isil,isl12026";
--		reg = <0x6f>;
--		isil,pwr-bsw = <0>;
--		isil,pwr-sbib = <1>;
--	}
-diff --git a/Documentation/devicetree/bindings/rtc/isil,isl12026.yaml b/Documentation/devicetree/bindings/rtc/isil,isl12026.yaml
-new file mode 100644
-index 000000000000..152edce2ab41
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/isil,isl12026.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/isil,isl12026.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Intersil ISL12026 I2C RTC/EEPROM
-+
-+maintainers:
-+  - Piyush Patle <piyushpatle228@gmail.com>
-+
-+description:
-+  The ISL12026 is a combination RTC and EEPROM device connected via I2C.
-+  The RTC and control registers respond at address 0x6f, while the EEPROM
-+  array responds at address 0x57. The "reg" property refers to the RTC
-+  portion of the device.
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    const: isil,isl12026
-+
-+  reg:
-+    maxItems: 1
-+    description: I2C address of the RTC portion (must be 0x6f)
-+
-+  isil,pwr-bsw:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1 ]
-+    description:
-+      Value written to the PWR.BSW bit for proper device operation.
-+
-+  isil,pwr-sbib:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1 ]
-+    description:
-+      Value written to the PWR.SBIB bit for proper device operation.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@6f {
-+            compatible = "isil,isl12026";
-+            reg = <0x6f>;
-+            isil,pwr-bsw = <0>;
-+            isil,pwr-sbib = <1>;
-+        };
-+    };
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
