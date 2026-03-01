@@ -1,172 +1,160 @@
-Return-Path: <linux-rtc+bounces-6091-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6092-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wOU8Dob4omn18QQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6091-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 15:15:34 +0100
+	id EE5ZOSdopGlcfgUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6092-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 01 Mar 2026 17:24:07 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCC801C3784
-	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 15:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 580D31D09D5
+	for <lists+linux-rtc@lfdr.de>; Sun, 01 Mar 2026 17:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7AEF530DF41F
-	for <lists+linux-rtc@lfdr.de>; Sat, 28 Feb 2026 14:15:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 46FD230053F6
+	for <lists+linux-rtc@lfdr.de>; Sun,  1 Mar 2026 16:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A49E426EC8;
-	Sat, 28 Feb 2026 14:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1C0C30E84A;
+	Sun,  1 Mar 2026 16:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J6zJCcWI"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="QVqVJ8V/"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33019410D29;
-	Sat, 28 Feb 2026 14:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2B118FDDE;
+	Sun,  1 Mar 2026 16:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772288104; cv=none; b=g8cvzK3uMymqvvAS4MkHtbkvf/ahBFHSmDwYQ+uVFJf4/ttg5xvRi95hOpeQy6kAn9KpWh8sIDJIb1NgukS4rr16sNY+SBpMBSfoqxnpOvuy8UaDj76ZTSh6ap0e2ANzvRX37THaDBIsTQKIYTeIkTrcf5DRsUwFYibk6tY7P7E=
+	t=1772382214; cv=none; b=olbdGONjx73kelBF3hpdQZqqdW1tF8RqBXtwkG2NIM5y3+U0I00eTusb0kALfKzPu7a5N+IMerpUlXTjzP9ytbpDWAtwUWW4tjgK8UrquisIqowO08F/YDYeqRh4yQYHl6upw7T60Vwk18KtehHBz5EKFcz6LS76BfffQ+xbcMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772288104; c=relaxed/simple;
-	bh=+SETpRl7qmd2zG0OjWiPCtpjIlN1+iDKysfo9cK3wwQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZLev2cPTUQNIF75uBY2Yx3wWAspEKbJ5rb1CLAoaK57J7pVx28RwNLRj5vJNDqy+YazpyBfeAhdbwOz76r6umexbJjCtiCoyb3zLBwwrHIvMbi7+8KJu8KrOXZoeKUZCj/zVnXbtqciL3ru4OMalTbf5KBEwj2h1S1K52QsXGWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J6zJCcWI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB0A6C19421;
-	Sat, 28 Feb 2026 14:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772288103;
-	bh=+SETpRl7qmd2zG0OjWiPCtpjIlN1+iDKysfo9cK3wwQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=J6zJCcWIYA+cjLcS51IieThAJnD/kZlumRileTh7aZapBcnLM2EJ3y1THlKT4FmRE
-	 6t8wc1fbIHzkG7zqJTd0gmyqCqhL8+tnxHWZwmOuZf7GtoacvxWXud50fzJR6e07Kv
-	 d+U2zimqGexj+ZyroDIrBDYwytaKNxAdIlm0cEaULC61EzpXLs/j7m4W3gClxcZZS/
-	 1Q4QEAqcXKpzvb4S6PKosDA1xU6C+dvWHy8yqrw6in5pB+S0mEDIJJ4WNDeSerJGPC
-	 AiN5M2Wxivab1ioK7/02B4e/pM6nFDNa6+VMyWra3a+KoGMqP4AZI00oK6NLJhp5lk
-	 hU7eRnAYQI5sQ==
-Message-ID: <a4b40769-1a35-47ad-8ac9-9d02f35188f0@kernel.org>
-Date: Sat, 28 Feb 2026 15:15:00 +0100
+	s=arc-20240116; t=1772382214; c=relaxed/simple;
+	bh=23CM7Md0r37lUyPaT6ciitb1CPWDJTZbY5ZR8DicXsU=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=nwrq7A5Zop36WdQIbn/LyE7xpe6SA9L4NgtaDBbijI0Lt530ilz6FNCWWuUUh9jnWZ3NbIG5g0XMXplBrSEllz3O16slUpLakuqKWn/69F5kMwUdoM2Y1rPkFbtFHvGefBJDSh8oBDz7nJrBVTdQlCxCi/zBptj8OC9zkWwiZmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=QVqVJ8V/; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1772382202; bh=6IASky7UeKNH6RIK3b7iRvf98oSz9nCNTLWsKND45F0=;
+	h=From:To:Cc:Subject:Date;
+	b=QVqVJ8V/YKhmGRt+bsV6vsG3xkVsqibNJpJofDFelTYxS/KjpUoR+6gLxDawtoQez
+	 RtwTi2HEZZA9WlEBPHncbg6N7CiZCnDXGT8C7VSadh36MWvLdy3ZkUIPzHDsIUTQIT
+	 /uW5IBYF0cRqrPbYDzuyb3tUKYPCRg/+WuffuUFI=
+Received: from admin.. ([2001:da8:205:20a0:6eeb:b6ff:fe15:94a7])
+	by newxmesmtplogicsvrszc41-0.qq.com (NewEsmtp) with SMTP
+	id 4FB8446E; Mon, 02 Mar 2026 00:19:59 +0800
+X-QQ-mid: xmsmtpt1772381999tgw5e8ybi
+Message-ID: <tencent_6BA6C87DB3B5EE61C7A22CADE9F5DBBCC90A@qq.com>
+X-QQ-XMAILINFO: OOECh7dB9AaU8WUjbWtinmWDb1sg4ld36mklb9QBa0XQchoSvgkBgNTQ6Ud4wY
+	 q2v6ccOz5ochNVWuGoVjo1vwYk6BtgaVsOscMAYuJmNmDglQlz/+3Gacu9YLx/Jthe+4tonybYFB
+	 +CPBtpRj42B+XTFUf/+iWoaJyCO7Txf9WAItWYNX1sZjBM4RKzmRSqsJpsvH50CsNh+KUfZKZFt7
+	 f29MM4mkHC6NEZ39zPTEIAKW68PTN8kVOyxCGywys9bUG27NfA4QaneoYzVq28FeKf0Yy2GFEXp2
+	 vli4SCGGf2ho0J4a7tmp+OOx54xR979POX3Kj+6dE29YGUiIwqTyZSFD+XJ46aoIPqJCJbJRQoWQ
+	 crxmkYnz+yq2nSTzPDE+pdv23+W2psdkINv4dXHD8pZVD0MYout699jGLBlVkcWJ3nLCIQmSp0cw
+	 vym29FyPa8q+g6O6kwox7aQamy+/VSpptf9OoRqIM8PUHABFFt9EzFVwK6qDa/GSxy+JQWK9dQWc
+	 eFRYWng1Yq8ViUTvDmd5nCAJbrpNlchZBNJUJ78Fw8m/oMQHB2byPI0MJmTgxI9s1MOdGhxoD94G
+	 U+HlRJzznj9Ff3Gg2gXn7LOMqnnJJC4IadeG1/lhVJQGtTnPrq9z+Ysh+1wjKIKwBasdeXQ4z/BC
+	 J9XwJ3ZROVo0GfYJOAQvcba3469c91VZ7268VuI05SxYCKlYGCQjmAOHWhS+Qe6bcV2XPjIdj9yg
+	 QIo5s2HQn1cDRhI6oUJ8jew6pclksKiJ9yVddg8c5L5YsUZ17oy2tjOuqXEAYStDn7T913TKst+v
+	 bmO5p1Q4UHUw+HDXQBjeXKirZS7Qb9gDdOgb3eac+Y2fJsPRMQtCK+uVtkXHn3VeLhB/XM4d5qur
+	 hZa7WTFl6ljyGTiHI+zFpXIsytB1OaufozVQaJhU2RyrQTIhM5GuXIddaljvoZ2weLBHAB+ZRGx3
+	 2zxhuTstTe5ODBSL4rYYTIUcKgBy4UnV+6kCnLzj0WY4k/kTkcgS09t4t/CzluFGI9no7SPOyFl6
+	 eeLh+z3IHySoE53P+rGtHpJFH04KRqnCkq9/EvPTXRWqTl5RmvN1+1oa0hsUcixJuUXIVmxIT5/3
+	 VM0FR0rmKb36g0670=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+From: Zhaoyang Yu <2426767509@qq.com>
+To: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhaoyang Yu <2426767509@qq.com>
+Subject: [PATCH] rtc: spear: check return value of clk_enable in resume
+Date: Sun,  1 Mar 2026 16:19:58 +0000
+X-OQ-MSGID: <20260301161958.266447-1-2426767509@qq.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] dt-bindings: rtc: isl12026: convert to YAML schema
-To: Piyush Patle <piyushpatle228@gmail.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <1c104639-4286-464c-aaf5-82f80b903bbb@kernel.org>
- <20260228140825.108205-1-piyushpatle228@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260228140825.108205-1-piyushpatle228@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[qq.com,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[qq.com:s=s201512];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6091-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,bootlin.com];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6092-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,qq.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[qq.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[2426767509@qq.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qq.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: BCC801C3784
+X-Rspamd-Queue-Id: 580D31D09D5
 X-Rspamd-Action: no action
 
-On 28/02/2026 15:08, Piyush Patle wrote:
-> Convert the ISL12026 RTC binding from text format to YAML schema.
-> Remove the legacy text binding.
-> 
-> The new schema enables dtbs_check validation.
-> 
-> ---
-> 
-> Changes in v3:
-> - Removed unsupported select section
-> 
-> Changes in v2:
-> - Fixed dt_binding_check warnings
-> - Improved example formatting
-> 
-> Changes in v4:
-> - Fixed Warnings and resent in-thread as requested
+In spear_rtc_resume(), the return value of clk_enable() is currently
+ignored. If clk_enable() fails, the driver proceeds to call
+spear_rtc_enable_interrupt().
 
-What warnings?
+The spear_rtc_enable_interrupt() function performs a readl() on the
+RTC control register (CTRL_REG) as its first operation. Accessing an
+MMIO register of a peripheral without an enabled functional clock is
+unsafe on SPEAr architectures and can lead to a system hang or data
+abort.
 
-I did not request it. And again you ignored the review. You kept sending
-me some messages in private, but did you read the response where I asked
-you read submitting patches?
+Fix this by checking the return value of clk_enable(). If it fails,
+print an error message and return the error code to avoid the unsafe
+register access.
 
-I am dropping this as well. Alexandre can just pick up v3.
+Signed-off-by: Zhaoyang Yu <2426767509@qq.com>
+---
+ drivers/rtc/rtc-spear.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
+index 959acff8faff..9bf7cf264715 100644
+--- a/drivers/rtc/rtc-spear.c
++++ b/drivers/rtc/rtc-spear.c
+@@ -437,7 +437,7 @@ static int spear_rtc_resume(struct device *dev)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct spear_rtc_config *config = platform_get_drvdata(pdev);
+-	int irq;
++	int irq, ret;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 
+@@ -447,7 +447,11 @@ static int spear_rtc_resume(struct device *dev)
+ 			config->irq_wake = 0;
+ 		}
+ 	} else {
+-		clk_enable(config->clk);
++		ret = clk_enable(config->clk);
++		if (ret) {
++			dev_err(dev, "Unable to enable clock on resume: %d\n", ret);
++			return ret;
++		}
+ 		spear_rtc_enable_interrupt(config);
+ 	}
+ 
+-- 
+2.34.1
+
 
