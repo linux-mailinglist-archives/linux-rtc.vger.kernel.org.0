@@ -1,209 +1,158 @@
-Return-Path: <linux-rtc+bounces-6095-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6096-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gDFQNR4lpmlrLAAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6095-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 03 Mar 2026 01:02:38 +0100
+	id QLONFd56pml8QQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6096-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 03 Mar 2026 07:08:30 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E75A11E6F04
-	for <lists+linux-rtc@lfdr.de>; Tue, 03 Mar 2026 01:02:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B226B1E966A
+	for <lists+linux-rtc@lfdr.de>; Tue, 03 Mar 2026 07:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C4086301F683
-	for <lists+linux-rtc@lfdr.de>; Tue,  3 Mar 2026 00:01:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 686C53045660
+	for <lists+linux-rtc@lfdr.de>; Tue,  3 Mar 2026 06:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B25A31F9BA;
-	Tue,  3 Mar 2026 00:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DEC358397;
+	Tue,  3 Mar 2026 06:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="R7Sc3mME"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K27VfvfK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11267342C88;
-	Tue,  3 Mar 2026 00:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772496079; cv=pass; b=pSR00D76DxWZJS9Cj5TLafeoo4Zj+TFJvbYinLO4j33j8MMvY5NwMdbQDDlec73Hzt6675fRCHLyluf01K75Nn4PdkDvDGB1OcipzVfMkXosEqqEV6vmIr1iFjjRmLZGbgPFh/gNSr8FrdFn5lDi9NadmfmPd6YjdMfcuChI8TE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772496079; c=relaxed/simple;
-	bh=ioGr+nk8fi9NYjdV0OIUJe4BpGL8TdYgG41Pew4uTmU=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF167262F;
+	Tue,  3 Mar 2026 06:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772518077; cv=none; b=VIybMCbYmZKTKMZkqCd7fTkpd4fjLwmKtdQ9sURscJ7HMG4m9MqM3M8YoW/wgpk7e2f1EHv46/VI2fIf071eDpnTJsV4Uo45I8oEt7zD6Id/H2olWzLIbJt7QqYSeRNS2+99lrFczzEe+fLgwj0JbBXtY6Te4J8FXaXUWEr5mTk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772518077; c=relaxed/simple;
+	bh=bYGxeb0oKnPKhTR3gcq9FDbtu2F7YmpxraTvFuPYRRg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HmZcdWbDONH5oqyT9/VyDO/KgdUUZLNNYjxd6XuQ9XpLBB+ngGzyUgiAACFejCOFVTg140CMW0tdmrdR5vXwRQ58V3eUODgcGEtnehUtfTNBpXlACL1pskbsfUk1ERm5SbTAYx2rC2Iks3sO9LfVfoNd9JMJXIk/4H6jZlcRA64=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=R7Sc3mME; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1772496053; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=SZAENPhpCVc5KCiFdrk/pr+sWKRZl+95DN9q+hnlsBwaN0wOumWDKLa1JIgwZXc5xf2tYoRVq43oILVW7srDICw46NvMpIxrxAfL4TTX5gJ4SdMzEe5A9/joogroTH1P19ViVfZML8HA7Kl473KqNjNuSusteT5Q6mx4dDHSjNk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1772496053; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=l3PYFCVcWjGQaSSZj39sm1aZzw9LlSKfmhEhHtoI7MY=; 
-	b=RGVfAtl7QXtEdlOV89ZYwG1zqyY/yt291EyWsC2qmDEauoE7Sk53CwHAv00TBGCIqYO4aiID27ew2SfkFYAtZ6WTrkLTRkh3JOLLA4R/jgM6abT6sh14HIPUG1oWoKPaC/OAZdZkZrwGEiI06L4kEuW7ZPtmeunL1x5M/LeYEiU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1772496052;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=l3PYFCVcWjGQaSSZj39sm1aZzw9LlSKfmhEhHtoI7MY=;
-	b=R7Sc3mME6oQ9arKfbh/G4lQNo6DTFlUSvKAaPdsCDMw1w97KKSxv7X9sIT/F1IL+
-	MeO6JkQn9Wt1+pqAwJiRF0SQ/2UPHe+tZCxE8yI9LiEwXa2kWFGyPgeATdv0E5lOrjm
-	pvw3kbKAUdiMUjOepHr06zsnwro3H/5AlEdzKoIM=
-Received: by mx.zohomail.com with SMTPS id 1772496050787810.127324350416;
-	Mon, 2 Mar 2026 16:00:50 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 062E9180D08; Tue, 03 Mar 2026 01:00:45 +0100 (CET)
-Date: Tue, 3 Mar 2026 01:00:45 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Otto =?utf-8?Q?Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 5/6] power: reset: sc27xx: Add platform_device_id table
-Message-ID: <aaYkhIGP2pexbxt7@venus>
-References: <20260222-sc27xx-mfd-cells-v1-0-69526fe74c77@abscue.de>
- <20260222-sc27xx-mfd-cells-v1-5-69526fe74c77@abscue.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ta0iugmq+01IC3xENGmBBFBbR8/yxYWRAtnORlNQ1wYY6GjP++SFxsSBmhGouvvBhCMCBuskycBdR/IBa1nYK8yoNTU/V4SjbDqYKwJEawr02/iIT2htXOYx4TB8DsxWFpIR+JAdGIHo74tcR72rOMwb2331jtYuZuc3F2dRRAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K27VfvfK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E1DC116C6;
+	Tue,  3 Mar 2026 06:07:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772518077;
+	bh=bYGxeb0oKnPKhTR3gcq9FDbtu2F7YmpxraTvFuPYRRg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=K27VfvfKyTIqhbi5/kcpQyQh82zF4irXRKnnde7Bi2L4lt0VYr3QxxD9oDRMtjimC
+	 MmsziJkMiR9P/nfJR6Li7hIkTVCu+N5t+Kln01q985h0dtNfaZ3ZGzDbFS2Wvqrwiy
+	 5E6BtdSfg46+O5qOIExeRbucY1mZGAVOi4aBp5kSPGC4X3T72Brv21no0FQ/1MwZT3
+	 Vs+qlKE0tF6o+eVyfyF1T8VLZi5JSLR1yvgxpAeDRXW3XqfqzkSPIscCahf7Swj/EO
+	 JrzhLxFeEkNb3A9Xp7WK+v+S0RH4qtCZQGi/thxt4uu9Laj/Gp5xW3K2an3pNmaoIg
+	 mxTMoDu8W6fXg==
+Date: Mon, 2 Mar 2026 23:07:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	x86 Maintainers <x86@kernel.org>, linux-rtc@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v1 4/8] ACPI: x86/rtc-cmos: Use platform device for
+ driver binding
+Message-ID: <20260303060752.GA2749263@ax162>
+References: <5983325.DvuYhMxLoT@rafael.j.wysocki>
+ <13969123.uLZWGnKmhe@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="adszrmxnyvdyek6f"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260222-sc27xx-mfd-cells-v1-5-69526fe74c77@abscue.de>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-0.2.1.1.4.3/272.480.55
-X-ZohoMailClient: External
-X-Rspamd-Queue-Id: E75A11E6F04
+In-Reply-To: <13969123.uLZWGnKmhe@rafael.j.wysocki>
+X-Rspamd-Queue-Id: B226B1E966A
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6095-lists,linux-rtc=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com,vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-6096-lists,linux-rtc=lfdr.de];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[collabora.com:+];
-	NEURAL_HAM(-0.00)[-0.998];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[abscue.de:email,collabora.com:dkim,collabora.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
+Hi Rafael,
 
---adszrmxnyvdyek6f
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 5/6] power: reset: sc27xx: Add platform_device_id table
-MIME-Version: 1.0
+On Mon, Feb 23, 2026 at 04:30:21PM +0100, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> 
+> Modify the rtc-cmos driver to bind to a platform device on systems with
+> ACPI via acpi_match_table and advertise the CMOST RTC ACPI device IDs
+> for driver auto-loading.  Note that adding the requisite device IDs to
+> it and exposing them via MODULE_DEVICE_TABLE() is sufficient for this
+> purpose.
+> 
+> Since the ACPI device IDs in question are the same as for the CMOS RTC
+> ACPI scan handler, put them into a common header file and use the
+> definition from there in both places.
+> 
+> Additionally, to prevent a PNP device from being created for the CMOS
+> RTC if a platform one is present already, make is_cmos_rtc_device()
+> check cmos_rtc_platform_device_present introduced previously.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Hi,
+After this change in -next as commit 2a78e4210444 ("ACPI: x86/rtc-cmos:
+Use platform device for driver binding"), I am seeing
 
-On Sun, Feb 22, 2026 at 02:16:49PM +0100, Otto Pfl=FCger wrote:
-> Make the poweroff driver for SC27xx-series PMICs probe automatically.
-> Since the device representing the poweroff functionality of the SC27xx
-> PMIC is not supposed to have a dedicated device tree node without any
-> corresponding DT resources [1], an of_device_id table cannot be used
-> here. Instead, use a platform_device_id table to match the poweroff
-> sub-device instantiated by the parent MFD driver.
->=20
-> Signed-off-by: Otto Pfl=FCger <otto.pflueger@abscue.de>
->=20
-> [1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
-> ---
+  rtc_cmos PNP0B00:00: error -ENXIO: IRQ index 0 not found
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+on a few of my test machines. Is this expected?
 
--- Sebastian
+Cheers,
+Nathan
 
->  drivers/power/reset/sc27xx-poweroff.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/=
-sc27xx-poweroff.c
-> index 393bd1c33b73..6376706bf561 100644
-> --- a/drivers/power/reset/sc27xx-poweroff.c
-> +++ b/drivers/power/reset/sc27xx-poweroff.c
-> @@ -6,6 +6,7 @@
-> =20
->  #include <linux/cpu.h>
->  #include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm.h>
-> @@ -70,11 +71,18 @@ static int sc27xx_poweroff_probe(struct platform_devi=
-ce *pdev)
->  	return 0;
->  }
-> =20
-> +static const struct platform_device_id sc27xx_poweroff_id_table[] =3D {
-> +	{ "sc2731-poweroff" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(platform, sc27xx_poweroff_id_table);
-> +
->  static struct platform_driver sc27xx_poweroff_driver =3D {
->  	.probe =3D sc27xx_poweroff_probe,
->  	.driver =3D {
->  		.name =3D "sc27xx-poweroff",
->  	},
-> +	.id_table =3D sc27xx_poweroff_id_table,
->  };
->  module_platform_driver(sc27xx_poweroff_driver);
-> =20
->=20
-> --=20
-> 2.51.0
->=20
->=20
-
---adszrmxnyvdyek6f
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmmmJKkACgkQ2O7X88g7
-+pqKDA/5AV136yvRe7RqNNIT156QrAc+9gAeOqzQ6oPlahmYFlPYeIeqFAdyRbFP
-CUks1Q7xZp4kcIlL9Qi0tdHM/em2QpHpx2Grh4nk3ZCv6oSp+ENj8xblRua85aPJ
-DQAM/xfskwuVATHFfRc6Aus6wSJpbmlXwGelvP2/Sxiq9FSmmn4CSPP7b8Lw41iA
-/tp6p3UuXPY8B8PkLApLBwECZ757Y/DZPTbfHkdUunt25qHvr5gOM0cUJ42kadVG
-WbmXtd4GRzkdT+IOgYhbWKhbbtjLIFkE1F3OLuJF/JfnpHs9WLuvgdnfyTy2kEc1
-D/ogyBvec9PqAFHpgymYgTRVcLHw3Lp7Yfane9f6PtTjsn5/A5vZmr8vi9xG2RuS
-UMThn+0OKwURaABK90z6udRR66+EDT3TClJLyK8P7tqmFNJ7YGtAa6K5r/VQikJi
-qzdHpJLRR2h0OVHJN/zyfitZHiJrE7EPwGd6p4w7EfuuG9emNRSDXZetZX+45dLA
-f/scfcVGxOB3KYpoB6r2rrF9yCQBJV/M9G3tgShq65WLLIfedUaM2NbcOEk7KYrn
-Dkb8c64EzMPOA/i4TWeZKpw2xpr6DSLl4VEC+1BApiux86+rsfw21bjASWq/2gX/
-KgibKzWdkv0HXK7/QU5g7gNPPnRNZPA3PhPEQE6PAr9TGtHSJNY=
-=U7O7
------END PGP SIGNATURE-----
-
---adszrmxnyvdyek6f--
+# bad: [d517cb8cea012f43b069617fc8179b45404f8018] Add linux-next specific files for 20260302
+# good: [11439c4635edd669ae435eec308f4ab8a0804808] Linux 7.0-rc2
+git bisect start 'd517cb8cea012f43b069617fc8179b45404f8018' '11439c4635edd669ae435eec308f4ab8a0804808'
+# bad: [30cad5d4db9212a3e9bb99be1d99c4fbc17966c7] Merge branch 'master' of https://git.kernel.org/pub/scm/linux/kernel/git/wpan/wpan-next.git
+git bisect bad 30cad5d4db9212a3e9bb99be1d99c4fbc17966c7
+# good: [3d6642ce50abe4cccbbc4cfda0808300b4f39cb6] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git
+git bisect good 3d6642ce50abe4cccbbc4cfda0808300b4f39cb6
+# good: [e832bc0903e6b85f9f084fef0a9d51bbbbcc1ee7] Merge branch 'for-next/pstore' of https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+git bisect good e832bc0903e6b85f9f084fef0a9d51bbbbcc1ee7
+# bad: [ef26f99b113b16135282e2cda9ee8afda2d39e10] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git
+git bisect bad ef26f99b113b16135282e2cda9ee8afda2d39e10
+# good: [df57aa49ec08ebe55d2840e3950be37bff3a8853] Merge branch 'docs-next' of git://git.lwn.net/linux.git
+git bisect good df57aa49ec08ebe55d2840e3950be37bff3a8853
+# bad: [8aec61332e195aae38737a3b6454526938132f41] Merge branch 'next' of https://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git
+git bisect bad 8aec61332e195aae38737a3b6454526938132f41
+# bad: [ea956cb5e17cb5910382be255aa2329e067edd3b] Merge branch 'cpupower' of https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git
+git bisect bad ea956cb5e17cb5910382be255aa2329e067edd3b
+# bad: [0953f6a5e08b6fc636b17e00dcac3d9eeef78e72] Merge branch 'acpi-cmos-rtc' into linux-next
+git bisect bad 0953f6a5e08b6fc636b17e00dcac3d9eeef78e72
+# bad: [0139085310c40853cc429d5c38fd66e540c97d34] x86: rtc: Drop PNP device check
+git bisect bad 0139085310c40853cc429d5c38fd66e540c97d34
+# good: [1ae2f435350ec05224a39995c3a680aa6fdae5a5] ACPI: x86: cmos_rtc: Create a CMOS RTC platform device
+git bisect good 1ae2f435350ec05224a39995c3a680aa6fdae5a5
+# bad: [d15f1c2e413e861270ca6aa5dc5d9da1bcd678ca] ACPI: PNP: Drop CMOS RTC PNP device support
+git bisect bad d15f1c2e413e861270ca6aa5dc5d9da1bcd678ca
+# bad: [2a78e42104444f948698f1225deaf515e9b7224d] ACPI: x86/rtc-cmos: Use platform device for driver binding
+git bisect bad 2a78e42104444f948698f1225deaf515e9b7224d
+# first bad commit: [2a78e42104444f948698f1225deaf515e9b7224d] ACPI: x86/rtc-cmos: Use platform device for driver binding
 
