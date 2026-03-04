@@ -1,128 +1,114 @@
-Return-Path: <linux-rtc+bounces-6102-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6103-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iMaWJLeap2ksigAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6102-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 03:36:39 +0100
+	id aCOVKqfvp2mWlwAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6103-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 09:39:03 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADE1E1F9EAA
-	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 03:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF361FCBCC
+	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 09:39:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50F9B3044A55
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Mar 2026 02:36:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 836A4300F514
+	for <lists+linux-rtc@lfdr.de>; Wed,  4 Mar 2026 08:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70CD27FD52;
-	Wed,  4 Mar 2026 02:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EFD03914ED;
+	Wed,  4 Mar 2026 08:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQFixfd4"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C2F19CD0A
-	for <linux-rtc@vger.kernel.org>; Wed,  4 Mar 2026 02:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCF2382F35;
+	Wed,  4 Mar 2026 08:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772591789; cv=none; b=RDynVbINHSaTX9t1Or5O7r7JcS3AF0qAEm0/bGFEF416UrK0swyHvrwr/5fsUu+cc2LNTI6XxOzqeK0kI+nlo189wOGi1AviFFADkzYocviO4LzUAslLkheWyMLXfoq8EgoliHcVUjHZtpIM1fcsj4fY/yBA2+iw1OUZC47ZUqc=
+	t=1772613255; cv=none; b=eXP5Aq74N1TfYdFBhIebL7b3ceUs5aSemlBnn8EDJgNAh8fSPVOFP7E7D1gjK3Jrr+BoYurcPJuH2ga0fe8/YcPYTvlLNhy7zMrEqZ4iIsqQtHg8StPuQ/LGIxBDl9Y/S9Jw9h8uCACawiqCtUQmxwBmpQHRay4TT8GzGpgJcHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772591789; c=relaxed/simple;
-	bh=dE18NARjHFoNjX4UkAsQzIp1Cjoq99h5u4zZptbJQtk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UCFuBcyG9IoHxCV06foFFyF2X9KCeZtfOjRiafz6Rs3kvbu4oFldcfcQW64uN/jguEhDj3hisP5fISdNATfDp8HMwt8A+j49eP0Qm+sV3L+sSumf/1Lu7LoZk+CrFkW9DdLUtA7wkzzTk8V6eGpKxILBBbI1CcZOuEGek0Qb/dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-05 (Coremail) with SMTP id zQCowADHWQ2hmqdpKx6dCQ--.30158S2;
-	Wed, 04 Mar 2026 10:36:17 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] rtc: cmos: Remove redundant include of linux/acpi.h
-Date: Wed,  4 Mar 2026 10:35:33 +0800
-Message-Id: <20260304023533.503066-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1772613255; c=relaxed/simple;
+	bh=ziTBDWIW9u87ppp3H8YLHxXrmlbuWtR01bSwg21V0Ks=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RZH0rsDkLjXlI1Ul9uKZeACClNn8PH48wB5+SUPHl25MllC1z/IxKn/g+D/Fhx3I8q8aKVEpnRxN9Aayk8+xzdUm8SvjcJdBij1NNdBRe2alnd9agORw0qkVtV5mCukVk4zRlQbyjfexkng2+PSeLUGDE+YIMHJCzUx7wTJqRRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQFixfd4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9051BC2BC87;
+	Wed,  4 Mar 2026 08:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772613255;
+	bh=ziTBDWIW9u87ppp3H8YLHxXrmlbuWtR01bSwg21V0Ks=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KQFixfd4QrHOw1LVI/dUoEwBC+tW6PRXfGUa5uNDkW5x5dhVUdJyPCuucQLXN19dE
+	 zIecJjIv3LEsP9UzSHiwktilM/Me0O335+zBXedw9xK+fLCt9KB9Wh/Emnz3MUJ1GS
+	 skSI96+vcIr+/7c31ndy2uH3fXs8j4OmIWkXmy56dXPxYHA8r77MvLQtE0Afe/mO1p
+	 6YMMODxNm4tLYAR4lbmdY6jJiu7Eqs/nY/wG9AGxNk7SPIJSOvpOYEC2/lK7KRqDUD
+	 PUbqTpP2VEZmbypypr22Z5DRSlC7cG54aXvefZJu48X4KFKG50g83Pkd7y83Jp7vaN
+	 Tno19lc+JPBjQ==
+Date: Wed, 4 Mar 2026 09:34:12 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-rtc@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Daire McNamara <daire.mcnamara@microchip.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: rtc: mpfs-rtc: permit resets
+Message-ID: <20260304-camouflaged-invisible-rhino-6e3c84@quoll>
+References: <20260303-flounder-slate-dd69766990ce@spud>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowADHWQ2hmqdpKx6dCQ--.30158S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZryfGrWkuFyDCw4fKFyfWFg_yoW3trg_C3
-	4xCr17W3WkAr4vyw1aqFs3WrW5Ka4UZF48X3Wvga93Aa9rtw4YqayDZF47X3sxu34UJFnx
-	Jay7Zryxur1jgjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb2kFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8JwCF
-	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-	1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-	x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYhF7UUUUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
-X-Rspamd-Queue-Id: ADE1E1F9EAA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260303-flounder-slate-dd69766990ce@spud>
+X-Rspamd-Queue-Id: 0DF361FCBCC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6102-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nichen@iscas.ac.cn,linux-rtc@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6103-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,iscas.ac.cn:mid,iscas.ac.cn:email]
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qualcomm.com:email]
 X-Rspamd-Action: no action
 
-The header file <linux/acpi.h> is already included globally at the top
-of the file. The second inclusion inside the #ifdef CONFIG_ACPI block is
-redundant because the header uses include guards to prevent multiple
-inclusions.
+On Tue, Mar 03, 2026 at 04:36:33PM +0000, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The RTC on mpfs and pic64gx has a reset pin, but until now this has been
+> undocumented because platform firmware takes the RTC out of reset on
+> first-party boards (or those using modified versions of the vendor
+> firmware), but not all boards may take this approach. Permit providing a
+> reset in devicetree for Linux, or other devicetree-consuming software,
+> to use.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Remove the duplicate line to clean up the code and slightly reduce
-preprocessing overhead.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
----
- drivers/rtc/rtc-cmos.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 9ac5bab846c1..7c06b9d19273 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -743,8 +743,6 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- 
- #ifdef	CONFIG_ACPI
- 
--#include <linux/acpi.h>
--
- static u32 rtc_handler(void *context)
- {
- 	struct device *dev = context;
--- 
-2.25.1
+Best regards,
+Krzysztof
 
 
