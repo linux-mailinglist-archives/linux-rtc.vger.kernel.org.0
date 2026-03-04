@@ -1,58 +1,58 @@
-Return-Path: <linux-rtc+bounces-6106-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6114-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJktEfMrqGkgpQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6106-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 13:56:19 +0100
+	id UJ2BMf94qGnpugAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6114-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 19:25:03 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAAFC1FFE7D
-	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 13:56:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98E5A206471
+	for <lists+linux-rtc@lfdr.de>; Wed, 04 Mar 2026 19:25:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 48D55303A3FE
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Mar 2026 12:55:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1F6CB3075F97
+	for <lists+linux-rtc@lfdr.de>; Wed,  4 Mar 2026 18:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 376B918D658;
-	Wed,  4 Mar 2026 12:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CCEA3DEAE0;
+	Wed,  4 Mar 2026 18:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSXKrDYF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXlqQN0y"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1436A73463;
-	Wed,  4 Mar 2026 12:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297F23DBD47;
+	Wed,  4 Mar 2026 18:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772628949; cv=none; b=l/s3XlGykjJDYFLB+eUcZ8igStwfRlo2Lb8/JgbKjzcJ7f5eEtvuEc7QhEMyK3RrAxhakHVeNsDpolYdyVs7/l03xgf7pujQ5Ux0tpp9otpLn+FXVMr/db1GAbNbatD0IvRUx+BFNOHRkRjq0pXU8wyhvJuPJXG76jvmJsBST3c=
+	t=1772648247; cv=none; b=XIPVE1jjBFYw+3M1jovpQZST9s8JN/q6llEkAzXH9XNc0U6ce8GRpUqeFw8PfjSJqLWNm/PJ6WPKLT4S+QBCagArEf7X9WNkvLkYp4ovlS55bwjd6VK3atJKDAh7zbz8cdAk9Y4lS7fJha4vo7yoE0ucrnvr+LMfeLG0cc7sP4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772628949; c=relaxed/simple;
-	bh=LLgqkgDiaPgn6snhIalKa89fIsH0nKVR5i3m1HJp24I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m4xSDqvSk5Z0bGwACIUnSx+UarmK7RbJ+vMBi32lJzcqCwohJIYfTjNnKj/0F7PvjQJq/BwXC818duaDqzR+KrJTPmKUq810KRfjID86Evh9g36rBmm3o/bwFUsGK8V19n//PtsjMKx4sY6L7vjus9dBsLytly3xvspHgQU18UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSXKrDYF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D5CC19423;
-	Wed,  4 Mar 2026 12:55:46 +0000 (UTC)
+	s=arc-20240116; t=1772648247; c=relaxed/simple;
+	bh=kYdlAqCsJPZaPGGfRQepzq2wsjHZ5NwYp44Uh/Tep3U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ICE51GkjCkagQRp9udHsSZ3PAo4a70rSpTqxC/7tkY+inZzYejfuAAzi9tNQbp573LoQgk6jMoVQXOeXp3lFgtmycqzq8QNH+lOMp1/GBmHK+RaOQIPZTZjWum678IvgfwwGIq+4r6vbHAyQQEFvOGMizlEEJvy7CjM77oEs0RQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXlqQN0y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FA6C19425;
+	Wed,  4 Mar 2026 18:17:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772628948;
-	bh=LLgqkgDiaPgn6snhIalKa89fIsH0nKVR5i3m1HJp24I=;
+	s=k20201202; t=1772648246;
+	bh=kYdlAqCsJPZaPGGfRQepzq2wsjHZ5NwYp44Uh/Tep3U=;
 	h=From:To:Cc:Subject:Date:From;
-	b=TSXKrDYF99PjUStTAwMfcjbBtry1ntRp/1OSGJ+yHRTtpqCjJ7Sjcu36UoLY8+6kC
-	 sVp7+w52JwEbtn3ryZwDRSM/Y8q1ytxwfIG62iTswOFyWutGndWu5p8Lp84nyipHeX
-	 Oj3DV7ktDTTvQyHh56YTAFBBsxjObnAtp+3naoRQkWfsWBJ/o+iLdQh5EEwhA+ruk1
-	 Zv4wuIo6XT5g/JqOn7Hbu2mDg+N5+kXKX4dEnLOa4wQnO40aBnU2WES5InIkcIb8Nx
-	 zM2fUrGtN3MqecyiP4eosdtx45uyQ25AHRXLkC9dw/K0QIDuC5PmCwVFhU3dCWELv2
-	 pn4wumo1sLXAA==
+	b=nXlqQN0yqjANn7UyapY7iwwoFi0VTcEHFZesq8vw4ocC4rSvg0lf4dGW2p8D2EShn
+	 k0EjNCUr3Obj1JgmeKEqWRYyBEFIQRMnqGoZNqrQNxejrBQPSMCY7tiJHOxnFM6jlg
+	 IQhUrbxfVmRQFUXkvjkqfu4IMKZAgwjqFHu9LKimy0l8G6rklVOXWhlsQiBxeZLChe
+	 LLd5TAVRkpK79l9CnRtb6QsbQMduJrZ5WA/MYhNDASnVkhKn+Ut6xhRFeAwEjmkbrB
+	 3iUx/NRteqHe49oH0j/7TAaT2TmgRJF//0DjNpL01+cGcrdW1kTQlRVXtyObimCm6l
+	 96BWNn2dWyOkg==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ LKML <linux-kernel@vger.kernel.org>, linux-rtc@vger.kernel.org,
+ Linux PM <linux-pm@vger.kernel.org>
 Subject:
- [PATCH v2] rtc: cmos: Use platform_get_irq_optional() in
- cmos_platform_probe()
-Date: Wed, 04 Mar 2026 13:55:43 +0100
-Message-ID: <12857714.O9o76ZdvQC@rafael.j.wysocki>
+ [PATCH v1 0/7] ACPI: TAD: Assorted improvements and RTC class device
+ interface
+Date: Wed, 04 Mar 2026 19:11:17 +0100
+Message-ID: <5092662.31r3eYUQgx@rafael.j.wysocki>
 Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -62,14 +62,14 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: AAAFC1FFE7D
+X-Rspamd-Queue-Id: 98E5A206471
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	CTE_CASE(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -77,7 +77,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	RCVD_COUNT_THREE(0.00)[4];
 	HAS_ORG_HEADER(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6106-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6114-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -88,63 +88,25 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,rafael.j.wysocki:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,rafael.j.wysocki:mid]
 X-Rspamd-Action: no action
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi All,
 
-The rtc-cmos driver can live without an IRQ and returning an error
-code from platform_get_irq() is not a problem for it in general, so
-make it call platform_get_irq_optional() in cmos_platform_probe()
-instead of platform_get_irq() to avoid a confusing error message
-printed by the latter if an IRQ cannot be found for index 0, which
-is possible on x86 platforms.
+This is a proper v1 of the series posted previously as a prototype:
 
-Additionally, on x86, if the IRQ is not defined and the system has
-a legacy PIC, hardcode it to RTC_IRQ, which should be safe then (and
-which is what the dropped PNP code did).
+https://lore.kernel.org/linux-acpi/4727679.LvFx2qVVIh@rafael.j.wysocki/
 
-Fixes: d15f1c2e413e ("ACPI: PNP: Drop CMOS RTC PNP device support")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://lore.kernel.org/linux-acpi/20260303060752.GA2749263@ax162/
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+The code has changed somewhat, most importantly the first patch has been
+split and review feedback on patch [6/7] (previously [5/6]) have been
+taken into account.
 
-v1 -> v2: Added tags, edited changelog
+This series is on top of linux-next.
 
-This is linux-next material.
-
----
- drivers/rtc/rtc-cmos.c |   13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -1423,9 +1423,18 @@ static int __init cmos_platform_probe(st
- 		resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
- 	else
- 		resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
-+	irq = platform_get_irq_optional(pdev, 0);
-+	if (irq < 0) {
- 		irq = -1;
-+#ifdef CONFIG_X86
-+		/*
-+		 * On some x86 systems, the IRQ is not defined, but it should
-+		 * always be safe to hardcode it on systems with a legacy PIC.
-+		 */
-+		if (nr_legacy_irqs())
-+			irq = RTC_IRQ;
-+#endif
-+	}
- 
- 	return cmos_do_probe(&pdev->dev, resource, irq);
- }
+Thanks!
 
 
 
