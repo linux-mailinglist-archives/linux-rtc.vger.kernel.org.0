@@ -1,181 +1,187 @@
-Return-Path: <linux-rtc+bounces-6119-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6122-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Bb7MWZMqWk14AAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6119-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 10:27:02 +0100
+	id cBTGKDTbqWneGQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6122-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 20:36:20 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A91D20E5FA
-	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 10:27:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AECB2179D9
+	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 20:36:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EB30C305F49F
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Mar 2026 09:24:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 96CBB3093446
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Mar 2026 19:35:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5690D3783C0;
-	Thu,  5 Mar 2026 09:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217F83D3D1C;
+	Thu,  5 Mar 2026 19:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=spacecubics-com.20230601.gappssmtp.com header.i=@spacecubics-com.20230601.gappssmtp.com header.b="JXmoJNqu"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CDWRsty+"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011036.outbound.protection.outlook.com [52.101.52.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6405C378813
-	for <linux-rtc@vger.kernel.org>; Thu,  5 Mar 2026 09:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B5B33A711;
+	Thu,  5 Mar 2026 19:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.36
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772702687; cv=pass; b=uJzDKWVzLidvvjORExteG7FDvfZZTQVN4KfdPTnNIQpLR5zfTsrSwCiryQ9MjCVTuKTOgMHZX9ziDZLrhbILAyVTU8Dgnt+xo59H7+jfAndoYqLUGYRslHXY3C/rr/xpnFfbFE4ADf53iMddqJv/eBseV7Eyouyg07E2qOs7ROc=
+	t=1772739354; cv=fail; b=etFRlc4K07Gj6nKngOMKdYF+MkPQ8s9+eIkYexBKbI3K0dpQdX9CSo2zaX5iLtOAw07heuMhMG0h4+ZTGkxUlA52ZNX7efn/lFCIKLkXGcQxgEdCJBEDZhJv/d32nsYH3JY2bwimtVQjMAnamZrCZgzOabnexj5YROFPuFCifJs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772702687; c=relaxed/simple;
-	bh=RyI/EasxGbNY8MAYGDpDHtAitKfMIIv+EOIA1+5tskY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ANFBwjBoPA0zaW6nB2Gyus1tHlIyoQa0Grjqp9UDPxPKfNHwfhoNiusSrOhZ4igz4ZvJME2iUFNDdNvNXMrlKudnGwxcTOuiS0TgJmxL42Jvl2e0GTC+jtKa1rpoul1sVoyXBJQ+0mMIURcGkz4DLc0QqfBM2dJnt2VIldj+fBs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=spacecubics.com; spf=none smtp.mailfrom=spacecubics.com; dkim=pass (2048-bit key) header.d=spacecubics-com.20230601.gappssmtp.com header.i=@spacecubics-com.20230601.gappssmtp.com header.b=JXmoJNqu; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=spacecubics.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=spacecubics.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-66174cf4549so108130a12.0
-        for <linux-rtc@vger.kernel.org>; Thu, 05 Mar 2026 01:24:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772702683; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Cqpv0/O/OgZdlrRQPj7e+TjBOvZGBI/0+v01wM/2cHEDTm1GNSbGR4Qf0ewUnpA38c
-         EZ3qILXKzvMeJEtTD58NOl5Jo11XFekpqlLSLj41WhXDiq9ktald5UpI4GEQo/LrtNG6
-         WnUcbwiCiltihr9+ZoQyqy6b1qRq+/XIE4iVca/G3oNwf8VJob4z5/wjuezYNEzkfp46
-         abrWJNEF3xyWfDEjNl0puvS7YyA91wGUfhzMYTxI2rZnHsYNpoCf45bo/aEagXPiI+a4
-         4r8EpsICnItd0kJffeERV97T5Aujk8DNMRjHEcBSPw54A12Zo16vl/uc+1JPtlZEysEb
-         d7pQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=ypYVyS5MeqKOLQueJPbQc6nHN3pg7qQVDG5ppaHItHg=;
-        fh=H753Ybiq3wqcoULCcCfrnDT0TaOVOcXrhBeVr7RnQ7Q=;
-        b=HQBYt6JtHj0yr2xnGYJxFiA3WREqUQRMxkimPVrA/dZRYtb5M+BEqHsUX10ZOcccx4
-         AP8DF/MR3jS1AmRotQ7XCclDWQdwhKsQ6FfpzznD/QPTDcJp+O7sWak1TxEpz3ZBfFmJ
-         qFv/+yDmaBrI1Hdnw97TIu+dMnmHehjC8H878Htao/6C+M1te/36k8t7t1w7pcCtKLk7
-         vlVd5apwDfFGfkFVDHID1wWx6ZrNi1l0TG7CBSQtg4XJ0HVJ7VI/B4fnJaoyF21RQ+52
-         EnKiOz01eacpxn+wum42pN5A+wIGtFQX0ET/J8cyYeIaq/+fY2GbP0qX07uje2qmJ2Q8
-         O5kQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=spacecubics-com.20230601.gappssmtp.com; s=20230601; t=1772702683; x=1773307483; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ypYVyS5MeqKOLQueJPbQc6nHN3pg7qQVDG5ppaHItHg=;
-        b=JXmoJNqudb+tGikNrkIaAPy1m6gZtNJLFgKe0oDZY4qHVu2cMkrwMFlKXFhVg3EKC+
-         wHoJUMWmndIeyOEzaX4UXBJ9u+w5Gti7Kgdz/0+X+l7tZQHQKWBuSuwIoRbb8WHxIjVj
-         GakoMlpCo5h+wzJWEVEuvPOWwAIh9D25gLGt8/oYFnRAyzr4e5ecuVYjdO8hrIKSW2y7
-         TkynXcEylnrmHG9anWlZWHUg5Wfs4YxbD6dCwz/0wI4zP/e0L5cnO6tfYHrJRq6AlKp7
-         rqvDVQWMejP6EKK/4mc053Dl0/xZy1yXQCcvz7zQK4oK0g14HO+aZSkkGlqK+DG7RR/1
-         x8Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772702683; x=1773307483;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ypYVyS5MeqKOLQueJPbQc6nHN3pg7qQVDG5ppaHItHg=;
-        b=fRv3qtMd2ac2C1WOM669hEO7xkUerIwpI8kOWsEe67IwsT0x82guwIgP+oEbVmrjRP
-         uWp5vRETBWhb5Nap1YyKziYCsPnSFvUY+2ZmRnXH67JfGOLoA/1Hpfr2MZ16rGdiWuhw
-         msmStE2dTCg+r39fcPuXGy2Nzp0YBYOpyAna9ah6Uc9mlQDLA5R5KJsEzsR6at21uCeN
-         uGZ8uGyX5eFpI6hnW+ft8rxNX9HFE5DK3mRUjsfSd0uDk8A+1QQxemW+XaugldckxHeD
-         7z9lZl2jVP1c8HhEPNaZP5eNtio2IhA7mzHDQbWB3QOkTInrTy5WbCI7AXtRrhbIG+d5
-         KfmA==
-X-Gm-Message-State: AOJu0Yxp4H307mxpLbUt7jNJkGYf1iowqm8sh4TDoWmT9YlQxWbvTMi5
-	lIB/GTYcksa/vqZfhrJJx7ukASNOVfQbG6d6nDSgaM5chjN0ywRSXwCniLI2DGp0JmUly3uXuvw
-	9FzP+7W47oSK9nYruOoDTOgw3UqFWbgS72/GzXaO+GZEKA04nuOAtHHc=
-X-Gm-Gg: ATEYQzx32CK64c9SLDjE9A+XZN6l+sYEpFo2F2V7z0lAlBd8bUem1euigjDhWaxEjBY
-	AOiPGEJc5wX+kr28nSDyD6+RbmyfSC0/sgoJI0/bK9TLqCdCCzMGH3dt69ecJ56IgJXZYIlm9rs
-	9okV2cwEE/iu+80a9ZoQLhBhSsz69Er222HOqXTVatuHbwe8XuTPTpEvn/Uf5wVW6JkAIDM/0SS
-	pT0iuZQljf4CjqwNjD8yOC+HVYI0gcr66XsyJJTgQJXCm1POAKzEYm+sGBOCoY1O6aHg+I32SAg
-	3aTfd2BD
-X-Received: by 2002:aa7:d350:0:b0:659:9068:9786 with SMTP id
- 4fb4d7f45d1cf-66143049299mr643291a12.10.1772702683052; Thu, 05 Mar 2026
- 01:24:43 -0800 (PST)
+	s=arc-20240116; t=1772739354; c=relaxed/simple;
+	bh=/i+sYSoO/kY0U8bDQJxqY8NxwSNhr55GSmKjvctEJ28=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=j5a01bmh+k9HGv+cEdClm8qYZOr9IqlR5XEy8pprFB3zmfDHf0wZFBEuLAT+JG3xiEUqrp8zGPevGphYOrRiNswwEBU7+bCf38mXoFRa2urZd+/PRsluA3wH33bWYbxZITrPsMNSeLGrLVIu08LvkvdtD8AdU2dAZpXH5Cef2Y4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CDWRsty+; arc=fail smtp.client-ip=52.101.52.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dmlLXrGmZLNsAjqh+zIlv7eJQNLx/0ENLmfAZhudKSgQx2GfacSx7DlEou1iINajXLjZCnM3JXnyGjxPdVnLvJOsnuzq3Wnx/ZlE/aoxZisksjGNvrHJ0oItJQzmIHPnbEJbGTbxjHXVvhElW47zAevhRUYbEa9KkcsMuy1HN46wG0XqhxZY5oDoNP/gg/uiM9cjwUGg2IB9hs+GDmeEz/sQBSadu/43RiLFtTBZ6yuek0G22varrmtqPCl3jmBkS2Uw37d21vIODoNjkTOYfuZHrfrhD8Ivpru+5GJ47qcqA6eOljp13W0gRHhu3n/XhQ26uS5nykTXN5f8JqzypA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vfJ+immh92VC3/rlOu4xwmhCoebuyl4/xBxOMzErutw=;
+ b=DIXafOUxuHV7Lz3Klqr3Ke0Fu7Rn6Oe7AQpbh3bN9uo77awQooJ029BLAvLF41iUEyFOeRhWrXpPWc30Ox2BAXz6oLSjt+R6/pXSrbR9mP63I1vWjM3yBpDBmEpuLkxtMUwpVRZn5rSOJPBchxIe5hjxpW3pac4Wfl8JpnseeJdNWGy+R2zqlbKIAUIZfUpUtkMeUXruufFXZaZYanf8XrJeJBStBaDLpZ1SI81QZbRTDI0KzDMRMxsqiQbilu4BOt6Oec36vNvaQOApo78gt94IFSWP2yaWczFrRjEcQDIHE6Ets5Rxv/drwto9RN3kuxmgtW4FBqQFHfQaMGlbRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vfJ+immh92VC3/rlOu4xwmhCoebuyl4/xBxOMzErutw=;
+ b=CDWRsty+ZBA2/HagqrycY12XK3gBv8Ng0nWErGcRx7X9nzNM6N24z8iyOwGECICxsDpE/MIT3tIt92UMBDB4CYC9OMKF3gQe+o3KHHh5r/ugruZG+Lx3IQTCKfBgPlKtb5n7PlIXkZTp+/7OjWGnymw6X5d3d1LD0rBrIcNaj0Y=
+Received: from BN0PR07CA0005.namprd07.prod.outlook.com (2603:10b6:408:141::20)
+ by SJ0PR10MB6328.namprd10.prod.outlook.com (2603:10b6:a03:44e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.18; Thu, 5 Mar
+ 2026 19:35:50 +0000
+Received: from BL6PEPF0002256F.namprd02.prod.outlook.com
+ (2603:10b6:408:141:cafe::28) by BN0PR07CA0005.outlook.office365.com
+ (2603:10b6:408:141::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.23 via Frontend Transport; Thu,
+ 5 Mar 2026 19:35:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ BL6PEPF0002256F.mail.protection.outlook.com (10.167.249.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9678.18 via Frontend Transport; Thu, 5 Mar 2026 19:35:49 +0000
+Received: from DFLE212.ent.ti.com (10.64.6.70) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 5 Mar
+ 2026 13:35:47 -0600
+Received: from DFLE210.ent.ti.com (10.64.6.68) by DFLE212.ent.ti.com
+ (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 5 Mar
+ 2026 13:35:47 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE210.ent.ti.com
+ (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 5 Mar 2026 13:35:47 -0600
+Received: from fllvem-mr08.itg.ti.com ([10.249.42.149])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 625JZldd2431963;
+	Thu, 5 Mar 2026 13:35:47 -0600
+From: Andrew Davis <afd@ti.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Andrew Davis
+	<afd@ti.com>
+Subject: [PATCH v2 0/6] Remove use of i2c_match_id in RTC
+Date: Thu, 5 Mar 2026 13:35:39 -0600
+Message-ID: <20260305193545.796294-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Takumi Ando <takumi@spacecubics.com>
-Date: Thu, 5 Mar 2026 18:24:32 +0900
-X-Gm-Features: AaiRm51SsH53awVRF2arWNb7hgwkmuorUZUNyye2wdKdzYCE7letyAqnnB-XCdc
-Message-ID: <CAJACUaoFK-GiBN_hfkNajDUygnSZc29U_jdeQ_rKtXS7P1f-nw@mail.gmail.com>
-Subject: [QUESTION] rtc: zynqmp: CALIB_RD reset behavior differs between
- ZynqMP and Versal
-To: linux-rtc@vger.kernel.org
-Cc: alexandre.belloni@bootlin.com, michal.simek@amd.com, 
-	Yasushi SHOJI <yashi@spacecubics.com>, kanta tamura <kanta@spacecubics.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 3A91D20E5FA
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0002256F:EE_|SJ0PR10MB6328:EE_
+X-MS-Office365-Filtering-Correlation-Id: 621d7688-660d-442c-7ded-08de7aee67ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|34020700016|82310400026|36860700016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	NSLCh9fNRktl8Ke3sbCV0+uoR0XCxKTwnmyIoRjoBR3XhUUiPPPvVwWtSNpZxPq5BwVxhe87xckIxdKONccy3UZTzsYCBKyJgJ7ZWx99biiGmfwzFLKvwIMQd2cyA1yXj1dgmS9DEHHKONL6JFcdU5GIH7nybbL+dvD7MnzGtclCLb5wPILb5nujwdaR62Uiqcxm3IioxznY5vcS2KOL/tKkDW4dfzhVUdbjJE6M54ei4fXZoATRir7n62AGL6Yo43NidgQtVMrkjsq5nqlcb4DaBT4HTZXvhJsP9huw9PomSC9nh+HTULatfZ+VOzu6HZLQs1SVaZy71DzLs6O7QW1fvuGkoRz6Ggxwk6etKzjFuey0joGk/AdXWkx3tQtRyKFW56/iaGQvHwCwOmmgpZH9eVRddiMPM+TpYC1Z8DoeFaTAcxhLpU56Xm25IEtwv8amGTbhCUhFQsP3YGjCfvLOXkjzyLw2yd1c9u9K2zdQylAY/bZNXv7LLR9Bq1XPBIjjacnZcJVaezjFpwXW3mZ/Yaoplzk0AIQ0jN7DreDQudLS9NDlVEIb87MvZ7WDWlza74q5x8v0kTY7Q7Un+Ln478ZSmYTrf1/MvOU1KrykR4Q7YD5GOoKWkhnQVCk3V9YGQZE5JsuErl906VbnBZVDmgYBa5ASM4gXR0SUduGFToy980q6i8Ib6s0BNODUmrt47MVqDhdh4Va6gbcR6yE3wXeLJcr1moqjyou83LojZMXAT5yt1oL59M72Cq6h8IP5XF3SjlFE7DXgSymrKw==
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(34020700016)(82310400026)(36860700016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	D6N6nnJv5BAt0Y+p3LvH+yZ4XpebceVSkdGLqeEabSTIiWRJByJq6u7H2jCkxa2RqPi3ACxUszAfz++x7K+EKzku/Rm8JdbNzu0cqdamzbw8vqxAmCEKslLvaS8z83Xv5Nnd83I6qjYAh5k8UXabFHwJjgdnHpBvQZQinCDV38EblLrkh/YHmTwTAdmQlV1637eO4O6OFSpaz7qNSAbxQ6e/Kr+1B8kcgpXlqEsJOr7CcN5K6555Ak+wB43kxjWPWb/8xpCydylfrT6GC6Sj9IAKHwoyrR5ZRR3wpnSdArmSbGglVgxjnkUvm5o/ZgHzD53fqo2HTSNgvaYX/9V7y1A6JQqIqWpv57IHKNB2ZAIW2tpxoYlsP6XNLflwIuIDpd7zvWGGRwGAZyuLKqQ1fDSW0O7UvDFnvOGy7RMBP7odszgeXePUchcIsmC8WiE7
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2026 19:35:49.2112
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 621d7688-660d-442c-7ded-08de7aee67ab
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0002256F.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB6328
+X-Rspamd-Queue-Id: 0AECB2179D9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[spacecubics-com.20230601.gappssmtp.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6122-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[spacecubics.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6119-lists,linux-rtc=lfdr.de];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[ti.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[takumi@spacecubics.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[spacecubics-com.20230601.gappssmtp.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[afd@ti.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid,amd.com:url,spacecubics-com.20230601.gappssmtp.com:dkim]
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[10]
 X-Rspamd-Action: no action
 
-Hi,
+Hello all,
 
-I have a question about the initialization logic in the zynqmp RTC
-driver(drivers/rtc/rtc-zynqmp.c).
+RTC subsystem is one of the last still using i2c_match_id().
+This is a v2 but nothing is changed from last time. If I'm
+not sending this to the right folks let me know.
 
-Currently the driver programs CALIB_WRITE only when CALIB_READ returns 0:
+Thanks,
+Andrew
 
-ret = readl(... + RTC_CALIB_RD);
-if (!ret)
-    writel(freq, ... + RTC_CALIB_WR);
+Andrew Davis (6):
+  rtc: abx80x: Remove use of i2c_match_id()
+  rtc: m41t80: Remove use of i2c_match_id()
+  rtc: pcf2127: Remove use of i2c_match_id()
+  rtc: rs5c372: Remove use of i2c_match_id()
+  rtc: rv8803: Remove use of i2c_match_id()
+  rtc: rx8025: Remove use of i2c_match_id()
 
-My understanding is that this was designed to avoid overwriting an
-existing calibration value. Since the RTC may continue running from the
-battery domain even when Linux is not running, the calibration value may
-have been configured previously and should be preserved.
-
-However, according to the Versal Adaptive SoC Register Reference (AM012) [1],
-the value returned by CALIB_RD after reset can be undefined.
-In practice, on Versal hardware we observe non-zero values even before
-any calibration has been programmed. Because of this, the current logic
-may skip programming CALIB_WR and leave the Max_Tick field uninitialized.
-
-On Zynq UltraScale+ Devices Register Reference (UG1087) [2],
-CALIB_RD resets to 0, so the current logic works correctly there.
-However, this assumption does not appear to hold for Versal.
-
-If there is a register or mechanism that indicates whether the RTC has
-already been calibrated, the driver could use that instead. However,
-I could not find such an indicator in the documentation.
-
-Am I missing something here? Is there a recommended way to detect whether
-RTC calibration has already been configured?
-
-Alternatively, would it be acceptable for the driver to always program
-Max_Tick while preserving the fractional calibration bits already stored
-in hardware?
-
-Best regards,
-
-[1] https://docs.amd.com/r/en-US/am012-versal-register-reference/CALIB_READ-PMC_RTC-Register
-[2] https://docs.amd.com/r/en-US/ug1087-zynq-ultrascale-registers/CALIB_READ-RTC-Register
+ drivers/rtc/rtc-abx80x.c  |  3 +--
+ drivers/rtc/rtc-m41t80.c  |  8 +-------
+ drivers/rtc/rtc-pcf2127.c | 23 +++++++----------------
+ drivers/rtc/rtc-rs5c372.c |  7 +------
+ drivers/rtc/rtc-rv8803.c  |  8 +-------
+ drivers/rtc/rtc-rx8025.c  |  4 +---
+ 6 files changed, 12 insertions(+), 41 deletions(-)
 
 -- 
-Takumi Ando
-Space Cubics Inc.
+2.39.2
+
 
