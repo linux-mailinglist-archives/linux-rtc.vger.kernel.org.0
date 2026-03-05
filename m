@@ -1,216 +1,181 @@
-Return-Path: <linux-rtc+bounces-6118-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6119-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oLMkLQpEqWlV3gAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6118-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 09:51:22 +0100
+	id +Bb7MWZMqWk14AAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6119-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 10:27:02 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4152E20DC01
-	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 09:51:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A91D20E5FA
+	for <lists+linux-rtc@lfdr.de>; Thu, 05 Mar 2026 10:27:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A50F330117F7
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Mar 2026 08:51:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EB30C305F49F
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Mar 2026 09:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7263374183;
-	Thu,  5 Mar 2026 08:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5690D3783C0;
+	Thu,  5 Mar 2026 09:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jTe/gcmX"
+	dkim=pass (2048-bit key) header.d=spacecubics-com.20230601.gappssmtp.com header.i=@spacecubics-com.20230601.gappssmtp.com header.b="JXmoJNqu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9C7366802
-	for <linux-rtc@vger.kernel.org>; Thu,  5 Mar 2026 08:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6405C378813
+	for <linux-rtc@vger.kernel.org>; Thu,  5 Mar 2026 09:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772700679; cv=pass; b=qDXFmmeGmnb6SbtUiGir8mWyk5/jCydnhqdL34vlZIFFSVtuaEngnOa0lcle9DvHM0u05HQgMJneJb/QvTNLywSBkbv7vqwEz3XHbO9LidEhKNEyJgUdrVP/05QC0bjWczls4KSkTts4KQYzNc+hGHlNs3rAtCFbm4iyzlMggP4=
+	t=1772702687; cv=pass; b=uJzDKWVzLidvvjORExteG7FDvfZZTQVN4KfdPTnNIQpLR5zfTsrSwCiryQ9MjCVTuKTOgMHZX9ziDZLrhbILAyVTU8Dgnt+xo59H7+jfAndoYqLUGYRslHXY3C/rr/xpnFfbFE4ADf53iMddqJv/eBseV7Eyouyg07E2qOs7ROc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772700679; c=relaxed/simple;
-	bh=sEUgx7XQv7g8DoL665lwvFwpJuQi8nuj7bjlTiz9Lag=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G/a2HxegtNw2Om4gVNEswfpoP9U5X+SRecMYB8+frcgsmrNpgnRvdp+W8iT2/aHG8K155315cnufEGk4MQYrq7BA4gka60D/e0a2uggpR46BaNxmyWVNdxyWPQoBnwemxPRidygEKww9ODTdgPjm62hjpY9t15OMr29CKBdAxoY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jTe/gcmX; arc=pass smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-660bdba9390so3643884a12.1
-        for <linux-rtc@vger.kernel.org>; Thu, 05 Mar 2026 00:51:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772700677; cv=none;
+	s=arc-20240116; t=1772702687; c=relaxed/simple;
+	bh=RyI/EasxGbNY8MAYGDpDHtAitKfMIIv+EOIA1+5tskY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ANFBwjBoPA0zaW6nB2Gyus1tHlIyoQa0Grjqp9UDPxPKfNHwfhoNiusSrOhZ4igz4ZvJME2iUFNDdNvNXMrlKudnGwxcTOuiS0TgJmxL42Jvl2e0GTC+jtKa1rpoul1sVoyXBJQ+0mMIURcGkz4DLc0QqfBM2dJnt2VIldj+fBs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=spacecubics.com; spf=none smtp.mailfrom=spacecubics.com; dkim=pass (2048-bit key) header.d=spacecubics-com.20230601.gappssmtp.com header.i=@spacecubics-com.20230601.gappssmtp.com header.b=JXmoJNqu; arc=pass smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=spacecubics.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=spacecubics.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-66174cf4549so108130a12.0
+        for <linux-rtc@vger.kernel.org>; Thu, 05 Mar 2026 01:24:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772702683; cv=none;
         d=google.com; s=arc-20240605;
-        b=AxTypFbn9DPKEk9kVF3I6IKOqa1mGf6XFND58Tg5UlBPtZNXQCN8RMkPV9vU+5wIBy
-         Q9ntnbavj7IHXe0eTGFeGxybaCKenhu4D1RkgI/PZOxVKQyMnYVeahJiuMR1cDo3AS2P
-         jgW2gdyZG/K0yo0m1j9ScBSqRAD25LujOxVY3lKcphUSWRmu9C1gIltX/5zQLyF225SK
-         LPoAw/e6lQ+Q+NdjuFb5w6nhNM9UuH50UJj2lGsa7aGc4cR9Ki5hXGpYy1jF/40WxgHF
-         NrAChQtl68bFqbW5momy6xUBzaa7QuLwoicCJamBguCnB+v+eOfZ/zwVug3N8GY2FVZK
-         utZQ==
+        b=Cqpv0/O/OgZdlrRQPj7e+TjBOvZGBI/0+v01wM/2cHEDTm1GNSbGR4Qf0ewUnpA38c
+         EZ3qILXKzvMeJEtTD58NOl5Jo11XFekpqlLSLj41WhXDiq9ktald5UpI4GEQo/LrtNG6
+         WnUcbwiCiltihr9+ZoQyqy6b1qRq+/XIE4iVca/G3oNwf8VJob4z5/wjuezYNEzkfp46
+         abrWJNEF3xyWfDEjNl0puvS7YyA91wGUfhzMYTxI2rZnHsYNpoCf45bo/aEagXPiI+a4
+         4r8EpsICnItd0kJffeERV97T5Aujk8DNMRjHEcBSPw54A12Zo16vl/uc+1JPtlZEysEb
+         d7pQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=YKI4RkHGLNgLhbmhZhuWJE4qOdTx2GaVOZl5vUzK2NU=;
-        fh=/zIOCMh7DKPPPJLh+gazo8Zz7FxwSYTTOwftWesXOgY=;
-        b=BxUXNMuoCoSmS7mDKRhY5Hr+Jhgd+NWXZhJYUzVzlyhIymPt/tvDLT7tu/cS6Lvc6w
-         N5pQlivKLWDHH47QniKMUPae8D/ZL3F45CWZ804WFygGLB2oFMC1+ZhfR+5EfElZrbOh
-         3D5qZR8d5e2g7h5PbobpFU1Z3mUQYppuCpo0instR8rgf9M+NvuYZ1qPKWOKAiGxEOnW
-         DVpbNe4O/5BxsPt6AnFFVXBQNSgWROJ95Xd3N3qBcePOS2vz1v4CK1FoGD24i48zZL2i
-         HaqvNfmNhxVMg6onhqoW1vlVIkgdRrAygUQ3dKw88782bF6rFWFcnQRcGO97zNWvf1Ll
-         JmXw==;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=ypYVyS5MeqKOLQueJPbQc6nHN3pg7qQVDG5ppaHItHg=;
+        fh=H753Ybiq3wqcoULCcCfrnDT0TaOVOcXrhBeVr7RnQ7Q=;
+        b=HQBYt6JtHj0yr2xnGYJxFiA3WREqUQRMxkimPVrA/dZRYtb5M+BEqHsUX10ZOcccx4
+         AP8DF/MR3jS1AmRotQ7XCclDWQdwhKsQ6FfpzznD/QPTDcJp+O7sWak1TxEpz3ZBfFmJ
+         qFv/+yDmaBrI1Hdnw97TIu+dMnmHehjC8H878Htao/6C+M1te/36k8t7t1w7pcCtKLk7
+         vlVd5apwDfFGfkFVDHID1wWx6ZrNi1l0TG7CBSQtg4XJ0HVJ7VI/B4fnJaoyF21RQ+52
+         EnKiOz01eacpxn+wum42pN5A+wIGtFQX0ET/J8cyYeIaq/+fY2GbP0qX07uje2qmJ2Q8
+         O5kQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772700677; x=1773305477; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YKI4RkHGLNgLhbmhZhuWJE4qOdTx2GaVOZl5vUzK2NU=;
-        b=jTe/gcmXv1uBCRgTNfRlPhI/TQeVtVX8rKavUnZx6fAf6HdKM/bLO1JURw01dvcw2C
-         Kzttl8o+xWmpLKOnbUijbQAvjIaMmbQlWVJTeHco192fQDl/IFdbxV5zlukvqC2lqmTK
-         Dd0hpLAeT8PgucHb0QyQzDw+wH/1IoOjtYiNuaNnd67x4p61scNStkzXdT9zcwOtvtnR
-         pE9kH9TJTOguJUGY988x03wQiERlNg6uuNpL/aUpAL0l7PMECV1PN7S1panGPWXlZlgC
-         FcTrvPG8AN7wHm1XddT7TfELSxM3AIp/oIsrsl8+UonUzwV5AR9dw82rcKUaP4Rr/Hpw
-         unEg==
+        d=spacecubics-com.20230601.gappssmtp.com; s=20230601; t=1772702683; x=1773307483; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ypYVyS5MeqKOLQueJPbQc6nHN3pg7qQVDG5ppaHItHg=;
+        b=JXmoJNqudb+tGikNrkIaAPy1m6gZtNJLFgKe0oDZY4qHVu2cMkrwMFlKXFhVg3EKC+
+         wHoJUMWmndIeyOEzaX4UXBJ9u+w5Gti7Kgdz/0+X+l7tZQHQKWBuSuwIoRbb8WHxIjVj
+         GakoMlpCo5h+wzJWEVEuvPOWwAIh9D25gLGt8/oYFnRAyzr4e5ecuVYjdO8hrIKSW2y7
+         TkynXcEylnrmHG9anWlZWHUg5Wfs4YxbD6dCwz/0wI4zP/e0L5cnO6tfYHrJRq6AlKp7
+         rqvDVQWMejP6EKK/4mc053Dl0/xZy1yXQCcvz7zQK4oK0g14HO+aZSkkGlqK+DG7RR/1
+         x8Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772700677; x=1773305477;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YKI4RkHGLNgLhbmhZhuWJE4qOdTx2GaVOZl5vUzK2NU=;
-        b=daWtbdb67kZgMBT6Xs6jq8y0/cLqfEkzUNvW+c88dz5RJZPY6DYeTpy1mQroU2iBWQ
-         gDH4VyprfRdmWueytBJKCc83DHSSTaJqs233j4yrito8i3B5kt/2cmGahvT7IaE29VWF
-         6g3RCRlu9aBgiSILyAL/NcGhXxL3h5roqZRBp6u5JJeUZMDrjBc5Knr7iWiPTBvCbWZK
-         Q5FaKxABxX7aiHLJDZn+vUO6W8BxXFsYSZuo6+Qp/PACe/59u2qw16jV9Ww1n8QXGqu6
-         fDZqz5J9/AReS3HaIwnuERmUznHSkzaxoPMjM0lcIHFQtbeMBBSCv9J4+Iw7p8VB/dcL
-         tZLA==
-X-Gm-Message-State: AOJu0Yz6jprcHVojt5zGet46dw7F6kRVCsohhPViap0/0GKdUaNnah+c
-	yahSMc2rtSsMIbdnpP6XTU0Op/98pqTz455wphYsft/+THMO/BEQKe+nbIFfa+YQhr/5kYqcWv1
-	fPb2iSq8gzYV67opW70YsRD2vA4ZASTA=
-X-Gm-Gg: ATEYQzwo8vZcWMV2Bv/GQ5PDUmxaraqjn5mkGiQP+uoIFqZd78GDWR3ibCig7+EcdbH
-	r1Tm3ifzNS8HSyRYDn5Uvelqdi6KpR4Y7iW8NdkzCwwy5y1MKzqe9f1jd3/jzcthahwMdVtAFv1
-	kz4dphBW1Qt81licgiNcrP5R4jXv52q9oQyErDjoDw5O13/kyn4G0sY0n1pLCpchBFiAWSE1qkR
-	wILd1sqYfbg3Bx8l9lqpQqZrJpc8DY3cDorNWkPPnhzc6C5NbX3YEARLZO6mdUaB94BLUDs0DCn
-	82LZcaqdsJBTMHZOgDpyQNOsu0RlfGZ4MelT1XSnuCaxILf4J8QT4JbCKB8Q4N1BCmPYDGg+rOo
-	ogU/87Q==
-X-Received: by 2002:a17:907:980e:b0:b8f:848b:4456 with SMTP id
- a640c23a62f3a-b93f116d717mr337178066b.13.1772700676451; Thu, 05 Mar 2026
- 00:51:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772702683; x=1773307483;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ypYVyS5MeqKOLQueJPbQc6nHN3pg7qQVDG5ppaHItHg=;
+        b=fRv3qtMd2ac2C1WOM669hEO7xkUerIwpI8kOWsEe67IwsT0x82guwIgP+oEbVmrjRP
+         uWp5vRETBWhb5Nap1YyKziYCsPnSFvUY+2ZmRnXH67JfGOLoA/1Hpfr2MZ16rGdiWuhw
+         msmStE2dTCg+r39fcPuXGy2Nzp0YBYOpyAna9ah6Uc9mlQDLA5R5KJsEzsR6at21uCeN
+         uGZ8uGyX5eFpI6hnW+ft8rxNX9HFE5DK3mRUjsfSd0uDk8A+1QQxemW+XaugldckxHeD
+         7z9lZl2jVP1c8HhEPNaZP5eNtio2IhA7mzHDQbWB3QOkTInrTy5WbCI7AXtRrhbIG+d5
+         KfmA==
+X-Gm-Message-State: AOJu0Yxp4H307mxpLbUt7jNJkGYf1iowqm8sh4TDoWmT9YlQxWbvTMi5
+	lIB/GTYcksa/vqZfhrJJx7ukASNOVfQbG6d6nDSgaM5chjN0ywRSXwCniLI2DGp0JmUly3uXuvw
+	9FzP+7W47oSK9nYruOoDTOgw3UqFWbgS72/GzXaO+GZEKA04nuOAtHHc=
+X-Gm-Gg: ATEYQzx32CK64c9SLDjE9A+XZN6l+sYEpFo2F2V7z0lAlBd8bUem1euigjDhWaxEjBY
+	AOiPGEJc5wX+kr28nSDyD6+RbmyfSC0/sgoJI0/bK9TLqCdCCzMGH3dt69ecJ56IgJXZYIlm9rs
+	9okV2cwEE/iu+80a9ZoQLhBhSsz69Er222HOqXTVatuHbwe8XuTPTpEvn/Uf5wVW6JkAIDM/0SS
+	pT0iuZQljf4CjqwNjD8yOC+HVYI0gcr66XsyJJTgQJXCm1POAKzEYm+sGBOCoY1O6aHg+I32SAg
+	3aTfd2BD
+X-Received: by 2002:aa7:d350:0:b0:659:9068:9786 with SMTP id
+ 4fb4d7f45d1cf-66143049299mr643291a12.10.1772702683052; Thu, 05 Mar 2026
+ 01:24:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260304225329.24510-1-rosenp@gmail.com> <871phyfz34.fsf@BLaptop.bootlin.com>
-In-Reply-To: <871phyfz34.fsf@BLaptop.bootlin.com>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Thu, 5 Mar 2026 00:51:05 -0800
-X-Gm-Features: AaiRm51AlcjYnmTJJFe0AVn7Vbz0L85O6On2RH6QhXadGX9VfwLzhLl2d7mR28Q
-Message-ID: <CAKxU2N9y_PTTojzUHAExwD_-Mss9uNJa-GnN9C4rfy+M3aschA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: armada38x: zalloc + calloc to single allocation
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: linux-rtc@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	"moderated list:ARM/Marvell Kirkwood and Armada 370, 375, 38x,..." <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>
+From: Takumi Ando <takumi@spacecubics.com>
+Date: Thu, 5 Mar 2026 18:24:32 +0900
+X-Gm-Features: AaiRm51SsH53awVRF2arWNb7hgwkmuorUZUNyye2wdKdzYCE7letyAqnnB-XCdc
+Message-ID: <CAJACUaoFK-GiBN_hfkNajDUygnSZc29U_jdeQ_rKtXS7P1f-nw@mail.gmail.com>
+Subject: [QUESTION] rtc: zynqmp: CALIB_RD reset behavior differs between
+ ZynqMP and Versal
+To: linux-rtc@vger.kernel.org
+Cc: alexandre.belloni@bootlin.com, michal.simek@amd.com, 
+	Yasushi SHOJI <yashi@spacecubics.com>, kanta tamura <kanta@spacecubics.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 4152E20DC01
+X-Rspamd-Queue-Id: 3A91D20E5FA
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[spacecubics-com.20230601.gappssmtp.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6118-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lunn.ch,gmail.com,bootlin.com,lists.infradead.org];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[spacecubics.com];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6119-lists,linux-rtc=lfdr.de];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[takumi@spacecubics.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[spacecubics-com.20230601.gappssmtp.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,bootlin.com:url,bootlin.com:email,mail.gmail.com:mid]
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,mail.gmail.com:mid,amd.com:url,spacecubics-com.20230601.gappssmtp.com:dkim]
 X-Rspamd-Action: no action
 
-On Thu, Mar 5, 2026 at 12:41=E2=80=AFAM Gregory CLEMENT
-<gregory.clement@bootlin.com> wrote:
->
-> Rosen Penev <rosenp@gmail.com> writes:
->
-> > Use a flexible array member to simplify allocation.
-> >
->
-> I must admit that I didn't know struct_size(), it is a nice helper!
-There's kzalloc_flex that's even nicer. Has no devm version yet.
->
-> Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->
-> Thanks,
->
-> Gregory
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > ---
-> >  drivers/rtc/rtc-armada38x.c | 9 ++-------
-> >  1 file changed, 2 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-armada38x.c b/drivers/rtc/rtc-armada38x.c
-> > index 713fa0d077cd..245290ae1a8d 100644
-> > --- a/drivers/rtc/rtc-armada38x.c
-> > +++ b/drivers/rtc/rtc-armada38x.c
-> > @@ -72,8 +72,8 @@ struct armada38x_rtc {
-> >       spinlock_t          lock;
-> >       int                 irq;
-> >       bool                initialized;
-> > -     struct value_to_freq *val_to_freq;
-> >       const struct armada38x_rtc_data *data;
-> > +     struct value_to_freq val_to_freq[];
-> >  };
-> >
-> >  #define ALARM1       0
-> > @@ -490,18 +490,13 @@ static __init int armada38x_rtc_probe(struct plat=
-form_device *pdev)
-> >  {
-> >       struct armada38x_rtc *rtc;
-> >
-> > -     rtc =3D devm_kzalloc(&pdev->dev, sizeof(struct armada38x_rtc),
-> > +     rtc =3D devm_kzalloc(&pdev->dev, struct_size(rtc, val_to_freq, SA=
-MPLE_NR),
-> >                           GFP_KERNEL);
-> >       if (!rtc)
-> >               return -ENOMEM;
-> >
-> >       rtc->data =3D of_device_get_match_data(&pdev->dev);
-> >
-> > -     rtc->val_to_freq =3D devm_kcalloc(&pdev->dev, SAMPLE_NR,
-> > -                             sizeof(struct value_to_freq), GFP_KERNEL)=
-;
-> > -     if (!rtc->val_to_freq)
-> > -             return -ENOMEM;
-> > -
-> >       spin_lock_init(&rtc->lock);
-> >
-> >       rtc->regs =3D devm_platform_ioremap_resource_byname(pdev, "rtc");
-> > --
-> > 2.53.0
-> >
->
-> --
-> Gr=C3=A9gory CLEMENT, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Hi,
+
+I have a question about the initialization logic in the zynqmp RTC
+driver(drivers/rtc/rtc-zynqmp.c).
+
+Currently the driver programs CALIB_WRITE only when CALIB_READ returns 0:
+
+ret = readl(... + RTC_CALIB_RD);
+if (!ret)
+    writel(freq, ... + RTC_CALIB_WR);
+
+My understanding is that this was designed to avoid overwriting an
+existing calibration value. Since the RTC may continue running from the
+battery domain even when Linux is not running, the calibration value may
+have been configured previously and should be preserved.
+
+However, according to the Versal Adaptive SoC Register Reference (AM012) [1],
+the value returned by CALIB_RD after reset can be undefined.
+In practice, on Versal hardware we observe non-zero values even before
+any calibration has been programmed. Because of this, the current logic
+may skip programming CALIB_WR and leave the Max_Tick field uninitialized.
+
+On Zynq UltraScale+ Devices Register Reference (UG1087) [2],
+CALIB_RD resets to 0, so the current logic works correctly there.
+However, this assumption does not appear to hold for Versal.
+
+If there is a register or mechanism that indicates whether the RTC has
+already been calibrated, the driver could use that instead. However,
+I could not find such an indicator in the documentation.
+
+Am I missing something here? Is there a recommended way to detect whether
+RTC calibration has already been configured?
+
+Alternatively, would it be acceptable for the driver to always program
+Max_Tick while preserving the fractional calibration bits already stored
+in hardware?
+
+Best regards,
+
+[1] https://docs.amd.com/r/en-US/am012-versal-register-reference/CALIB_READ-PMC_RTC-Register
+[2] https://docs.amd.com/r/en-US/ug1087-zynq-ultrascale-registers/CALIB_READ-RTC-Register
+
+-- 
+Takumi Ando
+Space Cubics Inc.
 
