@@ -1,63 +1,76 @@
-Return-Path: <linux-rtc+bounces-6131-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6132-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qE4dFE4YqmlfLAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6131-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 06 Mar 2026 00:57:02 +0100
+	id kJeMCskfqmn0LgEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6132-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 06 Mar 2026 01:28:57 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE79E2198F3
-	for <lists+linux-rtc@lfdr.de>; Fri, 06 Mar 2026 00:57:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C797E219C97
+	for <lists+linux-rtc@lfdr.de>; Fri, 06 Mar 2026 01:28:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4FE5C302C906
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Mar 2026 23:56:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9C2523037474
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2026 00:28:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0059369235;
-	Thu,  5 Mar 2026 23:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473D32BEC3F;
+	Fri,  6 Mar 2026 00:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dc6U6epp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1fWMiSV"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD223366557;
-	Thu,  5 Mar 2026 23:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193A629A309;
+	Fri,  6 Mar 2026 00:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772754973; cv=none; b=U/xi23Kf8NFHVyIFW6UrPAJEBK2iwc9a14P21eDVtes09XRdmbTCMJqgegayPZU8ZBxbojZPhjaPgHylquJReE8l9lC9lxnecc/ctc496B/T8EOSsZDjc2YT5ChCQzsGoEjVCpLhdNNs526KrfKdK3IgRqmIskSDBkzPkQtwGus=
+	t=1772756931; cv=none; b=g0UGfPdbWredwRxEmKkS8Af52Sa7NFIFGiyL4rMTxCIoPSKsd8BBk1Jo6F4JYi95SIMi4d4wMtRDE5hsaWDmRuNFRp0BGlq9HVfydobuyFp73yqy2R8IxhB7lJObEs0ofaz1aAys0HQxcRi6+RNlWxhWrcHno7H8fBcIZRhCxKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772754973; c=relaxed/simple;
-	bh=P1cJDOv3b/ZAmsFBRMV4gqQVcaDJlvO93WuX74LTbCo=;
+	s=arc-20240116; t=1772756931; c=relaxed/simple;
+	bh=EXIStN1B/izsA6vGyFCAGh+w3xMM+thmSuO0J4C0Xvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DifWIwyI8B1G+ZZ5+dIanW2oSYIdOLdCyn13Bowd8xxEQ1rHjtc6+cwqPMe8evVvoRB2aKzmbSi8/E84Nmds78apbMO4FP1IWc57mkvoAh2+/MARKZcXznpdKC2vFgYDbrq1GQcH+6LD9wlRMwNJE3wrQSbVyYLY3yzIXxtdhOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dc6U6epp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8E3C116C6;
-	Thu,  5 Mar 2026 23:56:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=s5+yWMgA6v8sSqlkGkM2+u0n47cYSy4oQp7Ju8Z/7BwDBl7u0bJV1GL6vLc3pUdDiSfWo9ILuggZauXl2lv7XoruczEIdq39RlXijP24rRcALwJ50sBd4N4E31vDUpzzw20dLB58OYMYjZfaVH/x1gdOYEJuEwQSo/pQ4E21UR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1fWMiSV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E4EC116C6;
+	Fri,  6 Mar 2026 00:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772754973;
-	bh=P1cJDOv3b/ZAmsFBRMV4gqQVcaDJlvO93WuX74LTbCo=;
+	s=k20201202; t=1772756930;
+	bh=EXIStN1B/izsA6vGyFCAGh+w3xMM+thmSuO0J4C0Xvo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dc6U6epp4/aONO+4QPcEsSw46hUIzgzu4SyKdCBFLTJVrgHyh4So4CMB5+I/YYiYV
-	 zmhHgoObEYVqxCEsCjby6rIiMfrL43WgIfzLb8vRyHnZNtZxazIgGtoLLn0jLalF8O
-	 UtP6gvv8x2MXJgLHebG0SFpPekF9q8g8nLZZVYgNo8JDzpccugfm9khQs94Q5dSTTc
-	 +THBVJS/BvJYTZCOgr1/dhEDRE9XMd3moNxLoJ+BdMpk9KllZi2geSNFqjTRVPLsTM
-	 eC7KAEnJu8LR+1XufzxXA+JNh60HgQcnOtBzIPBLN2Bdf8Z5dLQIGtMzd0fVhpp33U
-	 OoRztgFeninBQ==
-Date: Thu, 5 Mar 2026 17:56:10 -0600
-From: Rob Herring <robh@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	b=k1fWMiSVv9ZBMUvKy4qYRdIOqJzOmk3HXhNYLX4RKFCXSipyjH8GD9CkxuqVaOYd3
+	 t0ehgvplc3/7pGkWH/WKQVUtxj5l+8MkWdS8AnScmPCNhTJb8Lnrw2pa8IV8TVjKXM
+	 WdN19c/dGxbKjTwtmtLdNOmaSa9igq5318juqOVuFvEfQ9lUa/pyx11nHRO3m90EpW
+	 zFbvnnIAj8jJpkRDYodTJwgJrzcMzIqixXoUVCRSGBeASZqqAquFt8cjnndVjNEYIt
+	 NTkA+HFiCEKxhzxqbX2bC+I/kSZisc0mD+NlPJEI6P1cGjKrE5vb4KgJUNcy3K2CvR
+	 F2V0H94O8MlZQ==
+Date: Thu, 5 Mar 2026 18:28:49 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Luca Leonardo Scorcia <l.scorcia@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, Chen Zhong <chen.zhong@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, linux-pm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+	devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	Julien Massot <julien.massot@collabora.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: mfd: max77620: document optional RTC
- address for max77663
-Message-ID: <20260305235610.GA807544-robh@kernel.org>
-References: <20260223064343.12516-1-clamor95@gmail.com>
- <20260223064343.12516-2-clamor95@gmail.com>
+	Fabien Parent <parent.f@gmail.com>, linux-input@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Val Packett <val@packett.cool>, Sen Chu <sen.chu@mediatek.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Gary Bisson <bisson.gary@gmail.com>,
+	Eddie Huang <eddie.huang@mediatek.com>,
+	Sean Wang <sean.wang@mediatek.com>
+Subject: Re: [PATCH 2/9] dt-bindings: regulator: add support for MT6392
+Message-ID: <177275692938.853845.10496663055638089922.robh@kernel.org>
+References: <cover.1771865014.git.l.scorcia@gmail.com>
+ <b7664f4d9a7b038b0603b6bba79cfab4e18cbdd6.1771865015.git.l.scorcia@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -66,73 +79,55 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260223064343.12516-2-clamor95@gmail.com>
-X-Rspamd-Queue-Id: BE79E2198F3
+In-Reply-To: <b7664f4d9a7b038b0603b6bba79cfab4e18cbdd6.1771865015.git.l.scorcia@gmail.com>
+X-Rspamd-Queue-Id: C797E219C97
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6131-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6132-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,mediatek.com,vger.kernel.org,gmail.com,collabora.com,lists.infradead.org,bootlin.com,packett.cool];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Mon, Feb 23, 2026 at 08:43:42AM +0200, Svyatoslav Ryhel wrote:
-> Document an optional second I2C address for the MAX77663 PMIC's RTC
-> device, to be used if the MAX77663 RTC is located at a non-default I2C
-> address.
 
-No changes to .txt bindings. Convert to schema first if you have 
-additions.
-
+On Mon, 23 Feb 2026 17:12:41 +0000, Luca Leonardo Scorcia wrote:
+> From: Fabien Parent <parent.f@gmail.com>
 > 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> Add binding documentation of the regulator for MT6392 SoCs.
+> 
+> Signed-off-by: Fabien Parent <parent.f@gmail.com>
+> Signed-off-by: Val Packett <val@packett.cool>
+> Signed-off-by: Luca Leonardo Scorcia <l.scorcia@gmail.com>
 > ---
->  Documentation/devicetree/bindings/mfd/max77620.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/max77620.txt b/Documentation/devicetree/bindings/mfd/max77620.txt
-> index 5a642a51d58e..0bbb42e5dcfe 100644
-> --- a/Documentation/devicetree/bindings/mfd/max77620.txt
-> +++ b/Documentation/devicetree/bindings/mfd/max77620.txt
-> @@ -6,10 +6,12 @@ Required properties:
->  		"maxim,max77620"
->  		"maxim,max20024"
->  		"maxim,max77663"
-> -- reg: I2C device address.
-> +- reg: I2C device address. In case of MAX77663 there can be 2 addresses,
-> +       second one specifies position of RTC.
->  
->  Optional properties:
->  -------------------
-> +- reg-names:		If 2 addresses are specified then, must be "pmic", "rtc"
->  - interrupts:		The interrupt on the parent the controller is
->  			connected to.
->  - interrupt-controller: Marks the device node as an interrupt controller.
-> -- 
-> 2.51.0
-> 
+
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+
 
