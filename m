@@ -1,152 +1,157 @@
-Return-Path: <linux-rtc+bounces-6148-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6149-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SA1pFFr1qmlaZAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6148-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 06 Mar 2026 16:40:10 +0100
+	id YJ33FNZsq2kodAEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6149-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 07 Mar 2026 01:09:58 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C855A223FF6
-	for <lists+linux-rtc@lfdr.de>; Fri, 06 Mar 2026 16:40:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16065228EA7
+	for <lists+linux-rtc@lfdr.de>; Sat, 07 Mar 2026 01:09:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3CAE93142C8D
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2026 15:33:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9A52D302C334
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 Mar 2026 00:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678FC3E8C51;
-	Fri,  6 Mar 2026 15:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1EAA188596;
+	Sat,  7 Mar 2026 00:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4XXnpfP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ujM/C0iu"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3943A3E715D;
-	Fri,  6 Mar 2026 15:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F5B13C8E8
+	for <linux-rtc@vger.kernel.org>; Sat,  7 Mar 2026 00:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772811215; cv=none; b=aRohbDL3nVaYnQ4/Ge32csqObeL3vSUQ8aYe2lZkhoicA8OYY6BL2B4YlR5GwRWjYA3wRMtZZWxGwgDb6X41yJfBklBuokhNZj3U7jF8N0d2VJZI7/FkEN+C6FEqgrUC7JoFxD895pz5UKZIC1LmkGSNQH5urSHigzACGjKkHeI=
+	t=1772842187; cv=none; b=k4O7uvobz8XL7comNEczgRRV47VL1iR8k1r/lQg2nxD+BfEYM4Y6LcCk0tf1w3vAh5+f6wUtqbj3kvgEf9II1ThxzBpaoLT3VkRr0uxlbxCk4Y8Jv9i5qakNSEZDlttL5R2vGT/3qvTvkAdArd4JlgjKsRSjft3FdPWLF8Opvrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772811215; c=relaxed/simple;
-	bh=VM5jbbGTb0mqnwyWcHUzkPKmk0u7/AzwDkbCmqWKtsg=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=GfYg4KNPn2JUIgy+rNSeja9QjN8C2KdoOVPIcdGo996h9IqyVmp3VLHVrrW61Bqma8jJAJSmfIR8Oo9cxc6O9sbBcU5Kpjg4n5rSPeTO2BEWGjBHmB7W2pU0HHO+EPhbTN9u4QFXxzZ9xlq0BxfBQxGnV1j1lpaMHVDphhuHLac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4XXnpfP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF108C2BCB1;
-	Fri,  6 Mar 2026 15:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772811215;
-	bh=VM5jbbGTb0mqnwyWcHUzkPKmk0u7/AzwDkbCmqWKtsg=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=j4XXnpfPZ+hwL9bNlD6tbPv5I3QLjCwJyb+3AHIFuZWfvRJgODvpnDj+LzkZajc4+
-	 0VyIjO2rJNiFF49Q6PDx7iuFTaJanGLFkdEBHsvut88pPF0sZ0hQ+Ph4WlQhkCzYZS
-	 icgq8uaVua8G7y4YjnoZm+FaRRJzXBbvoH5m66N8fid0T/GGLTWdCqDesuci3ekkRa
-	 K2S+9K2HeGMCu57hxH5QnFyVdXg45pksRrpyHQgdTS3pPL8bkaXFg8tn3rMrQmJvdh
-	 e3fncahz9DeI23JJQsgy31+Prb1wIsRrIK0/7TqraZrbiaBKHqh+wV/QbVkmoqPjMb
-	 P6657wk5PE9lw==
-Date: Fri, 06 Mar 2026 09:33:32 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1772842187; c=relaxed/simple;
+	bh=Xod5TDatpNosX+9dF6j3RGrf8F9ANdZwsWtNdwJuEPA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e0teVNNiya2XX1+ieqpaNd8qsvI+mDVDr3mJt5BgIrsjLWETcyva//x+3UhgdIHQSeQb/YwW/6cY893GedcBV1r2tLHw92vTB5a3NnMoNDo5odp1NyUTi+pUO7zfJl0tozCzBh/zuKKvB+ow5RgCEYfYq49O9xNObyfYMHUlYjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ujM/C0iu; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 43ACDC4043D
+	for <linux-rtc@vger.kernel.org>; Sat,  7 Mar 2026 00:10:02 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id DE68F5FF92;
+	Sat,  7 Mar 2026 00:09:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B82CC102F0D91;
+	Sat,  7 Mar 2026 01:09:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772842182; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=C8rLGybudffOtHeoP9RDP82rOfmMQgZBlyUmz5V3v6Q=;
+	b=ujM/C0iupxOzfvG4KWhYPGkUW0Y5TaI+a03hVTj2qH4falN0idH/7CO8Q6jo5hyTSq9lCB
+	YKIKdobmR1V9x115fHEpjWc1k6fa/2sImLguVy/ldAuxdBQwKQJcEfbmf+ZK73P4mQgv/j
+	+ifogFXtVFz1vYonWrA7X5S7RbHw+yJfbYwORgpOF06IgzM0qKcYgBHP6bWGztOEhjYDC+
+	a7l8Zj44MN+3Ku5hahu1KB+l+dXboUaVTt/ul2XdldAMeUyKU3eDLR5oFAEbBkBTX80tKI
+	yQrFJNZlZXYDIdECJwr6GUXgTXA4FhJ186i15y8vdXGVjxruLrtbSOLHoui1sQ==
+Date: Sat, 7 Mar 2026 01:09:39 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Andrew Davis <afd@ti.com>
+Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] Remove use of i2c_match_id in RTC
+Message-ID: <202603070009395a8a4173@mail.local>
+References: <20260305193545.796294-1-afd@ti.com>
+ <20260305230725ffa875be@mail.local>
+ <5c4c2470-70ee-4dd4-b769-9f26206145d4@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-rtc@vger.kernel.org, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Lee Jones <lee@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>, 
- linux-pm@vger.kernel.org, Linus Walleij <linusw@kernel.org>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Conor Dooley <conor+dt@kernel.org>, 
- linux-gpio@vger.kernel.org, Daniel Lezcano <daniel.lezcano@kernel.org>, 
- Lukasz Luba <lukasz.luba@arm.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-In-Reply-To: <20260306133351.31589-3-clamor95@gmail.com>
-References: <20260306133351.31589-1-clamor95@gmail.com>
- <20260306133351.31589-3-clamor95@gmail.com>
-Message-Id: <177281121286.2318682.8615584882799605185.robh@kernel.org>
-Subject: Re: [PATCH v3 2/6] dt-binding: pinctrl: pinctrl-max77620: convert
- to DT schema
-X-Rspamd-Queue-Id: C855A223FF6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c4c2470-70ee-4dd4-b769-9f26206145d4@ti.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 16065228EA7
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6148-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6149-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	RCVD_COUNT_THREE(0.00)[4];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,bootlin.com,intel.com,gmail.com,samsung.com,arm.com];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.982];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-rtc@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[3];
+	NEURAL_HAM(-0.00)[-0.994];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:url,mail.local:mid]
 X-Rspamd-Action: no action
 
-
-On Fri, 06 Mar 2026 15:33:47 +0200, Svyatoslav Ryhel wrote:
-> Convert pinctrl-max77620 devicetree bindings for the MAX77620 PMIC from
-> TXT to YAML format. This patch does not change any functionality; the
-> bindings remain the same.
+On 06/03/2026 09:01:00-0600, Andrew Davis wrote:
+> On 3/5/26 5:07 PM, Alexandre Belloni wrote:
+> > On 05/03/2026 13:35:39-0600, Andrew Davis wrote:
+> > > Hello all,
+> > > 
+> > > RTC subsystem is one of the last still using i2c_match_id().
+> > > This is a v2 but nothing is changed from last time. If I'm
+> > > not sending this to the right folks let me know.
+> > 
+> > Do you mean that you intend to remove i2c_match_id from the kernel?
+> > 
 > 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  .../pinctrl/maxim,max77620-pinctrl.yaml       |  97 +++++++++++++
->  .../bindings/pinctrl/pinctrl-max77620.txt     | 127 ------------------
->  2 files changed, 97 insertions(+), 127 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/maxim,max77620-pinctrl.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-max77620.txt
+> Yes, once I remove all users in the various subsystems (like RTC),
+> I'll remove it from the I2C headers.
+> 
+> It should be replaced with functions like i2c_get_match_data()
+> for reasons given in the commit messages.
+
+Ok, this should have been made clear in the original cover letter, the
+series would have looked a bit less like unnecessary churn.
+
+> 
+> Andrew
+> 
+> > > 
+> > > Thanks,
+> > > Andrew
+> > > 
+> > > Andrew Davis (6):
+> > >    rtc: abx80x: Remove use of i2c_match_id()
+> > >    rtc: m41t80: Remove use of i2c_match_id()
+> > >    rtc: pcf2127: Remove use of i2c_match_id()
+> > >    rtc: rs5c372: Remove use of i2c_match_id()
+> > >    rtc: rv8803: Remove use of i2c_match_id()
+> > >    rtc: rx8025: Remove use of i2c_match_id()
+> > > 
+> > >   drivers/rtc/rtc-abx80x.c  |  3 +--
+> > >   drivers/rtc/rtc-m41t80.c  |  8 +-------
+> > >   drivers/rtc/rtc-pcf2127.c | 23 +++++++----------------
+> > >   drivers/rtc/rtc-rs5c372.c |  7 +------
+> > >   drivers/rtc/rtc-rv8803.c  |  8 +-------
+> > >   drivers/rtc/rtc-rx8025.c  |  4 +---
+> > >   6 files changed, 12 insertions(+), 41 deletions(-)
+> > > 
+> > > -- 
+> > > 2.39.2
+> > > 
+> > 
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/maxim,max77620-pinctrl.yaml: patternProperties:^(pin_gpio|gpio)[0-7_]+$:properties:pins: 'enum' should not be valid under {'enum': ['const', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'minimum', 'maximum', 'multipleOf', 'pattern']}
-	hint: Scalar and array keywords cannot be mixed
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/maxim,max77620-pinctrl.yaml: patternProperties:^(pin_gpio|gpio)[0-7_]+$:properties:pins: 'enum' should not be valid under {'enum': ['const', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'minimum', 'maximum', 'multipleOf', 'pattern']}
-	hint: Scalar and array keywords cannot be mixed
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.kernel.org/project/devicetree/patch/20260306133351.31589-3-clamor95@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
