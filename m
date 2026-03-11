@@ -1,50 +1,50 @@
-Return-Path: <linux-rtc+bounces-6171-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6172-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GL8oKHfKsWnvFAAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6171-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 21:03:03 +0100
+	id qM5CLXrKsWnvFAAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6172-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 21:03:06 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B8C269C2C
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 21:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FD20269C34
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 21:03:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EC4F8304804E
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 20:02:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A5EBF3036EB7
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 20:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D4038553D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6BB3859DC;
 	Wed, 11 Mar 2026 20:02:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="rk4/0bnb"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="s+DqyYLd"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E6433122D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A13F383C86;
 	Wed, 11 Mar 2026 20:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773259366; cv=none; b=j5uijiPnjbLw9hWSCvpOK3ohuFqlnoyb7xrziST2MyCYbHLcCuO7dGRHC26LQV9UvvQPC12mALGShAGwD9CLkNN0jfnT7tBSeo3V2SIeu3JQ0e4ucIFVk5gltN7ekTLyOhiJzheo7x7bYYhTTnlDm8TBeypwC+G2fdVQXgzRy9U=
+	t=1773259366; cv=none; b=rfBGNsLAlJ6ECz96hGrpDqqUKvRk39MpjAZ0IDaWnzsAN6DvNParFlbpzKgXLjXbiF6K/zbEOGLPlRwbC4tEo9Nvdd0nny4OibqIbBu83JjqFZeyrNckdGBbIAlrLvv76Fll/WiC/6veRAUWIQ0sAENsq0GuNpMTvXojmjt3b8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773259366; c=relaxed/simple;
-	bh=i6c3mDCRRAjDlXJe0nhjFm58gq3hSdjpXNhPcl7vufw=;
+	bh=zPnjoXw08YMNNV3/AEn/g4Vdd0XKRiOaNUdFYSxNwg4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H3MMGl4c6JL/c1EpEW7f5Gs1P3C7icE9dBBfosCgQ/nRZK4Fn4Vgw7+UbeiQpS0SZwItWa72PVq2NTaNmTHLN/DRxcOdsJLvV0hQf11w3mEXep4eze22C/d8BAwJYlymE8QB7HGPDV23TYcmBVVpr9nY2O8TvlRPpaP+isciU8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=fail (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=rk4/0bnb reason="key not found in DNS"; arc=none smtp.client-ip=162.243.120.170
+	 MIME-Version; b=LE2GEe8v/Hx7YKIIHWZ3AgCB6eqywQY5Rqsx6EeqCvXdQqjI7lgXpyRyuzt3NiV07gXAjW+dCkmkz6PRP+CXYwt5ZTPpsn45uEs/Yc2/34ogAIbdkrb0Y7W790MZ+g37/0N9XVkTH1F7ffMp8Z6SXtDji5W/NGD453MwQM9zLPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=fail (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=s+DqyYLd reason="key not found in DNS"; arc=none smtp.client-ip=162.243.120.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
 	; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject
 	:Cc:To:From:subject:date:message-id:reply-to;
-	bh=kH/fXf9SndV/fPlnXEWo7nT5oBnL6RleSNAFNGbN6cA=; b=rk4/0bnb2p+TWi5PVDFLCbyX7q
-	aiSbKa0JazaVAypeyHmla59JiDvtPPFDlkutq4TPulSed4suvCPZoypukbvuVLl1SnqePzEgVDjH0
-	NDtM+/l/3tKxcF2izH9FH5FZKuxbh8lSlGqKW98Bgc2jS49r9NwOcxvAjH/WWOkcf6M4=;
+	bh=990Tn+4G4Zbb0Uydm1+sIapSOYaCX24wog9+GqUb5Qc=; b=s+DqyYLdqx/hp0yony+PidpmDj
+	xP2yRZqR0RJ7rMU1w6T9lQXD4it2sfPEKNFYTa/TrY+mHhWbRI1r+OhbG0N0chsFQHqxeiswNoG92
+	IRqzRkNvA13VFeZiYYLqS6DhvJkWEFlElQIu8gPYPIYpQnnaOfBr3134gpBLyXCEk0D0=;
 Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168] helo=pettiford.lan)
 	by mail.hugovil.com with esmtpa (Exim 4.98.2)
 	(envelope-from <hugo@hugovil.com>)
-	id 1w0PlS-000000000Lu-15aP;
-	Wed, 11 Mar 2026 16:02:42 -0400
+	id 1w0PlT-000000000Lu-1Myy;
+	Wed, 11 Mar 2026 16:02:43 -0400
 From: Hugo Villeneuve <hugo@hugovil.com>
 To: alexandre.belloni@bootlin.com
 Cc: linux-rtc@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: linux-rtc@vger.kernel.org,
 	p.rosenberger@kunbus.com,
 	antonio@amsobr.com,
 	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: [PATCH 2/4] rtc: pcf2127: add pcf2127_pwrmng_get/set
-Date: Wed, 11 Mar 2026 16:02:28 -0400
-Message-ID: <20260311200237.3531981-3-hugo@hugovil.com>
+Subject: [PATCH 3/4] rtc: add battery low voltage detection feature
+Date: Wed, 11 Mar 2026 16:02:29 -0400
+Message-ID: <20260311200237.3531981-4-hugo@hugovil.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260311200237.3531981-1-hugo@hugovil.com>
 References: <20260311200237.3531981-1-hugo@hugovil.com>
@@ -80,7 +80,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6171-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6172-lists,linux-rtc=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[hugovil.com];
@@ -93,118 +93,55 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[hugo@hugovil.com,linux-rtc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[hugovil.com:~];
-	NEURAL_HAM(-0.00)[-0.630];
+	NEURAL_HAM(-0.00)[-0.387];
 	TAGGED_RCPT(0.00)[linux-rtc];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[dimonoff.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,hugovil.com:mid]
-X-Rspamd-Queue-Id: 22B8C269C2C
+X-Rspamd-Queue-Id: 6FD20269C34
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Add common functions to get/set the pwrmng field in the CTRL3 register,
-used by pcf2127_param_get() and pcf2127_param_set().
+Some RTCs have a battery low voltage detection function. Add new feature
+so that it can be enabled, disabled or queried at runtime.
 
 Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
-These functions will also be used in the following patch
-to add battery low detection.
----
- drivers/rtc/rtc-pcf2127.c | 42 +++++++++++++++++++++++++++------------
- 1 file changed, 29 insertions(+), 13 deletions(-)
+ include/uapi/linux/rtc.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index e2e9746027348..0605295026564 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -213,6 +213,30 @@ struct pcf2127 {
- 	bool ts_valid[PCF2127_MAX_TS_SUPPORTED];  /* Timestamp valid indication. */
- };
+diff --git a/include/uapi/linux/rtc.h b/include/uapi/linux/rtc.h
+index 97aca4503a6a3..596eec119bb3a 100644
+--- a/include/uapi/linux/rtc.h
++++ b/include/uapi/linux/rtc.h
+@@ -134,18 +134,23 @@ struct rtc_param {
+ #define RTC_FEATURE_CORRECTION		5
+ #define RTC_FEATURE_BACKUP_SWITCH_MODE	6
+ #define RTC_FEATURE_ALARM_WAKEUP_ONLY	7
+-#define RTC_FEATURE_CNT			8
++#define RTC_FEATURE_BATTERY_LOW_DETECT	8
++#define RTC_FEATURE_CNT			9
  
-+static int pcf2127_pwrmng_get(struct device *dev, u8 *pwrmng)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	u32 value;
-+	int ret;
+ /* parameter list */
+ #define RTC_PARAM_FEATURES		0
+ #define RTC_PARAM_CORRECTION		1
+ #define RTC_PARAM_BACKUP_SWITCH_MODE	2
++#define RTC_PARAM_BATTERY_LOW_DETECT	3
+ 
+ #define RTC_BSM_DISABLED	0
+ #define RTC_BSM_DIRECT		1
+ #define RTC_BSM_LEVEL		2
+ #define RTC_BSM_STANDBY		3
+ 
++#define RTC_BATTERY_LOW_DETECT_DISABLED	0
++#define RTC_BATTERY_LOW_DETECT_ENABLED	1
 +
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+	if (ret < 0)
-+		return ret;
-+
-+	*pwrmng = FIELD_GET(PCF2127_CTRL3_PM, value);
-+
-+	return 0;
-+}
-+
-+static int pcf2127_pwrmng_set(struct device *dev, u8 pwrmng)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+
-+	return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+				  PCF2127_CTRL3_PM,
-+				  FIELD_PREP(PCF2127_CTRL3_PM, pwrmng));
-+}
-+
- /*
-  * In the routines that deal directly with the pcf2127 hardware, we use
-  * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
-@@ -337,18 +361,15 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ #define RTC_MAX_FREQ	8192
  
- static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
- {
--	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
--	u32 value;
-+	u8 value;
- 	int ret;
  
- 	switch (param->param) {
- 	case RTC_PARAM_BACKUP_SWITCH_MODE:
--		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+		ret = pcf2127_pwrmng_get(dev, &value);
- 		if (ret < 0)
- 			return ret;
- 
--		value = FIELD_GET(PCF2127_CTRL3_PM, value);
--
- 		if (value < 0x3)
- 			param->uvalue = RTC_BSM_LEVEL;
- 		else if (value < 0x6)
-@@ -367,19 +388,16 @@ static int pcf2127_param_get(struct device *dev, struct rtc_param *param)
- 
- static int pcf2127_param_set(struct device *dev, struct rtc_param *param)
- {
--	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
- 	u8 mode = 0;
--	u32 value;
-+	u8 value;
- 	int ret;
- 
- 	switch (param->param) {
- 	case RTC_PARAM_BACKUP_SWITCH_MODE:
--		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &value);
-+		ret = pcf2127_pwrmng_get(dev, &value);
- 		if (ret < 0)
- 			return ret;
- 
--		value = FIELD_GET(PCF2127_CTRL3_PM, value);
--
- 		if (value > 5)
- 			value -= 5;
- 		else if (value > 2)
-@@ -400,9 +418,7 @@ static int pcf2127_param_set(struct device *dev, struct rtc_param *param)
- 			return -EINVAL;
- 		}
- 
--		return regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
--					  PCF2127_CTRL3_PM,
--					  FIELD_PREP(PCF2127_CTRL3_PM, mode + value));
-+		return pcf2127_pwrmng_set(dev, mode + value);
- 
- 	default:
- 		return -EINVAL;
 -- 
 2.47.3
 
