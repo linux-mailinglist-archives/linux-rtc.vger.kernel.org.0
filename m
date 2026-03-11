@@ -1,268 +1,204 @@
-Return-Path: <linux-rtc+bounces-6167-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6168-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kOpoJrIRsWmYqQIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6167-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 07:54:42 +0100
+	id OBCeCugTsWkZqgIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6168-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 08:04:08 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7EB625D194
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 07:54:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B42F625D28F
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 08:04:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D0401305D6D5
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 06:52:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4208030805E3
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2026 07:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D477F372EC6;
-	Wed, 11 Mar 2026 06:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1111F371899;
+	Wed, 11 Mar 2026 07:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=spacecubics-com.20230601.gappssmtp.com header.i=@spacecubics-com.20230601.gappssmtp.com header.b="Gh9h8fy+"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="wkVH9qPx"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010034.outbound.protection.outlook.com [52.101.85.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA42324677F
-	for <linux-rtc@vger.kernel.org>; Wed, 11 Mar 2026 06:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CA9376BFB;
+	Wed, 11 Mar 2026 07:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.34
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773211974; cv=pass; b=ceaJyzrdoxmE5wHwCQM9KmFBP5oltsIxN0/7XCudxnKC4Gqv3Ml42SxuKWsmRYHPQjSQPbd4GJP6am9apdO64xaTpnlP3vcFKWNfwZYrped/l7Zmq9HaejJOGbxNQh6/RZd5tJ6PzreacDaJQQIN/DnjaGBv8PZR+jOZSyqn0xI=
+	t=1773212579; cv=fail; b=QtCQwVHI+fggRJ1BiE6qD7VhGDJ3G2w3B+S0eyfQvjOiukcyKqujIUsbXhqVoTZouT/XtN6E9SyjVOpqDn6Q5l7RGduNWlIx7hqskYJFfw/+b9kkXBrBrBud/376BQruvpoCJSGkEqrdkkb6YtLNz+r1XjJtMOKdnRZHD6aEuy0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773211974; c=relaxed/simple;
-	bh=a8lgQlz3o8mxiQRHZnuOls/Pw+YBOhYyeXr99nATTzs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ENo7poF3WjdbesYsZ2fuCJkIJiXuHlC19SLT1ckQitXIaurlf2XfWc4e9hLHgaq6VvurPRSvNqBOrnSmDchDRzucvpEpUF4RhwuqoJO+E4nMoYBgPXAJNec43lwsUlTlS2v7DTqjCMdOMvPBxvy7Ek7DC2CPjcSWXfD/5T5NCbQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=spacecubics.com; spf=none smtp.mailfrom=spacecubics.com; dkim=pass (2048-bit key) header.d=spacecubics-com.20230601.gappssmtp.com header.i=@spacecubics-com.20230601.gappssmtp.com header.b=Gh9h8fy+; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=spacecubics.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=spacecubics.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-66281b1018bso4925440a12.2
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Mar 2026 23:52:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773211971; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LYSpDNXDi238MlLb+ZCzGQdx/Rz9x57RAReqRdKJ5kyLlqFv+yv9DntvCYPQX0QdWp
-         anhbJXQUyVRBGWsTFiShHErjMXahuETrQISLcUfAoQ4O0W0mkY1Prw3oe/o6kf9UEzzj
-         OJSQRmaF2KsezmdBWQKFdWg6Rlo6mGE5AKe4/UJii5k5/gTSomsKSKtqRLPesg/CWcxP
-         rFXaKXvUVRoMqdCsSWxI+QxIGsMBHdxzkRdwvnt1TXOvwgTL43AeGVIv3bPlIOhb+2Pc
-         UKhtK3hizm5CqI9DhVTITkWwPuOsh9CfVdeMg5puaWJNGzNE2jpGimPUusFxyxvKh6ee
-         Tr8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=a8lgQlz3o8mxiQRHZnuOls/Pw+YBOhYyeXr99nATTzs=;
-        fh=zW8E4Ogh7P08nSdr3Xb3gZMTUikMf+X41hQ1RbLVmgU=;
-        b=AxrZCxhmPZAoECQ8yJ7RgeebnraJBII640C0Tzt6Cs7DA0pRwL7z6ppbABF6wkRuN2
-         X1a53R6g3x4O8vKt1XqZcL3xypObmjZ2DNVTwC2qJJjWmV8OJNPnHDDpVjFp5MhZZFxd
-         fOsefnB/sbYlBtXkH7lWDbz7ZBA9p5Vtyvy9aLuYOsDDKzltTPqcYfPVpyhGPOtoYdU/
-         VegY0hBcZOi0BCnVEjy1OYlY4Iz9qJLhyYd/f5ofYXxuvrK8Zh1eKx9zD6uswZ5oOCjb
-         eDmterxdQwR1ADVrp5KKlw8F2eQoZmIZKdXQlkplLM9XBVXgInlM650tKtVENFeSQy6e
-         DG3A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=spacecubics-com.20230601.gappssmtp.com; s=20230601; t=1773211971; x=1773816771; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8lgQlz3o8mxiQRHZnuOls/Pw+YBOhYyeXr99nATTzs=;
-        b=Gh9h8fy+9AYmG4/11dAOCOuW4tqDKbLLIudb8rCauBqSnwgaZRdO4Eq2JKaTovSxtj
-         LHbDIvNpTXa14hVWB21S/h/1yQmqTR5vu9W0IMcn4jzJ2h5EDuZNhN14K326d1ZRsT1g
-         KO1GlolZSpIynMIprYgc5hx7ZtRUxzhitIKqmsVYEQOyyg0/JEpYJQ0waEp6Zw5lqg/m
-         gyvkHq+hMV6fSDK7AZPN57GVsGBlNottfjTNI5oTJ2+0nuJImHJrM0cBBai7BJYYQO1p
-         plImmP4ttirKQP4gUhvsvLkOC2zlWZkbOxW9ulSlp/3riLQ6hU3YRD9NAUSTqHo4xHAC
-         gggA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773211971; x=1773816771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=a8lgQlz3o8mxiQRHZnuOls/Pw+YBOhYyeXr99nATTzs=;
-        b=nD9P7UJNjGyIdcrrjQyvzF48q81ykHKVAEQBxMuyDl7mTNxm54wpugl6o+9fVdqFKC
-         +YOAKSDM8SNDJ1EIbBhGIEeqIo0xFhjdZH+u724jpfIFHVFyiiKXcJhnT90RI/WbNMAy
-         QjTV9Ng1i/vSswMPtftx3vhDUl5MEUeqSpm7n5kkibqT6npiDZyzNfiNFaum4tdc+kcJ
-         jM2oe3P9Oby1wzNuRFMI8Eqsq08yYlk9rsH37rujiqp2jFSPpKxi+UezAWN6FkD4hMNU
-         atn9NGWvJ7n9fksgg8+OVxuWzEOtkAdbCypSnksy4pwPgLah6hqhv7ilVMUJbdv++Fe7
-         wBpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUppLKP98gOgZJCFDEaQ+C0ob+qwmOD6afFGTYdLASfzTFlBSuUsbQV5wA/EuRbv9V7LT8UHVUGr0Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy56KlgM6f1Ox1j8tXlAKYI4IGf96DOfzBFYeRqwUEZGFsMeTq1
-	rI67+624BrXEOvBULU63MzaJSHjlsWOFDHzl1KEUjyaxGs24ofNVhXfh79hq0sei65upr7PuZYK
-	U8BesLfAGBZeEfl/oIE/y+MplOMiOMFMmEx1u2L0Ugb0y6xUATKj6vGjqLw==
-X-Gm-Gg: ATEYQzwjwJBg542VGhjBsVPFRaLwuVSOsyaXDaQumroGQiWrr4YQtHNBQFWXVPlmlAN
-	zo8QCGa9UnN6M2RCIPYVhqnxbKl2Q0cbBN7WoxgzQEK5Gx/qifsuQWP1D493fFwzu7YRDvacF6C
-	xehh537d9meJB9UQJ+ocYs0HA5lFImfZBscovR08aoBEG/bfOcYSxo2njB06zYnc90aPIugQO3i
-	FreFfGBoG76mdehRxUeiZHnRmxjRspicSo2JkWNKFLa0MV9fg82mEvrNZ+lEEFMBtHWgHNq6hxB
-	dJ4rLbF3GtKIFWPtnHw=
-X-Received: by 2002:a05:6402:f0a:b0:662:ce20:f22c with SMTP id
- 4fb4d7f45d1cf-66319edf97amr460422a12.28.1773211970975; Tue, 10 Mar 2026
- 23:52:50 -0700 (PDT)
+	s=arc-20240116; t=1773212579; c=relaxed/simple;
+	bh=O0OAWJCQNXVXKSp84DIH3JUFaTArMsOSeG9pjyMt2qA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=auIi1eRFXCkeWk+66Ine9muMSu743evEUtxjR3oF5hKrXT6Iena6MyE1u0JN7ujGhveG8V0v2B/9pfZNIc18QslqXESQ3PQOIt6m6K1LRuB1Fe8zye0XB9Emittitak35YSSQhUUSbaLUHm8FR6YAqzf3QAFoQgI22P2+CnZtdA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=wkVH9qPx; arc=fail smtp.client-ip=52.101.85.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WQ3AgJvhcdqS5OrG9ntBwqG37U72+ZCUHifaNBMIa/hHKXzVU4wTVkW3SCr7mPu8DNBJ+XR8KedBa1d8UY9DBdfbEqHNOa3dIC16hob9sW4WJgPIpITtwojIJI8shLVZwUYN6TUPgFfJk2gwO+88aIEt03V0TgDmaB9KWjU/KPwAiZLb1F/o1v2LGyiiPRVtrES6OgBpwvUh6+uWZ6fFSP1LUuGuRIKDDHUPDH/Dn7akABpsIMwDKf8MjsTnaslA4eE2pbUBLU6gSjOJqeEuHPOomqsgtoSgJY4n1ar1SM5mxfBdC+Xv+vqyKcoLTuuDN5I18A7bW8K824Kc60SJOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zn0B+oZ2rEtyD2zK3jIKgEC7XLj+IeuTr/lWtiOJkD8=;
+ b=wT6do+aRjDHKbEIV6WgG3qHxKpQReZMheMONQPc40B+cEMxC47oAtjrwTA7cN0NIxjnALn/zo5SjysW7/xdLLtsi8Goog1A6cCxb0A0wqlBmiLiLM9iH28dbkJPOC+iXW5KH0hYwZ5ajNX0hmO6VnSaX/owir/qd6/3gkER8HZ2G5kdu7hD3kjqF7ChJfnjciTOIEHb3vf//66L38eZdu0Has2mjUP4sJnrtN7WGGabWaZdJOwo5gahVEXtLF6/oDz/hlXWXweQf0/riLsfKm+SE2+f5ujZ2fQgthV/CzFh9cKplrhU1XA3bOf44I9OuXmKFeAQNXEdduLudMVrAYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.194) smtp.rcpttodomain=baylibre.com smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zn0B+oZ2rEtyD2zK3jIKgEC7XLj+IeuTr/lWtiOJkD8=;
+ b=wkVH9qPxWrjRhr8oUtpcdTy8wPehTXwRwg+fjf7xYi1f1jatyK5A5WvfwJxgZZk6xZ+y3La1jn7gG8qKfr3kaHdx32znFvc+pwQgLWLDTFigHJEOh2KFZRfEsl14jwAVQANWq0iUyES3+OEzuqyLQK15GPMh7WI0YM/gxZqVqXk=
+Received: from CH5PR05CA0008.namprd05.prod.outlook.com (2603:10b6:610:1f0::17)
+ by SA1PR10MB5887.namprd10.prod.outlook.com (2603:10b6:806:23e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9678.25; Wed, 11 Mar
+ 2026 07:02:51 +0000
+Received: from DS2PEPF000061C1.namprd02.prod.outlook.com
+ (2603:10b6:610:1f0:cafe::c8) by CH5PR05CA0008.outlook.office365.com
+ (2603:10b6:610:1f0::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.8 via Frontend
+ Transport; Wed, 11 Mar 2026 07:02:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ DS2PEPF000061C1.mail.protection.outlook.com (10.167.23.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9678.18 via Frontend Transport; Wed, 11 Mar 2026 07:02:49 +0000
+Received: from DFLE203.ent.ti.com (10.64.6.61) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 11 Mar
+ 2026 02:02:21 -0500
+Received: from DFLE205.ent.ti.com (10.64.6.63) by DFLE203.ent.ti.com
+ (10.64.6.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 11 Mar
+ 2026 02:02:20 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE205.ent.ti.com
+ (10.64.6.63) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 11 Mar 2026 02:02:20 -0500
+Received: from akashdeep-HP-Z2-Tower-G5-Workstation.dhcp.ti.com (akashdeep-hp-z2-tower-g5-workstation.dhcp.ti.com [10.24.68.91])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 62B72GAN4065210;
+	Wed, 11 Mar 2026 02:02:17 -0500
+From: Akashdeep Kaur <a-kaur@ti.com>
+To: <praneeth@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+	<alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <msp@baylibre.com>, <vishalm@ti.com>, <sebin.francis@ti.com>,
+	<d-gole@ti.com>, <k-willis@ti.com>, <a-kaur@ti.com>
+Subject: [PATCH] rtc: ti-k3: Add support to resume from IO DDR low power mode
+Date: Wed, 11 Mar 2026 12:32:14 +0530
+Message-ID: <20260311070214.3589965-1-a-kaur@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJACUaoFK-GiBN_hfkNajDUygnSZc29U_jdeQ_rKtXS7P1f-nw@mail.gmail.com>
- <9ed6823e-b381-4de5-b1cf-98f5dc54bb7c@vaisala.com> <202603061113298cbba29d@mail.local>
- <CAJACUaqHDJOZY-jgriGRX=DE=e3rvBgvycjO1exxQ7k1XdywpA@mail.gmail.com> <ac27be8f-363e-42e6-8b46-e95ab739762a@vaisala.com>
-In-Reply-To: <ac27be8f-363e-42e6-8b46-e95ab739762a@vaisala.com>
-From: Takumi Ando <takumi@spacecubics.com>
-Date: Wed, 11 Mar 2026 15:52:39 +0900
-X-Gm-Features: AaiRm50iDsz9pUNYLXhpwMJrxA7ZxNSK2mhlnVh0ScEj875xbijxl3nEEuL0wok
-Message-ID: <CAJACUapT3cNwQtyE1zmQcGfDex2jmrbvvd9vOvZhC3v8+h3cZQ@mail.gmail.com>
-Subject: Re: [QUESTION] rtc: zynqmp: CALIB_RD reset behavior differs between
- ZynqMP and Versal
-To: Tomas Melin <tomas.melin@vaisala.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
-	michal.simek@amd.com, Yasushi SHOJI <yashi@spacecubics.com>, 
-	kanta tamura <kanta@spacecubics.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: D7EB625D194
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PEPF000061C1:EE_|SA1PR10MB5887:EE_
+X-MS-Office365-Filtering-Correlation-Id: f6d00f66-d6f0-4e53-1c43-08de7f3c353b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700016|1800799024|82310400026|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	bKw34Uv2wHOLMik9EK+Ndix+gTg0r2/+BroNEfiTzqzsH04A9BEN3q+DmLronU9WXYAzpeX//eISwpZY6Q59zXUPLjr+XFWQe1OayxFCJMbkJGxik/5L+BaHn2CIJpqENQrgPF5rJ99OsP8E6v9bB/ozck2j8qZRZrnnRrLYG1o545O3EYL0/2tu//Z1MrJ1KanvZMbz8svV9QqpI2wl4WP/MRFDhEmVo3m8v9NBl9uZiBus4UczKEAkoYkAxemsaJfMYEW6XwgyQSP3ZtgohdqBOajaBMNRDMkcFaFqgxKkqb1J8nZ5Dql0pywXMttYJ2aJqSd4zrioy9kl8pf0qaOhvq547AZkQm9rq8oCanAONptWXQ8h/jwpACW62IWP9WG6E957pR6+9TQ2HWgzEtpx4UHIJc/1Ue4LzFgZMPXmS1aVgxWvuaoxIlZB4+HWrtiiYCk80cv7S+WMib9YqpAkwbus/cPKCTmdj+CK54O/1L5VOS02M3mkD7vVwfT5Rj9cBz9dsdKnzpYwKCAbXGqa6eyloHwtUD05daTg/DfQbJkka5c9u2UbHF0ZialMP8oQ+SsM2giUAstMeS+drrJiKWNNDclsSN2fFdN/iNgXGd66fSPYxGsucoInGsuCrrAOuXqSXqXLFIaWX1mEMXXvt/hZfVZTeBfKNJFcDAD7jHXHj8mr+OKeIfRZ7dnsOWEVyZHYAVd3JD1vtBoJTY2cYrgQSzJ73EClM3qc0LeS3/C0WnFD6PGe+Kw5k/yAJrSmXeSRtNn5Q0krytUn/g==
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(376014)(36860700016)(1800799024)(82310400026)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Y/VKC5pE13AqBYh7/521d4H8LzWzZ898aVOVbEcIBL63MeO9paNw58FagHckp0leXwbKb9k6XXciowAhHtR3jUcXr5p8lkfC1Dl9iE4XfCauwA1ZF8WIzCBCmHcEtNjk0rLL0ev0Y6QuRUzgLwLEyDLrKuTr8Q2d0mNBp+Kc7XdO34Cv5Qc2KcOD+o2am7ekyaWg4SsQlR0DhHdQHFvN0gmJZpc4L3GZ3s037EeJuPShTHd0OcE1HA3qp9yCvy/96iW7WhTSYDhhkafL80+9/kgJcbVzgcgP3ppWwtPtgWgtURsmCXGG0iKLp1UmPxMX+zV2hmESDjpkYTz6O1b8BoK6XNy8vJgp0VHiZb5nTG0oKQxpMH1laaQW/h1gyRyRAdq0tTxxnuDXcBr73gy6cKcf3i6tK164DFFUtKEpED2iwrlh/TKI3JWwCpK3Ztcb
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2026 07:02:49.9967
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6d00f66-d6f0-4e53-1c43-08de7f3c353b
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS2PEPF000061C1.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5887
+X-Rspamd-Queue-Id: B42F625D28F
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[spacecubics-com.20230601.gappssmtp.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[spacecubics.com];
+	TAGGED_FROM(0.00)[bounces-6168-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6167-lists,linux-rtc=lfdr.de];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[spacecubics-com.20230601.gappssmtp.com:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	DKIM_TRACE(0.00)[ti.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[takumi@spacecubics.com,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[a-kaur@ti.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	REDIRECTOR_URL(0.00)[aka.ms];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:dkim,ti.com:email,ti.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,amd.com:url,aka.ms:url,bootlin.com:url,bootlin.com:email,spacecubics.com:email]
+	RCVD_COUNT_SEVEN(0.00)[10]
 X-Rspamd-Action: no action
 
-Hi Tomas,
+During IO DDR low power mode, the RTC IP is reset and loses its
+register configuration. The DDR memory still preserves all driver states
+(reference counts, software context). System clocks are saved and restored
+by Device Manager (DM) firmware during the resume sequence.
+Add support to reconfigure the RTC IP registers in resume handler only if
+resume hook is called during IO DDR low power mode resume.
 
-Thanks for the clarification.
+Signed-off-by: Akashdeep Kaur <a-kaur@ti.com>
+---
 
-My understanding is that the fractional correction (fract_data) should
-indeed be managed from userspace since it represents oscillator drift
-and may change over time.
+Tested deep sleep with rtcwake after IO DDR resume on AM62P-SK.
 
-However, the Max_Tick field seems to have a different role: it defines
-the number of RTC oscillator cycles corresponding to one second.
-For example, with a 32.768 kHz oscillator the value should be 32768-1.
+---
+ drivers/rtc/rtc-ti-k3.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-This is how I interpreted the documentation as well.
-In the AM012, the description of Max_Tick says that the
-register value multiplied by the oscillator period should equal one
-second, and it explicitly states that for a 32.768 kHz oscillator the
-value will be 0x7FFF.
+diff --git a/drivers/rtc/rtc-ti-k3.c b/drivers/rtc/rtc-ti-k3.c
+index ec759d8f7023..e801f5b9d757 100644
+--- a/drivers/rtc/rtc-ti-k3.c
++++ b/drivers/rtc/rtc-ti-k3.c
+@@ -640,10 +640,18 @@ static int __maybe_unused ti_k3_rtc_suspend(struct device *dev)
+ static int __maybe_unused ti_k3_rtc_resume(struct device *dev)
+ {
+ 	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
++	int ret = 0;
++
++	if (k3rtc_check_unlocked(priv)) {
++		/* RTC locked implies low power mode exit where RTC loses context */
++		ret = k3rtc_configure(dev);
++		if (ret)
++			return ret;
++	}
+ 
+ 	if (device_may_wakeup(dev))
+ 		disable_irq_wake(priv->irq);
+-	return 0;
++	return ret;
+ }
+ 
+ static SIMPLE_DEV_PM_OPS(ti_k3_rtc_pm_ops, ti_k3_rtc_suspend, ti_k3_rtc_resume);
+-- 
+2.34.1
 
-Because of this, it appears that Max_Tick depends only on the oscillator
-frequency and should not change dynamically like the fractional
-correction.
-
-Did I misunderstand the purpose of the Max_Tick field?
-
-Best regards,
-
-2026=E5=B9=B43=E6=9C=8811=E6=97=A5(=E6=B0=B4) 14:23 Tomas Melin <tomas.meli=
-n@vaisala.com>:
->
-> Hi,
->
-> On 11/03/2026 05:19, Takumi Ando wrote:
-> > [You don't often get email from takumi@spacecubics.com. Learn why this =
-is important at https://aka.ms/LearnAboutSenderIdentification ]
-> >
-> > Hi Tomas, Alexandre,
-> >
-> > Thank you for the explanations.
-> >
-> > So if I understand correctly, both on Zynq UltraScale+ and Versal,
-> > CALIB_RD may return a non-zero (or otherwise undefined) value after
-> > reset, meaning that it cannot reliably be used to determine whether
-> > the calibration register has already been initialized.
-> >
-> > While the fractional calibration should indeed be handled from
-> > userspace (e.g. via the RTC offset interface), it seems that the
-> > Max_Tick field should still always be programmed according to the
-> > value provided in Device Tree, since it depends only on the RTC
-> > oscillator frequency.
->
-> Both max_tick and fract_data might change, it depends on how big
->
-> the calibrator drift/offset is and if it is negative/positive.
->
-> >
-> > Would it make sense for the driver to always program Max_Tick from the
-> > Device Tree "calibration" property while preserving the fractional
-> > calibration bits currently stored in hardware?
->
-> As Alexandre mentioned, user space needs to ensure calibration is what
-> it should be.
->
->
-> thanks,
->
-> Tomas
->
->
-> >
-> > If this approach sounds reasonable, I would like to prepare a patch
-> > for upstream.
-> >
-> > Best regards,
-> >
-> > 2026=E5=B9=B43=E6=9C=886=E6=97=A5(=E9=87=91) 20:13 Alexandre Belloni <a=
-lexandre.belloni@bootlin.com>:
-> >> On 06/03/2026 12:09:40+0200, Tomas Melin wrote:
-> >>>> On Zynq UltraScale+ Devices Register Reference (UG1087) [2],
-> >>>> CALIB_RD resets to 0, so the current logic works correctly there.
-> >>>> However, this assumption does not appear to hold for Versal.
-> >>> For Ultrascale+ the calibration register also gives random values aft=
-er
-> >>> reset, perhaps you have noticed this:
-> >>> https://adaptivesupport.amd.com/s/article/000036886?language=3Den_US.=
- Maybe
-> >>> the same can occur also on Versal.
-> >>>
-> >>> AFAIK there is no way of knowing if the value is correct or not after=
- reset,
-> >>> so user space helpers might be needed to maintain the calibration val=
-ue at a
-> >>> desired value.
-> >>>
-> >> Userspace is always needed to put the proper calibration, there is no
-> >> way for the kernel to know what value to put there. In the support cas=
-e
-> >> above, the crystal will never be exactly 32768Hz and this value will
-> >> change over time and also depends on the temperature. The value always
-> >> needs to be computed, if your device can do NTP, chrony will provide t=
-he
-> >> proper offsets. If you don't have a way to measure the deviation, then
-> >> userspace can always forcefully set /sys/class/rtc/rtcX/offset if it
-> >> doesn't hold the correct value.
-> >> There is no need for devmem here.
-> >>
-> >> --
-> >> Alexandre Belloni, co-owner and COO, Bootlin
-> >> Embedded Linux and Kernel engineering
-> >> https://bootlin.com/
-> >
-> >
-> > --
-> > Takumi Ando
-> > Space Cubics Inc.
-
-
-
---=20
-Takumi Ando
-Space Cubics Inc.
 
