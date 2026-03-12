@@ -1,150 +1,147 @@
-Return-Path: <linux-rtc+bounces-6191-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6192-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yCprH4fysmmLRAAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6191-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 18:06:15 +0100
+	id +Lg6Iz79smmQRQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6192-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 18:51:58 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF89A27659F
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 18:06:14 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 119D9276D2E
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 18:51:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D894930D019E
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 16:58:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1DE72302DA98
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 17:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FBD03FB066;
-	Thu, 12 Mar 2026 16:57:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF2FE3FB7CB;
+	Thu, 12 Mar 2026 17:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SQ1v4f52"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="GFFiQ9H3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9CB390C99
-	for <linux-rtc@vger.kernel.org>; Thu, 12 Mar 2026 16:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05303F7E88;
+	Thu, 12 Mar 2026 17:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773334674; cv=none; b=djJct+vb5Ay5Zgdvb/eikxkfs5G+mvqIPQgjnmkCAcHFkXv4p7XuX8yMC4vP0deIuvz5+Nb1SfhdlM7HG3Xln1a43JrIzyuMJ9Aej4C5DvuJltMMAUXg2peQAfsSoLxkqTpxj7L7oT56nRBfqf3WqzpylVViSk1gw2rPeCB6YhM=
+	t=1773337909; cv=none; b=aRAxRoo4sVBv1B+6i+J/fJPokP/xhJUcnGYBqjnJgy3r8ftB0oB2aZo2gu7Vpf6F9jekorJ6HhDZQjfOQk1BHUrt5522R1f7xfkunHKQ/hKNNXsMLvKJJIScuEfvyDGsliK9Mxl+sdJvsc0erkpFyKhD0kKnybG0kYMvVmscAUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773334674; c=relaxed/simple;
-	bh=quULCrgaVy74ulCzOnaMVUemMcBZcD8XT8fz8+dZQ+M=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CTs9JsLSV04j+n5pGFd+P+akJw63rzObG1fprgMGHxr0wQn9YGq7TPWDK7nTyNCMWOwRxJmiaKOvfQADkmrFvWYPVdh29v4KAa8WkhBfuNsxrP70s1qlXO2eGegrQaUAZ8yBaGNqGceTmR+W4+46Un/yJYEDhEQdYPkh6GnODGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SQ1v4f52; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 1CD421A2E14;
-	Thu, 12 Mar 2026 16:57:49 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CCEA76001B;
-	Thu, 12 Mar 2026 16:57:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D3F8F10369E47;
-	Thu, 12 Mar 2026 17:57:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773334667; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=vS8X2riZtgrHyxWXASjNfEHibRP7mKkHwfCf+Jt/BxA=;
-	b=SQ1v4f52iXK3NEXVc/weoa4K/Lr9SChaeUnBKEpBC/kH3hVXJM5zdDVDOrsjhINrxX7w22
-	xIqsp/HFai81vs5xKVxVDaluGoO7zHD6Vxc40WcwFkf14ZaJrxT1mTisZkvdkWd1LVtfeh
-	KSuTGht3b4Du67wkimH2z8F6dF8BgSLGMnMR9P6yySITBdlgEOIqDlvx0nv4ats8RCCpHe
-	QwqgaDv6CdMhm6Ls9KeSGkU9FcEEP7ewq8kwfSDJKjG5ckmeho5Z19ikuPVB/HpzmCnJZ/
-	OSgRaWLsipqEAYw4DBjuQ3dLQ1jz8MHXYNYzpaeZhVlTXd5N6lg59dJGvO1GvA==
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Linus Walleij <linusw@kernel.org>, 
- Bartosz Golaszewski <brgl@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
- Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-rtc@vger.kernel.org
-In-Reply-To: <20260312085258.11431-1-clamor95@gmail.com>
-References: <20260312085258.11431-1-clamor95@gmail.com>
-Subject: Re: (subset) [PATCH v4 0/5] rtc: max77686: convert to
- i2c_new_ancillary_device
-Message-Id: <177333461371.2685487.13502330713409047469.b4-ty@bootlin.com>
-Date: Thu, 12 Mar 2026 17:56:53 +0100
+	s=arc-20240116; t=1773337909; c=relaxed/simple;
+	bh=Tildp7S7qCH5LxAjbMiLA33KOVWz6OAySSjo4u37Nbo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=sOx5vq7N3lrrKIM1jPrWpgo/MH+hXwUc3wDzDcFf/Zhyhxq0++7Ycyh9WyjNabTUsbKoD3z8ajN0b+oAq0FbLoh7G2o/nIXPGuYHEfoGwPDWlsIRJ0H2enE67Z8K89UC0qcZdhfp8ZV6z3rDWq1+ed0sNjCnjzrnOe+Ezr/nfpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=fail (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=GFFiQ9H3 reason="key not found in DNS"; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=default; h=Content-Transfer-Encoding:Mime-Version:Message-Id:Subject:Cc:
+	To:From:Date:subject:date:message-id:reply-to;
+	bh=Uw1LvZ1PeS55qXnIKkOseA45oklJs+Y7ZpJs08kVHYU=; b=GFFiQ9H352zBlxSEcG4ASkYxTb
+	uaT5XktE8OS6oRiko6k6m4tu3rMG35I0kZOoKMXouWDgiiDfwdPhAS/g0/oSs2fHAxyqz8ZkaS1BX
+	KqT4baBHlc2oms3FWE+yCTK0kKTNmK4cOIB0ytkMW9X5y+SZ0usKtkJoDqguaf2l1asY=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168] helo=pettiford.lan)
+	by mail.hugovil.com with esmtpa (Exim 4.98.2)
+	(envelope-from <hugo@hugovil.com>)
+	id 1w0kCH-000000008AR-3cQ5;
+	Thu, 12 Mar 2026 13:51:46 -0400
+Date: Thu, 12 Mar 2026 13:51:45 -0400
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: Hugo Villeneuve <hugo@hugovil.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Hugo Villeneuve
+ <hvilleneuve@dimonoff.com>, linux-rtc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: add BSM flags descriptions
+Message-Id: <20260312135145.d37cfddb9317018de436bbd0@hugovil.com>
+In-Reply-To: <20260113100427.f2162f0d5ba80a259511f9d2@hugovil.com>
+References: <20250721153332.2177134-1-hugo@hugovil.com>
+	<20260113100427.f2162f0d5ba80a259511f9d2@hugovil.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=561;
- i=alexandre.belloni@bootlin.com; h=from:subject:message-id;
- bh=quULCrgaVy74ulCzOnaMVUemMcBZcD8XT8fz8+dZQ+M=;
- b=owEBbQKS/ZANAwAKAWOk3DBscDoyAcsmYgBpsvB4mskbF2LyV9MzarnuQhANCw4BF51L7RVBw
- BcBQ7Z1wmaJAjMEAAEKAB0WIQQGqwVVleHyz/Q7kmJjpNwwbHA6MgUCabLweAAKCRBjpNwwbHA6
- MqlwD/9qPfYJep66aTUNrqvSHobgG4YcpdbC1g6fiQDoIw3RB/56cOzEtrUZSuk3CIwQ3ufOsLT
- TvV7497LLMCqQnuYRzXjrH5o03gfkuLP6A2YfIJZXXrnsR3LpMeXAm//MMoblaagBf976UUxkNU
- bdaLi+PkihpjFiQSGdM4uofJlOuLvGw91vrRLtwUGdMaaTmV64la0wYd4G3ZNHaR5UsMDf7HKOa
- IDKtGsQyiidUYBZmqn2c3kmj8adOjNZcSnMrmvvrkaRphClZFsl8qAsPGjYw+EBr3LHuRKJpybm
- wpbcW+i7LQWpXVWXvE5sly174hxhWnTC5smFlkZcLVGnYO81WcEOgaQ8zfq23W0GoMeIzG6hEFU
- UShG+xkh9xdLjwL4z4JVhUYrVBr3iqEBlYJgXmCjF2MEDxrEUTvnR59w0wEPLZ9hPM5Bu3bNuJW
- vaTsvUCSywRSJSLTEHzJXtzU+ikO6RZ54c6RSkRWG77S1EQZL88iYMsB37jsC6GOlgTUrJtpInu
- IwkwisYrmqXvZ/plY/zFn4rBsuUUJcKhiP4+qrgHz2fEOzT2OwQ3HLpnqKAYXAoh6pzwOAmPAfg
- 7y0xZdLz7XB346yiTsK3VHJmmqa14GF9874Zjna09nx6MuH9wzQ+wCov3vuQxzcLtrFjOhNpUFW
- 4iueO5LOEJqZtVw==
-X-Developer-Key: i=alexandre.belloni@bootlin.com; a=openpgp;
- fpr=D42657F65BEB9D45A004FCFAA6CD9F096F642CB3
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spam_score: -2.0
+X-Spam_bar: --
+X-Spamd-Result: default: False [-0.96 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6191-lists,linux-rtc=lfdr.de];
-	FREEMAIL_TO(0.00)[kernel.org,gmail.com,intel.com,arm.com,samsung.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6192-lists,linux-rtc=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[hugovil.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[hugovil.com:?];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EF89A27659F
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hugo@hugovil.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	NEURAL_HAM(-0.00)[-0.978];
+	R_DKIM_TEMPFAIL(0.00)[hugovil.com:s=default];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,hugovil.com:email,hugovil.com:mid]
+X-Rspamd-Queue-Id: 119D9276D2E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, 12 Mar 2026 10:52:53 +0200, Svyatoslav Ryhel wrote:
-> rtc: max77686: convert to i2c_new_ancillary_device
+On Tue, 13 Jan 2026 10:04:27 -0500
+Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+> On Mon, 21 Jul 2025 11:33:31 -0400
+> Hugo Villeneuve <hugo@hugovil.com> wrote:
 > 
-> Convert RTC I2C device creation from devm_i2c_new_dummy_device() to
-> i2c_new_ancillary_device() to enable the use of a device tree-specified
-> RTC address instead of a hardcoded value. If the device tree does not
-> provide an address, use hardcoded values as a fallback.
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > It is hard to decipher what the RTC BSM flags mean, so add
+> > meaningful descriptions.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  include/uapi/linux/rtc.h | 11 ++++++++---
+> >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/uapi/linux/rtc.h b/include/uapi/linux/rtc.h
+> > index 97aca4503a6a..da65130e316d 100644
+> > --- a/include/uapi/linux/rtc.h
+> > +++ b/include/uapi/linux/rtc.h
+> > @@ -141,10 +141,15 @@ struct rtc_param {
+> >  #define RTC_PARAM_CORRECTION		1
+> >  #define RTC_PARAM_BACKUP_SWITCH_MODE	2
+> >  
+> > +/* Backup switch mode */
+> >  #define RTC_BSM_DISABLED	0
+> > -#define RTC_BSM_DIRECT		1
+> > -#define RTC_BSM_LEVEL		2
+> > -#define RTC_BSM_STANDBY		3
+> > +#define RTC_BSM_DIRECT		1 /* Switch if Vbackup > Vdd */
+> > +#define RTC_BSM_LEVEL		2 /* Switch based on a threshold, usually with an hysteresis */
+> > +#define RTC_BSM_STANDBY		3 /*
+> > +				   * Switch if Vdd > Vbackup.
+> > +				   * Useful to ensure the RTC doesn't draw any
+> > +				   * power until the device is first powered on.
+> > +				   */
+> >  
+> >  #define RTC_MAX_FREQ	8192
 > 
-> [...]
+> Ping?
 
-Applied, thanks!
+Ping, Ping?
 
-[5/5] rtc: max77686: convert to i2c_new_ancillary_device
-      https://git.kernel.org/abelloni/c/0d65a9d93d87
 
-Best regards,
-
+-- 
+Hugo Villeneuve
 
