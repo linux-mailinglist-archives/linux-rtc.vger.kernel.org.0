@@ -1,147 +1,124 @@
-Return-Path: <linux-rtc+bounces-6195-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6196-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4BlGKd3Zs2mzbgAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6195-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 10:33:17 +0100
+	id GO1/NBrls2ktcQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6196-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 11:21:14 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DC042808D6
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 10:33:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D0A728159D
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 11:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E01AF30825E0
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 09:29:03 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D12333013DF6
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 10:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDECA388389;
-	Fri, 13 Mar 2026 09:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D923839021C;
+	Fri, 13 Mar 2026 10:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EDn0BA/N"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WXaTTql3"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC03368941;
-	Fri, 13 Mar 2026 09:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE03C2836B5;
+	Fri, 13 Mar 2026 10:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773394141; cv=none; b=dgUeQHg485Dkx1VdoQg2hlFBNYaZPa2dICHaC/hhTSK7h2cOgW4lpwcW0n61lOkSEZnwEc4AlrKtikewm8ChFOcWED87lLMUxqP+jAoQcvIQcxmcg55DCCNo4DxNFCeljeeTWPuEm+ZtAYEKFehg3t0ldoEzbM7cUdt6na4C+VA=
+	t=1773397271; cv=none; b=fv2dcGsyoZvBkwsolPkzXq8so1IdIz+KhAaUHJarlaGYFaTPlTwEPvS9p/4rRlYOUUVixUEugc6d7mIdHk+cO4I4bdDHtxA3nhOKmtugtXTEuuW9g1PmRCzDKR0VxXilA2NxCrKdx8zLCX6JzH3jekVg7xDMT3ucUqNYUdEpWHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773394141; c=relaxed/simple;
-	bh=nYRFnLPrTONi7U7O1Enq4WB5OEJpZYPZGRPBstu1j9I=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ty0wYWtjEri975rRY9Fhq48n2FJKndJaWKmAi19A/hM+dWcVoUKktDH9BwLEy+Lfv1vSz7IKBQGs671D2T1HTZY56es4r7X9UVoAY9kc+JmeFmhO9NXdI7Lr9Zhg70m1cvxGCm6w9jrx0SD+nz+xzXazVqNYjgqEjjCfTHTYz0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EDn0BA/N; arc=none smtp.client-ip=185.171.202.116
+	s=arc-20240116; t=1773397271; c=relaxed/simple;
+	bh=hZtTwpBhTGEHeq+lDmlRqNA8NUSLraRIi0xYW44+7eE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WX917B5FaYfJgz6krIlo1mfUklx2NQ/T3G3r2bZQl+FuNFBybQriiaolt97Li4RljRbMrwWajxjBfBg7+WBfnJGlU0/CqVFSkULK3AMUNE6Eam4graVe4Z8FqY64V6KcFngBml7YOJmu2/mQnVVrZaSafhMf5ENPwvitONUxTYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WXaTTql3; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 51135C42702;
-	Fri, 13 Mar 2026 09:29:21 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 40773C42707;
+	Fri, 13 Mar 2026 10:21:18 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 24B3960027;
-	Fri, 13 Mar 2026 09:28:59 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4B88510369555;
-	Fri, 13 Mar 2026 10:28:54 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 22D8460027;
+	Fri, 13 Mar 2026 10:20:56 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 56A2110369E5C;
+	Fri, 13 Mar 2026 11:20:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1773394138; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=MeXmCnU6DkpJjDmOkF4Kl8YHcZPKKCKszdRslHD03ME=;
-	b=EDn0BA/Np4DWs10goVewjq2nRwiiWAdgjN1OO52/TU46cKug/fB4LXKFTooud2iCJ7WFAM
-	yIAqT5YepKsqHa3lrxEd2DYfzm88Ky+XC84kZzE9B4R3bS6R56Sv7e1wj5kDnUseMs9IMw
-	bMD4qaRz3DmyYibHFl4Av5D6gVIKWihqomEPUaQboC2wXM6LGTD5GTr2czSHmtcboZ60iT
-	qkNfahVXekJOPEc3EdTw4x8WOzD5nghJWlItGidksZkOhgDvHzAjqQXjpumqlGJODE54AU
-	VnuUg8GSyjAjb/C6lVv1uwlwKe/lLeOVbZkKqXjuwLgK8CNsfPaz8ZcogAFaUw==
+	t=1773397254; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=gdrglww0REeOGT4Viqo+gy6Tlr6Kb5Mc5/XuGVQzle4=;
+	b=WXaTTql3HYt60jxknmxJq80ggVUL/WeB5XD0TdoqCVxYZrLt1K+a9x7Ng895uuqSgjMaSP
+	YflrJDFN47t1Y1dh+H7KGS1sQAt1ZlJ5gy3NFBnZ/m8bxc4eefreLqedcNS7+tdOqTobch
+	GjSpOELfyZ1AEFdnZWhWaEyvX1r3pD2MYiTXRZajUTl/tVm+ZXhs0tAKaTFxuXl2q3lb+U
+	pfsZdTevvCCcpAkJZ6ZNL5C2rxbzmiPWjny+V5UNi+324SXpNQ/Z4lBSsA7K7qB1BXc94e
+	OoEH3FjaNdtwu/NQhSErc3Q0mpypSbqEJIhuABylcuwnhDZjxJpjcul5rGltFA==
+Date: Fri, 13 Mar 2026 11:20:52 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
- Frank Li <Frank.Li@nxp.com>, Frieder Schrempf <frieder.schrempf@kontron.de>, 
- imx@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
- Frieder Schrempf <frieder@fris.de>
-Cc: Annette Kobou <annette.kobou@kontron.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>
-In-Reply-To: <20260309085749.25747-1-frieder@fris.de>
-References: <20260309085749.25747-1-frieder@fris.de>
-Subject: Re: (subset) [PATCH v3 0/2] Kontron i.MX8MP OSM Devicetree Fixups
-Message-Id: <177339410764.2782875.6884612032294375531.b4-ty@bootlin.com>
-Date: Fri, 13 Mar 2026 10:28:27 +0100
+To: Piyush Patle <piyushpatle228@gmail.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: rtc: isl12026: convert to YAML schema
+Message-ID: <177339713674.2795331.18049519008197599066.b4-ty@bootlin.com>
+References: <20260227185115.174997-1-piyushpatle228@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=439;
- i=alexandre.belloni@bootlin.com; h=from:subject:message-id;
- bh=nYRFnLPrTONi7U7O1Enq4WB5OEJpZYPZGRPBstu1j9I=;
- b=owEBbQKS/ZANAwAKAWOk3DBscDoyAcsmYgBps9jI1uZM7eWpDS8rTcWpBXfEtGRKFhN+YxZMF
- yZmooD0hC+JAjMEAAEKAB0WIQQGqwVVleHyz/Q7kmJjpNwwbHA6MgUCabPYyAAKCRBjpNwwbHA6
- MlhnD/4+HCdR7zX8Z+uBkvQwNxwW1gwSrniKNKkxjYztDiGeFGH7NWiLecjKwfqw/TYsvqY1Fz8
- y4GeFdusQtmplFJ90uqQ/2Oq7u+bgsM2p8O8LtEfdToqpnnm+lEiWfEOLG1J8cq63h5yhFeJdM4
- tvh97+PxquzdrOD3xSCTy8oUKUssqKPMzLpgifgYSysrdvvY6+vxv8lqD1fBeGEDFf4R80bH47G
- HX9suO2A1Jhjlf/n/3/c/LiHS2/lqfFpWpdiQ74xBIwMgXgNiqlJFm795Qr6OkWZ3ljxqrU+tUA
- maQ6I5l+B1Ep1IuGmNO6xLVAd+Gwza2isxomF4Ik05JhNufWiajlw0CDO1TepHh+8jRFqr5EtMo
- yK3f2PrXfqo0VZDf6E9TFtrtXc6WjGj5ARogE5EzKBaRltlsNKotm0YxiI95ioS50GQ/gTYaCr3
- 1841EXYY3o8BX0vun2h93YRkVvxE8T678hc5olnnHMietCfNg+MhPGaEo1g5x4oP2cptZKdL/o3
- dg2nKsnazMcGYv4dDgknywEWYT/cHIT/eoj/DBom5Np0Xm2pghaYqDWBgoOtWrqeWFO7pLM95Nl
- wS75hU/bnsNrEi1Oua69YS1072MxINGSSadX0s/HOL8xm9+VDFB2fVJF1QsV7KSaJRn1Iv9x8IU
- pQNUThWh9LI9KRQ==
-X-Developer-Key: i=alexandre.belloni@bootlin.com; a=openpgp;
- fpr=D42657F65BEB9D45A004FCFAA6CD9F096F642CB3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227185115.174997-1-piyushpatle228@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6195-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6196-lists,linux-rtc=lfdr.de];
+	DKIM_TRACE(0.00)[bootlin.com:+];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kontron.de,gmail.com,pengutronix.de];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:mid,kontron.de:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3DC042808D6
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:mid,bootlin.com:url]
+X-Rspamd-Queue-Id: 6D0A728159D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 09 Mar 2026 09:57:41 +0100, Frieder Schrempf wrote:
-> Kontron i.MX8MP OSM Devicetree Fixups
+On Sat, 28 Feb 2026 00:21:15 +0530, Piyush Patle wrote:
+> Convert the ISL12026 RTC binding from text format to YAML schema.
+> Remove the legacy text binding.
 > 
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> The new schema enables dtbs_check validation.
 > 
-> This contains three fixes and one cosmetic change for
-> the Kontron i.MX8MP OSM devices.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: rtc: microcrystal,rv3028: Allow to specify vdd-supply
-      https://git.kernel.org/abelloni/c/10663044bee5
+[1/1] dt-bindings: rtc: isl12026: convert to YAML schema
+      https://git.kernel.org/abelloni/c/5ff89ef425d1
 
 Best regards,
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
