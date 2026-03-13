@@ -1,147 +1,189 @@
-Return-Path: <linux-rtc+bounces-6192-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6193-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +Lg6Iz79smmQRQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6192-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 18:51:58 +0100
+	id GJexNfWXs2leYgAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6193-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 05:52:05 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 119D9276D2E
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 18:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8370B27D4F2
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 05:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1DE72302DA98
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Mar 2026 17:51:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C95DF301284A
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2026 04:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF2FE3FB7CB;
-	Thu, 12 Mar 2026 17:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="GFFiQ9H3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6815028504D;
+	Fri, 13 Mar 2026 04:42:21 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+Received: from r9216.ps.combzmail.jp (r9216.ps.combzmail.jp [160.16.66.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05303F7E88;
-	Thu, 12 Mar 2026 17:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA508220F2A
+	for <linux-rtc@vger.kernel.org>; Fri, 13 Mar 2026 04:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.16.66.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773337909; cv=none; b=aRAxRoo4sVBv1B+6i+J/fJPokP/xhJUcnGYBqjnJgy3r8ftB0oB2aZo2gu7Vpf6F9jekorJ6HhDZQjfOQk1BHUrt5522R1f7xfkunHKQ/hKNNXsMLvKJJIScuEfvyDGsliK9Mxl+sdJvsc0erkpFyKhD0kKnybG0kYMvVmscAUE=
+	t=1773376941; cv=none; b=Iaq4KUtbKHRLi+IQj/k4H8UgBjvsNj7LXzWcktIpm9FKcM6knLfsQ2P2qdo6o5P4FC2hjOx1Qi0rDfnjPxsfiCW4uVCfaB/zk2d2CebBmlla8gWfiomTdzCK+4uAOa3aGfl1KE5WAlyVsGAOwRCwlh7sSMR3mu0SMPdq8mgaXMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773337909; c=relaxed/simple;
-	bh=Tildp7S7qCH5LxAjbMiLA33KOVWz6OAySSjo4u37Nbo=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=sOx5vq7N3lrrKIM1jPrWpgo/MH+hXwUc3wDzDcFf/Zhyhxq0++7Ycyh9WyjNabTUsbKoD3z8ajN0b+oAq0FbLoh7G2o/nIXPGuYHEfoGwPDWlsIRJ0H2enE67Z8K89UC0qcZdhfp8ZV6z3rDWq1+ed0sNjCnjzrnOe+Ezr/nfpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=fail (0-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=GFFiQ9H3 reason="key not found in DNS"; arc=none smtp.client-ip=162.243.120.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=default; h=Content-Transfer-Encoding:Mime-Version:Message-Id:Subject:Cc:
-	To:From:Date:subject:date:message-id:reply-to;
-	bh=Uw1LvZ1PeS55qXnIKkOseA45oklJs+Y7ZpJs08kVHYU=; b=GFFiQ9H352zBlxSEcG4ASkYxTb
-	uaT5XktE8OS6oRiko6k6m4tu3rMG35I0kZOoKMXouWDgiiDfwdPhAS/g0/oSs2fHAxyqz8ZkaS1BX
-	KqT4baBHlc2oms3FWE+yCTK0kKTNmK4cOIB0ytkMW9X5y+SZ0usKtkJoDqguaf2l1asY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168] helo=pettiford.lan)
-	by mail.hugovil.com with esmtpa (Exim 4.98.2)
-	(envelope-from <hugo@hugovil.com>)
-	id 1w0kCH-000000008AR-3cQ5;
-	Thu, 12 Mar 2026 13:51:46 -0400
-Date: Thu, 12 Mar 2026 13:51:45 -0400
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: Hugo Villeneuve <hugo@hugovil.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Hugo Villeneuve
- <hvilleneuve@dimonoff.com>, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: add BSM flags descriptions
-Message-Id: <20260312135145.d37cfddb9317018de436bbd0@hugovil.com>
-In-Reply-To: <20260113100427.f2162f0d5ba80a259511f9d2@hugovil.com>
-References: <20250721153332.2177134-1-hugo@hugovil.com>
-	<20260113100427.f2162f0d5ba80a259511f9d2@hugovil.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1773376941; c=relaxed/simple;
+	bh=gaxADsOpGh2R7TrfuYIbKk9k6zkvNv87ynFzd0C/yTc=;
+	h=To:From:Subject:Mime-Version:Content-Type:Message-Id:Date; b=QBDz6pbdzGE2GY9WDrfACvBIcCWWClxRtwUpt6XclMrMIU9PJqWMAyTqnnXBFbra6pzC0dqAkqO9f0xRJjUG9alVACfwGAn7XtTBciTDuCgp/DWzBRscNMnDCmD6vRP0ap4z2LZPI1uqYa+QSzzPRYYK7G9OjOxZ+Myj6O6k8zQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=j-pet-hotel.jp; spf=pass smtp.mailfrom=magerr.combzmail.jp; arc=none smtp.client-ip=160.16.66.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=j-pet-hotel.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=magerr.combzmail.jp
+Received: by r9216.ps.combzmail.jp (Postfix, from userid 99)
+	id 8B335FEC12; Fri, 13 Mar 2026 13:31:01 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9216.ps.combzmail.jp 8B335FEC12
+To: linux-rtc@vger.kernel.org
+From: =?ISO-2022-JP?B?GyRCRnxLXCVaJUMlSCVbJUYlazYoMnEbKEI=?= <info@j-pet-hotel.jp>
+X-Ip: 6181771491318568
+X-Ip-source: k85gj72w48dnsa51u0p6gd
+Precedence: bulk
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Subject: =?ISO-2022-JP?B?GyRCJVolQyVIJHIwJiQ5JGshIjdQMUQ8VE1NGyhC?=
+ =?ISO-2022-JP?B?GyRCJFgbKEI=?=
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=iso-2022-jp
 Content-Transfer-Encoding: 7bit
-X-Spam_score: -2.0
-X-Spam_bar: --
-X-Spamd-Result: default: False [-0.96 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-MagazineId: 2w51
+X-uId: 6764245141486059664281321043
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20260313043141.8B335FEC12@r9216.ps.combzmail.jp>
+Date: Fri, 13 Mar 2026 13:31:01 +0900 (JST)
+X-Spamd-Result: default: False [9.45 / 15.00];
+	FUZZY_DENIED(9.11)[1:35b52c2e4b:0.75:txt];
 	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6192-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[hugovil.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[hugovil.com:?];
+	DMARC_NA(0.00)[j-pet-hotel.jp];
+	TAGGED_FROM(0.00)[bounces-6193-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	GREYLIST(0.00)[pass,body];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hugo@hugovil.com,linux-rtc@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[info@j-pet-hotel.jp,linux-rtc@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	NEURAL_HAM(-0.00)[-0.978];
-	R_DKIM_TEMPFAIL(0.00)[hugovil.com:s=default];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,hugovil.com:email,hugovil.com:mid]
-X-Rspamd-Queue-Id: 119D9276D2E
-X-Rspamd-Action: no action
+	NEURAL_HAM(-0.00)[-1.000];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c09:e001:a7::/64:c];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,r9216.ps.combzmail.jp:mid,oneluke-fc-seminar.jp:url]
+X-Rspamd-Queue-Id: 8370B27D4F2
+X-Rspamd-Action: add header
 X-Rspamd-Server: lfdr
+X-Spam: Yes
 
-On Tue, 13 Jan 2026 10:04:27 -0500
-Hugo Villeneuve <hugo@hugovil.com> wrote:
+　
+　ペットを愛する、経営者様へ
+　
+　
+　地域で愛犬を安心して預けられる
+　ペットホテル・トリミング事業を始めませんか？
+　
+　
+　■　フランチャイズシステム説明会　■
+　
+　　　愛犬家のオーナー多数！
+　　　ペットホテル・トリミングサロン
+　　　“ONE LUKE（ワンルーク）”
+　
+　　　※「開業パック」をご用意しているので
+　　　　経験や資格が無くても始められます。
+　
+　
+　■　開催方式
+　　　オンライン（申込後に参加方法をご案内）
+　
+　■　日程
+　　　3月16日（月）11:00〜12:00　残り1枠
+　　　3月19日（木）15:00〜16:00　残り1枠
+　　　3月24日（火）13:00〜14:00
 
-> On Mon, 21 Jul 2025 11:33:31 -0400
-> Hugo Villeneuve <hugo@hugovil.com> wrote:
-> 
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > It is hard to decipher what the RTC BSM flags mean, so add
-> > meaningful descriptions.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  include/uapi/linux/rtc.h | 11 ++++++++---
-> >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/include/uapi/linux/rtc.h b/include/uapi/linux/rtc.h
-> > index 97aca4503a6a..da65130e316d 100644
-> > --- a/include/uapi/linux/rtc.h
-> > +++ b/include/uapi/linux/rtc.h
-> > @@ -141,10 +141,15 @@ struct rtc_param {
-> >  #define RTC_PARAM_CORRECTION		1
-> >  #define RTC_PARAM_BACKUP_SWITCH_MODE	2
-> >  
-> > +/* Backup switch mode */
-> >  #define RTC_BSM_DISABLED	0
-> > -#define RTC_BSM_DIRECT		1
-> > -#define RTC_BSM_LEVEL		2
-> > -#define RTC_BSM_STANDBY		3
-> > +#define RTC_BSM_DIRECT		1 /* Switch if Vbackup > Vdd */
-> > +#define RTC_BSM_LEVEL		2 /* Switch based on a threshold, usually with an hysteresis */
-> > +#define RTC_BSM_STANDBY		3 /*
-> > +				   * Switch if Vdd > Vbackup.
-> > +				   * Useful to ensure the RTC doesn't draw any
-> > +				   * power until the device is first powered on.
-> > +				   */
-> >  
-> >  #define RTC_MAX_FREQ	8192
-> 
-> Ping?
-
-Ping, Ping?
-
-
--- 
-Hugo Villeneuve
+　■　定員
+　　　5名
+　
+　■　参加申込はこちら
+　　　https://oneluke-fc-seminar.jp/lp/
+　
+　
+　お世話になります。
+　
+　この度は、ペットホテル・トリミングサロンの
+　フラチャイズ事業説明会の開催をご案内いたします。
+　
+　ペットホテルとトリミングサービスを提供する
+　
+　ONE LUKE（ワンルーク）
+　
+　は、ワンちゃんが好きすぎる創業者が実際に
+　ペットホテルに預けたときに感じた不安や
+　思ったことを施設づくりに活かしています。
+　
+　
+　例えばワンちゃんが泊まるときに、少しでも
+　広く、心地よく過ごして欲しいという思いから、
+　鉄のゲージではなくオーダーで職人さんに
+　「お部屋」をつくっていただいています。
+　　
+　そうした愛犬家目線のきめ細かいサービスが支持され、
+　ワンルークを利用した方は高い確率でリピートしてくれます。
+　
+　
+　日本ではいまや「8世帯に1世帯」がペットを飼うまでに
+　増えてきましたが、ペットホテルはまだまだ店舗数が
+　足りていないため、今後も成長が期待できます。
+　
+　
+　ここまでこの文章を読まれたということは、
+　あなたもワンちゃんが大好きなのではないでしょうか。
+　
+　ワンルークのFCオーナー様も愛犬家が多く、中には
+　ご自身が利用者だった、という方もいらっしゃいます。
+　
+　
+　説明会にて詳しいビジネスモデルをお伝えしますので、
+　新規事業を探している愛犬家の経営者様は
+　この機会にぜひご参加ください。
+　
+　
+　地域のペットライフを豊かにし、愛犬が安心して
+　過ごせる空間を一緒につくっていきましょう。
+　
+　
+　■　フランチャイズシステム説明会　■
+　
+　　　愛犬家のオーナー多数！
+　　　ペットホテル・トリミングサロン
+　　　“ONE LUKE（ワンルーク）”
+　
+　■　参加申込はこちら
+　　　https://oneluke-fc-seminar.jp/lp/
+　
+***********************************************************************
+本メールのご不要な方には大変ご迷惑をおかけいたしました。
+お手数お掛けしますが、メール不要のお手続きは
+下記URLよりお願いいたします。
+<メール停止フォーム>
+　https://oneluke-fc-seminar.jp/mail/
+***********************************************************************
+日本ペットホテル協会株式会社
+愛知県名古屋市千種区内山3丁目9-23 3F
+TEL:052-784-8416
+***********************************************************************
 
