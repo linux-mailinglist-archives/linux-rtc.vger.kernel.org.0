@@ -1,50 +1,50 @@
-Return-Path: <linux-rtc+bounces-6226-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6227-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MEydIjBDuGmLbAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6226-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 18:51:44 +0100
+	id wGWAInVDuGmLbAEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6227-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 18:52:53 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AD3629E8D5
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 18:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B9E829E930
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 18:52:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9417430DC0C8
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 17:46:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 27A7A302EE90
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 17:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1459F33B6F0;
-	Mon, 16 Mar 2026 17:46:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9733396E9;
+	Mon, 16 Mar 2026 17:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hSJlQ6Br"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sRBXa2ov"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD4E332ED3;
-	Mon, 16 Mar 2026 17:46:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDEC301004;
+	Mon, 16 Mar 2026 17:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773683196; cv=none; b=bFrve/mQLW4BliJwUXydYlBlOBOyYFQcI0D49lTwufd/QMDRWd5cl+XBzEiewc+5RzKaFHLYirQr75LrVzFUtsA/X7cpLoREduPHUd0zf3p1uPIrn7W5c7HKXa5nmoMIxQRCCLoDEtOUXWEnaKGV2s52DK8FpsX/fnBPfBkWsC0=
+	t=1773683236; cv=none; b=PZNMVJOWRJd8c2tfbzb2fQc3L+iaenpYOSPVlkjNFqGqOgf5yDJxELEPWnsw7D0aYVOvSdtp3Us6RCuSaDlrsiJtjZadxUVSdBrraY0Qgk030WklKuwrlZDIDA/xe3kKhar095cHT+ANMa7aEkCi3T8W+XEAzQxETz3zcjfRL1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773683196; c=relaxed/simple;
-	bh=wEHPyMu42lihqvWHgqVVNGPuEB9VrdUuNbdTcZKzmLY=;
+	s=arc-20240116; t=1773683236; c=relaxed/simple;
+	bh=dnDuwXGZ1btx0I9ScP/HNHG9vbVZo5zMOWlpux0W4WY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BM27k5xkKLVLPaGQxfbBdZaVnSny3J35OzVUSKPz0g4f3GC/2UPE9fJKCT2Bb0SssyOpLyZ5ulzwqKv+aqdUasoJDHeQQssdYNI5rsOFhTQd7Cb0d+gBcxsR5vsiSDxqG+QxtFkymN85ctreA6tGtp0EA/V6bI6rjtiAXO7zKqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hSJlQ6Br; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B24EC19425;
-	Mon, 16 Mar 2026 17:46:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BKYnYDcaw+SDrnUf28nY8aLKqQ0nsaGcIvwVDOQSsoomeslzFZOdPvvXuqQVvkCwhH+3Wa4izg2Xwyd9JVZwCEh+qG3GbvvPQC9CMAbq8J9Gu0pR/W9EjVC3nIGQ+EUxEpU7sJUel/xeWW+IzTS3C9ZPeroKJWiEqvrlR5y0+84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sRBXa2ov; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69BFCC19421;
+	Mon, 16 Mar 2026 17:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773683196;
-	bh=wEHPyMu42lihqvWHgqVVNGPuEB9VrdUuNbdTcZKzmLY=;
+	s=k20201202; t=1773683236;
+	bh=dnDuwXGZ1btx0I9ScP/HNHG9vbVZo5zMOWlpux0W4WY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hSJlQ6BrcpxYUk7JBEtBF9Qqe5d4jddMRs/BIYPXhpPeq2zSkrT1d7BDArBZojKWW
-	 BKLlbp5f1keg+9VNpIOWgkIBIijWzUmue4HADCbTjzJnOVuwSErUxWlrchbV7aek/k
-	 YL4Fz+hGFQ0alKzrJMsisaNWzjtXgr4Qjs4zOx0v4MuWkjCh4+uKgjvpAtIutxB2fm
-	 V/l3yUflC1bUWuKJqOQf43X3PX/imfc5TIias6ybZRLFFbMRWwZztH+NfDeWxMC/EL
-	 lfDdbpOMY/QxVqRDnnN9xRBiwYaM6qcWptv2b3NZoVJPWL8tv+1soDKh3FtqZiSf1Y
-	 tDcGiBYLJGuaQ==
-Date: Mon, 16 Mar 2026 17:46:26 +0000
+	b=sRBXa2ovvjPnWmoWwcUZlUb/RfNIKCBxJYUgGqWYE+olH5e/05xmKOMn3PMn3Bxq8
+	 Sm0RPOKtJgrFA4Nkna/SfM63GmGOjUcqhNOYPE5XT8hDbTrlYcVkWZ5EzY+jprOrRV
+	 l4Viqa7XAxFuU+rATnPUZYB48xFh6rMSI83W27iHNJjWLHREjypaENdzy/QzPBAdK3
+	 qOABTEsGsrgj3ajoNm0Gg6WLlNHu9IvYa+UNT73TeY7utnqPEN+vZG0sDR9BaOi8QA
+	 0XJU1kq/TxMTtEfK9n13gvkI74v1W4TiIWlCMY0nyY+YEx6zNL3h/lJ3umTM3hkX5Y
+	 cEen2C1izEUvA==
+Date: Mon, 16 Mar 2026 17:47:06 +0000
 From: Mark Brown <broonie@kernel.org>
 To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -78,11 +78,11 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
 	linux-rockchip@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 03/15] dt-bindings: regulator: ti,tps65219: Use generic
+Subject: Re: [PATCH 04/15] dt-bindings: regulator: act8x: Use generic
  power-controller schema
-Message-ID: <f0d6b252-370a-405c-b2b5-e02b8bc59bca@sirena.org.uk>
+Message-ID: <fd6b7103-2a72-4cae-8e92-44ee9586a953@sirena.org.uk>
 References: <20260316-power-controller-v1-0-92c80e5e1744@nxp.com>
- <20260316-power-controller-v1-3-92c80e5e1744@nxp.com>
+ <20260316-power-controller-v1-4-92c80e5e1744@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -90,9 +90,9 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8MjI/4wsRBNLAdgX"
+	protocol="application/pgp-signature"; boundary="xItI8zXtmIATo4FR"
 Content-Disposition: inline
-In-Reply-To: <20260316-power-controller-v1-3-92c80e5e1744@nxp.com>
+In-Reply-To: <20260316-power-controller-v1-4-92c80e5e1744@nxp.com>
 X-Cookie: Excellent day to have a rotten day.
 X-Spamd-Result: default: False [-2.76 / 15.00];
 	SIGNED_PGP(-2.00)[];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [-2.76 / 15.00];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6226-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6227-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_CC(0.00)[kernel.org,linaro.org,broadcom.com,gmail.com,ti.com,baylibre.com,crapouillou.net,bootlin.com,sntech.de,rock-chips.com,collabora.com,kemnade.info,gmx.net,v3.sk,blala.de,vger.kernel.org,lists.infradead.org,nxp.com];
@@ -122,18 +122,18 @@ X-Spamd-Result: default: False [-2.76 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nxp.com:email,sirena.org.uk:mid]
-X-Rspamd-Queue-Id: 2AD3629E8D5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nxp.com:email]
+X-Rspamd-Queue-Id: 2B9E829E930
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 
---8MjI/4wsRBNLAdgX
+--xItI8zXtmIATo4FR
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 16, 2026 at 10:47:38PM +0800, Peng Fan (OSS) wrote:
+On Mon, Mar 16, 2026 at 10:47:39PM +0800, Peng Fan (OSS) wrote:
 > From: Peng Fan <peng.fan@nxp.com>
 >=20
 > Convert the binding to use the generic power-controller schema instead by
@@ -142,20 +142,20 @@ On Mon, Mar 16, 2026 at 10:47:38PM +0800, Peng Fan (OSS) wrote:
 
 Acked-by: Mark Brown <broonie@kernel.org>
 
---8MjI/4wsRBNLAdgX
+--xItI8zXtmIATo4FR
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmm4QfEACgkQJNaLcl1U
-h9BWOwf/RYua3madlI7scNf3qpDMzQZHgi+eqAl3g7Lq6pMKTkmLA/V4P37VJTPi
-bB1VTwPRbNvxdczmeLgDust4Yi7d39Se6tX+OrgSXOhv+FMKnw621zdhZ9NLaI2Y
-tsbOwANB98ZH+jnGwVRJirPiDuopbsmBHRd7JovirNpdNujPs0sss3Z/GfWVyjjZ
-kZwF+6fEn7MKfHz8v0cVjdhDB/zKxJWyX6zlpSXToWVSvhiVnRmMW8tzvxax/kLa
-NukR0cAOLKySPWir5+lkOD3Vr2as+vhfcBmfZOdOB1bNqGF8nWOUt6DJljvdw7Iu
-wXg+QS+O0wGAQNLRmrZboAIyvnZQqA==
-=igxU
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmm4QhoACgkQJNaLcl1U
+h9ACOQf+JqpHS2vvWDBGmTprNgfkrZ9Q44lgSNbWZMnktfJE13q21QKHK5kSnDrO
+X40ZRgtewonmiGVIcifBtNjgoqkmY98pJvPnhgJjgP3fmBlFL/WCxYwUjF/JQCkg
+LrlVyB6IdKDWWAmUUVULvowVdo1TyiYZ2dlrvVwjGuMZJDgRFAz85fobiqkW9hIb
+5Z6Wdof4lcERkIE0dsbXctCTU4GJTupsC6duor8XTKC+wIL9sx02un+kINcyGwnP
+FwEkgvpfw9H/r9/jBuxTEQh7QcJPvlx36Ub2mFuBlF3OCJApRlm+j+vz9btoTkX4
+XZN3mowbqzv9xO9cSelYbJCV/FMs2Q==
+=SWwQ
 -----END PGP SIGNATURE-----
 
---8MjI/4wsRBNLAdgX--
+--xItI8zXtmIATo4FR--
 
