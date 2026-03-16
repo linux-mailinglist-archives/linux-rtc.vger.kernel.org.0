@@ -1,247 +1,160 @@
-Return-Path: <linux-rtc+bounces-6221-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6222-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aCpiGpoauGn/YwEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6221-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 15:58:34 +0100
+	id cC9mGDkbuGlYZAEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6222-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 16:01:13 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1CD629BE29
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 15:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B70DD29BE97
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 16:01:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2F80030BAEC2
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 14:49:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3674E302BDC4
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2026 14:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10622EAD1B;
-	Mon, 16 Mar 2026 14:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8976230506A;
+	Mon, 16 Mar 2026 14:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QA4RAok9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qJh/lLK9"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1939460;
-	Mon, 16 Mar 2026 14:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F5C3033E2;
+	Mon, 16 Mar 2026 14:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773672596; cv=none; b=e2VyOcZBp8oE11618/szKqmHmUWVq6zBQASvoayiYs1ZwDuFOx6q7LVAigvXInxmL2TlZ92idaER1OY9lFLr7YrjbGxxCp90Sw0p8pWnqD7rVFRq2vinQuIw8B8Qlr+8qmhxCRDpdOVuqx4mt/v7tYOJMz4aRyPNwl74r2ZpU7A=
+	t=1773672931; cv=none; b=t4IcgSt9vjBTx8rwGf/s8Y8GHOVGATVK82v09vOckdsAu+gbE/yQupeAnurcnOmbCWM57MxCQNKpWB0/JetD6IF8Vu6ecqhh01l6Z/ZV3mBg0bPFvSHhmFcjWfyQvgr7JVsMdBNeOuD5YXHs/mytflcfMOzLD2LaBfvh/oRpgqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773672596; c=relaxed/simple;
-	bh=Axd7d+UawpXOv/3tS8iWGfE+PXjHS0Z55o+fN4jSdxM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zbi1yPlGliv+PC5x5B6gQzsd8wt4e6VkFr9pI1YbgMUwV517WgxeROjNwEJbeqVQvzWUQZivV1oY418kS9pbrAzBL6gBCATae+8rtDmD9GFyGn/FDmXRhMK4bejmg3Y8CB1vPe06+ioDz/7tzHEwJKvI77ut3KPm7HQA6Wzilj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QA4RAok9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16D2C19421;
-	Mon, 16 Mar 2026 14:49:48 +0000 (UTC)
+	s=arc-20240116; t=1773672931; c=relaxed/simple;
+	bh=DXurX+rXkNtKMNetYL42Wscz0IskX62tenc5ozVeitA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ChSAbI7lS5M9OTZ2AsAd0sslJl6crikD53YTu6yHahj9wzmNZ00039vK0Uy4KbvohOT+GvdfmqY9BBPUu9h5eHZOS1hJ7waPM5mQlg0PdtDiYGJzc+NJAPrh8dFmN64LbBWQvZF6xdEEnT7O5BWezwg21ghz7bugUxDrkp18AI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qJh/lLK9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01AFCC19421;
+	Mon, 16 Mar 2026 14:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773672596;
-	bh=Axd7d+UawpXOv/3tS8iWGfE+PXjHS0Z55o+fN4jSdxM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QA4RAok9Ze+T6wBSM1kua6xsah1KbxXsTpa9lmceu7Lc78mUbOpajRUyCAJE4XBog
-	 mWrImeDMPJWpntKR7W3b4gk3dMH84hstaEmfbobAugO4EZnG4ZiA8s6rtnzKJO8iMd
-	 XXAVrx1fWbrnwL7Hg7j9D1SbkghmMwUakerJ5jXroxlUUEJJ62C5iEvwy4Jv98gPRs
-	 mtGHMt3FzHLUEqFxpwr0KKrAxPkj83KcYJe+GSBv+zp30mEOLPo/w0g05f+mS5AXJ6
-	 CYV+2+McXKkHH2oxQAqkESdoccYUaXSb5tBBbAyV/JIx2Vmdc/G/LNO/xM3k3QCopu
-	 K21re0Jr1hWtg==
-Message-ID: <e1e91ada-4d21-4384-983a-676a3aa09bd7@kernel.org>
-Date: Mon, 16 Mar 2026 15:49:46 +0100
+	s=k20201202; t=1773672931;
+	bh=DXurX+rXkNtKMNetYL42Wscz0IskX62tenc5ozVeitA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qJh/lLK9mQ4+tJsi/be7GN9483oLhqrwmr5gGA9yIxTr0zTqxRzRW53VKiDpS+znu
+	 al1TPbiDEz7JLE3AqeSgHGq+ej/dN8cj1DdY/c7ah90EdaS1H6plBc+IN475XdaAdc
+	 FfhBGf86zLMwlyannK/mE47+UFYTRd3UoHk/blPQ3d9PQct/l4lX12amujsz3xjfHG
+	 6iqb4GGddwKFjL8zG/CdLEYRoTS8ftWzk6C82uxjtslnVFRGMoPijQQ3UenQwxxqg+
+	 Fk4g+LelXVOHJGKC4jq20cV9YoUQOjywQrRyBudWaukf1rZdBBhlbNiCf1V0+qCDcd
+	 ypRksCHLMX91A==
+Date: Mon, 16 Mar 2026 14:55:21 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Saenz Julienne <nsaenz@kernel.org>, Lee Jones <lee@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Shree Ramamoorthy <s-ramamoorthy@ti.com>,
+	Jerome Neanne <jerome.neanne@baylibre.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Joseph Chen <chenjh@rock-chips.com>,
+	Chris Zhong <zyw@rock-chips.com>,
+	Zhang Qing <zhangqing@rock-chips.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Andreas Kemnade <andreas@kemnade.info>,
+	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+	Lubomir Rintel <lkundrak@v3.sk>, Julien Panis <jpanis@baylibre.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Alexander Kurz <akurz@blala.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 00/15] Convert power-controller to dt-schema and update
+ various yaml file to referencing it
+Message-ID: <f329f1b4-787e-4c8c-ba26-e419a047023b@sirena.org.uk>
+References: <20260316-power-controller-v1-0-92c80e5e1744@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/15] dt-bindings: power: power-controller: Convert to
- yaml format
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>,
- Scott Branden <sbranden@broadcom.com>, Saenz Julienne <nsaenz@kernel.org>,
- Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Shree Ramamoorthy <s-ramamoorthy@ti.com>,
- Jerome Neanne <jerome.neanne@baylibre.com>,
- Paul Cercueil <paul@crapouillou.net>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Dmitry Osipenko <digetx@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
- Joseph Chen <chenjh@rock-chips.com>, Chris Zhong <zyw@rock-chips.com>,
- Zhang Qing <zhangqing@rock-chips.com>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Andreas Kemnade <andreas@kemnade.info>,
- =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Lubomir Rintel <lkundrak@v3.sk>, Julien Panis <jpanis@baylibre.com>,
- Matti Vaittinen <mazziesaccount@gmail.com>, Alexander Kurz <akurz@blala.de>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-rtc@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20260316-power-controller-v1-0-92c80e5e1744@nxp.com>
- <20260316-power-controller-v1-1-92c80e5e1744@nxp.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260316-power-controller-v1-1-92c80e5e1744@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="q5D3dN9fM9+vUHgs"
+Content-Disposition: inline
+In-Reply-To: <20260316-power-controller-v1-0-92c80e5e1744@nxp.com>
+X-Cookie: Not a flying toy.
+X-Spamd-Result: default: False [-2.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6221-lists,linux-rtc=lfdr.de];
-	FREEMAIL_TO(0.00)[oss.nxp.com,kernel.org,linaro.org,broadcom.com,gmail.com,ti.com,baylibre.com,crapouillou.net,bootlin.com,sntech.de,rock-chips.com,collabora.com,kemnade.info,gmx.net,v3.sk,blala.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6222-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linaro.org,broadcom.com,gmail.com,ti.com,baylibre.com,crapouillou.net,bootlin.com,sntech.de,rock-chips.com,collabora.com,kemnade.info,gmx.net,v3.sk,blala.de,vger.kernel.org,lists.infradead.org,nxp.com];
 	RCPT_COUNT_TWELVE(0.00)[39];
-	MIME_TRACE(0.00)[0:+];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-rtc@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email,devicetree.org:url,0.0.0.5:email,nxp.com:email]
-X-Rspamd-Queue-Id: C1CD629BE29
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,sirena.org.uk:mid]
+X-Rspamd-Queue-Id: B70DD29BE97
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 16/03/2026 15:47, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Convert power-controller.txt to yaml format. Drop the example because
-> there is already one in regulator/active-semi,act8846.yaml.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/power/power-controller.txt | 17 ------------
->  .../bindings/power/power-controller.yaml           | 30 ++++++++++++++++++++++
->  2 files changed, 30 insertions(+), 17 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/power-controller.txt b/Documentation/devicetree/bindings/power/power-controller.txt
-> deleted file mode 100644
-> index e45affea80781292316c75ed387ba38402501c5b..0000000000000000000000000000000000000000
-> --- a/Documentation/devicetree/bindings/power/power-controller.txt
-> +++ /dev/null
-> @@ -1,17 +0,0 @@
-> -* Generic system power control capability
-> -
-> -Power-management integrated circuits or miscellaneous hardware components are
-> -sometimes able to control the system power. The device driver associated with these
-> -components might need to define this capability, which tells the kernel that
-> -it can be used to switch off the system. The corresponding device must have the
-> -standard property "system-power-controller" in its device node. This property
-> -marks the device as able to control the system power. In order to test if this
-> -property is found programmatically, use the helper function
-> -"of_device_is_system_power_controller" from of.h .
-> -
-> -Example:
-> -
-> -act8846: act8846@5 {
-> -	 compatible = "active-semi,act8846";
-> -	 system-power-controller;
-> -}
-> diff --git a/Documentation/devicetree/bindings/power/power-controller.yaml b/Documentation/devicetree/bindings/power/power-controller.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..ff698365d778446c08ceeb5f3ef144d5e97d2f79
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/power-controller.yaml
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
-You relicensed the text, so you need to get some acks for that. Your
-cover letter or patch changelog should explicitly ask for that and of
-course you must Cc previous authors.
+--q5D3dN9fM9+vUHgs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Mon, Mar 16, 2026 at 10:47:35PM +0800, Peng Fan (OSS) wrote:
+> Convert power-controller.txt to dt-schema
+> Update various dt-bindings to use generic power-controller.yaml without
+> defining local property.
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/power-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Generic System Power Control Capability
-> +
-> +maintainers:
-> +  - Rafael J. Wysocki <rafael@kernel.org>
-> +  - Ulf Hansson <ulf.hansson@linaro.org>
-> +
-> +description: |
-> +  Power-management integrated circuits or miscellaneous hardware components
-> +  are sometimes able to control the system power. The device driver associated
-> +  with these components might need to define this capability, which tells the
-> +  kernel that it can be used to switch off the system. The corresponding device
-> +  must have the standard property "system-power-controller" in its device node. This
-> +  property marks the device as able to control the system power.
-> +
-> +  In order to test if this property is found programmatically, use the helper
-> +  function "of_device_is_system_power_controller" from of.h.
-> +
-> +properties:
-> +  system-power-controller:
-> +    type: boolean
-> +    description:
-> +      Indicates that this device can be used to control the system power.
+Are there any dependencies here?  It doesn't look like it.  In general
+please don't send a single series covering multiple subsystems unless
+there are actual dependencies, it just makes it harder to figure out how
+to handle things.  Send a separate series to each subsystem instead.
 
-Just like it was in case of other core properties, I think this should
-go to dtschema.
+--q5D3dN9fM9+vUHgs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmm4GdgACgkQJNaLcl1U
+h9CnKwf/Y45O1xRPr9mTmI28M1CvW30zJp5xoDJXzVFZW6jtEjIuA8mFy+dOgIj+
+PkIOw9oNhVPJcUpY4vl8XJBEZDdEDPMwSOdMexgMsCCCeJBF1/2fEHkxI1xyTRlP
+19Nh8e23AD9Qpm+0/Hjn/iDwpuYXhqRLxqw17yeReb8HyXAvnVcoLQAsonOHewce
+imvplZGb9vkqG8UivYBCq/7Ar+eVs6vZGg2IEm5kn4EkVWj9xZDFMeP8G8RhbqnM
+oNHrFPTft2T52cuebigvOum9pbm4WmO5U8BqTDHLldZRD0qfvdKSn1hGumXDnVfh
+2O2qPvCp7KP1+oQbqttXJjEuIyoNLg==
+=wZgr
+-----END PGP SIGNATURE-----
+
+--q5D3dN9fM9+vUHgs--
 
