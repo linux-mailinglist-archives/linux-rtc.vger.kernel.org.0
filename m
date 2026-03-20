@@ -1,66 +1,66 @@
-Return-Path: <linux-rtc+bounces-6236-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6237-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8MG2MpWMvWnY+wIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6236-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 19:06:13 +0100
+	id SKKOIs2LvWnY+wIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6237-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 19:02:53 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304412DF264
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 19:06:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01FC72DF17B
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 19:02:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C33CF30E40BD
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 18:00:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 33BB0306C447
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 18:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739003DE430;
-	Fri, 20 Mar 2026 18:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 226742FE56F;
+	Fri, 20 Mar 2026 18:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OhXhtwfO"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jDF0NZw1"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4ACF3DD534;
-	Fri, 20 Mar 2026 18:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCF9314A90;
+	Fri, 20 Mar 2026 18:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774029626; cv=none; b=WBHU2mDGWrsHjSrQeWGkhf0AjR310H0oPRqX3HcmvM65DZzYg117VGXCGwNIEg+oPegTZus6zWfGNAaBony2UOjR9VL6BgnNBjyhn3Slr+Gp8LxKY4uOjgIyPp0u4nPRBAZZWXytwuMNrH2JKjc2N24ff0XGIdIGHwQ46BfCDNk=
+	t=1774029637; cv=none; b=B9rhd2GmA4oTKfRHaCxoG16+WJjZ/ajpNal5678GXQDfOqWHnExG6/uFTPdH5MSmrYhoIyEmcrnuFAX0sUAH+jfqnJ/wAtTcLHieN2E41xS9aPbg66oU02xF9HFaWJKwxj1OoYGjIEAw3VT8TGeYdnk15APmxeBa3sgfc0mNtGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774029626; c=relaxed/simple;
-	bh=eHPMls9k77SaCdcbx62TBPlkKhNDUB0exULGg4L0imI=;
+	s=arc-20240116; t=1774029637; c=relaxed/simple;
+	bh=HIVoQlj9KpYJ3C0KRN9+5eD4qih2mvw/55hD5RN9yxU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RzGfx1zikl5oqZvVdoV2CK5QXPJ+ZuvDE7hpj4Nfxr6RUGXt0gOwgaIwSCdpH/6Ir/YdTeydY6/08hhQI7XuQbwZT9JZ5Yr3+9CNmt1G9TJc8N1Pm/IGB0bxrc8Eiq13l825xLxXnP0k2OpD4yREjjaCaPPP9lSmcWRAUigOEEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OhXhtwfO; arc=none smtp.client-ip=185.246.84.56
+	 Content-Type:Content-Disposition:In-Reply-To; b=oGfnSjzFXN6KZxZo/XsnPtAfdrqHsOL6zcGNfNHhIsSYhWj3SsRChsPOobwBJhyS2mrCqANB06cyEOhOuU/O0ySHG1LXDvt33tH4g5xq7eR07yEafoI8+hGRTsixBZzIThRyAOw2LngBSxJqDlBDY3nm7XvQK7l/x/BqGvKhHK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jDF0NZw1; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 528C71A2F20;
-	Fri, 20 Mar 2026 18:00:21 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 98E3DC5668E;
+	Fri, 20 Mar 2026 18:00:58 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 22137600E0;
-	Fri, 20 Mar 2026 18:00:21 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9A0E410450CD0;
-	Fri, 20 Mar 2026 19:00:19 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D9CCB600E0;
+	Fri, 20 Mar 2026 18:00:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EC17D10450CCC;
+	Fri, 20 Mar 2026 19:00:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1774029620; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=0j3vCFqC7As9ayMr/CMjyps+yruCSN8oat2nQqzmOSQ=;
-	b=OhXhtwfOJcaXGcIf5YS35w1RLi2385nDXma8UawWLSXTfEwoS62UFpay32tege5NHfcdau
-	9d8S7SLytidrfuEPhb2RcKEOSjeNH4ZFStJP9EXaEsktBz2taVCG4WuhhQIpHXv+iwTD6O
-	XNATUVEzlmn7L1ooqdve3+opRxrqaKI4z0EN4JFr47Y2sRnpPejVb/Lg7U1Spp1VbYucFy
-	B0a5Lcbxn+6AStZCn/P/M3BIrvxPeh+Ed7nZHT8p8wY3+v3TaC3poR4hX96GqS6CGgOJ2k
-	MxQlalww1WxHOzDvexsvwyw9qP58QPpj3wu1n55AEDXEt1NEChLcoKe9OElzvA==
-Date: Fri, 20 Mar 2026 19:00:19 +0100
+	t=1774029632; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=tYOfk6sqQBVrfLLkxN9Cd3/KpR4PdhsCi629D2S8ZXw=;
+	b=jDF0NZw1+WG5YzXw1Ridg2T8D35zgk+jjncCFCiigDbxET/oLjlaLnZPp9vkW5rWxF2M7w
+	iSHlZSoqKa9GWO5TojJCTziVuVhIOhe54OST51ImQGuZ+Jdvi0HwS1Oixz5Qu/ZPJDpoHJ
+	ubXwbPkBVNmwRg2WMvzZY+UBialROnBDxsBtOJ/gNvBoDn0NOHKukfQD8ExkD7UGJbRjbt
+	eESHEMvGp91qgYC7+WaT1mXC9N306IJJrTsZPUPF3FaK15DCHSCUyLxAD8H9RBEGqZXfrD
+	QC3b6S6gTkap3mOWJJdFeZ8xKnEMAGg3uQz4+KoyvW41/ANeZ1nDiSJ5STvkEQ==
+Date: Fri, 20 Mar 2026 19:00:31 +0100
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
 	Linux ACPI <linux-acpi@vger.kernel.org>,
 	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v1 1/2] rtc: cmos: Enable ACPI alarm if advertised in
- ACPI FADT
-Message-ID: <202603201800199ad8b0af@mail.local>
+Subject: Re: [PATCH v1 2/2] rtc: cmos: Do not require IRQ if ACPI alarm is
+ used
+Message-ID: <20260320180031928c3da5@mail.local>
 References: <3964452.kQq0lBPeGt@rafael.j.wysocki>
- <9618535.CDJkKcVGEf@rafael.j.wysocki>
+ <6168746.MhkbZ0Pkbq@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -69,17 +69,17 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9618535.CDJkKcVGEf@rafael.j.wysocki>
+In-Reply-To: <6168746.MhkbZ0Pkbq@rafael.j.wysocki>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6236-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6237-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
@@ -87,72 +87,93 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	NEURAL_HAM(-0.00)[-0.997];
+	NEURAL_HAM(-0.00)[-0.998];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5]
-X-Rspamd-Queue-Id: 304412DF264
+X-Rspamd-Queue-Id: 01FC72DF17B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 14/03/2026 13:11:20+0100, Rafael J. Wysocki wrote:
+On 14/03/2026 13:12:44+0100, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> If the ACPI_FADT_FIXED_RTC flag is unset, the platform is declaring that
-> it supports the ACPI RTC fixed event which should be used instead of a
-> dedicated CMOS RTC IRQ.  However, the driver only enables it when
-> is_hpet_enabled() returns true, which is questionable because there is
-> no clear connection between enabled HPET and signaling wakeup via the
-> ACPI RTC fixed event (for instance, the latter can be expected to work
-> on systems that don't include a functional HPET).
-> 
-> Moreover, since use_hpet_alarm() returns false if use_acpi_alarm is set,
-> the ACPI RTC fixed event is effectively used instead of the HPET alarm
-> if the latter is functional, but there is no particular reason why it
-> could not be used otherwise.
-> 
-> Accordingly, on x86 systems with ACPI, set use_acpi_alarm if
-> ACPI_FADT_FIXED_RTC is unset without looking at whether or not HPET is
-> enabled.
-> 
-> Also, do the ACPI FADT check in use_acpi_alarm_quirks() before the DMI
-> BIOS year checks which are more expensive and it's better to skip them
-> if ACPI_FADT_FIXED_RTC is set.
+> If the ACPI RTC fixed event is used, a dedicated IRQ is not required
+> for the CMOS RTC alarm to work, so allow the driver to use the alarm
+> without a valid IRQ in that case.
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 > ---
->  drivers/rtc/rtc-cmos.c |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/rtc/rtc-cmos.c |   15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
 > 
 > --- a/drivers/rtc/rtc-cmos.c
 > +++ b/drivers/rtc/rtc-cmos.c
-> @@ -817,6 +817,9 @@ static void rtc_wake_off(struct device *
->  #ifdef CONFIG_X86
->  static void use_acpi_alarm_quirks(void)
->  {
-> +	if (acpi_gbl_FADT.flags & ACPI_FADT_FIXED_RTC)
-> +		return;
-> +
->  	switch (boot_cpu_data.x86_vendor) {
->  	case X86_VENDOR_INTEL:
->  		if (dmi_get_bios_year() < 2015)
-> @@ -830,8 +833,6 @@ static void use_acpi_alarm_quirks(void)
->  	default:
->  		return;
->  	}
-> -	if (!is_hpet_enabled())
-> -		return;
+> @@ -216,6 +216,11 @@ static inline void cmos_write_bank2(unsi
 >  
->  	use_acpi_alarm = true;
+>  /*----------------------------------------------------------------*/
+>  
+> +static bool cmos_no_alarm(struct cmos_rtc *cmos)
+> +{
+> +	return !is_valid_irq(cmos->irq) && !cmos_use_acpi_alarm();
+> +}
+> +
+>  static int cmos_read_time(struct device *dev, struct rtc_time *t)
+>  {
+>  	int ret;
+> @@ -287,7 +292,7 @@ static int cmos_read_alarm(struct device
+>  	};
+>  
+>  	/* This not only a rtc_op, but also called directly */
+> -	if (!is_valid_irq(cmos->irq))
+> +	if (cmos_no_alarm(cmos))
+>  		return -ETIMEDOUT;
+>  
+>  	/* Basic alarms only support hour, minute, and seconds fields.
+> @@ -520,7 +525,7 @@ static int cmos_set_alarm(struct device
+>  	int ret;
+>  
+>  	/* This not only a rtc_op, but also called directly */
+> -	if (!is_valid_irq(cmos->irq))
+> +	if (cmos_no_alarm(cmos))
+>  		return -EIO;
+>  
+>  	ret = cmos_validate_alarm(dev, t);
+> @@ -1096,7 +1101,7 @@ cmos_do_probe(struct device *dev, struct
+>  			dev_dbg(dev, "IRQ %d is already in use\n", rtc_irq);
+>  			goto cleanup1;
+>  		}
+> -	} else {
+> +	} else if (!cmos_use_acpi_alarm()) {
+>  		clear_bit(RTC_FEATURE_ALARM, cmos_rtc.rtc->features);
+>  	}
+>  
+> @@ -1121,7 +1126,7 @@ cmos_do_probe(struct device *dev, struct
+>  		acpi_rtc_event_setup(dev);
+>  
+>  	dev_info(dev, "%s%s, %d bytes nvram%s\n",
+> -		 !is_valid_irq(rtc_irq) ? "no alarms" :
+> +		 cmos_no_alarm(&cmos_rtc) ? "no alarms" :
+>  		 cmos_rtc.mon_alrm ? "alarms up to one year" :
+>  		 cmos_rtc.day_alrm ? "alarms up to one month" :
+>  		 "alarms up to one day",
+> @@ -1147,7 +1152,7 @@ cleanup0:
+>  static void cmos_do_shutdown(int rtc_irq)
+>  {
+>  	spin_lock_irq(&rtc_lock);
+> -	if (is_valid_irq(rtc_irq))
+> +	if (!cmos_no_alarm(&cmos_rtc))
+>  		cmos_irq_disable(&cmos_rtc, RTC_IRQMASK);
+>  	spin_unlock_irq(&rtc_lock);
 >  }
 > 
 > 
