@@ -1,184 +1,190 @@
-Return-Path: <linux-rtc+bounces-6239-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6240-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +EuEMoyfvWkM/wIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6239-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 20:27:08 +0100
+	id oKvrE/ymvWkAAAMAu9opvQ
+	(envelope-from <linux-rtc+bounces-6240-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 20:58:52 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E6B2DFE2E
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 20:27:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE0FF2E0A25
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 20:58:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3B8D73009565
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 19:27:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A84D23054672
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2026 19:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876F534D917;
-	Fri, 20 Mar 2026 19:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3ECD3542E2;
+	Fri, 20 Mar 2026 19:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sAYjzkRO"
+	dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b="NX0bTnSQ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6405934C802;
-	Fri, 20 Mar 2026 19:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D68D346AD7;
+	Fri, 20 Mar 2026 19:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774034825; cv=none; b=ltH181ZZCwbTtEdkTeSZbfp0fIj+JEgjk84at3LteBSEqYB0lVgBQsDP2O4B6r8btrHt4hZ8Z3GnyIGsVx7vENfBxDSUC6BrEOSMUvXc8PeXjdkbKW+hzQtY9OfilID6ybzXmxlpq4OSn99NfjiLnVpAj4+TYC4IY5JAMiMnK6o=
+	t=1774036217; cv=none; b=N2hEYb4RVXRjB3yEdqDQ6nvM6/MAXKgct5poEFL0vXKqGKWy9ewlAN3j2IwI5sztUbBmfG7IvYkopQGtobvzpkA5AYL3DsepXKF1wKg5n1grFM/CRAy2dLo3IiPQcPRYWFsPz+S5NFxdbWd+/Dn5SEYKwM3Hn97Gy7G7wh1EhiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774034825; c=relaxed/simple;
-	bh=ObjSKVjIg30kfGJIUTqHlDkc2PcSIeC8wgxupXeAeWU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y3rX39b/EVgWV8pCEoRXh8sLRa7Y28zV3mjWXMr9+8xWzxhWq+KTLwl958Ll/1k6wHiuMq/YypUaOWj4y42olt3NXnuT8n5PJ5twNJrrFEcx4092QGZMsdTeEmIZ5fYerQJgK4LP1FRhmIqN28SDNv46c1ShQJiah677u8vjqbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sAYjzkRO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E93FC4CEF7;
-	Fri, 20 Mar 2026 19:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774034825;
-	bh=ObjSKVjIg30kfGJIUTqHlDkc2PcSIeC8wgxupXeAeWU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sAYjzkROregNLvgtNuZ5GCwLILI0JWQNXHDjt1fz8awbovZYk677qyX1XqPqLGDN6
-	 ts7O7EU/7cNN4nHY5P2zDH3YqPXocU4ALNyASiuIDbaJ3wfBbLs0JodOIAyARW8vkH
-	 jXs7D+CQPh8eRq8rO6znt/vuVXv5TDRBYqplIpxeTsGLcCwP7wYSXW39goumVQBK0A
-	 gaz1CT4+kfB6jb5rNN8H/DodWXMkaB1WR+bSUQ43oFtHGolsm0O/9dJYvwdOHxUOPs
-	 tb48vJjgE/13e0WTuqQLVKQEYOu5rbZ7ZTkr2F+7yvtS75uY/wUGVs8QMsdQBlrv0/
-	 6+GruixMVWjeA==
-Message-ID: <e1b5efa5-5062-4885-b01e-f3d5c6e1f4d0@kernel.org>
-Date: Fri, 20 Mar 2026 14:27:03 -0500
+	s=arc-20240116; t=1774036217; c=relaxed/simple;
+	bh=B/ky4PGRNNPwvyb7fxbPkwqn5WgnAc0pdjMw1TIYUh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BCxCptvTdwO0ak5pkgAu+p1YJMMCo3/Q6O9qKgGH99dPg0rQo914YoFj0zv81yUSiTG0DBa0tBWeMX/pl9HQU+0KpmuLy/DiQCACbqci6nCO/P25kOjiBgQSjUNshj14PtmkJ2QD4Gqp6kniTYaZY6jmDHhQtfoie4H0aq+gCJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b=NX0bTnSQ; arc=none smtp.client-ip=89.58.28.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
+Date: Fri, 20 Mar 2026 20:41:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abscue.de; s=dkim;
+	t=1774035696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TodcsqwI5ROLukzlDCPSJPqsdnPQpyDS0/5H+3q7Ng8=;
+	b=NX0bTnSQab948BmULIE2Ptruv/tMxhE8hiI9Cq2979f+b9JOXCGXh58wsNonDP+c99bq4j
+	70RsjA7KCYuLwXkhSNtG4Ta/i7aX3VOhC4pFQLGt+Mnsa3azDbF6JEGYQunIvPKtXcvksu
+	YEYkfvAtBgZ9XoWxbGSuumofla32noZKW+D8/GRYnTo75kuDwQfmt58gbQLmVBThfHF3qH
+	9C4Oa5gM/2kGpUn9HUdY/7BQw607bij6V0NKE2d+mMmH+mgdeJ7S+c40KxsJ/vKFV6Ehbg
+	N/cY0YKI2RGgopP+xSeCGcipBQXV6bAOPtXCMudm/1eZ0ohjkrTZsS/KMBMsBg==
+From: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
+To: Lee Jones <lee@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Pavel Machek <pavel@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 4/6] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
+Message-ID: <ab2i6i2D5q0t0xZ5@abscue.de>
+References: <20260222-sc27xx-mfd-cells-v1-0-69526fe74c77@abscue.de>
+ <20260222-sc27xx-mfd-cells-v1-4-69526fe74c77@abscue.de>
+ <20260309185856.GZ183676@google.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] rtc: cmos: Do not require IRQ if ACPI alarm is
- used
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>
-References: <3964452.kQq0lBPeGt@rafael.j.wysocki>
- <6168746.MhkbZ0Pkbq@rafael.j.wysocki> <20260320180031928c3da5@mail.local>
-Content-Language: en-US
-From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
-In-Reply-To: <20260320180031928c3da5@mail.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260309185856.GZ183676@google.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[abscue.de:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6239-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6240-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[abscue.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[superm1@kernel.org,linux-rtc@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	TAGGED_RCPT(0.00)[linux-rtc];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[otto.pflueger@abscue.de,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[abscue.de:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: 63E6B2DFE2E
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,abscue.de:dkim,abscue.de:mid]
+X-Rspamd-Queue-Id: BE0FF2E0A25
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-
-
-On 3/20/2026 1:00 PM, Alexandre Belloni wrote:
-> On 14/03/2026 13:12:44+0100, Rafael J. Wysocki wrote:
->> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>
->> If the ACPI RTC fixed event is used, a dedicated IRQ is not required
->> for the CMOS RTC alarm to work, so allow the driver to use the alarm
->> without a valid IRQ in that case.
->>
->> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Mar 09, 2026 at 06:58:56PM +0000, Lee Jones wrote:
+> On Sun, 22 Feb 2026, Otto Pflüger wrote:
 > 
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
-
+> > To allow instantiating subdevices such as the regulator and poweroff
+> > devices that do not have corresponding device tree nodes with a
+> > "compatible" property, use devm_mfd_add_devices() with MFD cells instead
+> > of devm_of_platform_populate(). Since different PMICs in the SC27xx
+> > series contain different components, use separate MFD cell tables for
+> > each PMIC model. Define cells for all components that have upstream
+> > drivers at this point.
 > 
->> ---
->>   drivers/rtc/rtc-cmos.c |   15 ++++++++++-----
->>   1 file changed, 10 insertions(+), 5 deletions(-)
->>
->> --- a/drivers/rtc/rtc-cmos.c
->> +++ b/drivers/rtc/rtc-cmos.c
->> @@ -216,6 +216,11 @@ static inline void cmos_write_bank2(unsi
->>   
->>   /*----------------------------------------------------------------*/
->>   
->> +static bool cmos_no_alarm(struct cmos_rtc *cmos)
->> +{
->> +	return !is_valid_irq(cmos->irq) && !cmos_use_acpi_alarm();
->> +}
->> +
->>   static int cmos_read_time(struct device *dev, struct rtc_time *t)
->>   {
->>   	int ret;
->> @@ -287,7 +292,7 @@ static int cmos_read_alarm(struct device
->>   	};
->>   
->>   	/* This not only a rtc_op, but also called directly */
->> -	if (!is_valid_irq(cmos->irq))
->> +	if (cmos_no_alarm(cmos))
->>   		return -ETIMEDOUT;
->>   
->>   	/* Basic alarms only support hour, minute, and seconds fields.
->> @@ -520,7 +525,7 @@ static int cmos_set_alarm(struct device
->>   	int ret;
->>   
->>   	/* This not only a rtc_op, but also called directly */
->> -	if (!is_valid_irq(cmos->irq))
->> +	if (cmos_no_alarm(cmos))
->>   		return -EIO;
->>   
->>   	ret = cmos_validate_alarm(dev, t);
->> @@ -1096,7 +1101,7 @@ cmos_do_probe(struct device *dev, struct
->>   			dev_dbg(dev, "IRQ %d is already in use\n", rtc_irq);
->>   			goto cleanup1;
->>   		}
->> -	} else {
->> +	} else if (!cmos_use_acpi_alarm()) {
->>   		clear_bit(RTC_FEATURE_ALARM, cmos_rtc.rtc->features);
->>   	}
->>   
->> @@ -1121,7 +1126,7 @@ cmos_do_probe(struct device *dev, struct
->>   		acpi_rtc_event_setup(dev);
->>   
->>   	dev_info(dev, "%s%s, %d bytes nvram%s\n",
->> -		 !is_valid_irq(rtc_irq) ? "no alarms" :
->> +		 cmos_no_alarm(&cmos_rtc) ? "no alarms" :
->>   		 cmos_rtc.mon_alrm ? "alarms up to one year" :
->>   		 cmos_rtc.day_alrm ? "alarms up to one month" :
->>   		 "alarms up to one day",
->> @@ -1147,7 +1152,7 @@ cleanup0:
->>   static void cmos_do_shutdown(int rtc_irq)
->>   {
->>   	spin_lock_irq(&rtc_lock);
->> -	if (is_valid_irq(rtc_irq))
->> +	if (!cmos_no_alarm(&cmos_rtc))
->>   		cmos_irq_disable(&cmos_rtc, RTC_IRQMASK);
->>   	spin_unlock_irq(&rtc_lock);
->>   }
->>
->>
->>
+> We're not passing one device registration API's data (MFD)
+> through another (Device Tree).
 > 
+> Pass an identifier through and match on that instead.
+> 
+> Look at how all of the other drivers in MFD do it.
+>
+> [...]
+> > +static const struct mfd_cell sc2730_devices[] = {
+> > +	MFD_CELL_OF("sc2730-adc", NULL, NULL, 0, 0, "sprd,sc2730-adc"),
+> > +	MFD_CELL_OF("sc2730-bltc", NULL, NULL, 0, 0, "sprd,sc2730-bltc"),
+> > +	MFD_CELL_OF("sc2730-efuse", NULL, NULL, 0, 0, "sprd,sc2730-efuse"),
+> > +	MFD_CELL_OF("sc2730-eic", NULL, NULL, 0, 0, "sprd,sc2730-eic"),
+> > +	MFD_CELL_OF("sc2730-fgu", NULL, NULL, 0, 0, "sprd,sc2730-fgu"),
+> > +	MFD_CELL_OF("sc2730-rtc", NULL, NULL, 0, 0, "sprd,sc2730-rtc"),
+> > +	MFD_CELL_OF("sc2730-vibrator", NULL, NULL, 0, 0, "sprd,sc2730-vibrator"),
+> > +};
+> > +
+> > +static const struct mfd_cell sc2731_devices[] = {
+> > +	MFD_CELL_OF("sc2731-adc", NULL, NULL, 0, 0, "sprd,sc2731-adc"),
+> > +	MFD_CELL_OF("sc2731-bltc", NULL, NULL, 0, 0, "sprd,sc2731-bltc"),
+> > +	MFD_CELL_OF("sc2731-charger", NULL, NULL, 0, 0, "sprd,sc2731-charger"),
+> > +	MFD_CELL_OF("sc2731-efuse", NULL, NULL, 0, 0, "sprd,sc2731-efuse"),
+> > +	MFD_CELL_OF("sc2731-eic", NULL, NULL, 0, 0, "sprd,sc2731-eic"),
+> > +	MFD_CELL_OF("sc2731-fgu", NULL, NULL, 0, 0, "sprd,sc2731-fgu"),
+> > +	MFD_CELL_NAME("sc2731-poweroff"),
+> > +	MFD_CELL_NAME("sc2731-regulator"),
+> > +	MFD_CELL_OF("sc2731-rtc", NULL, NULL, 0, 0, "sprd,sc2731-rtc"),
+> > +	MFD_CELL_OF("sc2731-vibrator", NULL, NULL, 0, 0, "sprd,sc2731-vibrator"),
+> >  };
 
+Assuming that these tables are the "registration API's data", I don't
+see where it is being passed through the device tree. The device tree
+contains nodes for some of these MFD components, and I've listed their
+compatibles here so that the MFD core finds these nodes and registers
+them with the corresponding devices (which was previously done
+automatically by devm_of_platform_populate).
+
+> >  
+> >  /*
+> > @@ -59,12 +84,16 @@ static const struct sprd_pmic_data sc2730_data = {
+> >  	.irq_base = SPRD_SC2730_IRQ_BASE,
+> >  	.num_irqs = SPRD_SC2730_IRQ_NUMS,
+> >  	.charger_det = SPRD_SC2730_CHG_DET,
+> > +	.cells = sc2730_devices,
+> > +	.num_cells = ARRAY_SIZE(sc2730_devices),
+> >  };
+> >  
+> >  static const struct sprd_pmic_data sc2731_data = {
+> >  	.irq_base = SPRD_SC2731_IRQ_BASE,
+> >  	.num_irqs = SPRD_SC2731_IRQ_NUMS,
+> >  	.charger_det = SPRD_SC2731_CHG_DET,
+> > +	.cells = sc2731_devices,
+> > +	.num_cells = ARRAY_SIZE(sc2731_devices),
+> >  };
+
+Here I am simply referencing the tables above in the device-specific
+MFD data. These structs containing device-specific data already exist,
+they are private to the MFD driver, and I wouldn't consider them part
+of the device tree.
+
+I've looked at mt6397-core.c and it seems to be doing the exact same
+thing with its "struct chip_data". Some other drivers use a numeric ID
+for this purpose, but how would that be different from a pointer as long
+as it identifies the same data within the MFD driver?
+
+Could you clarify what should be changed?
 
