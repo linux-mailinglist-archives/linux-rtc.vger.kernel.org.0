@@ -1,57 +1,57 @@
-Return-Path: <linux-rtc+bounces-6250-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6251-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iBfrM1Trw2kAvAQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6250-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:04:04 +0100
+	id 4Mh6GJrqw2lvugQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6251-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:00:58 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9373C3265E9
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:04:04 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E34B3264D9
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:00:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4F7A130AE51F
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 13:55:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0AD403086925
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 13:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C573DC4CD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D911F3DCD9E;
 	Wed, 25 Mar 2026 13:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b="p0PwCT/n"
+	dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b="j5QaGxjM"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F443D9DB0;
-	Wed, 25 Mar 2026 13:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D731238166;
+	Wed, 25 Mar 2026 13:55:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774446903; cv=none; b=d/p8KKvDmS6FiwIy6nZs8MHjJJThG4Raw10rDK0CgKWpEPzNtnauvQCQcJcmbFMOwdOQ3Vhv5TsD6iKiGlO96vCRfNRKZflVkh97cPPbOZea26yJA8wo17XUkbWVMwkSNJGAzacs7ncxdyGTKTKn4Qu6HkA+4IN1fwVuhNJjBY0=
+	t=1774446903; cv=none; b=SPlL2PgBsBQ1I3uFIxnoiibRNYFQ0LpIYOYCIp1JSVp4+30yl+v3QMkJD1WVdkhFc/HmNfh7/q/bzN4TKWWFREukd8CM8KxL/igqFIMAoMML2j2miF2dBviEvBCqjBZzUO8o2Lr8Fj+U0BKhvPSoIkcbpa1Y241qGNE4dBZzdHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774446903; c=relaxed/simple;
-	bh=pmjaHkkd1GTe7qUmzoQfztH+XwQtCIWX0+AnfIZurJg=;
+	bh=pi32dSd8TSx+SNWSMpom2JT7gL0RFRI7pQDQIaLDrq8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Mt/kEG4IV0YwYZCnKegA/azfc94BlOmhkxZ+yPjXfWb8XOmKZSiaCSNRIMTa8bmuUQ9KxLVQJdpOVFK+ZyYUh/uNx1qeTFvVVXW18FphfbuTAs2ZhLQadE5AAEX36WThclrgLuVt5gjDpA69YhCgRV3R/V4sDx5T7CI197rvB7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b=p0PwCT/n; arc=none smtp.client-ip=89.58.28.240
+	 In-Reply-To:To:Cc; b=g51e5BLAY5Zxf/xo0JYUtWKJPrMrczhrAsWNHiGXGzkc52XHVkGoAAKiDhlBJAykqWe1PWfRL4WflP/1TMPxu+ZwIv7A6phk2BNqEk23Db7ptn0Y/eIk/0bMfo2CzAPBr+0YZcvyGIw3QLmvMtCO0mTmrjzrjp5TXjGN4VqejGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b=j5QaGxjM; arc=none smtp.client-ip=89.58.28.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
 Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cde0:9600:8d27:ae39:1dce:2212])
-	by srv01.abscue.de (Postfix) with ESMTPSA id E67781C00A8;
-	Wed, 25 Mar 2026 14:54:53 +0100 (CET)
+	by srv01.abscue.de (Postfix) with ESMTPSA id 723A71C264D;
+	Wed, 25 Mar 2026 14:54:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abscue.de; s=dkim;
-	t=1774446894;
+	t=1774446895;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=oAeadNDLY6QXY+Bf5+OCfab+TpNiEHvWt9WUf5IakbE=;
-	b=p0PwCT/nEYdkk1yT7UIDSrAIOhA46+Anm+Xkp6uAmG0bf9ZaPI/WGqBOKRtGC4Er/1xQ6B
-	u+QYMSUPb6Oi6nnmpN4cvs535xW9pEqB+Dd34CdVWJZ3vyFlHLgIsxLUJu2RQ4uOVEJt4H
-	+ZrjeSMpJJ53TtQBa5Zc4OFKjEj58SudGXrz3Fzw6h3KhnHJMwU0kL7bT3dYD968FxfNkQ
-	qo7xY0IARb6nk2ZWN17YS12JnwPGoCI+9tJ+Q3QoM0vcbg74djGpr1HFGk6WgPfbWdip/g
-	PKm2euM6dmoivbAADLdv/p0sQU74xVlhbXWvMvu6R6AM0d42IyBDiBv6C/JijQ==
+	bh=RHqLGlaDozhvgx5NZzsru55VUPorc1eitoMtmO4DGA0=;
+	b=j5QaGxjMbarizNKHJzox7nHghzgQitSFGmmXHww5GAQk5KCe6PLq1Br5PJDwNs/nY6Re3C
+	3SWjG99OKfLDpNxmwl/NgUS0imMukDjuvqDw2qiVkP8os1yX6e8Kf37Y57uJjfCLAkJkio
+	9q6yuDHRsM6X+yoyWiINjYVGvTwWcbtXsCVhLqO22o1L9I/dY5HyNlCM4oEaU4nL5wAEG8
+	nCtkbfmkJXVYHrJh5v5iyxIxkBsf5tJOanbbRYiV/v9cEXnqCSvy54edX3UgGZ40hihUaj
+	G/4JkYrHSlZyfmyPU1DBIn0b8nVXxxUDifA+nkMBvW6CLZFDnZL2Aa8vltdoHw==
 From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Date: Wed, 25 Mar 2026 14:53:45 +0100
-Subject: [PATCH v2 3/5] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
+Date: Wed, 25 Mar 2026 14:53:46 +0100
+Subject: [PATCH v2 4/5] power: reset: sc27xx: Add platform_device_id table
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7@abscue.de>
+Message-Id: <20260325-sc27xx-mfd-cells-v2-4-d0ebb60aa4a7@abscue.de>
 References: <20260325-sc27xx-mfd-cells-v2-0-d0ebb60aa4a7@abscue.de>
 In-Reply-To: <20260325-sc27xx-mfd-cells-v2-0-d0ebb60aa4a7@abscue.de>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
@@ -73,22 +73,24 @@ To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
  linux-pm@vger.kernel.org, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.3
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_DKIM_ALLOW(-0.20)[abscue.de:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com];
-	TAGGED_FROM(0.00)[bounces-6250-lists,linux-rtc=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[18];
 	DMARC_NA(0.00)[abscue.de];
+	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com];
+	RSPAMD_URIBL_FAIL(0.00)[collabora.com:query timed out];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TAGGED_FROM(0.00)[bounces-6251-lists,linux-rtc=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -101,133 +103,60 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[abscue.de:dkim,abscue.de:email,abscue.de:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9373C3265E9
+	RSPAMD_EMAILBL_FAIL(0.00)[sebastian.reichel.collabora.com:query timed out];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,abscue.de:dkim,abscue.de:email,abscue.de:mid]
+X-Rspamd-Queue-Id: 3E34B3264D9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-To allow instantiating subdevices such as the regulator and poweroff
-devices that do not have corresponding device tree nodes with a
-"compatible" property, use devm_mfd_add_devices() with MFD cells instead
-of devm_of_platform_populate(). Since different PMICs in the SC27xx
-series contain different components, use separate MFD cell tables for
-each PMIC model. Define cells for all components that have upstream
-drivers at this point.
+Make the poweroff driver for SC27xx-series PMICs probe automatically.
+Since the device representing the poweroff functionality of the SC27xx
+PMIC is not supposed to have a dedicated device tree node without any
+corresponding DT resources [1], an of_device_id table cannot be used
+here. Instead, use a platform_device_id table to match the poweroff
+sub-device instantiated by the parent MFD driver.
 
 Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
----
- drivers/mfd/sprd-sc27xx-spi.c | 62 ++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 53 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
-index d6b4350779e6..eb57023fdc3c 100644
---- a/drivers/mfd/sprd-sc27xx-spi.c
-+++ b/drivers/mfd/sprd-sc27xx-spi.c
-@@ -14,6 +14,11 @@
- #include <linux/spi/spi.h>
- #include <uapi/linux/usb/charger.h>
+[1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/power/reset/sc27xx-poweroff.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/sc27xx-poweroff.c
+index 393bd1c33b73..6376706bf561 100644
+--- a/drivers/power/reset/sc27xx-poweroff.c
++++ b/drivers/power/reset/sc27xx-poweroff.c
+@@ -6,6 +6,7 @@
  
-+enum sprd_pmic_type {
-+	PMIC_TYPE_SC2730,
-+	PMIC_TYPE_SC2731,
+ #include <linux/cpu.h>
+ #include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+@@ -70,11 +71,18 @@ static int sc27xx_poweroff_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct platform_device_id sc27xx_poweroff_id_table[] = {
++	{ "sc2731-poweroff" },
++	{ }
 +};
++MODULE_DEVICE_TABLE(platform, sc27xx_poweroff_id_table);
 +
- #define SPRD_PMIC_INT_MASK_STATUS	0x0
- #define SPRD_PMIC_INT_RAW_STATUS	0x4
- #define SPRD_PMIC_INT_EN		0x8
-@@ -50,6 +55,29 @@ struct sprd_pmic_data {
- 	u32 charger_det;
+ static struct platform_driver sc27xx_poweroff_driver = {
+ 	.probe = sc27xx_poweroff_probe,
+ 	.driver = {
+ 		.name = "sc27xx-poweroff",
+ 	},
++	.id_table = sc27xx_poweroff_id_table,
  };
+ module_platform_driver(sc27xx_poweroff_driver);
  
-+static const struct mfd_cell sc2730_devices[] = {
-+	MFD_CELL_OF("sc2730-adc", NULL, NULL, 0, 0, "sprd,sc2730-adc"),
-+	MFD_CELL_OF("sc2730-bltc", NULL, NULL, 0, 0, "sprd,sc2730-bltc"),
-+	MFD_CELL_OF("sc2730-efuse", NULL, NULL, 0, 0, "sprd,sc2730-efuse"),
-+	MFD_CELL_OF("sc2730-eic", NULL, NULL, 0, 0, "sprd,sc2730-eic"),
-+	MFD_CELL_OF("sc2730-fgu", NULL, NULL, 0, 0, "sprd,sc2730-fgu"),
-+	MFD_CELL_OF("sc2730-rtc", NULL, NULL, 0, 0, "sprd,sc2730-rtc"),
-+	MFD_CELL_OF("sc2730-vibrator", NULL, NULL, 0, 0, "sprd,sc2730-vibrator"),
-+};
-+
-+static const struct mfd_cell sc2731_devices[] = {
-+	MFD_CELL_OF("sc2731-adc", NULL, NULL, 0, 0, "sprd,sc2731-adc"),
-+	MFD_CELL_OF("sc2731-bltc", NULL, NULL, 0, 0, "sprd,sc2731-bltc"),
-+	MFD_CELL_OF("sc2731-charger", NULL, NULL, 0, 0, "sprd,sc2731-charger"),
-+	MFD_CELL_OF("sc2731-efuse", NULL, NULL, 0, 0, "sprd,sc2731-efuse"),
-+	MFD_CELL_OF("sc2731-eic", NULL, NULL, 0, 0, "sprd,sc2731-eic"),
-+	MFD_CELL_OF("sc2731-fgu", NULL, NULL, 0, 0, "sprd,sc2731-fgu"),
-+	MFD_CELL_NAME("sc2731-poweroff"),
-+	MFD_CELL_NAME("sc2731-regulator"),
-+	MFD_CELL_OF("sc2731-rtc", NULL, NULL, 0, 0, "sprd,sc2731-rtc"),
-+	MFD_CELL_OF("sc2731-vibrator", NULL, NULL, 0, 0, "sprd,sc2731-vibrator"),
-+};
-+
- /*
-  * Since different PMICs of SC27xx series can have different interrupt
-  * base address and irq number, we should save irq number and irq base
-@@ -152,12 +180,26 @@ static const struct regmap_config sprd_pmic_config = {
- static int sprd_pmic_probe(struct spi_device *spi)
- {
- 	struct sprd_pmic *ddata;
-+	enum sprd_pmic_type pmic_type;
- 	const struct sprd_pmic_data *pdata;
--	int ret, i;
-+	const struct mfd_cell *cells;
-+	int ret, i, num_cells;
-+
-+	pmic_type = (enum sprd_pmic_type)of_device_get_match_data(&spi->dev);
- 
--	pdata = of_device_get_match_data(&spi->dev);
--	if (!pdata) {
--		dev_err(&spi->dev, "No matching driver data found\n");
-+	switch (pmic_type) {
-+	case PMIC_TYPE_SC2730:
-+		pdata = &sc2730_data;
-+		cells = sc2730_devices;
-+		num_cells = ARRAY_SIZE(sc2730_devices);
-+		break;
-+	case PMIC_TYPE_SC2731:
-+		pdata = &sc2731_data;
-+		cells = sc2731_devices;
-+		num_cells = ARRAY_SIZE(sc2731_devices);
-+		break;
-+	default:
-+		dev_err(&spi->dev, "Invalid device ID\n");
- 		return -EINVAL;
- 	}
- 
-@@ -204,7 +246,9 @@ static int sprd_pmic_probe(struct spi_device *spi)
- 		return ret;
- 	}
- 
--	ret = devm_of_platform_populate(&spi->dev);
-+	ret = devm_mfd_add_devices(&spi->dev, PLATFORM_DEVID_AUTO,
-+				   cells, num_cells, NULL, 0,
-+				   regmap_irq_get_domain(ddata->irq_data));
- 	if (ret) {
- 		dev_err(&spi->dev, "Failed to populate sub-devices %d\n", ret);
- 		return ret;
-@@ -241,15 +285,15 @@ static DEFINE_SIMPLE_DEV_PM_OPS(sprd_pmic_pm_ops,
- 				sprd_pmic_suspend, sprd_pmic_resume);
- 
- static const struct of_device_id sprd_pmic_match[] = {
--	{ .compatible = "sprd,sc2730", .data = &sc2730_data },
--	{ .compatible = "sprd,sc2731", .data = &sc2731_data },
-+	{ .compatible = "sprd,sc2730", .data = (void *)PMIC_TYPE_SC2730 },
-+	{ .compatible = "sprd,sc2731", .data = (void *)PMIC_TYPE_SC2731 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, sprd_pmic_match);
- 
- static const struct spi_device_id sprd_pmic_spi_ids[] = {
--	{ .name = "sc2730", .driver_data = (unsigned long)&sc2730_data },
--	{ .name = "sc2731", .driver_data = (unsigned long)&sc2731_data },
-+	{ .name = "sc2730", .driver_data = PMIC_TYPE_SC2730 },
-+	{ .name = "sc2731", .driver_data = PMIC_TYPE_SC2731 },
- 	{},
- };
- MODULE_DEVICE_TABLE(spi, sprd_pmic_spi_ids);
 
 -- 
 2.51.0
