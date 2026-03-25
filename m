@@ -1,173 +1,210 @@
-Return-Path: <linux-rtc+bounces-6254-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6255-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uBZSNDrrw2kAvAQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6254-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:03:38 +0100
+	id sNp9MzX9w2lwvQQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6255-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 16:20:21 +0100
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93A7B3265B5
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:03:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47718327C74
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 16:20:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AA54E301C15E
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 13:55:59 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0377333D6CF3
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2026 15:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937BA3DEAC5;
-	Wed, 25 Mar 2026 13:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FE53FE35F;
+	Wed, 25 Mar 2026 14:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b="FRoR1cQ9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I43VyWvU"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from srv01.abscue.de (abscue.de [89.58.28.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211B73DDDC0;
-	Wed, 25 Mar 2026 13:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B184A3DB644;
+	Wed, 25 Mar 2026 14:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774446906; cv=none; b=sJTKx5Smliw/C/yL5Hb6bQ79eDjsoztY7+QYdBaBicGUTu8V/DFBH0kWFVl4AyYkN8W7yryc++2P9J93+DYtP4AMemUiJgZWOh+IzgQAZRIe/KmYxRSG0Erb0rMDE1iXCyzOPOBTtmU/K9nGjJCAN2sY122qpGNllB4dCIYRT2g=
+	t=1774450733; cv=none; b=W5uYcEVAXxKUif13HKcKci4cTIy/Cfl1lBwneabpOBHC1SgRu8dRHb4moIFAqyRNqZb84775rB/JsyDbgeT0QnO4Ne2VXjt3qmaqKDE7NG0W4ClHBYdOxf/iCgjjRdmsDSRuQM0ADXqmvEZXFfYbzt6/IvEfKsfEQhZhspfsJ+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774446906; c=relaxed/simple;
-	bh=iDKvaeDvnMyZNEDCO+iH5La4SPaeOS8gVVZsISM+/78=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jOmPqG4msEieK545DXm0a1oEcgqs/jXifen73JJ2m9TzoZLow/OP7nIzcrpdA/VZtyRlAm+R5RYWcJDBoo3FuQPzlKaSs7LRRtnYCXazzUBNxlPS7Evy5Gh3ZZ+THAggS56i7OywBL7ON8dBTyMCdr8ronyGjVLtJFA2vSjDBls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b=FRoR1cQ9; arc=none smtp.client-ip=89.58.28.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
-Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cde0:9600:8d27:ae39:1dce:2212])
-	by srv01.abscue.de (Postfix) with ESMTPSA id 93D7E1C3A8B;
-	Wed, 25 Mar 2026 14:54:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abscue.de; s=dkim;
-	t=1774446895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Vvz9BBCdCjmAKX3x6b5LHDmFkQb7BZeGItD0dshHTs=;
-	b=FRoR1cQ9xfDn68CQwKYxV7tH5hnWgj9zu9G9i7k3rUs4SZ3Drfe7AXK2vPw0Gt/2ed38YG
-	9dYIYc66WmjmbxWQCmVAYxH6wEKxcRKBgJsOIaDtOdaXxmYdYAg5tXNnyY+JONWDZgR00/
-	00Yprj+4KWWRkPdW32sxcrbAbtYOZKi/UJWofvW1XY7r23vERCPEWHxigic5mIPbJVQd72
-	zdCb9+aBGOsy27L+MUifumctiYAFXWTzh9AhFwSa2BQDBt82NyVVIzTEbHCcaii7B1dyjV
-	bNZ0EFRxRazNrxFrWote6ckkZmkkxnNnrohBgrDMdR3X7n5VWkP7wYEowsSdfw==
-From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Date: Wed, 25 Mar 2026 14:53:47 +0100
-Subject: [PATCH v2 5/5] regulator: sc2731: Add platform_device_id table
+	s=arc-20240116; t=1774450733; c=relaxed/simple;
+	bh=Q7Y7TIr5LpH0Ie+lGeQIaP4vsrzzTVRfvln8R9Xm3mI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I11kNrDO0GcefvY2qyu6X5qOZBGc9sgyDX6N0j6+fzm/UaSFy0rsuC85uvNrpGI3frY3sb8Qa5XhorV44aI3lNUWrNYSP6uR2y45MReq6F7z8nY5tQliIh+m/uFfJF27nLDL3GP+CoCUfIctn3+ubvZJ/1P/onxd30yFp6kXiGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I43VyWvU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3FFC2BCB2;
+	Wed, 25 Mar 2026 14:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774450733;
+	bh=Q7Y7TIr5LpH0Ie+lGeQIaP4vsrzzTVRfvln8R9Xm3mI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I43VyWvUYyWmv/3FJuYZZsdDxXr19VOjCy5ldO7lQsh/kprsrY7EQrRXKkIPuPDxN
+	 r5hdgtYKSRO6UPhQk34MwMvPTzofuTvelcJd8MxQwrBjFccKrPAIJGqR7xC5kUBACS
+	 8/tXY6iBXcLjJUHIlld31norhL65jSQgz+Z1lz5Nwsce7VuibNsI3vSK+zyZPVI+Sn
+	 GYzSOqo96sH4DobOhWAsSmiqhLZVKtxCOoR44wbfXKNpqz1C0PwONeSdZGrb8UG/2j
+	 1Pz3AsEEdo3ywSYu3nIjEGpaUzXhSzX5gSyUkWFeW9UN3qvn3RadOZUPp+hRqdURW9
+	 0MAt1fcMbAusg==
+Date: Wed, 25 Mar 2026 14:58:45 +0000
+From: Lee Jones <lee@kernel.org>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
+Cc: Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Nam Tran <trannamatk@gmail.com>, linux-leds@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 09/13] leds: flash: add support for Samsung S2M series
+ PMIC flash LED device
+Message-ID: <20260325145845.GC1141718@google.com>
+References: <20260225-s2mu005-pmic-v3-0-b4afee947603@disroot.org>
+ <20260225-s2mu005-pmic-v3-9-b4afee947603@disroot.org>
+ <20260310113835.GG183676@google.com>
+ <DH1XVOS6IIOE.HGIH6JQRHNAM@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260325-sc27xx-mfd-cells-v2-5-d0ebb60aa4a7@abscue.de>
-References: <20260325-sc27xx-mfd-cells-v2-0-d0ebb60aa4a7@abscue.de>
-In-Reply-To: <20260325-sc27xx-mfd-cells-v2-0-d0ebb60aa4a7@abscue.de>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-X-Mailer: b4 0.14.3
-X-Spamd-Result: default: False [-0.16 / 15.00];
+In-Reply-To: <DH1XVOS6IIOE.HGIH6JQRHNAM@disroot.org>
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[abscue.de:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6255-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com];
-	TAGGED_FROM(0.00)[bounces-6254-lists,linux-rtc=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	DMARC_NA(0.00)[abscue.de];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[otto.pflueger@abscue.de,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[abscue.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lee@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[abscue.de:dkim,abscue.de:email,abscue.de:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,config.dev:url]
-X-Rspamd-Queue-Id: 93A7B3265B5
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,disroot.org:email]
+X-Rspamd-Queue-Id: 47718327C74
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Make the regulator driver for the SC2731 PMIC probe automatically. Using
-a platform_device_id table instead of DT compatible matching avoids the
-need for a separate compatible property in the "regulators" node, which
-simplifies the DT bindings and makes the parent MFD device responsible
-for selecting the correct regulator driver for the PMIC.
+On Sat, 14 Mar 2026, Kaustabh Chakraborty wrote:
 
-However, this means that the regulator device is not automatically
-associated with the "regulators" node. Tell the regulator core to
-perform device tree lookups using the parent MFD device instead of
-the regulator sub-device and set the .regulators_node member in all
-regulator definitions so that the "regulators" sub-node is used.
+> On 2026-03-10 11:38 +00:00, Lee Jones wrote:
+> > On Wed, 25 Feb 2026, Kaustabh Chakraborty wrote:
+> >
+> >> Add support for flash LEDs found in certain Samsung S2M series PMICs.
+> >> The device has two channels for LEDs, typically for the back and front
+> >> cameras in mobile devices. Both channels can be independently
+> >> controlled, and can be operated in torch or flash modes.
+> >> 
+> >> The driver includes initial support for the S2MU005 PMIC flash LEDs.
+> >> 
+> >> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+> >> ---
+> >>  drivers/leds/flash/Kconfig          |  12 +
+> >>  drivers/leds/flash/Makefile         |   1 +
+> >>  drivers/leds/flash/leds-s2m-flash.c | 429 ++++++++++++++++++++++++++++++++++++
+> >>  3 files changed, 442 insertions(+)
+> >> 
+> >> diff --git a/drivers/leds/flash/Kconfig b/drivers/leds/flash/Kconfig
+> >> index 5e08102a67841..be62e05277429 100644
+> >> --- a/drivers/leds/flash/Kconfig
+> >> +++ b/drivers/leds/flash/Kconfig
+> >> @@ -114,6 +114,18 @@ config LEDS_RT8515
+> >>  	  To compile this driver as a module, choose M here: the module
+> >>  	  will be called leds-rt8515.
+> >>  
+> >> +config LEDS_S2M_FLASH
+> >> +	tristate "Samsung S2M series PMICs flash/torch LED support"
+> >> +	depends on LEDS_CLASS
+> >> +	depends on MFD_SEC_CORE
+> >> +	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
+> >> +	select REGMAP_IRQ
+> >> +	help
+> >> +	  This option enables support for the flash/torch LEDs found in
+> >> +	  certain Samsung S2M series PMICs, such as the S2MU005. It has
+> >> +	  a LED channel dedicated for every physical LED. The LEDs can
+> >> +	  be controlled in flash and torch modes.
+> >> +
+> >>  config LEDS_SGM3140
+> >>  	tristate "LED support for the SGM3140"
+> >>  	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
+> >> diff --git a/drivers/leds/flash/Makefile b/drivers/leds/flash/Makefile
+> >> index 712fb737a428e..44e6c1b4beb37 100644
+> >> --- a/drivers/leds/flash/Makefile
+> >> +++ b/drivers/leds/flash/Makefile
+> >> @@ -10,6 +10,7 @@ obj-$(CONFIG_LEDS_MAX77693)	+= leds-max77693.o
+> >>  obj-$(CONFIG_LEDS_QCOM_FLASH)	+= leds-qcom-flash.o
+> >>  obj-$(CONFIG_LEDS_RT4505)	+= leds-rt4505.o
+> >>  obj-$(CONFIG_LEDS_RT8515)	+= leds-rt8515.o
+> >> +obj-$(CONFIG_LEDS_S2M_FLASH)	+= leds-s2m-flash.o
+> >>  obj-$(CONFIG_LEDS_SGM3140)	+= leds-sgm3140.o
+> >>  obj-$(CONFIG_LEDS_SY7802)	+= leds-sy7802.o
+> >>  obj-$(CONFIG_LEDS_TPS6131X)	+= leds-tps6131x.o
 
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
----
- drivers/regulator/sc2731-regulator.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+[...]
 
-diff --git a/drivers/regulator/sc2731-regulator.c b/drivers/regulator/sc2731-regulator.c
-index 5447e1a47d15..93c8156c5110 100644
---- a/drivers/regulator/sc2731-regulator.c
-+++ b/drivers/regulator/sc2731-regulator.c
-@@ -131,6 +131,7 @@ static const struct regulator_ops sc2731_regu_linear_ops = {
- 			  vstep, vmin, vmax) {			\
- 	.name			= #_id,				\
- 	.of_match		= of_match_ptr(#_id),		\
-+	.regulators_node	= of_match_ptr("regulators"),	\
- 	.ops			= &sc2731_regu_linear_ops,	\
- 	.type			= REGULATOR_VOLTAGE,		\
- 	.id			= SC2731_##_id,			\
-@@ -226,7 +227,7 @@ static int sc2731_regulator_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	config.dev = &pdev->dev;
-+	config.dev = pdev->dev.parent;
- 	config.regmap = regmap;
- 
- 	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
-@@ -242,12 +243,19 @@ static int sc2731_regulator_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct platform_device_id sc2731_regulator_id_table[] = {
-+	{ "sc2731-regulator" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(platform, sc2731_regulator_id_table);
-+
- static struct platform_driver sc2731_regulator_driver = {
- 	.driver = {
- 		.name = "sc27xx-regulator",
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
- 	.probe = sc2731_regulator_probe,
-+	.id_table = sc2731_regulator_id_table,
- };
- 
- module_platform_driver(sc2731_regulator_driver);
+> >> +static int s2mu005_fled_torch_brightness_set(struct led_classdev *cdev,
+> >> +					     enum led_brightness value)
+> >> +{
+> >> +	struct s2m_fled *priv = to_led_priv(to_cdev_flash(cdev));
+> >> +	struct regmap *regmap = priv->regmap;
+> >> +	int ret;
+> >> +
+> >> +	mutex_lock(&priv->lock);
+> >> +
+> >> +	if (value == LED_OFF) {
+> >
+> > These defines are deprecated.
+> >
+> > From include/linux/leds.h:
+> >
+> > /* This is obsolete/useless. We now support variable maximum brightness. */
+> > enum led_brightness {
+> >         LED_OFF         = 0,
+> >         LED_ON          = 1,
+> >         LED_HALF        = 127,
+> >         LED_FULL        = 255,
+> > };
+> >
+> 
+> Let me know what am I supposed to use then. The
+> brightness_set_blocking() function is defined as such:
+> 
+> 	int (*brightness_set_blocking)(struct led_classdev *led_cdev,
+> 				       enum led_brightness brightness);
+> 
+> Which has enum led_brightness as one of its params.
+> 
+> Do I just ignore the 'obsolete' param for now and replace ` == LED_OFF`
+> with a logical NOT?
+
+I'm pretty sure most places just treat this as a u8 these days.
 
 -- 
-2.51.0
-
+Lee Jones [李琼斯]
 
