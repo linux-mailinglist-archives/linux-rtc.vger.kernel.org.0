@@ -1,247 +1,207 @@
-Return-Path: <linux-rtc+bounces-6260-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6263-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0EXFFWeSyGlOngUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6260-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Mar 2026 04:45:59 +0200
+	id +LXfEpjUyGl6rQUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6263-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 29 Mar 2026 09:28:24 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC50E350745
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Mar 2026 04:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B15C0351137
+	for <lists+linux-rtc@lfdr.de>; Sun, 29 Mar 2026 09:28:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 935FF301DCC4
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Mar 2026 02:44:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B6514302AE1D
+	for <lists+linux-rtc@lfdr.de>; Sun, 29 Mar 2026 07:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED62623C516;
-	Sun, 29 Mar 2026 02:44:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84BF92D77F5;
+	Sun, 29 Mar 2026 07:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lJWFP9vO"
+	dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b="gIV0Iifz"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5FF40DFA9;
-	Sun, 29 Mar 2026 02:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117FC175A6D;
+	Sun, 29 Mar 2026 07:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774752268; cv=none; b=XP7zEIhKCfBER6YYHYW++oQVazt7zOnxjU1BMmgK5eEfaQRjk78MigEwur/Ek0H4L7EqG5vdXR7E0dtqQygkP+ny097CAIPczs2P8jZ3AOJ21B+jSnYe+fuILMQrC8QphoFBDl6IU2guJuzKLkYRJ8Mzq5b8qg06CzBKm4Jm4nY=
+	t=1774769281; cv=none; b=lrP/1X1o7HGCM683dK43RnfJRoQZzdLB8dYK1uFDbCJTy8yscqUgi/JekB3bOJUN7HLMLAjEwyVp/bJM81xdG+O04o4Q0hTfh/0B8beuJyiSNWsmUx3tcZ2z6fp8ULdhkGjAJ8UYEd9i7BoPexgSfDBqiczUS/hXMzXdE/j6mnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774752268; c=relaxed/simple;
-	bh=zP8pKciSR07cE+zE4CuckNxlz1naeSv/P8AgYFY+L+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gLYtwKSSZWt1ledKCaCiy/yyzO10aSX3HyLnjTSNOAG2bX2y2Pe65d+Mf/V9DOilkKvr1UBc+f8nQtPMDXZxV5Kl0NRL6VMi6s9ipgQ9lSRwuD0akWVJ0erWSUNA/uOV/PKIHcJQBtCrjhmU5maiPhyndw72YaFvYhCZSffdp7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lJWFP9vO; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774752266; x=1806288266;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zP8pKciSR07cE+zE4CuckNxlz1naeSv/P8AgYFY+L+0=;
-  b=lJWFP9vOPi5B8ij+TirJ1RfGtpFn6xCB76oo7hfifZMHJoQhF4YR8MVW
-   6tNSR15i+UzUwSRySedtAIs8P7JFqz/uqQIq8h3kYBliN/4PqHWZ6AwEq
-   trWPnIEqXhMP0eKhK7ZGwmVPKSJg4jvZ9lOd695/SXfqn2lbabOFMJAY/
-   vgYepJGigPl0AUAwPL+uLKtAuNR13BBtMLKlftnDTw/3gH0AW7AA8LvrH
-   +pokTqnVGG0FD7Z4LcyXmZEBjTHrk7ifRwaCgYfT1+1n+i0XlEfIsQ2ZS
-   7WdKHNDfKqYk09taY5vYBG35rK/EraQiVWa1emwackQY3cBm3zjpnOwPn
-   g==;
-X-CSE-ConnectionGUID: P2/rlQQSQNmcRVVys6UmGg==
-X-CSE-MsgGUID: 0lQYCxcmQMSqs0nqI1FF+Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11742"; a="93165221"
-X-IronPort-AV: E=Sophos;i="6.23,147,1770624000"; 
-   d="scan'208";a="93165221"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2026 19:44:25 -0700
-X-CSE-ConnectionGUID: /GOkUf93RbSK9TYX5Vm+Zw==
-X-CSE-MsgGUID: PiBYSUfHRqK2zAYwZmdP0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,147,1770624000"; 
-   d="scan'208";a="224730212"
-Received: from lkp-server01.sh.intel.com (HELO 3905d212be1b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 28 Mar 2026 19:44:21 -0700
-Received: from kbuild by 3905d212be1b with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w6g8P-00000000C1B-46D9;
-	Sun, 29 Mar 2026 02:44:17 +0000
-Date: Sun, 29 Mar 2026 10:43:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
-Subject: Re: [PATCH v2 3/5] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
-Message-ID: <202603291013.6DnmGjG3-lkp@intel.com>
-References: <20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7@abscue.de>
+	s=arc-20240116; t=1774769281; c=relaxed/simple;
+	bh=TyOGRacq1l8VhjrXar+eTNydzKWkr7ceew9w7rmxyfM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iceVTH4XBIjnwgTKFQwxXKMsP6o2ikdCPXQ1VA6C1YI82tP3xbXasVP049lQaC36USfOBGCa/mz1lOChPfjUK9Q+ybv2JDV6Y9b9GrZ5hlPGKtMq7/qW8ZEJ99RzFLGdA774zSLYFOgwPZ24/SLrbw3gXigoSSUDAYF9KBXRUpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; dkim=pass (2048-bit key) header.d=abscue.de header.i=@abscue.de header.b=gIV0Iifz; arc=none smtp.client-ip=89.58.28.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
+Received: from fluffy-mammal.metal.fwg-cag.de (87-94-78-46.co.dnainternet.fi [87.94.78.46])
+	by srv01.abscue.de (Postfix) with ESMTPSA id 85C511C0010;
+	Sun, 29 Mar 2026 09:27:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abscue.de; s=dkim;
+	t=1774769269;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bwKg5f4/9X84xc/R7pQkuqBj+q/DTdDssJZt7wCnFjQ=;
+	b=gIV0IifziZIlQJ0rYwDTlaqqhEm0A+ovDuqFYb/SHDiXwEyJfw/NeuYqe6zISgn3K6zMoo
+	PmmZn2RnPDZm1ZuhWkWlaE41SVyF+LCa2/WEtH9E+M2TUJEbUsMyL0Ua1gqCAghHaqeTwA
+	VsKh1zBZ+Z1ASeNv8qvk+tgNUFlpBQG7IeAP2K9j2y+LSXUJy9fsgDbHpIJpMmo/d6E13F
+	T3bsOS8V24HnzKE2kde7zLx7AMUh1oWefDQ4AKtj8PPwOHY3m65R6prMWJRtrT4DQAxgdY
+	a3CUnFTtQd1FhdJfdWjMXpr1dVBMDaCc73cwwBhZGn990dZzNsMbkLWCJQwXiA==
+From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: [PATCH v3 0/5] mfd: sc27xx: Use MFD cells and
+ devm_mfd_add_devices()
+Date: Sun, 29 Mar 2026 09:27:44 +0200
+Message-Id: <20260329-sc27xx-mfd-cells-v3-0-9158dee41f74@abscue.de>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7@abscue.de>
-X-Spamd-Result: default: False [0.34 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHDUyGkC/23NQQrCMBCF4auUrI2k0zahrryHuJgkExuorSQaK
+ qV3Ny2IiC7/B/PNzCIFT5EdipkFSj76cchR7QpmOhwuxL3NzUCAFAAljwbUNPGrs9xQ30duUat
+ WNK5CJJbPboGcnzbydM7d+Xgfw3P7kMp1fWPwi6WSCy7bBqQjVRuljqijedDeEluxBB+gguYPA
+ BmwgrSWArHGL2BZlhczVPyx8QAAAA==
+X-Change-ID: 20260221-sc27xx-mfd-cells-dab7905f3aae
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>, 
+ Pavel Machek <pavel@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.3
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[abscue.de:s=dkim];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6260-lists,linux-rtc=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,gmail.com,linux.alibaba.com];
+	TAGGED_FROM(0.00)[bounces-6263-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	DMARC_NA(0.00)[abscue.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[abscue.de,bootlin.com,kernel.org,gmail.com,linux.alibaba.com];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[otto.pflueger@abscue.de,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[abscue.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: AC50E350745
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,abscue.de:dkim,abscue.de:email,abscue.de:mid]
+X-Rspamd-Queue-Id: B15C0351137
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Otto,
+These changes resulted from the need to decouple the the Linux device
+driver hierarchy from the device tree bindings for two different series
+introducing regulator [1] and poweroff [2] support for the SC2730 PMIC.
 
-kernel test robot noticed the following build warnings:
+There are different PMICs in the SC27xx series, including SC2730 and
+SC2731. These have a lot of similarities, but some differences too. For
+instance, they contain compatible RTC blocks, but completely different
+sets of regulators.
 
-[auto build test WARNING on 85964cdcad0fac9a0eb7b87a0f9d88cc074b854c]
+On the Linux side, each PMIC block needs its own driver. The MFD driver
+currently uses devm_of_platform_populate() to load the drivers for the
+components of the PMIC, which only works when each component has its own
+sub-node with a "compatible" property that is used to select a driver
+for the device.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Otto-Pfl-ger/dt-bindings-rtc-sc2731-Add-compatible-for-SC2730/20260327-162827
-base:   85964cdcad0fac9a0eb7b87a0f9d88cc074b854c
-patch link:    https://lore.kernel.org/r/20260325-sc27xx-mfd-cells-v2-3-d0ebb60aa4a7%40abscue.de
-patch subject: [PATCH v2 3/5] mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260329/202603291013.6DnmGjG3-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 054e11d1a17e5ba88bb1a8ef32fad3346e80b186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260329/202603291013.6DnmGjG3-lkp@intel.com/reproduce)
+When viewed from the device tree side, the parent node representing the
+PMIC already contains a "compatible" property that distinguishes the
+different PMICs. While the device tree bindings currently do require a
+separate "compatible" property for each sub-node (ADC, fuel gauge,
+regulators, ...), this is essentially redundant since the node name and
+the parent compatible uniquely identify the component. Moreover, some
+parts of the PMIC such as the poweroff/reboot controller do not even
+need a corresponding device tree node.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603291013.6DnmGjG3-lkp@intel.com/
+Change the MFD driver to use MFD cells instead, which allows it to
+instantiate sub-devices both with and without device tree nodes.
+Devices that do not have a separate device tree node with its own
+"compatible" property can be matched by their platform device ID.
+Use this to hook up the existing SC2731 poweroff and regulator drivers,
+which were previously not loaded at all due to the lack of an ID table.
 
-All warnings (new ones prefixed by >>):
+In the device tree bindings, deprecate the redundant "compatible"
+property for the "regulators" node. While it might make sense to do this
+for the other components too, there are a few reasons to only change the
+regulators at this point:
+ - The regulators node is special since it is not as independent as the
+   other components. For instance, it is the only child node of the PMIC
+   that does not have a "reg" property. The set of regulators also
+   differs much more between different PMIC models than the register
+   layout of the other components.
+ - We already have some other PMICs where only the regulators are
+   treated specially like this, such as MediaTek MT6359 and MT6370.
+ - It was suggested to remove the "compatible" property for the new
+   SC2730 regulator bindings I am preparing in [2]. The bindings for
+   the other components do not need any significant changes at the
+   moment.
+ - Unlike the poweroff and regulator components, the other parts are
+   already working with the existing drivers and bindings.
 
->> drivers/mfd/sprd-sc27xx-spi.c:188:14: warning: cast to smaller integer type 'enum sprd_pmic_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     188 |         pmic_type = (enum sprd_pmic_type)of_device_get_match_data(&spi->dev);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+For the other components that still have a "compatible" property used
+for matching MFD cells, ensure that an SC2730-specific compatible is
+defined in the bindings so that it can be listed in the SC2730-specific
+device table in the MFD driver.
 
+Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 
-vim +188 drivers/mfd/sprd-sc27xx-spi.c
+[1]: https://lore.kernel.org/all/20250926-sc2730-reboot-v1-0-62ebfd3d31bb@abscue.de/
+[2]: https://lore.kernel.org/all/20260220-sc2730-regulators-v1-0-3f2bbc9ecf14@abscue.de/
 
-   179	
-   180	static int sprd_pmic_probe(struct spi_device *spi)
-   181	{
-   182		struct sprd_pmic *ddata;
-   183		enum sprd_pmic_type pmic_type;
-   184		const struct sprd_pmic_data *pdata;
-   185		const struct mfd_cell *cells;
-   186		int ret, i, num_cells;
-   187	
- > 188		pmic_type = (enum sprd_pmic_type)of_device_get_match_data(&spi->dev);
-   189	
-   190		switch (pmic_type) {
-   191		case PMIC_TYPE_SC2730:
-   192			pdata = &sc2730_data;
-   193			cells = sc2730_devices;
-   194			num_cells = ARRAY_SIZE(sc2730_devices);
-   195			break;
-   196		case PMIC_TYPE_SC2731:
-   197			pdata = &sc2731_data;
-   198			cells = sc2731_devices;
-   199			num_cells = ARRAY_SIZE(sc2731_devices);
-   200			break;
-   201		default:
-   202			dev_err(&spi->dev, "Invalid device ID\n");
-   203			return -EINVAL;
-   204		}
-   205	
-   206		ddata = devm_kzalloc(&spi->dev, sizeof(*ddata), GFP_KERNEL);
-   207		if (!ddata)
-   208			return -ENOMEM;
-   209	
-   210		ddata->regmap = devm_regmap_init(&spi->dev, &sprd_pmic_regmap,
-   211						 &spi->dev, &sprd_pmic_config);
-   212		if (IS_ERR(ddata->regmap)) {
-   213			ret = PTR_ERR(ddata->regmap);
-   214			dev_err(&spi->dev, "Failed to allocate register map %d\n", ret);
-   215			return ret;
-   216		}
-   217	
-   218		spi_set_drvdata(spi, ddata);
-   219		ddata->dev = &spi->dev;
-   220		ddata->irq = spi->irq;
-   221		ddata->pdata = pdata;
-   222	
-   223		ddata->irq_chip.name = dev_name(&spi->dev);
-   224		ddata->irq_chip.status_base =
-   225			pdata->irq_base + SPRD_PMIC_INT_MASK_STATUS;
-   226		ddata->irq_chip.unmask_base = pdata->irq_base + SPRD_PMIC_INT_EN;
-   227		ddata->irq_chip.ack_base = 0;
-   228		ddata->irq_chip.num_regs = 1;
-   229		ddata->irq_chip.num_irqs = pdata->num_irqs;
-   230	
-   231		ddata->irqs = devm_kcalloc(&spi->dev,
-   232					   pdata->num_irqs, sizeof(struct regmap_irq),
-   233					   GFP_KERNEL);
-   234		if (!ddata->irqs)
-   235			return -ENOMEM;
-   236	
-   237		ddata->irq_chip.irqs = ddata->irqs;
-   238		for (i = 0; i < pdata->num_irqs; i++)
-   239			ddata->irqs[i].mask = BIT(i);
-   240	
-   241		ret = devm_regmap_add_irq_chip(&spi->dev, ddata->regmap, ddata->irq,
-   242					       IRQF_ONESHOT, 0,
-   243					       &ddata->irq_chip, &ddata->irq_data);
-   244		if (ret) {
-   245			dev_err(&spi->dev, "Failed to add PMIC irq chip %d\n", ret);
-   246			return ret;
-   247		}
-   248	
-   249		ret = devm_mfd_add_devices(&spi->dev, PLATFORM_DEVID_AUTO,
-   250					   cells, num_cells, NULL, 0,
-   251					   regmap_irq_get_domain(ddata->irq_data));
-   252		if (ret) {
-   253			dev_err(&spi->dev, "Failed to populate sub-devices %d\n", ret);
-   254			return ret;
-   255		}
-   256	
-   257		ret = devm_device_init_wakeup(&spi->dev);
-   258		if (ret)
-   259			return dev_err_probe(&spi->dev, ret, "Failed to init wakeup\n");
-   260	
-   261		return 0;
-   262	}
-   263	
+---
+Changes in v3:
+- Fixed warning about pointer-to-integer cast by using uintptr_t.
+- Changed device ID enum to start with 1 so that 0 is invalid.
+- Link to v2: https://lore.kernel.org/r/20260325-sc27xx-mfd-cells-v2-0-d0ebb60aa4a7@abscue.de
 
+Changes in v2:
+- Changed PMIC type matching in MFD driver to use an identifier like
+  other drivers instead of passing pointers through of_device_id.
+- Rebased on next-20260324.
+- Link to v1: https://lore.kernel.org/r/20260222-sc27xx-mfd-cells-v1-0-69526fe74c77@abscue.de
+
+---
+Otto Pflüger (5):
+      dt-bindings: rtc: sc2731: Add compatible for SC2730
+      regulator: dt-bindings: sc2731: Deprecate compatible property
+      mfd: sprd-sc27xx: Switch to devm_mfd_add_devices()
+      power: reset: sc27xx: Add platform_device_id table
+      regulator: sc2731: Add platform_device_id table
+
+ .../devicetree/bindings/mfd/sprd,sc2731.yaml       |  2 -
+ .../bindings/regulator/sprd,sc2731-regulator.yaml  |  4 +-
+ .../devicetree/bindings/rtc/sprd,sc2731-rtc.yaml   |  7 ++-
+ drivers/mfd/sprd-sc27xx-spi.c                      | 62 ++++++++++++++++++----
+ drivers/power/reset/sc27xx-poweroff.c              |  8 +++
+ drivers/regulator/sc2731-regulator.c               | 10 +++-
+ 6 files changed, 77 insertions(+), 16 deletions(-)
+---
+base-commit: 85964cdcad0fac9a0eb7b87a0f9d88cc074b854c
+change-id: 20260221-sc27xx-mfd-cells-dab7905f3aae
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Otto Pflüger <otto.pflueger@abscue.de>
+
 
