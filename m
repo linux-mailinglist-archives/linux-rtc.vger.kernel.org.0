@@ -1,278 +1,163 @@
-Return-Path: <linux-rtc+bounces-6269-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6274-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sIYmL+IizGnHPgYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6269-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Mar 2026 21:39:14 +0200
+	id iNDEIzdOzWkWbwYAu9opvQ
+	(envelope-from <linux-rtc+bounces-6274-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Apr 2026 18:56:23 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9310370A40
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Mar 2026 21:39:13 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06D6B37E406
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Apr 2026 18:56:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DDD6D300F280
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Mar 2026 19:39:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F3FB43004C1F
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Apr 2026 16:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82CE73A4513;
-	Tue, 31 Mar 2026 19:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381C645BD4E;
+	Wed,  1 Apr 2026 16:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLX3joYc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J3gdAdsK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0AD38BF70;
-	Tue, 31 Mar 2026 19:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A21477988
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Apr 2026 16:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774985949; cv=none; b=qNP71uqCYd9v3G6sc1XzMQLJ04FpRpnM4LtsPVLBhbw4Vj4Wz1A083WQRJlJaLSCiWyCYP+oMJO4jEZjrX9TJg0mi2gGfM6TkvbOGo3fqf1H9j+VNjYNpR540OJ1UnltwjXXoWQUdj46Zy8AgaM6thYSVeYUwQNVlxItNvLJTBM=
+	t=1775062384; cv=none; b=q89Bs4iEjBRXnxds4dIFVAru2gQBeHaYPpfDIYWJl5AKojJZvpUdddzQVEfgzFTMbuuCBNTmSZTNVWoPpvqLL7I5fkYH/QPPVspfRwnZlZb79xPKDENH1GmWCDpUEJCo1SSAKo0psQFYDvZFz+ThNKZC9zpNzAG1lFUo/urqwII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774985949; c=relaxed/simple;
-	bh=1dZWLCLTqRn4kT22XtcWM27dvqDrG6ZgNQNmZWjQR50=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hcoXxRk2otkFdXpar+TJQ8X/F7+eE0wyyeJvpAXWXWYof7si/RB6TMsUXMGbQsvzTsOsjixn+qC+8JlrZ3W35bVTse7xqJy8a/PyXaLQP4/bW9J+CPIHTxO1mCaxdamxIcmyUY4WM4B/9nKuMYPNlxJQ2x9U3jFLgGaM0K26N7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLX3joYc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F385AC19423;
-	Tue, 31 Mar 2026 19:39:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774985949;
-	bh=1dZWLCLTqRn4kT22XtcWM27dvqDrG6ZgNQNmZWjQR50=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XLX3joYcgDmxp8j1gAlGAsP4fSTijdZFWruaDvwHVNL9KwN103Vz0BqxECHxCEgdX
-	 j4Y1dlcrjOyBZ2fQBpWfoLMJedC1wC8i8SF4j2AnoqVSqaRzYrprk4PeijGrumQK4Z
-	 UNsClVF1ZnfzLmr4YfLYxmZppw5BwyUw8i//effCRydUa4M6jPWYzsHb8C/AMlnfd4
-	 v5B5MkXycpv7SY6x3nwZ1QrDLMlZ+DJU3YnwSUqo06+bBzzXL6spAKBat+HmoHSGUp
-	 JrBTRq7zFeyZMwb2+pI8FhG50Pc94Dwwc83PgVg77n7ns7NT5FE+vvSNJotsceWWnb
-	 A3rZfK0q53lOA==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject:
- [PATCH v1 4/4] ACPI: TAD: Add alarm support to the RTC class device interface
-Date: Tue, 31 Mar 2026 21:38:52 +0200
-Message-ID: <2076980.usQuhbGJ8B@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <2366642.iZASKD2KPV@rafael.j.wysocki>
-References: <2366642.iZASKD2KPV@rafael.j.wysocki>
+	s=arc-20240116; t=1775062384; c=relaxed/simple;
+	bh=O/d5nTuCQSyawDHyeFxfGQr1z4wgMwOJQ5lFyp3385Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PUtkB7REgKl0uH0uiEBUn219082CwieIxq0KT7z7763XtBh+eZ5OaCcVF07oWUEyTxogcjgtHcaNZbIm0oXsMvFgOuPQgGS54mfhhA6O3Td7lAVy813orInp6B5k+fkigy+Xi3EzHtJqEaoqqQYkn6jGCw4vbOfT+lUMqu9EfVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J3gdAdsK; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a2b5ea59a1so9707e87.1
+        for <linux-rtc@vger.kernel.org>; Wed, 01 Apr 2026 09:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775062380; x=1775667180; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YFr/uSECQBqNskioj5ShvHktlZ289MTrhS+Qpu8jFIA=;
+        b=J3gdAdsK+K19DltRuHtBgG1ATdhzy4prpKtddOj8enc2gZC+zOfvezuy68C9oB1Ch/
+         2G9xKPz4/TN2hhyQA55FJtibzUGPWcrCAH+ivJ5Ngl8s5MnXjs8ieo+xXKkbdOVUG8PN
+         5LeU1av4PbIHTHJMo9Dxd0gzKF042MFD0kNqf/d+xxc+Tnw9p1/l4TQtAFfntQrfQn78
+         lWz6596y9lUQ6CzJEfUCbrPBRd96eCcEi44l/2uIXAKZHma3+dZgJLxBRX/Es3nPCkxO
+         vVS5mhP9OEbFVrQgqUGFRlJr+X7ApHm8mLnyh7Npbu7e4T1iPCB7OoC/Ibd4CQqmlILh
+         1/GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775062380; x=1775667180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YFr/uSECQBqNskioj5ShvHktlZ289MTrhS+Qpu8jFIA=;
+        b=LWb8BunU/CAKp9/ETfAcU4x06eKbFKF6H4HY+whSQVLWSEF0DyNM4h4GLbJOc+ldub
+         +oQnIAA7+5d7Gwia4IXqsCXYcnRuDdKTVbyN5xr8+d+S8mOJRm8j+9JS/LdXXgmJrfu0
+         47TQu9XbXRQ2KMaQU4OnehnVKwaJee8j7wwdt9UNj8aKSueSG8wGlkzpZn01cJAA4FUE
+         ZQsBagV6w+B4/YOVu0M/u0BAV1j949/4jlJ3A8B11oKT0V6XC7tjN6fjMXcmsctxLzja
+         pn2WNfllBwOQ/OISoidJfT6ZSevYhliK70Yc02bKE+RGFzvbxVgjm84COO/fIyq6hHYc
+         s8pw==
+X-Gm-Message-State: AOJu0Yx+EX0/ZA9JtR5gjRhzZWd/QKA0hnRr5zR14dh8RVM8SsOuzVtR
+	pp8YWRjBN8wxTXHZKFFrxCu9nvuI2zVUwWCNn6LEJT8SRb95pzfcQJYYOaiMdsPmlU4o/g==
+X-Gm-Gg: ATEYQzyeznea2G0uoK/n7ToyFmlmaW/soGy5dSHdFo4/OkuGfpsczKKX+J27W9rtsgy
+	IUg4W7saAgTPzJsUCn/Yi9VOlFKgWIEKfIjR01Ou+jVgGgwRin8zqhvP60+Ma9dN+V8RGb11+qD
+	uXOMfgJ3mjQ+U6z0+92q2au/ouCearf6rrBBz2CPEZNsLhrPg/TSH/pb5+ysXC5VBGwfdV/kX82
+	SaNYnMrTRUpOwxd304AFBnosWLEm2F/FyMUaxQScCTm5AsAVSsVZJIrmb7gI3d8IYJaT/48aDVq
+	rkyFpA0lq/2Z4BzvDiNo9ZdIeDPH5znPJz0viMzmD9s4iA88MiWKbYRIR/SjCEGG270mUFdy64O
+	3dRzThzUMwBKEQbXqQ+GIUSD8CuFRP9HGKjWj9+inBtQLew7jGvHsOawgi73BhdAoSdTtJIx28Z
+	ExIdS1AvHorEbhWGb4fcOZxeqDQVsJUq4r8di3Ea8=
+X-Received: by 2002:a05:6512:1282:b0:5a2:84a3:9b41 with SMTP id 2adb3069b0e04-5a2c1f0d6a5mr1800721e87.16.1775062380248;
+        Wed, 01 Apr 2026 09:53:00 -0700 (PDT)
+Received: from gentoo.sknt.ru ([95.161.221.172])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a2c6cccbecsm63358e87.62.2026.04.01.09.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 09:52:59 -0700 (PDT)
+From: Alexander Shiyan <eagle.alexander923@gmail.com>
+To: linux-rtc@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	"Steven A . Falco" <sfalco@harris.com>,
+	Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>
+Subject: [PATCH 1/6] rtc: m41t80: Remove deprecated and undocumented compatible strings
+Date: Wed,  1 Apr 2026 19:52:40 +0300
+Message-ID: <20260401165245.936428-1-eagle.alexander923@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	CTE_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6269-lists,linux-rtc=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	HAS_ORG_HEADER(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	NEURAL_HAM(-0.00)[-0.998];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rafael.j.wysocki:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:email,uefi.org:url]
-X-Rspamd-Queue-Id: C9310370A40
+	TAGGED_FROM(0.00)[bounces-6274-lists,linux-rtc=lfdr.de];
+	FROM_NEQ_ENVFROM(0.00)[eaglealexander923@gmail.com,linux-rtc@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[bootlin.com,harris.com,mba.ocn.ne.jp,towertech.it,linux-foundation.org,gmail.com];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 06D6B37E406
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The OF match table contains legacy compatibles "st,rv4162" and "rv4162"
+which were added 9 years ago for compatibility reasons but are not
+documented in the binding.
+Remove them as they are no longer needed after the device tree has
+been updated to use the correct "microcrystal,rv4162".
 
-Add alarm support, based on Section 9.17 of ACPI 6.6 [1], to the RTC
-class device interface of the driver.
-
-The ACPI time and alarm device (TAD) can support two separate alarm
-timers, one for waking up the system when it is on AC power, and one
-for waking it up when it is on DC power.  In principle, each of them
-can be set to a different value representing the number of seconds
-till the given alarm timer expires.
-
-However, the RTC class device can only set one alarm, so it will set
-both the alarm timers of the ACPI TAD (if the DC one is supported) to
-the same value.  That is somewhat cumbersome because there is no way in
-the ACPI TAD firmware interface to set both timers in one go, so they
-need to be set sequentially, but that's how it goes.
-
-On the alarm read side, the driver assumes that both timers have been
-set to the same value, so it is sufficient to access one of them (the
-AC one specifically).
-
-Link: https://uefi.org/specs/ACPI/6.6/09_ACPI_Defined_Devices_and_Device_Specific_Objects.html#time-and-alarm-device [1]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: a897bf138c9b ("rtc: m41t80: Add proper compatible for rv4162")
+Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
 ---
- drivers/acpi/acpi_tad.c |  112 ++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 109 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-m41t80.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
---- a/drivers/acpi/acpi_tad.c
-+++ b/drivers/acpi/acpi_tad.c
-@@ -25,6 +25,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/kernel.h>
-+#include <linux/ktime.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-@@ -658,12 +659,113 @@ static int acpi_tad_rtc_read_time(struct
- 	return 0;
- }
- 
-+static int acpi_tad_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *t)
-+{
-+	struct acpi_tad_driver_data *dd = dev_get_drvdata(dev);
-+	s64 value = ACPI_TAD_WAKE_DISABLED;
-+	struct rtc_time tm_now;
-+	struct acpi_tad_rt rt;
-+	int ret;
-+
-+	PM_RUNTIME_ACQUIRE(dev, pm);
-+	if (PM_RUNTIME_ACQUIRE_ERR(&pm))
-+		return -ENXIO;
-+
-+	if (t->enabled) {
-+		/*
-+		 * The value to pass to _STV is expected to be the number of
-+		 * seconds between the time when the timer is programmed and the
-+		 * time when it expires represented as a 32-bit integer.
-+		 */
-+		ret = __acpi_tad_get_real_time(dev, &rt);
-+		if (ret)
-+			return ret;
-+
-+		acpi_tad_rt_to_tm(&rt, &tm_now);
-+
-+		value = ktime_divns(ktime_sub(rtc_tm_to_ktime(t->time),
-+					      rtc_tm_to_ktime(tm_now)), NSEC_PER_SEC);
-+		if (value <= 0 || value > U32_MAX)
-+			return -EINVAL;
-+	}
-+
-+	ret = __acpi_tad_wake_set(dev, "_STV", ACPI_TAD_AC_TIMER, value);
-+	if (ret && t->enabled)
-+		return ret;
-+
-+	/*
-+	 * If a separate DC alarm timer is supported, set it to the same value
-+	 * as the AC alarm timer.
-+	 */
-+	if (dd->capabilities & ACPI_TAD_DC_WAKE) {
-+		ret = __acpi_tad_wake_set(dev, "_STV", ACPI_TAD_DC_TIMER, value);
-+		if (ret && t->enabled) {
-+			__acpi_tad_wake_set(dev, "_STV", ACPI_TAD_AC_TIMER,
-+					    ACPI_TAD_WAKE_DISABLED);
-+			return ret;
-+		}
-+	}
-+
-+	/* Assume success if the alarm is being disabled. */
-+	return 0;
-+}
-+
-+static int acpi_tad_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *t)
-+{
-+	unsigned long long retval;
-+	struct rtc_time tm_now;
-+	struct acpi_tad_rt rt;
-+	int ret;
-+
-+	PM_RUNTIME_ACQUIRE(dev, pm);
-+	if (PM_RUNTIME_ACQUIRE_ERR(&pm))
-+		return -ENXIO;
-+
-+	ret = __acpi_tad_get_real_time(dev, &rt);
-+	if (ret)
-+		return ret;
-+
-+	acpi_tad_rt_to_tm(&rt, &tm_now);
-+
-+	/*
-+	 * Assume that the alarm was set by acpi_tad_rtc_set_alarm(), so the AC
-+	 * and DC alarm timer settings are the same and it is sufficient to read
-+	 * the former.
-+	 *
-+	 * The value returned by _TIV should be the number of seconds till the
-+	 * expiration of the timer, represented as a 32-bit integer, or the
-+	 * special ACPI_TAD_WAKE_DISABLED value meaning that the timer has
-+	 * been disabled.
-+	 */
-+	ret = __acpi_tad_wake_read(dev, "_TIV", ACPI_TAD_AC_TIMER, &retval);
-+	if (ret)
-+		return ret;
-+
-+	if (retval > U32_MAX)
-+		return -ENODATA;
-+
-+	t->pending = 0;
-+
-+	if (retval != ACPI_TAD_WAKE_DISABLED) {
-+		t->enabled = 1;
-+		t->time = rtc_ktime_to_tm(ktime_add_ns(rtc_tm_to_ktime(tm_now),
-+						       (u64)retval * NSEC_PER_SEC));
-+	} else {
-+		t->enabled = 0;
-+		t->time = tm_now;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct rtc_class_ops acpi_tad_rtc_ops = {
- 	.read_time = acpi_tad_rtc_read_time,
- 	.set_time = acpi_tad_rtc_set_time,
-+	.set_alarm = acpi_tad_rtc_set_alarm,
-+	.read_alarm = acpi_tad_rtc_read_alarm,
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index b26afef37d9c..155eded2a921 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -131,15 +131,6 @@ static const __maybe_unused struct of_device_id m41t80_of_match[] = {
+ 		.compatible = "microcrystal,rv4162",
+ 		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT)
+ 	},
+-	/* DT compatibility only, do not use compatibles below: */
+-	{
+-		.compatible = "st,rv4162",
+-		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT)
+-	},
+-	{
+-		.compatible = "rv4162",
+-		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT)
+-	},
+ 	{ }
  };
- 
--static void acpi_tad_register_rtc(struct device *dev)
-+static void acpi_tad_register_rtc(struct device *dev, unsigned long long caps)
- {
- 	struct rtc_device *rtc;
- 
-@@ -676,10 +778,14 @@ static void acpi_tad_register_rtc(struct
- 
- 	rtc->ops = &acpi_tad_rtc_ops;
- 
-+	if (!(caps & ACPI_TAD_AC_WAKE))
-+		clear_bit(RTC_FEATURE_ALARM, rtc->features);
-+
- 	devm_rtc_register_device(rtc);
- }
- #else /* !CONFIG_RTC_CLASS */
--static inline void acpi_tad_register_rtc(struct device *dev) {}
-+static inline void acpi_tad_register_rtc(struct device *dev,
-+					 unsigned long long caps) {}
- #endif /* !CONFIG_RTC_CLASS */
- 
- /* Platform driver interface */
-@@ -765,7 +871,7 @@ static int acpi_tad_probe(struct platfor
- 	pm_runtime_suspend(dev);
- 
- 	if (caps & ACPI_TAD_RT)
--		acpi_tad_register_rtc(dev);
-+		acpi_tad_register_rtc(dev, caps);
- 
- 	return 0;
- }
-
-
+ MODULE_DEVICE_TABLE(of, m41t80_of_match);
+-- 
+2.52.0
 
 
