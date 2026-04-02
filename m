@@ -1,467 +1,182 @@
-Return-Path: <linux-rtc+bounces-6283-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6284-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wN+DLLFOzmmjmgYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6283-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Apr 2026 13:10:41 +0200
+	id CJ4dAKVVzmnPmwYAu9opvQ
+	(envelope-from <linux-rtc+bounces-6284-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Apr 2026 13:40:21 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A806D38821A
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Apr 2026 13:10:40 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B41E388719
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Apr 2026 13:40:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1F6D3305F7A3
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Apr 2026 11:07:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 47BAA308F493
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Apr 2026 11:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1AC3C1416;
-	Thu,  2 Apr 2026 11:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCAC3CCA1E;
+	Thu,  2 Apr 2026 11:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I9mzrwKV"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22E1386C30
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Apr 2026 11:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775127994; cv=none; b=lueaMhLQ6fT/t09FyAKn0Dktv+3UtGFPnjvfQhVtBNMTDCWGGV6+c+cOuWAIC89Foe3MeBE9s9M1rPsbDDN1St/VBX2hggivqNwoBUbiFA2D0FN8pi68hTqIT7pLpcz01bfZVjPctGWDnQvRaUKZpAyYE8+WUdnPMMmd2SBNq3Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775127994; c=relaxed/simple;
-	bh=Yd/6Pc5loOp6q2Ae4swq/Wc1w/fliWxGIpt5pwIb6ZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AiVrfg/628eNKlDJH71dhYPeP9RmybvWixNrOf3XBv7nHz2EBvVRwYQSv0lkr7U3ITCd2yy9X9p1pO5vL7+L8U+U+runUWo2apDZFwgK2lPHZENnmryBX2u9R6UvFOuA+gOgSjMCa4V+geEbBPwjRH0HrCSWG/gBo+WawFm3kzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Fru-0004ZY-BZ; Thu, 02 Apr 2026 13:05:46 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1w8Frs-003MQs-2L;
-	Thu, 02 Apr 2026 13:05:44 +0200
-Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 57352514511;
-	Thu, 02 Apr 2026 11:05:44 +0000 (UTC)
-Date: Thu, 2 Apr 2026 13:05:43 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, mailhol@kernel.org, 
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
-X-AI: stop_reason: "refusal"
-References: <20260402051442.1426672-1-a0282524688@gmail.com>
- <20260402051442.1426672-3-a0282524688@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7183A3D8120
+	for <linux-rtc@vger.kernel.org>; Thu,  2 Apr 2026 11:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775129488; cv=pass; b=WVzYiSqUGipRcBFBg51OcO88BJgYz0dGsasFFqkbhoKu0OfMaV2zRCrPuAzbxc8goNN2d0+pU+1bIpvm4WqNwaZgrhyZjRo/B2S+vnLajvtZPTH+TaRR8eZj7YRVtEg5JYm/vU/+NZiJtfeRN1I2ij8uv7pK62unU3mOLetRCcE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775129488; c=relaxed/simple;
+	bh=YMzP0datrfnXrNyBIyBZ4SLQypxT0D3DUHKlJiwFpvY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LW+pSzfJ7EvwWHAtGutKLTJpTuoM3msxF5fG9fshk2zg6gleTDha7FcKL/1bDKp6hVHifs2JwGB1EIMdPaIGoIv5NtEgg3eqFZuWYt2XQzjSHXFokilhgD/L/CwkHfA79OctB/ox6da97VxtegMW35R5t2HjybilxhiKlOccwEA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I9mzrwKV; arc=pass smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12a71ade78cso995562c88.0
+        for <linux-rtc@vger.kernel.org>; Thu, 02 Apr 2026 04:31:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775129476; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FsvqJCP8PkzzhKT9dO60/IwPyasLWJS/0cl3QoeN41pAbpKxVvrJonDRWmli09g/79
+         LtLC+srdxk4kGqnVWOLNRP/JCQx13lqwcIxgJHdVQhmrOSDDv9ZYiQcbJrtgjWxyITNN
+         5bBn8ebLW2iRzTu0xCqouti7gCNG+TcQ/180F1g7tHOfUZ7LGK3ZwwRUktd3jUWNE0EQ
+         Kyf6+s9hrzhUzRuk41hKiEuI46xDBos6Gs2Zptesn1ngqXArI3efo8Eh5cuG2ydHzyNw
+         R9rNWF9EfibvtyY2QyvA6mU59/rC+w8JwyK15AN6/5YZHQNm6oxkFJCxOpvw7HLhnWJy
+         +fzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=rC+GzInJ4RFVl9AiUw43QCU88NmO9P93zEbx9fCnVZI=;
+        fh=IacQpBElSG16nJHRt9IFIBB6Z9BZ8QA810rCQ8kGc70=;
+        b=JGIapZ6pXRGy/XRjmJah5XBQk72Kj6abp6p5X81/QAusi8NCuuC+Cf7YrnhZxR06x5
+         M3QB6o1pT4mDYb3PdAaGgVD0L2axqi/vrKzkGNWSCJWPH0zkbaWVatF73gi1OYqkGvgF
+         CuDk/ICxabntVUFWv3C+HCzgC/eFwVU1ODZXq3IJBECcMkwPQr20BEyhcGAuLtJDJ0tL
+         ZFokE9XGHrkZA0UDY8mPGv1JMDZGRSi59Yw1A8d9ye3NGiLAkREwNI8nKntMu3Mnm9Iv
+         ajOv7HuafHsHbiZD+WhOzr39+sI3XBoR2lEVyD5lowCAq3vbrWHBmcCFxxn3JheXDLmW
+         QVgg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775129476; x=1775734276; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rC+GzInJ4RFVl9AiUw43QCU88NmO9P93zEbx9fCnVZI=;
+        b=I9mzrwKVHM/UK9XNvtORaEkH4T8w7rnh5FaMWRNdn1seqEu579JOI9n0sSbOVhjo2W
+         +ivs5dklLLK0QZeAtdI6OaFkbnycVNcQdLFgyvaO5MGggBVcSj7tAQq+ks34IL0Qy0qc
+         Ct1/RSXnUoXaW8rIdoJ6HJVNELt3VJSqIUppwtLzARMyE1/DypIVJL7FpjrFw/Sl+ISW
+         +RSOl7TkYtmKxb0Es3jHc9O8KFJ77+3hPaL3l15uojinztRoxkEwzGuxes8VNWTl2eF6
+         WxGMGQqVEPIiha8X6fBTTMEkiTqwJTquub1LPFu3QeGkKUz1MUHdbJGWkPso4xCHkdar
+         y88Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775129476; x=1775734276;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rC+GzInJ4RFVl9AiUw43QCU88NmO9P93zEbx9fCnVZI=;
+        b=WL28PWVaxslvGRxR6iNxftwu0WNnWchWNilXSS/Fb18RCT+Yu3s+Lvy41TBXu+lAV0
+         ZOu7JwQ51IM+EQRHKAErWiH26vAuo8k9YC81NfRFwo03gQsZykpTG8eORdxPGp8pQZg0
+         KTPhwsucpa4gTmkHhKrSdwncOQ8VWYS3DHY17+9e+64yTf0TQfsyZjLJaVqev0jAac+Q
+         cb8od/zCIrrfdOj45mZZSZDfK5hkfvJEWugzTFHN+iH05E2DMMMbqht2Mt+8LO0mftVz
+         Kwxs27uKxZlHuzUZKDW6aKG04NMYC4nWMA+jCjFe8QDoPRNXsF4bArHh9LQ7RUHQTaxw
+         /9iw==
+X-Gm-Message-State: AOJu0Yyjbq8C5Vl6U/+2TpUJj7wLPHyJQlMhqk/RMJwNgo39N/PPq7N+
+	A0YY+WSmRwPh5lRHtKobxXAmWhl9v8gqiM3mdmH4tWv2KYktLWj/RvkNqYnBVe+JZlb9e7No/qs
+	GP3j0zAIjAbwUpei9k6hM0LzwICS93EUOJKcMkEU=
+X-Gm-Gg: ATEYQzwFwmnYGb4kFWvwvwuqcsjjtpBt0YCmb/G3Dyyu+54AVMj6Peom0NziRIxPGnm
+	gZbfyMdSVyUB9L7WbOyVAeSWNq4ZSm+gDZKjml8eFM+kzQ12XkrQnwo1lnG40A4fCInpUpMZphl
+	rpihbczb94b/oVjuxqSknEHbOL7iFwGSOjnTPAZOMrjE3pSB8XOayq16/3kyJxC5JEgyiZRkLLP
+	Cu1xJbTG6vhic4X7DOLxxWcC/4VYB2rjIrE7Zee4WNrYqQV1kGNcnl6nvoz9dlJiwH5KoDDv6jO
+	gL9stObD3xoCL0Mtt/Q=
+X-Received: by 2002:a05:7022:2508:b0:12a:7181:2eff with SMTP id
+ a92af1059eb24-12be645defbmr3780671c88.4.1775129475926; Thu, 02 Apr 2026
+ 04:31:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eduyjgnvxkh2zrsd"
-Content-Disposition: inline
-In-Reply-To: <20260402051442.1426672-3-a0282524688@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spamd-Result: default: False [-1.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+References: <20260401165245.936428-1-eagle.alexander923@gmail.com> <20260401165245.936428-3-eagle.alexander923@gmail.com>
+In-Reply-To: <20260401165245.936428-3-eagle.alexander923@gmail.com>
+From: Alexander Shiyan <eagle.alexander923@gmail.com>
+Date: Thu, 2 Apr 2026 14:31:04 +0300
+X-Gm-Features: AQROBzDBqaphWiw5hQWNLDNAfdYnGgxwOdNtGTfwR8xSlWzg3vI1jeaulSpfwtI
+Message-ID: <CAP1tNvTxppwEyVvG0TXoHNYtvSMwG7pGoJfoiHuWUerQFW6NEA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] rtc: m41t80: Fix watchdog resolution bit handling for
+ chips without extra resolution
+To: linux-rtc@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, "Steven A . Falco" <sfalco@harris.com>, 
+	Atsushi Nemoto <anemo@mba.ocn.ne.jp>, Alessandro Zummo <a.zummo@towertech.it>, 
+	Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	URIBL_MULTI_FAIL(0.00)[sin.lore.kernel.org:server fail,pengutronix.de:server fail];
-	TAGGED_FROM(0.00)[bounces-6283-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[pengutronix.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6284-lists,linux-rtc=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mkl@pengutronix.de,linux-rtc@vger.kernel.org];
-	NEURAL_SPAM(0.00)[0.271];
-	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[eaglealexander923@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	R_DKIM_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pengutronix.de:mid,pengutronix.de:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A806D38821A
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 6B41E388719
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hello.
 
---eduyjgnvxkh2zrsd
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-MIME-Version: 1.0
+Unfortunately, I have reviewed this patch and come to the conclusion
+that it is incorrect.
+Please skip its review (3/6).
 
-On 02.04.2026 13:14:42, a0282524688@gmail.com wrote:
-> From: Ming Yu <a0282524688@gmail.com>
+> For chips without the extra watchdog resolution (i.e., those with only 2
+> resolution bits), bit 7 (RB2) must be cleared to avoid invalid settings.
+> The current logic clears RB2 only when extra resolution is present.
+> Reverse the condition.
 >
-> The Nuvoton NCT6694 also provides a Host Interface (HIF) via eSPI
-> to the host to access its features.
->
-> Sub-devices can use the common functions nct6694_read_msg() and
-> nct6694_write_msg() to issue a command. They can also request
-> interrupts that will be called when the HIF device triggers a
-> shared memory interrupt.
->
-> To support multiple transports, the driver configuration is
-> updated to allow selecting between the USB and HIF interfaces.
->
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> Fixes: d3a126fcf9df ("rtc: rtc-m41t80.c: add support for the ST M41T65 RTC")
+> Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
 > ---
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 649 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               |  97 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
->  drivers/rtc/rtc-nct6694.c           |   7 -
->  drivers/watchdog/nct6694_wdt.c      |   7 -
->  include/linux/mfd/nct6694.h         |  51 ++-
->  12 files changed, 787 insertions(+), 116 deletions(-)
->  create mode 100644 drivers/mfd/nct6694-hif.c
+>  drivers/rtc/rtc-m41t80.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c3fe46d7c4bc..7b6241faa6df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18899,6 +18899,7 @@ S:	Supported
->  F:	drivers/gpio/gpio-nct6694.c
->  F:	drivers/hwmon/nct6694-hwmon.c
->  F:	drivers/i2c/busses/i2c-nct6694.c
-> +F:	drivers/mfd/nct6694-hif.c
->  F:	drivers/mfd/nct6694.c
->  F:	drivers/net/can/usb/nct6694_canfd.c
->  F:	drivers/rtc/rtc-nct6694.c
-> diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
-> index 3703a61209e6..a279510ece89 100644
-> --- a/drivers/gpio/gpio-nct6694.c
-> +++ b/drivers/gpio/gpio-nct6694.c
-> @@ -12,13 +12,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
+> diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+> index 52f398107d35..11ef8195e786 100644
+> --- a/drivers/rtc/rtc-m41t80.c
+> +++ b/drivers/rtc/rtc-m41t80.c
+> @@ -658,10 +658,10 @@ static void wdt_ping(void)
+>                 i2c_data[1] = wdt_margin << 2 | 0x82;
 >
-> -/*
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
-> diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
-> index 6dcf22ca5018..581451875f2c 100644
-> --- a/drivers/hwmon/nct6694-hwmon.c
-> +++ b/drivers/hwmon/nct6694-hwmon.c
-> @@ -15,13 +15,6 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
+>         /*
+> -        * M41T65 has three bits for watchdog resolution.  Don't set bit 7, as
+> -        * that would be an invalid resolution.
+> +        * Chips with extra watchdog resolution have three bits.
+> +        * Don't set bit 7, as that would be an invalid resolution.
+>          */
+> -       if (clientdata->features & M41T80_FEATURE_WDR)
+> +       if (!(clientdata->features & M41T80_FEATURE_WDR))
+>                 i2c_data[1] &= ~M41T80_WATCHDOG_RB2;
 >
-> -/*
-> - * USB command module type for NCT6694 report channel
-> - * This defines the module type used for communication with the NCT6694
-> - * report channel over the USB interface.
-> - */
-> -#define NCT6694_RPT_MOD			0xFF
-> -
->  /* Report channel */
->  /*
->   * The report channel is used to report the status of the hardware monit=
-or
-> @@ -38,13 +31,6 @@
->  #define NCT6694_TIN_STS(x)		(0x6A + (x))
->  #define NCT6694_FIN_STS(x)		(0x6E + (x))
+>         i2c_transfer(save_client->adapter, msgs1, 1);
+> --
+> 2.52.0
 >
-> -/*
-> - * USB command module type for NCT6694 HWMON controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * HWMON controller over the USB interface.
-> - */
-> -#define NCT6694_HWMON_MOD		0x00
-> -
->  /* Command 00h - Hardware Monitor Control */
->  #define NCT6694_HWMON_CONTROL		0x00
->  #define NCT6694_HWMON_CONTROL_SEL	0x00
-> @@ -53,13 +39,6 @@
->  #define NCT6694_HWMON_ALARM		0x02
->  #define NCT6694_HWMON_ALARM_SEL		0x00
->
-> -/*
-> - * USB command module type for NCT6694 PWM controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * PWM controller over the USB interface.
-> - */
-> -#define NCT6694_PWM_MOD			0x01
-> -
->  /* PWM Command - Manual Control */
->  #define NCT6694_PWM_CONTROL		0x01
->  #define NCT6694_PWM_CONTROL_SEL		0x00
-> diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nc=
-t6694.c
-> index 7d8ad997f6d2..7ee209a04d16 100644
-> --- a/drivers/i2c/busses/i2c-nct6694.c
-> +++ b/drivers/i2c/busses/i2c-nct6694.c
-> @@ -11,13 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->
-> -/*
-> - * USB command module type for NCT6694 I2C controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * I2C controller over the USB interface.
-> - */
-> -#define NCT6694_I2C_MOD			0x03
-> -
->  /* Command 00h - I2C Deliver */
->  #define NCT6694_I2C_DELIVER		0x00
->  #define NCT6694_I2C_DELIVER_SEL		0x00
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 7192c9d1d268..8a715ec2f79f 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1164,19 +1164,46 @@ config MFD_MENF21BMC
->  	  will be called menf21bmc.
->
->  config MFD_NCT6694
-> -	tristate "Nuvoton NCT6694 support"
-> +	tristate
->  	select MFD_CORE
-> +	help
-> +	  Core MFD support for the Nuvoton NCT6694 peripheral expander.
-> +	  This provides the common APIs and shared structures used by all
-> +	  interfaces (USB, HIF) to access the NCT6694 hardware features
-> +	  such as GPIO, I2C, CAN-FD, Watchdog, ADC, PWM, and RTC.
-> +
-> +	  It is selected automatically by the transport interface drivers.
-> +
-> +config MFD_NCT6694_HIF
-> +	tristate "Nuvoton NCT6694 HIF (eSPI) interface support"
-> +	depends on HAS_IOPORT && ACPI
-> +	select MFD_NCT6694
-> +	select REGMAP_MMIO
-> +	help
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the Host Interface (HIF) using eSPI transport.
-> +
-> +	  The transport driver uses Super-I/O mapping and shared memory to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 over an eSPI interface on an ACPI platform.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694-hif.
-> +
-> +config MFD_NCT6694_USB
-> +	tristate "Nuvoton NCT6694 USB interface support"
-> +	select MFD_NCT6694
->  	depends on USB
->  	help
-> -	  This enables support for the Nuvoton USB device NCT6694, which shares
-> -	  peripherals.
-> -	  The Nuvoton NCT6694 is a peripheral expander with 16 GPIO chips,
-> -	  6 I2C controllers, 2 CANfd controllers, 2 Watchdog timers, ADC,
-> -	  PWM, and RTC.
-> -	  This driver provides core APIs to access the NCT6694 hardware
-> -	  monitoring and control features.
-> -	  Additional drivers must be enabled to utilize the specific
-> -	  functionalities of the device.
-> +	  This enables support for the Nuvoton NCT6694 peripheral expander
-> +	  connected via the USB interface.
-> +
-> +	  The transport driver uses USB bulk and interrupt transfers to
-> +	  communicate with the NCT6694 firmware. Enable this option if you
-> +	  are using the NCT6694 via a USB connection.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called nct6694.
->
->  config MFD_OCELOT
->  	tristate "Microsemi Ocelot External Control Support"
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index e75e8045c28a..4cee9b74978c 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -124,7 +124,8 @@ obj-$(CONFIG_MFD_MC13XXX_I2C)	+=3D mc13xxx-i2c.o
->
->  obj-$(CONFIG_MFD_PF1550)	+=3D pf1550.o
->
-> -obj-$(CONFIG_MFD_NCT6694)	+=3D nct6694.o
-> +obj-$(CONFIG_MFD_NCT6694_HIF)	+=3D nct6694-hif.o
-> +obj-$(CONFIG_MFD_NCT6694_USB)	+=3D nct6694.o
->
->  obj-$(CONFIG_MFD_CORE)		+=3D mfd-core.o
->
-> diff --git a/drivers/mfd/nct6694-hif.c b/drivers/mfd/nct6694-hif.c
-> new file mode 100644
-> index 000000000000..a5953c951eb5
-> --- /dev/null
-> +++ b/drivers/mfd/nct6694-hif.c
-> @@ -0,0 +1,649 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2026 Nuvoton Technology Corp.
-> + *
-> + * Nuvoton NCT6694 host-interface (eSPI) transport driver.
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/bits.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/nct6694.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/unaligned.h>
-> +
-> +#define DRVNAME "nct6694-hif"
-> +
-> +#define NCT6694_POLL_INTERVAL_US	10
-> +#define NCT6694_POLL_TIMEOUT_US		10000
-> +
-> +/*
-> + * Super-I/O registers
-> + */
-> +#define SIO_REG_LDSEL		0x07	/* Logical device select */
-> +#define SIO_REG_DEVID		0x20	/* Device ID (2 bytes) */
-> +#define SIO_REG_LD_SHM		0x0F	/* Logical device shared memory control */
-> +
-> +#define SIO_REG_SHM_ENABLE	0x30	/* Enable shared memory */
-> +#define SIO_REG_SHM_BASE_ADDR	0x60	/* Shared memory base address (2 byte=
-s) */
-> +#define SIO_REG_SHM_IRQ_NR	0x70	/* Shared memory interrupt number */
-> +
-> +#define SIO_REG_UNLOCK_KEY	0x87	/* Key to enable Super-I/O */
-> +#define SIO_REG_LOCK_KEY	0xAA	/* Key to disable Super-I/O */
-> +
-> +#define SIO_NCT6694B_ID		0xD029
-> +#define SIO_NCT6694D_ID		0x5832
-> +
-> +/*
-> + * Super-I/O Shared Memory Logical Device registers
-> + */
-> +#define NCT6694_SHM_COFS_STS			0x2E
-> +#define NCT6694_SHM_COFS_STS_COFS4W		BIT(7)
-> +
-> +#define NCT6694_SHM_COFS_CTL2			0x3B
-> +#define NCT6694_SHM_COFS_CTL2_COFS4W_IE		BIT(3)
-> +
-> +#define NCT6694_SHM_INTR_STATUS			0x9C	/* Interrupt status register (4 b=
-ytes) */
-> +
-> +enum nct6694_chips {
-> +	NCT6694B =3D 0,
-> +	NCT6694D,
-> +};
-> +
-> +enum nct6694_module_id {
-> +	NCT6694_GPIO0 =3D 0,
-> +	NCT6694_GPIO1,
-> +	NCT6694_GPIO2,
-> +	NCT6694_GPIO3,
-> +	NCT6694_GPIO4,
-> +	NCT6694_GPIO5,
-> +	NCT6694_GPIO6,
-> +	NCT6694_GPIO7,
-> +	NCT6694_GPIO8,
-> +	NCT6694_GPIO9,
-> +	NCT6694_GPIOA,
-> +	NCT6694_GPIOB,
-> +	NCT6694_GPIOC,
-> +	NCT6694_GPIOD,
-> +	NCT6694_GPIOE,
-> +	NCT6694_GPIOF,
-> +	NCT6694_I2C0,
-> +	NCT6694_I2C1,
-> +	NCT6694_I2C2,
-> +	NCT6694_I2C3,
-> +	NCT6694_I2C4,
-> +	NCT6694_I2C5,
-> +	NCT6694_CAN0,
-> +	NCT6694_CAN1,
-> +};
-> +
-> +struct __packed nct6694_msg {
-> +	struct nct6694_cmd_header cmd_header;
-> +	struct nct6694_response_header response_header;
-> +	unsigned char *data;
-> +};
-> +
-> +struct nct6694_sio_data {
-> +	enum nct6694_chips chip;
-> +	int sioreg;	/* Super-I/O index port */
-> +
-> +	/* Super-I/O access functions */
-> +	int (*sio_enter)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_exit)(struct nct6694_sio_data *sio_data);
-> +	void (*sio_select)(struct nct6694_sio_data *sio_data, int ld);
-> +	int (*sio_inb)(struct nct6694_sio_data *sio_data, int reg);
-> +	int (*sio_inw)(struct nct6694_sio_data *sio_data, int reg);
-> +	void (*sio_outb)(struct nct6694_sio_data *sio_data, int reg, int val);
-
-The signatures of the function look a bit strange. I expect functions
-reading/writing bytes use u8 not int, register offsets should probably
-be an unsigned int.
-
-Why do you have pointers to the access functions? Why not use them
-directly?
-
-Marc
-
---
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---eduyjgnvxkh2zrsd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCac5NhQAKCRDMOmT6rpmt
-0iiOAQDPnaCTCz7cHPZcUdH6WW5DKZHAXFfgb03FMRkx/xPipgD/X+mA6FYqehlp
-FMnxD26sUBwZidoKAtEpXxguwwLFGgo=
-=+i7v
------END PGP SIGNATURE-----
-
---eduyjgnvxkh2zrsd--
 
