@@ -1,93 +1,65 @@
-Return-Path: <linux-rtc+bounces-6291-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6292-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YK57AtXnz2kS1gYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6291-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 03 Apr 2026 18:16:21 +0200
+	id UPPNG7znz2kS1gYAu9opvQ
+	(envelope-from <linux-rtc+bounces-6292-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Apr 2026 18:15:56 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E79739630F
-	for <lists+linux-rtc@lfdr.de>; Fri, 03 Apr 2026 18:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8E483962E5
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Apr 2026 18:15:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BC600300E3BA
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Apr 2026 16:09:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6109C301828C
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Apr 2026 16:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497213C9EE2;
-	Fri,  3 Apr 2026 16:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7A33CB2E1;
+	Fri,  3 Apr 2026 16:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L97T2VHG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wnLEoN5I"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064A6347FC4;
-	Fri,  3 Apr 2026 16:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BCD351C3F
+	for <linux-rtc@vger.kernel.org>; Fri,  3 Apr 2026 16:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775232554; cv=none; b=fMOqQPpluhAw7JuS6+H/jNf78sroApEUdY+54N1n+40JBzHWL/lXeJ+GnYZPWEXy/vguatbRWMVrkFG4O0+HncXtXDrkiHXY4KlCi0pQfrbSLph5zqaFxLekaseGgCZ27BLOejmTDW25KmSgFjnNfFdigKCCt8IS2D7iOz3dF1U=
+	t=1775232561; cv=none; b=heepi3TTyo0vlwevtOlDowTES5AMNEnWktYVcJoF14ruDURP+w748hMaVvdvsFLxcMr1zTNp7X3Q58/xCYD7Wo9BVVKqmZyd5DAfHOZN+kJAC+Zy6j2ArgDW6O/CbWPa0abOdShNTdZEjV/NRORABjGYaiQMQDvMEPmGq3M2rfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775232554; c=relaxed/simple;
-	bh=CghEAyURPKNDWNh1KF3hIuxOiGfdcuCeOXvU4p4PtB8=;
+	s=arc-20240116; t=1775232561; c=relaxed/simple;
+	bh=Mozm54e3kj3ylhz+hlP2Ai7Qimo66RJX8Q/qoWOZKQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QfLw0Xzy73dhSpLC/IPRv5d8YoMp/7gptGpXyZuJ/5qtn4AjZyyG4CGvNxpD2cEHSCMWOtQzanLiH9MsExANURtLdBH5Un+RA3Qrv64R56wKa9zf+re+nwu4T20SKBcB2hDKA5LvXeOxdxdFRtKfHS4cqKmzUHfvwCYyUNJAOSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L97T2VHG; arc=none smtp.client-ip=185.246.85.4
+	 Content-Type:Content-Disposition:In-Reply-To; b=iUL+NzwswSOfLwWYWUgK0UgfeFIR1C1wnVJIaPwJOmr8hpucR58Ad3caiSvf2oWf8JiNfWTjRxU0pFQl1fEYVe7cU746GDK9bMhqTmBcGDsIJpmvMFW700NAizMC/jwFfgur59rKM3lx7CW/suAy29dOzRd0ZEh0iQCT3jx9ZHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wnLEoN5I; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 932684E428D4;
-	Fri,  3 Apr 2026 16:09:11 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 56BCA1A312B;
+	Fri,  3 Apr 2026 16:09:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 60FDA603C1;
-	Fri,  3 Apr 2026 16:09:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BEC96104500F6;
-	Fri,  3 Apr 2026 18:09:00 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2E530603C1;
+	Fri,  3 Apr 2026 16:09:19 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4B503104500F6;
+	Fri,  3 Apr 2026 18:09:18 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1775232549; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=AzjEQefN6xPDjXEYIiHo2SUJdWU1/vP2x5cFXraZjkk=;
-	b=L97T2VHGtwNjfPaEhWyiSnZG6k7C48S4htZ3xdXMja4I35x1Vha2dpAMX0WNGYblzxbrUv
-	w/aoNXMJkcAGsxHBGwMvC3v4AK9Us0ZAofbj1Jge/XAkKyW2WBLtAg7c7meeTov3m/kL37
-	0CrL3m46nLSt5nrUBSgCoKk3+eRsC35eLXnauDPjPd+NzRjQe8faib+rb+JcFj482nTsHb
-	3XncxjjRBpnDjNtz4yAKJu6tsmqEtJkodT5r8GkMTLIdOt2ARjdq1uvll/xIID23MOSaNo
-	KuHxucXkddWY+UP1yY+7J186BSJZy4E1fhoGtY3cQDGv+ydRID09gV/+YIKJFA==
-Date: Fri, 3 Apr 2026 18:09:00 +0200
+	t=1775232558; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=/t44091BTuiGA/3IotE5ahSTrak5+O9l8783U0Gxdo4=;
+	b=wnLEoN5I/fgGR+GFWNYkKR30wuVXzVo4sFfBtEQKpoQA9acxFit/ThAnhnepGj/YFS0GsC
+	vmABI7GC2xDDyduKZ41xp99UCjNTHslZX3iRCXxRyfIlZU8ufAL5l1661OoppAVqcssp3q
+	9T4/h0LpT1PGH6hpdAOCelUcWyhhCVf55e8wL45AaKoSebj+WYvucCUFHSy9MIdV9OaI06
+	wIMuBWR87gsFNzfN2hEl9Y0Q+9Is347FRrIDoRN0TrpIa79F5NbDHFHHbGFUPr7DwgPv28
+	IEc+zdQglYr/NDa4hBdTmi1LU2A9AKRUK91wFOrEbbjpIphR3GBMxm5o/SLsSw==
+Date: Fri, 3 Apr 2026 18:09:17 +0200
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Saenz Julienne <nsaenz@kernel.org>, Lee Jones <lee@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Shree Ramamoorthy <s-ramamoorthy@ti.com>,
-	Jerome Neanne <jerome.neanne@baylibre.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Joseph Chen <chenjh@rock-chips.com>,
-	Chris Zhong <zyw@rock-chips.com>,
-	Zhang Qing <zhangqing@rock-chips.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Andreas Kemnade <andreas@kemnade.info>,
-	Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Lubomir Rintel <lkundrak@v3.sk>, Julien Panis <jpanis@baylibre.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Alexander Kurz <akurz@blala.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: (subset) [PATCH 05/15] dt-bindings: rtc: ingenic,rtc: Use
- generic power-controller schema
-Message-ID: <177523251875.1559844.9690289848283345069.b4-ty@b4>
-References: <20260316-power-controller-v1-5-92c80e5e1744@nxp.com>
+To: Linux ACPI <linux-acpi@vger.kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: cmos: Use platform_get_irq_optional() in
+ cmos_platform_probe()
+Message-ID: <177523251876.1559844.3350200076617485072.b4-ty@b4>
+References: <12857714.O9o76ZdvQC@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -96,51 +68,54 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260316-power-controller-v1-5-92c80e5e1744@nxp.com>
+In-Reply-To: <12857714.O9o76ZdvQC@rafael.j.wysocki>
 X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6291-lists,linux-rtc=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,broadcom.com,gmail.com,ti.com,baylibre.com,crapouillou.net,sntech.de,rock-chips.com,collabora.com,kemnade.info,gmx.net,v3.sk,blala.de,oss.nxp.com];
-	RCPT_COUNT_TWELVE(0.00)[39];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6292-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9E79739630F
+X-Rspamd-Queue-Id: C8E483962E5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 16 Mar 2026 22:47:40 +0800, Peng Fan (OSS) wrote:
-> Convert the binding to use the generic power-controller schema instead by
-> referencing power-controller.yaml and removing the local
-> `system-power-controller` property definition.
+On Wed, 04 Mar 2026 13:55:43 +0100, Rafael J. Wysocki wrote:
+> The rtc-cmos driver can live without an IRQ and returning an error
+> code from platform_get_irq() is not a problem for it in general, so
+> make it call platform_get_irq_optional() in cmos_platform_probe()
+> instead of platform_get_irq() to avoid a confusing error message
+> printed by the latter if an IRQ cannot be found for index 0, which
+> is possible on x86 platforms.
+> 
+> [...]
 
 Applied, thanks!
 
-[05/15] dt-bindings: rtc: ingenic,rtc: Use generic power-controller schema
-        https://git.kernel.org/abelloni/c/0452290110cc
+[1/1] rtc: cmos: Use platform_get_irq_optional() in cmos_platform_probe()
+      https://git.kernel.org/abelloni/c/92bad323175e
 
 Best regards,
 
