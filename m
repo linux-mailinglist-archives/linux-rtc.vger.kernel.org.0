@@ -1,182 +1,190 @@
-Return-Path: <linux-rtc+bounces-6284-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6285-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CJ4dAKVVzmnPmwYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6284-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Apr 2026 13:40:21 +0200
+	id kCj5LxBGz2lEuwYAu9opvQ
+	(envelope-from <linux-rtc+bounces-6285-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Apr 2026 06:46:08 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B41E388719
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Apr 2026 13:40:20 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8E60390F69
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Apr 2026 06:46:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 47BAA308F493
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Apr 2026 11:31:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E6609300AD94
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Apr 2026 04:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCAC3CCA1E;
-	Thu,  2 Apr 2026 11:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B20F8354AF8;
+	Fri,  3 Apr 2026 04:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I9mzrwKV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DidQGWOK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7183A3D8120
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Apr 2026 11:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F89C3563EB
+	for <linux-rtc@vger.kernel.org>; Fri,  3 Apr 2026 04:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775129488; cv=pass; b=WVzYiSqUGipRcBFBg51OcO88BJgYz0dGsasFFqkbhoKu0OfMaV2zRCrPuAzbxc8goNN2d0+pU+1bIpvm4WqNwaZgrhyZjRo/B2S+vnLajvtZPTH+TaRR8eZj7YRVtEg5JYm/vU/+NZiJtfeRN1I2ij8uv7pK62unU3mOLetRCcE=
+	t=1775191563; cv=pass; b=bXq0C+7z6LOPBwJjjw6at6bmqPPSes93K3rs78R+AlYN1Df47ifesVswm8OGg5Zf4zW1EU17LLccQsgse3DYX0ww6ATVCuF55x+YTQlkIrIGpdhHh8VxRcVmDHTZjvZHsVyP0xmPaLmWLboZJUMTg7O8myqo+l2w23jNkFPqOLg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775129488; c=relaxed/simple;
-	bh=YMzP0datrfnXrNyBIyBZ4SLQypxT0D3DUHKlJiwFpvY=;
+	s=arc-20240116; t=1775191563; c=relaxed/simple;
+	bh=groc3VAnH15CVUVhNhE5OtlEsDNXM/uA7VeW8vaOMTY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LW+pSzfJ7EvwWHAtGutKLTJpTuoM3msxF5fG9fshk2zg6gleTDha7FcKL/1bDKp6hVHifs2JwGB1EIMdPaIGoIv5NtEgg3eqFZuWYt2XQzjSHXFokilhgD/L/CwkHfA79OctB/ox6da97VxtegMW35R5t2HjybilxhiKlOccwEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I9mzrwKV; arc=pass smtp.client-ip=74.125.82.52
+	 To:Cc:Content-Type; b=ACKaTnYAYBS/uu9YyUTU+ecdfLe7YBKDq3PjSyb2EROa0xzcLAq3phmJ13Nq6Pxux0f45eHXaOf3kHY3vG/nauUOxQ5vrO9PmQzMHvDfTPFboLV+v9GxpMopFBdHxozB+H5EvvWu/whn4l+13uYk2nLQeF7pB7ejVcEXaej8I5s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DidQGWOK; arc=pass smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-12a71ade78cso995562c88.0
-        for <linux-rtc@vger.kernel.org>; Thu, 02 Apr 2026 04:31:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775129476; cv=none;
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-78fc4425b6bso15626487b3.1
+        for <linux-rtc@vger.kernel.org>; Thu, 02 Apr 2026 21:46:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775191561; cv=none;
         d=google.com; s=arc-20240605;
-        b=FsvqJCP8PkzzhKT9dO60/IwPyasLWJS/0cl3QoeN41pAbpKxVvrJonDRWmli09g/79
-         LtLC+srdxk4kGqnVWOLNRP/JCQx13lqwcIxgJHdVQhmrOSDDv9ZYiQcbJrtgjWxyITNN
-         5bBn8ebLW2iRzTu0xCqouti7gCNG+TcQ/180F1g7tHOfUZ7LGK3ZwwRUktd3jUWNE0EQ
-         Kyf6+s9hrzhUzRuk41hKiEuI46xDBos6Gs2Zptesn1ngqXArI3efo8Eh5cuG2ydHzyNw
-         R9rNWF9EfibvtyY2QyvA6mU59/rC+w8JwyK15AN6/5YZHQNm6oxkFJCxOpvw7HLhnWJy
-         +fzA==
+        b=OcS85+3x0MzDqQ3ccGwnQPeF5xH8NQtwMQ7Es7f1wO/U++pHMjKCXXYCSuibiXEf1b
+         0F3Vo0Ykn3X0A9Kk1hIa/fPdJyhYUj0ZQ5ShP1fTukhWpcKOuaGMjAuHgsjWSZ+9q1rp
+         Q/8uQkpoWsSfsJyKwU7QC+r7Z8MsYAPVFtQnfLXhjnmN7Mlmoj/NVDl9XDCNlmACzORB
+         WSvpULhk0pJw8H3I14zkQnDpmEdJyQU2MGx8A++VD7xp6uWSzuw6lfM1OEN51bX0NLZE
+         OC22gl7V08HGLwUys89l9zL/4+p/xA1oZoCPAT4qjvvKjaBm/PFv9o8GHhA27DWW4YoP
+         IvJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=rC+GzInJ4RFVl9AiUw43QCU88NmO9P93zEbx9fCnVZI=;
-        fh=IacQpBElSG16nJHRt9IFIBB6Z9BZ8QA810rCQ8kGc70=;
-        b=JGIapZ6pXRGy/XRjmJah5XBQk72Kj6abp6p5X81/QAusi8NCuuC+Cf7YrnhZxR06x5
-         M3QB6o1pT4mDYb3PdAaGgVD0L2axqi/vrKzkGNWSCJWPH0zkbaWVatF73gi1OYqkGvgF
-         CuDk/ICxabntVUFWv3C+HCzgC/eFwVU1ODZXq3IJBECcMkwPQr20BEyhcGAuLtJDJ0tL
-         ZFokE9XGHrkZA0UDY8mPGv1JMDZGRSi59Yw1A8d9ye3NGiLAkREwNI8nKntMu3Mnm9Iv
-         ajOv7HuafHsHbiZD+WhOzr39+sI3XBoR2lEVyD5lowCAq3vbrWHBmcCFxxn3JheXDLmW
-         QVgg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=udWmikDfTPoYOznLAWVnBq6+fVtMa2LFJrslNkdcn48=;
+        fh=rOeqQfAv9WIAnogC0wWrAo8LMYfJ1A4Q+UCiu6RAXmI=;
+        b=ULes1FLewc7ZF81pz5cZYJDX47MVeLgEpfx4oKbBr4swfyY1KstxSeB0K2TKQ3jb2M
+         eSx0pTzXL2gvhsq6cfQuteDWV20IPJao8NXuO45cZ8VUC3xyzGeRPJzsP3e3V+rhTKcZ
+         QXqjXim7hh9M3505vPFpRkOTDOrQi6KTncYQT8bXxCoX+sKTT86XDXRaGf7oM0OyFwHf
+         wcSdfqkc5R7lQ60BSiYilCadA6hzZBDxKSxC5GR8cVD2dZkq/BCQ6Uzed+yHaPgIGM0g
+         A8OOoAaTc6+GkZ8+2gPEopPegsQ6NkmnxDfu9oAV609AY2x6upVoPBSEfRSkLZzcyblD
+         8swQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775129476; x=1775734276; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rC+GzInJ4RFVl9AiUw43QCU88NmO9P93zEbx9fCnVZI=;
-        b=I9mzrwKVHM/UK9XNvtORaEkH4T8w7rnh5FaMWRNdn1seqEu579JOI9n0sSbOVhjo2W
-         +ivs5dklLLK0QZeAtdI6OaFkbnycVNcQdLFgyvaO5MGggBVcSj7tAQq+ks34IL0Qy0qc
-         Ct1/RSXnUoXaW8rIdoJ6HJVNELt3VJSqIUppwtLzARMyE1/DypIVJL7FpjrFw/Sl+ISW
-         +RSOl7TkYtmKxb0Es3jHc9O8KFJ77+3hPaL3l15uojinztRoxkEwzGuxes8VNWTl2eF6
-         WxGMGQqVEPIiha8X6fBTTMEkiTqwJTquub1LPFu3QeGkKUz1MUHdbJGWkPso4xCHkdar
-         y88Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775129476; x=1775734276;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775191561; x=1775796361; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rC+GzInJ4RFVl9AiUw43QCU88NmO9P93zEbx9fCnVZI=;
-        b=WL28PWVaxslvGRxR6iNxftwu0WNnWchWNilXSS/Fb18RCT+Yu3s+Lvy41TBXu+lAV0
-         ZOu7JwQ51IM+EQRHKAErWiH26vAuo8k9YC81NfRFwo03gQsZykpTG8eORdxPGp8pQZg0
-         KTPhwsucpa4gTmkHhKrSdwncOQ8VWYS3DHY17+9e+64yTf0TQfsyZjLJaVqev0jAac+Q
-         cb8od/zCIrrfdOj45mZZSZDfK5hkfvJEWugzTFHN+iH05E2DMMMbqht2Mt+8LO0mftVz
-         Kwxs27uKxZlHuzUZKDW6aKG04NMYC4nWMA+jCjFe8QDoPRNXsF4bArHh9LQ7RUHQTaxw
-         /9iw==
-X-Gm-Message-State: AOJu0Yyjbq8C5Vl6U/+2TpUJj7wLPHyJQlMhqk/RMJwNgo39N/PPq7N+
-	A0YY+WSmRwPh5lRHtKobxXAmWhl9v8gqiM3mdmH4tWv2KYktLWj/RvkNqYnBVe+JZlb9e7No/qs
-	GP3j0zAIjAbwUpei9k6hM0LzwICS93EUOJKcMkEU=
-X-Gm-Gg: ATEYQzwFwmnYGb4kFWvwvwuqcsjjtpBt0YCmb/G3Dyyu+54AVMj6Peom0NziRIxPGnm
-	gZbfyMdSVyUB9L7WbOyVAeSWNq4ZSm+gDZKjml8eFM+kzQ12XkrQnwo1lnG40A4fCInpUpMZphl
-	rpihbczb94b/oVjuxqSknEHbOL7iFwGSOjnTPAZOMrjE3pSB8XOayq16/3kyJxC5JEgyiZRkLLP
-	Cu1xJbTG6vhic4X7DOLxxWcC/4VYB2rjIrE7Zee4WNrYqQV1kGNcnl6nvoz9dlJiwH5KoDDv6jO
-	gL9stObD3xoCL0Mtt/Q=
-X-Received: by 2002:a05:7022:2508:b0:12a:7181:2eff with SMTP id
- a92af1059eb24-12be645defbmr3780671c88.4.1775129475926; Thu, 02 Apr 2026
- 04:31:15 -0700 (PDT)
+        bh=udWmikDfTPoYOznLAWVnBq6+fVtMa2LFJrslNkdcn48=;
+        b=DidQGWOKrm72zYGNfTnKQ9IcnJWZNioKN73o236MElVFzyQKQ8qb/l+soctZqFpFYR
+         KhdKkKO4KWfPBZssLoFqJJaoQDXfr0ubxMRtcYnbkp4Aw6n+hEGhzMD/e6M1vs9Vctn7
+         F7uzUA9y1Hc8Am0AiyTcsudzX2bQmqDVaIRAHRwR1H1Mdwqeulzb+nkNolrXNE6n+lnA
+         5zZ6mhLg+931xo6+ZY56HBf57G3FpKAkbPbK1guAlEH/oool84UFse8KKG4/MulU3zjW
+         kOZ0D+JZfXdmrH7t4ojZVoyu6NPL6R7//xVc/4ow33xoSCayriKVfXDNF+A2xeU4fM2L
+         OvxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775191561; x=1775796361;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=udWmikDfTPoYOznLAWVnBq6+fVtMa2LFJrslNkdcn48=;
+        b=fe1rS9HM+wqxJ8wBeXbmJ7mp99AeAsnvURwJJEcG2vSUuAfoAfZX8PppOtZjWi8rLe
+         +BBv1GxpvRs8kFzFoSiSnJXWWAghofHOnZOFq9MXOHqwN5DDfTht8DjZ66nUoNL+ousA
+         0ZHBg/lMSIiQh4DPMB8yEudr8tvdrsBVo0kzkg6JquwXYJEsBAO8GCUYqrQok4jByySs
+         Ghf9lc6MphFgrBh2+loJ6EiFIlEdc8IHIwiDWI/NIyd8klM0axM2Jr3bl/wvIbFD5/NJ
+         vyUGAlSdLk3MqbOoq/cownefikaOFuQ35cBgrH15njsf30RVHiOm5/WqO4kP3SLZTknB
+         1Veg==
+X-Forwarded-Encrypted: i=1; AJvYcCVJz6g5xi+Dqn1wG1URUmBSlBQ+kP+t7fjykPKKp7X7BFSK1YJ54/HdLmX9McqQLZ6Owsn1LduYcCc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0U8ltygF0nXzWZphgex0EYK2A96vUxbB7m2CqzgMLeyj8RygW
+	RNrTUYv9T5fdqEoqm0HUs0iXunGVpljhaNj/RR2mbE4AxLvGuwMqDhrgtbioPaUGzjOHFgYhH3S
+	0DwQwGBpkMN9nNpiVleHh4DSn5Pd/w7c=
+X-Gm-Gg: AeBDiesKIngrkgVySBS0oSeafk9iyz38e3UuqBFItGGYOjDqKpQDOmqDc2UnHsi9FAB
+	E2uPJUkd/YhKxT5/nXaIX0KrxPCbVbGT10YXVkCb81kLqlK6gYiKOSJ+LLcdvM1Ul2ggmTW/hpc
+	mn91Lu+wUEMzTXRRq8QRYMtyRrI/c2mFAMieSqtG9u9dZDiaRi4VCppsajUhawIdeQq+nW9soUG
+	ixhNzFKpoatRF2oBitgzNE72ZV+H19MHsAVaUFIc+jOEslAWu9ks1vy5vJVFsGN0mOcUAUM4pu0
+	j7VJaA==
+X-Received: by 2002:a05:690c:6987:b0:799:198d:8c5a with SMTP id
+ 00721157ae682-7a4d585f69dmr19958067b3.34.1775191561252; Thu, 02 Apr 2026
+ 21:46:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260401165245.936428-1-eagle.alexander923@gmail.com> <20260401165245.936428-3-eagle.alexander923@gmail.com>
-In-Reply-To: <20260401165245.936428-3-eagle.alexander923@gmail.com>
-From: Alexander Shiyan <eagle.alexander923@gmail.com>
-Date: Thu, 2 Apr 2026 14:31:04 +0300
-X-Gm-Features: AQROBzDBqaphWiw5hQWNLDNAfdYnGgxwOdNtGTfwR8xSlWzg3vI1jeaulSpfwtI
-Message-ID: <CAP1tNvTxppwEyVvG0TXoHNYtvSMwG7pGoJfoiHuWUerQFW6NEA@mail.gmail.com>
-Subject: Re: [PATCH 3/6] rtc: m41t80: Fix watchdog resolution bit handling for
- chips without extra resolution
-To: linux-rtc@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, "Steven A . Falco" <sfalco@harris.com>, 
-	Atsushi Nemoto <anemo@mba.ocn.ne.jp>, Alessandro Zummo <a.zummo@towertech.it>, 
-	Andrew Morton <akpm@linux-foundation.org>
+References: <20260402051442.1426672-1-a0282524688@gmail.com>
+ <20260402051442.1426672-3-a0282524688@gmail.com> <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
+In-Reply-To: <20260402-warping-chameleon-of-prowess-9df780-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 3 Apr 2026 12:46:22 +0800
+X-Gm-Features: AQROBzC_c6Pz91vTEwJZ5AXR_5dXzfojiP7V5Wmo6LnqG_6F9RBzJL09w08myjU
+Message-ID: <CAOoeyxVp2dY=XrujkCbWHjX4bVu4-H2=k0JHxL6akC6KwY+rVA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org, linux@roeck-us.net, 
+	andi.shyti@kernel.org, lee@kernel.org, mailhol@kernel.org, 
+	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6285-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6284-lists,linux-rtc=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[eaglealexander923@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-rtc@vger.kernel.org];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 6B41E388719
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: C8E60390F69
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello.
+Dear Marc,
 
-Unfortunately, I have reviewed this patch and come to the conclusion
-that it is incorrect.
-Please skip its review (3/6).
+Thanks for the review.
 
-> For chips without the extra watchdog resolution (i.e., those with only 2
-> resolution bits), bit 7 (RB2) must be cleared to avoid invalid settings.
-> The current logic clears RB2 only when extra resolution is present.
-> Reverse the condition.
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2026=E5=B9=B44=E6=9C=882=
+=E6=97=A5=E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=887:05=E5=AF=AB=E9=81=93=EF=BC=
+=9A
 >
-> Fixes: d3a126fcf9df ("rtc: rtc-m41t80.c: add support for the ST M41T65 RTC")
-> Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
-> ---
->  drivers/rtc/rtc-m41t80.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> > +struct nct6694_sio_data {
+> > +     enum nct6694_chips chip;
+> > +     int sioreg;     /* Super-I/O index port */
+> > +
+> > +     /* Super-I/O access functions */
+> > +     int (*sio_enter)(struct nct6694_sio_data *sio_data);
+> > +     void (*sio_exit)(struct nct6694_sio_data *sio_data);
+> > +     void (*sio_select)(struct nct6694_sio_data *sio_data, int ld);
+> > +     int (*sio_inb)(struct nct6694_sio_data *sio_data, int reg);
+> > +     int (*sio_inw)(struct nct6694_sio_data *sio_data, int reg);
+> > +     void (*sio_outb)(struct nct6694_sio_data *sio_data, int reg, int =
+val);
 >
-> diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-> index 52f398107d35..11ef8195e786 100644
-> --- a/drivers/rtc/rtc-m41t80.c
-> +++ b/drivers/rtc/rtc-m41t80.c
-> @@ -658,10 +658,10 @@ static void wdt_ping(void)
->                 i2c_data[1] = wdt_margin << 2 | 0x82;
+> The signatures of the function look a bit strange. I expect functions
+> reading/writing bytes use u8 not int, register offsets should probably
+> be an unsigned int.
 >
->         /*
-> -        * M41T65 has three bits for watchdog resolution.  Don't set bit 7, as
-> -        * that would be an invalid resolution.
-> +        * Chips with extra watchdog resolution have three bits.
-> +        * Don't set bit 7, as that would be an invalid resolution.
->          */
-> -       if (clientdata->features & M41T80_FEATURE_WDR)
-> +       if (!(clientdata->features & M41T80_FEATURE_WDR))
->                 i2c_data[1] &= ~M41T80_WATCHDOG_RB2;
+> Why do you have pointers to the access functions? Why not use them
+> directly?
 >
->         i2c_transfer(save_client->adapter, msgs1, 1);
-> --
-> 2.52.0
->
+
+These helpers were originally meant to be used by sub-drivers for SIO
+access, but the implementation later converged so that all SIO access
+is done in the MFD driver itself. In the next version, I will remove
+the function pointers and simplify the interface accordingly.
+
+I will also adjust the types as suggested.
+
+
+Regards,
+Ming
 
