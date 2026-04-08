@@ -1,130 +1,179 @@
-Return-Path: <linux-rtc+bounces-6297-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6298-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qGI+B/T41GlszQcAu9opvQ
-	(envelope-from <linux-rtc+bounces-6297-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 07 Apr 2026 14:30:44 +0200
+	id 68s7ORPo1Wmw/AcAu9opvQ
+	(envelope-from <linux-rtc+bounces-6298-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 08 Apr 2026 07:30:59 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8F823AE66F
-	for <lists+linux-rtc@lfdr.de>; Tue, 07 Apr 2026 14:30:38 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 401E33B729B
+	for <lists+linux-rtc@lfdr.de>; Wed, 08 Apr 2026 07:30:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2339D3003BC1
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Apr 2026 12:27:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D71D63015880
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Apr 2026 05:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 059D53B38BE;
-	Tue,  7 Apr 2026 12:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A62635839C;
+	Wed,  8 Apr 2026 05:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gG76MDqu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8ZWPWMq"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59E5212550;
-	Tue,  7 Apr 2026 12:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D848E355F39
+	for <linux-rtc@vger.kernel.org>; Wed,  8 Apr 2026 05:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775564857; cv=none; b=bONay60A8KLBHR1mzV+vhiHLfQKvlwqkLxozmW/m3uOWcFBPiW6VXKRsrgAeQ9udk12KxAmhNABM1tZ1YTZPQubL87K+va/T3d3ZX7nJC4Fi7QXXU8pQD4pdzOZ3QAS9GUHa13SotngpbLj2JBeVleZ8KZA3oV/HOAipNwIgckI=
+	t=1775626257; cv=none; b=PJByx829RZG3lGiW/idDyh2V+UE2i2HpORN8l2s4AZgQ87+sm1iZMTHG62fX+Heq6TANxOSGUtscDrj905X11DxoGIu0ftUdb6sw0GwTYxMOfLWbPkH+CYl58o2Y/eItKfoPAsDNTzrxlvoPy/GNq7MjwlIU9Ai6p6qIAnuzK4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775564857; c=relaxed/simple;
-	bh=iR7CuEfVsqUz1O+m5IqArEL6lRG6Qz9YqeQ99dSNi4k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZdiIC02sDHJaYxpL2oxDUj9S8POOggm1EVWHWs+IdsgrMyTLjjvc6Px9Po6qCIUHSqWonT1a9H5swP96CLez2wCNNV9ZuDuv4NqxLkXfRNJIPn/npOcLUtSORi30YP48M09o7ymOjccwVOdALvQhk7pEkv9DOJ4q8NtervobrfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gG76MDqu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77368C116C6;
-	Tue,  7 Apr 2026 12:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775564857;
-	bh=iR7CuEfVsqUz1O+m5IqArEL6lRG6Qz9YqeQ99dSNi4k=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gG76MDquaB935HAdrGK5Du0cdHFqi+vhYVdWPpvvSVyvDz4eH7ODt1bgXVaoC4U4w
-	 9Td+ErMw0aV/W44vrnIhTNUfN4Y/vE9Tnoea/rtOgNGViLKHF9FqqSHO1a7vbg1Dw4
-	 2l055fBEIEnw8FvHxwwaNOM1TJlnJlZ6StOp739dwd398GP95pmKiuchOZlK15dS12
-	 jAFQj6mIlFHL1ApVAJthvIo9qs5fsRcc1JiJs0Z++2CtVAcQmMWgkGrxQYvUBLPeSB
-	 2oxevXi0cAUFbJXL253P4zE8RvnxRQAbf4N4PwnzHokcGkTiVUoqujAOcx1nF9kBSJ
-	 f1N3BDEn2TtDg==
-Received: from johan by xi.lan with local (Exim 4.98.2)
-	(envelope-from <johan@kernel.org>)
-	id 1wA5Wp-0000000BEMN-0ruC;
-	Tue, 07 Apr 2026 14:27:35 +0200
-From: Johan Hovold <johan@kernel.org>
-To: =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] rtc: ntxec: fix OF node reference imbalance
-Date: Tue,  7 Apr 2026 14:27:17 +0200
-Message-ID: <20260407122717.2676774-1-johan@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1775626257; c=relaxed/simple;
+	bh=2bvutzs7rtzWgmeamR13PJ6ItU9+5Cs+DqdG83Mabhw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bv3Z57GdrzFlTmVhWMCvz8XZvptaN7buLxP5jG8y83Y+O0m1NJcqvHExagEN1om7+J45fzbCXYfP6I3oNgML0jZUPrXRBTlK4ukWEn9UGVwnPRQx/CNWi5FMDusGzfKoQbxxKhmtMx6VZgwldm/Mt23o4d3/bcSMp6lbf7dvEnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8ZWPWMq; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-358ed696623so2534913a91.0
+        for <linux-rtc@vger.kernel.org>; Tue, 07 Apr 2026 22:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775626255; x=1776231055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G261iPgwxdDm9fBlFNsCEO8KxZODyeiwStlQ3uz07JM=;
+        b=V8ZWPWMqIM0a1pIwCeYyr7S7yp7Dco1DstdcGm8g9rxA29Efde1Roj1i5rcE4iBJPn
+         fsHLZhnXE8c5cggjmHM42eT3uoMXlTw9pZqUvlB3J4qUmJGuMa8PihJgxOtHA7TJKbWq
+         iczR2H/A2QgWbT1TY4Px2AKvigew9sNEWySTDTHoYPFVuKUmjdfKRNzOoAee4afwiNHW
+         p2NCoIgnkBIC9MQKNROYRzF+hy7M35Rt4B4StKYoRWTerL4bCioqceGnedGlFVb1zLiy
+         RA1vi4luuCyS44b25VMz0M6Q1tLapccjDStg10ebjYnZvPar3u5zqJ6xshcsqGpBIk6e
+         8Lzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775626255; x=1776231055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G261iPgwxdDm9fBlFNsCEO8KxZODyeiwStlQ3uz07JM=;
+        b=CagJB7jmwVku5WMow/cTNb4M+10aqtvd86JVsH9ACCQqrkZk1TT2V3MrsYbn69i5TF
+         tKxJT2vlfTM4aWt0LVjRFyO5i8oHSZj2Ekz5xdVsl9F7Tnorof/P9EN2VK7IXG+JPNKN
+         ifAJdYzekFzVceR4JTT2MKpWB1tj0AtJq0nAWBB8QnLWScAtJ9iXv6jAA6x5WnG5Myas
+         PK5ZIcOYvwUKQBbfORpVzyxWXoHBT+Jh8mg39LRbkCfANFtrGGu1V1EEp5p/vONLq6RS
+         rakJJ3MXR3OSra9ccGGk+ng/zgaAOEZ0lwCFKNFz+XtRD8gNRIJHPmRm/W+DcRJu0E+m
+         AKMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUncvu1uOCm7DXSR3qELPNQm1CFgX6NIQEqM2f+hB2nLYb7sB+SKKA2YCymPMgg15XotuReMxf6XFc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn1vSz8widEhE7ftN5enYU/LMkLpGJJduxU00R0c4YVn3jdZcG
+	SSuRB5Mzubu6zMasTHbRukpS/OlFpcN/sAqmbOU3O//Zvrs7WCe6f4Th
+X-Gm-Gg: AeBDieu5AHcNek+40+rWr0y1LFrx+1duQ0TCjsi9CIk9wQp/Yt80/qnAaYLzzjXyXWk
+	C7QCq6xTdEpBMkoP4HDfmdNgvXMjRMpcwga814mk8ePUvcvcYf+ZWYSrYUeQH7Dh2cNo0ChKl4U
+	Li+B3VOrJa40wZ/II5u9ckvHjeoEEk/Kw4eN8EG31/+b63QNzFdFgoR4jRpg+hvq/TMwJkvtu34
+	60eCCc86CdIRfTt7kXdojAqlYxV+vgHmS0YL5OMQXZTtE7GVLXnVe66dtJjusxvfUhyW1GFKUko
+	ijlJFZG2hmB/lBW8b0xyzlgbISg4f7K6p9ezvU2KuCmsYkpVKsz3GKvpG2DCZn7aJHnIsTVkir+
+	+27tmL4fxCJiZOX3cafDd1b/0rsewkGJgBYSxVLzCmD1ZXs+Geb23XBaT6bOo8X8DkKsRYulPzL
+	rPPs3f3eNSw4v4Dqh5w1zigOfnxn8DlO/ptVogv6ZE7TrBTcakekCOQMGdnqdZDT9bW0WLruXpP
+	4iV
+X-Received: by 2002:a17:902:e78b:b0:2b2:57df:264d with SMTP id d9443c01a7336-2b28178c3b7mr208603985ad.33.1775626255168;
+        Tue, 07 Apr 2026 22:30:55 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27472d098sm181673475ad.13.2026.04.07.22.30.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 22:30:54 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	linusw@kernel.org,
+	brgl@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org,
+	alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v2 0/2] mfd: nct6694: Refactor transport layer and add HIF (eSPI) support
+Date: Wed,  8 Apr 2026 13:30:35 +0800
+Message-Id: <20260408053037.1867092-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6297-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmx.net,bootlin.com];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[johan@kernel.org,linux-rtc@vger.kernel.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-6298-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-0.979];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6]
-X-Rspamd-Queue-Id: E8F823AE66F
+	TAGGED_RCPT(0.00)[linux-rtc];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 401E33B729B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The driver reuses the OF node of the parent multi-function device but
-fails to take another reference to balance the one dropped by the
-platform bus code when unbinding the MFD and deregistering the child
-devices.
+From: Ming Yu <a0282524688@gmail.com>
 
-Fix this by using the intended helper for reusing OF nodes.
+The Nuvoton NCT6694 is a peripheral expander that provides GPIO, I2C,
+CAN-FD, Watchdog, HWMON, PWM, and RTC sub-devices. Currently, the
+driver only supports USB as the host transport interface.
 
-Fixes: 435af89786c6 ("rtc: New driver for RTC in Netronix embedded controller")
-Cc: stable@vger.kernel.org	# 5.13
-Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/rtc/rtc-ntxec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series refactors the NCT6694 MFD core to support multiple transport
+backends and adds a new Host Interface (HIF) transport driver that
+communicates over eSPI using Super-I/O shared memory.
 
-diff --git a/drivers/rtc/rtc-ntxec.c b/drivers/rtc/rtc-ntxec.c
-index 850ca49186fd..d28ddb34e19e 100644
---- a/drivers/rtc/rtc-ntxec.c
-+++ b/drivers/rtc/rtc-ntxec.c
-@@ -110,7 +110,7 @@ static int ntxec_rtc_probe(struct platform_device *pdev)
- 	struct rtc_device *dev;
- 	struct ntxec_rtc *rtc;
- 
--	pdev->dev.of_node = pdev->dev.parent->of_node;
-+	device_set_of_node_from_dev(&pdev->dev, pdev->dev.parent);
- 
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
- 	if (!rtc)
+Changes since version 1:
+- Reworked the Super-I/O access helpers.
+
+Ming Yu (2):
+  mfd: nct6694: Switch to devm_mfd_add_devices() and drop IDA
+  mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
+
+ MAINTAINERS                         |   1 +
+ drivers/gpio/gpio-nct6694.c         |  26 +-
+ drivers/hwmon/nct6694-hwmon.c       |  21 -
+ drivers/i2c/busses/i2c-nct6694.c    |  26 +-
+ drivers/mfd/Kconfig                 |  47 ++-
+ drivers/mfd/Makefile                |   3 +-
+ drivers/mfd/nct6694-hif.c           | 634 ++++++++++++++++++++++++++++
+ drivers/mfd/nct6694.c               | 180 ++++----
+ drivers/net/can/usb/nct6694_canfd.c |  18 +-
+ drivers/rtc/rtc-nct6694.c           |   7 -
+ drivers/watchdog/nct6694_wdt.c      |  27 +-
+ include/linux/mfd/nct6694.h         |  57 ++-
+ 12 files changed, 814 insertions(+), 233 deletions(-)
+ create mode 100644 drivers/mfd/nct6694-hif.c
+
 -- 
-2.52.0
+2.34.1
 
 
