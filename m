@@ -1,240 +1,206 @@
-Return-Path: <linux-rtc+bounces-6310-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6311-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sANLKRHI2GmkiAgAu9opvQ
-	(envelope-from <linux-rtc+bounces-6310-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 11:51:13 +0200
+	id uO0+IA3K2GktiQgAu9opvQ
+	(envelope-from <linux-rtc+bounces-6311-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 11:59:41 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882983D53AD
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 11:51:12 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6994A3D5531
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 11:59:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 316FB3006837
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 09:50:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CADA03005AA9
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 09:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C144036E495;
-	Fri, 10 Apr 2026 09:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7273ACA75;
+	Fri, 10 Apr 2026 09:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="AC0lYtKu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rErJRG4Z"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE7B377EC1;
-	Fri, 10 Apr 2026 09:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE1D21CC5A
+	for <linux-rtc@vger.kernel.org>; Fri, 10 Apr 2026 09:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775814628; cv=pass; b=ppmfayvbJ5W16QCGBt28tBd+iQP/Ld8GTHk7F6rHrTUYyz2a0JO4ml4mSvvL6Fah5XICPjvXmOj142NSw/J/9ePZDQBJv2rk6Qzq99aHvhvyDUzb7+MU12HCo4tPY3SOkYl54PeSZeZk7QVcZQwRMjerzAJGObhtrnhxOW1kKe4=
+	t=1775815175; cv=pass; b=pwZJqez7oV+3IRpj70Jz5sKxqAhiAwASVjcdaLVENylRzGED30iESLSLQBNBONFxl/quv+Cnuqx9sq6EDHN433Jpo4Czs7QS1Pomu5xMSaLq0Pvh1br2+VZUFTHBmWYMBmGM/47GKtw6GtDhomKJP9tBbiV7tWBk6q93LF9jpck=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775814628; c=relaxed/simple;
-	bh=ryWgDWizi4eqObnZFpa8OiBFomGSkJVOTCG/4bae7Kw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Dq9pfw6Ei2b6ojAffvjUan0tJwO80RDT/m0hhxDb+gkEItoRzQYH4hvupxkT5s5oiNMBKGCNb3TgN+nXcYawQsT98JC+qJRwmRtSM3QjAPY7gCGrMITsJtOBb7uizqVGr3gQC2uTqOGkfl6r/T/bZoWRpzp134IDCvseZvSNIxU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=AC0lYtKu; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
-ARC-Seal: i=1; a=rsa-sha256; t=1775814601; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ajm8KCOZ3HTSDSoPDZoE9w9U5kzebIqYrtN6aM24IPDwBP+TYeGwp0aaBR/8epFs2/NTYEhCHH6CG2HdePepR0/51RRwdJJLLoI5fYYwVEyXQdZxVQxLnoJ+x3ZBwhhcQAh7LtHQYx0tFdVlapJi3GvNBjDJyCgL6XbP2079oHg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1775814601; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=4UotVkU/wCIPZVHZquY/z63H5AYQdFj3m1KFqxdTFcU=; 
-	b=IYAN6kqC9G0aFn3AfYs3yQN8xhF9F6n4oVvHq8uQtDLcgyuqPV/CP+PBAGoXVyWm1bkSwZ5kOi4KRqbd5DMeMdkZsrOdRfFpGzW5ZE+ACZbui78IoKj1aQowRFnKcHCoF33FCWKSuI+j35weNE3IM5e3IUU2qhmN5Lm0MDb3azM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=pigmoral.tech;
-	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
-	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1775814601;
-	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
-	h=Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Date:Message-Id:Message-Id:To:To:Cc:Cc:Subject:Subject:From:From:References:In-Reply-To:Reply-To;
-	bh=4UotVkU/wCIPZVHZquY/z63H5AYQdFj3m1KFqxdTFcU=;
-	b=AC0lYtKuynwcFp+hCP1+ChfvSQzvoDauSKvDDBVq8N6ciLoj7X4J22S1lLYGpInz
-	NhTXFOg9erWKcx8Msb/+lNLn60PANj2OYboXlrDFu2Kv18aIDl1HREDceAtFV3FACNa
-	OK/X9IZk2rSw6+W7BRHMdJFwXWocQRagvFnv4ACk=
-Received: by mx.zohomail.com with SMTPS id 1775814599395110.49786561844996;
-	Fri, 10 Apr 2026 02:49:59 -0700 (PDT)
+	s=arc-20240116; t=1775815175; c=relaxed/simple;
+	bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n+Xnu9SBFwS5xUJ4smqvjGKWUfHUCGisUg9tK4cl6iCPfPjsqseEVEmsg0+7P3mBm5oNull7p2ugO3can+5Mg4k2d3inq0o4ulh8AYrV3C9T7l+2yO+dNAahAAfdZ0vZFlVUf0a/DSWlf3ObMlgH6OWy0maRfsOyTPDFNcpBElY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rErJRG4Z; arc=pass smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-79a7109f568so21619287b3.1
+        for <linux-rtc@vger.kernel.org>; Fri, 10 Apr 2026 02:59:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775815173; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PPEjKgWcOiNSAqLPJktuWRWsiJaYjWTC6yljuHoUjJrODjW7DaQoUaFdKtGgGCEaXh
+         I+0xGuZASvNhQoytAXdYFkrx9k1uR7AiTLTGo08SpYNi1O7Pqugii0lT8vDQiXF+0mS8
+         zxTrx26DJyGeuoKumwUYsPUIH/P0VV5rbbxCsUQRIcN3LwPSwvUFfCcRsIH6wkrmSZJ/
+         YefXBEuz+2MPtNwHw0f7WYo7F2vww2Phza63dPGB5Bjq9m8Q1JE/9aZAp2B8/GyztgtC
+         3kOCKzpG5EU+dxDGfZtUWMTVpHDN2UrtzVOdVl7lfqfEVIxb0E7ZbFZV3ZkEZFXHmjtU
+         aZ6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+        fh=/oul19byST0vT8AjFxd0O99vrqZ1D+9h3k8ax4Xqo0I=;
+        b=XuhOZAAgZzaqOdysJgZW0bWTKWGYPJgIsYKhUl3omCTxH8RskHhHCt4RRQ3YDghRid
+         oYrfBaVCibT+xkm8e1PHEUvjoR2aJERmgGaeM829RYdZ2HEE1nvZiAqJ8BAmOgXRYIWG
+         lllXqS+qB+ZYUqER4+yWTQeFD7VdX7+/5foOioSV8fzhvoGJ63rIen2L6GWvpdPukFRl
+         HY1eMIW55pY0coI24hiN53xUbAfGI8EgnnCjkareHTfvtfVpT5jPI/Y9kOiX0qmzo9jj
+         VJRShUWjXt/O5XKY+r4I68S4IRpJkfPI0OEFpWRcHTg2fMl9/9b1UrK2NijK4N5rRfCV
+         djcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775815173; x=1776419973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+        b=rErJRG4ZXVbUQMFbRFnmhepxOtcXBpodg5RLaOgBH+BoRSymMMJ7ImR40QJedCzbyW
+         tMf1Kw0G48yG1WZj+bNeo4MywgSjIiHC6+mdUiWs/1trlCFn5wz1/AAEssiw7iJpV45I
+         HfNU8cXmReN8Nsez829lTb/TBvUrr77OsqHawEgFSQ6vY1oOAVLWJ0U/Z4+fMTe/VFCg
+         IR23/Yp54EUoq9dhxidWHZuyoQIaTlIzdzfge5/sD4+zoIksk5Yd0vqptdZ4fGSwlDMf
+         y/S/uZCe8K9ouwDdws1zrrxjoze6PKxwMOQ8PgDitKmFK8vgUphQisVdc+pg/trHdpwt
+         wTJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775815173; x=1776419973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=N2Ytf4PmH2myigvUKMqYUbjaDrOTgHCXnYH7NNPpZ9Q=;
+        b=m9lOE+d8yRXxK8sESiUohyLTWiy58c3SAMFA9+ICQyMm4yZZawKffY8RUBN4odKxKD
+         zc9n2lya4ZrR2CpGHH0CsPA6GXtwea+ElkMJXdhs04LIwNhUPH8ILcQe1cNkb77uWDw4
+         yAFTlq3p7bIOCNcO8BllA4EGucHQtVZQzcPF0m8qvGYIyhd6RwapMTQkDPY+9tSXdrA/
+         oJqb7qz3VXPzRprUV9nxO8BU+/Tw4jBGp+sh5QdKYjhRk3Vu4f/cGGqO+KoVAY7tiZuM
+         PF6ib1U9n493+mwiUXPv+ei5Ls7ZkTDVNXSmsyab6L0QdMPWdftlJBBIcfDquN3aNo7o
+         OHEg==
+X-Forwarded-Encrypted: i=1; AJvYcCURLJaiRxa44BFVr7hjtrZxkq9vp9xTrcbkOkwhaXaRUC8d7w51042Vw3ZybObA7jh0sBIesHXeU1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzywi3Q6CsxTPI7TeN9P+PjeHGBemZBQ+/Vj96oAp6uK8w4DAHu
+	cSfSsg2zuRDod1gDblRGwhJg1ZrLkA94lPlil0Dt0P4jJbPuWYgrYHm3fEJLJA23s/QW7bBtoTl
+	zY23ACZAkWFsjvGNFtrzwJ7chd2L+Fzs=
+X-Gm-Gg: AeBDietRhSTiVNB14hZJAwnAxN05L2bb0b7ME7A2l0P+q2ihsvUCtsXd8x5bmoSSNSl
+	UFNi17AhCHvwy1H5K5oPTgUVAdmE+DgH1yHAIsiXOLXCWJ3FyjfL7JjdYBMGGylrM8FttTmX0Hf
+	EUQWEuYGfF8fMoUgGy+VGiIWXrTwmR4uxlYPyn4jPem/Rm4HOMY9DkdawlkUe6LqnyfB7xWzs4d
+	e0TDQpj/CCqn/NgPVVBTaYUXvml7ZVXQRAD2XFiNDm8hLf21g6DOw5qfHf+u0QJZRbdGdLzL341
+	zXgl4M0PV0i3Eg7wGFd0cx6c+Is9SLA2IItOMTXQsA==
+X-Received: by 2002:a05:690c:83:b0:79f:3715:1980 with SMTP id
+ 00721157ae682-7af6f907f77mr24281587b3.12.1775815173216; Fri, 10 Apr 2026
+ 02:59:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260408053037.1867092-1-a0282524688@gmail.com>
+ <20260408053037.1867092-2-a0282524688@gmail.com> <CAMRc=MeJL_po8HuBa4btVowR-e0i2FyzbDgNVo2u54iPKyuvWw@mail.gmail.com>
+In-Reply-To: <CAMRc=MeJL_po8HuBa4btVowR-e0i2FyzbDgNVo2u54iPKyuvWw@mail.gmail.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Fri, 10 Apr 2026 17:59:22 +0800
+X-Gm-Features: AQROBzChhaENjKRgm1eiXEkKC5Ek3HBghHXiZXP2Ngye9h9-wWZ61ho7Hz-V2Tw
+Message-ID: <CAOoeyxXqUbdd3Y0VorzVVOARVpoEkx033sYrv5Hs4tRfst2tOA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mfd: nct6694: Switch to devm_mfd_add_devices() and
+ drop IDA
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, linux@roeck-us.net, 
+	andi.shyti@kernel.org, lee@kernel.org, mkl@pengutronix.de, mailhol@kernel.org, 
+	alexandre.belloni@bootlin.com, wim@linux-watchdog.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 10 Apr 2026 17:49:49 +0800
-Message-Id: <DHPDQG786QZJ.BPIOZITGMHKR@pigmoral.tech>
-To: <wens@kernel.org>, "Junhui Liu" <junhui.liu@pigmoral.tech>
-Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Samuel
- Holland" <samuel@sholland.org>, "Alexandre Belloni"
- <alexandre.belloni@bootlin.com>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
- <conor+dt@kernel.org>, "Maxime Ripard" <mripard@kernel.org>,
- <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
- <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
- =?utf-8?q?Andr=C3=A9_Przywara?= <andre.przywara@arm.com>
-Subject: Re: [PATCH 7/7] clk: sunxi-ng: Add Allwinner A733 RTC CCU support
-From: "Junhui Liu" <junhui.liu@pigmoral.tech>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260121-a733-rtc-v1-0-d359437f23a7@pigmoral.tech>
- <20260121-a733-rtc-v1-7-d359437f23a7@pigmoral.tech>
- <CAGb2v64euL+QNXiJdTn0JygYLXg0WoguPSprKT4sKGZGVZbwug@mail.gmail.com>
-In-Reply-To: <CAGb2v64euL+QNXiJdTn0JygYLXg0WoguPSprKT4sKGZGVZbwug@mail.gmail.com>
-X-ZohoMailClient: External
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	MV_CASE(0.50)[];
-	R_DKIM_ALLOW(-0.20)[pigmoral.tech:s=zmail];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-6311-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6310-lists,linux-rtc=lfdr.de];
-	DMARC_NA(0.00)[pigmoral.tech];
-	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[19];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[pigmoral.tech:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[junhui.liu@pigmoral.tech,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[baylibre.com,kernel.org,gmail.com,sholland.org,bootlin.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,arm.com];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,pigmoral.tech:dkim,pigmoral.tech:email,pigmoral.tech:mid]
-X-Rspamd-Queue-Id: 882983D53AD
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6994A3D5531
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sat Mar 28, 2026 at 10:41 PM CST, Chen-Yu Tsai wrote:
-> On Wed, Jan 21, 2026 at 7:04=E2=80=AFPM Junhui Liu <junhui.liu@pigmoral.t=
-ech> wrote:
->>
->> Add support for the internal CCU found in the RTC module of the Allwinne=
-r
->> A733 SoC. While the basic 16MHz (IOSC) and 32kHz logic remains compatibl=
-e
->> with older SoCs like the sun6i, the A733 introduces several new features=
-.
->>
->> The A733 RTC CCU supports choosing one of three external crystal
->> frequencies: 19.2MHz, 24MHz, and 26MHz. It features hardware detection
->> logic to automatically identify the frequency used on the board and
->> exports this DCXO signal as the "hosc" clock.
->>
->> Furthermore, the driver implements logic to derive a 32kHz reference
->> from the HOSC. This is achieved through a muxed clock path using fixed
->> pre-dividers to normalize the different crystal frequencies to ~32kHz.
+Hi Bart, all,
+
+Thanks for the review.
+
+Bartosz Golaszewski <brgl@kernel.org> =E6=96=BC 2026=E5=B9=B44=E6=9C=888=E6=
+=97=A5=E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=883:25=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> Have you tested whether the actually normalizes the frequency, i.e.
-> selects a different divider based on the DCXO frequency? Otherwise
-> we're just lying about the frequency.
-
-I only have A733 boards with 26MHz crystals, so I couldn't test all
-crystal configurations. However, I exported the "hosc_32k" clock
-(referred to as dcxo24M_div32k_clk in the vendor driver) to a physical
-pin via the fanout path and measured it with the oscilloscope.
-
-Observations:
-
-- Normal conditions: The frequency remains stable within the 32.744 kHz
-  to 32.791 kHz range.
-- Forced condition: I grounded the R24 resistor on radxa A7A board to
-  trick the SoC into detecting a 24MHz crystal while the actual input
-  remained 26MHz. In this case, the frequency became unstable but still
-  stayed around the 32.2 kHz to 33.3 kHz range.
-
-Based on these results, it appears the hardware does attempt to
-normalize the frequency towards 32.768 kHz via some internal logic.
-
+> On Wed, Apr 8, 2026 at 7:31=E2=80=AFAM <a0282524688@gmail.com> wrote:
+> >
+> > From: Ming Yu <a0282524688@gmail.com>
+> >
+> > Currently, the nct6694 core driver uses mfd_add_hotplug_devices()
+> > and an IDA to manage subdevice IDs.
+> >
+> > Switch the core implementation to use the managed
+> > devm_mfd_add_devices() API, which simplifies the error handling and
+> > device lifecycle management. Concurrently, drop the custom IDA
+> > implementation and transition to using pdev->id.
+> >
+> > Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> > ---
 >
->> This path reuses the same hardware mux registers as the HOSC clock.
->>
->> Additionally, this CCU provides several gate clocks for specific
->> peripherals, including SerDes, HDMI, and UFS. The driver is implemented
->> as an auxiliary driver to be bound to the sun6i-rtc driver.
->>
->> Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
->> ---
->>  drivers/clk/sunxi-ng/Kconfig               |   5 +
->>  drivers/clk/sunxi-ng/Makefile              |   2 +
->>  drivers/clk/sunxi-ng/ccu-sun60i-a733-rtc.c | 204 ++++++++++++++++++++++=
-+++++++
->>  drivers/clk/sunxi-ng/ccu-sun60i-a733-rtc.h |  18 +++
->>  drivers/clk/sunxi-ng/ccu_rtc.h             |   7 +
->>  5 files changed, 236 insertions(+)
->>
-
-[...]
-
->> +
->> +static const struct clk_parent_data hosc_parents[] =3D {
->> +       { .fw_name =3D "osc24M" },
->> +       { .fw_name =3D "osc19M" },
->> +       { .fw_name =3D "osc26M" },
->> +       { .fw_name =3D "osc24M" },
->> +};
+> This does result in a nice code shrink but I'd split this commit into
+> two: one switching to using MFD_CELL_BASIC() with hard-coded devices
+> IDs and one completing the transition to devres.
 >
-> As mentioned in my reply to the binding, this is wrong. There is only
-> one input.
->
-> The most you can do is check the rate of the parent clock against the
-> detected one, and _scream_ that the DT is wrong. And maybe override
-> the reported frequency.
 
-I will add a warning message if the frequency detected by the driver
-does not match the one in the DT.
 
->
-> If you want to do the latter, you could add a new fixed rate gated
-> clock type to our library. You would fill in the rate before the
-> clocks get registered. I probably wouldn't go that far. We want people
-> to have correct hardware descriptions.
->
-> Funnily enough Allwinner's BSP actually implements a fixed rate gate
-> for the next 24M-to-32k divider clock.
+You are right that this change is trying to do too much at once, and
+splitting it as you suggested would make the series much cleaner.
 
-Yes, I noticed that as well. I agree, and I will model this path as a
-simple fixed-rate clock (32768Hz) in v2.
+After looking more closely at the ID handling and hotplug
+implications, I realized that switching to devm_mfd_add_devices() and
+dropping the IDA is not a good fit for this driver. The current
+mfd_add_hotplug_devices() path uses PLATFORM_DEVID_AUTO, which gives
+globally unique device IDs and avoids sysfs name collisions. If we
+switch to devm_mfd_add_devices() with fixed IDs, multiple identical
+NCT6694 devices can end up registering subdevices with the same
+platform device names, which would break hotplug support when more
+than one device is present.
 
->
->> +
->> +struct ccu_mux hosc_clk =3D {
->> +       .enable =3D DCXO_CTRL_DCXO_EN,
->> +       .mux    =3D _SUNXI_CCU_MUX(14, 2),
->> +       .common =3D {
->> +               .reg            =3D DCXO_CTRL_REG,
->> +               .hw.init        =3D CLK_HW_INIT_PARENTS_DATA("hosc",
->> +                                                          hosc_parents,
->> +                                                          &ccu_mux_ro_o=
-ps,
->> +                                                          0),
->> +       },
->> +};
->
-> So this is wrong.
->
->> +
->> +static const struct ccu_mux_fixed_prediv hosc_32k_predivs[] =3D {
->> +       { .index =3D 0, .div =3D 732 },
->
-> Why is it 732 instead of 750?
+So I think it is better not to pursue this direction further.
 
-As mentioned above, the target frequency is 32.768kHz rather than
-32.0kHz. However, since I will drop this prediv array and use a
-fixed-rate clock instead, I think this will no longer be an issue.
+For the next revision, I will drop this part of the change and keep
+the existing MFD core logic, including the IDA usage. The series will
+focus on adding the nct6694-hif MFD driver only, and I will add the
+IDA initialization there as needed.
 
---=20
+Thanks again for the suggestion and review.
+
+
 Best regards,
-Junhui Liu
-
+Ming
 
