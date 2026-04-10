@@ -1,179 +1,222 @@
-Return-Path: <linux-rtc+bounces-6308-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6309-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0F4LGySs12kMRQgAu9opvQ
-	(envelope-from <linux-rtc+bounces-6308-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 09 Apr 2026 15:39:48 +0200
+	id EHerBJXA2GlVhggAu9opvQ
+	(envelope-from <linux-rtc+bounces-6309-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 11:19:17 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40203CB662
-	for <lists+linux-rtc@lfdr.de>; Thu, 09 Apr 2026 15:39:47 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB2013D4A2E
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 11:19:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8683C303D08C
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Apr 2026 13:30:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C51A43011A79
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2026 09:19:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52FE42C21FE;
-	Thu,  9 Apr 2026 13:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D601F342509;
+	Fri, 10 Apr 2026 09:19:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Gt+DdS+8"
+	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="i+jDGeGg"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1121D299959;
-	Thu,  9 Apr 2026 13:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775741448; cv=none; b=IMEE4GIPInvsUrMRw8UdqDCUHDbag9Aab6nJUcXSk36lHgclyao2CuNNfUFRS7OU6VQKgCDpZwbRfqbHj3T0NjabhyX6isCNiZigg0eH3IJYOaurK8RbLBIRDvEYDLwdv+1CMKCbvGDHWquZKydbencbZceImIml4x8qrt469cQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775741448; c=relaxed/simple;
-	bh=xoWNC+9fj3k5xjF4v6BdKmGDQc6d15YKVxkkGQRRC50=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ExCq55/QDVVW95QPmEKJ/4FuT6hm2tUA7uGe72ynVG0ZT+Wg8k8ePewq8JwyzpTgH7vtHSafGD6gMo/5713xL0L0q+im/ODvXeZt/967ZGxraIH8sdAw2pEQM0PKoBDz7YoWVmvvsH6bCT6IlusHltcP9vbD9FzGDuYgfl0aYoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Gt+DdS+8; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 400D6C5C185;
-	Thu,  9 Apr 2026 13:31:19 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6809E5FDEB;
-	Thu,  9 Apr 2026 13:30:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 150E2104500B5;
-	Thu,  9 Apr 2026 15:30:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1775741443; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=FfLf9FSJQ4bbwNckexl7akFIsYHUqdf4UFIJBjk7jgU=;
-	b=Gt+DdS+85NbhlyHCtmfUuYrNwTpMkZ8ewS6xuIdlV2LbbNIkromilVSWoJ99XsMgfK95z6
-	x44zRQaVCTbEEXJYmuH5ZvClzrF6SSK946ex3qwZLS0V3ESiAfEZUHUKM0kpnpQIXdveNe
-	POv7VhGh5NzPLX7xcXd6T0YO1K4MCAoZ4G+XnnzLx7W34Y6WNqD9z75m6WKnbiJ8oECQ8X
-	vhSlUDAkT/618naR3BauZorB/ivgxxPtnKWtlrCHIlMP4/fuaolcPxuK9ThFHZhDS5MWl8
-	Qbqo6w6b8K8MhdCZny9AYliVrQTatBAcA98+gY3XFIWorSEsRxhsB3+H1Bu+Kw==
-Date: Thu, 9 Apr 2026 15:30:36 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: David Wang <tomato1220@gmail.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, a.zummo@towertech.it,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	andrew@aj.id.au, avi.fishman@gmail.com, tmaimon77@gmail.com,
-	tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
-	benjaminfair@google.com, ctcchien@nuvoton.com, mimi05633@gmail.com,
-	openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	davidwang@quantatw.com
-Subject: Re: [PATCH 1/2] dt-bindings: rtc: nct3018y: add nuvoton,ctrl-reg-val
- property
-Message-ID: <20260409133036512b9819@mail.local>
-References: <cover.1775717959.git.tomato1220@gmail.com>
- <ba0845c590eda42a28b3799a6f40294ba74a726e.1775717959.git.tomato1220@gmail.com>
- <a1e24b69-b90a-47d7-b952-bca45fcc6281@kernel.org>
- <CADSQSY1rAnZ69JAjosV_AWBw9OL77dyzHkewW5YGvpCZRwXq5A@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F28733689A;
+	Fri, 10 Apr 2026 09:19:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775812751; cv=pass; b=Xa9ydkVpQtObELnlJSmpO2UFgLd2IoGPYI+7Ujle9I1uuGy4E2l8CgxVPchZPhTnZyaFuOq8FV1RNfGqDlsckKVV4bticHtChQPhnFoj7JsD7iXcIm7sJruNq2UCw7CZph3jFMMsoOaUg0QTXDk3u0EjgxP1iQSN8Y8SCuHSQNI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775812751; c=relaxed/simple;
+	bh=YzqYoTegGmVvbZ0PJr8sikOwbxAvloSf+9ezaClId2o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=VdgEfzVOF88E7mMMWbseu45UUE/C9dJYnjnrojYe9G7R1QJz+FEqtRmFR4uoqnmY80jCZtLEgnkIcJQWjwfraBa43LH3J71/H10OECMC5YPOI0h/+MiHplmCeBp1D7PFEg4+xww55n37ymjRtNsWufklildJ0y+Ql+s/x32/3WY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=i+jDGeGg; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
+ARC-Seal: i=1; a=rsa-sha256; t=1775812716; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=bvjtxWIGOwhhI07XetIdFYhUqGJcYhs1zYmkXxPR+bt1MMUfp+UTmkokPpSVD8koVW9oH7b4KCkzSjskeCO3JLfO8KIbFAXY7WFBPX59CCcBps+t2qMHeKgNL31T1i3BVDDEqDw6rkQWYDv874oVInplMPYPVsEl8eWNoA+UPx8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1775812716; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=biSMIjMoqI6BSBHbISsyBv693FJEoQDokGFZnddUKkM=; 
+	b=ltX0DBnvVCzideQg/qFRRhLxSZSjYBNSPbh7gM5WtTLsNf/Y2HpNC8D4PZEusaB8yggQtqb8UDuo0j5bpHhV8dz3CaZgFASdyltwVo/tibN3BrFr/eR7DTGvyavl4XHUJoq1nazHACboDTRM50Qa9rSirivlazUpI8hOEZHbyQI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=pigmoral.tech;
+	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
+	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1775812716;
+	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
+	h=Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Date:Message-Id:Message-Id:Cc:Cc:Subject:Subject:From:From:To:To:References:In-Reply-To:Reply-To;
+	bh=biSMIjMoqI6BSBHbISsyBv693FJEoQDokGFZnddUKkM=;
+	b=i+jDGeGgXIRG64OfX53pe45O/Du/c+8L4IPKelfAnF1mBKufshKaE5+OFLuByLT2
+	P+tmRSdtqgA4a0J+qXYu5tvRNMVjIBexFpWxqmUYH+dsWeqr65e5rflBFGSktSqN9B0
+	c3YP7u98dFywWacjkOYYaUTdZnHeL3uipmEcIgqU=
+Received: by mx.zohomail.com with SMTPS id 1775812713638605.1620198428519;
+	Fri, 10 Apr 2026 02:18:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADSQSY1rAnZ69JAjosV_AWBw9OL77dyzHkewW5YGvpCZRwXq5A@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 10 Apr 2026 17:18:22 +0800
+Message-Id: <DHPD2DBIJNKO.11THXNWNUEEG9@pigmoral.tech>
+Cc: "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Samuel
+ Holland" <samuel@sholland.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "Maxime Ripard" <mripard@kernel.org>,
+ <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+ <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/7] dt-bindings: rtc: sun6i: Add Allwinner A733 support
+From: "Junhui Liu" <junhui.liu@pigmoral.tech>
+To: <wens@kernel.org>, "Junhui Liu" <junhui.liu@pigmoral.tech>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260121-a733-rtc-v1-0-d359437f23a7@pigmoral.tech>
+ <20260121-a733-rtc-v1-1-d359437f23a7@pigmoral.tech>
+ <CAGb2v67844OPwE6VJ0PAs5LsmCa2h0FvXOBUomZ50dM5tZ0Zow@mail.gmail.com>
+In-Reply-To: <CAGb2v67844OPwE6VJ0PAs5LsmCa2h0FvXOBUomZ50dM5tZ0Zow@mail.gmail.com>
+X-ZohoMailClient: External
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[pigmoral.tech:s=zmail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6308-lists,linux-rtc=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FREEMAIL_CC(0.00)[kernel.org,towertech.it,aj.id.au,gmail.com,google.com,nuvoton.com,lists.ozlabs.org,vger.kernel.org,quantatw.com];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6309-lists,linux-rtc=lfdr.de];
+	DMARC_NA(0.00)[pigmoral.tech];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	DKIM_TRACE(0.00)[pigmoral.tech:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	FROM_NEQ_ENVFROM(0.00)[junhui.liu@pigmoral.tech,linux-rtc@vger.kernel.org];
+	FREEMAIL_CC(0.00)[baylibre.com,kernel.org,gmail.com,sholland.org,bootlin.com,vger.kernel.org,lists.infradead.org,lists.linux.dev];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:url]
-X-Rspamd-Queue-Id: F40203CB662
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EB2013D4A2E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 09/04/2026 15:44:43+0800, David Wang wrote:
-> On Apr 9, 2026, at 15:23, Krzysztof Kozlowski wrote:
-> >
-> > On 09/04/2026 09:21, David Wang wrote:
-> > > Add "nuvoton,ctrl-reg-val" vendor property to allow optional
-> > > initialization of the RTC control register (0x0A).
-> > >
-> > > This allows platform-specific configurations like 24h mode and
-> > > write ownership to be defined via Device Tree.
-> > >
-> > > Signed-off-by: David Wang <tomato1220@gmail.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml b/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
-> > > index 4f9b5604acd9..0984dfb77170 100644
-> > > --- a/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
-> > > +++ b/Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
-> > > @@ -24,6 +24,10 @@ properties:
-> > >
-> > >    reset-source: true
-> > >
-> > > +  nuvoton,ctrl-reg-val:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    description: Initial value for the control register (0x0A).
-> >
-> > 24h mode is not a property of a board. I don't know what "write
-> > ownership" is.
-> >
-> > Best regards,
-> > Krzysztof
-> 
-> Hi Krzysztof,
-> 
-> Thanks for your feedback. Let me clarify these two points based on the
-> NCT3018Y datasheet:
-> 1. Regarding "write ownership": The NCT3018Y features two I2C
-> interfaces (Primary and Secondary). The TWO (Time Write Ownership) bit
-> in the control register determines which interface has the authority
-> to write to the RTC. We need to ensure the interface connected to our
-> SoC is granted this ownership during probe—especially for factory-new
-> chips—to ensure the RTC is writable.
+Hi ChenYu,
+Thanks for your patient review.
 
-You need a write-access property. For NXP, we settled with
-nxp,write-access.
+On Sat Mar 28, 2026 at 8:37 PM CST, Chen-Yu Tsai wrote:
+> On Wed, Jan 21, 2026 at 7:03=E2=80=AFPM Junhui Liu <junhui.liu@pigmoral.t=
+ech> wrote:
+>>
+>> The RTC module in the Allwinner A733 SoC is functionally compatible with
+>> the sun6i RTC, but its internal Clock Control Unit (CCU) has significant
+>> changes.
+>>
+>> The A733 supports selecting the oscillator between three frequencies:
+>> 19.2MHz, 24MHz, and 26MHz. The RTC CCU relies on hardware to detect
+>> which frequency is actually used on the board. By defining all three
+>> frequencies as fixed-clocks in the device tree, the driver can identify
+>> the hardware-detected frequency and expose it to the rest of the system.
+>
+> No. The board device tree shall have the exact and correct frequency
+> defined in the external crystal device node. The operating system can
+> use the hardware-detected frequency to "fix" the in-system representation
+> if it is off.
 
+Okay, I will keep only one main external crystal in the device tree.
 
+>
+>> Additionally, the A733 RTC CCU provides several new DCXO gate clocks for
+>> specific modules, including SerDes, HDMI, and UFS.
+>>
+>> Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
+>> ---
+>>  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml      | 38 +++++++++++++++=
++++++--
+>>  include/dt-bindings/clock/sun60i-a733-rtc.h        | 16 +++++++++
+>>  2 files changed, 52 insertions(+), 2 deletions(-)
+>>
 
-> 2. Regarding "24h mode": This bit determines the internal data format
-> in which time is stored within the RTC hardware. Setting this ensures
-> the hardware's internal storage layout matches the driver's
-> expectation from the start.
+[...]
 
-The driver needs to always write 24h mode but can support reading both.
+>> diff --git a/include/dt-bindings/clock/sun60i-a733-rtc.h b/include/dt-bi=
+ndings/clock/sun60i-a733-rtc.h
+>> new file mode 100644
+>> index 000000000000..8a2b5facad73
+>> --- /dev/null
+>> +++ b/include/dt-bindings/clock/sun60i-a733-rtc.h
+>> @@ -0,0 +1,16 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
+>> +
+>> +#ifndef _DT_BINDINGS_CLK_SUN60I_A733_RTC_H_
+>> +#define _DT_BINDINGS_CLK_SUN60I_A733_RTC_H_
+>> +
+>> +#define CLK_IOSC               0
+>> +#define CLK_OSC32K             1
+>> +#define CLK_HOSC               2
+>
+> The DCXO enable control has been present since at least the H6. We just
+> never added it, as we would never disable it anyway.
 
+I will remove it.
 
+>
+> If you compare the RTC clock trees of the A733 and A523, the only additio=
+n
+> besides the new gates seems to be the LOSC auto selection. But even that
+> is just an illusion, as the A523 has the same registers for that.
+>
+> One could say the A733 RTC is almost backward compatible to the A523, if
+> not for the two fastboot registers the A523 has at 0x120 and 0x124.
+>
+> So I ask that you try to integrate the differences into the existing
+> driver and bindings. You can tweak and export internal clks if you
+> need.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Okay, I will try to integrate the A733 RTC support into the existing
+driver and bindings.
+
+But first I would like to ask for your advice on how to correctly
+organize the device tree binding header for the clocks? I have two ideas
+in mind:
+
+1. Add the common internal clocks (e.g., CLK_RTC_32K) to the existing
+sun6i-rtc.h. Then, create a new sun60i-a733-rtc.h which includes
+the old sun6i-rtc.h and appends the A733-specific clock gates.
+
+2. Simply append all the new A733-specific clock IDs directly to the
+bottom of the existing sun6i-rtc.h, sharing the same header file for all
+SoCs utilizing this driver.
+
+>
+>> +#define CLK_RTC_32K            3
+>
+> AFAICT besides being an internal clock, this is also fed to GPIO for
+> debounce? We probably need to expose this on the A523 as well.
+>
+
+I will do it.
+
+>
+> Thanks
+> ChenYu
+>
+
+--=20
+Best regards,
+Junhui Liu
+
 
