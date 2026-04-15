@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-6340-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6341-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CCbcIrKg32kEWwAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6340-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:29:06 +0200
+	id MLccOGKj32miXAAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6341-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:40:34 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E077940548D
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:29:05 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D12DA4056A3
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C07D6301050C
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 14:27:30 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 58FAA3004D8D
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 14:40:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECE03D3CF2;
-	Wed, 15 Apr 2026 14:27:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3EC3D3492;
+	Wed, 15 Apr 2026 14:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujlcNq3X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7BEMT5p"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B1130C631;
-	Wed, 15 Apr 2026 14:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B3B21A447;
+	Wed, 15 Apr 2026 14:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776263250; cv=none; b=UzqVOeei+7GsahCkAoltpOt2doUCnnpmkEEzpHqL6L5mXdS57n/LdRpVY9+AaccE15U37ZrgabMQBi/HnxuVasQNtyGfsdVs+UklDklgrpRfXnIMaN6RjkB6/QIkYOWk0/It1dg5GlfjotnKocqqVyp5wTKo8NFQAwhc0PisTik=
+	t=1776264005; cv=none; b=tmJFboXOveIFzG7IpIYVTcLuKb+23muqlxNC2cxlEnKSrkD/k9zogtM6jaA9UBeeScmXRQAvTvi0VJ19lBQEctS24lzoCvO+D9AYrq6eBy1aP9hB791LWlEbl/QWHpYoCoLOUJn6TDdsGVN8zbFsOMDuUCyNua/A9YzuFw4YSnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776263250; c=relaxed/simple;
-	bh=HPxvLQoJdqNF3bOI+QUdScX6o7dfRuqIAw3ZzCgwaIw=;
+	s=arc-20240116; t=1776264005; c=relaxed/simple;
+	bh=vRytYMb3yBx4DsRTk5JUfGOjb04s/yzy8mMvJV/J9Z0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jf8NYHuOWS3vmIc053DnewFbTcAF5ny0kYCz5gUTb6LSjq8O3LdHnCGUG11VDKpRph6pcD8Mwzt54IEMm6ZwQhTa3wRT+EBlHEMRiKigN1r3WWOEf3DayHEPdNt9tUOaIpKA8mnmPaXVJ/eaK515i3J7UzOORag0x74mnaHstnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujlcNq3X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A299C19424;
-	Wed, 15 Apr 2026 14:27:25 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Yzx/x5gip82vMOmnNIvAf7aLY7KVxcBvU+Rb9E3yLkH/QiKUAvk61VkkTWfdVm9heC5N/XYNIx5Ny5uW21JFFjYPkhDHcsijOBniXOlilS92YPZR1XxD7EQY+fM6lP2XrvNEgBABYDuDQuaC91pf+4Q3hs+aZwC5/iY3w7sL3e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7BEMT5p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B4F7C19424;
+	Wed, 15 Apr 2026 14:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776263249;
-	bh=HPxvLQoJdqNF3bOI+QUdScX6o7dfRuqIAw3ZzCgwaIw=;
+	s=k20201202; t=1776264004;
+	bh=vRytYMb3yBx4DsRTk5JUfGOjb04s/yzy8mMvJV/J9Z0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ujlcNq3Xgh3q75FXzvLM8+UagUdf8HoMeJyYpUWvw29teYYft9wWG4KNjMkPmnaea
-	 6ZwI14NgJ0aYSo40fGMVN5QSPGf84RrB4Wejnk9p1Kr1sWiwDVTWdl63lrZHVnuWgO
-	 nLTwTqxlz1JjO9QTV8mjMR+jYHkuRs+0UBCom2L+fZnAHanUzWBhmXmmYtGUZmED1y
-	 7cPI+FRgjAjX1KB9KRo1YB2T310trEar5JVg1LlhnIWcFpRrtdf7SJCvps+OFVE1IC
-	 1bKN8SxVKi1fuHgQmmeRyjqZbf1/AALUy48AMIC0iywmLb4CSV/Ye50aWTYX3iRMmI
-	 oYKRNWHlEzWoQ==
-Message-ID: <a51cbf67-ed36-432a-af58-fbda085f322e@kernel.org>
-Date: Wed, 15 Apr 2026 16:27:23 +0200
+	b=m7BEMT5pb2z0xhxj6FuuytJVA4+qXpuZqPjem2aBnO/O5huXHtA10JnhVz2Q/0KhS
+	 H6E4vOBB7KGBHISfiFa1N05kwP+Fd/ZRO3WnRtjqNPeggeS+m1SC/Jc0yWS5QSakxg
+	 /n4h/QHcarbZnRUmGcN2fogOdHIk3YVp6WXm+hewZaZ3oC3X4lpXN6SsvrGKrMyvhN
+	 raSU742Dxuh8xGN0sDyJtgSY2Z17BE33DYct2inVzIYlntT5sGjUgIkzaLOFWgNE/A
+	 o7BsUsXtRZuSqdXqoyH2pFDO0g2L1YFZupvzhp7jN3alkUY+ZerSdii00Zse0yQ0EP
+	 7JE7idITNYbSg==
+Message-ID: <cf079a7d-c919-4a76-a760-fa38eaccc895@kernel.org>
+Date: Wed, 15 Apr 2026 16:39:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -53,8 +53,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 05/13] dt-bindings: mfd: s2mps11: add documentation for
- S2MU005 PMIC
+Subject: Re: [PATCH v4 04/13] dt-bindings: power: supply: document Samsung S2M
+ series PMIC charger device
 To: Kaustabh Chakraborty <kauschluss@disroot.org>
 Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
  linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-doc@vger.kernel.org
 References: <20260414-s2mu005-pmic-v4-0-7fe7480577e6@disroot.org>
- <20260414-s2mu005-pmic-v4-5-7fe7480577e6@disroot.org>
- <20260415-notorious-dainty-starfish-58a13c@quoll>
- <DHTSO9L6YZTQ.WYM9ERXBGNGB@disroot.org>
+ <20260414-s2mu005-pmic-v4-4-7fe7480577e6@disroot.org>
+ <20260415-swinging-radical-junglefowl-85dcf7@quoll>
+ <DHTS9H2EIM2D.2TC17F9WBOOR1@disroot.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,7 +117,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <DHTSO9L6YZTQ.WYM9ERXBGNGB@disroot.org>
+In-Reply-To: <DHTS9H2EIM2D.2TC17F9WBOOR1@disroot.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -125,11 +125,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6340-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6341-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -146,64 +146,49 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E077940548D
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D12DA4056A3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 15/04/2026 16:22, Kaustabh Chakraborty wrote:
-> On 2026-04-15 09:17 +02:00, Krzysztof Kozlowski wrote:
->> On Tue, Apr 14, 2026 at 12:02:57PM +0530, Kaustabh Chakraborty wrote:
->>>  
->>>    clocks:
->>>      $ref: /schemas/clock/samsung,s2mps11.yaml
->>>      description:
->>>        Child node describing clock provider.
->>>  
->>> +  charger:
->>> +    $ref: /schemas/power/supply/samsung,s2mu005-charger.yaml
->>> +    description:
->>> +      Child node describing battery charger device.
+On 15/04/2026 16:03, Kaustabh Chakraborty wrote:
+> On 2026-04-15 09:18 +02:00, Krzysztof Kozlowski wrote:
+>> On Tue, Apr 14, 2026 at 12:02:56PM +0530, Kaustabh Chakraborty wrote:
+>>> +description: |
+>>> +  The Samsung S2M series PMIC battery charger manages power interfacing
+>>> +  of the USB port. It may supply power, as done in USB OTG operation
+>>> +  mode, or it may accept power and redirect it to the battery fuelgauge
+>>> +  for charging.
 >>> +
->>> +  extcon:
->>
->> You got comment to drop extcon naming. If this stays, it's muic for
->> example.
->>
->>> +    $ref: /schemas/extcon/samsung,s2mu005-muic.yaml
->>> +    description:
->>> +      Child node describing extcon device.
+>>> +  This is a part of device tree bindings for S2M and S5M family of Power
+>>> +  Management IC (PMIC).
 >>> +
->>> +  flash:
->>> +    $ref: /schemas/leds/samsung,s2mu005-flash.yaml
->>> +    description:
->>> +      Child node describing flash LEDs.
+>>> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
+>>> +  additional information and example.
 >>> +
+>>> +allOf:
+>>> +  - $ref: power-supply.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - samsung,s2mu005-charger
+>>> +
+>>> +  port:
+>>> +    $ref: /schemas/graph.yaml#/properties/port
 >>
->> Please make it a separate binding file.
+>> That port is internal part of the device, thus should be dropped which
+>> leaves you with only one property - monitored battery - and therefore
+>> fold the node into the parent node.
 > 
-> What do you mean by that?
+> And that monitored-battery belongs to power-supply.yaml. Do I then
+> include the allOf block in the mfd/samsung,s2mps11.yaml under the
+> s2mu005 compatible?
 
-I mean, S2MU005 should go to its own file.
-
-> 
->>
->>>    interrupts:
->>>      maxItems: 1
->>>  
->>> @@ -43,6 +59,11 @@ properties:
->>>      description:
->>>        List of child nodes that specify the regulators.
->>>  
->>> +  rgb:
->>
->> led
-> 
-> Well flash ones are also LEDs. Would you rather have `flash { ... }` and
-> `rgb { ... }` under `led { ... }` instead?
-
-There is no approved name "rgb" for LEDs. What is the name for flash LEDs?
+allOf does not go under the compatible. The entire device schema should
+have $ref to power-supply.yaml, just like many other devices have that
+or different $ref.
 
 Best regards,
 Krzysztof
