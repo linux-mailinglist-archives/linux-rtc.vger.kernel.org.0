@@ -1,55 +1,55 @@
-Return-Path: <linux-rtc+bounces-6338-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6339-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0P4fL06c32kEWwAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6338-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:10:22 +0200
+	id KDBmAFmf32kEWwAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6339-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:23:21 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58C8E40527F
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:10:22 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A12C4053A7
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 16:23:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6892D302BE9B
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 14:04:04 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id EF7EB300BBA1
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2026 14:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD1C3D34AD;
-	Wed, 15 Apr 2026 14:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E73E3D411D;
+	Wed, 15 Apr 2026 14:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="UGOeCFuc"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="X3VqBch4"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3842A3D3339;
-	Wed, 15 Apr 2026 14:03:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BA63D3D1E;
+	Wed, 15 Apr 2026 14:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776261842; cv=none; b=RFaejnPRagqd5s4Nryxl8F+6Maaz712Kgr4ZuBpyUznNuy7WpOr4tH4ZVJT9QKk9pfdyjtVlx8CKT994YyHW8LoZ1RgkMbAlY1PAKSxzCuJfdPu8SMRkvLfdD1DA36hL7Dr6uDKz/D/mqFVp3/6H+dNt3/+q4xf59ETq5/fUJYw=
+	t=1776262998; cv=none; b=fznBQeBbHs/xqS6OpkRtIDKl9P/K7Ay9g+ywQq8iL/b21TJh4jHviV9sJo5YfEA4hh2zbkAh33dZM4p3qHRRLQu7U6YOP7A8kYaj7PzQQ91GpyzlqxHUrbOiLQ3G3HwXRWB71MFjm+A11YBvHw+QHvT/VtSNuXilm17N1S5uAmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776261842; c=relaxed/simple;
-	bh=aWGSn3CN9S+IbpjM6b+2zZExgq1YLo7wgpfx+ae9Qt4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=m6Tp5fk1XNbS/kWJbDjmEpfxf4dSzs2F8QW1zZEHTv/7QRob83Qi5Ys4vrWAZgwMBLWsL6sGkCYthSsiPk0lkXcn40U1EAjKnWKMaYwt0gBnLLU52l6VedeFDdPnFn+S6XU53ajexEG/8984EYAbvsPhSEB8xxe0Bw6fPxDiQWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=UGOeCFuc; arc=none smtp.client-ip=178.21.23.139
+	s=arc-20240116; t=1776262998; c=relaxed/simple;
+	bh=6ZLO2AMuAAH+XCdzW7ye5diyybZIn/a4i+Igy0qsURk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AFfaABqbJncRjK0m5KcdfwssNidBn3/xN6rtUsv37QEQbgedUFLXpnU+E/81Q+V2B9OYEhZvD4e+tsCZardY+BhJKuNXlbwjaVhOISNxwl/CUqpS3g+/hfGL6KQxqY7hUVp+JPSVyI+A367CJvcxnJtbGj8H8aW4FGVcj5uuEIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=X3VqBch4; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id EBFAB2715F;
-	Wed, 15 Apr 2026 16:03:49 +0200 (CEST)
+	by disroot.org (Postfix) with ESMTP id E95FA262A0;
+	Wed, 15 Apr 2026 16:23:15 +0200 (CEST)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mkeiFiIQuqGz; Wed, 15 Apr 2026 16:03:49 +0200 (CEST)
+ id rnWEuO4oD7w3; Wed, 15 Apr 2026 16:23:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1776261829; bh=aWGSn3CN9S+IbpjM6b+2zZExgq1YLo7wgpfx+ae9Qt4=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To;
-	b=UGOeCFucyHI3hsMEzq+/IOCQghT92u4U5lbNFTK7yaZM5Im1gRhbEPt5K6bf0xFq5
-	 B8oPsO5I4T1lNZiKuJ2NK6wyUMsVX8ALWlE0kZJdXL3R1wPHHNesUNnXQT2oVBuzuG
-	 WHw1hajTx4dB+Gbq69JItu5tz52Thsy74H8wIA/BOha9CYlcKQgtdhZST6ruKMkfBN
-	 s14aBNvndqe48+vxH1M6+Fl4kH8bZWkFzIWweIaEHvNBUECZfgoTTfcf3JkVbPo6C4
-	 k9nexMRmR7+fb2PK7QHQPZNdYfgeqo3AEA/VDl9rFGks1SSMyJdRSqPUTrcqUYhmsf
-	 bmRI5V3O5YWWg==
+	t=1776262995; bh=6ZLO2AMuAAH+XCdzW7ye5diyybZIn/a4i+Igy0qsURk=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To;
+	b=X3VqBch4/pUMXNri0BSB8m4YbE1iuvdppa+/dCMCXxxrRD1eh30UQu+kTQktKUX7F
+	 zEDUpfRjTrC7D3/C6leypbhJTWlFLoDCL5IpHJzPvcJtaafZcf6+gRv4Xaa4wqhGd9
+	 sT4JPbPSqOmh2PsZUAYJgmCXBRlluc+MN0lc/OIxjxAUE88QcxiP6dar/ApgNeZD/x
+	 dijJhGqjDZNdgN/+0r3voJjTmPVQXc+5W7b9zbpDbLHzgi8wHSpuDKt7Acxo+BgX6y
+	 GEkTY/Gy2FgznDCZZ557uhkzH8ZZLK1yJn2WCavQ2acXySVKyKbtLXnCqner8bOMpt
+	 4SyQBI3jWAKFA==
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -58,10 +58,8 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 15 Apr 2026 19:33:35 +0530
-Message-Id: <DHTS9H2EIM2D.2TC17F9WBOOR1@disroot.org>
-To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Kaustabh Chakraborty"
- <kauschluss@disroot.org>
+Date: Wed, 15 Apr 2026 19:52:54 +0530
+Message-Id: <DHTSO9L6YZTQ.WYM9ERXBGNGB@disroot.org>
 Cc: "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>, "Rob
  Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
  "Conor Dooley" <conor+dt@kernel.org>, "MyungJoo Ham"
@@ -75,24 +73,26 @@ Cc: "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>, "Rob
  <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
  <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
  <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v4 04/13] dt-bindings: power: supply: document Samsung
- S2M series PMIC charger device
+Subject: Re: [PATCH v4 05/13] dt-bindings: mfd: s2mps11: add documentation
+ for S2MU005 PMIC
 From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Kaustabh Chakraborty"
+ <kauschluss@disroot.org>
 References: <20260414-s2mu005-pmic-v4-0-7fe7480577e6@disroot.org>
- <20260414-s2mu005-pmic-v4-4-7fe7480577e6@disroot.org>
- <20260415-swinging-radical-junglefowl-85dcf7@quoll>
-In-Reply-To: <20260415-swinging-radical-junglefowl-85dcf7@quoll>
+ <20260414-s2mu005-pmic-v4-5-7fe7480577e6@disroot.org>
+ <20260415-notorious-dainty-starfish-58a13c@quoll>
+In-Reply-To: <20260415-notorious-dainty-starfish-58a13c@quoll>
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MV_CASE(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6338-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6339-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -108,51 +108,64 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	DKIM_TRACE(0.00)[disroot.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	NEURAL_HAM(-0.00)[-0.978];
+	NEURAL_HAM(-0.00)[-0.993];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,disroot.org:dkim,disroot.org:mid]
-X-Rspamd-Queue-Id: 58C8E40527F
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,disroot.org:dkim,disroot.org:mid]
+X-Rspamd-Queue-Id: 8A12C4053A7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 2026-04-15 09:18 +02:00, Krzysztof Kozlowski wrote:
-> On Tue, Apr 14, 2026 at 12:02:56PM +0530, Kaustabh Chakraborty wrote:
->> +description: |
->> +  The Samsung S2M series PMIC battery charger manages power interfacing
->> +  of the USB port. It may supply power, as done in USB OTG operation
->> +  mode, or it may accept power and redirect it to the battery fuelgauge
->> +  for charging.
+On 2026-04-15 09:17 +02:00, Krzysztof Kozlowski wrote:
+> On Tue, Apr 14, 2026 at 12:02:57PM +0530, Kaustabh Chakraborty wrote:
+>> =20
+>>    clocks:
+>>      $ref: /schemas/clock/samsung,s2mps11.yaml
+>>      description:
+>>        Child node describing clock provider.
+>> =20
+>> +  charger:
+>> +    $ref: /schemas/power/supply/samsung,s2mu005-charger.yaml
+>> +    description:
+>> +      Child node describing battery charger device.
 >> +
->> +  This is a part of device tree bindings for S2M and S5M family of Powe=
-r
->> +  Management IC (PMIC).
->> +
->> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml f=
-or
->> +  additional information and example.
->> +
->> +allOf:
->> +  - $ref: power-supply.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - samsung,s2mu005-charger
->> +
->> +  port:
->> +    $ref: /schemas/graph.yaml#/properties/port
+>> +  extcon:
 >
-> That port is internal part of the device, thus should be dropped which
-> leaves you with only one property - monitored battery - and therefore
-> fold the node into the parent node.
+> You got comment to drop extcon naming. If this stays, it's muic for
+> example.
+>
+>> +    $ref: /schemas/extcon/samsung,s2mu005-muic.yaml
+>> +    description:
+>> +      Child node describing extcon device.
+>> +
+>> +  flash:
+>> +    $ref: /schemas/leds/samsung,s2mu005-flash.yaml
+>> +    description:
+>> +      Child node describing flash LEDs.
+>> +
+>
+> Please make it a separate binding file.
 
-And that monitored-battery belongs to power-supply.yaml. Do I then
-include the allOf block in the mfd/samsung,s2mps11.yaml under the
-s2mu005 compatible?
+What do you mean by that?
 
 >
-> Best regards,
-> Krzysztof
+>>    interrupts:
+>>      maxItems: 1
+>> =20
+>> @@ -43,6 +59,11 @@ properties:
+>>      description:
+>>        List of child nodes that specify the regulators.
+>> =20
+>> +  rgb:
+>
+> led
 
+Well flash ones are also LEDs. Would you rather have `flash { ... }` and
+`rgb { ... }` under `led { ... }` instead?
+
+>
+>> +    $ref: /schemas/leds/samsung,s2mu005-rgb.yaml
+>> +    description:
+>> +      Child node describing RGB LEDs.
+>> +
 
