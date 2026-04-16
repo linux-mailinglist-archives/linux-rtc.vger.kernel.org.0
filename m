@@ -1,160 +1,175 @@
-Return-Path: <linux-rtc+bounces-6355-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6356-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SOslLpvB4Gm8lgAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6355-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 13:01:47 +0200
+	id SANGKOPF4GlelwAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6356-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 13:20:03 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19A7540D14A
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 13:01:46 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2370440D42E
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 13:20:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 41DFB30A5DFC
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 11:00:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 78E0C30C7D6D
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 11:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED073A6B8D;
-	Thu, 16 Apr 2026 11:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7708E372ECD;
+	Thu, 16 Apr 2026 11:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOsMoLtU"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="MRv+ziI7"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE51396D10;
-	Thu, 16 Apr 2026 11:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776337233; cv=none; b=uk/fV/HqUIOA8ngaUp45aXJZYpSRogFZK/HvA8whkj/QmeiSRRtXYU7rsk34JfGu1CV/uqqh1IyKolNCCP8FCHgqCR5EyO76OtUATmUdrGtjLlKrIOgXjd2l52afEeLhBBd5UPXZfgRedGpe3C3NqwHlaU8+4keOw7+3Ow9lVmw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776337233; c=relaxed/simple;
-	bh=UNM346qIOMFaM9dwhst0Kj3gfu0UGlzy8iqRjx8oFgg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uUYAWrynUn3V5hpiwAjdcv36PmHDanh28jPJ1JHCQJfjXtVkiKVrejuV+PjfeF7NVi88WV8xKaSF4TZueXze0j2LAcfNape6OSUBbmOCX1w7h1nEAeWrVIbW2jh3T4IbMJZGTI/vcVxGpkWkBKZvS6LmfNPeYpb+NfzuA/GcKdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOsMoLtU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB993C2BCB8;
-	Thu, 16 Apr 2026 11:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776337232;
-	bh=UNM346qIOMFaM9dwhst0Kj3gfu0UGlzy8iqRjx8oFgg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fOsMoLtUFBTYN/S7ykCDnNBfjJHnElGNUadIiNcOQ5pSRpwUQEuoj6RWlkj1Avdpc
-	 2z95fahqe1SWwHeFqXEDlpUSD5TatBtbFVxEIfKmvz5FLYSSq/3W17bhP+3OuDOLCS
-	 JAJY0QK05fvL/eix3eyGp8Ixbw116hHMtAlYdZ+daYQu1iNjnowqS4wT8X/FfofQH3
-	 nAoFNaXCnDD5shH1ntgzVB3AqvwCbhjhv1c6X2LL9QP+vOuZ+yZbzDYxRr41oavRhG
-	 8zN+1MGv27IoDsCsNpAzx1A+9pOIIaV5jFYGgEXj7KECwyi0l564tFitjKPywOa/8F
-	 1AH+SfANb6ajg==
-Message-ID: <89bb6063-d473-498e-bca5-0185325608c3@kernel.org>
-Date: Thu, 16 Apr 2026 13:00:26 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958FD3A6F03
+	for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2026 11:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776338102; cv=pass; b=JLpN4o3D7pMne+pM3TBZOc5sMYIn98gNEAKGCXoz7m2EHtB3tRu260H6vKXFLQkH0vR3/pnczIkPRifVqH1nXUpBxFzedSwbMFb0zhkr9XQDHGr8d64QIYtfenNrlvmArDedFqUWglnPKSu1/nWNrqNrZvtVGEk1fje4O/fWFsQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776338102; c=relaxed/simple;
+	bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OCG2httS1up6OUr1NPp3lTdVlb+cUTNcHDgg5bIhxBrrrN8ExkGFVn9IvFgCEYnGrOFOl+DzaT74KTw9hqskU9ilMLl11FwSap5JGu0npGG3VC5IzowhE2EB6Pe7riCBVhtiURr/jn6KpWsL8+Nz9bUb1amvXQUhu6Ocu8MK4cw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=MRv+ziI7; arc=pass smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-41c6204e57cso1548508fac.1
+        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2026 04:14:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776338098; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QF3NWLoIamMhvzbzMHgn6++AVSP5dLQRwRSfYvA4rKGEBa+d+YUDyVoZua+6udI0Gw
+         nm0Xy+C9MzZEn+wiESt9gwnYthEepgJr8P6hqMU+cFWkIBFIWJb+zCffJO02S8DrjW/W
+         XpulHU4IABA5b8dhg8qbSwonZh6AlsnBrfWLIL+QfTC18Ym1PnZK0YZLQyseSENL9Q0F
+         X/AmGM3kPLg2JJKwGKkZzDEWmqhEbmsn8QFZNr9Lb5LTHUx0dfXNa5VblCnQ7KP66omy
+         viFW/BfGOQgTLGqhL8EYI/H3+bsVyxxq8HB7VTw98pvitCG5E71LW7ExZxqkQWE9qFpL
+         hROQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
+        fh=ZMkYzUHY1lteMHAy2H5ICE0kzP9hBWLN7dBBIJ+Vdtw=;
+        b=GxNmjpd5MYI9M85t+uAwGctvS3a/cexpw0jWS6fKbktz1f3NGRogOAzter5e6EsLah
+         qsbns0fWKNKeXRQou7lH/Hx93sQB9u/mRlc6G5b+S5zJv8z8eaz9vMead9jwe2bq0crm
+         QJv8ntBwWgg0rZ+laPbvZ4dV/0Dp0mpqu7jYz3O0cal53qwXDpfUpU/8DB9DY956Gkxn
+         eUpNLssnwRG9V2oGC+bkkpFZJBDdz9xei0fDLUlxn+JogZ48chmGG+UYV/QN2a2oWzUk
+         eR7ZRWHqzoxh5wFE5CRocFulvo79bwqiEINOXan2+slQ2lNTACcgeM9pHnQOExmYENgB
+         IjvA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1776338098; x=1776942898; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
+        b=MRv+ziI7lNcO/sWCqah3PVn1HYy/htruGU97Cig+NwwrgAwZj+ioGYFJzCvgLM0coV
+         RsyoALN9lJ5MJoPkbjwfkd5rB2Z2aQg5Fnab2okfrBhzOyFDGeCk9VWy2i4Yq5KcujW+
+         j72TEWtdPsKQRJZ40xowowfBn3rX4cRQ7X8kwpSqOGi3WcZRrEfH3Wu0nfmygHIwHPmd
+         ghkP3d4129aD7ue3T8/+nzX1fk45SzY6I6e/3QTlhG9AG2F8nVt6ytJMmy3xGmmxHTqc
+         w5RHljY5tnJx0mbbnRAezoLh9u89XbJd85THHatANOlVI9k+J9hftZU6Nk6IqtBmGStZ
+         sxQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776338098; x=1776942898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
+        b=K2qDAKND4XL7OfLRz1jY+l49FS3+EFaBBrItNn9BvmDmhSpEHBSF65b4wj5BcJX3ol
+         NWKJ1oBuqrSdHZmQre4hnqRDVcWbQYDvOkrxyGtuOYthIipXuX0Cqi3go7ANQT4NxY3H
+         yg1lvLAOJZm608gsEOE2x6X3a84E8DMUCj9/z2UumAFejlNou8DAWb3reoE+lfUjHIax
+         DK9Oma7xRS3D22nGrJUbd3J8Netk4md/KVQaWsRm8R7SH7rd/Rymg+06N5dCo3GnuBME
+         2YymNcHzqFIZEKBFJ+IKN9UqhImblmH9diKkljMBv186foMQpOoBENIQVNJ9Akotjw/c
+         XvhA==
+X-Forwarded-Encrypted: i=1; AFNElJ/etO1g6ETAVkxOydYp+tKU6q8B/CEvCZHRoDdjNOl85J1rrHvMe2hoXUcJv6DNp8kefvF+YHdxZpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7V4hUXWD0FoebjH6wsoIyiI3aiMaUNnO5QGgZRQmvKPDMfshu
+	kJQ4IZkc22wix7xcSZy1bUGkNJT2FxrHrmcsatrRnwQYwMoJnrt9MB0ru2k00pjxwfMtUGIcg00
+	wAUjopDupeZR+/Lg9fSSCcCAB+SD4YGZ2IGW4YT8j
+X-Gm-Gg: AeBDieskFFmDeND5NOZlr7Q5bNWUbxinoHnQd5BUl2Xfq3bbaA1jDT/2XlVYn2KaRgR
+	l+JtwEoP7fhR4/QH5z+pj6ofk8ckm3/UWT3lGnaeBZAWWz1xzMf0qkxMD5eiyK1YNvDGCVoK861
+	9PaVxvqun8TgJAyFSCNEtOcJ81m/HlZrPoBguFiCuEwiLmYIsQz38WLCjBBE/GvpiImGu6F6E49
+	yau0p7W+bNftmLRKtfpHZ0KAZOPR8hFx4mr4Ni+CjrDclwpgN346WErVVP99vhOwv9zjDbt7lXc
+	mQ42AmvpEot5Kw7uqf/UmIgYnT9O9Id0xqi445eWkQ==
+X-Received: by 2002:a05:6870:eca2:b0:417:3414:3ce6 with SMTP id
+ 586e51a60fabf-42813a70f59mr680899fac.0.1776338098368; Thu, 16 Apr 2026
+ 04:14:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <20260416092414.3210383-1-adriana@arista.com> <20260416095706.3212158-1-adriana@arista.com>
+ <20260416095706.3212158-2-adriana@arista.com> <89bb6063-d473-498e-bca5-0185325608c3@kernel.org>
+In-Reply-To: <89bb6063-d473-498e-bca5-0185325608c3@kernel.org>
+From: Adriana Nicolae <adriana@arista.com>
+Date: Thu, 16 Apr 2026 14:14:47 +0300
+X-Gm-Features: AQROBzCFCGs6bn6qdgFdMqeO4xeOIwgmQaiXCM5o1sprYuY5YgEhIxJrKxK-Yr4
+Message-ID: <CAERbo5x6nyQS9nm39q=9cY6y2bn-w4_e86U0OgXO1=+tSOKa+A@mail.gmail.com>
 Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: ti,bq32k: Add delay on rtc reads
-To: Adriana Stancu <adriana@arista.com>, alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org
-References: <20260416092414.3210383-1-adriana@arista.com>
- <20260416095706.3212158-1-adriana@arista.com>
- <20260416095706.3212158-2-adriana@arista.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20260416095706.3212158-2-adriana@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[arista.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[arista.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6355-lists,linux-rtc=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6356-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[arista.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[adriana@arista.com,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:url]
-X-Rspamd-Queue-Id: 19A7540D14A
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:url,mail.gmail.com:mid,arista.com:dkim]
+X-Rspamd-Queue-Id: 2370440D42E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 16/04/2026 11:57, Adriana Stancu wrote:
-> Add a configurable "ti,read-settle-us" property to resolve a limitation
-> where aggressive I2C polling prevents the BQ32000's internal register to
-> update. This ensures the hardware has sufficient idle time to update its
-> buffer, preventing stale data reads on systems where the "interrupts" are
-> not configured.
-
-And why does the value different between each board layouts? Same
-device, different board and you need different value?
-
-Do not attach (thread) your patchsets to some other threads (unrelated
-or older versions). This buries them deep in the mailbox and might
-interfere with applying entire sets. See also:
-https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/submitting-patches.rst#L830
+On Thu, Apr 16, 2026 at 2:00=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 16/04/2026 11:57, Adriana Stancu wrote:
+> > Add a configurable "ti,read-settle-us" property to resolve a limitation
+> > where aggressive I2C polling prevents the BQ32000's internal register t=
+o
+> > update. This ensures the hardware has sufficient idle time to update it=
+s
+> > buffer, preventing stale data reads on systems where the "interrupts" a=
+re
+> > not configured.
+>
+> And why does the value different between each board layouts? Same
+> device, different board and you need different value?
+>
+> Do not attach (thread) your patchsets to some other threads (unrelated
+> or older versions). This buries them deep in the mailbox and might
+> interfere with applying entire sets. See also:
+> https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/s=
+ubmitting-patches.rst#L830
+>
+You are right, the delay should be specific to the RTC chip, not the
+board layout. I will drop the dt property and send a v3 that
+implements a fixed 2ms delay in the driver.
+This will be applied only when an interrupt is not present, because
+this is when the userspace will use polling.
 
 Best regards,
-Krzysztof
+Adriana
 
