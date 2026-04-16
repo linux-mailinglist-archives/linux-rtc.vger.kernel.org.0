@@ -1,244 +1,120 @@
-Return-Path: <linux-rtc+bounces-6352-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6353-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +NgXIZqy4Gm8kwAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6352-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 11:57:46 +0200
+	id WNl1AyW04Gn5kwAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6353-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 12:04:21 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAE1040CA5D
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 11:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 10B3240CB00
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 12:04:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 22A27302086D
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 09:57:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 61A41300BEBF
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 10:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3614439DBEE;
-	Thu, 16 Apr 2026 09:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2880C39DBC2;
+	Thu, 16 Apr 2026 10:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="A7xhCwCP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qyK79Tbv"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C497739D6F0
-	for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2026 09:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6070737C11C;
+	Thu, 16 Apr 2026 10:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776333437; cv=none; b=QQ1wvk7DcvA+gSa39CtohR+WjU9/PiqtYrydRELDBxGLf0aQ/U07bMEaA2wHgihxC9QzpNtBgB2D5InwOyF64NOpRoGuri6+aJNXEacrwShuONuw4PhJKSEGpfEQ9MkqLV9BExqLcXbuNVXV5OHqXxirahHv9ObyScy4nNNoE9Q=
+	t=1776333841; cv=none; b=qG4NtR1QPh+DxlO9mpsT79sSAt06K3rzEeVTY/K0jbe8pEBuFzvKj6DXKT958vNCx2WQiS5+X5EBvLtu6IHgzTRXTDlqpAJP9+JnLio8bD262t2V1eHYKOZxvFdLPKxKQOj0SGCzyGLkKq7nagL646cTqGQqlYE/Dqnpcvcjiz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776333437; c=relaxed/simple;
-	bh=lIJnDyanoQRdooXW+rb4vRnTiHA4NZZ2a5UsiOLgCzQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OXM965C5shWPaMwopDCZf6MbXmAGhjhkq962gtO7btqCP4i6GM8vL9AJYCmSR+TgYLq+d4pSEms4Qzf/LBjt20OVSXb1OTZ3WhK50dcz+Nz/Ys92LsMl/LVOCY32YTqhO4QL3AeIY5eVANpDBZ8G/bJ90W6e8mi7gHQlpEPWqxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=A7xhCwCP; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2dd52990758so268699eec.1
-        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2026 02:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1776333435; x=1776938235; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H/1T705jUCHUuc7zYF9p5WCGH43XsT88FDPreDZ7P4Y=;
-        b=A7xhCwCPhwfdNhXwpyVgqBtP5J7dey86XN3zXBRoSA1zyAn8nrZxohuS1t3a6F4Jye
-         yKzbL7P/odW4m+A6E3OvRcOVfmx+JCgSUhHJtUDlFijLhfjF9GzR+Yy5lU76cAIzmcoh
-         f0meYorTbcBqjlKGRjjWwo2anNpES6Dcy6LeVDLp7D9ljeW8yGVhhayCvzY+2M7IxEMD
-         FZhRFV8WbS5lMyrAtPzl7CunAhIwnxHxPLRDMOHUJNPP6sAxhWwePLeTn6ArcWYBDtpw
-         SWeiPuVan5eO1uTbp8RhROUouxAsW+aZCzg9vm6CiWrdBTLAXBQ4yna6okVS2a8gDa9w
-         AClQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776333435; x=1776938235;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H/1T705jUCHUuc7zYF9p5WCGH43XsT88FDPreDZ7P4Y=;
-        b=ncKI9gllIHD1bnJ5MbT7S8rWP3cQUldvCbhkoOyOVJps47COCmt0pO7ttXcdAxhnjm
-         0/n/avaCPDqKGKlxqF4KSDhb9bkf0izhi5CUZvNtAYXO4Qi+W6NV9P9rn7Yjowx7kSd3
-         VP2VetSGCdOTh/y6eyYTdiLsmlR0ozCuSX1Ofo9vyBtDXHzYWxxtBn8y/KVdQ7058deb
-         WvDQZQFzJRb0Rdz2kEoFek0CnT9/fUz8iA14mxvH3Zf+nLU8St0E+2s/v530VHt76t+3
-         T3u/Il4ObrC/he7+h8S62PAVuHE9aGhDOmI8HqWTlBS2IiXumTRukosKuKRYLCHvMqCe
-         BNfQ==
-X-Gm-Message-State: AOJu0YzLjPzuu8Zf/dqy6FYM3ZKHlDDP7+OE+MaZ9fysbRCtHsMEaFS6
-	Dp4TP89rV+60QleIr1aJF1RMDMVL7Prnpbb8ELeidz7hnvP3tVl+l9e+EPZ/Onu2Mg==
-X-Gm-Gg: AeBDieuzI7julj+ySxPhuUgC3FVkd+yoCMOBx150mMMd1gddKA+VRIPEW62s2gpG2cX
-	4d92igkqyu2GMMAoTLTC4f5aOFY0z4ers4luyutFyRO2mBBWAAHse5HVLpPM42/uszcYBqfgpk5
-	4Kt3mCzYny7az4Gf3QdH7pv0hpoC9KfSlpBOvAkPvqOilprwkKRPrqbAezh6wPKfmP2hHWi/wDh
-	mxIu7YDS4mNmgHuS/jXIjfoTPntOiF4pEdIogg45X+6dB8lmi+KmuIsEhwTQLu68HGxhbAIAchE
-	49U7D9Mb/zpammAXl1MgpgTIJQNZnQDhK1HdWELppOuy2lvo/uVhz+GD5mrlGjul7mofwGAq9jk
-	F5xJ6sX7cSZW1rwRYr5UgxZoqGSdx1pf5+6qu/kXEwCIn5PG+6vhzv/3XUm1gNxC0B4jjxEiNog
-	EMHd48m4G3Z8/htWI9VhjmhMzTlUpwUWPxuBmawlnnvivc1U2W7nbr8VHHXR8=
-X-Received: by 2002:a05:7022:6888:b0:119:e56b:c3f1 with SMTP id a92af1059eb24-12c658ed58cmr333493c88.1.1776333434608;
-        Thu, 16 Apr 2026 02:57:14 -0700 (PDT)
-Received: from adriana-schoodic-rtc.sjc.aristanetworks.com ([74.123.28.10])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c5f3f3d93sm4532913c88.15.2026.04.16.02.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 02:57:14 -0700 (PDT)
-From: Adriana Stancu <adriana@arista.com>
-To: alexandre.belloni@bootlin.com
-Cc: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	Adriana Stancu <adriana@arista.com>
-Subject: [PATCH v2 2/2] rtc: bq32000: add configurable delay between RTC reads
-Date: Thu, 16 Apr 2026 02:57:06 -0700
-Message-ID: <20260416095706.3212158-3-adriana@arista.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260416095706.3212158-1-adriana@arista.com>
+	s=arc-20240116; t=1776333841; c=relaxed/simple;
+	bh=eJznwiWu3GS+G9YuTGcBBBnq7Dob2hnAe6bFBd1fFWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eGZZUZiUIpS24qjOHgnH3q7Rh9zfEt+m8TpLsZzbCe4bBkFni0E7lWEN1CHvvMPIwq7SpzAsy71XVFaVyBRXkAvoiY18WSTtf0nkUskqOI1GP58x16Rq/Ne/BUEF5Kp1XTETHNRp1DYNoREwOK6LEoYZjkWG474Licod8HozmX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qyK79Tbv; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id CCF2B4E42A1A;
+	Thu, 16 Apr 2026 10:03:56 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A286260495;
+	Thu, 16 Apr 2026 10:03:56 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 215111045A177;
+	Thu, 16 Apr 2026 12:03:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776333836; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=jz6qYFKNci22zxAWa0vLjki+Xbsl10MmWaT9hS9sWNc=;
+	b=qyK79Tbv0He5cPPGsSwcn+lVCvXGjTmv3N4N7u/qDZhmFp+hbI8pLmW9mcWyLOd2VyN+14
+	xaoZrDsp/5wI4SSW45AJnwFEWEQOVHHRb0CE3upt71IMae6Pc0F7VTF2Iar2k3B9wmNk/1
+	M3tIqi0ZASnSivJh5CEzgxo4Ft5/fHpTAT3m+mCW4Miqm29cFvvFaDIlwWjOeIygWhtMSn
+	okX4uO2v2SidwDQyrLSFNUlJLru3RTjyLVjh/nYirnb9UIKwr02CvoU/KDpE27Zb5QShtF
+	tNaWz7Fk9leY572KbswxsrSXuyN0peDtinPIJd7OOcSh5Uk9fvGrwL9Y/pH/EA==
+Date: Thu, 16 Apr 2026 12:03:54 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Adriana Stancu <adriana@arista.com>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: ti,bq32k: Add delay on rtc reads
+Message-ID: <20260416100354ac85cb48@mail.local>
 References: <20260416092414.3210383-1-adriana@arista.com>
  <20260416095706.3212158-1-adriana@arista.com>
+ <20260416095706.3212158-2-adriana@arista.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260416095706.3212158-2-adriana@arista.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[arista.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[arista.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[adriana@arista.com,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6352-lists,linux-rtc=lfdr.de];
+	DKIM_TRACE(0.00)[bootlin.com:+];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6353-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-0.997];
-	DKIM_TRACE(0.00)[arista.com:+];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,arista.com:email,arista.com:dkim,arista.com:mid]
-X-Rspamd-Queue-Id: BAE1040CA5D
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.local:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 10B3240CB00
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When the RTC is used on systems without a interrupt line, userspace tools
-like "hwclock" fall back to a frequent polling loop to synchronize with
-the edge of the next second.
+On 16/04/2026 02:57:05-0700, Adriana Stancu wrote:
+> Add a configurable "ti,read-settle-us" property to resolve a limitation
+> where aggressive I2C polling prevents the BQ32000's internal register to
+> update. This ensures the hardware has sufficient idle time to update its
+> buffer, preventing stale data reads on systems where the "interrupts" are
+> not configured.
+> 
 
-On the BQ32000, this aggressive polling can temporarly lock the register
-refresh cycle, because the continuous transfers prevent the hardware from
-updating the buffer. This results in stale data reads or select() timeouts
-in userspace.
+Why does it need to be configured?
 
-This patch introduces a configurable settle delay via "ti,read-settle-us"
-property. If this property is specified, the driver uses a delay before
-reading the RTC registers. This provides a sufficient idle time for the
-hardware to sync with the register buffer.
 
-Signed-off-by: Adriana Stancu <adriana@arista.com>
----
- drivers/rtc/rtc-bq32k.c | 34 ++++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
-index 7ad34539be4d..0cbfa0909732 100644
---- a/drivers/rtc/rtc-bq32k.c
-+++ b/drivers/rtc/rtc-bq32k.c
-@@ -16,6 +16,7 @@
- #include <linux/kstrtox.h>
- #include <linux/errno.h>
- #include <linux/bcd.h>
-+#include <linux/delay.h>
- 
- #define BQ32K_SECONDS		0x00	/* Seconds register address */
- #define BQ32K_SECONDS_MASK	0x7F	/* Mask over seconds value */
-@@ -48,6 +49,11 @@ struct bq32k_regs {
- 	uint8_t		years;
- };
- 
-+struct bq32k_data {
-+	struct rtc_device *rtc;
-+	u32 read_delay_us;
-+};
-+
- static struct i2c_driver bq32k_driver;
- 
- static int bq32k_read(struct device *dev, void *data, uint8_t off, uint8_t len)
-@@ -89,9 +95,17 @@ static int bq32k_write(struct device *dev, void *data, uint8_t off, uint8_t len)
- 
- static int bq32k_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
-+	struct bq32k_data *bq32k = dev_get_drvdata(dev);
- 	struct bq32k_regs regs;
- 	int error;
- 
-+	/*
-+	 * When the device doesn't have the interrupt connected, prevent
-+	 * userpace from polling the RTC registers to frequently.
-+	 */
-+	if (bq32k && bq32k->read_delay_us)
-+		usleep_range(bq32k->read_delay_us, bq32k->read_delay_us + 50);
-+
- 	error = bq32k_read(dev, &regs, 0, sizeof(regs));
- 	if (error)
- 		return error;
-@@ -253,13 +267,18 @@ static void bq32k_sysfs_unregister(struct device *dev)
- static int bq32k_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
--	struct rtc_device *rtc;
-+	struct bq32k_data *bq32k;
- 	uint8_t reg;
- 	int error;
-+	uint32_t settle_us = 0;
- 
- 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
- 		return -ENODEV;
- 
-+	bq32k = devm_kzalloc(dev, sizeof(*bq32k), GFP_KERNEL);
-+	if (!bq32k)
-+		return -ENOMEM;
-+
- 	/* Check Oscillator Stop flag */
- 	error = bq32k_read(dev, &reg, BQ32K_SECONDS, 1);
- 	if (!error && (reg & BQ32K_STOP)) {
-@@ -280,10 +299,13 @@ static int bq32k_probe(struct i2c_client *client)
- 	if (client->dev.of_node)
- 		trickle_charger_of_init(dev, client->dev.of_node);
- 
--	rtc = devm_rtc_device_register(&client->dev, bq32k_driver.driver.name,
--						&bq32k_rtc_ops, THIS_MODULE);
--	if (IS_ERR(rtc))
--		return PTR_ERR(rtc);
-+	bq32k->rtc = devm_rtc_device_register(&client->dev, bq32k_driver.driver.name,
-+					      &bq32k_rtc_ops, THIS_MODULE);
-+	if (IS_ERR(bq32k->rtc))
-+		return PTR_ERR(bq32k->rtc);
-+
-+	device_property_read_u32(dev, "ti,read-settle-us", &settle_us);
-+	bq32k->read_delay_us = settle_us;
- 
- 	error = bq32k_sysfs_register(&client->dev);
- 	if (error) {
-@@ -293,7 +315,7 @@ static int bq32k_probe(struct i2c_client *client)
- 	}
- 
- 
--	i2c_set_clientdata(client, rtc);
-+	i2c_set_clientdata(client, bq32k);
- 
- 	return 0;
- }
 -- 
-2.51.0
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
