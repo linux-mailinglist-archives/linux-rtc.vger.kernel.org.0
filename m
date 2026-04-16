@@ -1,175 +1,167 @@
-Return-Path: <linux-rtc+bounces-6356-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6357-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SANGKOPF4GlelwAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6356-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 13:20:03 +0200
+	id 0LKNAwzT4GkGmgAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6357-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 14:16:12 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2370440D42E
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 13:20:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5DAA40DF69
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 14:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 78E0C30C7D6D
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 11:15:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B70B7305776E
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2026 12:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7708E372ECD;
-	Thu, 16 Apr 2026 11:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D733B6342;
+	Thu, 16 Apr 2026 12:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="MRv+ziI7"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="S7USaVxd"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958FD3A6F03
-	for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2026 11:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776338102; cv=pass; b=JLpN4o3D7pMne+pM3TBZOc5sMYIn98gNEAKGCXoz7m2EHtB3tRu260H6vKXFLQkH0vR3/pnczIkPRifVqH1nXUpBxFzedSwbMFb0zhkr9XQDHGr8d64QIYtfenNrlvmArDedFqUWglnPKSu1/nWNrqNrZvtVGEk1fje4O/fWFsQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776338102; c=relaxed/simple;
-	bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OCG2httS1up6OUr1NPp3lTdVlb+cUTNcHDgg5bIhxBrrrN8ExkGFVn9IvFgCEYnGrOFOl+DzaT74KTw9hqskU9ilMLl11FwSap5JGu0npGG3VC5IzowhE2EB6Pe7riCBVhtiURr/jn6KpWsL8+Nz9bUb1amvXQUhu6Ocu8MK4cw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=MRv+ziI7; arc=pass smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-41c6204e57cso1548508fac.1
-        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2026 04:14:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776338098; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QF3NWLoIamMhvzbzMHgn6++AVSP5dLQRwRSfYvA4rKGEBa+d+YUDyVoZua+6udI0Gw
-         nm0Xy+C9MzZEn+wiESt9gwnYthEepgJr8P6hqMU+cFWkIBFIWJb+zCffJO02S8DrjW/W
-         XpulHU4IABA5b8dhg8qbSwonZh6AlsnBrfWLIL+QfTC18Ym1PnZK0YZLQyseSENL9Q0F
-         X/AmGM3kPLg2JJKwGKkZzDEWmqhEbmsn8QFZNr9Lb5LTHUx0dfXNa5VblCnQ7KP66omy
-         viFW/BfGOQgTLGqhL8EYI/H3+bsVyxxq8HB7VTw98pvitCG5E71LW7ExZxqkQWE9qFpL
-         hROQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
-        fh=ZMkYzUHY1lteMHAy2H5ICE0kzP9hBWLN7dBBIJ+Vdtw=;
-        b=GxNmjpd5MYI9M85t+uAwGctvS3a/cexpw0jWS6fKbktz1f3NGRogOAzter5e6EsLah
-         qsbns0fWKNKeXRQou7lH/Hx93sQB9u/mRlc6G5b+S5zJv8z8eaz9vMead9jwe2bq0crm
-         QJv8ntBwWgg0rZ+laPbvZ4dV/0Dp0mpqu7jYz3O0cal53qwXDpfUpU/8DB9DY956Gkxn
-         eUpNLssnwRG9V2oGC+bkkpFZJBDdz9xei0fDLUlxn+JogZ48chmGG+UYV/QN2a2oWzUk
-         eR7ZRWHqzoxh5wFE5CRocFulvo79bwqiEINOXan2+slQ2lNTACcgeM9pHnQOExmYENgB
-         IjvA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1776338098; x=1776942898; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
-        b=MRv+ziI7lNcO/sWCqah3PVn1HYy/htruGU97Cig+NwwrgAwZj+ioGYFJzCvgLM0coV
-         RsyoALN9lJ5MJoPkbjwfkd5rB2Z2aQg5Fnab2okfrBhzOyFDGeCk9VWy2i4Yq5KcujW+
-         j72TEWtdPsKQRJZ40xowowfBn3rX4cRQ7X8kwpSqOGi3WcZRrEfH3Wu0nfmygHIwHPmd
-         ghkP3d4129aD7ue3T8/+nzX1fk45SzY6I6e/3QTlhG9AG2F8nVt6ytJMmy3xGmmxHTqc
-         w5RHljY5tnJx0mbbnRAezoLh9u89XbJd85THHatANOlVI9k+J9hftZU6Nk6IqtBmGStZ
-         sxQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776338098; x=1776942898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qP68Jrnbqvxfi+YiKfJ2QG2j9PgNyniNDllkv4faoBM=;
-        b=K2qDAKND4XL7OfLRz1jY+l49FS3+EFaBBrItNn9BvmDmhSpEHBSF65b4wj5BcJX3ol
-         NWKJ1oBuqrSdHZmQre4hnqRDVcWbQYDvOkrxyGtuOYthIipXuX0Cqi3go7ANQT4NxY3H
-         yg1lvLAOJZm608gsEOE2x6X3a84E8DMUCj9/z2UumAFejlNou8DAWb3reoE+lfUjHIax
-         DK9Oma7xRS3D22nGrJUbd3J8Netk4md/KVQaWsRm8R7SH7rd/Rymg+06N5dCo3GnuBME
-         2YymNcHzqFIZEKBFJ+IKN9UqhImblmH9diKkljMBv186foMQpOoBENIQVNJ9Akotjw/c
-         XvhA==
-X-Forwarded-Encrypted: i=1; AFNElJ/etO1g6ETAVkxOydYp+tKU6q8B/CEvCZHRoDdjNOl85J1rrHvMe2hoXUcJv6DNp8kefvF+YHdxZpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7V4hUXWD0FoebjH6wsoIyiI3aiMaUNnO5QGgZRQmvKPDMfshu
-	kJQ4IZkc22wix7xcSZy1bUGkNJT2FxrHrmcsatrRnwQYwMoJnrt9MB0ru2k00pjxwfMtUGIcg00
-	wAUjopDupeZR+/Lg9fSSCcCAB+SD4YGZ2IGW4YT8j
-X-Gm-Gg: AeBDieskFFmDeND5NOZlr7Q5bNWUbxinoHnQd5BUl2Xfq3bbaA1jDT/2XlVYn2KaRgR
-	l+JtwEoP7fhR4/QH5z+pj6ofk8ckm3/UWT3lGnaeBZAWWz1xzMf0qkxMD5eiyK1YNvDGCVoK861
-	9PaVxvqun8TgJAyFSCNEtOcJ81m/HlZrPoBguFiCuEwiLmYIsQz38WLCjBBE/GvpiImGu6F6E49
-	yau0p7W+bNftmLRKtfpHZ0KAZOPR8hFx4mr4Ni+CjrDclwpgN346WErVVP99vhOwv9zjDbt7lXc
-	mQ42AmvpEot5Kw7uqf/UmIgYnT9O9Id0xqi445eWkQ==
-X-Received: by 2002:a05:6870:eca2:b0:417:3414:3ce6 with SMTP id
- 586e51a60fabf-42813a70f59mr680899fac.0.1776338098368; Thu, 16 Apr 2026
- 04:14:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA26839FCD7;
+	Thu, 16 Apr 2026 12:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776341761; cv=none; b=lTPLg9oQ3gwrrazUKgODYEfCkd7jjJxAwblRxuaKKJDT95O3JNJequKS3+RhyVdrjMfHPom3RoYrh/4d9E4Ct9CRFbsoUbTkqbQQLKKAcB/jDLSHc2CqeSsvQq54wEYePWp0ZdPuAzxuNuBG8b6DOLtccQXOz5tMnGZx5XRHqBc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776341761; c=relaxed/simple;
+	bh=gZLO9lN2kJhvahZVktWGr0uWFAt2YTX/UxFa5gJq4A8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=oSwzCM+QvK7GCVlyRsnBticF0MXmXzk+u1Vk/OPpp6jkJGtYFqLEvDyWPIi0HCIcYRqiymwyjiXdJM1GKnXrfkyu++VcELlMwP0w+dokA74lVkrdGsUdQjCTM9naHapg+bISksjAGn7ZMmrMurQRRN96Pdc5gqTjmAilQ+AWHR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=S7USaVxd; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id D25DF2652E;
+	Thu, 16 Apr 2026 14:15:56 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X6_CcIs2Vbau; Thu, 16 Apr 2026 14:15:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1776341756; bh=gZLO9lN2kJhvahZVktWGr0uWFAt2YTX/UxFa5gJq4A8=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=S7USaVxd65Og3uIBkajZCPvp5uwQZmZ7aCXvg10iCZY+jeBRc/BMfVzEvDleesVkg
+	 zLq8XGpCS0tbNavffePMl5DA6RCAH0jOM3KNEmy5DCj6a0BoGV38qsN26VB1WglB7t
+	 fT2puLTOvqjZiVoA4BPCbpyKRCY7189XIxmioDYpRAAY/NN3q5RkjOBI0gRM7u6zGc
+	 +egLI8//Sm2SGNidrv5TEjS9Gga2NeNfGKOSFk/CdPDViYFLc2W7m+N52QVgB0Wml0
+	 w4rlnKVUAdQ3K9UVfY7NGHeml8SVHt8HFxkwEyJRqhYpuUgRRuJ8tdEmGnjN2t1UzP
+	 GQiJcPVvGWHEQ==
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260416092414.3210383-1-adriana@arista.com> <20260416095706.3212158-1-adriana@arista.com>
- <20260416095706.3212158-2-adriana@arista.com> <89bb6063-d473-498e-bca5-0185325608c3@kernel.org>
-In-Reply-To: <89bb6063-d473-498e-bca5-0185325608c3@kernel.org>
-From: Adriana Nicolae <adriana@arista.com>
-Date: Thu, 16 Apr 2026 14:14:47 +0300
-X-Gm-Features: AQROBzCFCGs6bn6qdgFdMqeO4xeOIwgmQaiXCM5o1sprYuY5YgEhIxJrKxK-Yr4
-Message-ID: <CAERbo5x6nyQS9nm39q=9cY6y2bn-w4_e86U0OgXO1=+tSOKa+A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: ti,bq32k: Add delay on rtc reads
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[arista.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[arista.com:s=google];
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 16 Apr 2026 17:45:32 +0530
+Message-Id: <DHUKLAE757OT.XQW1LJYKC2FM@disroot.org>
+Subject: Re: [PATCH v4 02/13] dt-bindings: leds: document Samsung S2M series
+ PMIC RGB LED device
+From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Kaustabh Chakraborty"
+ <kauschluss@disroot.org>
+Cc: "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "MyungJoo Ham"
+ <myungjoo.ham@samsung.com>, "Chanwoo Choi" <cw00.choi@samsung.com>,
+ "Sebastian Reichel" <sre@kernel.org>, =?utf-8?q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Nam Tran" <trannamatk@gmail.com>,
+ =?utf-8?q?=C5=81ukasz_Lebiedzi=C5=84ski?= <kernel@lvkasz.us>,
+ <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>
+References: <20260414-s2mu005-pmic-v4-0-7fe7480577e6@disroot.org>
+ <20260414-s2mu005-pmic-v4-2-7fe7480577e6@disroot.org>
+ <20260415-sensible-kiwi-of-argument-44d6ed@quoll>
+ <DHTWNPSQ06IJ.24A9E1FL1RWER@disroot.org>
+ <20260416-upbeat-archetypal-mantis-1ede48@quoll>
+In-Reply-To: <20260416-upbeat-archetypal-mantis-1ede48@quoll>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6356-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6357-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[arista.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[adriana@arista.com,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[disroot.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-0.985];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,bootlin.com:url,mail.gmail.com:mid,arista.com:dkim]
-X-Rspamd-Queue-Id: 2370440D42E
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:dkim,disroot.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A5DAA40DF69
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Apr 16, 2026 at 2:00=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 16/04/2026 11:57, Adriana Stancu wrote:
-> > Add a configurable "ti,read-settle-us" property to resolve a limitation
-> > where aggressive I2C polling prevents the BQ32000's internal register t=
-o
-> > update. This ensures the hardware has sufficient idle time to update it=
+On 2026-04-16 10:23 +02:00, Krzysztof Kozlowski wrote:
+> On Wed, Apr 15, 2026 at 11:00:16PM +0530, Kaustabh Chakraborty wrote:
+>> On 2026-04-15 09:03 +02:00, Krzysztof Kozlowski wrote:
+>> > On Tue, Apr 14, 2026 at 12:02:54PM +0530, Kaustabh Chakraborty wrote:
+>> >> +description: |
+>> >> +  The Samsung S2M series PMIC RGB LED is a three-channel LED device =
+with
+>> >> +  8-bit brightness control for each channel, typically used as statu=
 s
-> > buffer, preventing stale data reads on systems where the "interrupts" a=
-re
-> > not configured.
+>> >> +  indicators in mobile phones.
+>> >> +
+>> >> +  This is a part of device tree bindings for S2M and S5M family of P=
+ower
+>> >> +  Management IC (PMIC).
+>> >> +
+>> >> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yam=
+l for
+>> >> +  additional information and example.
+>> >> +
+>> >> +allOf:
+>> >> +  - $ref: common.yaml#
+>> >
+>> > Rob's comment is still valid:
+>> > 1. How do you address one of three LEDs in non-RGB case?
+>> > 2. Where is multi-color?
+>>=20
+>> Yes, multi-color should have been added here.
+>>=20
+>> >
+>> > And based on this alone without other properties, I say this should be
+>> > part of top-level schema.  Separate node is fine, but no need for
+>> > separate binding.
+>>=20
+>> BTW, for loading the sub-device driver via platform (as it won't be a
+>> separate binding) the driver *must* be built-in. Although not related to
+>> bindings, this seems counter-intuitive. I see the same problem with the
 >
-> And why does the value different between each board layouts? Same
-> device, different board and you need different value?
->
-> Do not attach (thread) your patchsets to some other threads (unrelated
-> or older versions). This buries them deep in the mailbox and might
-> interfere with applying entire sets. See also:
-> https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/s=
-ubmitting-patches.rst#L830
->
-You are right, the delay should be specific to the RTC chip, not the
-board layout. I will drop the dt property and send a v3 that
-implements a fixed 2ms delay in the driver.
-This will be applied only when an interrupt is not present, because
-this is when the userspace will use polling.
+> I don't understand that comment. If it has nothing to do with the
+> binding, what is the problem?
 
-Best regards,
-Adriana
+It was an unrelated user-space issue, so ignore.
+
+>
+> Best regards,
+> Krzysztof
+
 
