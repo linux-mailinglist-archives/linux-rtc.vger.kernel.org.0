@@ -1,50 +1,50 @@
-Return-Path: <linux-rtc+bounces-6376-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6377-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cNA1NMnW5GnZagEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6376-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 15:21:13 +0200
+	id MGeEG+7W5Gl5awEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6377-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 15:21:50 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49891424195
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 15:21:13 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFCE44241C2
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 15:21:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4D524300E63D
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 13:21:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 985DA300F95B
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 13:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63AE378D84;
-	Sun, 19 Apr 2026 13:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C15A37BE74;
+	Sun, 19 Apr 2026 13:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XDhiISp2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e3P5OvpW"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821D633260B;
-	Sun, 19 Apr 2026 13:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676E632D452;
+	Sun, 19 Apr 2026 13:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776604871; cv=none; b=o4DQ4CkSPAPNzWtBxF5eDT5hzJYvvU1O++4A4b2s8ig2PfpmEiq1lOBedvO4QvcjK5iZnyg0vxcplFBe27g8jdjBtzeZ7yOZ51EDJGlGkjWSx/Xdc7qm/ovzT2LLK9H8CBqfrp3uzbcAnnknx0fJF+XBgYmHsV2r3vWtS/aEiJg=
+	t=1776604906; cv=none; b=GfMI35YJ97byPkTECSNUts2Q/c7FqPb7Uz23p256aSCzU8fwVqmgTve8YgHSQkUvWlF5Ux5pce1dhDjLXJ9953PqH5QJjlOZOnXBo0v3MV/b6DKJEsE5Vv5cuAnVG6SAAA+vCrrYd59e7g/IzhM9Vdn7pvqDDTjQGxOSLclvqkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776604871; c=relaxed/simple;
-	bh=FgDYXkUkm9aucXmTXa4FHW6oLYLPtFizZghvL9EwMm8=;
+	s=arc-20240116; t=1776604906; c=relaxed/simple;
+	bh=aDBT/XErMEHxKvpB883yVAHwGQ6WsrujzMQ1W1nlBws=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JAs/HuWBg5VhgTY/Uu/5VPjxUZBi2uOU/ICMznsQsObgqmR2EUoC6LS1Kvdc8aqUnyOEXViq2v+rncbDctqR+XvnXdVH1oArfJ/N80UyXHv3LQJjrmxPWodhJfXT6zdVjZW85fofH6NNVcLb3n5frvUgJFsHFsJZHdrPCAAd9nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XDhiISp2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D68C2BCAF;
-	Sun, 19 Apr 2026 13:21:00 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Bg8SWawDAWkXjeph1VhxrY8AZz55S/c6s/RZfjODVtnH0pnvlacoQUK/XvW6+EfKHX5AGixmiLiaxm4o4Z1oLh5FA6292gYJNeNuH0/A37tW1qEMeHBP9dfNA9xFc8tLL7VaBJ3TaJjoXgKB1lBa49u2sF9jLV8ejS1fLOpgUdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e3P5OvpW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0623C2BCAF;
+	Sun, 19 Apr 2026 13:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776604871;
-	bh=FgDYXkUkm9aucXmTXa4FHW6oLYLPtFizZghvL9EwMm8=;
+	s=k20201202; t=1776604906;
+	bh=aDBT/XErMEHxKvpB883yVAHwGQ6WsrujzMQ1W1nlBws=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XDhiISp2Bu0d3vER2JR79jpIxctjflJuL7SuiiWuPZ75M71sQppUtfKTKyrR3cYwO
-	 WEzADiHx2qew8M3V1O0MD1vhiB+hYHqPR4QC9m4GqGdjS2PFzEtd0Y1/3lulheT/Xp
-	 ugDYG8nhDF7krkLw6ZMTfLSsiuwusEZMX3TqbKXkfswUOewKxFwpKxp5y5o52LT0Pm
-	 5F5s8NjqlBvl5VN1beILzpkyeivldBiSQ1v6j4tsemKTywS0Oq3tKdoEF8wTiTzeqP
-	 lcqhCgiVybVohCBO9IDowaGU8qBiPEOXPfUktCrNy9CHXOiEkgHwrv8djPaaWl65mI
-	 LeXlslE3jf3Mg==
-Date: Sun, 19 Apr 2026 14:20:54 +0100
+	b=e3P5OvpW25qZtd8K+8K4+KKWorTXHowo8wWfid/wlEDzTe12B5MCD77tBwWQ5pmtc
+	 Nsv5Q0gXjJV+5qRgkcCT2WkZ05KZvs/ksWUX+xZl44acurvXeXiDDogYBiYq1vFGxi
+	 X9djwXPKLHKkWZp5duf8H+7s+8WHRPk3Xn9wDhcQzdSuI1NXc875i9RRHnVIp7uwww
+	 p//nQoue6WZMaF7lJHagF6wKOHYB3QUi9dQ2o0dhqDQyi7m5CHBUFHfStC6rQ+AJ93
+	 MfgKIAeaG2FEXz2udRM19cGzfAAZaVVoOX3J8XoJmgmyeKu1PNVxPxIN1EflSmNcv2
+	 wUt8oDv324JpA==
+Date: Sun, 19 Apr 2026 14:21:29 +0100
 From: Jonathan Cameron <jic23@kernel.org>
 To: Yury Norov <ynorov@nvidia.com>
 Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
@@ -64,12 +64,12 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
  Collins <bcollins@watter.com>, linux-kernel@vger.kernel.org,
  linux-iio@vger.kernel.org, linux-wireless@vger.kernel.org,
  netdev@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 4/9] iio: magnetometer: yas530: switch to using
+Subject: Re: [PATCH 5/9] iio: pressure: bmp280: switch to using
  FIELD_GET_SIGNED()
-Message-ID: <20260419142054.0660e8e2@jic23-huawei>
-In-Reply-To: <20260417173621.368914-5-ynorov@nvidia.com>
+Message-ID: <20260419142129.591aabff@jic23-huawei>
+In-Reply-To: <20260417173621.368914-6-ynorov@nvidia.com>
 References: <20260417173621.368914-1-ynorov@nvidia.com>
-	<20260417173621.368914-5-ynorov@nvidia.com>
+	<20260417173621.368914-6-ynorov@nvidia.com>
 X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -84,12 +84,12 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6376-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6377-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
@@ -103,15 +103,15 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[jic23@kernel.org,linux-rtc@vger.kernel.org];
 	FREEMAIL_CC(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,baylibre.com,analog.com,realtek.com,gmail.com,lunn.ch,davemloft.net,google.com,bootlin.com,rasmusvillemoes.dk,Stromeko.DE,watter.com,vger.kernel.org];
 	TAGGED_RCPT(0.00)[linux-rtc,netdev];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 49891424195
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,nvidia.com:email]
+X-Rspamd-Queue-Id: CFCE44241C2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 17 Apr 2026 13:36:15 -0400
+On Fri, 17 Apr 2026 13:36:16 -0400
 Yury Norov <ynorov@nvidia.com> wrote:
 
 > Switch from sign_extend32(FIELD_GET()) to the dedicated
