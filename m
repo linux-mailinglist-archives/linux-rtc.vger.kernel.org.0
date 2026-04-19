@@ -1,134 +1,156 @@
-Return-Path: <linux-rtc+bounces-6379-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6380-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2NieMiE35WlufgEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6379-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 22:12:17 +0200
+	id yKh1BfdY5WmFiQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6380-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Apr 2026 00:36:39 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA843425658
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 22:12:16 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A174425B2C
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Apr 2026 00:36:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E17693003482
-	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 20:12:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78449300BCBD
+	for <lists+linux-rtc@lfdr.de>; Sun, 19 Apr 2026 22:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD223301704;
-	Sun, 19 Apr 2026 20:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCD82FB965;
+	Sun, 19 Apr 2026 22:36:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRo/2AVm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4UbyEPS"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1842E6CD5
-	for <linux-rtc@vger.kernel.org>; Sun, 19 Apr 2026 20:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451F32DCBFC
+	for <linux-rtc@vger.kernel.org>; Sun, 19 Apr 2026 22:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776629530; cv=none; b=GsPMjPTfc2iZI8PLX/ilL27Xs/Ej7JARks2iM/KWtA52xE4aalFISS8UDFd9CPfDcBNwGZgsTI8sisctkMipyGICvq1bI52AVYqM6S4HZQorhQOWPrXNn5MTXhpU73fIbPhfPqD/Mi8B52IBhopuaQ88sjAuE+pxSLdNtWfhG04=
+	t=1776638194; cv=none; b=eg0LgOA2wABCXi1/vuqkxrmekHD4xAK0a7wduEOnuATpaFIs5I8D6KzrGeNoORXXN5B3uQxM0BUBRsXqDZK7CVuunTLefODlJs5sl30GiiEBDYheZsknF71aYDiabNbVIh/E5o0IfeE4d0TZaE0ijc7c+PeIvMjO16ei1yMV6Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776629530; c=relaxed/simple;
-	bh=OAMdrPYK5OV+e4A3PfNzbz835UpVFOyL7nAyo4Bzd74=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UGnIakv0sODo5kzwGSJSOvAicjjzDMQQaAG90m1lX++OeoAm8Ykv0kuyVl8yVdc9nPXKTfvB8b5bgXetA/eqh2rvQJHALKdUMyb1ZfzNYoV8EK3Ontb6oXQ5iUTjET0xYk4l5DUl6R3Ghn0NFjGv/NnoZLKkIjzCLvHI+hj3QyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRo/2AVm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571BCC2BCF6
-	for <linux-rtc@vger.kernel.org>; Sun, 19 Apr 2026 20:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776629530;
-	bh=OAMdrPYK5OV+e4A3PfNzbz835UpVFOyL7nAyo4Bzd74=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nRo/2AVmwPolgfGOXy14+dpwclEBZBvgGgT7MAlxO4NavhyOo6dvn/Yyr6+ck2ttf
-	 n6tfKCYZsdPagG10cjsD4+wIpQ81qjBsW2K3vrg9Vh3Z/xXgmq1FPST6cu1jb17Y6U
-	 AjpsVYfkQ9m97aSleN94z6n3qkmkjG6gOZApPZW1riD04Ir6G/5IydEVvB8N1xXbDV
-	 NaadMP2ZhoguQrKLYgHnbH2ExeU6tUSdmT51OhnAXTZW7Ypuuj+4KIAhVwdHXN9V+n
-	 UwA3rnoMwSfQOlixeu++vJL8/3D3Ia8ovddPw0Hne0bOh21wrqB3zzPPQ7tEQplSAp
-	 9M/UjwbSsrGWw==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a0faa0d15cso2269599e87.0
-        for <linux-rtc@vger.kernel.org>; Sun, 19 Apr 2026 13:12:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8PxkPJb5QOWYZePAmEL63ZP18/fPzUBM2DFqmBy8/aleZdEfaTQBAbKIj1UlN7lFgtBlLon9eITxk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGQuyc/UqakxgsTYwVEVwGyAPGa+7drp8wwc9xEpgpr5nVDX4/
-	gcKc9gRmXuO7O8sC20g1KIvGN/9pBBTgso2PkuBtXIgdLL0lDNDtz0irYkN55cwRWGH+E98Xxx9
-	P9mtoKau0d1Kxk0TsZXB5nJLJXTIeVjo=
-X-Received: by 2002:a05:6512:3c9d:b0:5a3:fd83:13f7 with SMTP id
- 2adb3069b0e04-5a4172ba690mr3178772e87.6.1776629528998; Sun, 19 Apr 2026
- 13:12:08 -0700 (PDT)
+	s=arc-20240116; t=1776638194; c=relaxed/simple;
+	bh=MbsHOnyZ9XH67VDYm0Yd55VReAFjYSdBLaEWWeRgBAM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=knf3Zci4qGpAxIA3zyN7UPNwzNjXKlfH2K0YPkz+V7me+zmtpgd+DfJ3QgPJK0rU1jYL9lkuiooVqUZr/pmRO9jEvzArvHzuCiZA+jJ/xBnBIDZhf3jsI/Ss8S8tctEUT4wmqPjgriAdkiSyFhVMAYPB7aclEPzv6kzPWHO0m4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4UbyEPS; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7dbcd61429cso1248853a34.2
+        for <linux-rtc@vger.kernel.org>; Sun, 19 Apr 2026 15:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776638192; x=1777242992; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FosC665WE8Cy1oOKr7vEfeLdTUyUScA7y3vdV3aiAok=;
+        b=g4UbyEPSB/uMqZGM8XGCp9s3plz99if57VA+6OMstQdUjR804gWL16jMRW2yAqZJv0
+         sFNrau4bqnPaozafRuGu8jNFJeB3Wu4uymE62//Eb21DlNwFpyIUrm852gCm8XV0+MpP
+         V97cXB8WldXjyBGd1HSx6cpPtZ7Vsrol2ye4MvAJhnkkrLO0OnxR1C0dPSdlLYao3yty
+         PONlgz/xaA2TAuZWnuKessJJgakjM9JK08LXQ/5oVQdvsMYlnbPqcQG90z3oc+MZ8Z+a
+         9LkGd2fFxun6IcuFODGVeElp6wvdT4bS2Koc+N09LkTq/bMy9+nrXTXm5m7+5S+Ipmlt
+         R3WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776638192; x=1777242992;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FosC665WE8Cy1oOKr7vEfeLdTUyUScA7y3vdV3aiAok=;
+        b=WFiSgOWS1usub/IxOyhAgJu7VZf9N9SITFcvr1kr4iRQLiPP+DcmVl97Qeq66BXDlW
+         IkLFRP4VCipZ2jy4SF5mmO0CnXRheBXA5R9TqTi+Rs7duGPwOI2TJNGT/Ipxjjfnksek
+         QDH02JBWacqTHxk8H/qjP7IFLcox4nvkxlYYwEb7keTPODDBMJFMFL+209a6uUfcQMjG
+         7/dkwXTkdi8zzpZt7hrHWRlDZ2UziyOvpD59jJm7P+FnCbVgkmwF8fdRhJdB7WSm1Xod
+         Yq6fBLzl8Urexo2/gvyctM/1kjK5xV8rMP5LzNhxoVrN0VY4Ly3hM1musFU5ex/chAAq
+         BaVw==
+X-Forwarded-Encrypted: i=1; AFNElJ8lI42GA+1aAbTCB0iS9V8voq7T0zAYZcsV1ATFcDFZ+QmHK+XkU3a0K9U+RBztrE2F51h5jZ6+UUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz16O/c1aM5TYhK5hfjsMXqBZM+md3p42DEgp02M6eLdgcd8eps
+	5lykqvf4Zjpg74GsR7gib0jLWJFoal2uIqlPLrjAXiqoPpX/Q1+ZhJa9vrFeLlgD
+X-Gm-Gg: AeBDieufS2+G97nIrOjLwmkwLfWNLYStvk7wfX3D9g4w+8GeX2RI/gJnCZJzNuAlKrE
+	kCL9brh8wtjWdqOm0Y5ZISUDJAh8PitZSXP6GNpk8goYb3LdcsV3LPaWeBYCfgrnzFK0kHM9hTT
+	2KXRpxrqXtj2VzI8nrXHX3RY1LHcFw8CEVe7Wm/jiLm4cfMHnfuztZtxBhuQJ0r8a3D6wqD+HqB
+	W+IcW2AWsa5TkYQLyJiVYBbsCduPYLi44cqFeVGAYhEJ/FZCWFdJvfAjN+8PH6yW5h6+03+zot7
+	usm3a14qO03GNmWWu/bdAyf4ELKiujIF4WJE9lA7J6ldFe1nKmVC+24mNollB6I5+MVeVzjs6h7
+	dhoMDaooKi03fJjxPrNFyiPAn73PZdTr4gLywrO/Srekzsz241SZvLn5UbXDFK0ifD7X6uYtWfq
+	FYtksGhW8vh40YpFt2Irl5dg7LdG+jMrFg966YNOEaQcQ9E/gBTx1N4rK/n8WDwfhlv2H+
+X-Received: by 2002:a05:6830:8d1:b0:7d7:5b78:ef31 with SMTP id 46e09a7af769-7dc94fdf204mr6753657a34.12.1776638192241;
+        Sun, 19 Apr 2026 15:36:32 -0700 (PDT)
+Received: from linuxescape.lan (23-88-128-2.fttp.usinternet.com. [23.88.128.2])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc975034f2sm6979077a34.4.2026.04.19.15.36.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Apr 2026 15:36:31 -0700 (PDT)
+From: Maxwell Doose <m32285159@gmail.com>
+To: linusw@kernel.org,
+	alexandre.belloni@bootlin.com
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: ab8500: replace sprintf() with sysfs_emit()
+Date: Sun, 19 Apr 2026 17:36:30 -0500
+Message-ID: <20260419223630.67644-1-m32285159@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260417173621.368914-1-ynorov@nvidia.com> <20260417173621.368914-5-ynorov@nvidia.com>
-In-Reply-To: <20260417173621.368914-5-ynorov@nvidia.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Sun, 19 Apr 2026 22:11:57 +0200
-X-Gmail-Original-Message-ID: <CAD++jLmeFP4CHf+PZdR4gWW7ZFiN9LDNeXADQXcM0e5eJOO_rw@mail.gmail.com>
-X-Gm-Features: AQROBzA9qeeVj2Ps3N0YEWnbfhWwJYO6GUSEavstda-gTisTP6p1HIZ-NbjdBrk
-Message-ID: <CAD++jLmeFP4CHf+PZdR4gWW7ZFiN9LDNeXADQXcM0e5eJOO_rw@mail.gmail.com>
-Subject: Re: [PATCH 4/9] iio: magnetometer: yas530: switch to using FIELD_GET_SIGNED()
-To: Yury Norov <ynorov@nvidia.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>, 
-	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Andy Shevchenko <andy@kernel.org>, Ping-Ke Shih <pkshih@realtek.com>, 
-	Richard Cochran <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Hans de Goede <hansg@kernel.org>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Salah Triki <salah.triki@gmail.com>, 
-	Achim Gratz <Achim.Gratz@stromeko.de>, Ben Collins <bcollins@watter.com>, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6379-lists,linux-rtc=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,baylibre.com,analog.com,realtek.com,gmail.com,lunn.ch,davemloft.net,google.com,bootlin.com,rasmusvillemoes.dk,stromeko.de,watter.com,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6380-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-rtc@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[m32285159@gmail.com,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	RCPT_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,netdev];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nvidia.com:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: CA843425658
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6A174425B2C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Apr 17, 2026 at 7:36=E2=80=AFPM Yury Norov <ynorov@nvidia.com> wrot=
-e:
+This patch replaces sprintf() with sysfs_emit() to ensure proper
+bounds checking. It also simplifies the return logic by directly
+returning the error after logging, instead of logging, calling
+sprintf(), then returning.
 
-> Switch from sign_extend32(FIELD_GET()) to the dedicated
-> FIELD_GET_SIGNED() and don't calculate the fields length explicitly.
->
-> Signed-off-by: Yury Norov <ynorov@nvidia.com>
+Signed-off-by: Maxwell Doose <m32285159@gmail.com>
+---
+ drivers/rtc/rtc-ab8500.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Very nice,
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+diff --git a/drivers/rtc/rtc-ab8500.c b/drivers/rtc/rtc-ab8500.c
+index ed2b6b8bb3bf..c6147837f957 100644
+--- a/drivers/rtc/rtc-ab8500.c
++++ b/drivers/rtc/rtc-ab8500.c
+@@ -284,11 +284,10 @@ static ssize_t ab8500_sysfs_show_rtc_calibration(struct device *dev,
+ 	retval = ab8500_rtc_get_calibration(dev, &calibration);
+ 	if (retval < 0) {
+ 		dev_err(dev, "Failed to read RTC calibration attribute\n");
+-		sprintf(buf, "0\n");
+ 		return retval;
+ 	}
+ 
+-	return sprintf(buf, "%d\n", calibration);
++	return sysfs_emit(buf, "%d\n", calibration);
+ }
+ 
+ static DEVICE_ATTR(rtc_calibration, S_IRUGO | S_IWUSR,
+-- 
+2.53.0
 
-Yours,
-Linus Walleij
 
