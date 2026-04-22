@@ -1,57 +1,56 @@
-Return-Path: <linux-rtc+bounces-6392-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6391-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8KMaOCjq6Gl4RgIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6392-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2026 17:32:56 +0200
+	id +H8cNBrq6Gl4RgIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6391-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2026 17:32:42 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A328447F39
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2026 17:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6948447F22
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2026 17:32:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0B00F3105D5A
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2026 15:28:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CA28D300579B
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2026 15:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBCC3469E6;
-	Wed, 22 Apr 2026 15:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FF833D4E2;
+	Wed, 22 Apr 2026 15:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUeuHMAw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMf8ryn1"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CF832861F;
-	Wed, 22 Apr 2026 15:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FAC32861F;
+	Wed, 22 Apr 2026 15:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776871678; cv=none; b=YLTd7JqZ01N735TTFsf454u59ug59U9Xq324HVun7IZMo4bGyfBQJJGibG1nPWZ7dCaDoKCVNreyp2h5Mi5mbXXPUSfTvn70cXU+Wx6rr08d9KWEXrKZbvNRaetdRf9JE2f1AliRUxH4JcQDuwA4IWqFg+pgG4n5HWiWn/tBULw=
+	t=1776871675; cv=none; b=C7pyXn3qhlsr78vIJmIccKojLT1UwvczUcSRaK+7fhuwNgp806JlXKYi/x4QQAxF6zoDHNgWqYX9JfC9/cOOoygDBFyIE7PHmAaKAZGBEE/Qn+jOrvOICG43zcGpDaUvQULAw37iisFjfo3lNBZf3jQfFBA3/fbx46+nlyg8TSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776871678; c=relaxed/simple;
-	bh=SdhQbESNFDH1bXcdLQC9jBBaB9HVX2mb7A0M6v65Zac=;
+	s=arc-20240116; t=1776871675; c=relaxed/simple;
+	bh=NVmot+vxgpRTiaQ+60GFGpNH7UVQX7tim9k5fsbuotQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LnUiWoU2Lo/rpmcw3tIfEKKUuftEUt+j5di1gn2UA4SkJrePm/EOu1hS1VP5hSNDSAg1Q3FRbdegD8rYDH9dBiK8zS2usDP1DSuMGZzgoPpVpBHTqUEYuOvioH5PQ/JHt9Ii2yuXGQkGdE+gMbQwQSoTtePRkA/Kh+3tXfLURgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUeuHMAw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F3EC19425;
-	Wed, 22 Apr 2026 15:27:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=k8p0449P9gQiM7lFsDVJELovgKXNJX/SWY/MrcjquTwR5nhlS3FzpAV3RC4LhmgyLqvuWf11hP/tBRdD2AgcsaP4CnKIt0Qmr9WJpNiJ3D7tsx9wKXW/jCQPT390Z6G2KGhtIIRDcOcj9wer+AgQu7gK9njTPTSHi+h8lJ2w+sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMf8ryn1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAE2C19425;
+	Wed, 22 Apr 2026 15:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776871678;
-	bh=SdhQbESNFDH1bXcdLQC9jBBaB9HVX2mb7A0M6v65Zac=;
+	s=k20201202; t=1776871675;
+	bh=NVmot+vxgpRTiaQ+60GFGpNH7UVQX7tim9k5fsbuotQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fUeuHMAwGFWxQzn7hChqoj5FxnmYgwICxcAVpRaKMgRBPbxdKbWjdNgZDJDkrTWJl
-	 69hQvzBEy5J7rGipctEyus+rGgw4i7acmoRYB0oVB//DblgiOsI3h2h5IhNT+dkDm5
-	 xeFNGBrdcJClie9W7y5pw0esuuyQ/1QLUBox+ZXIWxzY3z3EYOmXYJIJhISZH09f5W
-	 Bdn60CLX7bJtLgqVENp3ika0+MteK3ZuECXqAuG46gFmzJSoO9Cdt1p+TYpN143LqW
-	 dvW9xuEx0gj5ghEnUzY2nlBIkRVT4mKFEE0aU/GFxIg3AGaH0sawIGGPYS3tDgD9/X
-	 gMUN72HFtl3UA==
+	b=QMf8ryn1AXF0HBAxqiYembLdz3RUC6wKWIbKGLxeoZMhgAU78i5B1ojptsVgQRF2J
+	 JCmv0IjEC5tL1wfPSz6JQSKbRovP4qJDQ+qD55PQQpAekBV4RG8c0qq0jSfDLFHMXp
+	 CntiBWx3ZmPQJWCcLUekTsZBGWesfecDFMjjF3yHn+s1qz1EBs4+jHtF32tCj4za4V
+	 rugJQ3jmMFYF2VlBJyTJS3gdz2eYGnD7rtpEHB+ScjJpRwrvV+8RPVPR5E0Y7vpOZw
+	 baJGeugJVlGDQ3p155zsczj+ITAxulDh/20Kit/FsMVCZywClmkeQBRfnAXKt/K21z
+	 6xw2A6MIC4QeQ==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux ACPI <linux-acpi@vger.kernel.org>
 Cc: linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
  Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject:
- [PATCH v1 3/4] ACPI: TAD: RTC: Refine timer value computations and checks
-Date: Wed, 22 Apr 2026 17:26:49 +0200
-Message-ID: <3414608.aeNJFYEL58@rafael.j.wysocki>
+Subject: [PATCH v1 4/4] ACPI: TAD: Fix up a comment in acpi_tad_probe()
+Date: Wed, 22 Apr 2026 17:27:32 +0200
+Message-ID: <8678306.T7Z3S40VBb@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <2415066.ElGaqSPkdT@rafael.j.wysocki>
 References: <2415066.ElGaqSPkdT@rafael.j.wysocki>
@@ -73,7 +72,7 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6392-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6391-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	HAS_ORG_HEADER(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -90,53 +89,34 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rafael.j.wysocki:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: 5A328447F39
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rafael.j.wysocki:mid]
+X-Rspamd-Queue-Id: A6948447F22
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Since rtc_tm_to_ktime() may overflow for large RTC time values and
-full second granularity is sufficient in timer value computations
-in acpi_tad_rtc_set_alarm() and acpi_tad_rtc_read_alarm(), use
-rtc_tm_to_time64() instead of that function, which also allows the
-computations to be simplified.
+Fix grammar in the comment preceding the pm_runtime_set_active() call in
+acpi_tad_probe().
 
-Moreover, U32_MAX is a special "timer disabled" value, so make
-acpi_tad_rtc_set_alarm() reject it when attempting to program the
-alarm timers.
-
-Fixes: 7572dcabe38d ("ACPI: TAD: Add alarm support to the RTC class device interface")
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/acpi_tad.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/acpi/acpi_tad.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 --- a/drivers/acpi/acpi_tad.c
 +++ b/drivers/acpi/acpi_tad.c
-@@ -680,9 +680,8 @@ static int acpi_tad_rtc_set_alarm(struct
- 
- 		acpi_tad_rt_to_tm(&rt, &tm_now);
- 
--		value = ktime_divns(ktime_sub(rtc_tm_to_ktime(t->time),
--					      rtc_tm_to_ktime(tm_now)), NSEC_PER_SEC);
--		if (value <= 0 || value > U32_MAX)
-+		value = rtc_tm_to_time64(&t->time) - rtc_tm_to_time64(&tm_now);
-+		if (value <= 0 || value >= U32_MAX)
- 			return -EINVAL;
+@@ -859,8 +859,8 @@ static int acpi_tad_probe(struct platfor
  	}
  
-@@ -745,8 +744,7 @@ static int acpi_tad_rtc_read_alarm(struc
- 
- 	if (retval != ACPI_TAD_WAKE_DISABLED) {
- 		t->enabled = 1;
--		t->time = rtc_ktime_to_tm(ktime_add_ns(rtc_tm_to_ktime(tm_now),
--						       (u64)retval * NSEC_PER_SEC));
-+		rtc_time64_to_tm(rtc_tm_to_time64(&tm_now) + retval, &t->time);
- 	} else {
- 		t->enabled = 0;
- 		t->time = tm_now;
+ 	/*
+-	 * The platform bus type layer tells the ACPI PM domain powers up the
+-	 * device, so set the runtime PM status of it to "active".
++	 * The platform bus type probe callback tells the ACPI PM domain to
++	 * power up the device, so set the runtime PM status of it to "active".
+ 	 */
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
 
 
 
