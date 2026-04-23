@@ -1,59 +1,59 @@
-Return-Path: <linux-rtc+bounces-6403-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6404-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AM4NBhV46mkUzwIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6403-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Apr 2026 21:50:45 +0200
+	id IDfFBlV46mkUzwIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6404-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Apr 2026 21:51:49 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E64B3456EEE
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Apr 2026 21:50:44 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1142E456F38
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Apr 2026 21:51:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 003B33004F1D
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Apr 2026 19:50:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4F6533011522
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Apr 2026 19:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1918D397690;
-	Thu, 23 Apr 2026 19:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3013F3932F6;
+	Thu, 23 Apr 2026 19:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="FG5yY2jl"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="CruYKeGy"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F191D38E133;
-	Thu, 23 Apr 2026 19:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23727397E8A;
+	Thu, 23 Apr 2026 19:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776973842; cv=none; b=rxbc1b6lw7vM8SQfNglWcc8AcJxD48I4dnh6vaGWcE1Z5xmcKFAXkQuS2LcoGRDFIwToMaWmuFy54wA7izYcyVC1JzdOJVhw4nnVO4bLZZ5MfY6wDCxj7pOYgv/ersPgQkYvrKdf2JSvGhkrHET68xGBAJCxzEWu5/RwHQ9EUR8=
+	t=1776973848; cv=none; b=PDTLYBRMsVWfJAQzJO9BCFeVDlMbcjGoom/AGxbePqB06y3Fl32ypQUCV++BKNTPRXtMi87wi3PCUknFsdEgYcK4XmEqDThUkaMdWceE1mngsTxibQrmStkoPre6DOAcrqyoWMhug7bYDYNPncJmZqiGXmKUQO4ecAGtlrH80Ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776973842; c=relaxed/simple;
-	bh=cfpbhpQNgGVhnRRMf4ZxWDpz78+RDImmD7OiBUAm+hA=;
+	s=arc-20240116; t=1776973848; c=relaxed/simple;
+	bh=rsRkgbshtktSWvwQMo2NtEvUnQ6shzPQs4UCMeD9YAY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ePXMmC3G8P07PT11MZXF2KpKoWIc0CkqodhZL/MowXEb7WrCWFevqcAflCz+s9FNLM9W/MhgCbjQvy5zH8AQJvhgLXpF00RPjxgtswi0OsV1c5m2W4tEW2hziRwKvemxCqzSdaJZolNlwjcWJ1X/jsf4fXKruyKrL4HPgWVtcFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=FG5yY2jl; arc=none smtp.client-ip=178.21.23.139
+	 In-Reply-To:To:Cc; b=LzIMI6V0qKQGIIF4T1lGy9GOUDe7CTsC/uxfOueAlNBE8vJGmkXJg2OGLp8kW/FGXdb3BWeSb+EODzSjiEpXhJ8n0zuwqPJpEGf1g1JZrRRDc5pPbVJAm77+QWFUMjWHdRuV1t5UoXIxV+c85NOFX00B8fv8kacsKQlN1Ty88N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=CruYKeGy; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 5210326E03;
-	Thu, 23 Apr 2026 21:50:38 +0200 (CEST)
+	by disroot.org (Postfix) with ESMTP id B2B7C26E0B;
+	Thu, 23 Apr 2026 21:50:44 +0200 (CEST)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nkHtpgpqGGSw; Thu, 23 Apr 2026 21:50:37 +0200 (CEST)
+ id BO3I8JU7jBWV; Thu, 23 Apr 2026 21:50:43 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1776973837; bh=cfpbhpQNgGVhnRRMf4ZxWDpz78+RDImmD7OiBUAm+hA=;
+	t=1776973843; bh=rsRkgbshtktSWvwQMo2NtEvUnQ6shzPQs4UCMeD9YAY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=FG5yY2jl8fE6Rz2oZwWYIabMo5KvT1kbFyJ/Ojuek+Kq+04AWIe9sDQXLhfZwzq+8
-	 NJobiJpPid4Z4qE2xpi7at/N9WNJcCcirYawIbTfT50lJZv6oesMyOtsoj7vW5uNjX
-	 M0CfF5aMJ71XXoh7Yw23w4qsSEO1rK2nxDm3PoTPlXmCMBZIHi7KIytKxTgLgOizV1
-	 mGPuQR+RKEgfwODF0sOzlie4w8Pf+FQOHFcuE3bybn9iOnwTfFLgd0XClmQA5liro+
-	 gXdX+x7VIR6lfcrarx0Jup2ovYDm+YLM4p1kH6bxBtYDswpHZFnFUyvPy7hn9ZPlD1
-	 3zHHcK5JcSX8w==
+	b=CruYKeGyxlFLAt5f7uEf1uFWIs6/Y3Eufh8dMIkabq2ri9tEMjRIqeBiXPqHDS761
+	 XmB0Cii3pn8KK+Dq9V8PoF/YbLo5Oqcd1gF0okvgxvxjJxneGMWwcYepHJsVGgZWZA
+	 gXzDdwyTftrunjOyItMRCXA47Tu007aV7HMxaTAtARAwq6Rw3f3LV/rJ0G+eaCBfvX
+	 YuNzsvb3rpAAWJjWFTlDP/zyOB1ANA73B5rBAOSTq3SIVWn9YvVmuDR/WnwJzQnV1q
+	 rDSImEaC8M4zwJqAK1o6fp5/fd0Iu5VBuL5qATvchbauCcpf2aNVFEu+gTpAlcs8b0
+	 Z8njkxQztcwQQ==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Fri, 24 Apr 2026 01:09:06 +0530
-Subject: [PATCH v5 07/11] leds: flash: add support for Samsung S2M series
- PMIC flash LED device
+Date: Fri, 24 Apr 2026 01:09:07 +0530
+Subject: [PATCH v5 08/11] leds: rgb: add support for Samsung S2M series
+ PMIC RGB LED device
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260424-s2mu005-pmic-v5-7-fcbc9da5a004@disroot.org>
+Message-Id: <20260424-s2mu005-pmic-v5-8-fcbc9da5a004@disroot.org>
 References: <20260424-s2mu005-pmic-v5-0-fcbc9da5a004@disroot.org>
 In-Reply-To: <20260424-s2mu005-pmic-v5-0-fcbc9da5a004@disroot.org>
 To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
@@ -84,11 +84,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
 	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6403-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6404-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -105,423 +105,507 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,disroot.org:email,disroot.org:dkim,disroot.org:mid]
-X-Rspamd-Queue-Id: E64B3456EEE
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:email,disroot.org:dkim,disroot.org:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1142E456F38
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add support for flash LEDs found in certain Samsung S2M series PMICs.
-The device has two channels for LEDs, typically for the back and front
-cameras in mobile devices. Both channels can be independently
-controlled, and can be operated in torch or flash modes.
+Add support for the RGB LEDs found in certain Samsung S2M series PMICs.
+The device has three LED channels, controlled as a single device. These
+LEDs are typically used as status indicators in mobile phones.
 
-The driver includes initial support for the S2MU005 PMIC flash LEDs.
+The driver includes initial support for the S2MU005 PMIC RGB LEDs.
 
 Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 ---
- drivers/leds/flash/Kconfig          |  12 ++
- drivers/leds/flash/Makefile         |   1 +
- drivers/leds/flash/leds-s2m-flash.c | 358 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 371 insertions(+)
+ drivers/leds/rgb/Kconfig        |  11 +
+ drivers/leds/rgb/Makefile       |   1 +
+ drivers/leds/rgb/leds-s2m-rgb.c | 446 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 458 insertions(+)
 
-diff --git a/drivers/leds/flash/Kconfig b/drivers/leds/flash/Kconfig
-index 5e08102a67841..be62e05277429 100644
---- a/drivers/leds/flash/Kconfig
-+++ b/drivers/leds/flash/Kconfig
-@@ -114,6 +114,18 @@ config LEDS_RT8515
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called leds-rt8515.
+diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
+index 28ef4c487367c..30051342f4e4d 100644
+--- a/drivers/leds/rgb/Kconfig
++++ b/drivers/leds/rgb/Kconfig
+@@ -75,6 +75,17 @@ config LEDS_QCOM_LPG
  
-+config LEDS_S2M_FLASH
-+	tristate "Samsung S2M series PMICs flash/torch LED support"
+ 	  If compiled as a module, the module will be named leds-qcom-lpg.
+ 
++config LEDS_S2M_RGB
++	tristate "Samsung S2M series PMICs RGB LED support"
 +	depends on LEDS_CLASS
 +	depends on MFD_SEC_CORE
-+	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
 +	select REGMAP_IRQ
 +	help
-+	  This option enables support for the flash/torch LEDs found in
-+	  certain Samsung S2M series PMICs, such as the S2MU005. It has
-+	  a LED channel dedicated for every physical LED. The LEDs can
-+	  be controlled in flash and torch modes.
++	  This option enables support for the S2MU005 RGB LEDs. These
++	  devices have three LED channels, with 8-bit brightness control
++	  for each channel. It's usually found in mobile phones as
++	  status indicators.
 +
- config LEDS_SGM3140
- 	tristate "LED support for the SGM3140"
- 	depends on V4L2_FLASH_LED_CLASS || !V4L2_FLASH_LED_CLASS
-diff --git a/drivers/leds/flash/Makefile b/drivers/leds/flash/Makefile
-index 712fb737a428e..44e6c1b4beb37 100644
---- a/drivers/leds/flash/Makefile
-+++ b/drivers/leds/flash/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_LEDS_MAX77693)	+= leds-max77693.o
- obj-$(CONFIG_LEDS_QCOM_FLASH)	+= leds-qcom-flash.o
- obj-$(CONFIG_LEDS_RT4505)	+= leds-rt4505.o
- obj-$(CONFIG_LEDS_RT8515)	+= leds-rt8515.o
-+obj-$(CONFIG_LEDS_S2M_FLASH)	+= leds-s2m-flash.o
- obj-$(CONFIG_LEDS_SGM3140)	+= leds-sgm3140.o
- obj-$(CONFIG_LEDS_SY7802)	+= leds-sy7802.o
- obj-$(CONFIG_LEDS_TPS6131X)	+= leds-tps6131x.o
-diff --git a/drivers/leds/flash/leds-s2m-flash.c b/drivers/leds/flash/leds-s2m-flash.c
+ config LEDS_MT6370_RGB
+ 	tristate "LED Support for MediaTek MT6370 PMIC"
+ 	depends on MFD_MT6370
+diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
+index be45991f63f50..98050e1aa4255 100644
+--- a/drivers/leds/rgb/Makefile
++++ b/drivers/leds/rgb/Makefile
+@@ -6,4 +6,5 @@ obj-$(CONFIG_LEDS_LP5812)		+= leds-lp5812.o
+ obj-$(CONFIG_LEDS_NCP5623)		+= leds-ncp5623.o
+ obj-$(CONFIG_LEDS_PWM_MULTICOLOR)	+= leds-pwm-multicolor.o
+ obj-$(CONFIG_LEDS_QCOM_LPG)		+= leds-qcom-lpg.o
++obj-$(CONFIG_LEDS_S2M_RGB)		+= leds-s2m-rgb.o
+ obj-$(CONFIG_LEDS_MT6370_RGB)		+= leds-mt6370-rgb.o
+diff --git a/drivers/leds/rgb/leds-s2m-rgb.c b/drivers/leds/rgb/leds-s2m-rgb.c
 new file mode 100644
-index 0000000000000..177d23b432ce6
+index 0000000000000..51d12f2ef762a
 --- /dev/null
-+++ b/drivers/leds/flash/leds-s2m-flash.c
-@@ -0,0 +1,358 @@
++++ b/drivers/leds/rgb/leds-s2m-rgb.c
+@@ -0,0 +1,446 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Flash and Torch LED Driver for Samsung S2M series PMICs.
++ * RGB LED Driver for Samsung S2M series PMICs.
 + *
 + * Copyright (c) 2015 Samsung Electronics Co., Ltd
 + * Copyright (c) 2026 Kaustabh Chakraborty <kauschluss@disroot.org>
 + */
 +
 +#include <linux/container_of.h>
-+#include <linux/led-class-flash.h>
++#include <linux/led-class-multicolor.h>
 +#include <linux/mfd/samsung/core.h>
 +#include <linux/mfd/samsung/s2mu005.h>
++#include <linux/minmax.h>
 +#include <linux/module.h>
++#include <linux/mutex.h>
 +#include <linux/of.h>
 +#include <linux/platform_device.h>
 +#include <linux/regmap.h>
-+#include <media/v4l2-flash-led-class.h>
 +
-+#define MAX_CHANNELS	2
-+
-+struct s2m_led {
++struct s2m_rgb {
++	struct device *dev;
 +	struct regmap *regmap;
-+	struct led_classdev_flash fled;
-+	struct v4l2_flash *v4l2_flash;
++	struct led_classdev_mc mc;
++	enum sec_device_type device_type;
 +	/*
-+	 * The mutex object prevents the concurrent access of flash control
-+	 * registers by the LED and V4L2 subsystems.
++	 * The mutex object prevents race conditions when evaluation and
++	 * application of LED pattern state.
 +	 */
 +	struct mutex lock;
-+	unsigned int reg_enable;
-+	u8 channel;
-+	u8 flash_brightness;
-+	u8 flash_timeout;
++	/*
++	 * State variables representing the current LED pattern, these only to
++	 * be accessed when lock is held.
++	 */
++	u8 ramp_up;
++	u8 ramp_dn;
++	u8 stay_hi;
++	u8 stay_lo;
 +};
 +
-+static struct s2m_led *to_s2m_led(struct led_classdev_flash *fled)
++static struct led_classdev_mc *to_s2m_mc(struct led_classdev *cdev)
 +{
-+	return container_of(fled, struct s2m_led, fled);
++	return container_of(cdev, struct led_classdev_mc, led_cdev);
 +}
 +
-+static struct led_classdev_flash *to_s2m_fled(struct led_classdev *cdev)
++static struct s2m_rgb *to_s2m_rgb(struct led_classdev_mc *mc)
 +{
-+	return container_of(cdev, struct led_classdev_flash, led_cdev);
++	return container_of(mc, struct s2m_rgb, mc);
 +}
 +
-+static int s2m_fled_flash_brightness_set(struct led_classdev_flash *fled, u32 brightness)
-+{
-+	struct s2m_led *led = to_s2m_led(fled);
-+	struct led_flash_setting *setting = &fled->brightness;
-+
-+	led->flash_brightness = (brightness - setting->min) / setting->step;
-+
-+	return 0;
-+}
-+
-+static int s2m_fled_flash_timeout_set(struct led_classdev_flash *fled, u32 timeout)
-+{
-+	struct s2m_led *led = to_s2m_led(fled);
-+	struct led_flash_setting *setting = &fled->timeout;
-+
-+	led->flash_timeout = (timeout - setting->min) / setting->step;
-+
-+	return 0;
-+}
-+
-+#if IS_ENABLED(CONFIG_V4L2_FLASH_LED_CLASS)
-+static int s2m_fled_flash_external_strobe_set(struct v4l2_flash *v4l2_flash, bool enable)
-+{
-+	struct s2m_led *led = to_led(v4l2_flash->fled_cdev);
-+
-+	mutex_lock(&led->lock);
-+
-+	led->fled.ops->strobe_set(&led->fled, enable);
-+
-+	mutex_unlock(&led->lock);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_flash_ops s2m_fled_v4l2_flash_ops = {
-+	.external_strobe_set = s2m_fled_flash_external_strobe_set,
-+};
-+#else
-+static const struct v4l2_flash_ops s2m_fled_v4l2_flash_ops;
-+#endif
-+
-+static void s2m_fled_v4l2_flash_release(void *v4l2_flash)
-+{
-+	v4l2_flash_release(v4l2_flash);
-+}
-+
-+static int s2mu005_fled_torch_brightness_set(struct led_classdev *cdev, enum led_brightness value)
-+{
-+	struct s2m_led *led = to_s2m_led(to_s2m_fled(cdev));
-+	int ret;
-+
-+	mutex_lock(&led->lock);
-+
-+	if (!value) {
-+		ret = regmap_clear_bits(led->regmap, led->reg_enable,
-+					S2MU005_FLED_TORCH_EN(led->channel));
-+		if (ret < 0)
-+			dev_err(cdev->dev, "failed to disable torch LED\n");
-+		goto unlock;
-+	}
-+
-+	ret = regmap_update_bits(led->regmap, S2MU005_REG_FLED_CH_CTRL1(led->channel),
-+				 S2MU005_FLED_TORCH_IOUT,
-+				 FIELD_PREP(S2MU005_FLED_TORCH_IOUT, value - 1));
-+	if (ret < 0) {
-+		dev_err(cdev->dev, "failed to set torch current\n");
-+		goto unlock;
-+	}
-+
-+	ret = regmap_set_bits(led->regmap, led->reg_enable, S2MU005_FLED_TORCH_EN(led->channel));
-+	if (ret < 0) {
-+		dev_err(cdev->dev, "failed to enable torch LED\n");
-+		goto unlock;
-+	}
-+
-+unlock:
-+	mutex_unlock(&led->lock);
-+
-+	return ret;
-+}
-+
-+static int s2mu005_fled_flash_strobe_set(struct led_classdev_flash *fled, bool state)
-+{
-+	struct s2m_led *led = to_s2m_led(fled);
-+	int ret;
-+
-+	mutex_lock(&led->lock);
-+
-+	ret = regmap_clear_bits(led->regmap, led->reg_enable, S2MU005_FLED_FLASH_EN(led->channel));
-+	if (ret < 0) {
-+		dev_err(fled->led_cdev.dev, "failed to disable flash LED\n");
-+		goto unlock;
-+	}
-+
-+	if (!state)
-+		goto unlock;
-+
-+	ret = regmap_update_bits(led->regmap, S2MU005_REG_FLED_CH_CTRL0(led->channel),
-+				 S2MU005_FLED_FLASH_IOUT,
-+				 FIELD_PREP(S2MU005_FLED_FLASH_IOUT, led->flash_brightness));
-+	if (ret < 0) {
-+		dev_err(fled->led_cdev.dev, "failed to set flash brightness\n");
-+		goto unlock;
-+	}
-+
-+	ret = regmap_update_bits(led->regmap, S2MU005_REG_FLED_CH_CTRL3(led->channel),
-+				 S2MU005_FLED_FLASH_TIMEOUT,
-+				 FIELD_PREP(S2MU005_FLED_FLASH_TIMEOUT, led->flash_timeout));
-+	if (ret < 0) {
-+		dev_err(fled->led_cdev.dev, "failed to set flash timeout\n");
-+		goto unlock;
-+	}
-+
-+	ret = regmap_set_bits(led->regmap, led->reg_enable, S2MU005_FLED_FLASH_EN(led->channel));
-+	if (ret < 0) {
-+		dev_err(fled->led_cdev.dev, "failed to enable flash LED\n");
-+		goto unlock;
-+	}
-+
-+unlock:
-+	mutex_unlock(&led->lock);
-+
-+	return 0;
-+}
-+
-+static int s2mu005_fled_flash_strobe_get(struct led_classdev_flash *fled, bool *state)
-+{
-+	struct s2m_led *led = to_s2m_led(fled);
-+	u32 val;
-+	int ret;
-+
-+	mutex_lock(&led->lock);
-+
-+	ret = regmap_read(led->regmap, S2MU005_REG_FLED_STATUS, &val);
-+	if (ret < 0) {
-+		dev_err(fled->led_cdev.dev, "failed to fetch LED status");
-+		goto unlock;
-+	}
-+
-+	*state = !!(val & S2MU005_FLED_FLASH_STATUS(led->channel));
-+
-+unlock:
-+	mutex_unlock(&led->lock);
-+
-+	return ret;
-+}
-+
-+static const struct led_flash_ops s2mu005_fled_flash_ops = {
-+	.flash_brightness_set = s2m_fled_flash_brightness_set,
-+	.timeout_set = s2m_fled_flash_timeout_set,
-+	.strobe_set = s2mu005_fled_flash_strobe_set,
-+	.strobe_get = s2mu005_fled_flash_strobe_get,
++static const u32 s2mu005_rgb_lut_ramp[] = {
++	0,	100,	200,	300,	400,	500,	600,	700,
++	800,	1000,	1200,	1400,	1600,	1800,	2000,	2200,
 +};
 +
-+static int s2mu005_fled_init(struct s2m_led *led, struct device *dev, struct regmap *regmap,
-+			     unsigned int nr_channels)
++static const u32 s2mu005_rgb_lut_stay_hi[] = {
++	100,	200,	300,	400,	500,	750,	1000,	1250,
++	1500,	1750,	2000,	2250,	2500,	2750,	3000,	3250,
++};
++
++static const u32 s2mu005_rgb_lut_stay_lo[] = {
++	0,	500,	1000,	1500,	2000,	2500,	3000,	3500,
++	4000,	4500,	5000,	6000,	7000,	8000,	10000,	12000,
++};
++
++static int s2mu005_rgb_apply_params(struct s2m_rgb *rgb)
 +{
-+	unsigned int val;
-+	int i, ret;
++	struct regmap *regmap = rgb->regmap;
++	unsigned int ramp_val = 0;
++	unsigned int stay_val = 0;
++	int ret;
++	int i;
 +
-+	/* Enable the LED channels. */
-+	ret = regmap_set_bits(regmap, S2MU005_REG_FLED_CTRL1, S2MU005_FLED_CH_EN);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to enable LED channels\n");
++	ramp_val |= FIELD_PREP(S2MU005_RGB_CH_RAMP_UP, rgb->ramp_up);
++	ramp_val |= FIELD_PREP(S2MU005_RGB_CH_RAMP_DN, rgb->ramp_dn);
 +
-+	ret = regmap_read(regmap, S2MU005_REG_ID, &val);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to read revision\n");
++	stay_val |= FIELD_PREP(S2MU005_RGB_CH_STAY_HI, rgb->stay_hi);
++	stay_val |= FIELD_PREP(S2MU005_RGB_CH_STAY_LO, rgb->stay_lo);
 +
-+	for (i = 0; i < nr_channels; i++) {
-+		/*
-+		 * Read the revision register. Revision EVT0 has the register
-+		 * at CTRL4, while EVT1 and higher have it at CTRL6.
-+		 */
-+		if (FIELD_GET(S2MU005_ID_MASK, val) == 0)
-+			led[i].reg_enable = S2MU005_REG_FLED_CTRL4;
++	ret = regmap_write(regmap, S2MU005_REG_RGB_EN, S2MU005_RGB_RESET);
++	if (ret < 0) {
++		dev_err(rgb->dev, "failed to reset RGB LEDs\n");
++		return ret;
++	}
++
++	for (i = 0; i < rgb->mc.num_colors; i++) {
++		ret = regmap_write(regmap, S2MU005_REG_RGB_CH_CTRL(i),
++				   rgb->mc.subled_info[i].brightness);
++		if (ret < 0) {
++			dev_err(rgb->dev, "failed to set LED brightness\n");
++			return ret;
++		}
++
++		ret = regmap_write(regmap, S2MU005_REG_RGB_CH_RAMP(i), ramp_val);
++		if (ret < 0) {
++			dev_err(rgb->dev, "failed to set ramp timings\n");
++			return ret;
++		}
++
++		ret = regmap_write(regmap, S2MU005_REG_RGB_CH_STAY(i), stay_val);
++		if (ret < 0) {
++			dev_err(rgb->dev, "failed to set stay timings\n");
++			return ret;
++		}
++	}
++
++	ret = regmap_update_bits(regmap, S2MU005_REG_RGB_EN, S2MU005_RGB_SLOPE,
++				 S2MU005_RGB_SLOPE_SMOOTH);
++	if (ret < 0) {
++		dev_err(rgb->dev, "failed to set ramp slope\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static int s2mu005_rgb_reset_params(struct s2m_rgb *rgb)
++{
++	struct regmap *regmap = rgb->regmap;
++	int ret;
++
++	ret = regmap_write(regmap, S2MU005_REG_RGB_EN, S2MU005_RGB_RESET);
++	if (ret < 0) {
++		dev_err(rgb->dev, "failed to reset RGB LEDs\n");
++		return ret;
++	}
++
++	rgb->ramp_up = 0;
++	rgb->ramp_dn = 0;
++	rgb->stay_hi = 0;
++	rgb->stay_lo = 0;
++
++	return 0;
++}
++
++static int s2m_rgb_lut_calc_timing(const u32 *lut, const size_t len,
++				   const u32 req_time, u8 *idx)
++{
++	int lo = 0;
++	int hi = len - 2;
++
++	/* Bounds checking */
++	if (req_time < lut[0] || req_time > lut[len - 1])
++		return -EINVAL;
++
++	/*
++	 * Perform a binary search to pick the best timing from the LUT.
++	 *
++	 * The search algorithm picks two consecutive elements of the
++	 * LUT and tries to search the pair between which the requested
++	 * time lies.
++	 */
++	while (lo <= hi) {
++		*idx = (lo + hi) / 2;
++
++		if ((lut[*idx] <= req_time) && (req_time <= lut[*idx + 1]))
++			break;
++
++		if ((req_time < lut[*idx]) && (req_time < lut[*idx + 1]))
++			hi = *idx - 1;
 +		else
-+			led[i].reg_enable = S2MU005_REG_FLED_CTRL6;
++			lo = *idx + 1;
 +	}
++
++	/*
++	 * The searched timing is always less than the requested time. At
++	 * times, the succeeding timing in the LUT is closer thus more
++	 * accurate. Adjust the resulting value if that's the case.
++	 */
++	if (abs(req_time - lut[*idx]) > abs(lut[*idx + 1] - req_time))
++		(*idx)++;
 +
 +	return 0;
 +}
 +
-+static int s2mu005_fled_init_channel(struct s2m_led *led, struct device *dev,
-+				     struct fwnode_handle *fwnp)
++static int s2m_rgb_pattern_set(struct led_classdev *cdev, struct led_pattern *pattern,
++			       u32 len, int repeat)
 +{
-+	struct led_classdev *cdev = &led->fled.led_cdev;
-+	struct led_init_data init_data = {};
-+	struct v4l2_flash_config v4l2_cfg = {};
++	struct s2m_rgb *rgb = to_s2m_rgb(to_s2m_mc(cdev));
++	const u32 *lut_ramp_up, *lut_ramp_dn, *lut_stay_hi, *lut_stay_lo;
++	size_t lut_ramp_up_len, lut_ramp_dn_len, lut_stay_hi_len, lut_stay_lo_len;
++	int brightness_peak = 0;
++	u32 time_hi = 0, time_lo = 0;
++	bool ramp_up_en, ramp_dn_en;
 +	int ret;
++	int i;
 +
-+	cdev->max_brightness = 16;
-+	cdev->brightness_set_blocking = s2mu005_fled_torch_brightness_set;
-+	cdev->flags |= LED_DEV_CAP_FLASH;
++	/*
++	 * The typical pattern supported by this device can be
++	 * represented with the following graph:
++	 *
++	 *  255 T ''''''-.                         .-'''''''-.
++	 *      |         '.                     .'           '.
++	 *      |           \                   /               \
++	 *      |            '.               .'                 '.
++	 *      |              '-...........-'                     '-
++	 *    0 +----------------------------------------------------> time (s)
++	 *
++	 *       <---- HIGH ----><-- LOW --><-------- HIGH --------->
++	 *       <-----><-------><---------><-------><-----><------->
++	 *       stay_hi ramp_dn   stay_lo   ramp_up stay_hi ramp_dn
++	 *
++	 * There are two states, named HIGH and LOW. HIGH has a non-zero
++	 * brightness level, while LOW is of zero brightness. The
++	 * pattern provided should mention only one zero and non-zero
++	 * brightness level. The hardware always starts the pattern from
++	 * the HIGH state, as shown in the graph.
++	 *
++	 * The HIGH state can be divided in three somewhat equal timings:
++	 * ramp_up, stay_hi, and ramp_dn. The LOW state has only one
++	 * timing: stay_lo.
++	 */
 +
-+	led->fled.timeout.min = 62000;
-+	led->fled.timeout.step = 62000;
-+	led->fled.timeout.max = 992000;
-+	led->fled.timeout.val = 992000;
++	/* Only indefinitely looping patterns are supported. */
++	if (repeat != -1)
++		return -EINVAL;
 +
-+	led->fled.brightness.min = 25000;
-+	led->fled.brightness.step = 25000;
-+	led->fled.brightness.max = 375000; /* 400000 causes flickering */
-+	led->fled.brightness.val = 375000;
++	/* Pattern should consist of at least two tuples. */
++	if (len < 2)
++		return -EINVAL;
 +
-+	s2m_fled_flash_timeout_set(&led->fled, led->fled.timeout.val);
-+	s2m_fled_flash_brightness_set(&led->fled, led->fled.brightness.val);
++	for (i = 0; i < len; i++) {
++		int brightness = pattern[i].brightness;
++		u32 delta_t = pattern[i].delta_t;
 +
-+	led->fled.ops = &s2mu005_fled_flash_ops;
++		if (brightness) {
++			/*
++			 * The pattern shold define only one non-zero
++			 * brightness in the HIGH state. The device
++			 * doesn't have any provisions to handle
++			 * multiple peak brightness levels.
++			 */
++			if (brightness_peak && brightness_peak != brightness)
++				return -EINVAL;
 +
-+	init_data.fwnode = fwnp;
-+	ret = devm_led_classdev_flash_register_ext(dev, &led->fled, &init_data);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to create LED flash device\n");
-+
-+	v4l2_cfg.intensity.min = led->fled.timeout.min;
-+	v4l2_cfg.intensity.step = led->fled.timeout.step;
-+	v4l2_cfg.intensity.max = led->fled.timeout.max;
-+	v4l2_cfg.intensity.val = led->fled.timeout.val;
-+
-+	v4l2_cfg.has_external_strobe = true;
-+
-+	led->v4l2_flash = v4l2_flash_init(dev, fwnp, &led->fled, &s2m_fled_v4l2_flash_ops,
-+					  &v4l2_cfg);
-+	if (IS_ERR(led->v4l2_flash)) {
-+		v4l2_flash_release(led->v4l2_flash);
-+		return dev_err_probe(dev, PTR_ERR(led->v4l2_flash),
-+				     "failed to create V4L2 flash device\n");
++			brightness_peak = brightness;
++			time_hi += delta_t;
++			ramp_dn_en = !!delta_t;
++		} else {
++			time_lo += delta_t;
++			ramp_up_en = !!delta_t;
++		}
 +	}
 +
-+	ret = devm_add_action_or_reset(dev, (void *)s2m_fled_v4l2_flash_release, led->v4l2_flash);
++	switch (rgb->device_type) {
++	case S2MU005:
++		lut_ramp_up = s2mu005_rgb_lut_ramp;
++		lut_ramp_up_len = ARRAY_SIZE(s2mu005_rgb_lut_ramp);
++		lut_ramp_dn = s2mu005_rgb_lut_ramp;
++		lut_ramp_dn_len = ARRAY_SIZE(s2mu005_rgb_lut_ramp);
++		lut_stay_hi = s2mu005_rgb_lut_stay_hi;
++		lut_stay_hi_len = ARRAY_SIZE(s2mu005_rgb_lut_stay_hi);
++		lut_stay_lo = s2mu005_rgb_lut_stay_lo;
++		lut_stay_lo_len = ARRAY_SIZE(s2mu005_rgb_lut_stay_lo);
++		break;
++	default:
++		/* execution shouldn't reach here */
++		break;
++	}
++
++	mutex_lock(&rgb->lock);
++
++	/*
++	 * The timings ramp_up, stay_hi, and ramp_dn of the HIGH state
++	 * are roughly equal. Firstly, calculate and set timings for
++	 * ramp_up and ramp_dn (making sure they're exactly equal).
++	 */
++	rgb->ramp_up = 0;
++	rgb->ramp_dn = 0;
++
++	if (ramp_up_en) {
++		ret = s2m_rgb_lut_calc_timing(lut_ramp_up, lut_ramp_up_len, time_hi / 3,
++					      &rgb->ramp_up);
++		if (ret < 0)
++			goto param_fail;
++	}
++
++	if (ramp_dn_en) {
++		ret = s2m_rgb_lut_calc_timing(lut_ramp_dn, lut_ramp_dn_len, time_hi / 3,
++					      &rgb->ramp_dn);
++		if (ret < 0)
++			goto param_fail;
++	}
++
++	/*
++	 * Subtract the allocated ramp timings from time_hi (and also
++	 * making sure it doesn't underflow!). The remaining time is
++	 * allocated to stay_hi.
++	 */
++	time_hi -= min(time_hi, lut_ramp_up[rgb->ramp_up]);
++	time_hi -= min(time_hi, lut_ramp_dn[rgb->ramp_dn]);
++
++	ret = s2m_rgb_lut_calc_timing(lut_stay_hi, lut_stay_hi_len, time_hi, &rgb->stay_hi);
 +	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to add cleanup action\n");
++		goto param_fail;
++
++	ret = s2m_rgb_lut_calc_timing(lut_stay_lo, lut_stay_lo_len, time_lo, &rgb->stay_lo);
++	if (ret < 0)
++		goto param_fail;
++
++	led_mc_calc_color_components(&rgb->mc, brightness_peak);
++	switch (rgb->device_type) {
++	case S2MU005:
++		ret = s2mu005_rgb_apply_params(rgb);
++		break;
++	default:
++		/* execution shouldn't reach here */
++		break;
++	}
++	if (ret < 0)
++		goto param_fail;
++
++	mutex_unlock(&rgb->lock);
 +
 +	return 0;
++
++param_fail:
++	rgb->ramp_up = 0;
++	rgb->ramp_dn = 0;
++	rgb->stay_hi = 0;
++	rgb->stay_lo = 0;
++
++	mutex_unlock(&rgb->lock);
++
++	return ret;
 +}
 +
-+static int s2m_fled_probe(struct platform_device *pdev)
++static int s2m_rgb_pattern_clear(struct led_classdev *cdev)
++{
++	struct s2m_rgb *rgb = to_s2m_rgb(to_s2m_mc(cdev));
++	int ret = 0;
++
++	mutex_lock(&rgb->lock);
++
++	switch (rgb->device_type) {
++	case S2MU005:
++		ret = s2mu005_rgb_reset_params(rgb);
++		break;
++	default:
++		/* execution shouldn't reach here */
++		break;
++	}
++
++	mutex_unlock(&rgb->lock);
++
++	return ret;
++}
++
++static int s2m_rgb_brightness_set(struct led_classdev *cdev, enum led_brightness value)
++{
++	struct s2m_rgb *rgb = to_s2m_rgb(to_s2m_mc(cdev));
++	int ret = 0;
++
++	if (!value)
++		return s2m_rgb_pattern_clear(cdev);
++
++	mutex_lock(&rgb->lock);
++
++	led_mc_calc_color_components(&rgb->mc, value);
++	switch (rgb->device_type) {
++	case S2MU005:
++		ret = s2mu005_rgb_apply_params(rgb);
++		break;
++	default:
++		/* execution shouldn't reach here */
++		break;
++	}
++
++	mutex_unlock(&rgb->lock);
++
++	return ret;
++}
++
++static struct mc_subled s2mu005_rgb_subled_info[] = {
++	{ .channel = 0, .color_index = LED_COLOR_ID_BLUE },
++	{ .channel = 1, .color_index = LED_COLOR_ID_GREEN },
++	{ .channel = 2, .color_index = LED_COLOR_ID_RED },
++};
++
++static int s2m_rgb_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct sec_pmic_dev *ddata = dev_get_drvdata(dev->parent);
-+	struct s2m_led *led;
++	struct sec_pmic_dev *pmic_drvdata = dev_get_drvdata(dev->parent);
++	struct s2m_rgb *rgb;
++	struct led_init_data init_data = {};
 +	int ret;
 +
-+	led = devm_kzalloc(dev, sizeof(*led) * MAX_CHANNELS, GFP_KERNEL);
-+	if (!led)
++	rgb = devm_kzalloc(dev, sizeof(*rgb), GFP_KERNEL);
++	if (!rgb)
 +		return -ENOMEM;
 +
-+	switch (platform_get_device_id(pdev)->driver_data) {
++	platform_set_drvdata(pdev, rgb);
++	rgb->dev = dev;
++	rgb->regmap = pmic_drvdata->regmap_pmic;
++	rgb->device_type = platform_get_device_id(pdev)->driver_data;
++
++	switch (rgb->device_type) {
 +	case S2MU005:
-+		ret = s2mu005_fled_init(led, dev, ddata->regmap_pmic, MAX_CHANNELS);
-+		if (ret)
-+			return ret;
++		rgb->mc.subled_info = s2mu005_rgb_subled_info;
++		rgb->mc.num_colors = ARRAY_SIZE(s2mu005_rgb_subled_info);
 +		break;
 +	default:
 +		return dev_err_probe(dev, -ENODEV, "device type %d is not supported by driver\n",
-+				     ddata->device_type);
++				     pmic_drvdata->device_type);
 +	}
 +
-+	device_for_each_child_node_scoped(dev, child) {
-+		u32 reg;
++	rgb->mc.led_cdev.max_brightness = 255;
++	rgb->mc.led_cdev.brightness_set_blocking = s2m_rgb_brightness_set;
++	rgb->mc.led_cdev.pattern_set = s2m_rgb_pattern_set;
++	rgb->mc.led_cdev.pattern_clear = s2m_rgb_pattern_clear;
 +
-+		if (fwnode_property_read_u32(child, "reg", &reg))
-+			continue;
++	ret = devm_mutex_init(dev, &rgb->lock);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to create mutex lock\n");
 +
-+		if (led[reg].regmap) {
-+			dev_warn(dev, "duplicate node for channel %d\n", reg);
-+			continue;
-+		}
-+
-+		led[reg].regmap = ddata->regmap_pmic;
-+		led[reg].channel = (u8)reg;
-+
-+		ret = devm_mutex_init(dev, &led[reg].lock);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to create mutex\n");
-+
-+		switch (platform_get_device_id(pdev)->driver_data) {
-+		case S2MU005:
-+			ret = s2mu005_fled_init_channel(led + reg, dev, child);
-+			if (ret < 0)
-+				return ret;
-+			break;
-+		}
-+	}
++	init_data.fwnode = of_fwnode_handle(dev->of_node);
++	ret = devm_led_classdev_multicolor_register_ext(dev, &rgb->mc, &init_data);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed to create LED device\n");
 +
 +	return 0;
 +}
 +
-+static const struct platform_device_id s2m_fled_id_table[] = {
-+	{ "s2mu005-flash", S2MU005 },
++static const struct platform_device_id s2m_rgb_id_table[] = {
++	{ "s2mu005-rgb", S2MU005 },
 +	{ /* sentinel */ },
 +};
-+MODULE_DEVICE_TABLE(platform, s2m_fled_id_table);
++MODULE_DEVICE_TABLE(platform, s2m_rgb_id_table);
 +
-+static const struct of_device_id s2m_fled_of_match_table[] = {
-+	{ .compatible = "samsung,s2mu005-flash", .data = (void *)S2MU005 },
++static const struct of_device_id s2m_rgb_of_match_table[] = {
++	{ .compatible = "samsung,s2mu005-rgb", .data = (void *)S2MU005 },
 +	{ /* sentinel */ },
 +};
-+MODULE_DEVICE_TABLE(of, s2m_fled_of_match_table);
++MODULE_DEVICE_TABLE(of, s2m_rgb_of_match_table);
 +
-+static struct platform_driver s2m_fled_driver = {
++static struct platform_driver s2m_rgb_driver = {
 +	.driver = {
-+		.name = "s2m-flash",
++		.name = "s2m-rgb",
 +	},
-+	.probe = s2m_fled_probe,
-+	.id_table = s2m_fled_id_table,
++	.probe = s2m_rgb_probe,
++	.id_table = s2m_rgb_id_table,
 +};
-+module_platform_driver(s2m_fled_driver);
++module_platform_driver(s2m_rgb_driver);
 +
-+MODULE_DESCRIPTION("Flash/Torch LED Driver For Samsung S2M Series PMICs");
++MODULE_DESCRIPTION("RGB LED Driver For Samsung S2M Series PMICs");
 +MODULE_AUTHOR("Kaustabh Chakraborty <kauschluss@disroot.org>");
 +MODULE_LICENSE("GPL");
 
