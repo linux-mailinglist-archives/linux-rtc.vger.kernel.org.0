@@ -1,189 +1,162 @@
-Return-Path: <linux-rtc+bounces-6449-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6450-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iKRJFn2V8GnnVAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6449-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Apr 2026 13:09:49 +0200
+	id QL8fJwbW8GkSZQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6450-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Apr 2026 17:45:10 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17F434835B6
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Apr 2026 13:09:49 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BAD448823B
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Apr 2026 17:45:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CF34C308F214
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Apr 2026 10:56:50 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 343EC301C1B5
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Apr 2026 14:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5F73F9F45;
-	Tue, 28 Apr 2026 10:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C675E43CED2;
+	Tue, 28 Apr 2026 14:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OnXstZmN"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="vxjVaeVo"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA3D3F9F36
-	for <linux-rtc@vger.kernel.org>; Tue, 28 Apr 2026 10:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC1B4418DF;
+	Tue, 28 Apr 2026 14:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777373028; cv=none; b=Z14BFoAuye6OPuuf1+IYk4OBoL2zrLn43HyyargpQD7vYcvInQ3kjuWla2SGBj6jiMZCAOp0R0dQYNjkI+3mv4UZQCrzjM46Z7+6iNzCuBvj4PlT9KjX3ydck0rSSyM+ntIby2B/AZVy3TphbkV9rNgGOjP+tV2YOFmXj0NINek=
+	t=1777386063; cv=none; b=tDYXD7zWE5Agld29ASOFeQfJ9lNxP/b9yPEfP9sLY6VaLMaN3FoDsjnVrdK/Abx8cSPuar36LfBHEhBaLoG1o+8xVcwARVH1BrsrzmU8bvIAyHmYoRQx6xCE54vphbLKHiSE6AI+31ZGre+36t7UquLl/HkLLC66brFOQcOWHlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777373028; c=relaxed/simple;
-	bh=Txo9jXdDRugPyX7qmDybQ2dYpzzLy0YS2OMMBLInikE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SnHlNfVc10way5r92TlpbwLIsVdVrSF4rtrPwdmzFTy8a32/kL6NsRw85idOPfrCQp2nrIsi84H3eT6IujgFvBkdnRRTdOItApXAaQcwU33m+5rzB7BBetuaLoux1685EIygrFLaJdWU5G01P9l71JCM9QAWyTIShpIJPFfWK6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OnXstZmN; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48a3e9862f0so60193075e9.1
-        for <linux-rtc@vger.kernel.org>; Tue, 28 Apr 2026 03:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777373025; x=1777977825; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hKtRqSF01B3I4gaZJfxuG2QF2TOpMdK++wbIpuZOUFw=;
-        b=OnXstZmN7ww1Q4bhga8AwQWndl6j+ndOBx2NRQaG/ke7OEbOxNum8W/rv6iVgWWpsP
-         q3CqBLQEPXY6iz2D7jDqte1G8jU5tZRYGnO5sYLmLOYq0HhrVh8lUNG2Pa+PTDRUbBj8
-         yXvz1CKuvbjoMO/5hlzvifIjmBs1huNuA2I2nkMOI0UGUJStbkpc26sEi5r1jR65caUI
-         rKz1BFO0+/M/uhxlM+PjQdZhsnYgbUuAwIfTbMeQZ7QefPDTYw6nsVY264kH03ze1LtD
-         lTRdJn7H0otmTRynmseltG+hfSWaQ6x3nMXcRRDxxFzlXhbdE1cKgLGYcmyphB1lBzLY
-         ZXsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777373025; x=1777977825;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hKtRqSF01B3I4gaZJfxuG2QF2TOpMdK++wbIpuZOUFw=;
-        b=VOIsyM95jHgUAyYd4T7SN2rywuhBpceBYpV8kh5r/BccCFa4HSeBRo0w8oiSWh352r
-         6qtm7hjr6jliJBmUwTbrJqk42q3Qb77JQqNBCojTIWgEUFif2x6HN7yDkYIIh2BGrTZb
-         zPfAXp3k6mQ5O4cFL8g+Ony2Wt1BDPCKypM6qxicbMHGtk9FuirxupqoIce2o/EhxGev
-         unwV8VjAPQhY8IHZ1XIU39MVwf6C224v6MFW9CN8YmIAmd+q4CApFRopur1d0LJOuq/8
-         ifg7Ka0ykSFPb4MSG7i4uneNbrTMqHtcAUEN5BCpEU/+eywE24/l3SOQNu7jgTB49OPp
-         XQbw==
-X-Forwarded-Encrypted: i=1; AFNElJ/YRJP9i5hCSsjbqwFlR5Glpg5blJ/KEbovQeFupu/hOu4DQbAbP+GkfWpFudTTGKYYHLtSLr4gXvc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6yD/VZ7HxL2dhwBMr3xRga2vzJdambd0CQoAS69L/UH0A/Cc5
-	jJrsu0QeHk8Vy2J/ZEKh89xHIa3t76JjFTyB6m7eWuS1CM8HUKaointM
-X-Gm-Gg: AeBDiesuPEGBWFXIepGJaP3pL2iroJuG4tS8+2xIop+XB08+9A443K6V6+4FWu9Vv/X
-	iGqAW0CP1Ea8eTSdLX2lAgwhdM7qRZNx8nyrOJYwKlgxeSO3VbkTyCHxw+qgy01kYhbfZN4hkzh
-	G9jcD7lMYRxlC+/eBD50cWmwdWQhp91L8Iw/hmHG9PXUba+QHuttbfkva9R2NNujMpbpG6N2kvc
-	YEN/d6wUcHarQQ2imDOPJUyDyZmmybo6IhqSdmcuH108Qshyn/7wcAgjE0bT6u+ED/qCovFepXd
-	rOwYYjGWucVUmnmLxE+GMt0gKUyaciDPn473WyeSCivMbkVZwB5BqJ3Eyv9aUQRjq/4SCVBkQd9
-	LXyg30/HIcjtunznb/n9r1NLyoa71eJZ2FUi5CjL5QXTIPnk4TCn3ssH+NHR8Ayl167NqAmYky8
-	aXlsn2EyKfrjwa6v3NyyOWDSyfW6A2VnqG88hL7R69fDV16qGpf0B5OVo9wPrFDkeubIKyzJxlB
-	m8=
-X-Received: by 2002:a05:600c:a08b:b0:48a:53cb:8604 with SMTP id 5b1f17b1804b1-48a78a536acmr28625155e9.14.1777373024680;
-        Tue, 28 Apr 2026 03:43:44 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a77af28e6sm41696855e9.6.2026.04.28.03.43.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 03:43:44 -0700 (PDT)
-Date: Tue, 28 Apr 2026 11:43:42 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Yury Norov <ynorov@nvidia.com>, Thomas Gleixner <tglx@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Andy
- Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Jonathan Cameron <jic23@kernel.org>, David Lechner <dlechner@baylibre.com>,
- Johannes Berg <johannes@sipsolutions.net>, Nuno =?UTF-8?B?U8Oh?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Ping-Ke Shih
- <pkshih@realtek.com>, Richard Cochran <richardcochran@gmail.com>, Andrew
- Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Yury Norov <yury.norov@gmail.com>, Rasmus
- Villemoes <linux@rasmusvillemoes.dk>, Hans de Goede <hansg@kernel.org>,
- Linus Walleij <linusw@kernel.org>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Salah Triki <salah.triki@gmail.com>, Achim
- Gratz <Achim.Gratz@stromeko.de>, Ben Collins <bcollins@watter.com>,
- x86@kernel.org, linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 7/9] wifi: rtw89: switch to using FIELD_GET_SIGNED()
-Message-ID: <20260428114342.0d674fd8@pumpkin>
-In-Reply-To: <afBdXj_9r25Ssnz6@ashevche-desk.local>
+	s=arc-20240116; t=1777386063; c=relaxed/simple;
+	bh=Gf+XrcYgPenGEIKbsoSDcC9F+FbyEhYGvpS57tMlaI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OICK6HWQNvOkkcFe8gi4Y6kzK/6UhiwJYkhBL68KsniClzJrJ/Bte5Gr7hBiU5TTFTIZctUAeiC3eZFW1pIqCw4IKKd03Buq2cozsYau22kuLiMSbGYn16za2S/4DIRuxJ1eimZ+hT2x+9gTZ1uDZ3uODbsmaZhYlhgrHXyYZgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=vxjVaeVo; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id A3A204E42B56;
+	Tue, 28 Apr 2026 14:20:52 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 71025601D0;
+	Tue, 28 Apr 2026 14:20:52 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C9BD910728AA4;
+	Tue, 28 Apr 2026 16:20:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1777386050; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=Se88myibkKEKJupqIWVDpzFA5fJPWlqZId0UB7SQ3r8=;
+	b=vxjVaeVoViKGSjmy7yA8GP/7DlUObLqX7S8zv6rcnNtDxwGmIJXvVzu3v4mrrviqaY5A9e
+	LJp++FMBsE1rBNkgf+gPOlF7M4dmIf8dfvFsZ8mr/BXasf4iWnFFBYk6V5+ocpAxJmQclD
+	dqAoNv2o6aTuDlojzUMk7cANEAVzmJvw9SwcZ66z57zpBrriy/fe+UhXu8x6GUD8ItAIjn
+	5OwX3oTmK5ouLl/du3JxUfurO0KeigVf4PiX8ZzxgUeGMefgok2tSohk1VICdEGxouRQs/
+	QVYdzCGuyaj+yMIMPX6HUQ2HwIPF/1GVumnQAW14Vjlp9xzAmcvW2MbU7oEcvg==
+Date: Tue, 28 Apr 2026 16:20:40 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Yury Norov <ynorov@nvidia.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Ping-Ke Shih <pkshih@realtek.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Hans de Goede <hansg@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Salah Triki <salah.triki@gmail.com>,
+	Achim Gratz <Achim.Gratz@stromeko.de>,
+	Ben Collins <bcollins@watter.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 8/9] rtc: rv3032: switch to using FIELD_GET_SIGNED()
+Message-ID: <202604281420408aa2e078@mail.local>
 References: <20260427214127.406067-1-ynorov@nvidia.com>
-	<20260427214127.406067-8-ynorov@nvidia.com>
-	<afBdXj_9r25Ssnz6@ashevche-desk.local>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+ <20260427214127.406067-9-ynorov@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 17F434835B6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260427214127.406067-9-ynorov@nvidia.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 8BAD448823B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-6450-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6449-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	FREEMAIL_CC(0.00)[nvidia.com,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,baylibre.com,sipsolutions.net,analog.com,realtek.com,gmail.com,lunn.ch,davemloft.net,google.com,bootlin.com,rasmusvillemoes.dk,stromeko.de,watter.com,vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,baylibre.com,sipsolutions.net,gmail.com,analog.com,realtek.com,lunn.ch,davemloft.net,google.com,rasmusvillemoes.dk,stromeko.de,watter.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[davidlaightlinux@gmail.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[bootlin.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,netdev];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email]
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nvidia.com:email,mail.local:mid,bootlin.com:email,bootlin.com:dkim,bootlin.com:url]
 
-On Tue, 28 Apr 2026 10:10:22 +0300
-Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+On 27/04/2026 17:41:25-0400, Yury Norov wrote:
+> Switch from sign_extend32(FIELD_GET()) to the dedicated
+> FIELD_GET_SIGNED() and don't calculate the fields length explicitly.
+> 
+> Signed-off-by: Yury Norov <ynorov@nvidia.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-> On Mon, Apr 27, 2026 at 05:41:24PM -0400, Yury Norov wrote:
-> > Switch from sign_extend32(FIELD_GET()) to the dedicated
-> > FIELD_GET_SIGNED() and don't calculate the fields length explicitly.  
+> ---
+>  drivers/rtc/rtc-rv3032.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> ...
-> 
-> >  	for (i = 0; i < ADDC_T_AVG; i++) {
-> >  		tmp = rtw89_phy_read32_mask(rtwdev, R_DBG32_D, MASKDWORD);
-> > -		dc_re += sign_extend32(FIELD_GET(0xfff000, tmp), 11);
-> > -		dc_im += sign_extend32(FIELD_GET(0xfff, tmp), 11);
-> > +		dc_re += FIELD_GET_SIGNED(0xfff000, tmp);
-> > +		dc_im += FIELD_GET_SIGNED(0xfff, tmp);  
-> 
-> In the same driver the GENMASK() is being used, why not  doing it here while at it?
-
-To me those bit masks look more readable than the GENMASK() calls would be.
-
-	David
-
-> 
-> >  	}  
-> 
-> ...
-> 
-> >  	for (i = 0; i < ADDC_T_AVG; i++) {
-> >  		tmp = rtw89_phy_read32_mask(rtwdev, R_DBG32_D, MASKDWORD);
-> > -		dc_re += sign_extend32(FIELD_GET(0xfff000, tmp), 11);
-> > -		dc_im += sign_extend32(FIELD_GET(0xfff, tmp), 11);
-> > +		dc_re += FIELD_GET_SIGNED(0xfff000, tmp);
-> > +		dc_im += FIELD_GET_SIGNED(0xfff, tmp);
-> >  	}  
-> 
-> Ditto, and it even looks like the same piece repeating twice in different
-> compilation units of the same driver...
+> diff --git a/drivers/rtc/rtc-rv3032.c b/drivers/rtc/rtc-rv3032.c
+> index 6c09da7738e1..6bafdec637ae 100644
+> --- a/drivers/rtc/rtc-rv3032.c
+> +++ b/drivers/rtc/rtc-rv3032.c
+> @@ -376,7 +376,7 @@ static int rv3032_read_offset(struct device *dev, long *offset)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	steps = sign_extend32(FIELD_GET(RV3032_OFFSET_MSK, value), 5);
+> +	steps = FIELD_GET_SIGNED(RV3032_OFFSET_MSK, value);
+>  
+>  	*offset = DIV_ROUND_CLOSEST(steps * OFFSET_STEP_PPT, 1000);
+>  
+> -- 
+> 2.51.0
 > 
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
