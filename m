@@ -1,166 +1,272 @@
-Return-Path: <linux-rtc+bounces-6452-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6453-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WK+2I9dT8WkugAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6452-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Apr 2026 02:41:59 +0200
+	id EDCnGCUK8mlXnAEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6453-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Apr 2026 15:39:49 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C95048DCD9
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Apr 2026 02:41:58 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE398494FAE
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Apr 2026 15:39:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B63513013FD3
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Apr 2026 00:41:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E1CC33006B1E
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Apr 2026 13:21:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA4921770B;
-	Wed, 29 Apr 2026 00:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58A33FCB2B;
+	Wed, 29 Apr 2026 13:21:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="Hd4gF/tn"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="Xp3Eqw6D"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810051DD0D4;
-	Wed, 29 Apr 2026 00:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20223F2101;
+	Wed, 29 Apr 2026 13:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777423308; cv=none; b=EtAdau46NEs9/7PPtO6KaTHuyFpTo0AHUOVdXSg2j6mpnGcPmL45B9BKiF6SUaUZUpMBUwQSOG4xxskFXx38/QG7HudC/ZkCRtiBcawJBZoO9h1XY1Z2g0e/zh2YODTGiwPgMXxMtVSkHI4Qymf09KH6UI1s4k36ruLllKzPz3c=
+	t=1777468917; cv=none; b=YoaTuUPAGDbzFsuRGL4jEvQ/rqbEq9QZ9OC8hYFQdZSD46Pq2X3wafNy3Pj+oVJlm4gTCGx3jtzU1/jIs/Tyjy4z1Dr+gnXXCJMaWCqltz75LMVhpNFnvszfAXmxSMwrtlbgSS7oJg98xw+xAkrxhlDDQ8JSE9YxXPgCABU3hcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777423308; c=relaxed/simple;
-	bh=YQkVH7lirlYNBMaQ3LoLyoQpPlONIc2D3c8S5pNufuA=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=E+5svuubvj8p1uBS+Z48TmUKkIFF5kLTQwgaP1qLkalnxssTByfgTChi5LcXyA1qWQ2ZFWGvGM0fqBTKOmxkTtV78YSoHy488fqQZPN7Y66Wek49RZHNgZnUCG81rX1PiFU+VkCdv5NPk0WxzrVeAAhqZ2p4/keAFUk2CjAUyrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=Hd4gF/tn; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 63T0eQy75850035, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1777423226; bh=YQkVH7lirlYNBMaQ3LoLyoQpPlONIc2D3c8S5pNufuA=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:MIME-Version;
-	b=Hd4gF/tnrGNSK0f4tEtSVhJIA/ckn7mucHDFLDFkjor7nufQbBpxJyk26DFueplr1
-	 H/kFO8EOYyrby+PZbEO7Llashb8Az5mbb8NiZ+JBZopF218JQBLBzWxWnSmcQeYMcG
-	 FE77Y5ZKQlUGv+v2el9rMqThvoL5BC/ktpVpBeukQ4miy2H5PEHRs+ilB2AdatZwrs
-	 Ef2dQUlKv+aju2AKz3inMgiYBJzaQmzqoFN7b1RZd4igd5kp0HJ78Ot0nlgQUxdpWb
-	 Wyf4YFkj8/hdebMyteQLs8kXpOTps7SaiG37U8B2OQAhSTs7lHMg/eNrTdpe4vHI9k
-	 EUJloqTHPgnQg==
-Received: from mail.realtek.com (rtkexhmbs02.realtek.com.tw[172.21.6.41])
-	by rtits2.realtek.com.tw (8.15.2/3.27/5.94) with ESMTPS id 63T0eQy75850035
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 Apr 2026 08:40:26 +0800
-Received: from RTKEXHMBS06.realtek.com.tw (10.21.1.56) by
- RTKEXHMBS02.realtek.com.tw (172.21.6.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Wed, 29 Apr 2026 08:40:27 +0800
-Received: from RTKEXHMBS06.realtek.com.tw ([fe80::ed72:3015:2840:4458]) by
- RTKEXHMBS06.realtek.com.tw ([fe80::ed72:3015:2840:4458%10]) with mapi id
- 15.02.1748.010; Wed, 29 Apr 2026 08:40:26 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: Yury Norov <ynorov@nvidia.com>, Thomas Gleixner <tglx@kernel.org>,
-        "Ingo
- Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen
-	<dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Andy
- Lutomirski" <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Jonathan Cameron" <jic23@kernel.org>,
-        David Lechner <dlechner@baylibre.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>,
-        David Laight
-	<david.laight.linux@gmail.com>,
-        =?iso-8859-1?Q?Nuno_S=E1?=
-	<nuno.sa@analog.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Richard Cochran
-	<richardcochran@gmail.com>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S.
- Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Hans de Goede
-	<hansg@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Sakari Ailus
-	<sakari.ailus@linux.intel.com>,
-        Salah Triki <salah.triki@gmail.com>,
-        "Achim
- Gratz" <Achim.Gratz@Stromeko.DE>,
-        Ben Collins <bcollins@watter.com>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org"
-	<linux-iio@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org"
-	<linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org"
-	<linux-rtc@vger.kernel.org>
-Subject: RE: [PATCH v2 7/9] wifi: rtw89: switch to using FIELD_GET_SIGNED()
-Thread-Topic: [PATCH v2 7/9] wifi: rtw89: switch to using FIELD_GET_SIGNED()
-Thread-Index: AQHc1o6xWsc4T9bdAkGO0jI3Cj/ORbX1Mn/A
-Date: Wed, 29 Apr 2026 00:40:26 +0000
-Message-ID: <571202270b0f4811b18cbd6c9381522c@realtek.com>
-References: <20260427214127.406067-1-ynorov@nvidia.com>
- <20260427214127.406067-8-ynorov@nvidia.com>
-In-Reply-To: <20260427214127.406067-8-ynorov@nvidia.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1777468917; c=relaxed/simple;
+	bh=B+6vl6C/OV8+WpB8aWQtmkHIycQOFdlFNDQexZH3THM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=rAIbZqnXjGPjTZ+Z2qhm/mDQM2yGlS4NuLTKC1G/TDe2mAUAJZHC9l9ePmAjw8dZlDfN48dv6KVrg4c7cd9PuEsZxZzGMdnw6hciKkovlJQjLCvmSnOVwN37Qb6WylzeL6KWIiWUsFEQr6O8H8moDeVpRoY9MqEk3dO+iL4Q3TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=Xp3Eqw6D; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 570F826949;
+	Wed, 29 Apr 2026 15:12:35 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RS3R83mpiQhH; Wed, 29 Apr 2026 15:12:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1777468354; bh=B+6vl6C/OV8+WpB8aWQtmkHIycQOFdlFNDQexZH3THM=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To;
+	b=Xp3Eqw6D2wdfqkrqtCXEGKpQarouGLQmdkkzDYQtDCU/Eg/HT8Nj2CKamRCYfW4N9
+	 PsmGt3/ne5sI9irdB8JmCGwilYHpUuT1zscLbLG5cq8DEh5BcnprzsHralTLVnJfzv
+	 yFigbtB3HB9/C79K8sFT/CsY6VriNOV2z81aoXp8XNy0A0L8FeKQ030/TaLKEhsUfv
+	 BQ10L9CBl3tIMVZ4YzSC5B0+S5NHamXeHPl+1TuV4cGAnERslQRq+sEpnG/ktD07/B
+	 wcihld4J9ADvSRNyVE0KU3qU//zC69p243KukM5aqOZofDt8MqloZncA5Y5wCQZEzW
+	 PXfPHLRbAswyw==
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: 8C95048DCD9
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 29 Apr 2026 18:42:14 +0530
+Message-Id: <DI5NXS3PQ53R.L9JZEBHW5EGI@disroot.org>
+Subject: Re: [PATCH v5 03/11] dt-bindings: mfd: add documentation for
+ S2MU005 PMIC
+From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
+To: "Krzysztof Kozlowski" <krzk@kernel.org>, "Kaustabh Chakraborty"
+ <kauschluss@disroot.org>
+Cc: "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "MyungJoo Ham"
+ <myungjoo.ham@samsung.com>, "Chanwoo Choi" <cw00.choi@samsung.com>,
+ "Sebastian Reichel" <sre@kernel.org>, =?utf-8?q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Nam Tran" <trannamatk@gmail.com>,
+ =?utf-8?q?=C5=81ukasz_Lebiedzi=C5=84ski?= <kernel@lvkasz.us>,
+ <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>
+References: <20260424-s2mu005-pmic-v5-0-fcbc9da5a004@disroot.org>
+ <20260424-s2mu005-pmic-v5-3-fcbc9da5a004@disroot.org>
+ <20260428-fortunate-olive-asp-fe4f53@quoll>
+In-Reply-To: <20260428-fortunate-olive-asp-fe4f53@quoll>
+X-Rspamd-Queue-Id: EE398494FAE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [5.34 / 15.00];
+	SEM_URIBL(3.50)[0.0.0.0:email];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[realtek.com,none];
-	R_DKIM_ALLOW(-0.20)[realtek.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MV_CASE(0.50)[];
 	MAILLIST(-0.15)[generic];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6452-lists,linux-rtc=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6453-lists,linux-rtc=lfdr.de];
+	DMARC_POLICY_ALLOW(0.00)[disroot.org,reject];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[nvidia.com,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,infradead.org,baylibre.com,sipsolutions.net,gmail.com,analog.com,lunn.ch,davemloft.net,google.com,bootlin.com,rasmusvillemoes.dk,Stromeko.DE,watter.com,vger.kernel.org];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_TWELVE(0.00)[35];
+	R_DKIM_ALLOW(0.00)[disroot.org:s=mail];
+	GREYLIST(0.00)[pass,body];
+	DKIM_TRACE(0.00)[disroot.org:+];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[realtek.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pkshih@realtek.com,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-rtc,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nvidia.com:email,realtek.com:email,realtek.com:dkim,realtek.com:mid]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
+	NEURAL_SPAM(0.00)[0.996];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[]
 
-Yury Norov <ynorov@nvidia.com> wrote:
-> Switch from sign_extend32(FIELD_GET()) to the dedicated
-> FIELD_GET_SIGNED() and don't calculate the fields length explicitly.
->=20
-> Signed-off-by: Yury Norov <ynorov@nvidia.com>
+Hi Krzysztof,
 
-Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+This are no review comments here. Did you happen to miss anything?
 
+On 2026-04-28 08:01 +02:00, Krzysztof Kozlowski wrote:
+> On Fri, Apr 24, 2026 at 01:09:02AM +0530, Kaustabh Chakraborty wrote:
+>> Samsung's S2MU005 PMIC includes subdevices for a charger, an MUIC (Micro
+>> USB Interface Controller), and flash and RGB LED controllers.
+>>=20
+>> Add the compatible and documentation for the S2MU005 PMIC. Also, add an
+>> example for nodes for supported sub-devices, i.e. MUIC, flash LEDs, and
+>> RGB LEDs. Charger sub-device uses the node of the parent.
+>>=20
+>> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+>> ---
+>>  .../bindings/mfd/samsung,s2mu005-pmic.yaml         | 120 ++++++++++++++=
++++++++
+>>  1 file changed, 120 insertions(+)
+> \r>=20
+>> diff --git a/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.=
+yaml b/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml
+>> new file mode 100644
+>> index 0000000000000..0e6afb7d2017b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml
+>> @@ -0,0 +1,120 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mfd/samsung,s2mu005-pmic.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Samsung S2MU005 Power Management IC
+>> +
+>> +maintainers:
+>> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
+>> +
+>> +description: |
+>> +  The S2MU005 is a companion power management IC which includes subdevi=
+ces for
+>> +  a charger controller, an MUIC (Micro USB Interface Controller), and f=
+lash and
+>> +  RGB LED controllers.
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/power/supply/power-supply.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: samsung,s2mu005-pmic
+>> +
+>> +  flash:
+>> +    $ref: /schemas/leds/samsung,s2mu005-flash.yaml
+>> +    description:
+>> +      Child node describing flash LEDs.
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  muic:
+>> +    $ref: /schemas/extcon/samsung,s2mu005-muic.yaml#
+>> +    description:
+>> +      Child node describing MUIC device.
+>> +
+>> +  multi-led:
+>> +    type: object
+>> +
+>> +    allOf:
+>> +      - $ref: /schemas/leds/leds-class-multicolor.yaml#
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        const: samsung,s2mu005-rgb
+>> +
+>> +    required:
+>> +      - compatible
+>> +
+>> +    unevaluatedProperties: false
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    #include <dt-bindings/leds/common.h>
+>> +
+>> +    i2c {
+>> +        #address-cells =3D <1>;
+>> +        #size-cells =3D <0>;
+>> +
+>> +        pmic@3d {
+>> +            compatible =3D "samsung,s2mu005-pmic";
+>> +            reg =3D <0x3d>;
+>> +            interrupt-parent =3D <&gpa2>;
+>> +            interrupts =3D <7 IRQ_TYPE_LEVEL_LOW>;
+>> +
+>> +            monitored-battery =3D <&battery>;
+>> +
+>> +            flash {
+>> +                compatible =3D "samsung,s2mu005-flash";
+>> +                #address-cells =3D <1>;
+>> +                #size-cells =3D <0>;
+>> +
+>> +                led@0 {
+>> +                    reg =3D <0>;
+>> +                    color =3D <LED_COLOR_ID_WHITE>;
+>> +                    function =3D LED_FUNCTION_FLASH;
+>> +                };
+>> +
+>> +                led@1 {
+>> +                    reg =3D <1>;
+>> +                    color =3D <LED_COLOR_ID_WHITE>;
+>> +                    function =3D LED_FUNCTION_FLASH;
+>> +                    function-enumerator =3D <1>;
+>> +                };
+>> +            };
+>> +
+>> +            muic {
+>> +                compatible =3D "samsung,s2mu005-muic";
+>> +
+>> +                connector {
+>> +                    compatible =3D "usb-b-connector";
+>> +                    label =3D "micro-USB";
+>> +                    type =3D "micro";
+>> +                };
+>> +
+>> +                port {
+>> +                    muic_to_usb: endpoint {
+>> +                        remote-endpoint =3D <&usb_to_muic>;
+>> +                    };
+>> +                };
+>> +            };
+>> +
+>> +            multi-led {
+>> +                compatible =3D "samsung,s2mu005-rgb";
+>> +                color =3D <LED_COLOR_ID_RGB>;
+>> +                function =3D LED_FUNCTION_INDICATOR;
+>> +                linux,default-trigger =3D "pattern";
+>> +            };
+>> +        };
+>> +    };
+>>=20
+>> --=20
+>> 2.53.0
+>>=20
 
