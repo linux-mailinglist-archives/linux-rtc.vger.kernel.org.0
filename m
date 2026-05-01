@@ -1,181 +1,226 @@
-Return-Path: <linux-rtc+bounces-6456-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6457-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OOEkHKVF82kMzAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6456-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Apr 2026 14:05:57 +0200
+	id ftapGWQx9GnK/AEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6457-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 01 May 2026 06:51:48 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19AD24A290B
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Apr 2026 14:05:57 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C34414AA654
+	for <lists+linux-rtc@lfdr.de>; Fri, 01 May 2026 06:51:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5DB30305BA8B
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Apr 2026 12:03:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E832E3014439
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 May 2026 04:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B093FA5EB;
-	Thu, 30 Apr 2026 12:03:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C782FB99D;
+	Fri,  1 May 2026 04:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eoIk2JN9"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="Mi8G2Amy"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D933EF66D
-	for <linux-rtc@vger.kernel.org>; Thu, 30 Apr 2026 12:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B27233D9E
+	for <linux-rtc@vger.kernel.org>; Fri,  1 May 2026 04:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777550606; cv=none; b=Ai4qj+Y02EjlBEJ/vXlerP85wfimiJN9cIX5XdqhNfJjuKk2jquwYc1MumByLG/PfMT9bdjIQIWVVSW/XT2ra2hp6zxfZp9PQ9QY/Z16KYQNn+g03rFarFAhVj5xIBtfVcATToEEa9cIYVOpf2CThmUJ4xv9SzLomUJ/uhnERik=
+	t=1777611100; cv=none; b=VIQhID0M97suLyY+dt9g89RmVeklT4Amr6OV8xN9Surzq/gGKRWWlaP60f6bZrGQ37i6dRmulm+kcghpTCQN+VBuFhNZHgVO/f/8awnUCQpSSvY7TcTOU3T56rClyaBEKbsHN35TBU2aU5Ix+T7weMGEOvmSJUbP4z860/mZV+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777550606; c=relaxed/simple;
-	bh=duJWKLbfqTL4D1zNPPk5QveBYRxoms7eL2nTGNWcLqY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=p+Xx+fRxp61wfEg8zR1M9PVU1zL5F3icgJDrnGocGlnh3umE0h4kbFRL6CQsHQX/SoXZQkgieXzaEVCQczdE+wsYF+48sMU8oMEs9ed2MBFtwp5WDfngH2IhXwuJZm9QtbC1vkiK7LzJNJKMVHU1klpP6hjNcNaSNhjnH6JesvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eoIk2JN9; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82fbceb0181so639107b3a.3
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Apr 2026 05:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777550603; x=1778155403; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PvMj/MkllnjgvE6Y7N3WHrJDvNHvsjKi1M8BHUaGO3o=;
-        b=eoIk2JN9G0lyeyRKP9OQ4Tmjgi/XHJFUFEOiGH/rT+vjWi0kjVgOWKb+qY6I1IB7Fb
-         wxNDv9uZL2Uyy78H22fmrEGDpoyoSt5q0d9mwdFCgHy0hvzfnRZ8PeWDzwdEyGoYRq7Y
-         TxMjd4699QKuOgsNckmLFHI5UEdtlx9J7b486gPtkR+REwrcoIY975S4/EPvFyskH+ZF
-         88SbgwcJy1UVi/ySM5O9MP6pkU1M4ik5qllBKDgq52rjSS3L0KAfPaMuajVEk2Aj42no
-         in24wqfNSh1TOb/MuD2XFSyBxD64T1MlXjPpdASIx+8GVXK/ds13e40kzzg1QMku7hig
-         +Fgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777550603; x=1778155403;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PvMj/MkllnjgvE6Y7N3WHrJDvNHvsjKi1M8BHUaGO3o=;
-        b=h5rx2hP4xILQXkc/TPpMKnMS85JVnj/hoL1KQNnV/Z4/VwL47Vuc4wzv5vwB1pOUh9
-         3nRfKAtwoI9JetkGLpcYg+RGmcBJcIHuCD7LoI57Kc15Ujz7VSpg5XD50DF+1IXxjert
-         PpX2QeQostKtQ8tSlZ9SIkIbAaqfz/Y2ruAcGy6hEcgcqi2nIMGY7N0H+aXng5u3j96U
-         NMwpCmDBRthLrlgsCFaWolsNlIUTgI2xajea4udtXI5Z54SYBX1Fko8H4fHjKqrd2Mre
-         1/eRnn0vcCzLEOPTBAN44DZqbLP/XB/nOVaBpbCV8GopZ+o5RSmaNJeDJ+woWvGdZvNb
-         2UXQ==
-X-Gm-Message-State: AOJu0Yxt8iymC03pmXlFrEe/FEJRgJ9Om1rf4i3IdqYgqbW2A82dO7MI
-	+O8ROOY0sD5WR6XwC9+HxUhZjF/p2Md/yVL0P74fzhZOHMR8+yz3wyHdMiy4L1TfxWfjYvnvmQg
-	+pw==
-X-Received: from pfbgx2.prod.google.com ([2002:a05:6a00:1e02:b0:82f:b322:30fb])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:340a:b0:82f:1973:4b96
- with SMTP id d2e1a72fcca58-834fdcdef18mr2884609b3a.26.1777550602832; Thu, 30
- Apr 2026 05:03:22 -0700 (PDT)
-Date: Thu, 30 Apr 2026 20:03:13 +0800
+	s=arc-20240116; t=1777611100; c=relaxed/simple;
+	bh=zgYKV0g8h/sbwHqqHgRPQ20vs2Bs5Np7r5DJDXulGhw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=unwbTnDqdskLdKqQa43GX5n9gZwoorNfGqItkOwawkYocLx1xv1XPhsxmA2pu4x/7hcZi33Tteq88d4jPNGXDqpZZAcK/H7xMFAUIkWUd6DrmIjc0jVi/YsbBSbBOlDPceDrqInH+naqwKqRWA4r2B/LLpqFSHaInxofM2TWrtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=Mi8G2Amy; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7B8A22C023A;
+	Fri,  1 May 2026 16:51:28 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1777611088;
+	bh=jmTSEhdwhbLZM471o2oxoaWmb7pz1B/7IQxuHd6Pubs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Mi8G2Amyw43NH34OqQmWrsjNRf5BFEg/RV3lN4z2B/rGKVXnzhxzqQu3Tg4tbS2/D
+	 LihPvfUijmg6lPhWxQRxZdy4muxjS7ztoQziacZRgw1p4VcZ8d+YSm+tAjWiWyDRuA
+	 sJKAAk7HjzWqEZ7BVab+3xCt0zheGmNubqsVHsXWXlSzneoQ83m1aNqDlhku2MgJFe
+	 4Iw0RNtW66kdQgPdN+mx3Hanb4uKr3j7odG8m0tZGRS/QljmcTAqtlXCbJTOutbP0L
+	 PnvYGdY2+Rnke97Zj3K/OhiDZubNgz+JMQ61ShHYSeGxyiVMOnd3UNU2VFrRrWkLdk
+	 xtdsuiZYZK9Dw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B69f431500000>; Fri, 01 May 2026 16:51:28 +1200
+Received: from ronand-dl.ws.atlnz.lc (ronand-dl.ws.atlnz.lc [10.33.12.18])
+	by pat.atlnz.lc (Postfix) with ESMTP id 5565C13EC7E;
+	Fri,  1 May 2026 16:51:28 +1200 (NZST)
+Received: by ronand-dl.ws.atlnz.lc (Postfix, from userid 1930)
+	id 4FE0484004F; Fri,  1 May 2026 16:51:28 +1200 (NZST)
+From: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+To: alexandre.belloni@bootlin.com
+Cc: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tyler Hicks <code@tyhicks.com>,
+	Sasha Levin <sashal@kernel.org>,
+	Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+	Rodolfo Giometti <giometti@enneenne.com>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] rtc: ds1307: handle oscillator stop flag for ds1337/ds1339/ds3231
+Date: Fri,  1 May 2026 16:46:10 +1200
+Message-ID: <20260501044657.1003980-2-ronan.dalton@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260430120313.4078185-1-wakel@google.com>
-Subject: [PATCH] selftests: rtc: fix flaky date_read_loop test
-From: Wake Liu <wakel@google.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Wake Liu <wakel@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 19AD24A290B
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=FPe4xPos c=1 sm=1 tr=0 ts=69f43150 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=NGcC8JguVDcA:10 a=VwQbUJbxAAAA:8 a=P-IC7800AAAA:8 a=FLmnqZ5pAAAA:8 a=yMhMjlubAAAA:8 a=gUfQWItQAAAA:8 a=vhqSDMIX0PFRHOe_07sA:9 a=3ZKOabzyN94A:10 a=d3PnA9EDa4IxuAV0gXij:22 a=8DxQ4-P9FUvTN4rw3Xy2:22 a=Xud5aiJGVNusHZ8q4fKI:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Rspamd-Queue-Id: C34414AA654
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[alliedtelesis.co.nz,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[alliedtelesis.co.nz:s=mail181024];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6456-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6457-lists,linux-rtc=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,alliedtelesis.co.nz:email,alliedtelesis.co.nz:dkim,alliedtelesis.co.nz:mid,bootlin.com:email];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ronan.dalton@alliedtelesis.co.nz,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wakel@google.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[google.com:+];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DKIM_TRACE(0.00)[alliedtelesis.co.nz:+];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
 
-The test case rtc.date_read_loop in rtctest.c fails intermittently because
-it checks that the RTC time does not advance by more than 1 second per loop
-iteration. However, the loop sleeps for 11ms via nanosleep(), and if the
-test thread is descheduled by the OS scheduler (e.g., under heavy system
-load in a VM), more than 1 second can elapse between consecutive RTC reads.
-This causes the next RTC time read to be 2 or more seconds ahead of the
-previous read, triggering a test assertion failure.
+Prior to commit 6cb0d8587b96 ("rtc: ds1307: remove clear of oscillator
+stop flag (OSF) in probe"), the oscillator stop flag (OSF) bit was
+checked during device probe for the ds1337, ds1339, ds1341, and ds3231
+chips; if it was set, it would be cleared and a warning would be logged
+saying "SET TIME!". Since that commit, the OSF bit is no longer cleared,
+but the warning is still printed.
 
-To make the test more resilient against OS scheduling delays, measure the
-real elapsed time between iterations using a monotonic clock
-(clock_gettime(CLOCK_MONOTONIC)), and compute the actual number of seconds
-elapsed (delta_s) between consecutive RTC reads. Then dynamically adjust
-the assertion to:
-ASSERT_GE(prev_rtc_read + delta_s + 1, rtc_read);
+Directly following that commit, there was no way to get rid of this
+warning because nothing cleared the OSF bit on these chips.
 
-Signed-off-by: Wake Liu <wakel@google.com>
+The commit associated with the previous commit, ae03a28e12a7 ("rtc:
+ds1307: handle oscillator stop flag (OSF) for ds1341"), made proper use
+of the OSF when getting and setting the time in the RTC. However, the
+other RTC variants ds1337, ds1339 and ds3231 didn't have a corresponding
+change made.
+
+Given that the OSF bit is no longer cleared at probe time when it is
+set, the remaining three chips should have the same handling as the
+ds1341 chip has for the OSF bit.
+
+Fix the issue on the ds1337, ds1339 and ds3231 chips by applying the
+same logic as the ds1341 has to these chips.
+
+Note that any devices brought up between the first referenced commit and
+this one may begin mistrusting the time reported by the RTC until it is
+set again, if the bit was never explicitly cleared.
+
+Note that only the ds1339 was tested with this change, but the
+datasheets for the other chips contain essentially identical
+descriptions of the OSF bit so the same change should work.
+
+An alternative to this change could be just to revert the referenced two
+commits and not use the OSF bit at all, apart from logging a warning and
+clearing it on probe.
+
+Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Tyler Hicks <code@tyhicks.com>
+Cc: Sasha Levin <sashal@kernel.org>
+Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+Cc: Rodolfo Giometti <giometti@enneenne.com>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Fixes: 6cb0d8587b96 ("rtc: ds1307: remove clear of oscillator stop flag (=
+OSF) in probe")
 ---
- tools/testing/selftests/rtc/rtctest.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-ds1307.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 8047d9879039..54eb5c255a45 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -116,6 +116,7 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
- 	long iter_count = 0;
- 	struct rtc_time rtc_tm;
- 	time_t start_rtc_read, prev_rtc_read;
-+	struct timespec prev_mono, cur_mono;
- 
- 	if (self->fd == -1 && errno == ENOENT)
- 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-@@ -126,25 +127,31 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
- 
- 	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
- 	ASSERT_NE(-1, rc);
-+	clock_gettime(CLOCK_MONOTONIC, &prev_mono);
- 	start_rtc_read = rtc_time_to_timestamp(&rtc_tm);
- 	prev_rtc_read = start_rtc_read;
- 
- 	do  {
- 		time_t rtc_read;
-+		time_t delta_s = 0;
- 
- 		rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
- 		ASSERT_NE(-1, rc);
-+		clock_gettime(CLOCK_MONOTONIC, &cur_mono);
- 
- 		rtc_read = rtc_time_to_timestamp(&rtc_tm);
-+		delta_s = cur_mono.tv_sec - prev_mono.tv_sec;
-+
- 		/* Time should not go backwards */
- 		ASSERT_LE(prev_rtc_read, rtc_read);
--		/* Time should not increase more then 1s at a time */
--		ASSERT_GE(prev_rtc_read + 1, rtc_read);
-+		/* Time should not increase more then elapsed time + 1s */
-+		ASSERT_GE(prev_rtc_read + delta_s + 1, rtc_read);
- 
- 		/* Sleep 11ms to avoid killing / overheating the RTC */
- 		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
- 
- 		prev_rtc_read = rtc_read;
-+		prev_mono = cur_mono;
- 		iter_count++;
- 	} while (prev_rtc_read <= start_rtc_read + READ_LOOP_DURATION_SEC);
- 
--- 
-2.54.0.545.g6539524ca2-goog
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 7205c59ff729..edf81b975dec 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -269,6 +269,16 @@ static int ds1307_get_time(struct device *dev, struc=
+t rtc_time *t)
+ 		if (tmp & DS1338_BIT_OSF)
+ 			return -EINVAL;
+ 		break;
++	case ds_1337:
++	case ds_1339:
++	case ds_1341:
++	case ds_3231:
++		ret =3D regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
++		if (ret)
++			return ret;
++		if (tmp & DS1337_BIT_OSF)
++			return -EINVAL;
++		break;
+ 	case ds_1340:
+ 		if (tmp & DS1340_BIT_nEOSC)
+ 			return -EINVAL;
+@@ -279,13 +289,6 @@ static int ds1307_get_time(struct device *dev, struc=
+t rtc_time *t)
+ 		if (tmp & DS1340_BIT_OSF)
+ 			return -EINVAL;
+ 		break;
+-	case ds_1341:
+-		ret =3D regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
+-		if (ret)
+-			return ret;
+-		if (tmp & DS1337_BIT_OSF)
+-			return -EINVAL;
+-		break;
+ 	case ds_1388:
+ 		ret =3D regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
+ 		if (ret)
+@@ -380,14 +383,17 @@ static int ds1307_set_time(struct device *dev, stru=
+ct rtc_time *t)
+ 		regmap_update_bits(ds1307->regmap, DS1307_REG_CONTROL,
+ 				   DS1338_BIT_OSF, 0);
+ 		break;
++	case ds_1337:
++	case ds_1339:
++	case ds_1341:
++	case ds_3231:
++		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
++				   DS1337_BIT_OSF, 0);
++		break;
+ 	case ds_1340:
+ 		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
+ 				   DS1340_BIT_OSF, 0);
+ 		break;
+-	case ds_1341:
+-		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
+-				   DS1337_BIT_OSF, 0);
+-		break;
+ 	case ds_1388:
+ 		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+ 				   DS1388_BIT_OSF, 0);
+--=20
+2.53.0
 
 
