@@ -1,146 +1,276 @@
-Return-Path: <linux-rtc+bounces-6463-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6464-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2LTyJcYx+WkG6gIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6463-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 05 May 2026 01:54:46 +0200
+	id KFLnL0sb+mkJJgMAu9opvQ
+	(envelope-from <linux-rtc+bounces-6464-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 05 May 2026 18:31:07 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB2424C4FF2
-	for <lists+linux-rtc@lfdr.de>; Tue, 05 May 2026 01:54:44 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 606B64D1516
+	for <lists+linux-rtc@lfdr.de>; Tue, 05 May 2026 18:31:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 798C030115B2
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 May 2026 23:54:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9EFAC3005991
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 May 2026 16:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220783E717C;
-	Mon,  4 May 2026 23:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263A148C412;
+	Tue,  5 May 2026 16:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="GAGIFq6o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SzYGnNwZ"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D121938CFEF
-	for <linux-rtc@vger.kernel.org>; Mon,  4 May 2026 23:54:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAFD48C8BA;
+	Tue,  5 May 2026 16:31:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777938883; cv=none; b=HnA0XTczJDeMhPByGOH0rx3EbwgkTuuFfWAcVap5qLyHcrS+53/lu+EZ60VuUTEliXMLk0UvHoSVmhiunidj/mxwQgTro6vQktLuH0xufYaku0zx8QjHnDJbQctasYGiB/BjxR22O/gaKxvOybrzA6TCliO5g/PZC0ajzKgqspU=
+	t=1777998663; cv=none; b=s4YgujMl23Wb2Fxht1GnDDDmw2bS+j554CFctwwBjAOrYXZ9n3nRC5KndxraX/D6jmKJN5s3UDOursgSbNou4Pp2GWWNgBvqpGFvZ0+lgG7II0fxAwWCtosmmQ6KgMUxMNDpYvCjUOJUp62efm4t5VyhMnKQdeA0fp66Jws8maU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777938883; c=relaxed/simple;
-	bh=k8rZx155B7yknBFC/um5IJmbbuPF2tvu6qu+CLrdeU4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=FxgjQK4+Ogpl/fjG7Y3Iw32cg/7K/cSSLmcLSkP/EowG+SuQiYfFb8G1SrnH8/i6jiJrLTtVTajb+ehpN7DYpdxDmTXpIbCPZimjmjZlzQ6Bv1Qf4DQ80rAMkFCCUlYDKTxZXYE9kUgPH+RA/y1gRLZxyORz08NLqUJsWy2yVYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=GAGIFq6o; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 56A592C04F5;
-	Tue,  5 May 2026 11:54:33 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1777938873;
-	bh=k8rZx155B7yknBFC/um5IJmbbuPF2tvu6qu+CLrdeU4=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=GAGIFq6o4QsxszUeuGFNa/l5Lk/VfZaMv1Ex5zzUYj6JADPSvrcaLc3ChxkSFN3eA
-	 knvypfTOjKYBcZm6Qpj+c4fC9Vj2oaJa4FWnpMyTTT4aTDMt/e5V7KT811l0t7Ny+6
-	 IpAWHuiAe9mh9nVTbUN4HCODrQvd2VCmMO90MRgTeGM5hpOMKO9FLen1gyZ+e5et2c
-	 tjTd7cmO3ANXjnP0aCMGqDhRGKduJt7/CQ0BzniagBhpl1unG79TquQ2dv8DeUwJJk
-	 IBy2tRej1Ge3+KLUQEDj2qRSG9HxkHUEWVdDe3O5u4pfRzcrLiLlukr27zEwi9PEtj
-	 5Gz00Rn+GwuEg==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B69f931b90001>; Tue, 05 May 2026 11:54:33 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.39; Tue, 5 May 2026 11:54:33 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1748.039; Tue, 5 May 2026 11:54:33 +1200
-From: Ronan Dalton <Ronan.Dalton@alliedtelesis.co.nz>
-To: "meaganlloyd@linux.microsoft.com" <meaganlloyd@linux.microsoft.com>
-CC: "tgopinath@linux.microsoft.com" <tgopinath@linux.microsoft.com>,
-	"code@tyhicks.com" <code@tyhicks.com>, "linux-rtc@vger.kernel.org"
-	<linux-rtc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "giometti@enneenne.com"
-	<giometti@enneenne.com>, Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-	"sashal@kernel.org" <sashal@kernel.org>, "alexandre.belloni@bootlin.com"
-	<alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] rtc: ds1307: handle oscillator stop flag for
- ds1337/ds1339/ds3231
-Thread-Topic: [PATCH] rtc: ds1307: handle oscillator stop flag for
- ds1337/ds1339/ds3231
-Thread-Index: AQHc2SYs/dzU9DqYhU6v2CJYbHsOHLX9qaOAgAAdmgA=
-Date: Mon, 4 May 2026 23:54:32 +0000
-Message-ID: <4c097ca4fffed215395ec5979f0f0f43ed85cb97.camel@alliedtelesis.co.nz>
-References: <20260501044657.1003980-2-ronan.dalton@alliedtelesis.co.nz>
-	 <20260504-fd90667b1274c4e3a38a0604@linux.microsoft.com>
-In-Reply-To: <20260504-fd90667b1274c4e3a38a0604@linux.microsoft.com>
-Accept-Language: en-US, en-NZ
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <30B8F1F194FEB54A8BD76313849AD700@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1777998663; c=relaxed/simple;
+	bh=gF0YOpy0AgSgb45W10/iDuugizyRyn5fWd2ue+rexOs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Owq8tA5mZKHglK+6vOoWzkLwdwAXk+3G/RgA0DjisR0GLZmG4MzeTngoOCAkXi4RA/11fJ5miFBOKqmLh5Agy99DX7pchvBRzI+RCWA33M3Rc+iYfwlufupmXz1VkRrBcMkwO9Q6iWDq3p0yWQjVlz9ACSMFC+LHYfNzLlY/Rfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SzYGnNwZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38049C2BCB4;
+	Tue,  5 May 2026 16:31:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777998662;
+	bh=gF0YOpy0AgSgb45W10/iDuugizyRyn5fWd2ue+rexOs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SzYGnNwZk+DEt6X/IqCE9cbmjWS/OljsoHDDApVa/de2zbm+NxqABHSsf89h+Rc3N
+	 3se0GBo4jnyFHHXerfsq0jtBZB4gJIGIgeQOS6R7gSfewiFTOgcTR5x05dc/kz6YgQ
+	 TN5PDRBkRfYsdiDjUpCB013sTBnFLnytdXdmtMniNk4F95XEQpXuS6YRlz/vsxz3bj
+	 slD1iapmnUg+y/Rjn/wBKF7fulY3JsmoeqYyhZoHnBPXsaocS311sYMM+0BMSdeN93
+	 mWkHpZGJuyF+/7anivFIL37RM59pfGNqMUtqV28vlSOol52uhdXtb5RCnuykPyX1k2
+	 B2ItOg0l8SGeQ==
+Date: Tue, 5 May 2026 17:30:58 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Udaya Kiran Challa <challauday369@gmail.com>
+Cc: alexandre.belloni@bootlin.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, skhan@linuxfoundation.org,
+	me@brighamcampbell.com, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: rtc: epson,rx6110: Convert to DT Schema
+Message-ID: <20260505-draw-unbraided-be4f74e38df1@spud>
+References: <20260504183728.27412-1-challauday369@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=FPe4xPos c=1 sm=1 tr=0 ts=69f931b9 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=BhaoXNk7gXQA:10 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=SkGgXHIgSkrV2LiTOisA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Rspamd-Queue-Id: BB2424C4FF2
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="r6jWYLpgRGISHE5p"
+Content-Disposition: inline
+In-Reply-To: <20260504183728.27412-1-challauday369@gmail.com>
+X-Rspamd-Queue-Id: 606B64D1516
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.06 / 15.00];
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[alliedtelesis.co.nz,quarantine];
-	R_DKIM_ALLOW(-0.20)[alliedtelesis.co.nz:s=mail181024];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,alliedtelesis.co.nz:dkim,alliedtelesis.co.nz:mid];
-	TAGGED_FROM(0.00)[bounces-6463-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[alliedtelesis.co.nz:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Ronan.Dalton@alliedtelesis.co.nz,linux-rtc@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6464-lists,linux-rtc=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.3:email,0.0.0.32:email]
 
-SGkgTWVhZ2FuLAoKT24gTW9uLCAyMDI2LTA1LTA0IGF0IDE1OjA4IC0wNzAwLCBNZWFnYW4gTGxv
-eWQgd3JvdGU6Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIGRzXzEzMzc6Cj4gPiArwqDCoMKgwqDC
-oMKgwqBjYXNlIGRzXzEzMzk6Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIGRzXzEzNDE6Cj4gPiAr
-wqDCoMKgwqDCoMKgwqBjYXNlIGRzXzMyMzE6Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgcmV0ID0gcmVnbWFwX3JlYWQoZHMxMzA3LT5yZWdtYXAsCj4gPiBEUzEzMzdfUkVHX1NU
-QVRVUywgJnRtcCk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJu
-IHJldDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAodG1wICYgRFMxMzM3
-X0JJVF9PU0YpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoHJldHVybiAtRUlOVkFMOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJy
-ZWFrOwo+IAo+IElmIHlvdSdyZSBnb2luZyB0byByZS1hcnJhbmdlIHRoZSBibG9jayB0byBiZSBp
-biBzb21ld2hhdCBvZiBhbgo+IG9yZGVyLAo+IHBlcmhhcHMgcHV0IGl0IGFib3ZlIDEzMzggc2lu
-Y2UgMTMzNyA8IDEzMzguCgpJJ3ZlIG9yZGVyZWQgaXQgdGhpcyB3YXkgYmFzZWQgb24gdGhlIGZp
-cnN0IGNhc2Ugc3RhdGVtZW50IGluIGVhY2gKYmxvY2suIFNpbmNlIGRzXzEzMzcgPiBkc18xMzA4
-LCBJJ3ZlIHB1dCB0aGUgYmxvY2sgYmVsb3cgdGhlIGJsb2NrCnN0YXJ0aW5nIHdpdGggZHNfMTMw
-OC4gSSBjb3VsZCBpbnN0ZWFkIG9yZGVyIGl0IGJhc2VkIG9uIHRoZSBsYXN0IGNhc2UKc3RhdGVt
-ZW50IGluIGVhY2ggYmxvY2ssIGlmIHlvdSB0aGluayB0aGF0J3MgYmV0dGVyLgo=
+
+--r6jWYLpgRGISHE5p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 05, 2026 at 12:07:28AM +0530, Udaya Kiran Challa wrote:
+> Convert the Epson RX6110 Real Time Clock devicetree binding
+> from the legacy text format to DT schema.
+>=20
+> Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
+> ---
+>  .../devicetree/bindings/rtc/epson,rx6110.txt  | 39 -----------
+>  .../devicetree/bindings/rtc/epson,rx6110.yaml | 69 +++++++++++++++++++
+>  2 files changed, 69 insertions(+), 39 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/epson,rx6110.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/epson,rx6110.ya=
+ml
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/epson,rx6110.txt b/Doc=
+umentation/devicetree/bindings/rtc/epson,rx6110.txt
+> deleted file mode 100644
+> index 3dc313e01f77..000000000000
+> --- a/Documentation/devicetree/bindings/rtc/epson,rx6110.txt
+> +++ /dev/null
+> @@ -1,39 +0,0 @@
+> -Epson RX6110 Real Time Clock
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> -
+> -The Epson RX6110 can be used with SPI or I2C busses. The kind of
+> -bus depends on the SPISEL pin and can not be configured via software.
+> -
+> -I2C mode
+> ---------
+> -
+> -Required properties:
+> -  - compatible: should be: "epson,rx6110"
+> -  - reg : the I2C address of the device for I2C
+> -
+> -Example:
+> -
+> -	rtc: rtc@32 {
+> -		compatible =3D "epson,rx6110"
+> -		reg =3D <0x32>;
+> -	};
+> -
+> -SPI mode
+> ---------
+> -
+> -Required properties:
+> -  - compatible: should be: "epson,rx6110"
+> -  - reg: chip select number
+> -  - spi-cs-high: RX6110 needs chipselect high
+> -  - spi-cpha: RX6110 works with SPI shifted clock phase
+> -  - spi-cpol: RX6110 works with SPI inverse clock polarity
+> -
+> -Example:
+> -
+> -	rtc: rtc@3 {
+> -		compatible =3D "epson,rx6110"
+> -		reg =3D <3>
+> -		spi-cs-high;
+> -		spi-cpha;
+> -		spi-cpol;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml b/Do=
+cumentation/devicetree/bindings/rtc/epson,rx6110.yaml
+> new file mode 100644
+> index 000000000000..32d15a014f91
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/epson,rx6110.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Epson RX6110 Real Time Clock
+> +
+> +description: |
+> +  The Epson RX6110 can be used with SPI or I2C busses.
+> +  The kind of bus depends on the SPISEL pin and can not be
+> +  configured via software.
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: epson,rx6110
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  # SPI-specific properties
+
+Drop the obvious comment.
+
+> +  spi-cs-high:
+> +    type: boolean
+> +    description: RX6110 needs chipselect high
+> +
+> +  spi-cpha:
+> +    type: boolean
+> +    description: RX6110 works with SPI shifted clock phase
+> +
+> +  spi-cpol:
+> +    type: boolean
+> +    description: RX6110 works with SPI inverse clock polarity
+
+These spi properties should be replaced by a ref to /schemas/spi/spi-periph=
+eral-props.yaml
+and become "spi-foo: true", unless you want to reword these descriptions
+to make it clear that these are all mandatory.
+
+pw-bot: changes-requested
+
+Cheers,
+Conor.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # I2C mode
+> +  - |
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      rtc1: rtc@32 {
+
+Drop the labels here, since they have no users.
+
+> +        compatible =3D "epson,rx6110";
+> +        reg =3D <0x32>;
+> +      };
+> +    };
+> +
+> +  # SPI mode
+> +  - |
+> +    spi {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      rtc2: rtc@3 {
+> +        compatible =3D "epson,rx6110";
+> +        reg =3D <3>;
+> +        spi-cs-high;
+> +        spi-cpha;
+> +        spi-cpol;
+> +      };
+> +    };
+> --=20
+> 2.43.0
+>=20
+
+--r6jWYLpgRGISHE5p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCafobQgAKCRB4tDGHoIJi
+0uYpAP0WA5K+8qHfZVSBOQnWTOBDnzoIDEoPv5IShp9c6lFFyQD+OYEUckJzxc3I
+QLFfJm1NmFr/e85cZeyrDa21AEuHUg4=
+=95g/
+-----END PGP SIGNATURE-----
+
+--r6jWYLpgRGISHE5p--
 
