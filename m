@@ -1,81 +1,81 @@
-Return-Path: <linux-rtc+bounces-6470-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6471-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gMZHITVx+2m7bAMAu9opvQ
-	(envelope-from <linux-rtc+bounces-6470-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 06 May 2026 18:49:57 +0200
+	id ELQfK0Bx+2m7bAMAu9opvQ
+	(envelope-from <linux-rtc+bounces-6471-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 06 May 2026 18:50:08 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21DF34DE4AC
-	for <lists+linux-rtc@lfdr.de>; Wed, 06 May 2026 18:49:57 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CE3B4DE4CB
+	for <lists+linux-rtc@lfdr.de>; Wed, 06 May 2026 18:50:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BDFBA3016833
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2026 16:49:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 790EC303CD11
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2026 16:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5D64963B3;
-	Wed,  6 May 2026 16:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE0B49552D;
+	Wed,  6 May 2026 16:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuflnOgR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X36KRS78"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF1831D375
-	for <linux-rtc@vger.kernel.org>; Wed,  6 May 2026 16:49:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BF7495528
+	for <linux-rtc@vger.kernel.org>; Wed,  6 May 2026 16:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778086161; cv=none; b=S6E+4a4jZZw79cvw7x4Wt2nJn04maajrUNhJR/a1N1XoCOHNa5h1jhZU2OIuTol2PWjo95J5olZ+4fptw4Yb7Ha7A9RJ7aqC1BR6RziZKnZlpbewuzFrxUmRPnHrHWrQGJh+7YqizhjknUiYdDXivRepk3XbwP8rDpEBClzbxCk=
+	t=1778086161; cv=none; b=o1ayXo8xGFH/LtzThbGlwNzHJf86ISLjfeOR7F5eOCVwl2EICWcVXksoajjhf72EXeCIObav2Jg6WWoof4s3aATLXRJs1LaNpDuj6+RJKu2SKwfp3uI9QbK2ox2CWqjdxFh7JSemFkuPYm305JdAXee0kZpxSkRmbRGB9LX3S7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778086161; c=relaxed/simple;
-	bh=ydCT1/JE/JPYLI+J+iW6pMlD2xEDI2Bd5yteqX85Pl8=;
+	bh=Ic5kVY6Rq8d1btQ9z3kI93gZws6has0O855jspCPo30=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xn4Dmk5fmg2rB4o0b1xXupx41cyaM03caDjZ/cqW+gfr5yCaYph++No9CokSpDEyGQ4l6ZyYB9IZuRj+nDEeN9wQzt5wErf0AY6yXMIiNczBAzWBuB3AyUM7KxHPdIvNR7Yzi3jXTO2yvuTex9l4WKUKdNlvPjTzC/9AvxCuCys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuflnOgR; arc=none smtp.client-ip=209.85.128.52
+	 MIME-Version; b=hqBZmTaVermuAO+1NZNtf+kGiIwW3HUtu9aR0T1OKvvB4517e3W1b08Kf/H9KQrZbrsjS1W9+6M4aOs5DeM7Mj57P+vjI6qZ1J7HXjtNT3AKymbvQgfFJ/rt1NycAwOuijPKyvc20y/u/S9nHWLPQoG99H2gh4hJoRY8X6yOWLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X36KRS78; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4891b0786beso44068615e9.1
-        for <linux-rtc@vger.kernel.org>; Wed, 06 May 2026 09:49:19 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0046078so59306395e9.1
+        for <linux-rtc@vger.kernel.org>; Wed, 06 May 2026 09:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778086158; x=1778690958; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778086159; x=1778690959; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WM+K0gilZXjULIrmHaDGvw/aYGEN7GMhe5rYaCexhFI=;
-        b=GuflnOgRZpE4oGmRzQdVTRTQipqZOw50zLhrOZq7SOY9SbfXfiy/+A/HHVUEKXynGh
-         pPafotKB6d4A/7LZUYg0j+jXd6AxnNeErBenhIzpOaftJSSmx8knYR249+LDBTKYntNv
-         ry7+rleU2M9Wg8a1PO7PZCdHJfN0YWloVpjDKS2AnxXwRMNGdAfLoH4lh82fLw7O7DLd
-         j5emGSKn8U+BOnXU3m2PTMb+POJU32+9488H3ZFRY8/ILcrye7O1VR/GIQo2DoUACq7q
-         MmkViZeNl0U7XzN/jLEpOfAovgH8Jq7ui6XkSYeQI0yLRUY0gOQ9LJ5nfbclVBi7nkKs
-         iMNA==
+        bh=zxWuPcuF0UKPqeCZ8y2hNLNnCZzaOu2O0vTDxb6yruo=;
+        b=X36KRS78W6d7jJr13JyeZ1aOQ3EnhXbTn7VL3+ME9sejDevGEWQKucWQHnttvKmZTy
+         nrEB55WREXmiAtUdK7LEN0EY2II9g77XxsYCHFYElpWYpd21s7UmZmot9Uwxhy0RU1Tt
+         BQn89d8Xy43iOH8Mr/yFc+AOlYzXLliiydNpydpj0+JhyfstUxVOJ+X/pYlJl7EICegA
+         5BxnmQmx0Flq0sbjUfuLQ/wKL2S717o6choYfkU9e7n9ATC+ibKu/MqwM4/XBD0gtzNv
+         8RGOhGrX8HzEkD4AsD8sqsYazKYeKP6npzUQDAoLbPHeg9NaXQjQEc51sI6Bh5pOC8fJ
+         ZWvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778086158; x=1778690958;
+        d=1e100.net; s=20251104; t=1778086159; x=1778690959;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WM+K0gilZXjULIrmHaDGvw/aYGEN7GMhe5rYaCexhFI=;
-        b=QsSiyQIwZQJY8/bk99FZxC/5/lHKsUg99qxkmr6u+a/36CZYcF4b9I+fySIZnOIQ4n
-         viTjxaHyghBfIcLBWWYqWnvKoC3cWvpXfcnRWgk9NBxgahZZAw/rzvt0uG/rNmgaNBAA
-         S60XgvKFvv8EmOWB+ti/+wqdyg2xVTm+UkQq71uiIjGzsN76Fszr3SarVNzdxRjqmthG
-         kEkksM7fnu9H2Ncat+c1d9ISwfDCIvQD2aOAnfYxaYfkUxgBRapFltP7mD9IH2cKJJm6
-         tpdpiK/P7bR7ZP+2+0gvBOlROqINlk0nNPGgVwspKbhSQiF4dRCyp3BQLla7rTa5xVqc
-         bbuQ==
-X-Gm-Message-State: AOJu0YyHfTBDI00muvGyDXvOA4kR05sPd7HIdOrY9c3cs+Ky0DBEna38
-	LwiDVM6XlTd2lu0BiZwlKC1lwHFNN+Sart2xkSZAF0OcvhAIBNh4GmXO
-X-Gm-Gg: AeBDievIg9k2jo+48fbmxty43VtVLYpaZ8+FNSPRLn2rRGh8CNTrCBTv78T9UPNVUjO
-	O7WvsvbRu61KMvyQECfI0pXDqiPJVkC8uVt94O7TzHfMhBsHlepDjT9RQNpiTZ+tnTJNUUx8tPw
-	6M9riXE4/ouIwtSMKC+8Z/6LHTFmK5x+TCrvuvFpqqdNddL9LiFnFDEhIPBNcHuC23p4Bi05uj4
-	RFjuw5S3jAHTrSKQmWC9qrNw96ENVaBElvgflqatzqgeouTKvf7YfTAWunl/CKQPj8onRPfWack
-	F4/DT60YJUP2JBFPfg+IWFW8fdebt/5lbwgHyq8JT2S3W5anirG2ZCmbl+FTuH4g9hnFFuPblwg
-	TRJQAWO0CpB80e4rfAJhdTrPTx4gr7aWkYwiIcFqynLst4PAvMQ+aq4cXljMyDzaG6+99bPihVn
-	vds9XOh6V+M3C8Ju+wRY3Iy0z9+8kM6YQnM8WKLLyU0QN+LqKkgAs59jrg5J/PizA5jP7VUytE6
-	JsWvHGW5iGmvIp7jl59QPyGu2pZ6H/LYcnJjBC0rNhJDt8HQ4hUqt4ZA0kucq/ZCyQ/
-X-Received: by 2002:a05:600c:6d7:b0:489:1d23:4524 with SMTP id 5b1f17b1804b1-48e51e0bc19mr45621445e9.5.1778086158014;
+        bh=zxWuPcuF0UKPqeCZ8y2hNLNnCZzaOu2O0vTDxb6yruo=;
+        b=UTJoSUzqX6UwD3ml0JF/0kAbt+DBl1NeSEDxNingXwc83XvWeCarjYBJ7QE9Bsymyd
+         QnzQjZKNMGQApLqm21eNtI+lPpOCqnq7D42GuEC4g18rp3coetX7/5m29pc/yj+3AifM
+         Hq9CzGlhGUb096tLJiDDEtJydS2oceSoqY3c7PEtx+k3zu/0YwbF/uRGu71EhcEw5XoO
+         L7xOanJW9iEs/lo/6u4xRSU228+yuhzWxQJkQ/1MZ+S0YIPNtahJ3+N9eKlOFu7sCTPU
+         HqSrYQvZKhVmYE33Br0bwP7c4ElgH31S7/Q8VuAbzEy7DmryH7SU0EK5HwqGr1IWIvB9
+         dMdg==
+X-Gm-Message-State: AOJu0YzGwFNJ/02yV03VrMYOXqbnjhk9CF9k19TZHpI8c4rPc1Ji9zBV
+	ozsGsW4BcDBmzmFbOOmeFaCnt1YgI4fKe9yb9kK35//Ukm1ycOyCQCWX
+X-Gm-Gg: AeBDieve9hAHdp1fX+V53qCz1dfefreHEQhM6zVGNl+uR2w37YIDtsX+NyKg7ZafSGk
+	PTfgmqueb+eLlXKfryznE0V/TGXYRMYkPkGEfjs0v540sAEOFnEwVk2EBBDAFq39M7kRH8/h7sO
+	HqhrxlhY6OPTJ/ql51Tc2dxGqJH62OVXr4wxPJkYFcRQI/f7spoa9FR4yVMjGfg7W/XjFA6RSpH
+	uqye68+pDiLtqyYRlfa+zZon3rGpQFwsvl94RGXrKpxFv90QFk6Yu/oEB+xuC8y7p8szT/7K0Bn
+	KTpSlC0kPFrcCRUMpH9juoemM/rubDMyuRV+CuTSY9qLF0j5ysYBcHFyAXUbzT8XDu80M2AUhJh
+	qWsayhhpkRdbsFDGVpj2Tr3me5NXg0CyxKVNigKva9cBqOXd0i9vo0cvdUWyH5Ue1lOQtVN12vt
+	RaMOXa3tk/eDFVO+f8a716pgB/0wjKbSFASb4/3f9fNgH1rq6y+xGaD5kkfBVMq8pfJgwNVoqI3
+	YMrycqIZ9Y1HBjE8jHvNKA0PCciOpoJ4d7ZOZ/JU1DX+d8tt3mMz5T640j6tnK5u+pb
+X-Received: by 2002:a05:600c:c082:b0:485:3ec6:e634 with SMTP id 5b1f17b1804b1-48e51f327fbmr52468335e9.15.1778086158703;
         Wed, 06 May 2026 09:49:18 -0700 (PDT)
 Received: from iku.example.org ([2a06:5906:61b:2d00:3dcb:40a8:a5b9:2327])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530fdc50sm33060795e9.5.2026.05.06.09.49.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530fdc50sm33060795e9.5.2026.05.06.09.49.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 09:49:17 -0700 (PDT)
+        Wed, 06 May 2026 09:49:18 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -88,9 +88,9 @@ Cc: linux-rtc@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 1/5] rtc: renesas-rtca3: Fix PIE clear polling condition in alarm setup error path
-Date: Wed,  6 May 2026 17:49:10 +0100
-Message-ID: <20260506164914.3987293-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 2/5] rtc: renesas-rtca3: Check RADJ poll result during initial setup
+Date: Wed,  6 May 2026 17:49:11 +0100
+Message-ID: <20260506164914.3987293-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260506164914.3987293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20260506164914.3987293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -101,7 +101,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 21DF34DE4AC
+X-Rspamd-Queue-Id: 2CE3B4DE4CB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
@@ -110,13 +110,13 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6470-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6471-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -131,47 +131,33 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-rtc,renesas];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,bp.renesas.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,bp.renesas.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-In rtca3_set_alarm(), the setup_failed path attempts to disable the
-Periodic Interrupt Enable (PIE) bit and wait until it is cleared.
-However, the polling condition passed to readb_poll_timeout_atomic()
-uses an incorrect expression:
-
-    !(tmp & ~RTCA3_RCR1_PIE)
-
-As ~RTCA3_RCR1_PIE evaluates to a mask of all bits except PIE, the
-condition effectively waits for all non-PIE bits to become zero, which
-is unrelated to the intended operation and is unlikely to ever be true.
-This causes the poll to time out unnecessarily.
-
-Fix the condition to check for the PIE bit itself being cleared:
-
-    !(tmp & RTCA3_RCR1_PIE)
-
-This correctly waits until PIE is deasserted after being cleared.
+In rtca3_initial_setup(), the driver clears the RTCA3_RADJ register and
+waits for it to reach zero using readb_poll_timeout(). Check the return
+value of readb_poll_timeout() and propagate the error if the poll fails.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/rtc/rtc-renesas-rtca3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-renesas-rtca3.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/rtc/rtc-renesas-rtca3.c b/drivers/rtc/rtc-renesas-rtca3.c
-index cbabaa4dc96a..2dc080d0eb6c 100644
+index 2dc080d0eb6c..af2a3878289e 100644
 --- a/drivers/rtc/rtc-renesas-rtca3.c
 +++ b/drivers/rtc/rtc-renesas-rtca3.c
-@@ -455,7 +455,7 @@ static int rtca3_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 		 * specified timeout for setup.
- 		 */
- 		writeb(rcr1 & ~RTCA3_RCR1_PIE, priv->base + RTCA3_RCR1);
--		readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp, !(tmp & ~RTCA3_RCR1_PIE),
-+		readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp, !(tmp & RTCA3_RCR1_PIE),
- 					  10, RTCA3_DEFAULT_TIMEOUT_US);
- 		atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
- 	}
+@@ -634,6 +634,8 @@ static int rtca3_initial_setup(struct clk *clk, struct rtca3_priv *priv)
+ 	writeb(0, priv->base + RTCA3_RADJ);
+ 	ret = readb_poll_timeout(priv->base + RTCA3_RADJ, tmp, !tmp, 10,
+ 				 RTCA3_DEFAULT_TIMEOUT_US);
++	if (ret)
++		return ret;
+ 
+ 	/* Start the RTC and enable automatic time error adjustment. */
+ 	mask = RTCA3_RCR2_START | RTCA3_RCR2_AADJE;
 -- 
 2.54.0
 
