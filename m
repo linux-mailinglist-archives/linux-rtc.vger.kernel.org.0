@@ -1,207 +1,273 @@
-Return-Path: <linux-rtc+bounces-6474-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6475-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8KL0LE9x+2kNbQMAu9opvQ
-	(envelope-from <linux-rtc+bounces-6474-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 06 May 2026 18:50:23 +0200
+	id cFPjF9St/GkNSgAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6475-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 07 May 2026 17:20:52 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AF774DE4F5
-	for <lists+linux-rtc@lfdr.de>; Wed, 06 May 2026 18:50:22 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC9924EAE9B
+	for <lists+linux-rtc@lfdr.de>; Thu, 07 May 2026 17:20:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 44EC83027370
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2026 16:49:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 393C33010399
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 May 2026 15:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3C64949FF;
-	Wed,  6 May 2026 16:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD861441032;
+	Thu,  7 May 2026 15:19:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSxO92UI"
+	dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b="aFCOO/nW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Bzg5BsZb"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40288495528
-	for <linux-rtc@vger.kernel.org>; Wed,  6 May 2026 16:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971BD43E9FF;
+	Thu,  7 May 2026 15:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778086165; cv=none; b=mShev2N3Ac1NOkgLTYu+zleHCSay2/BRaStdk2b0s+iHfKxfD/L+C1YzLmb8MuCMSmL9sZvKXjOoQdko11oXzxM4IwDWszM1jyj0TLIPmXpCiTQoaUkx8wmfuR/+pBIkjJNeXB/A/vK/q91DyIpkYNjMo8ADqWMZROinHpTyVS4=
+	t=1778167167; cv=none; b=POj8bKIYyAild0pl+kxu5I4Ck+pgY6oFH145xohB8AycP5xinWNsvmmno0jLUmfVjMmEuTpnpoMo0Y5o3K+0PpdUFKuJwTnVDbcc6v6EMiw0QlmCDFmqiMjAhjlGo2GSzJqlPW0bNYNTd/uYcyceSTGUwtPVJIptJB/BI9p2ASg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778086165; c=relaxed/simple;
-	bh=XbIcmfBPvdUsZgt8hYQuWguV5+dMEMnvfD1TFRjc7zA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K/6EyOX8AaNIrXRLFNEu4bPPMP8O7nFXVuwbNciz0n243GKmb36ydk14Mwl98KchzkTB0SDkxH19shsnzVdXBGSDerFG+vZ5co1ZTzkHKs1mQii5M2cL8MaxrNNg8lATAHwwQUdkhShSefDjPjpG3w4s89+YB5/8JQVIVCIUtpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSxO92UI; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48d146705b4so27510965e9.3
-        for <linux-rtc@vger.kernel.org>; Wed, 06 May 2026 09:49:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778086162; x=1778690962; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H/baJx7mBsqKytKYQaKxdbG5hOnnWG1GzcGphYV5dXY=;
-        b=iSxO92UI/pfpIBIpTJ9pEJUCdlNSyr0yOGYRhFT/a6aw3U3MeI+j6WsEzabt4mutsn
-         pGxUvVLeFuNoziE+Y2xx7grQfRM8/fyyIJiRfTVfraS06toRB0xgx1EU1n0C7B3Ss6TZ
-         fOXTaK/pKgUv2Eiv2x2HrO6rEVex71viiy+gNmK8sy0RtVzoUaRjbpVC6Gb7j4uYEH5z
-         KSajT9+1fX1wrtWwEuxZ1oneybAvflnHUT1+g/1+ObW/rWaD2M9o5iUo33QlLDgY8xk9
-         HoXAsm28mVZ6vwTfqU8TxcE1+AWbVGHdIhWDv/5p/Apt8svqEheAQspvcE19Pc4subeh
-         dgdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778086162; x=1778690962;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H/baJx7mBsqKytKYQaKxdbG5hOnnWG1GzcGphYV5dXY=;
-        b=sgEqpufx4xMdjUn1cjvMfT91BDNpyABz6Ia+tC3ERk0cpuZEtpta+mF7Vr/5f1BdIt
-         uTd9I/14Q0OUYXc/U1N0ex7978lJ7Lgn+KP4TLR8QKGVqSpvdscIIZPztdxKRRSCLhNg
-         xlxLu8rAI2pjiE/3LzkV//dpJNXe6snsuuCs/FeStq0HAceVGqVlMRyyb9v9AGLyNr2J
-         XeTqMSWGySO8RguhUKia3g85b2k3GPzYnbW2x3VCfbTVdoggyfM8CL2CgLroSxigvR13
-         2AFYEtc3tb/vtwjUeE/AdhgYLpKnF9KW8sU0BL7W0T/uhe+NIVlAXBkm6NqI9yEzG4jU
-         eJZA==
-X-Gm-Message-State: AOJu0YwSEB19utiHy6dVBuUgoYg8WzlZQBlyiuJ1RRREZMteqTL8J8gG
-	WT3CDNeXebSBW+MjcZgrcZaD8555uI0829wTjuywvDprSdfel1T7hg2i
-X-Gm-Gg: AeBDiesPEKScR7lDf7jSLZOMlugV7BpdwOMYjoRT9DiG31cVEwiAK8EIsTPuLxHsVdX
-	JkacbKXwxRYa42o35qnzzDv9gJlz/hwGH0GvW8OUTiedVryiuEd6LhCjz67iCiwthpWk7IIrulg
-	P2pcmgW8OscZB6YyiJRZ+ruTfTd/svjUnOwObECgNw/nDp6/X3S06uyiBQAuvPkgmxNsDSxwped
-	hfOpE+SlIzuLrnG7xb+RbdLQ1qSEL4l4bjQEkx8jyC2t6TVHd1q74KlrzTD6o7OQdioFHNFe4rQ
-	x5TWa1zSnyqX5EPufWqugoHZCwqtQaV7T6+C2M61dMX2f3l14OqSL3bGWcr/pwitSw5s883wgVy
-	TK6+dU8XrCGO/vhQZ76LFJWcc7IcLiji+AeAJvFDz/C6wfKvAQbQRPFnLquLMGES4J7VULA25z5
-	5J0F5afXbf0la5BUHk6PlCpIIzK17lwG8yffzo+ft8nNIiYytJ+r33e/zOpa6gSCToIzfuS8QK6
-	kuGrlFRUkyWyMdyTgv7Id2yyFY+k91PjMB7zu/a1rg3c8Yy4OymdiG6xw==
-X-Received: by 2002:a05:600d:10:b0:488:e7e4:8425 with SMTP id 5b1f17b1804b1-48e51f4ea40mr61630205e9.23.1778086161523;
-        Wed, 06 May 2026 09:49:21 -0700 (PDT)
-Received: from iku.example.org ([2a06:5906:61b:2d00:3dcb:40a8:a5b9:2327])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530fdc50sm33060795e9.5.2026.05.06.09.49.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 09:49:20 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-rtc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 5/5] rtc: renesas-rtca3: Factor out year decoding helper
-Date: Wed,  6 May 2026 17:49:14 +0100
-Message-ID: <20260506164914.3987293-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260506164914.3987293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20260506164914.3987293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=arc-20240116; t=1778167167; c=relaxed/simple;
+	bh=lf+sZJ4rE5b/24w7+yfWuko/2+F9/GbvSSUjz/pQdEs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZMxFIjmcY4MfQD0K95A17bX3kHlFGMJd5xYhjhxiv9wC9tJa+tfRyRU8fT+Hsg+InoqmkpoOoly4x26099sSM4bxW8bmqb24856zh5C0Z2j/ETRK3wUuOgClj7310/WpmgeWjsvFBKZNVCQOJLAPP0BkcVv3La/bikhcWVpyopo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com; spf=pass smtp.mailfrom=tyhicks.com; dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b=aFCOO/nW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Bzg5BsZb; arc=none smtp.client-ip=202.12.124.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tyhicks.com
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 2811A7A0084;
+	Thu,  7 May 2026 11:19:22 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Thu, 07 May 2026 11:19:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
+	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1778167161; x=1778253561; bh=hVqV1Ts51c
+	DJBkNZ9a1xW6T5PtwH6Vxq8AydYKDJXLQ=; b=aFCOO/nWk+7Q1e7ALs3Xfmt7e9
+	FJo9T5qBlgPBFqoVdyRXh9pQiA8b+KRY4e/TcB4sVROz11cZMLq288xZZyOlnxRp
+	Fn4fAlRZ0ks9chKC2h38lIqkvQpF43TlfcQrTa38G36r6VO6EUsySnyhwlTBBeOx
+	RA/Gg8a2ARx6wIDUdp6ruH7qO//SrYks26UU6q9WRrijlaxMsPzmveY/guMn8qHD
+	6SZxlyXBLBAjMjh6OrYyHYXivSgqffsf6hFRCI7MmDSSRHTW/SZnvsrWLNrMSJjj
+	feGjm2mAkIhc/L4PMxISvALwPlvOzq0e5Pddxnk2GNueyUwhPrStAi1lzNJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1778167161; x=1778253561; bh=hVqV1Ts51cDJBkNZ9a1xW6T5PtwH6Vxq8Ay
+	dYKDJXLQ=; b=Bzg5BsZb5mulLjvaF6uJ4Qmu7VOp4WQV7NXCQC+EF0XHfnzWX6w
+	uZ6ru44jpZ/UCjWGHCURlHeSfXFxUVKqAXBrqm/7EudDbYHxXZNxIM2Nt1kB1h0z
+	TjhVNcn7+iOSLF0NxxG+9IHtKHzjrBWyGvF95zx/4l4NCXqycW2Pw2QyYNy7lj71
+	qixrHPz4fMhyYl6szHS1fMqMoDdCNQ7NyFk42noAcZ1tXJIkvdPrldfgylpHqdEe
+	qn9lIyd4vQAfeI2Oh9KIcA2Q3CuGpifOnUCSN27t6Q1ZYQ4ivqz1vfCyfxL44xn2
+	XwX6e65uTyBuj2mFBaQbkrI37BDQxNlnTDA==
+X-ME-Sender: <xms:eK38aawv_VKochBhy2N2OJjCVo20yohJC0LOsVCp_QwiCE5nsz41Pw>
+    <xme:eK38abOJvva_BcRjDC434OPYbGtyG6zKnM0tNaOclsYrPLQPxDPX1Ii6pJ4NHQ8eg
+    addwPhFVdSKc-yNIyhlrMUcAVMulXaBkCqxaplRWQK7L3gAZyQVNZIh>
+X-ME-Received: <xmr:eK38aQmjW-ttzxWYRcCoKw1jcfSSKdTMmh7n4zk2bXEU-DIxzdilNnk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutdejkeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihlhgvrhcu
+    jfhitghkshcuoegtohguvgesthihhhhitghkshdrtghomheqnecuggftrfgrthhtvghrnh
+    epvdehvddttdfhfefhtdfgleehfeeggfdujeeuveekudevkedvgeejtddtfefgleeinecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptghouggvse
+    hthihhihgtkhhsrdgtohhmpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehrohhnrghnrdgurghlthhonhesrghllhhivgguthgvlhgvshhish
+    drtghordhniidprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohho
+    thhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehsrghshhgrlheskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepmhgvrghgrghnlhhlohihugeslhhinhhugidrmhhitghrohhsohhfthdrtgho
+    mhdprhgtphhtthhopehgihhomhgvthhtihesvghnnhgvvghnnhgvrdgtohhmpdhrtghpth
+    htoheptghhrhhishdrphgrtghkhhgrmhesrghllhhivgguthgvlhgvshhishdrtghordhn
+    ii
+X-ME-Proxy: <xmx:eK38aQQ3bLacuHhSRw03GKylSITUitPVygD-eYg0bykYE4mVdrt-Sw>
+    <xmx:eK38afUAON6ICjEFAedp0odRUzusrtjo2oROjLI39Gn8Kz1trUrE1A>
+    <xmx:eK38aUJtXL5H3gT775cBb_mQwmnBT0PTS7YxRQqvr9u6VAXcpbNZBw>
+    <xmx:eK38af0JAoDqQwCyDD45m5qsHd7aIZsQEuqVhBT7wiab0poQtSYLQw>
+    <xmx:ea38aSmEmMzyJoUfe8EmdqYZ2XQ2TqXUBvRylLbnSgMwk68fA2u8jT64>
+Feedback-ID: i78e14604:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 7 May 2026 11:19:19 -0400 (EDT)
+Date: Thu, 7 May 2026 10:19:03 -0500
+From: Tyler Hicks <code@tyhicks.com>
+To: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+	Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+	Rodolfo Giometti <giometti@enneenne.com>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH] rtc: ds1307: handle oscillator stop flag for
+ ds1337/ds1339/ds3231
+Message-ID: <afytZzYGaSG-6V6y@yaupon>
+References: <20260501044657.1003980-2-ronan.dalton@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 6AF774DE4F5
-X-Rspamd-Action: no action
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260501044657.1003980-2-ronan.dalton@alliedtelesis.co.nz>
+X-Rspamd-Queue-Id: AC9924EAE9B
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[tyhicks.com:s=fm2,messagingengine.com:s=fm3];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6474-lists,linux-rtc=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[tyhicks.com:+,messagingengine.com:+];
+	TAGGED_FROM(0.00)[bounces-6475-lists,linux-rtc=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,bp.renesas.com,renesas.com];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[tyhicks.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-0.999];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-rtc,renesas];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[code@tyhicks.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,bp.renesas.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[messagingengine.com:dkim,bootlin.com:email,thicks.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Action: no action
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 2026-05-01 16:46:10, Ronan Dalton wrote:
+> Prior to commit 6cb0d8587b96 ("rtc: ds1307: remove clear of oscillator
 
-The logic to decode the year value from the hardware registers is
-duplicated in both rtca3_read_time() and rtca3_read_alarm().
+This commit hash is from the linux-6.12.y stable branch but we should
+use hashes from Linus' tree in this commit message:
 
-Introduce a helper rtca3_decode_year() to centralize this conversion.
+ 48458654659c ("rtc: ds1307: remove clear of oscillator stop flag (OSF) in probe")
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/rtc/rtc-renesas-rtca3.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+> stop flag (OSF) in probe"), the oscillator stop flag (OSF) bit was
+> checked during device probe for the ds1337, ds1339, ds1341, and ds3231
+> chips; if it was set, it would be cleared and a warning would be logged
+> saying "SET TIME!". Since that commit, the OSF bit is no longer cleared,
+> but the warning is still printed.
+> 
+> Directly following that commit, there was no way to get rid of this
+> warning because nothing cleared the OSF bit on these chips.
+> 
+> The commit associated with the previous commit, ae03a28e12a7 ("rtc:
 
-diff --git a/drivers/rtc/rtc-renesas-rtca3.c b/drivers/rtc/rtc-renesas-rtca3.c
-index 97e7e65f59a5..b3875d041de5 100644
---- a/drivers/rtc/rtc-renesas-rtca3.c
-+++ b/drivers/rtc/rtc-renesas-rtca3.c
-@@ -228,12 +228,19 @@ static void rtca3_prepare_cntalrm_regs_for_read(struct rtca3_priv *priv, bool cn
- 	}
- }
- 
-+static u32 rtca3_decode_year(u8 mask, u16 year)
-+{
-+	u8 y = FIELD_GET(mask, year);
-+	u32 century = bcd2bin((y == 0x99) ? 0x19 : 0x20);
-+
-+	return (century * 100 + bcd2bin(y)) - 1900;
-+}
-+
- static int rtca3_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct rtca3_priv *priv = dev_get_drvdata(dev);
- 	u8 sec, min, hour, wday, mday, month, tmp;
- 	u8 trials = 0;
--	u32 year100;
- 	u16 year;
- 
- 	guard(spinlock_irqsave)(&priv->lock);
-@@ -274,9 +281,7 @@ static int rtca3_read_time(struct device *dev, struct rtc_time *tm)
- 	tm->tm_wday = bcd2bin(FIELD_GET(RTCA3_RWKCNT_WK, wday));
- 	tm->tm_mday = bcd2bin(FIELD_GET(RTCA3_RDAYCNT_DAY, mday));
- 	tm->tm_mon = bcd2bin(FIELD_GET(RTCA3_RMONCNT_MONTH, month)) - 1;
--	year = FIELD_GET(RTCA3_RYRCNT_YEAR, year);
--	year100 = bcd2bin((year == 0x99) ? 0x19 : 0x20);
--	tm->tm_year = (year100 * 100 + bcd2bin(year)) - 1900;
-+	tm->tm_year = rtca3_decode_year(RTCA3_RYRCNT_YEAR, year);
- 
- 	return 0;
- }
-@@ -354,7 +359,6 @@ static int rtca3_read_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 	struct rtca3_priv *priv = dev_get_drvdata(dev);
- 	u8 sec, min, hour, wday, mday, month;
- 	struct rtc_time *tm = &wkalrm->time;
--	u32 year100;
- 	u16 year;
- 
- 	guard(spinlock_irqsave)(&priv->lock);
-@@ -373,9 +377,7 @@ static int rtca3_read_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 	tm->tm_wday = bcd2bin(FIELD_GET(RTCA3_RWKAR_DAYW, wday));
- 	tm->tm_mday = bcd2bin(FIELD_GET(RTCA3_RDAYAR_DATE, mday));
- 	tm->tm_mon = bcd2bin(FIELD_GET(RTCA3_RMONAR_MON, month)) - 1;
--	year = FIELD_GET(RTCA3_RYRAR_YR, year);
--	year100 = bcd2bin((year == 0x99) ? 0x19 : 0x20);
--	tm->tm_year = (year100 * 100 + bcd2bin(year)) - 1900;
-+	tm->tm_year = rtca3_decode_year(RTCA3_RYRAR_YR, year);
- 
- 	wkalrm->enabled = !!(readb(priv->base + RTCA3_RCR1) & RTCA3_RCR1_AIE);
- 
--- 
-2.54.0
+The commit hash referenced here should be 523923cfd5d6.
 
+> ds1307: handle oscillator stop flag (OSF) for ds1341"), made proper use
+> of the OSF when getting and setting the time in the RTC. However, the
+> other RTC variants ds1337, ds1339 and ds3231 didn't have a corresponding
+> change made.
+> 
+> Given that the OSF bit is no longer cleared at probe time when it is
+> set, the remaining three chips should have the same handling as the
+> ds1341 chip has for the OSF bit.
+> 
+> Fix the issue on the ds1337, ds1339 and ds3231 chips by applying the
+> same logic as the ds1341 has to these chips.
+> 
+> Note that any devices brought up between the first referenced commit and
+> this one may begin mistrusting the time reported by the RTC until it is
+> set again, if the bit was never explicitly cleared.
+> 
+> Note that only the ds1339 was tested with this change, but the
+> datasheets for the other chips contain essentially identical
+> descriptions of the OSF bit so the same change should work.
+> 
+> An alternative to this change could be just to revert the referenced two
+> commits and not use the OSF bit at all, apart from logging a warning and
+> clearing it on probe.
+> 
+> Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Tyler Hicks <code@tyhicks.com>
+> Cc: Sasha Levin <sashal@kernel.org>
+> Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+> Cc: Rodolfo Giometti <giometti@enneenne.com>
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Fixes: 6cb0d8587b96 ("rtc: ds1307: remove clear of oscillator stop flag (OSF) in probe")
+
+Please adjust the commit hash here, as well. Everything else looks good.
+Thanks!
+
+Reviewed-by: Tyler Hicks <code@thicks.com>
+
+Tyler
+
+> ---
+>  drivers/rtc/rtc-ds1307.c | 28 +++++++++++++++++-----------
+>  1 file changed, 17 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+> index 7205c59ff729..edf81b975dec 100644
+> --- a/drivers/rtc/rtc-ds1307.c
+> +++ b/drivers/rtc/rtc-ds1307.c
+> @@ -269,6 +269,16 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
+>  		if (tmp & DS1338_BIT_OSF)
+>  			return -EINVAL;
+>  		break;
+> +	case ds_1337:
+> +	case ds_1339:
+> +	case ds_1341:
+> +	case ds_3231:
+> +		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
+> +		if (ret)
+> +			return ret;
+> +		if (tmp & DS1337_BIT_OSF)
+> +			return -EINVAL;
+> +		break;
+>  	case ds_1340:
+>  		if (tmp & DS1340_BIT_nEOSC)
+>  			return -EINVAL;
+> @@ -279,13 +289,6 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
+>  		if (tmp & DS1340_BIT_OSF)
+>  			return -EINVAL;
+>  		break;
+> -	case ds_1341:
+> -		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
+> -		if (ret)
+> -			return ret;
+> -		if (tmp & DS1337_BIT_OSF)
+> -			return -EINVAL;
+> -		break;
+>  	case ds_1388:
+>  		ret = regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
+>  		if (ret)
+> @@ -380,14 +383,17 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
+>  		regmap_update_bits(ds1307->regmap, DS1307_REG_CONTROL,
+>  				   DS1338_BIT_OSF, 0);
+>  		break;
+> +	case ds_1337:
+> +	case ds_1339:
+> +	case ds_1341:
+> +	case ds_3231:
+> +		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
+> +				   DS1337_BIT_OSF, 0);
+> +		break;
+>  	case ds_1340:
+>  		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
+>  				   DS1340_BIT_OSF, 0);
+>  		break;
+> -	case ds_1341:
+> -		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
+> -				   DS1337_BIT_OSF, 0);
+> -		break;
+>  	case ds_1388:
+>  		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+>  				   DS1388_BIT_OSF, 0);
+> -- 
+> 2.53.0
+> 
 
