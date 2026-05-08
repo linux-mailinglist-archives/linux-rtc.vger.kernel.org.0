@@ -1,145 +1,230 @@
-Return-Path: <linux-rtc+bounces-6480-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6481-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yBd8Nf8j/Wn6YAAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6480-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 01:45:03 +0200
+	id 8HJKIKAr/WkLYgAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6481-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 02:17:36 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5026F4F034C
-	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 01:45:01 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 368C94F0738
+	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 02:17:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 48516300D1C7
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 May 2026 23:45:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 65E9C3007A76
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 May 2026 00:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C3437EFE4;
-	Thu,  7 May 2026 23:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1E91A682C;
+	Fri,  8 May 2026 00:17:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="c7xjfAIl"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="zAB6gMDF"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE2133E373
-	for <linux-rtc@vger.kernel.org>; Thu,  7 May 2026 23:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BD916F27F
+	for <linux-rtc@vger.kernel.org>; Fri,  8 May 2026 00:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778197500; cv=none; b=gHG8C4sZQPQJz0WaVbRGIbbZAXtt1YMT4UfcifZc70ZRB8m6RaYEhtR0ocMjRfjWwqYab6oH5ZI4XjSXEDY+DppMnt5tq2es0f6+4feWAPa/xngjrLruXMDdIpyslCyGyBFWmMp8IyaDpwUx72MHhgEkGjPgmO4XRLuYgilOeRk=
+	t=1778199450; cv=none; b=acCuQnj01r3+i2L/hnMMHmNBfFfBgf7XnwrsiqHVYWZJJLSpfWuQODDHu3G20yMaXrGQfJoxlHH80r6NC+DUwzoHhXsi0H434ggLWssN6ipS6vT1s33jPBVIOSvE/5VL7vqEVknENzIqwPWWVA5lsGrFPnUL2AXIfuZLbw6kQiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778197500; c=relaxed/simple;
-	bh=8E08JR1x8OEjEBYesWMNmtZmhDrHwP3hpL7HzGY8RfQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=sWHeXiiDNT/BQn55jW1K1Xg17P4nvdcOqq5xg5Q8VMWczs7BWCkEl3CzG0twJhQvjKEaKHQK6iFn8ZxLJKR1Jk/+qfxs3Zu+0sTDF1BZgiZ50kzyjMpvx9P0hcqO5TOiQcroA0crE8E7se6FrDXQzD0k3AIotkGse9Qy0JTzwK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=c7xjfAIl; arc=none smtp.client-ip=202.36.163.20
+	s=arc-20240116; t=1778199450; c=relaxed/simple;
+	bh=vRXpJQN29hjLjmK2OxhdxjRCoqHqZIbkPY3vEmdZBxM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hnN8+V2+oxTf1p6a1xBt2I011OoWfJv0hVMhpuwQVm3hLWoL5P1Ck//fyr7re8aDAUTeskahrnQC6vRbAcJFt387EwwBwsEpvLZueDoUbSjW+rw+kTNQPQ/sL3tXrfq7XJqjks34cnYHk2Z6FEx/XGaeUWqmAudaqnobljCrWFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=zAB6gMDF; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EDE1F2C0183;
-	Fri,  8 May 2026 11:44:48 +1200 (NZST)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A936E2C0183;
+	Fri,  8 May 2026 12:17:25 +1200 (NZST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1778197488;
-	bh=8E08JR1x8OEjEBYesWMNmtZmhDrHwP3hpL7HzGY8RfQ=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=c7xjfAIltjjbA8fW8sQZOEW7V6hzBXtI4aIpRgbxR7sN8iR9w0A4S54GU7ipyoncX
-	 30dE8bDfxHXhRGgGSwICPrwUBqIN5qgFdR3fiA0NzB5KK5KdMm7lbb5f6H5tGg9l+C
-	 dZYFwmHPSW7Vw6+Ml3LVrxEVRgA/J839pP5yVADWSOwYOLrM0oVLjLECRLZxVlEjEi
-	 n/DxNTvRRLcxVl+HBkRvCeBiiCqkeZTRce74DrDZI4+LM3u6HaDRZH4fcdyHkKnXiU
-	 X1usNZFSZanPIAw4mPseQKCtEggCk4qBqGeBd7Adj8wdbVGWpN+xgU2uA3XxhXp7Ca
-	 W9oiyAGH4qtOQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B69fd23ef0000>; Fri, 08 May 2026 11:44:47 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.39; Fri, 8 May 2026 11:44:46 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1748.039; Fri, 8 May 2026 11:44:46 +1200
-From: Ronan Dalton <Ronan.Dalton@alliedtelesis.co.nz>
-To: "code@tyhicks.com" <code@tyhicks.com>
-CC: "sashal@kernel.org" <sashal@kernel.org>, "giometti@enneenne.com"
-	<giometti@enneenne.com>, "meaganlloyd@linux.microsoft.com"
-	<meaganlloyd@linux.microsoft.com>, "linux-rtc@vger.kernel.org"
-	<linux-rtc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "alexandre.belloni@bootlin.com"
-	<alexandre.belloni@bootlin.com>, Chris Packham
-	<Chris.Packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH] rtc: ds1307: handle oscillator stop flag for
- ds1337/ds1339/ds3231
-Thread-Topic: [PATCH] rtc: ds1307: handle oscillator stop flag for
- ds1337/ds1339/ds3231
-Thread-Index: AQHc2SYs/dzU9DqYhU6v2CJYbHsOHLYB7jWAgACNTAA=
-Date: Thu, 7 May 2026 23:44:46 +0000
-Message-ID: <516a340925419655dae2967f7ad996ed2e995e97.camel@alliedtelesis.co.nz>
-References: <20260501044657.1003980-2-ronan.dalton@alliedtelesis.co.nz>
-	 <afytZzYGaSG-6V6y@yaupon>
-In-Reply-To: <afytZzYGaSG-6V6y@yaupon>
-Accept-Language: en-US, en-NZ
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B1601801442CDB4C92DEFB27586A8D5F@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	s=mail181024; t=1778199445;
+	bh=uywkIOOPdprN1Cctz2PBlY9ZoFYz/Hwr0W+QeaQL52M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=zAB6gMDF11tAfixR+bvE5ByKeYKXCKCfShMNhabJ5ebWXO2wIK8tOCmUkYbr8a+5X
+	 nHMtE5If5IZfSyLF1zLX70zGefHo6d2a3mVgosA6bRuMBK4BM4cOuHA9D5bch7DbTm
+	 S+9q47o3T6phOwMHusnjiRy395/WiOIpDa/Qrtay+7tuLQDdJ0lfctP+tsaGeXCNWG
+	 Mt3FUziQzDiBkMCD2/kZhNvD5BYQ7dS372+K3LnJdYvxLyNjB3p7xklDlOJP23RETE
+	 cNpCuoleH/uiSXP7Jrn6v64Lu+dcsu/Zy4tDJ1uVBTADflVkeQhOhnMnAqcOXmqoNa
+	 ojYMzwLmoblzA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B69fd2b950000>; Fri, 08 May 2026 12:17:25 +1200
+Received: from ronand-dl.ws.atlnz.lc (ronand-dl.ws.atlnz.lc [10.33.12.18])
+	by pat.atlnz.lc (Postfix) with ESMTP id 776DC13ED2A;
+	Fri,  8 May 2026 12:17:25 +1200 (NZST)
+Received: by ronand-dl.ws.atlnz.lc (Postfix, from userid 1930)
+	id 7277D84004F; Fri,  8 May 2026 12:17:25 +1200 (NZST)
+From: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+To: alexandre.belloni@bootlin.com
+Cc: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>,
+	linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tyler Hicks <code@tyhicks.com>,
+	Sasha Levin <sashal@kernel.org>,
+	Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+	Rodolfo Giometti <giometti@enneenne.com>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v2] rtc: ds1307: handle oscillator stop flag for ds1337/ds1339/ds3231
+Date: Fri,  8 May 2026 12:17:06 +1200
+Message-ID: <20260508001709.3681392-1-ronan.dalton@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=FPe4xPos c=1 sm=1 tr=0 ts=69fd23ef a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=BhaoXNk7gXQA:10 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=z6DmqFdrAAAA:8 a=GOU78zvoPd1deeDqtAwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=sWf6SEGcLVeEBSvlKYKl:22
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=FPe4xPos c=1 sm=1 tr=0 ts=69fd2b95 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=NGcC8JguVDcA:10 a=VwQbUJbxAAAA:8 a=P-IC7800AAAA:8 a=FLmnqZ5pAAAA:8 a=yMhMjlubAAAA:8 a=gUfQWItQAAAA:8 a=vhqSDMIX0PFRHOe_07sA:9 a=3ZKOabzyN94A:10 a=d3PnA9EDa4IxuAV0gXij:22 a=8DxQ4-P9FUvTN4rw3Xy2:22 a=Xud5aiJGVNusHZ8q4fKI:22
 X-SEG-SpamProfiler-Score: 0
-X-Rspamd-Queue-Id: 5026F4F034C
+x-atlnz-ls: pat
+X-Rspamd-Queue-Id: 368C94F0738
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.06 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[alliedtelesis.co.nz,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[alliedtelesis.co.nz:s=mail181024];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,thicks.com:email,alliedtelesis.co.nz:mid,alliedtelesis.co.nz:dkim];
-	TAGGED_FROM(0.00)[bounces-6480-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6481-lists,linux-rtc=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[alliedtelesis.co.nz:email,alliedtelesis.co.nz:mid,alliedtelesis.co.nz:dkim,bootlin.com:email];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[alliedtelesis.co.nz:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Ronan.Dalton@alliedtelesis.co.nz,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[ronan.dalton@alliedtelesis.co.nz,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[alliedtelesis.co.nz:+];
 	TAGGED_RCPT(0.00)[linux-rtc];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Action: no action
 
-T24gVGh1LCAyMDI2LTA1LTA3IGF0IDEwOjE5IC0wNTAwLCBUeWxlciBIaWNrcyB3cm90ZToNCj4g
-T24gMjAyNi0wNS0wMSAxNjo0NjoxMCwgUm9uYW4gRGFsdG9uIHdyb3RlOg0KPiA+IFByaW9yIHRv
-IGNvbW1pdCA2Y2IwZDg1ODdiOTYgKCJydGM6IGRzMTMwNzogcmVtb3ZlIGNsZWFyIG9mDQo+ID4g
-b3NjaWxsYXRvcg0KPiANCj4gVGhpcyBjb21taXQgaGFzaCBpcyBmcm9tIHRoZSBsaW51eC02LjEy
-Lnkgc3RhYmxlIGJyYW5jaCBidXQgd2Ugc2hvdWxkDQo+IHVzZSBoYXNoZXMgZnJvbSBMaW51cycg
-dHJlZSBpbiB0aGlzIGNvbW1pdCBtZXNzYWdlOg0KPiANCj4gwqA0ODQ1ODY1NDY1OWMgKCJydGM6
-IGRzMTMwNzogcmVtb3ZlIGNsZWFyIG9mIG9zY2lsbGF0b3Igc3RvcCBmbGFnDQo+IChPU0YpIGlu
-IHByb2JlIikNCj4gPiANCj4gPiBUaGUgY29tbWl0IGFzc29jaWF0ZWQgd2l0aCB0aGUgcHJldmlv
-dXMgY29tbWl0LCBhZTAzYTI4ZTEyYTcgKCJydGM6DQo+IA0KPiBUaGUgY29tbWl0IGhhc2ggcmVm
-ZXJlbmNlZCBoZXJlIHNob3VsZCBiZSA1MjM5MjNjZmQ1ZDYuDQo+ID4gDQo+ID4gRml4ZXM6IDZj
-YjBkODU4N2I5NiAoInJ0YzogZHMxMzA3OiByZW1vdmUgY2xlYXIgb2Ygb3NjaWxsYXRvciBzdG9w
-DQo+ID4gZmxhZyAoT1NGKSBpbiBwcm9iZSIpDQo+IA0KPiBQbGVhc2UgYWRqdXN0IHRoZSBjb21t
-aXQgaGFzaCBoZXJlLCBhcyB3ZWxsLiBFdmVyeXRoaW5nIGVsc2UgbG9va3MNCj4gZ29vZC4NCg0K
-R29vZCBjYXRjaC4gSSdsbCBzZW5kIGEgZm9sbG93LXVwIHBhdGNoIHdpdGggdGhlc2UgY29tbWl0
-IGhhc2hlcyBmaXhlZC4NCg0KPiANCj4gUmV2aWV3ZWQtYnk6IFR5bGVyIEhpY2tzIDxjb2RlQHRo
-aWNrcy5jb20+DQo+IA0KPiBUeWxlcg0KDQpDaGVlcnMNCj4gDQo=
+Prior to commit 48458654659c ("rtc: ds1307: remove clear of oscillator
+stop flag (OSF) in probe"), the oscillator stop flag (OSF) bit was
+checked during device probe for the ds1337, ds1339, ds1341, and ds3231
+chips; if it was set, it would be cleared and a warning would be logged
+saying "SET TIME!". Since that commit, the OSF bit is no longer cleared,
+but the warning is still printed.
+
+Directly following that commit, there was no way to get rid of this
+warning because nothing cleared the OSF bit on these chips.
+
+The commit associated with the previous commit, 523923cfd5d6 ("rtc:
+ds1307: handle oscillator stop flag (OSF) for ds1341"), made proper use
+of the OSF when getting and setting the time in the RTC. However, the
+other RTC variants ds1337, ds1339 and ds3231 didn't have a corresponding
+change made.
+
+Given that the OSF bit is no longer cleared at probe time when it is
+set, the remaining three chips should have the same handling as the
+ds1341 chip has for the OSF bit.
+
+Fix the issue on the ds1337, ds1339 and ds3231 chips by applying the
+same logic as the ds1341 has to these chips.
+
+Note that any devices brought up between the first referenced commit and
+this one may begin mistrusting the time reported by the RTC until it is
+set again, if the bit was never explicitly cleared.
+
+Note that only the ds1339 was tested with this change, but the
+datasheets for the other chips contain essentially identical
+descriptions of the OSF bit so the same change should work.
+
+An alternative to this change could be just to revert the referenced two
+commits and not use the OSF bit at all, apart from logging a warning and
+clearing it on probe.
+
+Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Tyler Hicks <code@tyhicks.com>
+Cc: Sasha Levin <sashal@kernel.org>
+Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+Cc: Rodolfo Giometti <giometti@enneenne.com>
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Fixes: 48458654659c ("rtc: ds1307: remove clear of oscillator stop flag (=
+OSF) in probe")
+---
+Changes in v2:
+- Fix hashes of referenced commits
+
+ drivers/rtc/rtc-ds1307.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 7205c59ff729..edf81b975dec 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -269,6 +269,16 @@ static int ds1307_get_time(struct device *dev, struc=
+t rtc_time *t)
+ 		if (tmp & DS1338_BIT_OSF)
+ 			return -EINVAL;
+ 		break;
++	case ds_1337:
++	case ds_1339:
++	case ds_1341:
++	case ds_3231:
++		ret =3D regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
++		if (ret)
++			return ret;
++		if (tmp & DS1337_BIT_OSF)
++			return -EINVAL;
++		break;
+ 	case ds_1340:
+ 		if (tmp & DS1340_BIT_nEOSC)
+ 			return -EINVAL;
+@@ -279,13 +289,6 @@ static int ds1307_get_time(struct device *dev, struc=
+t rtc_time *t)
+ 		if (tmp & DS1340_BIT_OSF)
+ 			return -EINVAL;
+ 		break;
+-	case ds_1341:
+-		ret =3D regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
+-		if (ret)
+-			return ret;
+-		if (tmp & DS1337_BIT_OSF)
+-			return -EINVAL;
+-		break;
+ 	case ds_1388:
+ 		ret =3D regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
+ 		if (ret)
+@@ -380,14 +383,17 @@ static int ds1307_set_time(struct device *dev, stru=
+ct rtc_time *t)
+ 		regmap_update_bits(ds1307->regmap, DS1307_REG_CONTROL,
+ 				   DS1338_BIT_OSF, 0);
+ 		break;
++	case ds_1337:
++	case ds_1339:
++	case ds_1341:
++	case ds_3231:
++		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
++				   DS1337_BIT_OSF, 0);
++		break;
+ 	case ds_1340:
+ 		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
+ 				   DS1340_BIT_OSF, 0);
+ 		break;
+-	case ds_1341:
+-		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
+-				   DS1337_BIT_OSF, 0);
+-		break;
+ 	case ds_1388:
+ 		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+ 				   DS1388_BIT_OSF, 0);
+--=20
+2.53.0
+
 
