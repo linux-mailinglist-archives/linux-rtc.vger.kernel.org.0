@@ -1,265 +1,197 @@
-Return-Path: <linux-rtc+bounces-6485-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6486-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UN+QA4H6/WnYlQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6485-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 17:00:17 +0200
+	id MLM1LQ4d/mkRnAAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6486-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 19:27:42 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71D824F8390
-	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 17:00:16 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC0C94F9F62
+	for <lists+linux-rtc@lfdr.de>; Fri, 08 May 2026 19:27:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BF8B9301DE7A
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 May 2026 15:00:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4E173300D4DA
+	for <lists+linux-rtc@lfdr.de>; Fri,  8 May 2026 17:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FAE3F7AA5;
-	Fri,  8 May 2026 15:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E01D15539A;
+	Fri,  8 May 2026 17:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b="pypyrCBR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rG9yQs1c"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="FoabeDNM"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC422352C34;
-	Fri,  8 May 2026 15:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A63E33AD9A;
+	Fri,  8 May 2026 17:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252414; cv=none; b=d5Du4e4Nipm9qXCgll0ETyEH7TDjvQURwlxnyDSDFrsC5u3NqCX0TvBqirbm+zgYP/d6N00n1xnZCiQi2enNWGCzII9ty65+OGhQjIaI8ineQIJufj8YRXX1TsMrN2Al2QMxaF5H/HeI3i1GQUK8y5PONRln8BLeoZGND0aUZl8=
+	t=1778261257; cv=none; b=XOA5K1cwqvAUrZz8aCSs3uU6OrYE0TygqfxrZgDo7uePokPzfBKRD1gI3V0fa+0FinSu2OC5sNmONwAecC+9YmU40LcPqm49Fp28QIwyQrHvyoxYJUXrLFGSaOUI0TRNU6LZaYiZoSLEgK2jXwH+gRx3knMp8MMy66KHBKvjb5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778252414; c=relaxed/simple;
-	bh=PWhTOA+mQ1vsLLDlxHMCTc7ukEw+frxMMoOHDB+7MZc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MVF2oAeBXtG0QaPI9STFbeQuHG82d9rrlZh/G7l/UC2W8YAkiku5XiuINQfTXAFGO3UOD2xhdD4lrCQYLrn9UD//gNW7BI18u3viCUzUV13L5dPYD1voiOuj+cW5L2lDJBrLKP+k6KTxy3v/PzEEjjaWaXiU/u0qdDe0UOd+Ue8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com; spf=pass smtp.mailfrom=tyhicks.com; dkim=pass (2048-bit key) header.d=tyhicks.com header.i=@tyhicks.com header.b=pypyrCBR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rG9yQs1c; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tyhicks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tyhicks.com
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id DBB837A0166;
-	Fri,  8 May 2026 11:00:11 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Fri, 08 May 2026 11:00:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1778252411; x=1778338811; bh=73wc6Bv58p
-	adeGP8ml1W4jXtGr0WBA9uIhE0H2uoKiE=; b=pypyrCBRH68IkvrLNtSiGMMxVV
-	4JTPpXnhwD5BIA+Gz8O5Im4htkF6iphlPqSaFiyCuOOWSLyU0jQq+Q7hRguU9ID8
-	Kpdsa6MAduTAWAP0Ja1RzPowapAEB3LT+sjWNTTvl//Tgmi/q7wkULnNN91qMc+K
-	bqzY6ClLsTtcJfaAWgBjtujbPZ6JfZHlipawDbHnk48O6owtPxWY+ESGyPns970+
-	3MWyiw/AG+845ZGd5U5whvBEO/Gn88xl+SfZkPdMtLJVvhIC2cPN5RjqoPwwBkyS
-	XAbR0Oy/0VcH3kqzq2omItwReqJJp3tlzbzdOG7FzpR4dp8SzOSHnAvitXHw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1778252411; x=1778338811; bh=73wc6Bv58padeGP8ml1W4jXtGr0WBA9uIhE
-	0H2uoKiE=; b=rG9yQs1ctAYMLmlYr/oS4FMh0Oe+0jwRbsg5qnI55tb1bsOICL6
-	xrH5RTGjJmgWTOahE6WgeTjLih34akPQw0fgyo53i+qWeH0n5KULdHzurc7ifxr7
-	YNCH8nIgy+Inub6hKm6333Oe8r/IXgyHjeLKlFtRnX+EE14+SYvQq96mnOdlq45a
-	odw1h9/WDU/xttMgdPoCi/E6xi1IzXVUtP7OUhnLxsl9yT20A5N1Pwsd+/KNBOOy
-	RT+Cy+DU0HnSS+LsPI/oyISL827EqwB+1tYdWeI6pydMD0MRYmmMzaFIkGrBeamy
-	gzExS61k7g8jpPEwqGbzDmxAv/duKDGxzfg==
-X-ME-Sender: <xms:evr9aeDv3PEkLX1Exc5i1cxcCX4-VYHswGk0DLqJaF2h3Q6jaxZWrg>
-    <xme:evr9adcXoupcAlo01eBQMyZxmeAKPndMYaRtMmKFpRfk_HQQSJdVgC1RZ80dm7xhR
-    nGwggiuaoId33Bt6xdpeWjvxte_0Dz-Bo_Jpmxze0IziSHN-OZxbHw>
-X-ME-Received: <xmr:evr9aV2AI3Z66Kn081DG4o3Q8nS-qDmIqd3stXKAbmztjdqhOMEqQDk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduuddtieehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihlhgvrhcu
-    jfhitghkshcuoegtohguvgesthihhhhitghkshdrtghomheqnecuggftrfgrthhtvghrnh
-    epvdehvddttdfhfefhtdfgleehfeeggfdujeeuveekudevkedvgeejtddtfefgleeinecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptghouggvse
-    hthihhihgtkhhsrdgtohhmpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehrohhnrghnrdgurghlthhonhesrghllhhivgguthgvlhgvshhish
-    drtghordhniidprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohho
-    thhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehsrghshhgrlheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepmhgvrghgrghnlhhlohihugeslhhinhhugidrmhhitghrohhsohhfthdrtgho
-    mhdprhgtphhtthhopehgihhomhgvthhtihesvghnnhgvvghnnhgvrdgtohhmpdhrtghpth
-    htoheptghhrhhishdrphgrtghkhhgrmhesrghllhhivgguthgvlhgvshhishdrtghordhn
-    ii
-X-ME-Proxy: <xmx:evr9acjrzj8WdjU_elN8W38tKDuVLn4IWz59dWSVWXEjaFWVfbdlNA>
-    <xmx:evr9aWkQV6izQGb4_iWct7jEMjwUbZZyZaPNlED9UPJvbYPg79LmnA>
-    <xmx:evr9aaY5aIwMR1AO5H1LkBJKxEy0Ya1wadigd_2mL96_HAgau7pZfQ>
-    <xmx:evr9aZHo2fgL_bDajtzFMD1ClT0dXsrpovkjbtMVTIOmqRxNt3mpsg>
-    <xmx:e_r9aZ3sZa7Qhiyc62cZKRW1-41hcLj9Jy-z46nb2VlgKnk72I02wyl8>
-Feedback-ID: i78e14604:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 8 May 2026 11:00:07 -0400 (EDT)
-Date: Fri, 8 May 2026 10:00:03 -0500
-From: Tyler Hicks <code@tyhicks.com>
-To: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-	Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
-	Rodolfo Giometti <giometti@enneenne.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v3] rtc: ds1307: handle oscillator stop flag for
- ds1337/ds1339/ds3231
-Message-ID: <af36cwOofjtS2mNP@yaupon>
-References: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
+	s=arc-20240116; t=1778261257; c=relaxed/simple;
+	bh=GVadrPaIpXvloCZ2qd0TqpTcfl5gklkUuZCeS18TOZ8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=TuQlVjHFjLSV3OtU9nXZHwpcr1BKC7/afpf9k8hs6gbBBnXIf12+O0gL1BPXVptcKtHZJVZIERFywElaPCFaQJ/lqk53H1+QZcIk4/88nXKYcFSI224orhKbjNNkTBoclKnsJHUsO2cLTrcT58MF7si2Ls2cstynro1H18bdFU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=FoabeDNM; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id E957027342;
+	Fri,  8 May 2026 19:27:31 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mz1FdCaqy_UM; Fri,  8 May 2026 19:27:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1778261251; bh=GVadrPaIpXvloCZ2qd0TqpTcfl5gklkUuZCeS18TOZ8=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To;
+	b=FoabeDNM7Jyz+x0UDJK6XcQU51z7Kdd5xB/++yvjt5c/PUyu4oQ9/i/J5rLglEHBS
+	 dUWSemd3ufA1LqftJjHvOJNQeLILdkgigpTYXJ2yrYSK8CzS8Zzi9ToGYHbDyHqm9B
+	 Gk9TQM/GcPz1LwiGOY6WlKmC6O1dIYOr1g5tuKQYVKrhB1o8MFyt+g2p+0+wKo/ycy
+	 biOp8HFVlb6UorCJfanOu/hhaTi4DerBImFFRf22ONmJaaaQMFuBHxnbpRYLC7RhS+
+	 gCMGPYdj1nFOCgVNbRCX53LCTLIT52dQTXuQY8vrGE03YQSXwdKkpFADQXMVlAnouL
+	 6p6aVHxrv7Mfg==
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
-X-Rspamd-Queue-Id: 71D824F8390
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 08 May 2026 22:57:12 +0530
+Message-Id: <DIDGZWFXUX7H.WYJNRZR4BQ2P@disroot.org>
+Cc: "Pavel Machek" <pavel@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>, "MyungJoo Ham" <myungjoo.ham@samsung.com>, "Chanwoo
+ Choi" <cw00.choi@samsung.com>, "Sebastian Reichel" <sre@kernel.org>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>, =?utf-8?q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Nam Tran" <trannamatk@gmail.com>,
+ =?utf-8?q?=C5=81ukasz_Lebiedzi=C5=84ski?= <kernel@lvkasz.us>,
+ <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v5 08/11] leds: rgb: add support for Samsung S2M series
+ PMIC RGB LED device
+From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
+To: "Lee Jones" <lee@kernel.org>, "Kaustabh Chakraborty"
+ <kauschluss@disroot.org>
+References: <20260424-s2mu005-pmic-v5-0-fcbc9da5a004@disroot.org>
+ <20260424-s2mu005-pmic-v5-8-fcbc9da5a004@disroot.org>
+ <20260507190005.GT305027@google.com>
+In-Reply-To: <20260507190005.GT305027@google.com>
+X-Rspamd-Queue-Id: BC0C94F9F62
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[tyhicks.com:s=fm2,messagingengine.com:s=fm3];
+	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[tyhicks.com:+,messagingengine.com:+];
-	TAGGED_FROM(0.00)[bounces-6485-lists,linux-rtc=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[tyhicks.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6486-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[disroot.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[code@tyhicks.com,linux-rtc@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[messagingengine.com:dkim,enneenne.com:email,alliedtelesis.co.nz:email]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,disroot.org:mid,disroot.org:dkim]
 X-Rspamd-Action: no action
 
-On 2026-05-08 15:24:49, Ronan Dalton wrote:
-> Prior to commit 48458654659c ("rtc: ds1307: remove clear of oscillator
-> stop flag (OSF) in probe"), the oscillator stop flag (OSF) bit was
-> checked during device probe for the ds1337, ds1339, ds1341, and ds3231
-> chips; if it was set, it would be cleared and a warning would be logged
-> saying "SET TIME!". Since that commit, the OSF bit is no longer cleared,
-> but the warning is still printed.
-> 
-> Directly following that commit, there was no way to get rid of this
-> warning because nothing cleared the OSF bit on these chips.
-> 
-> The commit associated with the previous commit, 523923cfd5d6 ("rtc:
-> ds1307: handle oscillator stop flag (OSF) for ds1341"), made proper use
-> of the OSF when getting and setting the time in the RTC. However, the
-> other RTC variants ds1337, ds1339 and ds3231 didn't have a corresponding
-> change made.
-> 
-> Given that the OSF bit is no longer cleared at probe time when it is
-> set, the remaining three chips should have the same handling as the
-> ds1341 chip has for the OSF bit.
-> 
-> Fix the issue on the ds1337, ds1339 and ds3231 chips by applying the
-> same logic as the ds1341 has to these chips.
-> 
-> Note that any devices brought up between the first referenced commit and
-> this one may begin mistrusting the time reported by the RTC until it is
-> set again, if the bit was never explicitly cleared.
-> 
-> Note that only the ds1339 was tested with this change, but the
-> datasheets for the other chips contain essentially identical
-> descriptions of the OSF bit so the same change should work.
-> 
-> Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Tyler Hicks <code@tyhicks.com>
-> Cc: Sasha Levin <sashal@kernel.org>
-> Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-> Cc: Rodolfo Giometti <giometti@enneenne.com>
-> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Fixes: 48458654659c ("rtc: ds1307: remove clear of oscillator stop flag (OSF) in probe")
-> ---
-> Changes in v3:
-> - Remove paragraph mentioning alternative fix from commit message
-> 
-> Changes in v2:
-> - Fix hashes of referenced commits
+On 2026-05-07 20:00 +01:00, Lee Jones wrote:
+> On Fri, 24 Apr 2026, Kaustabh Chakraborty wrote:
 
-Reviewed-by: Tyler Hicks <code@tyhicks.com>
+[...]
 
-Thanks again!
+>> +
+>> +	switch (rgb->device_type) {
+>> +	case S2MU005:
+>> +		lut_ramp_up =3D s2mu005_rgb_lut_ramp;
+>> +		lut_ramp_up_len =3D ARRAY_SIZE(s2mu005_rgb_lut_ramp);
+>> +		lut_ramp_dn =3D s2mu005_rgb_lut_ramp;
+>> +		lut_ramp_dn_len =3D ARRAY_SIZE(s2mu005_rgb_lut_ramp);
+>> +		lut_stay_hi =3D s2mu005_rgb_lut_stay_hi;
+>> +		lut_stay_hi_len =3D ARRAY_SIZE(s2mu005_rgb_lut_stay_hi);
+>> +		lut_stay_lo =3D s2mu005_rgb_lut_stay_lo;
+>> +		lut_stay_lo_len =3D ARRAY_SIZE(s2mu005_rgb_lut_stay_lo);
+>> +		break;
+>> +	default:
+>> +		/* execution shouldn't reach here */
+>
+> Instead of a comment, perhaps a WARN_ON_ONCE(1); or similar would be
+> more robust here to catch unexpected device types?
+>
 
-Tyler
+[...]
 
-> 
->  drivers/rtc/rtc-ds1307.c | 28 +++++++++++++++++-----------
->  1 file changed, 17 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-> index 7205c59ff729..edf81b975dec 100644
-> --- a/drivers/rtc/rtc-ds1307.c
-> +++ b/drivers/rtc/rtc-ds1307.c
-> @@ -269,6 +269,16 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
->  		if (tmp & DS1338_BIT_OSF)
->  			return -EINVAL;
->  		break;
-> +	case ds_1337:
-> +	case ds_1339:
-> +	case ds_1341:
-> +	case ds_3231:
-> +		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
-> +		if (ret)
-> +			return ret;
-> +		if (tmp & DS1337_BIT_OSF)
-> +			return -EINVAL;
-> +		break;
->  	case ds_1340:
->  		if (tmp & DS1340_BIT_nEOSC)
->  			return -EINVAL;
-> @@ -279,13 +289,6 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
->  		if (tmp & DS1340_BIT_OSF)
->  			return -EINVAL;
->  		break;
-> -	case ds_1341:
-> -		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
-> -		if (ret)
-> -			return ret;
-> -		if (tmp & DS1337_BIT_OSF)
-> -			return -EINVAL;
-> -		break;
->  	case ds_1388:
->  		ret = regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
->  		if (ret)
-> @@ -380,14 +383,17 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
->  		regmap_update_bits(ds1307->regmap, DS1307_REG_CONTROL,
->  				   DS1338_BIT_OSF, 0);
->  		break;
-> +	case ds_1337:
-> +	case ds_1339:
-> +	case ds_1341:
-> +	case ds_3231:
-> +		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
-> +				   DS1337_BIT_OSF, 0);
-> +		break;
->  	case ds_1340:
->  		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
->  				   DS1340_BIT_OSF, 0);
->  		break;
-> -	case ds_1341:
-> -		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
-> -				   DS1337_BIT_OSF, 0);
-> -		break;
->  	case ds_1388:
->  		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
->  				   DS1388_BIT_OSF, 0);
-> -- 
-> 2.53.0
-> 
+>> +static int s2m_rgb_pattern_clear(struct led_classdev *cdev)
+>> +{
+>> +	struct s2m_rgb *rgb =3D to_s2m_rgb(to_s2m_mc(cdev));
+>> +	int ret =3D 0;
+>> +
+>> +	mutex_lock(&rgb->lock);
+>> +
+>> +	switch (rgb->device_type) {
+>> +	case S2MU005:
+>> +		ret =3D s2mu005_rgb_reset_params(rgb);
+>> +		break;
+>> +	default:
+>> +		/* execution shouldn't reach here */
+>> +		break;
+>
+> As above.
+>
+> And a single branch switch () makes little sense.
+
+Even with an `if`, since only one variant is supported we're sure that
+the control would never go to `else` anyway. I will flatten this block,
+and expect the switch to be added when another variant is added.
+
+>> +static struct mc_subled s2mu005_rgb_subled_info[] =3D {
+>
+> const?
+
+No, this is fed to (struct led_classdev_mc)::subled_info, which is not a
+const pointer. Relevant snip is marked below.
+
+"Assigning to 'struct mc_subled *' from const struct mc_subled[3]
+discards qualifiers."
+
+
+>> +	{ .channel =3D 0, .color_index =3D LED_COLOR_ID_BLUE },
+>> +	{ .channel =3D 1, .color_index =3D LED_COLOR_ID_GREEN },
+>> +	{ .channel =3D 2, .color_index =3D LED_COLOR_ID_RED },
+>> +};
+
+[...]
+
+>> +	switch (rgb->device_type) {
+>> +	case S2MU005:
+>> +		rgb->mc.subled_info =3D s2mu005_rgb_subled_info;
+
+Here.
+
+>> +		rgb->mc.num_colors =3D ARRAY_SIZE(s2mu005_rgb_subled_info);
+>> +		break;
+>> +	default:
+>> +		return dev_err_probe(dev, -ENODEV, "device type %d is not supported b=
+y driver\n",
+>> +				     pmic_drvdata->device_type);
 
