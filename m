@@ -1,171 +1,211 @@
-Return-Path: <linux-rtc+bounces-6492-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6493-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uMWHDtayAWppigEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6492-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 12:43:34 +0200
+	id uAFBLQg7AmqYpQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6493-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 22:24:40 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAE9750C11E
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 12:43:33 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2BBA515D04
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 22:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 654963011346
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 10:42:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CB9DB302F0CE
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 20:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9623DCD94;
-	Mon, 11 May 2026 10:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACCA37FF71;
+	Mon, 11 May 2026 20:21:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="si4g3Hkm"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="qlRaFajK"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BA93DA5AD
-	for <linux-rtc@vger.kernel.org>; Mon, 11 May 2026 10:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2700337FF60;
+	Mon, 11 May 2026 20:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778496147; cv=none; b=mCbZ2DAAW9za+Hm97T47SZQH6cTiUBf8COLNbHNFArn0/+qhxVQxsDwH8zcPK4ZbiHUc6S+sbD++wmcDYkxrbhI0gQF1dtxTDXr0Gr57PnIJSpvlfnYEQFpp5QpUP+yAf3l4QexIqQrZk6jgBV+wcnYiOqZeDnWIWka6NCnC7W8=
+	t=1778530873; cv=none; b=U9mfc5SdGiEekhlh2u/oNgZefTSpbbMIf7EU5h9qxwPzo8WB3uzYlMhkJ1IZ5nmOzr1gOLzjZUHsGktDXYddldB/eWJU8BYFVzXAMVuT/Nz+cmTv7U/TISuFb83XvMJvj2ssbWPMJaPMsULcfRszteG5pYFZCezAG95GGm37v7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778496147; c=relaxed/simple;
-	bh=VdJ5r2ElmHFPYRu6yd7Ju6FxYooHR/G/5UEPpRbDz04=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z+tEC4pJp6F2Z+H+La89ZKlnXuTiq98nZzbBlJ8eD902QcVoSqleMHxkihuutpR4LLc0c9spwmGq1Kz9VeI9tnKWJE5GSOsdTvvcIJPL7mniZLfJn7Oz20sO0qWX5JsttRmGA26QtUe3gwqhK9Ws5/1xJypu5sWFW7d3UxYE2mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=si4g3Hkm; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44c44af71f8so452411f8f.1
-        for <linux-rtc@vger.kernel.org>; Mon, 11 May 2026 03:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778496145; x=1779100945; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=udHBpIJli3+EZkum4HEpk4t8YdfFn6QUTjZ7riwLiEg=;
-        b=si4g3Hkmr4074ddDbokPNPA1QV3eLxqYvIXWzv6WAU5YTU2X6FNwcHWfQsa3KI7p9+
-         lFRDXWMpN5ZACHr+e5gmEFKOCPc3GwyUN+ibVLnpCgIBdvR9dvc87jXnvsGyXirEASHl
-         htg3dS93oWmsO9FioQVwqR9UwrrOu/Ahkfok1cWzMLlBDDJrP5QPZedjkmgCHcgCHZ/+
-         1hI9k369P/ooMWXUBozAACSUQZFXatZqkke9uMp5LpYezTJVMKD/1PSja/g49g1ID3zg
-         WsQ2WRWmpF6P4UDqr5ieQs0/MoARQ1Q1lcp9FTMGXD+PDrRAOezc8PCH8jPNkrzivMIE
-         1YrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778496145; x=1779100945;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=udHBpIJli3+EZkum4HEpk4t8YdfFn6QUTjZ7riwLiEg=;
-        b=f6UE0CGrmM8PR6IijE9cONkfR4/zzXej6EqUroNgtddcG2gKmUxMNyPmh0/ZkomU1x
-         AQRC+PT1NmkqMopfB6ghIe4lHiHzeLeIPvVM4iivPkbJn5mN5C438eBLW6VWQGgIn1qL
-         CtQPL4aI6yxHLUonVNmuxN41meuH2iXZvvJQF90olgRKX5je8LemjML9Tf3kDt/pddQp
-         0tiMNKi5RajcRbnm4/mYFKABjf/LNjQFLwPixPylPVXDO6jBACsch0kkuPAy/N14r7dq
-         9i2Zw7EdozD5QHMzePRa3xzsKZhgGEXQc874MsZv2hCgI8fvHfWAvYJ53UQq0+8gEzqb
-         Vt+A==
-X-Forwarded-Encrypted: i=1; AFNElJ9EW1K66iHNPIcsxY+x3C5E4FuMalLv5M8S64EnVlmi/s7mNDkBQ4Z/FwxrL9cTJmi5lGC+V+6RQ44=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/HoFc6FEd96GRPBY1g8pn8e4ZNkK09GeFrGKVe66WUKvGpKA+
-	eXT+vAt4EYRjM4yNaBQZs89RfdfYmif7PiGNICEUL9Ti+6JVmzPB7vgB
-X-Gm-Gg: Acq92OEV/P9J/EqemsepP8j9X6YDaBI5vKtUYJBnIaDNkFsoYOsqnKLeaOenOgVRBQz
-	0kC9hywygeW6ltTCeyvNj7JPgyxYZLhTo2Yn9X8tqGnliyGabQmMTedw54SjNl9kkklDlfvMtc1
-	3stLfMmpUkehAL42TbCnmI5EnjvOcz0puMm3jJaJnD4N1YcO+zxgY7X2TslzmJ2v5fJ/WdKo91o
-	070VxAH6wJ21vB9tP9BmXXo8JDczvqKzqdora48diuWiUR5TsQ5lcqed1fbUM1tEovGqnziOptm
-	OsEnChaicIEMjQMHinAAl3Nsc/lFqTbPLIx+R25QKodDjXDRv94EhkJkhmIIMz6IKKwsW1siMeX
-	GmnAAOPKP/4YLZmX9s8txuadP5YPPlN1AE9nHbXdtaIqgorWmyYEvVAGg8lT7Q80NqAOeSOOl79
-	P6VeUwM+5AKxhxZPfpbCVDqCmIenjVd6p81BA8MgQrI4kT
-X-Received: by 2002:a05:6000:478a:b0:43e:a978:c25e with SMTP id ffacd0b85a97d-451a4c52575mr10340580f8f.1.1778496144582;
-        Mon, 11 May 2026 03:42:24 -0700 (PDT)
-Received: from localhost.localdomain ([82.215.118.79])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4548ec6b00fsm26824651f8f.11.2026.05.11.03.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 03:42:24 -0700 (PDT)
-From: Stepan Ionichev <sozdayvek@gmail.com>
-To: alexandre.belloni@bootlin.com
-Cc: daniel@thingy.jp,
-	romain.perier@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	sozdayvek@gmail.com
-Subject: [PATCH] rtc: msc313: fix NULL deref in shared IRQ handler at probe
-Date: Mon, 11 May 2026 08:27:03 +0500
-Message-Id: <20260511032703.48262-1-sozdayvek@gmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+	s=arc-20240116; t=1778530873; c=relaxed/simple;
+	bh=l+WaMOawBO/RYowmCmiGK1x9IGPkzXV98PevDOVbzns=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ipbKCWhYNz2o92GpQBbCrSWEb4uePr231WT+547TE7hcFiAHQXhOvUKpzOUrgkXiuftg0wJyghJHnJt6ihev3oAjdk6fQOnO/vmoiUDLvdxta9m/3PN7Dsppce6M4B8cwFUh9JR9YX7yOet8OHdl/4/hHGLl9suZyHNAQ1cnrQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=qlRaFajK; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: by linux.microsoft.com (Postfix, from userid 1223)
+	id 0F88420B7166; Mon, 11 May 2026 13:21:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F88420B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1778530870;
+	bh=9Isige1wAsuEWm8kiOJqaV5UCc3ybjvYEdwmOW4BkR8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qlRaFajK8JndLUmCb4YQW9e10vVf3wMV/xjkeurIgeCHBzFtE3a6w0v60bdooP21M
+	 V667AxYNNRmqZcxdLeYGhQEzluAmYW1+6nQNytu4+Ckn8jo6aqF+P5pjI1ucDhYtd0
+	 c/lokDTif+ETY7VKX5QRkzy6OPMKDyozyxMEl1n8=
+Date: Mon, 11 May 2026 13:21:10 -0700
+From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+To: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
+	Sasha Levin <sashal@kernel.org>,
+	Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
+	Rodolfo Giometti <giometti@enneenne.com>,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v3] rtc: ds1307: handle oscillator stop flag for
+ ds1337/ds1339/ds3231
+Message-ID: <20260511-da8f705069778e5e3335ca43@linux.microsoft.com>
+References: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: DAE9750C11E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
+X-Rspamd-Queue-Id: F2BBA515D04
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6492-lists,linux-rtc=lfdr.de];
-	FREEMAIL_CC(0.00)[thingy.jp,gmail.com,lists.infradead.org,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6493-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_NONE(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sozdayvek@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[linux.microsoft.com:+];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-0.997];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[meaganlloyd@linux.microsoft.com,linux-rtc@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:email,tyhicks.com:email,alliedtelesis.co.nz:email]
 X-Rspamd-Action: no action
 
-msc313_rtc_probe() calls devm_request_irq() with IRQF_SHARED and
-&pdev->dev as the cookie, but platform_set_drvdata() is only called
-later after the clock setup. With a shared IRQ line, another device
-on the same line can trigger the handler in that window. The
-handler does dev_get_drvdata() on the cookie, gets NULL, and
-dereferences priv->rtc_base in interrupt context.
+On Fri, May 08, 2026 at 03:24:49PM +1200, Ronan Dalton wrote:
+> Prior to commit 48458654659c ("rtc: ds1307: remove clear of oscillator
+> stop flag (OSF) in probe"), the oscillator stop flag (OSF) bit was
+> checked during device probe for the ds1337, ds1339, ds1341, and ds3231
+> chips; if it was set, it would be cleared and a warning would be logged
+> saying "SET TIME!". Since that commit, the OSF bit is no longer cleared,
+> but the warning is still printed.
+> 
+> Directly following that commit, there was no way to get rid of this
+> warning because nothing cleared the OSF bit on these chips.
+> 
+> The commit associated with the previous commit, 523923cfd5d6 ("rtc:
+> ds1307: handle oscillator stop flag (OSF) for ds1341"), made proper use
+> of the OSF when getting and setting the time in the RTC. However, the
+> other RTC variants ds1337, ds1339 and ds3231 didn't have a corresponding
+> change made.
+> 
+> Given that the OSF bit is no longer cleared at probe time when it is
+> set, the remaining three chips should have the same handling as the
+> ds1341 chip has for the OSF bit.
+> 
+> Fix the issue on the ds1337, ds1339 and ds3231 chips by applying the
+> same logic as the ds1341 has to these chips.
+> 
+> Note that any devices brought up between the first referenced commit and
+> this one may begin mistrusting the time reported by the RTC until it is
+> set again, if the bit was never explicitly cleared.
+> 
+> Note that only the ds1339 was tested with this change, but the
+> datasheets for the other chips contain essentially identical
+> descriptions of the OSF bit so the same change should work.
+> 
+> Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Tyler Hicks <code@tyhicks.com>
+> Cc: Sasha Levin <sashal@kernel.org>
+> Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+> Cc: Rodolfo Giometti <giometti@enneenne.com>
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Fixes: 48458654659c ("rtc: ds1307: remove clear of oscillator stop flag (OSF) in probe")
+> ---
+> Changes in v3:
+> - Remove paragraph mentioning alternative fix from commit message
+> 
+> Changes in v2:
+> - Fix hashes of referenced commits
 
-Pass priv as the cookie directly so the handler reads it from
-dev_id without the lookup, removing the dependency on probe order.
+Reviewed-by: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
 
-Fixes: be7d9c9161b9 ("rtc: Add support for the MSTAR MSC313 RTC")
-Signed-off-by: Stepan Ionichev <sozdayvek@gmail.com>
----
- drivers/rtc/rtc-msc313.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
-index 8d7737e0e..6ef9c4efd 100644
---- a/drivers/rtc/rtc-msc313.c
-+++ b/drivers/rtc/rtc-msc313.c
-@@ -160,7 +160,7 @@ static const struct rtc_class_ops msc313_rtc_ops = {
- 
- static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
- {
--	struct msc313_rtc *priv = dev_get_drvdata(dev_id);
-+	struct msc313_rtc *priv = dev_id;
- 	u16 reg;
- 
- 	reg = readw(priv->rtc_base + REG_RTC_STATUS_INT);
-@@ -206,7 +206,7 @@ static int msc313_rtc_probe(struct platform_device *pdev)
- 	priv->rtc_dev->range_max = U32_MAX;
- 
- 	ret = devm_request_irq(dev, irq, msc313_rtc_interrupt, IRQF_SHARED,
--			       dev_name(&pdev->dev), &pdev->dev);
-+			       dev_name(&pdev->dev), priv);
- 	if (ret) {
- 		dev_err(dev, "Could not request IRQ\n");
- 		return ret;
--- 
-2.43.0
-
+> 
+>  drivers/rtc/rtc-ds1307.c | 28 +++++++++++++++++-----------
+>  1 file changed, 17 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+> index 7205c59ff729..edf81b975dec 100644
+> --- a/drivers/rtc/rtc-ds1307.c
+> +++ b/drivers/rtc/rtc-ds1307.c
+> @@ -269,6 +269,16 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
+>  		if (tmp & DS1338_BIT_OSF)
+>  			return -EINVAL;
+>  		break;
+> +	case ds_1337:
+> +	case ds_1339:
+> +	case ds_1341:
+> +	case ds_3231:
+> +		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
+> +		if (ret)
+> +			return ret;
+> +		if (tmp & DS1337_BIT_OSF)
+> +			return -EINVAL;
+> +		break;
+>  	case ds_1340:
+>  		if (tmp & DS1340_BIT_nEOSC)
+>  			return -EINVAL;
+> @@ -279,13 +289,6 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
+>  		if (tmp & DS1340_BIT_OSF)
+>  			return -EINVAL;
+>  		break;
+> -	case ds_1341:
+> -		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
+> -		if (ret)
+> -			return ret;
+> -		if (tmp & DS1337_BIT_OSF)
+> -			return -EINVAL;
+> -		break;
+>  	case ds_1388:
+>  		ret = regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
+>  		if (ret)
+> @@ -380,14 +383,17 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
+>  		regmap_update_bits(ds1307->regmap, DS1307_REG_CONTROL,
+>  				   DS1338_BIT_OSF, 0);
+>  		break;
+> +	case ds_1337:
+> +	case ds_1339:
+> +	case ds_1341:
+> +	case ds_3231:
+> +		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
+> +				   DS1337_BIT_OSF, 0);
+> +		break;
+>  	case ds_1340:
+>  		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
+>  				   DS1340_BIT_OSF, 0);
+>  		break;
+> -	case ds_1341:
+> -		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
+> -				   DS1337_BIT_OSF, 0);
+> -		break;
+>  	case ds_1388:
+>  		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+>  				   DS1388_BIT_OSF, 0);
+> -- 
+> 2.53.0
 
