@@ -1,94 +1,91 @@
-Return-Path: <linux-rtc+bounces-6491-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6492-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id TL+SE+qD/2lz7QAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6491-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 09 May 2026 20:58:50 +0200
+	id uMWHDtayAWppigEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6492-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 12:43:34 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5F0B5010FF
-	for <lists+linux-rtc@lfdr.de>; Sat, 09 May 2026 20:58:49 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAE9750C11E
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 12:43:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 79D3C300D72E
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 May 2026 18:58:47 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 654963011346
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 10:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0BE23C65FF;
-	Sat,  9 May 2026 18:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9623DCD94;
+	Mon, 11 May 2026 10:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjNnrrP7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="si4g3Hkm"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6823C276F
-	for <linux-rtc@vger.kernel.org>; Sat,  9 May 2026 18:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BA93DA5AD
+	for <linux-rtc@vger.kernel.org>; Mon, 11 May 2026 10:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778353123; cv=none; b=N5j35GWZKumkwTqTIjKyZTLmqO486UhD53pJAZdRRP4DZCiY7Y0mayqdA53U2GeQXaMj/chUCUIGww/UlZWj4tF68ITduCjN5Yfbw33Df0+RmqyTnU0oj3YlgBqYTy06lIUrXS+hTychaQcaSaGXRzhjro3rxT+I/U2hqB2Jbvw=
+	t=1778496147; cv=none; b=mCbZ2DAAW9za+Hm97T47SZQH6cTiUBf8COLNbHNFArn0/+qhxVQxsDwH8zcPK4ZbiHUc6S+sbD++wmcDYkxrbhI0gQF1dtxTDXr0Gr57PnIJSpvlfnYEQFpp5QpUP+yAf3l4QexIqQrZk6jgBV+wcnYiOqZeDnWIWka6NCnC7W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778353123; c=relaxed/simple;
-	bh=hqGFzcRAEPnMTd/jfO+lOHuetEfMmFQ2/+xsz4yB2YY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PI+mbpPPDUUe7dN1dpPY9l7LLKysv24rQEk6r8Dt5yTPfRvUuVTfOAjdP1GTSAFTv+pSIcGmF/y6Wdc/A1Erc0PGHLkqf7Cx5Wet04u0YFqNDSjdniWgX+hWN3yeKFZ/i3oADK4bbtfBxYyjzlOJd9D2Z4jsAXEA0W+YpTsM+NY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjNnrrP7; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1778496147; c=relaxed/simple;
+	bh=VdJ5r2ElmHFPYRu6yd7Ju6FxYooHR/G/5UEPpRbDz04=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z+tEC4pJp6F2Z+H+La89ZKlnXuTiq98nZzbBlJ8eD902QcVoSqleMHxkihuutpR4LLc0c9spwmGq1Kz9VeI9tnKWJE5GSOsdTvvcIJPL7mniZLfJn7Oz20sO0qWX5JsttRmGA26QtUe3gwqhK9Ws5/1xJypu5sWFW7d3UxYE2mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=si4g3Hkm; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-36536771300so2941879a91.1
-        for <linux-rtc@vger.kernel.org>; Sat, 09 May 2026 11:58:42 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44c44af71f8so452411f8f.1
+        for <linux-rtc@vger.kernel.org>; Mon, 11 May 2026 03:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778353122; x=1778957922; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778496145; x=1779100945; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pp6CLbJl76WQm15M0o32CAsBSD/I1ik0M5zbpMwsEQw=;
-        b=XjNnrrP7zWRN8bZyZZcuSLDENd8015p+z8zAtL8+MU7nPkw3AmhI71yQ7kpk32y8Nd
-         HXG+tA6xU31Na1F3O/4oXPUnSMvCOOZFZUsW6F1vDA8yD9zA1TE8fj+Uj/BI440+tHZw
-         4WUnwjy2xkM5hD1fwMzbLQR/S28Qtl4JVEpelTLjqq5gYwZ3K7sXgSdCQprgU1ak1szW
-         QHMCR+vjc7rwxrlJUN551LZI8xkd4EDs8AoJgo8iBOI5T9mCjQqyMnnmxL9/rR5/ptCC
-         XwNc6WfXbs/dEZWITe3EltuqrUbz6hitP1pwtRPimNTxZiOI1FtOXIP7iPuXQnk+WRTo
-         nERA==
+        bh=udHBpIJli3+EZkum4HEpk4t8YdfFn6QUTjZ7riwLiEg=;
+        b=si4g3Hkmr4074ddDbokPNPA1QV3eLxqYvIXWzv6WAU5YTU2X6FNwcHWfQsa3KI7p9+
+         lFRDXWMpN5ZACHr+e5gmEFKOCPc3GwyUN+ibVLnpCgIBdvR9dvc87jXnvsGyXirEASHl
+         htg3dS93oWmsO9FioQVwqR9UwrrOu/Ahkfok1cWzMLlBDDJrP5QPZedjkmgCHcgCHZ/+
+         1hI9k369P/ooMWXUBozAACSUQZFXatZqkke9uMp5LpYezTJVMKD/1PSja/g49g1ID3zg
+         WsQ2WRWmpF6P4UDqr5ieQs0/MoARQ1Q1lcp9FTMGXD+PDrRAOezc8PCH8jPNkrzivMIE
+         1YrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778353122; x=1778957922;
+        d=1e100.net; s=20251104; t=1778496145; x=1779100945;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pp6CLbJl76WQm15M0o32CAsBSD/I1ik0M5zbpMwsEQw=;
-        b=nYkGPac0u5gpqByqiAGsS4lGfEivhciGPLOxj2EdH7y0tl7GLUYMUvaSq18wOBrlkz
-         TU4sVBtnvET7OWHCY6L+2cnvhotYiK+l+B4/IG9WB6qarEtXAp9LN1KvCPM9aWbYImPq
-         GDUvmpEBLAm2IEwuanBx/t3JbdEU8QlxpBVFrhFYvdxJlVsl4rRQxk50+karbedjDYz2
-         5vEeUpnUqJ5XzTbJRjHBO/XtMlI6ehXp6eO23+TGQPBdr7dXAZ8ZHMFmVxzQlvCGQjJe
-         RTaQZwomV0vffdhZTpZZgdr0R7ZBdqUPQW2hFL4yQSYO3MLtAx/fwPRSYKznIOqBC3ZO
-         cRGA==
-X-Forwarded-Encrypted: i=1; AFNElJ/mPAy7u+jFfv0tc++6dkxNuT/VqbjNznV/3Eg0f5FIH93271v0E3D1UPpg1OTgK6g7zVWQ5Y1iqns=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEil/fWACym2PKTfmRzD6tTjIuASZ+pT32JMext2DFq5kBbWBv
-	rEfU61+Wa3pQMJrmQ0WNL8c0CX1sQSB3zXOhV+0LxUDbpsbs5r9r+2K3
-X-Gm-Gg: Acq92OEbBOyGluAvF7wB4yQ+0Sdp0HoN4wvDFmChPJPdtogqQdfjg+WU8bz8+Ozuekp
-	hsofM0EqVo+K+n4szNQF3OjLxP48/V3O9gUThXKJ0IM3NYzZ6z/nUkL3P85M6/b/KvUfLN+58GH
-	yWCzxp2+anyBSPTjZ03NDT4HuFk8JWfCv4T49N3Bxtycy0VClNVrW15A85zscMzZl6Bto26QJlf
-	TV3Zt+rrARQHDR5Pq0AlBQoZzRTPMcQUfaw7rT/sotPa29AgVlv8sNDu0mQLWZMEOoYUx6Autxv
-	MJhChJtrlaY4zdMSNHZj7887XtkRgFOJcnPHWkl2UpCkLbDDLuLV2MJLVRxDARJ1S005hVwW4QU
-	2cgVZC9OnYbBDUWFt8VvDnmLH+FXpwBNjnOGgRtLk5UdgRoXxerm8hsEfb4D4SMqeP1Oxh5/lXH
-	MajGqFaiUACH8rB8PS2W/BD4dhuWcgQV8EzcvQy4+KtQuHUw==
-X-Received: by 2002:a17:90b:37ce:b0:35e:579a:7e9a with SMTP id 98e67ed59e1d1-366053f7f37mr10321916a91.7.1778353121682;
-        Sat, 09 May 2026 11:58:41 -0700 (PDT)
-Received: from ultimate.. ([58.84.60.2])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367d628474dsm2703647a91.8.2026.05.09.11.58.37
+        bh=udHBpIJli3+EZkum4HEpk4t8YdfFn6QUTjZ7riwLiEg=;
+        b=f6UE0CGrmM8PR6IijE9cONkfR4/zzXej6EqUroNgtddcG2gKmUxMNyPmh0/ZkomU1x
+         AQRC+PT1NmkqMopfB6ghIe4lHiHzeLeIPvVM4iivPkbJn5mN5C438eBLW6VWQGgIn1qL
+         CtQPL4aI6yxHLUonVNmuxN41meuH2iXZvvJQF90olgRKX5je8LemjML9Tf3kDt/pddQp
+         0tiMNKi5RajcRbnm4/mYFKABjf/LNjQFLwPixPylPVXDO6jBACsch0kkuPAy/N14r7dq
+         9i2Zw7EdozD5QHMzePRa3xzsKZhgGEXQc874MsZv2hCgI8fvHfWAvYJ53UQq0+8gEzqb
+         Vt+A==
+X-Forwarded-Encrypted: i=1; AFNElJ9EW1K66iHNPIcsxY+x3C5E4FuMalLv5M8S64EnVlmi/s7mNDkBQ4Z/FwxrL9cTJmi5lGC+V+6RQ44=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/HoFc6FEd96GRPBY1g8pn8e4ZNkK09GeFrGKVe66WUKvGpKA+
+	eXT+vAt4EYRjM4yNaBQZs89RfdfYmif7PiGNICEUL9Ti+6JVmzPB7vgB
+X-Gm-Gg: Acq92OEV/P9J/EqemsepP8j9X6YDaBI5vKtUYJBnIaDNkFsoYOsqnKLeaOenOgVRBQz
+	0kC9hywygeW6ltTCeyvNj7JPgyxYZLhTo2Yn9X8tqGnliyGabQmMTedw54SjNl9kkklDlfvMtc1
+	3stLfMmpUkehAL42TbCnmI5EnjvOcz0puMm3jJaJnD4N1YcO+zxgY7X2TslzmJ2v5fJ/WdKo91o
+	070VxAH6wJ21vB9tP9BmXXo8JDczvqKzqdora48diuWiUR5TsQ5lcqed1fbUM1tEovGqnziOptm
+	OsEnChaicIEMjQMHinAAl3Nsc/lFqTbPLIx+R25QKodDjXDRv94EhkJkhmIIMz6IKKwsW1siMeX
+	GmnAAOPKP/4YLZmX9s8txuadP5YPPlN1AE9nHbXdtaIqgorWmyYEvVAGg8lT7Q80NqAOeSOOl79
+	P6VeUwM+5AKxhxZPfpbCVDqCmIenjVd6p81BA8MgQrI4kT
+X-Received: by 2002:a05:6000:478a:b0:43e:a978:c25e with SMTP id ffacd0b85a97d-451a4c52575mr10340580f8f.1.1778496144582;
+        Mon, 11 May 2026 03:42:24 -0700 (PDT)
+Received: from localhost.localdomain ([82.215.118.79])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4548ec6b00fsm26824651f8f.11.2026.05.11.03.42.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 May 2026 11:58:40 -0700 (PDT)
-From: Udaya Kiran Challa <challauday369@gmail.com>
-To: alexandre.belloni@bootlin.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
+        Mon, 11 May 2026 03:42:24 -0700 (PDT)
+From: Stepan Ionichev <sozdayvek@gmail.com>
+To: alexandre.belloni@bootlin.com
+Cc: daniel@thingy.jp,
+	romain.perier@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
 	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Udaya Kiran Challa <challauday369@gmail.com>
-Subject: [PATCH v4] dt-bindings: rtc: epson,rx6110: Convert to DT Schema
-Date: Sun, 10 May 2026 00:26:39 +0530
-Message-ID: <20260509185735.21557-1-challauday369@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	sozdayvek@gmail.com
+Subject: [PATCH] rtc: msc313: fix NULL deref in shared IRQ handler at probe
+Date: Mon, 11 May 2026 08:27:03 +0500
+Message-Id: <20260511032703.48262-1-sozdayvek@gmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -96,7 +93,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: A5F0B5010FF
+X-Rspamd-Queue-Id: DAE9750C11E
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -105,192 +102,69 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6492-lists,linux-rtc=lfdr.de];
+	FREEMAIL_CC(0.00)[thingy.jp,gmail.com,lists.infradead.org,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,brighamcampbell.com,vger.kernel.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6491-lists,linux-rtc=lfdr.de];
-	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
+	TO_DN_NONE(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sozdayvek@gmail.com,linux-rtc@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-0.994];
-	DBL_PROHIBIT(0.00)[0.0.0.3:email];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-0.997];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[devicetree.org:url,bootlin.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,0.0.0.32:email]
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Convert the Epson RX6110 Real Time Clock devicetree binding
-from the legacy text format to DT schema.
+msc313_rtc_probe() calls devm_request_irq() with IRQF_SHARED and
+&pdev->dev as the cookie, but platform_set_drvdata() is only called
+later after the clock setup. With a shared IRQ line, another device
+on the same line can trigger the handler in that window. The
+handler does dev_get_drvdata() on the cookie, gets NULL, and
+dereferences priv->rtc_base in interrupt context.
 
-Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
+Pass priv as the cookie directly so the handler reads it from
+dev_id without the lookup, removing the dependency on probe order.
+
+Fixes: be7d9c9161b9 ("rtc: Add support for the MSTAR MSC313 RTC")
+Signed-off-by: Stepan Ionichev <sozdayvek@gmail.com>
 ---
-Changelog:
-Changes since v3:
-- Add conditional validation for SPI mode properties using anyOf
+ drivers/rtc/rtc-msc313.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Link to v3:https://lore.kernel.org/all/20260509181909.21871-1-challauday369@gmail.com/
-
-Changes since v2:
-- Reference rtc.yaml for common RTC properties
-- Add conditional validation for SPI mode properties
-
-Link to v2:https://lore.kernel.org/all/20260509095713.5818-1-challauday369@gmail.com/
-
-Changes since v1:
-- Reuse common SPI peripheral properties
-- Drop redundant SPI-specific comment
-- Remove unused labels from examples
-
-Link to v1:https://lore.kernel.org/all/20260504183728.27412-1-challauday369@gmail.com/
----
- .../devicetree/bindings/rtc/epson,rx6110.txt  | 39 ---------
- .../devicetree/bindings/rtc/epson,rx6110.yaml | 79 +++++++++++++++++++
- 2 files changed, 79 insertions(+), 39 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/epson,rx6110.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
-
-diff --git a/Documentation/devicetree/bindings/rtc/epson,rx6110.txt b/Documentation/devicetree/bindings/rtc/epson,rx6110.txt
-deleted file mode 100644
-index 3dc313e01f77..000000000000
---- a/Documentation/devicetree/bindings/rtc/epson,rx6110.txt
-+++ /dev/null
-@@ -1,39 +0,0 @@
--Epson RX6110 Real Time Clock
--============================
--
--The Epson RX6110 can be used with SPI or I2C busses. The kind of
--bus depends on the SPISEL pin and can not be configured via software.
--
--I2C mode
----------
--
--Required properties:
--  - compatible: should be: "epson,rx6110"
--  - reg : the I2C address of the device for I2C
--
--Example:
--
--	rtc: rtc@32 {
--		compatible = "epson,rx6110"
--		reg = <0x32>;
--	};
--
--SPI mode
----------
--
--Required properties:
--  - compatible: should be: "epson,rx6110"
--  - reg: chip select number
--  - spi-cs-high: RX6110 needs chipselect high
--  - spi-cpha: RX6110 works with SPI shifted clock phase
--  - spi-cpol: RX6110 works with SPI inverse clock polarity
--
--Example:
--
--	rtc: rtc@3 {
--		compatible = "epson,rx6110"
--		reg = <3>
--		spi-cs-high;
--		spi-cpha;
--		spi-cpol;
--	};
-diff --git a/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml b/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
-new file mode 100644
-index 000000000000..3466f74736d2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/epson,rx6110.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Epson RX6110 Real Time Clock
-+
-+description: |
-+  The Epson RX6110 can be used with SPI or I2C busses.
-+  The kind of bus depends on the SPISEL pin and can not be
-+  configured via software.
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    const: epson,rx6110
-+
-+  reg:
-+    maxItems: 1
-+
-+  spi-cs-high: true
-+  spi-cpha: true
-+  spi-cpol: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+if:
-+  anyOf:
-+    - required:
-+        - spi-cs-high
-+    - required:
-+        - spi-cpha
-+    - required:
-+        - spi-cpol
-+
-+then:
-+  required:
-+    - spi-cs-high
-+    - spi-cpha
-+    - spi-cpol
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  # I2C mode
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      rtc@32 {
-+        compatible = "epson,rx6110";
-+        reg = <0x32>;
-+      };
-+    };
-+
-+  # SPI mode
-+  - |
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      rtc@3 {
-+        compatible = "epson,rx6110";
-+        reg = <3>;
-+        spi-cs-high;
-+        spi-cpha;
-+        spi-cpol;
-+      };
-+    };
+diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+index 8d7737e0e..6ef9c4efd 100644
+--- a/drivers/rtc/rtc-msc313.c
++++ b/drivers/rtc/rtc-msc313.c
+@@ -160,7 +160,7 @@ static const struct rtc_class_ops msc313_rtc_ops = {
+ 
+ static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
+ {
+-	struct msc313_rtc *priv = dev_get_drvdata(dev_id);
++	struct msc313_rtc *priv = dev_id;
+ 	u16 reg;
+ 
+ 	reg = readw(priv->rtc_base + REG_RTC_STATUS_INT);
+@@ -206,7 +206,7 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+ 	priv->rtc_dev->range_max = U32_MAX;
+ 
+ 	ret = devm_request_irq(dev, irq, msc313_rtc_interrupt, IRQF_SHARED,
+-			       dev_name(&pdev->dev), &pdev->dev);
++			       dev_name(&pdev->dev), priv);
+ 	if (ret) {
+ 		dev_err(dev, "Could not request IRQ\n");
+ 		return ret;
 -- 
 2.43.0
 
