@@ -1,211 +1,152 @@
-Return-Path: <linux-rtc+bounces-6493-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6494-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uAFBLQg7AmqYpQEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6493-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 22:24:40 +0200
+	id WKf5H3SVA2rY7gEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6494-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 May 2026 23:02:44 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2BBA515D04
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 22:24:39 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9E11529CE8
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 May 2026 23:02:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CB9DB302F0CE
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 May 2026 20:21:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 896123026317
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 May 2026 21:02:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACCA37FF71;
-	Mon, 11 May 2026 20:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA063B9D8D;
+	Tue, 12 May 2026 21:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="qlRaFajK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELpwMpxn"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2700337FF60;
-	Mon, 11 May 2026 20:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DC83859E0
+	for <linux-rtc@vger.kernel.org>; Tue, 12 May 2026 21:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778530873; cv=none; b=U9mfc5SdGiEekhlh2u/oNgZefTSpbbMIf7EU5h9qxwPzo8WB3uzYlMhkJ1IZ5nmOzr1gOLzjZUHsGktDXYddldB/eWJU8BYFVzXAMVuT/Nz+cmTv7U/TISuFb83XvMJvj2ssbWPMJaPMsULcfRszteG5pYFZCezAG95GGm37v7w=
+	t=1778619761; cv=none; b=Wm7lUqJzDDu5X3N1H0NjssWjkxw7vjx2/s1j3DhGqs/qCOEf3JhbidJAzb1DBJCuDpsho6PSUaTE2RAYJQ0FQblPMCDMfuSa/avhCOFK83eMhPR/9uL/7Adc/+mv3ZKzJGZen9WUCGO5Ze391CKAqthbIq9R2c8NjGoREXED+B4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778530873; c=relaxed/simple;
-	bh=l+WaMOawBO/RYowmCmiGK1x9IGPkzXV98PevDOVbzns=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ipbKCWhYNz2o92GpQBbCrSWEb4uePr231WT+547TE7hcFiAHQXhOvUKpzOUrgkXiuftg0wJyghJHnJt6ihev3oAjdk6fQOnO/vmoiUDLvdxta9m/3PN7Dsppce6M4B8cwFUh9JR9YX7yOet8OHdl/4/hHGLl9suZyHNAQ1cnrQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=qlRaFajK; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1223)
-	id 0F88420B7166; Mon, 11 May 2026 13:21:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F88420B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1778530870;
-	bh=9Isige1wAsuEWm8kiOJqaV5UCc3ybjvYEdwmOW4BkR8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qlRaFajK8JndLUmCb4YQW9e10vVf3wMV/xjkeurIgeCHBzFtE3a6w0v60bdooP21M
-	 V667AxYNNRmqZcxdLeYGhQEzluAmYW1+6nQNytu4+Ckn8jo6aqF+P5pjI1ucDhYtd0
-	 c/lokDTif+ETY7VKX5QRkzy6OPMKDyozyxMEl1n8=
-Date: Mon, 11 May 2026 13:21:10 -0700
-From: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-To: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-Cc: alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tyler Hicks <code@tyhicks.com>,
-	Sasha Levin <sashal@kernel.org>,
-	Meagan Lloyd <meaganlloyd@linux.microsoft.com>,
-	Rodolfo Giometti <giometti@enneenne.com>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v3] rtc: ds1307: handle oscillator stop flag for
- ds1337/ds1339/ds3231
-Message-ID: <20260511-da8f705069778e5e3335ca43@linux.microsoft.com>
-References: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
+	s=arc-20240116; t=1778619761; c=relaxed/simple;
+	bh=Cj4Jd0ZCiqh6e8yFUopkofGnEstrcAQzKowPfmXw4QU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LvlO9XMis44ZR/CyPcHdHE4EiqqXiPd3N8oNhVmdZyGEqklFGD4Nhux8pLGLnTw3HN2H+vy9iqxyVAHuAq49Cu8TqcTK6SJ071Yclk6mwR+hwJspCLR09Nr2Pc5z739HpMRJNj8COUUU2IUbFkKMiQJoKOQ/jRchn/z5lX9g2y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELpwMpxn; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488b8bc6bc9so37732705e9.3
+        for <linux-rtc@vger.kernel.org>; Tue, 12 May 2026 14:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778619759; x=1779224559; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m03oRQ3XCCJ6ykhnNGCxBSIFoOQirR7Xo/tfavkFavA=;
+        b=ELpwMpxn7UOPeN5coFLf/quTl7jbfDc89zMeprXPeG+XdQXnGC5vElaa8RFLIpFP5M
+         gYEieNSKgD0wmTv1jgB4e1vQFUOqnIUIs6LGZAwtw/SSmgjvWSA8ssS/l9MV2VsLmruY
+         Uk/ON0H8picUfgGz8hhBRqrFvZ1ZDNnbB9xCmn09mK4n+qz6zaYl9CZG9LU/H/vbwlSx
+         kyWh2NxQG1iFAhlljffPXgTn7kkO7Fo4cE51pBF74vvGpn/6vbsCOEq4b5cJx12fMYOc
+         iBAMciSVrC46MRLDsrtldsvargxpJJ9KgN5Pzi81vAfEv9t3aowcyN6jrdljawAWNL5X
+         n8jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778619759; x=1779224559;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m03oRQ3XCCJ6ykhnNGCxBSIFoOQirR7Xo/tfavkFavA=;
+        b=bIcE3T5/2Hd9TIT4RHKcDwTb4urvI7L2On8qsOh6HVVRx3y/KFKGK3WUFmvFVl5Y/p
+         w7KRsKOEMIlGn79LatySrHp4TS4Yxw7VUsQGitKechsY/Lu1VpIPMzLGxO4ACdiO0oKB
+         OSFzUwk9Zciyde2UvzADdVDA55v/he/6o9Kq/iszUOzqBddM16Pj0HAuKrlO7PBvqOfY
+         AAXxhiU+GZ6pWe1iDkCGIuindTwwP460EuDrjYaB0b460oMn5X5WgxEM2SfavWHoyeMD
+         sqC7rH6tFnLKkjw89THc31MLtqfnNeYIqNzAr+BRG3IZ0RW2CQLv0TtSvhdCUGf2FS1g
+         Tsmw==
+X-Gm-Message-State: AOJu0YwNaTcRhRW23l3rSeAqg1MYm0Y3IYP7lPDBKzn5wG/7pxEIgwN+
+	LG0VhLlTsb262DGyl2+5WWWoq5Csgdslf4N6L7gdonOo1AZnH6EZG35N
+X-Gm-Gg: Acq92OH7fUa+ZC1jtGgzr0dde4PedmZ+dghowcRoYaf3nKdTJngT3UjdabwPyLG+VfW
+	+D4y0ybus4w2Exfrfj01THlZwguE2A1UkTy2IJRclJ2EDHF0aVNBO+BYS481C8KhM/OUR3qNcZ5
+	HSr9pwHk6K4iVe057LECpthabU0z80hgPYqZvE/4exHDVqpHysDDriKFmPY1dl2L6VPXhahKZ1L
+	1KNCqXkvvnFJRw5qwMPWexwE4gkWtzEuOQQOkrZuHPwAQmXKO7GI0gRZ8+nF37Va1Ie25j96tOa
+	vbqa4yrCAuZsEcZpmNnXYj/znUsNW6SJSCVnO30pr0vofNm315S+qCYnbpMkeRNjqNswr0YXYgj
+	5SGhT0vBwobQ5ADcHcpRCf1R5SsEeXqNX3guTH6GHUdQJuVVo91nxrWAxYtrYHgktFghiNAMqMa
+	ELpQOlnZZ10pelgR+aQIoxaTmr3Hqcd77WNU85LxXasWskE/Ls7AYzHtsLuT4CxpYKpY0qxpd8+
+	v4hLQQp02f6otBD
+X-Received: by 2002:a05:600c:4f14:b0:48a:5546:61a1 with SMTP id 5b1f17b1804b1-48fc9a32cd8mr6990235e9.15.1778619758948;
+        Tue, 12 May 2026 14:02:38 -0700 (PDT)
+Received: from y7-400-G2.tailb95756.ts.net ([37.39.195.231])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fc8d21c72sm19666255e9.7.2026.05.12.14.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 14:02:38 -0700 (PDT)
+From: Yahya Saqban <yahyasaqban@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yahya Saqban <yahyasaqban@gmail.com>
+Subject: [PATCH] rtc: interface: fix typos in rtc_handle_legacy_irq() documentation
+Date: Wed, 13 May 2026 00:02:35 +0300
+Message-ID: <20260512210235.343070-1-yahyasaqban@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
-X-Rspamd-Queue-Id: F2BBA515D04
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: D9E11529CE8
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6493-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6494-lists,linux-rtc=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[meaganlloyd@linux.microsoft.com,linux-rtc@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yahyasaqban@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:email,tyhicks.com:email,alliedtelesis.co.nz:email]
+	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Fri, May 08, 2026 at 03:24:49PM +1200, Ronan Dalton wrote:
-> Prior to commit 48458654659c ("rtc: ds1307: remove clear of oscillator
-> stop flag (OSF) in probe"), the oscillator stop flag (OSF) bit was
-> checked during device probe for the ds1337, ds1339, ds1341, and ds3231
-> chips; if it was set, it would be cleared and a warning would be logged
-> saying "SET TIME!". Since that commit, the OSF bit is no longer cleared,
-> but the warning is still printed.
-> 
-> Directly following that commit, there was no way to get rid of this
-> warning because nothing cleared the OSF bit on these chips.
-> 
-> The commit associated with the previous commit, 523923cfd5d6 ("rtc:
-> ds1307: handle oscillator stop flag (OSF) for ds1341"), made proper use
-> of the OSF when getting and setting the time in the RTC. However, the
-> other RTC variants ds1337, ds1339 and ds3231 didn't have a corresponding
-> change made.
-> 
-> Given that the OSF bit is no longer cleared at probe time when it is
-> set, the remaining three chips should have the same handling as the
-> ds1341 chip has for the OSF bit.
-> 
-> Fix the issue on the ds1337, ds1339 and ds3231 chips by applying the
-> same logic as the ds1341 has to these chips.
-> 
-> Note that any devices brought up between the first referenced commit and
-> this one may begin mistrusting the time reported by the RTC until it is
-> set again, if the bit was never explicitly cleared.
-> 
-> Note that only the ds1339 was tested with this change, but the
-> datasheets for the other chips contain essentially identical
-> descriptions of the OSF bit so the same change should work.
-> 
-> Signed-off-by: Ronan Dalton <ronan.dalton@alliedtelesis.co.nz>
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Tyler Hicks <code@tyhicks.com>
-> Cc: Sasha Levin <sashal@kernel.org>
-> Cc: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
-> Cc: Rodolfo Giometti <giometti@enneenne.com>
-> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Fixes: 48458654659c ("rtc: ds1307: remove clear of oscillator stop flag (OSF) in probe")
-> ---
-> Changes in v3:
-> - Remove paragraph mentioning alternative fix from commit message
-> 
-> Changes in v2:
-> - Fix hashes of referenced commits
+Fix spelling of 'occurence' to 'occurrence' and 'of' to 'or' in the
+kernel-doc comment for rtc_handle_legacy_irq().
 
-Reviewed-by: Meagan Lloyd <meaganlloyd@linux.microsoft.com>
+Signed-off-by: Yahya Saqban <yahyasaqban@gmail.com>
+---
+ drivers/rtc/interface.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
->  drivers/rtc/rtc-ds1307.c | 28 +++++++++++++++++-----------
->  1 file changed, 17 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-> index 7205c59ff729..edf81b975dec 100644
-> --- a/drivers/rtc/rtc-ds1307.c
-> +++ b/drivers/rtc/rtc-ds1307.c
-> @@ -269,6 +269,16 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
->  		if (tmp & DS1338_BIT_OSF)
->  			return -EINVAL;
->  		break;
-> +	case ds_1337:
-> +	case ds_1339:
-> +	case ds_1341:
-> +	case ds_3231:
-> +		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
-> +		if (ret)
-> +			return ret;
-> +		if (tmp & DS1337_BIT_OSF)
-> +			return -EINVAL;
-> +		break;
->  	case ds_1340:
->  		if (tmp & DS1340_BIT_nEOSC)
->  			return -EINVAL;
-> @@ -279,13 +289,6 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
->  		if (tmp & DS1340_BIT_OSF)
->  			return -EINVAL;
->  		break;
-> -	case ds_1341:
-> -		ret = regmap_read(ds1307->regmap, DS1337_REG_STATUS, &tmp);
-> -		if (ret)
-> -			return ret;
-> -		if (tmp & DS1337_BIT_OSF)
-> -			return -EINVAL;
-> -		break;
->  	case ds_1388:
->  		ret = regmap_read(ds1307->regmap, DS1388_REG_FLAG, &tmp);
->  		if (ret)
-> @@ -380,14 +383,17 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
->  		regmap_update_bits(ds1307->regmap, DS1307_REG_CONTROL,
->  				   DS1338_BIT_OSF, 0);
->  		break;
-> +	case ds_1337:
-> +	case ds_1339:
-> +	case ds_1341:
-> +	case ds_3231:
-> +		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
-> +				   DS1337_BIT_OSF, 0);
-> +		break;
->  	case ds_1340:
->  		regmap_update_bits(ds1307->regmap, DS1340_REG_FLAG,
->  				   DS1340_BIT_OSF, 0);
->  		break;
-> -	case ds_1341:
-> -		regmap_update_bits(ds1307->regmap, DS1337_REG_STATUS,
-> -				   DS1337_BIT_OSF, 0);
-> -		break;
->  	case ds_1388:
->  		regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
->  				   DS1388_BIT_OSF, 0);
-> -- 
-> 2.53.0
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 1906f4884..d7106cb29 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -635,8 +635,8 @@ EXPORT_SYMBOL_GPL(rtc_update_irq_enable);
+ /**
+  * rtc_handle_legacy_irq - AIE, UIE and PIE event hook
+  * @rtc: pointer to the rtc device
+- * @num: number of occurence of the event
+- * @mode: type of the event, RTC_AF, RTC_UF of RTC_PF
++ * @num: number of occurrence of the event
++ * @mode: type of the event, RTC_AF, RTC_UF or RTC_PF
+  *
+  * This function is called when an AIE, UIE or PIE mode interrupt
+  * has occurred (or been emulated).
+-- 
+2.51.0
+
 
