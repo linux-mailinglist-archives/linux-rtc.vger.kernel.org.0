@@ -1,59 +1,58 @@
-Return-Path: <linux-rtc+bounces-6525-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6526-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iJSBG7aSB2pV9QIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6525-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 23:40:06 +0200
+	id 8LqYEbqVB2pU9AIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6526-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 23:52:58 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D87A4558450
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 23:40:05 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5347755877B
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 23:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6E64C302255C
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 21:39:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2F229300FC3F
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 21:39:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27323ED128;
-	Fri, 15 May 2026 21:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21563ED5DA;
+	Fri, 15 May 2026 21:39:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="gGyXtlMt"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="bWwvLi1u"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D5D2620DE;
-	Fri, 15 May 2026 21:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8571C2D7DE9;
+	Fri, 15 May 2026 21:39:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778881174; cv=none; b=pQlQ3hDhqKr9wq66QI5xD0APxJZkS65/LHYG1SROW2Mvg/q6Saa3pbHFvMAC3STgaM0snIYpSuJ7qYvxupaC39ulw7p4bwycFW08lMDAWr7DaoNs6FlV6YaxZz+9QhdP280GBuS9B1IR+7IonwsMK9IfsM4Qt2SgaAP4YWIOTcA=
+	t=1778881186; cv=none; b=Ja/5K/hZGx4llGyWI1ObgcBsfQZk2Cx0IWJLAisYAv2zfZYtxmHB1sgn7plo0Zsf3FvQnPmbKPOD5gp/w1vgFeSG9F3soS9zJUBYQVQ1miM9QZwx7Civ16Jfes4b4aEEpQnLklDFMM07v9rfpWgbcvkoQQZxnB8zH7POAs1K+mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778881174; c=relaxed/simple;
-	bh=s9W5yg52+EnAqiockwZaL4XrGHM64100Exp9kHcl8tI=;
+	s=arc-20240116; t=1778881186; c=relaxed/simple;
+	bh=hvassaVVJz//RaXbFmQfTZA53QMEOweCtrqoKCCjXpM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Tf4qTlxLLsUZUBbznsaxsilVXKf3EtDddtsr11kh2wlOgkz1q7iUR3K6hKEWo/e/6609Cglw8rVqvUb+p56TY+4U9w+YNKDGlKvE6SP/qDD1hrb9VNPd8Wf40BSFjy6HIAoboz8nickcrcftgX0NKosQ6WoXh8CsBLenUXsodlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=gGyXtlMt; arc=none smtp.client-ip=178.21.23.139
+	 In-Reply-To:To:Cc; b=NHEUda/BH6s46nGh9vTI91JFMhoowUpu9QV7m6dSO5vweMLCzfryGY5gQrP+OV5ITs8VJEKfIwqHBwNIj8ziN4c3FgxhG//IQkwFvVj4IP0hvi/Nl4Zpv72xCAnrbTyUWkSpRa8d8g2/AMfr7Q/hjM46dD5HdgcZ+NyFLegCl74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=bWwvLi1u; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id D703F27173;
-	Fri, 15 May 2026 23:39:31 +0200 (CEST)
+	by disroot.org (Postfix) with ESMTP id 2216B267F0;
+	Fri, 15 May 2026 23:39:43 +0200 (CEST)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uHvEU0gb5sqo; Fri, 15 May 2026 23:39:31 +0200 (CEST)
+ id 504ZF7YusPvV; Fri, 15 May 2026 23:39:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1778881171; bh=s9W5yg52+EnAqiockwZaL4XrGHM64100Exp9kHcl8tI=;
+	t=1778881182; bh=hvassaVVJz//RaXbFmQfTZA53QMEOweCtrqoKCCjXpM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=gGyXtlMtW8GmpssjBye1lk71CmW+b8epuOvkS+wOaplqFX5SzaATg/WnV6+znDMAn
-	 dzuCwtWEBKNKe4XlASBc62NIw1swWxAmNagsCZ3OzLyHcbwJVWadS8ShF+jlur6+/J
-	 UnVPo5+zWIZ3zKX3LTJnVnKHwFx7oxxSsxs8RPiVhb3gIF7RXU+LN9kPTWZYff1iRl
-	 0FQq1+4OOCIPUsRzBhj7y1l0EuTIH+kntabTbFjRepqXdzzz9taGS8LTJ62tw4chef
-	 l1TAiwECS356G9PU2Gp+tBzt6JfYwGMvnRregzknBcIBX7EQx7h6NPvOwbiI0t3vUO
-	 durhEJA87m1eA==
+	b=bWwvLi1udgZt+opPa2yXFTWRlfXVW4iDhznLtW+1iICXm92+yGCEOlziyvsLnmd+Y
+	 BRzLIHkylZlj/D9XT3uxZObgaX2Z8SdRt4G7HBz7Xfeyw/EaUqadVBjJdFtr/pEHEL
+	 W7imY22E3SkOywGpAQ1AyCHc/cp2PiK/wMBdXbRUmLWJ0VKwl/Xvf9Tw1ykLF30rFd
+	 ZHEDkC3Bisd+e1SYSkLCF0ZfD0mvL1afY8/zOFwrhsAGPXjveCpY5dbKY/futa33Fw
+	 4Gzc0ssTOVeXxZAhB01//eE0JKlERdVyEV0b1fmWigWqzitj/fM9KsAeN8Tnkltnsz
+	 6WmrjLZBHt55A==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Sat, 16 May 2026 03:08:35 +0530
-Subject: [PATCH v7 03/10] dt-bindings: mfd: add documentation for S2MU005
- PMIC
+Date: Sat, 16 May 2026 03:08:36 +0530
+Subject: [PATCH v7 04/10] mfd: sec: add support for S2MU005 PMIC
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -61,8 +60,8 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260516-s2mu005-pmic-v7-3-73f9702fb461@disroot.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260516-s2mu005-pmic-v7-4-73f9702fb461@disroot.org>
 References: <20260516-s2mu005-pmic-v7-0-73f9702fb461@disroot.org>
 In-Reply-To: <20260516-s2mu005-pmic-v7-0-73f9702fb461@disroot.org>
 To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
@@ -79,180 +78,737 @@ To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
- linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-X-Rspamd-Queue-Id: D87A4558450
+ linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
+X-Rspamd-Queue-Id: 5347755877B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
 	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6525-lists,linux-rtc=lfdr.de];
-	URIBL_MULTI_FAIL(0.00)[qualcomm.com:server fail,0.0.0.0:server fail,tor.lore.kernel.org:server fail,3d:server fail,0.0.0.1:server fail,devicetree.org:server fail,disroot.org:server fail];
+	TAGGED_FROM(0.00)[bounces-6526-lists,linux-rtc=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us,protonmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
+	RCPT_COUNT_TWELVE(0.00)[24];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[disroot.org:+];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[disroot.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.0:email,0.0.0.1:email,qualcomm.com:email,disroot.org:email,disroot.org:mid,disroot.org:dkim,3d:email,devicetree.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,disroot.org:email,disroot.org:mid,disroot.org:dkim,lvkasz.us:email]
 X-Rspamd-Action: no action
 
 Samsung's S2MU005 PMIC includes subdevices for a charger, an MUIC (Micro
 USB Interface Controller), and flash and RGB LED controllers.
 
-Add the compatible and documentation for the S2MU005 PMIC. Also, add an
-example for nodes for supported sub-devices, i.e. MUIC, flash LEDs, and
-RGB LEDs. Charger sub-device uses the node of the parent.
+S2MU005's interrupt registers divided into three domains, each for the
+charger, flash LEDs, and the MUIC, packed into a single regmap IRQ chip
+construct.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+In devices other than S2MPG1X, the revision can be retrieved from the
+first register of the PMIC regmap. In S2MU005 however, the location is
+in offset 0x73. Introduce a switch-case block to allow selecting the
+REG_ID register. S2MU005 also has a field mask for the revision. Apply
+it using FIELD_GET() and get the extracted value.
+
+Add initial support for S2MU005 in the PMIC driver, along with its three
+interrupt chips, and support for allowing to fetch revision based on the
+device variant.
+
+Co-developed-by: Łukasz Lebiedziński <kernel@lvkasz.us>
+Signed-off-by: Łukasz Lebiedziński <kernel@lvkasz.us>
 Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 ---
- .../bindings/mfd/samsung,s2mu005-pmic.yaml         | 120 +++++++++++++++++++++
- 1 file changed, 120 insertions(+)
+ drivers/mfd/sec-common.c            |  34 +++-
+ drivers/mfd/sec-i2c.c               |  29 ++++
+ drivers/mfd/sec-irq.c               |  73 ++++++++
+ include/linux/mfd/samsung/core.h    |   1 +
+ include/linux/mfd/samsung/irq.h     |  66 +++++++
+ include/linux/mfd/samsung/s2mu005.h | 332 ++++++++++++++++++++++++++++++++++++
+ 6 files changed, 529 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml b/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml
+diff --git a/drivers/mfd/sec-common.c b/drivers/mfd/sec-common.c
+index bd8b5f9686892..22f6c74eb6c0e 100644
+--- a/drivers/mfd/sec-common.c
++++ b/drivers/mfd/sec-common.c
+@@ -16,6 +16,7 @@
+ #include <linux/mfd/samsung/irq.h>
+ #include <linux/mfd/samsung/s2mps11.h>
+ #include <linux/mfd/samsung/s2mps13.h>
++#include <linux/mfd/samsung/s2mu005.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/pm.h>
+@@ -105,22 +106,39 @@ static const struct mfd_cell s2mpu05_devs[] = {
+ 	MFD_CELL_RES("s2mps15-rtc", s2mpu05_rtc_resources),
+ };
+ 
++static const struct resource s2mu005_muic_resources[] = {
++	DEFINE_RES_IRQ_NAMED(S2MU005_IRQ_MUIC_ATTACH, "attach"),
++	DEFINE_RES_IRQ_NAMED(S2MU005_IRQ_MUIC_DETACH, "detach"),
++};
++
++static const struct mfd_cell s2mu005_devs[] = {
++	MFD_CELL_NAME("s2mu005-charger"),
++	MFD_CELL_OF("s2mu005-flash", NULL, NULL, 0, 0, "samsung,s2mu005-flash"),
++	MFD_CELL_OF("s2mu005-muic", s2mu005_muic_resources, NULL, 0, 0, "samsung,s2mu005-muic"),
++	MFD_CELL_OF("s2mu005-rgb", NULL, NULL, 0, 0, "samsung,s2mu005-rgb"),
++};
++
+ static void sec_pmic_dump_rev(struct sec_pmic_dev *sec_pmic)
+ {
+-	unsigned int val;
++	unsigned int reg, mask, val;
+ 
+-	/* For s2mpg1x, the revision is in a different regmap */
+ 	switch (sec_pmic->device_type) {
+ 	case S2MPG10:
+ 	case S2MPG11:
++		/* For s2mpg1x, the revision is in a different regmap */
+ 		return;
+-	default:
++	case S2MU005:
++		reg = S2MU005_REG_ID;
++		mask = S2MU005_ID_MASK;
+ 		break;
++	default:
++		/* For other device types, REG_ID is always the first register. */
++		reg = S2MPS11_REG_ID;
++		mask = ~0;
+ 	}
+ 
+-	/* For each device type, the REG_ID is always the first register */
+-	if (!regmap_read(sec_pmic->regmap_pmic, S2MPS11_REG_ID, &val))
+-		dev_dbg(sec_pmic->dev, "Revision: 0x%x\n", val);
++	if (!regmap_read(sec_pmic->regmap_pmic, reg, &val))
++		dev_dbg(sec_pmic->dev, "Revision: 0x%x\n", field_get(mask, val));
+ }
+ 
+ static void sec_pmic_configure(struct sec_pmic_dev *sec_pmic)
+@@ -250,6 +268,10 @@ int sec_pmic_probe(struct device *dev, int device_type, unsigned int irq,
+ 		sec_devs = s2mpu05_devs;
+ 		num_sec_devs = ARRAY_SIZE(s2mpu05_devs);
+ 		break;
++	case S2MU005:
++		sec_devs = s2mu005_devs;
++		num_sec_devs = ARRAY_SIZE(s2mu005_devs);
++		break;
+ 	default:
+ 		return dev_err_probe(sec_pmic->dev, -EINVAL,
+ 				     "Unsupported device type %d\n",
+diff --git a/drivers/mfd/sec-i2c.c b/drivers/mfd/sec-i2c.c
+index 3132b849b4bc4..d8609886fcc80 100644
+--- a/drivers/mfd/sec-i2c.c
++++ b/drivers/mfd/sec-i2c.c
+@@ -17,6 +17,7 @@
+ #include <linux/mfd/samsung/s2mps14.h>
+ #include <linux/mfd/samsung/s2mps15.h>
+ #include <linux/mfd/samsung/s2mpu02.h>
++#include <linux/mfd/samsung/s2mu005.h>
+ #include <linux/mfd/samsung/s5m8767.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+@@ -66,6 +67,19 @@ static bool s2mpu02_volatile(struct device *dev, unsigned int reg)
+ 	}
+ }
+ 
++static bool s2mu005_volatile(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case S2MU005_REG_CHGR_INT1M:
++	case S2MU005_REG_FLED_INT1M:
++	case S2MU005_REG_MUIC_INT1M:
++	case S2MU005_REG_MUIC_INT2M:
++		return false;
++	default:
++		return true;
++	}
++}
++
+ static const struct regmap_config s2dos05_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+@@ -130,6 +144,15 @@ static const struct regmap_config s2mpu05_regmap_config = {
+ 	.val_bits = 8,
+ };
+ 
++static const struct regmap_config s2mu005_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++
++	.max_register = S2MU005_REG_MUIC_LDOADC_H,
++	.volatile_reg = s2mu005_volatile,
++	.cache_type = REGCACHE_FLAT_S,
++};
++
+ static const struct regmap_config s5m8767_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+@@ -203,6 +226,11 @@ static const struct sec_pmic_i2c_platform_data s2mpu05_data = {
+ 	.device_type = S2MPU05,
+ };
+ 
++static const struct sec_pmic_i2c_platform_data s2mu005_data = {
++	.regmap_cfg = &s2mu005_regmap_config,
++	.device_type = S2MU005,
++};
++
+ static const struct sec_pmic_i2c_platform_data s5m8767_data = {
+ 	.regmap_cfg = &s5m8767_regmap_config,
+ 	.device_type = S5M8767X,
+@@ -217,6 +245,7 @@ static const struct of_device_id sec_pmic_i2c_of_match[] = {
+ 	{ .compatible = "samsung,s2mps15-pmic", .data = &s2mps15_data, },
+ 	{ .compatible = "samsung,s2mpu02-pmic", .data = &s2mpu02_data, },
+ 	{ .compatible = "samsung,s2mpu05-pmic", .data = &s2mpu05_data, },
++	{ .compatible = "samsung,s2mu005-pmic", .data = &s2mu005_data, },
+ 	{ .compatible = "samsung,s5m8767-pmic", .data = &s5m8767_data, },
+ 	{ },
+ };
+diff --git a/drivers/mfd/sec-irq.c b/drivers/mfd/sec-irq.c
+index 133188391f7c2..42862807be1a0 100644
+--- a/drivers/mfd/sec-irq.c
++++ b/drivers/mfd/sec-irq.c
+@@ -16,6 +16,7 @@
+ #include <linux/mfd/samsung/s2mps14.h>
+ #include <linux/mfd/samsung/s2mpu02.h>
+ #include <linux/mfd/samsung/s2mpu05.h>
++#include <linux/mfd/samsung/s2mu005.h>
+ #include <linux/mfd/samsung/s5m8767.h>
+ #include <linux/regmap.h>
+ #include "sec-core.h"
+@@ -223,6 +224,65 @@ static const struct regmap_irq s2mpu05_irqs[] = {
+ 	REGMAP_IRQ_REG(S2MPU05_IRQ_TSD, 2, S2MPU05_IRQ_TSD_MASK),
+ };
+ 
++static const struct regmap_irq s2mu005_irqs[] = {
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_DETBAT, 0, S2MU005_IRQ_CHGR_DETBAT_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_BAT, 0, S2MU005_IRQ_CHGR_BAT_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_IVR, 0, S2MU005_IRQ_CHGR_IVR_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_EVENT, 0, S2MU005_IRQ_CHGR_EVENT_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_CHG, 0, S2MU005_IRQ_CHGR_CHG_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_VMID, 0, S2MU005_IRQ_CHGR_VMID_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_WCIN, 0, S2MU005_IRQ_CHGR_WCIN_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_CHGR_VBUS, 0, S2MU005_IRQ_CHGR_VBUS_MASK),
++
++	REGMAP_IRQ_REG(S2MU005_IRQ_FLED_LBPROT, 1, S2MU005_IRQ_FLED_LBPROT_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_FLED_OPENCH2, 1, S2MU005_IRQ_FLED_OPENCH2_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_FLED_OPENCH1, 1, S2MU005_IRQ_FLED_OPENCH1_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_FLED_SHORTCH2, 1, S2MU005_IRQ_FLED_SHORTCH2_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_FLED_SHORTCH1, 1, S2MU005_IRQ_FLED_SHORTCH1_MASK),
++
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_ATTACH, 2, S2MU005_IRQ_MUIC_ATTACH_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_DETACH, 2, S2MU005_IRQ_MUIC_DETACH_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_KP, 2, S2MU005_IRQ_MUIC_KP_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_LKP, 2, S2MU005_IRQ_MUIC_LKP_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_LKR, 2, S2MU005_IRQ_MUIC_LKR_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_RIDCHG, 2, S2MU005_IRQ_MUIC_RIDCHG_MASK),
++
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_VBUSON, 3, S2MU005_IRQ_MUIC_VBUSON_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_RSVD, 3, S2MU005_IRQ_MUIC_RSVD_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_ADC, 3, S2MU005_IRQ_MUIC_ADC_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_STUCK, 3, S2MU005_IRQ_MUIC_STUCK_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_STUCKRCV, 3, S2MU005_IRQ_MUIC_STUCKRCV_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_MHDL, 3, S2MU005_IRQ_MUIC_MHDL_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_AVCHG, 3, S2MU005_IRQ_MUIC_AVCHG_MASK),
++	REGMAP_IRQ_REG(S2MU005_IRQ_MUIC_VBUSOFF, 3, S2MU005_IRQ_MUIC_VBUSOFF_MASK),
++};
++
++static unsigned int s2mu005_irq_get_reg(struct regmap_irq_chip_data *data,
++					unsigned int base, int index)
++{
++	const unsigned int irqf_regs[] = {
++		S2MU005_REG_CHGR_INT1,
++		S2MU005_REG_FLED_INT1,
++		S2MU005_REG_MUIC_INT1,
++		S2MU005_REG_MUIC_INT2,
++	};
++	const unsigned int mask_regs[] = {
++		S2MU005_REG_CHGR_INT1M,
++		S2MU005_REG_FLED_INT1M,
++		S2MU005_REG_MUIC_INT1M,
++		S2MU005_REG_MUIC_INT2M,
++	};
++
++	switch (base) {
++	case S2MU005_REG_CHGR_INT1:
++		return irqf_regs[index];
++	case S2MU005_REG_CHGR_INT1M:
++		return mask_regs[index];
++	}
++
++	return base;
++}
++
+ static const struct regmap_irq s5m8767_irqs[] = {
+ 	REGMAP_IRQ_REG(S5M8767_IRQ_PWRR, 0, S5M8767_IRQ_PWRR_MASK),
+ 	REGMAP_IRQ_REG(S5M8767_IRQ_PWRF, 0, S5M8767_IRQ_PWRF_MASK),
+@@ -337,6 +397,16 @@ static const struct regmap_irq_chip s2mpu05_irq_chip = {
+ 	.ack_base = S2MPU05_REG_INT1,
+ };
+ 
++static const struct regmap_irq_chip s2mu005_irq_chip = {
++	.name = "s2mu005",
++	.irqs = s2mu005_irqs,
++	.num_irqs = ARRAY_SIZE(s2mu005_irqs),
++	.num_regs = 4,
++	.status_base = S2MU005_REG_CHGR_INT1,
++	.mask_base = S2MU005_REG_CHGR_INT1M,
++	.get_irq_reg = s2mu005_irq_get_reg,
++};
++
+ static const struct regmap_irq_chip s5m8767_irq_chip = {
+ 	.name = "s5m8767",
+ 	.irqs = s5m8767_irqs,
+@@ -442,6 +512,9 @@ struct regmap_irq_chip_data *sec_irq_init(struct sec_pmic_dev *sec_pmic)
+ 	case S2MPU05:
+ 		sec_irq_chip = &s2mpu05_irq_chip;
+ 		break;
++	case S2MU005:
++		sec_irq_chip = &s2mu005_irq_chip;
++		break;
+ 	default:
+ 		return dev_err_ptr_probe(sec_pmic->dev, -EINVAL, "Unsupported device type %d\n",
+ 					 sec_pmic->device_type);
+diff --git a/include/linux/mfd/samsung/core.h b/include/linux/mfd/samsung/core.h
+index 4480c631110a6..6191f409de945 100644
+--- a/include/linux/mfd/samsung/core.h
++++ b/include/linux/mfd/samsung/core.h
+@@ -47,6 +47,7 @@ enum sec_device_type {
+ 	S2MPS15X,
+ 	S2MPU02,
+ 	S2MPU05,
++	S2MU005,
+ };
+ 
+ /**
+diff --git a/include/linux/mfd/samsung/irq.h b/include/linux/mfd/samsung/irq.h
+index 6eab95de6fa83..19d0f0e12944f 100644
+--- a/include/linux/mfd/samsung/irq.h
++++ b/include/linux/mfd/samsung/irq.h
+@@ -408,6 +408,72 @@ enum s2mpu05_irq {
+ #define S2MPU05_IRQ_INT140C_MASK	BIT(1)
+ #define S2MPU05_IRQ_TSD_MASK		BIT(2)
+ 
++enum s2mu005_irq {
++	S2MU005_IRQ_CHGR_DETBAT,
++	S2MU005_IRQ_CHGR_BAT,
++	S2MU005_IRQ_CHGR_IVR,
++	S2MU005_IRQ_CHGR_EVENT,
++	S2MU005_IRQ_CHGR_CHG,
++	S2MU005_IRQ_CHGR_VMID,
++	S2MU005_IRQ_CHGR_WCIN,
++	S2MU005_IRQ_CHGR_VBUS,
++
++	S2MU005_IRQ_FLED_LBPROT,
++	S2MU005_IRQ_FLED_OPENCH2,
++	S2MU005_IRQ_FLED_OPENCH1,
++	S2MU005_IRQ_FLED_SHORTCH2,
++	S2MU005_IRQ_FLED_SHORTCH1,
++
++	S2MU005_IRQ_MUIC_ATTACH,
++	S2MU005_IRQ_MUIC_DETACH,
++	S2MU005_IRQ_MUIC_KP,
++	S2MU005_IRQ_MUIC_LKP,
++	S2MU005_IRQ_MUIC_LKR,
++	S2MU005_IRQ_MUIC_RIDCHG,
++
++	S2MU005_IRQ_MUIC_VBUSON,
++	S2MU005_IRQ_MUIC_RSVD,
++	S2MU005_IRQ_MUIC_ADC,
++	S2MU005_IRQ_MUIC_STUCK,
++	S2MU005_IRQ_MUIC_STUCKRCV,
++	S2MU005_IRQ_MUIC_MHDL,
++	S2MU005_IRQ_MUIC_AVCHG,
++	S2MU005_IRQ_MUIC_VBUSOFF,
++
++	S2MU005_IRQ_NR,
++};
++
++#define S2MU005_IRQ_CHGR_DETBAT_MASK	BIT(0)
++#define S2MU005_IRQ_CHGR_BAT_MASK	BIT(1)
++#define S2MU005_IRQ_CHGR_IVR_MASK	BIT(2)
++#define S2MU005_IRQ_CHGR_EVENT_MASK	BIT(3)
++#define S2MU005_IRQ_CHGR_CHG_MASK	BIT(4)
++#define S2MU005_IRQ_CHGR_VMID_MASK	BIT(5)
++#define S2MU005_IRQ_CHGR_WCIN_MASK	BIT(6)
++#define S2MU005_IRQ_CHGR_VBUS_MASK	BIT(7)
++
++#define S2MU005_IRQ_FLED_LBPROT_MASK		BIT(2)
++#define S2MU005_IRQ_FLED_OPENCH2_MASK		BIT(4)
++#define S2MU005_IRQ_FLED_OPENCH1_MASK		BIT(5)
++#define S2MU005_IRQ_FLED_SHORTCH2_MASK		BIT(6)
++#define S2MU005_IRQ_FLED_SHORTCH1_MASK		BIT(7)
++
++#define S2MU005_IRQ_MUIC_ATTACH_MASK		BIT(0)
++#define S2MU005_IRQ_MUIC_DETACH_MASK		BIT(1)
++#define S2MU005_IRQ_MUIC_KP_MASK		BIT(2)
++#define S2MU005_IRQ_MUIC_LKP_MASK		BIT(3)
++#define S2MU005_IRQ_MUIC_LKR_MASK		BIT(4)
++#define S2MU005_IRQ_MUIC_RIDCHG_MASK		BIT(5)
++
++#define S2MU005_IRQ_MUIC_VBUSON_MASK		BIT(0)
++#define S2MU005_IRQ_MUIC_RSVD_MASK		BIT(1)
++#define S2MU005_IRQ_MUIC_ADC_MASK		BIT(2)
++#define S2MU005_IRQ_MUIC_STUCK_MASK		BIT(3)
++#define S2MU005_IRQ_MUIC_STUCKRCV_MASK		BIT(4)
++#define S2MU005_IRQ_MUIC_MHDL_MASK		BIT(5)
++#define S2MU005_IRQ_MUIC_AVCHG_MASK		BIT(6)
++#define S2MU005_IRQ_MUIC_VBUSOFF_MASK		BIT(7)
++
+ enum s5m8767_irq {
+ 	S5M8767_IRQ_PWRR,
+ 	S5M8767_IRQ_PWRF,
+diff --git a/include/linux/mfd/samsung/s2mu005.h b/include/linux/mfd/samsung/s2mu005.h
 new file mode 100644
-index 0000000000000..aff68c035b38e
+index 0000000000000..46e7759545af2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml
-@@ -0,0 +1,120 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/samsung,s2mu005-pmic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/include/linux/mfd/samsung/s2mu005.h
+@@ -0,0 +1,332 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright (c) 2015 Samsung Electronics Co., Ltd
++ * Copyright (c) 2026 Kaustabh Chakraborty <kauschluss@disroot.org>
++ * Copyright (c) 2026 Łukasz Lebiedziński <kernel@lvkasz.us>
++ */
 +
-+title: Samsung S2MU005 Power Management IC
++#ifndef __LINUX_MFD_S2MU005_H
++#define __LINUX_MFD_S2MU005_H
 +
-+maintainers:
-+  - Kaustabh Chakraborty <kauschluss@disroot.org>
++#include <linux/bitfield.h>
++#include <linux/bits.h>
 +
-+description: |
-+  The S2MU005 is a companion power management IC which includes subdevices for
-+  a charger controller, an MUIC (Micro USB Interface Controller), and flash and
-+  RGB LED controllers.
++/* S2MU005 registers */
++enum s2mu005_reg {
++	S2MU005_REG_CHGR_INT1,
++	S2MU005_REG_CHGR_INT1M,
 +
-+allOf:
-+  - $ref: /schemas/power/supply/power-supply.yaml#
++	S2MU005_REG_FLED_INT1,
++	S2MU005_REG_FLED_INT1M,
 +
-+properties:
-+  compatible:
-+    const: samsung,s2mu005-pmic
++	S2MU005_REG_MUIC_INT1,
++	S2MU005_REG_MUIC_INT2,
++	S2MU005_REG_MUIC_INT1M,
++	S2MU005_REG_MUIC_INT2M,
 +
-+  flash:
-+    $ref: /schemas/leds/samsung,s2mu005-flash.yaml#
-+    description:
-+      Child node describing flash LEDs.
++	S2MU005_REG_CHGR_STATUS0,
++	S2MU005_REG_CHGR_STATUS1,
++	S2MU005_REG_CHGR_STATUS2,
++	S2MU005_REG_CHGR_STATUS3,
++	S2MU005_REG_CHGR_STATUS4,
++	S2MU005_REG_CHGR_STATUS5,
++	S2MU005_REG_CHGR_CTRL0,
++	S2MU005_REG_CHGR_CTRL1,
++	S2MU005_REG_CHGR_CTRL2,
++	S2MU005_REG_CHGR_CTRL3,
++	S2MU005_REG_CHGR_CTRL4,
++	S2MU005_REG_CHGR_CTRL5,
++	S2MU005_REG_CHGR_CTRL6,
++	S2MU005_REG_CHGR_CTRL7,
++	S2MU005_REG_CHGR_CTRL8,
++	S2MU005_REG_CHGR_CTRL9,
++	S2MU005_REG_CHGR_CTRL10,
++	S2MU005_REG_CHGR_CTRL11,
++	S2MU005_REG_CHGR_CTRL12,
++	S2MU005_REG_CHGR_CTRL13,
++	S2MU005_REG_CHGR_CTRL14,
++	S2MU005_REG_CHGR_CTRL15,
++	S2MU005_REG_CHGR_CTRL16,
++	S2MU005_REG_CHGR_CTRL17,
++	S2MU005_REG_CHGR_CTRL18,
++	S2MU005_REG_CHGR_CTRL19,
++	S2MU005_REG_CHGR_TEST0,
++	S2MU005_REG_CHGR_TEST1,
++	S2MU005_REG_CHGR_TEST2,
++	S2MU005_REG_CHGR_TEST3,
++	S2MU005_REG_CHGR_TEST4,
++	S2MU005_REG_CHGR_TEST5,
++	S2MU005_REG_CHGR_TEST6,
++	S2MU005_REG_CHGR_TEST7,
++	S2MU005_REG_CHGR_TEST8,
++	S2MU005_REG_CHGR_TEST9,
++	S2MU005_REG_CHGR_TEST10,
 +
-+  interrupts:
-+    maxItems: 1
++	S2MU005_REG_FLED_STATUS,
++	S2MU005_REG_FLED_CH0_CTRL0,
++	S2MU005_REG_FLED_CH0_CTRL1,
++	S2MU005_REG_FLED_CH0_CTRL2,
++	S2MU005_REG_FLED_CH0_CTRL3,
++	S2MU005_REG_FLED_CH1_CTRL0,
++	S2MU005_REG_FLED_CH1_CTRL1,
++	S2MU005_REG_FLED_CH1_CTRL2,
++	S2MU005_REG_FLED_CH1_CTRL3,
++	S2MU005_REG_FLED_CTRL0,
++	S2MU005_REG_FLED_CTRL1,
++	S2MU005_REG_FLED_CTRL2,
++	S2MU005_REG_FLED_CTRL3,
++	S2MU005_REG_FLED_CTRL4,
++	S2MU005_REG_FLED_CTRL5,
++	S2MU005_REG_FLED_CTRL6,
 +
-+  muic:
-+    $ref: /schemas/extcon/samsung,s2mu005-muic.yaml#
-+    description:
-+      Child node describing MUIC device.
++	S2MU005_REG_RGB_EN,
++	S2MU005_REG_RGB_CH0_CTRL,
++	S2MU005_REG_RGB_CH1_CTRL,
++	S2MU005_REG_RGB_CH2_CTRL,
++	S2MU005_REG_RGB_CH0_RAMP,
++	S2MU005_REG_RGB_CH0_STAY,
++	S2MU005_REG_RGB_CH1_RAMP,
++	S2MU005_REG_RGB_CH1_STAY,
++	S2MU005_REG_RGB_CH2_RAMP,
++	S2MU005_REG_RGB_CH2_STAY,
++	S2MU005_REG_RGB_TEST0,
++	S2MU005_REG_RGB_CTRL0,
 +
-+  multi-led:
-+    type: object
++	S2MU005_REG_MUIC_ADC,
++	S2MU005_REG_MUIC_DEV1,
++	S2MU005_REG_MUIC_DEV2,
++	S2MU005_REG_MUIC_DEV3,
++	S2MU005_REG_MUIC_BUTTON1,
++	S2MU005_REG_MUIC_BUTTON2,
++	S2MU005_REG_MUIC_RESET,
++	S2MU005_REG_MUIC_CHGTYPE,
++	S2MU005_REG_MUIC_DEVAPPLE,
++	S2MU005_REG_MUIC_BCDRESCAN,
++	S2MU005_REG_MUIC_TEST1,
++	S2MU005_REG_MUIC_TEST2,
++	S2MU005_REG_MUIC_TEST3,
 +
-+    allOf:
-+      - $ref: /schemas/leds/leds-class-multicolor.yaml#
++	S2MU005_REG_ID = 0x73,
 +
-+    properties:
-+      compatible:
-+        const: samsung,s2mu005-rgb
++	S2MU005_REG_MUIC_CTRL1 = 0xb2,
++	S2MU005_REG_MUIC_TIMERSET1,
++	S2MU005_REG_MUIC_TIMERSET2,
++	S2MU005_REG_MUIC_SWCTRL,
++	S2MU005_REG_MUIC_TIMERSET3,
++	S2MU005_REG_MUIC_CTRL2,
++	S2MU005_REG_MUIC_CTRL3,
 +
-+    required:
-+      - compatible
++	S2MU005_REG_MUIC_LDOADC_L = 0xbf,
++	S2MU005_REG_MUIC_LDOADC_H,
++};
 +
-+    unevaluatedProperties: false
++#define S2MU005_REG_FLED_CH_CTRL0(x)	(S2MU005_REG_FLED_CH0_CTRL0 + 4 * (x))
++#define S2MU005_REG_FLED_CH_CTRL1(x)	(S2MU005_REG_FLED_CH0_CTRL1 + 4 * (x))
++#define S2MU005_REG_FLED_CH_CTRL2(x)	(S2MU005_REG_FLED_CH0_CTRL2 + 4 * (x))
++#define S2MU005_REG_FLED_CH_CTRL3(x)	(S2MU005_REG_FLED_CH0_CTRL3 + 4 * (x))
 +
-+  reg:
-+    maxItems: 1
++#define S2MU005_REG_RGB_CH_CTRL(x)	(S2MU005_REG_RGB_CH0_CTRL + 1 * (x))
++#define S2MU005_REG_RGB_CH_RAMP(x)	(S2MU005_REG_RGB_CH0_RAMP + 2 * (x))
++#define S2MU005_REG_RGB_CH_STAY(x)	(S2MU005_REG_RGB_CH0_STAY + 2 * (x))
 +
-+required:
-+  - compatible
-+  - reg
++/* S2MU005_REG_CHGR_STATUS0 */
++#define S2MU005_CHGR_VBUS		BIT(7)
++#define S2MU005_CHGR_WCIN		BIT(6)
++#define S2MU005_CHGR_VMID		BIT(5)
++#define S2MU005_CHGR_CHG		BIT(4)
++#define S2MU005_CHGR_STAT		GENMASK(3, 0)
 +
-+unevaluatedProperties: false
++#define S2MU005_CHGR_STAT_DONE		8
++#define S2MU005_CHGR_STAT_TOPOFF	7
++#define S2MU005_CHGR_STAT_DONE_FLAG	6
++#define S2MU005_CHGR_STAT_CV		5
++#define S2MU005_CHGR_STAT_CC		4
++#define S2MU005_CHGR_STAT_COOL_CHG	3
++#define S2MU005_CHGR_STAT_PRE_CHG	2
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/leds/common.h>
++/* S2MU005_REG_CHGR_STATUS1 */
++#define S2MU005_CHGR_DETBAT		BIT(7)
++#define S2MU005_CHGR_VBUS_OVP		GENMASK(6, 4)
 +
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++#define S2MU005_CHGR_VBUS_OVP_OVERVOLT	2
 +
-+        pmic@3d {
-+            compatible = "samsung,s2mu005-pmic";
-+            reg = <0x3d>;
-+            interrupt-parent = <&gpa2>;
-+            interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
++/* S2MU005_REG_CHGR_STATUS2 */
++#define S2MU005_CHGR_BAT		GENMASK(6, 4)
 +
-+            monitored-battery = <&battery>;
++#define S2MU005_CHGR_BAT_VOLT_DET	7
++#define S2MU005_CHGR_BAT_FAST_CHG_DET	6
++#define S2MU005_CHGR_BAT_COOL_CHG_DET	5
++#define S2MU005_CHGR_BAT_LOW_CHG	2
++#define S2MU005_CHGR_BAT_SELF_DISCHG	1
++#define S2MU005_CHGR_BAT_OVP_DET	0
 +
-+            flash {
-+                compatible = "samsung,s2mu005-flash";
-+                #address-cells = <1>;
-+                #size-cells = <0>;
++/* S2MU005_REG_CHGR_STATUS3 */
++#define S2MU005_CHGR_EVT		GENMASK(3, 0)
 +
-+                led@0 {
-+                    reg = <0>;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    function = LED_FUNCTION_FLASH;
-+                };
++#define S2MU005_CHGR_EVT_WDT_RST	6
++#define S2MU005_CHGR_EVT_WDT_SUSP	5
++#define S2MU005_CHGR_EVT_VSYS_VUVLO	4
++#define S2MU005_CHGR_EVT_VSYS_VOVP	3
++#define S2MU005_CHGR_EVT_THERM_FOLDBACK	2
++#define S2MU005_CHGR_EVT_THERM_SHUTDOWN	1
 +
-+                led@1 {
-+                    reg = <1>;
-+                    color = <LED_COLOR_ID_WHITE>;
-+                    function = LED_FUNCTION_FLASH;
-+                    function-enumerator = <1>;
-+                };
-+            };
++/* S2MU005_REG_CHGR_CTRL0 */
++#define S2MU005_CHGR_CHG_EN		BIT(4)
++#define S2MU005_CHGR_OP_MODE		GENMASK(2, 0)
 +
-+            muic {
-+                compatible = "samsung,s2mu005-muic";
++#define S2MU005_CHGR_OP_MODE_OTG	BIT(2)
++#define S2MU005_CHGR_OP_MODE_CHG	BIT(1)
 +
-+                connector {
-+                    compatible = "usb-b-connector";
-+                    label = "micro-USB";
-+                    type = "micro";
-+                };
++/* S2MU005_REG_CHGR_CTRL1 */
++#define S2MU005_CHGR_VIN_DROP		GENMASK(6, 4)
 +
-+                port {
-+                    muic_to_usb: endpoint {
-+                        remote-endpoint = <&usb_to_muic>;
-+                    };
-+                };
-+            };
++/* S2MU005_REG_CHGR_CTRL2 */
++#define S2MU005_CHGR_IN_CURR_LIM	GENMASK(5, 0)
 +
-+            multi-led {
-+                compatible = "samsung,s2mu005-rgb";
-+                color = <LED_COLOR_ID_RGB>;
-+                function = LED_FUNCTION_INDICATOR;
-+                linux,default-trigger = "pattern";
-+            };
-+        };
-+    };
++/* S2MU005_REG_CHGR_CTRL4 */
++#define S2MU005_CHGR_OTG_OCP_ON		BIT(5)
++#define S2MU005_CHGR_OTG_OCP_OFF	BIT(4)
++#define S2MU005_CHGR_OTG_OCP		GENMASK(3, 2)
++#define S2MU005_CHGR_OTG_OCP_1P5A	0x3
++
++/* S2MU005_REG_CHGR_CTRL5 */
++#define S2MU005_CHGR_VMID_BOOST		GENMASK(4, 0)
++#define S2MU005_CHGR_VMID_BOOST_5P1V	0x16
++
++/* S2MU005_REG_CHGR_CTRL6 */
++#define S2MU005_CHGR_COOL_CHG_CURR	GENMASK(5, 0)
++
++/* S2MU005_REG_CHGR_CTRL7 */
++#define S2MU005_CHGR_FAST_CHG_CURR	GENMASK(5, 0)
++
++/* S2MU005_REG_CHGR_CTRL8 */
++#define S2MU005_CHGR_VF_VBAT		GENMASK(6, 1)
++
++/* S2MU005_REG_CHGR_CTRL10 */
++#define S2MU005_CHGR_TOPOFF_CURR(x)	(GENMASK(3, 0) << 4 * (x))
++
++/* S2MU005_REG_CHGR_CTRL11 */
++#define S2MU005_CHGR_OSC_BOOST		GENMASK(6, 5)
++#define S2MU005_CHGR_OSC_BUCK		GENMASK(4, 3)
++#define S2MU005_CHGR_OSC_BOOST_2MHZ	0x3
++
++/* S2MU005_REG_CHGR_CTRL12 */
++#define S2MU005_CHGR_WDT		GENMASK(2, 0)
++
++#define S2MU005_CHGR_WDT_ON		BIT(2)
++#define S2MU005_CHGR_WDT_OFF		BIT(1)
++
++/* S2MU005_REG_CHGR_CTRL15 */
++#define S2MU005_CHGR_OTG_EN		GENMASK(3, 2)
++#define S2MU005_CHGR_OTG_EN_ON		0x3
++
++/* S2MU005_REG_FLED_STATUS */
++#define S2MU005_FLED_FLASH_STATUS(x)	(BIT(7) >> 2 * (x))
++#define S2MU005_FLED_TORCH_STATUS(x)	(BIT(6) >> 2 * (x))
++
++/* S2MU005_REG_FLED_CHx_CTRL0 */
++#define S2MU005_FLED_FLASH_IOUT		GENMASK(3, 0)
++
++/* S2MU005_REG_FLED_CHx_CTRL1 */
++#define S2MU005_FLED_TORCH_IOUT		GENMASK(3, 0)
++
++/* S2MU005_REG_FLED_CHx_CTRL2 */
++#define S2MU005_FLED_TORCH_TIMEOUT	GENMASK(3, 0)
++
++/* S2MU005_REG_FLED_CHx_CTRL3 */
++#define S2MU005_FLED_FLASH_TIMEOUT	GENMASK(3, 0)
++
++/* S2MU005_REG_FLED_CTRL1 */
++#define S2MU005_FLED_CH_EN		BIT(7)
++
++/*
++ * S2MU005_REG_FLED_CTRL4 - Rev. EVT0
++ * S2MU005_REG_FLED_CTRL6 - Rev. EVT1 and later
++ */
++#define S2MU005_FLED_FLASH_EN(x)	(GENMASK(7, 6) >> 4 * (x))
++#define S2MU005_FLED_TORCH_EN(x)	(GENMASK(5, 4) >> 4 * (x))
++
++/* S2MU005_REG_RGB_EN */
++#define S2MU005_RGB_RESET		BIT(6)
++#define S2MU005_RGB_SLOPE		GENMASK(5, 0)
++
++#define S2MU005_RGB_SLOPE_CONST		(BIT(4) | BIT(2) | BIT(0))
++#define S2MU005_RGB_SLOPE_SMOOTH	(BIT(5) | BIT(3) | BIT(1))
++
++/* S2MU005_REG_RGB_CHx_RAMP */
++#define S2MU005_RGB_CH_RAMP_UP		GENMASK(7, 4)
++#define S2MU005_RGB_CH_RAMP_DN		GENMASK(3, 0)
++
++/* S2MU005_REG_RGB_CHx_STAY */
++#define S2MU005_RGB_CH_STAY_HI		GENMASK(7, 4)
++#define S2MU005_RGB_CH_STAY_LO		GENMASK(3, 0)
++
++/* S2MU005_REG_MUIC_DEV1 */
++#define S2MU005_MUIC_OTG		BIT(7)
++#define S2MU005_MUIC_DCP		BIT(6)
++#define S2MU005_MUIC_CDP		BIT(5)
++#define S2MU005_MUIC_T1_T2_CHG		BIT(4)
++#define S2MU005_MUIC_UART		BIT(3)
++#define S2MU005_MUIC_SDP		BIT(2)
++#define S2MU005_MUIC_LANHUB		BIT(1)
++#define S2MU005_MUIC_AUDIO		BIT(0)
++
++/* S2MU005_REG_MUIC_DEV2 */
++#define S2MU005_MUIC_SDP_1P8S		BIT(7)
++#define S2MU005_MUIC_AV			BIT(6)
++#define S2MU005_MUIC_TTY		BIT(5)
++#define S2MU005_MUIC_PPD		BIT(4)
++#define S2MU005_MUIC_JIG_UART_OFF	BIT(3)
++#define S2MU005_MUIC_JIG_UART_ON	BIT(2)
++#define S2MU005_MUIC_JIG_USB_OFF	BIT(1)
++#define S2MU005_MUIC_JIG_USB_ON		BIT(0)
++
++/* S2MU005_REG_MUIC_DEV3 */
++#define S2MU005_MUIC_U200_CHG		BIT(7)
++#define S2MU005_MUIC_VBUS_AV		BIT(4)
++#define S2MU005_MUIC_VBUS_R255		BIT(1)
++#define S2MU005_MUIC_MHL		BIT(0)
++
++/* S2MU005_REG_MUIC_DEVAPPLE */
++#define S2MU005_MUIC_APPLE_CHG_0P5A	BIT(7)
++#define S2MU005_MUIC_APPLE_CHG_1P0A	BIT(6)
++#define S2MU005_MUIC_APPLE_CHG_2P0A	BIT(5)
++#define S2MU005_MUIC_APPLE_CHG_2P4A	BIT(4)
++#define S2MU005_MUIC_SDP_DCD_OUT	BIT(3)
++#define S2MU005_MUIC_RID_WAKEUP		BIT(2)
++#define S2MU005_MUIC_VBUS_WAKEUP	BIT(1)
++#define S2MU005_MUIC_BCV1P2_OR_OPEN	BIT(0)
++
++/* S2MU005_REG_ID */
++#define S2MU005_ID_MASK			GENMASK(3, 0)
++
++/* S2MU005_REG_MUIC_SWCTRL */
++#define S2MU005_MUIC_DM_DP		GENMASK(7, 2)
++#define S2MU005_MUIC_JIG		BIT(0)
++
++#define S2MU005_MUIC_DM_DP_UART		0x12
++#define S2MU005_MUIC_DM_DP_USB		0x09
++
++/* S2MU005_REG_MUIC_CTRL1 */
++#define S2MU005_MUIC_OPEN		BIT(4)
++#define S2MU005_MUIC_RAW_DATA		BIT(3)
++#define S2MU005_MUIC_MAN_SW		BIT(2)
++#define S2MU005_MUIC_WAIT		BIT(1)
++#define S2MU005_MUIC_IRQ		BIT(0)
++
++/* S2MU005_REG_MUIC_CTRL3 */
++#define S2MU005_MUIC_ONESHOT_ADC	BIT(2)
++
++/* S2MU005_REG_MUIC_LDOADC_L and S2MU005_REG_MUIC_LDOADC_H */
++#define S2MU005_MUIC_VSET		GENMASK(4, 0)
++
++#define S2MU005_MUIC_VSET_3P0V		0x1f
++#define S2MU005_MUIC_VSET_2P6V		0x0e
++#define S2MU005_MUIC_VSET_2P4V		0x0c
++#define S2MU005_MUIC_VSET_2P2V		0x0a
++#define S2MU005_MUIC_VSET_2P0V		0x08
++#define S2MU005_MUIC_VSET_1P5V		0x03
++#define S2MU005_MUIC_VSET_1P4V		0x02
++#define S2MU005_MUIC_VSET_1P2V		0x00
++
++#endif /* __LINUX_MFD_S2MU005_H */
 
 -- 
 2.53.0
