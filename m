@@ -1,145 +1,133 @@
-Return-Path: <linux-rtc+bounces-6519-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6520-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SxvrHaFfB2oy0wIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6519-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 20:02:09 +0200
+	id MP/dAWeLB2oI8AIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6520-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 23:08:55 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD976555CB6
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 20:02:08 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1A4B557A51
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 23:08:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9EFFC316AEDE
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 17:16:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 374C83030EA9
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 21:07:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22C2B3D813E;
-	Fri, 15 May 2026 17:16:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CE13EB81B;
+	Fri, 15 May 2026 21:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8t1oLyL"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="KZxDj9jU"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F120834B183;
-	Fri, 15 May 2026 17:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B38D346AD5;
+	Fri, 15 May 2026 21:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778865364; cv=none; b=qSZfAf6U/Xw3u6o0hs9Z7Alx2co+ElLRvZUz1Y2tzRwSc71ndIQ8a2Nas+3hyBUQfUMZUohY8VHbKU+XB1IJrSC41pq52ze4uDQia66TY42Bm4yiMdavlYXMOvcccl+EZ8mhGIbqDTdjTN29xMItRPWUWscguiZjb38fFO9lIfk=
+	t=1778879274; cv=none; b=Pzh37pc7/+8hbVXfG2rd6UYaRCzsVPESW66i2BWyPnJQ7IUgbAb7XtEo+LmQW7HnXQ9Pu76s6QnfxjT4iX64Xg8DfXCO38JwvSAsQMI1u9O8KeSdStPBC14VOXP1wEAqLjwu7Cltbot4Y5G8vZifujTof2veLDxeiEzEYsb4sFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778865364; c=relaxed/simple;
-	bh=i8idn8H9HrZ9zikdnhtR4vW/A6+lT+Lu667jMNTNSzU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HTSGNQ6uR3an/P+gzwfzgayumVxtevX3+ZEvdGvGPbMf8b7+dbpdNn8wgYvcyC0c6RcJY9cp2tfrPUd0D304Vi24GietWI6LoRwA+6XG82//iDuGkRIgFYNHQqt1Njd+4C1qC5/hiulwSoT8jlUx5I+pvU7Gmhx9s8Aa3UIs+DE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8t1oLyL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A764C2BCB3;
-	Fri, 15 May 2026 17:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778865363;
-	bh=i8idn8H9HrZ9zikdnhtR4vW/A6+lT+Lu667jMNTNSzU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F8t1oLyLw9i0bV2+LIAxdoZI2cp9tEHtfEAhWZifrVS549qCdsUfhNe3KXAdDYVke
-	 kbKNQpwbzFsfSQXeQAgAXaZavx/Lou8daywkv3uCSK0Qxr6WQIagCnOngCrL/3MxPA
-	 EndRU0mu2/ulOiBrI/eurN3yp4x9KPOfUTrxxdorX2Dau3kiRSN02aEaZoa0fZOKJV
-	 mCYF08gWN2a5Zff2x4Htpb1GdfEHc99E4WrA5B6jc3YxcQYN+A6HAq/n8xh30GDFG5
-	 ciIBlw+jjK7TA+DWnLVieA5JR/FABqTIR5mmcEuqYy9ooDIYDlrpYbe5tR20djT9Ck
-	 3fXiQv8ueYE6g==
-Date: Fri, 15 May 2026 18:15:57 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Nam Tran <trannamatk@gmail.com>,
-	=?utf-8?B?xYF1a2FzeiBMZWJpZWR6acWEc2tp?= <kernel@lvkasz.us>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 02/11] dt-bindings: extcon: document Samsung S2M
- series PMIC extcon device
-Message-ID: <20260515-mutable-urgency-305fecf3ffc4@spud>
-References: <20260515-s2mu005-pmic-v6-0-1979106992d4@disroot.org>
- <20260515-s2mu005-pmic-v6-2-1979106992d4@disroot.org>
+	s=arc-20240116; t=1778879274; c=relaxed/simple;
+	bh=UZQiu0VH2xAOXUxnfPEgUIj3JzYw5nHJpb6xLgSjZxw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=vDP3SsEgmQ903+JuKrTR3cdIESH9hq2HyoL0l1RZ3Dq3p3GKYSAAzZuiNmxKctyw1qTMNgWK7B70Z7c3S/8PbyrOUt+2fxHKwic5rYjmEjBRPCScYDRWWPmeA4qJJFcaMtoLyPhCJuQ/uofXMjiiu9sgG4TAf067aJeMlLfJ9VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=KZxDj9jU; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 4FCC9271BA;
+	Fri, 15 May 2026 23:07:52 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0_mgalvMmZ-c; Fri, 15 May 2026 23:07:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1778879271; bh=UZQiu0VH2xAOXUxnfPEgUIj3JzYw5nHJpb6xLgSjZxw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KZxDj9jUR9eWY6FtpDOfeAiHdPJhQRayv8CRJF0SCw/5/WwSUZmevrgvw/Fq4mYEC
+	 FvgYwNdWeUmcs6Rl+P9VBFdaAhnFR57l18isQVtNY/lx0nzvShZfuxXwg6YrjAO5oO
+	 4H7dHFV7DdVdr5ILFO/KJWDmXcVaFjqnI19H8hS9viNfoysLdTYusaC8oprMu1pn3R
+	 iYes4MaI9wvWM3s8arTr5vFrjfCa/h0C7z1WxAUKgX2DuphoS+9Fj2zPG619erC0w4
+	 E+PsYVzARBAHhJorueok+DNwSS83ke16/sMNQwTSnt1cYWXinUahBOMaT/e+eMrjnK
+	 UA41x/RhAlNzA==
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="lKNSi/QIFdgUPR11"
-Content-Disposition: inline
-In-Reply-To: <20260515-s2mu005-pmic-v6-2-1979106992d4@disroot.org>
-X-Rspamd-Queue-Id: CD976555CB6
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 16 May 2026 02:37:34 +0530
+Message-Id: <DIJK2FWQOGCK.2WJ9FED9HKGHG@disroot.org>
+From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
+To: "Conor Dooley" <conor@kernel.org>, "Kaustabh Chakraborty"
+ <kauschluss@disroot.org>
+Cc: "Lee Jones" <lee@kernel.org>, "Pavel Machek" <pavel@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "MyungJoo Ham"
+ <myungjoo.ham@samsung.com>, "Chanwoo Choi" <cw00.choi@samsung.com>,
+ "Sebastian Reichel" <sre@kernel.org>, "Krzysztof Kozlowski"
+ <krzk@kernel.org>, =?utf-8?q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, "Alexandre Belloni"
+ <alexandre.belloni@bootlin.com>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Nam Tran" <trannamatk@gmail.com>,
+ =?utf-8?q?=C5=81ukasz_Lebiedzi=C5=84ski?= <kernel@lvkasz.us>,
+ <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+ <linux-samsung-soc@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v6 02/11] dt-bindings: extcon: document Samsung S2M
+ series PMIC extcon device
+References: <20260515-s2mu005-pmic-v6-0-1979106992d4@disroot.org>
+ <20260515-s2mu005-pmic-v6-2-1979106992d4@disroot.org>
+ <20260515-mutable-urgency-305fecf3ffc4@spud>
+In-Reply-To: <20260515-mutable-urgency-305fecf3ffc4@spud>
+X-Rspamd-Queue-Id: A1A4B557A51
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6519-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
 	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6520-lists,linux-rtc=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[disroot.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,microchip.com:email,disroot.org:email]
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,disroot.org:email,disroot.org:mid,disroot.org:dkim,microchip.com:email]
 X-Rspamd-Action: no action
 
+On 2026-05-15 18:15 +01:00, Conor Dooley wrote:
+> On Fri, May 15, 2026 at 04:08:58PM +0530, Kaustabh Chakraborty wrote:
+>> Certain Samsung S2M series PMICs have a MUIC device which reports
+>> various cable states by measuring the ID-GND resistance with an internal
+>> ADC. Document the devicetree schema for this device.
+>>=20
+>> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> pw-bot: not-applicable
 
---lKNSi/QIFdgUPR11
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, May 15, 2026 at 04:08:58PM +0530, Kaustabh Chakraborty wrote:
-> Certain Samsung S2M series PMICs have a MUIC device which reports
-> various cable states by measuring the ID-GND resistance with an internal
-> ADC. Document the devicetree schema for this device.
->=20
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
-
---lKNSi/QIFdgUPR11
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCagdUzQAKCRB4tDGHoIJi
-0ikJAQD8WkCIgSdf8UfUNAswa/AfHGZsFpJUqN9s8+XJXvQuDwD+IsAoeb4QTJCz
-CNcs/VFeH5Rwv9mL7y7G0wVc6It0ZAM=
-=2pni
------END PGP SIGNATURE-----
-
---lKNSi/QIFdgUPR11--
+Thanks, but this patch has already been reviewed by Krzysztof in v5. I
+missed the Reviewed-by tags, sorry! I'd been preparing v7 after the
+reviews by Sashiko.
 
