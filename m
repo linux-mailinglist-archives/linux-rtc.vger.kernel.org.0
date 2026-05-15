@@ -1,59 +1,59 @@
-Return-Path: <linux-rtc+bounces-6512-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6513-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mDtiAQ/8BmrtqQIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6512-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 12:57:19 +0200
+	id 8GmJNaT+BmpiqgIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6513-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 13:08:20 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9836E54DDD5
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 12:57:18 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DA8754E168
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 13:08:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7DADB3165803
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 10:41:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C336331829A0
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 10:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C772450901;
-	Fri, 15 May 2026 10:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C188E44E051;
+	Fri, 15 May 2026 10:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="HAZnQP7c"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="XfbpuskP"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EFD44B67F;
-	Fri, 15 May 2026 10:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15D744D695;
+	Fri, 15 May 2026 10:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778841691; cv=none; b=VH/Aar9BTjZp5Vx34LtiiyVS/1J8qBmLHj3fe5/RdfENIKLGM6IaGrUnhUfNfqoPvJhUn1o8/xm39TW/jcCtgit4SAbyBkaHHXKJYkIfDRm1lAMJLQ6zFX+klIQqQvDl9Wh7tgE/DJVqNo5Xsl8owIHUdp4nAZC7a/fIroX/r6I=
+	t=1778841713; cv=none; b=GwbEizyQG/6zR4CDEJOMnqjMt3APoXS5y6cGMjJi+NKkgF75BDvcs3PfAqpAKmMeylGFsZV8NLBtPQNFSHeoai1cp1XAv11lm75+7tWVd0XGQTUsnMR0tf6Nf4zAkwydwk/+j3bhZDsRTY+Eag/Z1kXKWGwt0z6sP5DkCj06Lt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778841691; c=relaxed/simple;
-	bh=/WI5uPKkfnHPmN5fRkoq5GqgK1SkJOYa870eu3oI8o0=;
+	s=arc-20240116; t=1778841713; c=relaxed/simple;
+	bh=fDGy8zCbKZjuU7SUb4iiNUBbrbAOmp37dV9Iyi+Nb8M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D6Z2aqOpzYC4Pu5e87RQ9z4uszTPtCbqlpFImb1pYehwn0gBY7/UtnB4sBfn8xQeoI9f+cEzRTUjS0kINxIWalyP1mHsmJglOQUYkINyHGu2fZ+q2t8qzmCWi1jRd60As5taXcOIsazApLZx9Q67spqFoMbmvXnooJomfNM4Sl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=HAZnQP7c; arc=none smtp.client-ip=178.21.23.139
+	 In-Reply-To:To:Cc; b=o0iyOGyQedsoW2g+rnT0fH9v6Wygj9nbBKOy647oDHYKvFUcyacAeL5lBgF44eZ1Mg7wgTW1TlyAcjAfIBoCrqfbhSl3XW0CcFHXeYoTW4DOtjl/hJEmymPdgnnmCJMSfl/JJOdghSmkEUiB5zqactlwxVNEgdoH5i31JslmSUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=XfbpuskP; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 438D12673A;
-	Fri, 15 May 2026 12:41:28 +0200 (CEST)
+	by disroot.org (Postfix) with ESMTP id 6ABC626DEA;
+	Fri, 15 May 2026 12:41:50 +0200 (CEST)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N8aZwqtK04q8; Fri, 15 May 2026 12:41:27 +0200 (CEST)
+ id V4omcYTAQy65; Fri, 15 May 2026 12:41:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1778841687; bh=/WI5uPKkfnHPmN5fRkoq5GqgK1SkJOYa870eu3oI8o0=;
+	t=1778841709; bh=fDGy8zCbKZjuU7SUb4iiNUBbrbAOmp37dV9Iyi+Nb8M=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=HAZnQP7cGHYtMmL09+JdJWDxWBDWfryDS+T8IYtsaeVVSFXK2Fpgi0nkHiw4NUipm
-	 U7rCKTkyOIzbPUwMP2MwlLBCDVzp8ZVu8d4S0/3NFqeyYUFDp3PYu7u2Mry6QbegpS
-	 u/BkW9CuaYeikhua9JMzdF/yN9y2+5N2OsynzwsvE1f+ZCNnEt9TDVU/FgHAxdNTrj
-	 4uYSJEXa3PL+MXU8J/HxevC9Ef2rCpfAMUGPWWWMoTluAJjF/i5g1sqMYk4zXINxKj
-	 yhg1f1/l5Nooyga7nFf+4IJ8HWJ+jk06XMss0U+a1cqNjt5yXo2rqiL1h4L8S+kJrn
-	 yUB/zFikFlugQ==
+	b=XfbpuskPJqSXZMaJz/spg7PsaIa6y8uxXgBA6XgYRkVoxkEZ2ytS2b+GTgktuRKf6
+	 fQwFzS5Dj8fOIX79kZDUshruZnEw5Rixy2zLTATvZk+fmIKYT0fg0OjBu6fn5Nfn4S
+	 ilJkk3y2VWbNgYhrPs84/MLRxTwPLXVA2lbbF3Ytq75iloiW8tXHNRJqgxxTsJmw1F
+	 0BWzGEZClFV4sfjEaSCDRfqn2sdJxGbMbBO2AesB4sGkl3zBZNB68ydJs24EnsRwp5
+	 YtRnUOmoxlSHzvRdHY77ZyE7GunlzsvvfrtkqXhiy5DTiGlNfZk8lanZ+dhLFjUPdG
+	 rsgnThIORmePQ==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Fri, 15 May 2026 16:09:05 +0530
-Subject: [PATCH v6 09/11] Documentation: leds: document pattern behavior of
- Samsung S2M series PMIC RGB LEDs
+Date: Fri, 15 May 2026 16:09:06 +0530
+Subject: [PATCH v6 10/11] extcon: add support for Samsung S2M series PMIC
+ extcon devices
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260515-s2mu005-pmic-v6-9-1979106992d4@disroot.org>
+Message-Id: <20260515-s2mu005-pmic-v6-10-1979106992d4@disroot.org>
 References: <20260515-s2mu005-pmic-v6-0-1979106992d4@disroot.org>
 In-Reply-To: <20260515-s2mu005-pmic-v6-0-1979106992d4@disroot.org>
 To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
@@ -79,26 +79,27 @@ Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
  linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
-X-Rspamd-Queue-Id: 9836E54DDD5
+X-Rspamd-Queue-Id: 2DA8754E168
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
 	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6512-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6513-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[disroot.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-rtc@vger.kernel.org];
@@ -106,98 +107,408 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	TO_DN_SOME(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:email,disroot.org:mid,disroot.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Add documentation to describe how hardware patterns (as defined by the
-documentation of led-class-multicolor) are parsed and implemented by the
-Samsung S2M series PMIC RGB LED driver.
+Add a driver for MUIC devices found in certain Samsung S2M series PMICs
+These are USB port accessory detectors. These devices report multiple
+cable states depending on the ID-GND resistance measured by an internal
+ADC.
+
+The driver includes initial support for the S2MU005 PMIC extcon.
 
 Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 ---
- Documentation/leds/index.rst        |  1 +
- Documentation/leds/leds-s2m-rgb.rst | 60 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
+ drivers/extcon/Kconfig      |  10 ++
+ drivers/extcon/Makefile     |   1 +
+ drivers/extcon/extcon-s2m.c | 345 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 356 insertions(+)
 
-diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
-index bebf440042787..23fa9ff7aaf4b 100644
---- a/Documentation/leds/index.rst
-+++ b/Documentation/leds/index.rst
-@@ -28,6 +28,7 @@ LEDs
-    leds-lp5812
-    leds-mlxcpld
-    leds-mt6370-rgb
-+   leds-s2m-rgb
-    leds-sc27xx
-    leds-st1202
-    leds-qcom-lpg
-diff --git a/Documentation/leds/leds-s2m-rgb.rst b/Documentation/leds/leds-s2m-rgb.rst
+diff --git a/drivers/extcon/Kconfig b/drivers/extcon/Kconfig
+index 68d9df7d2dae0..19c712e591955 100644
+--- a/drivers/extcon/Kconfig
++++ b/drivers/extcon/Kconfig
+@@ -183,6 +183,16 @@ config EXTCON_RT8973A
+ 	  and switch that is optimized to protect low voltage system
+ 	  from abnormal high input voltage (up to 28V).
+ 
++config EXTCON_S2M
++	tristate "Samsung S2M series PMIC EXTCON support"
++	depends on MFD_SEC_CORE
++	select REGMAP_IRQ
++	help
++	  This option enables support for MUIC devices found in certain
++	  Samsung S2M series PMICs, such as the S2MU005. These devices
++	  have internal ADCs measuring the ID-GND resistance, thereby
++	  can be used as a USB port accessory detector.
++
+ config EXTCON_SM5502
+ 	tristate "Silicon Mitus SM5502/SM5504/SM5703 EXTCON support"
+ 	depends on I2C
+diff --git a/drivers/extcon/Makefile b/drivers/extcon/Makefile
+index 6482f2bfd6611..e3939786f3474 100644
+--- a/drivers/extcon/Makefile
++++ b/drivers/extcon/Makefile
+@@ -23,6 +23,7 @@ obj-$(CONFIG_EXTCON_PALMAS)	+= extcon-palmas.o
+ obj-$(CONFIG_EXTCON_PTN5150)	+= extcon-ptn5150.o
+ obj-$(CONFIG_EXTCON_QCOM_SPMI_MISC) += extcon-qcom-spmi-misc.o
+ obj-$(CONFIG_EXTCON_RT8973A)	+= extcon-rt8973a.o
++obj-$(CONFIG_EXTCON_S2M)	+= extcon-s2m.o
+ obj-$(CONFIG_EXTCON_SM5502)	+= extcon-sm5502.o
+ obj-$(CONFIG_EXTCON_USB_GPIO)	+= extcon-usb-gpio.o
+ obj-$(CONFIG_EXTCON_USBC_CROS_EC) += extcon-usbc-cros-ec.o
+diff --git a/drivers/extcon/extcon-s2m.c b/drivers/extcon/extcon-s2m.c
 new file mode 100644
-index 0000000000000..4f89a8c89ea86
+index 0000000000000..e57031b0066bb
 --- /dev/null
-+++ b/Documentation/leds/leds-s2m-rgb.rst
-@@ -0,0 +1,60 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/drivers/extcon/extcon-s2m.c
+@@ -0,0 +1,345 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Extcon Driver for Samsung S2M series PMICs.
++ *
++ * Copyright (c) 2015 Samsung Electronics Co., Ltd
++ * Copyright (C) 2026 Kaustabh Chakraborty <kauschluss@disroot.org>
++ */
 +
-+======================================
-+Samsung S2M Series PMIC RGB LED Driver
-+======================================
++#include <linux/delay.h>
++#include <linux/extcon-provider.h>
++#include <linux/interrupt.h>
++#include <linux/mfd/samsung/core.h>
++#include <linux/mfd/samsung/s2mu005.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
 +
-+Description
-+-----------
++struct s2m_muic {
++	struct device *dev;
++	struct regmap *regmap;
++	struct extcon_dev *extcon;
++	struct s2m_muic_irq_data *irq_data;
++	const unsigned int *extcon_cable;
++	bool attached;
++};
 +
-+The RGB LED on the S2M series PMIC hardware features a three-channel LED that
-+is grouped together as a single device. Furthermore, it supports 8-bit
-+brightness control for each channel. This LED is typically used as a status
-+indicator in mobile devices. It also supports various parameters for hardware
-+patterns.
++struct s2m_muic_irq_data {
++	const char *name;
++	int (*const handler)(struct s2m_muic *);
++	int irq;
++};
 +
-+The hardware pattern can be programmed using the "pattern" trigger, using the
-+hw_pattern attribute.
++static int s2mu005_muic_detach(struct s2m_muic *priv)
++{
++	int ret;
++	int i;
 +
-+/sys/class/leds/<led>/repeat
-+----------------------------
++	ret = regmap_set_bits(priv->regmap, S2MU005_REG_MUIC_CTRL1,
++			      S2MU005_MUIC_MAN_SW);
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to disable manual switching\n");
++		return ret;
++	}
 +
-+The hardware supports only indefinitely repeating patterns. The repeat
-+attribute must be set to -1 for hardware patterns to function.
++	ret = regmap_set_bits(priv->regmap, S2MU005_REG_MUIC_CTRL3,
++			      S2MU005_MUIC_ONESHOT_ADC);
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to enable ADC oneshot mode\n");
++		return ret;
++	}
 +
-+/sys/class/leds/<led>/hw_pattern
-+--------------------------------
++	ret = regmap_clear_bits(priv->regmap, S2MU005_REG_MUIC_SWCTRL, ~0);
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to clear switch control register\n");
++		return ret;
++	}
 +
-+Specify a hardware pattern for the RGB LEDs.
++	/* Find all set states and clear them */
++	for (i = 0; priv->extcon_cable[i]; i++) {
++		unsigned int state = priv->extcon_cable[i];
 +
-+The pattern is a series of brightness levels and durations in milliseconds.
-+There should be only one non-zero brightness level. Unlike the results
-+described in leds-trigger-pattern, the transitions between on and off states
-+are smoothed out by the hardware.
++		if (extcon_get_state(priv->extcon, state) == true)
++			extcon_set_state_sync(priv->extcon, state, false);
++	}
 +
-+Simple pattern::
++	priv->attached = false;
 +
-+    "255 3000 0 1000"
++	return 0;
++}
 +
-+    255 -+ ''''''-.                     .-'''''''-.
-+         |         '.                 .'           '.
-+         |           \               /               \
-+         |            '.           .'                 '.
-+         |              '-.......-'                     '-
-+      0 -+-------+-------+-------+-------+-------+-------+--> time (s)
-+         0       1       2       3       4       5       6
++static int s2mu005_muic_attach(struct s2m_muic *priv)
++{
++	unsigned int type;
++	int ret;
 +
-+As described in leds-trigger-pattern, it is also possible to use zero-length
-+entries to disable the ramping mechanism.
++	/* If any device is already attached, detach it */
++	if (priv->attached) {
++		s2mu005_muic_detach(priv);
++		msleep(100);
++	}
 +
-+On-Off pattern::
++	ret = regmap_read(priv->regmap, S2MU005_REG_MUIC_DEV1, &type);
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to read DEV1 register\n");
++		return ret;
++	}
 +
-+    "255 1000 255 0 0 1000 0 0"
++	/*
++	 * All USB connections which require communication via its D+
++	 * and D- wires need it.
++	 */
++	if (type & (S2MU005_MUIC_OTG | S2MU005_MUIC_DCP | S2MU005_MUIC_SDP)) {
++		ret = regmap_update_bits(priv->regmap, S2MU005_REG_MUIC_SWCTRL,
++					 S2MU005_MUIC_DM_DP,
++					 FIELD_PREP(S2MU005_MUIC_DM_DP,
++						    S2MU005_MUIC_DM_DP_USB));
++		if (ret < 0) {
++			dev_err(priv->dev, "failed to configure DM/DP pins\n");
++			return ret;
++		}
++	}
 +
-+    255 -+ ------+       +-------+       +-------+
-+         |       |       |       |       |       |
-+         |       |       |       |       |       |
-+         |       |       |       |       |       |
-+         |       +-------+       +-------+       +-------
-+      0 -+-------+-------+-------+-------+-------+-------+--> time (s)
-+         0       1       2       3       4       5       6
++	/*
++	 * For OTG connections, enable manual switching and ADC oneshot
++	 * mode. Since the port will now be supplying power, the
++	 * internal ADC (measuring the ID-GND resistance) is made to
++	 * poll periodically for any changes, so as to prevent any
++	 * damages due to power.
++	 */
++	if (type & S2MU005_MUIC_OTG) {
++		ret = regmap_clear_bits(priv->regmap, S2MU005_REG_MUIC_CTRL1,
++					S2MU005_MUIC_MAN_SW);
++		if (ret < 0) {
++			dev_err(priv->dev, "failed to enable manual switching\n");
++			return ret;
++		}
++
++		ret = regmap_clear_bits(priv->regmap, S2MU005_REG_MUIC_CTRL3,
++					S2MU005_MUIC_ONESHOT_ADC);
++		if (ret < 0) {
++			dev_err(priv->dev, "failed to disable ADC oneshot mode\n");
++			return ret;
++		}
++	}
++
++	switch (type) {
++	case S2MU005_MUIC_OTG:
++		dev_dbg(priv->dev, "USB OTG connection detected\n");
++		extcon_set_state_sync(priv->extcon, EXTCON_USB_HOST, true);
++		priv->attached = true;
++		break;
++	case S2MU005_MUIC_CDP:
++		dev_dbg(priv->dev, "USB CDP connection detected\n");
++		extcon_set_state_sync(priv->extcon, EXTCON_USB, true);
++		extcon_set_state_sync(priv->extcon, EXTCON_CHG_USB_CDP, true);
++		priv->attached = true;
++		break;
++	case S2MU005_MUIC_SDP:
++		dev_dbg(priv->dev, "USB SDP connection detected\n");
++		extcon_set_state_sync(priv->extcon, EXTCON_USB, true);
++		extcon_set_state_sync(priv->extcon, EXTCON_CHG_USB_SDP, true);
++		priv->attached = true;
++		break;
++	case S2MU005_MUIC_DCP:
++		dev_dbg(priv->dev, "USB DCP connection detected\n");
++		extcon_set_state_sync(priv->extcon, EXTCON_USB, true);
++		extcon_set_state_sync(priv->extcon, EXTCON_CHG_USB_DCP, true);
++		priv->attached = true;
++		break;
++	case S2MU005_MUIC_UART:
++		dev_dbg(priv->dev, "UART connection detected\n");
++		extcon_set_state_sync(priv->extcon, EXTCON_JIG, true);
++		priv->attached = true;
++		break;
++	}
++
++	if (!priv->attached)
++		dev_warn(priv->dev, "failed to recognize the device attached\n");
++
++	return ret;
++}
++
++static int s2mu005_muic_init(struct s2m_muic *priv)
++{
++	int ret = 0;
++
++	ret = regmap_update_bits(priv->regmap, S2MU005_REG_MUIC_LDOADC_L,
++				 S2MU005_MUIC_VSET,
++				 FIELD_PREP(S2MU005_MUIC_VSET,
++					    S2MU005_MUIC_VSET_3P0V));
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to set internal ADC voltage regulator\n");
++		return ret;
++	}
++
++	ret = regmap_update_bits(priv->regmap, S2MU005_REG_MUIC_LDOADC_H,
++				 S2MU005_MUIC_VSET,
++				 FIELD_PREP(S2MU005_MUIC_VSET,
++					    S2MU005_MUIC_VSET_3P0V));
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to set internal ADC voltage regulator\n");
++		return ret;
++	}
++
++	ret = regmap_clear_bits(priv->regmap, S2MU005_REG_MUIC_CTRL1,
++				S2MU005_MUIC_IRQ);
++	if (ret < 0) {
++		dev_err(priv->dev, "failed to enable MUIC interrupts\n");
++		return ret;
++	}
++
++	return s2mu005_muic_attach(priv);
++}
++
++static const unsigned int s2mu005_muic_extcon_cable[] = {
++	EXTCON_USB,
++	EXTCON_USB_HOST,
++	EXTCON_CHG_USB_SDP,
++	EXTCON_CHG_USB_DCP,
++	EXTCON_CHG_USB_CDP,
++	EXTCON_JIG,
++	EXTCON_NONE,
++};
++
++static struct s2m_muic_irq_data s2mu005_muic_irq_data[] = {
++	{
++		.name = "attach",
++		.handler = s2mu005_muic_attach
++	}, {
++		.name = "detach",
++		.handler = s2mu005_muic_detach
++	}, {
++		/* sentinel */
++	}
++};
++
++static irqreturn_t s2m_muic_irq_func(int virq, void *data)
++{
++	struct s2m_muic *priv = data;
++	const struct s2m_muic_irq_data *irq_data = priv->irq_data;
++	int ret;
++	int i;
++
++	for (i = 0; irq_data[i].handler; i++) {
++		if (virq != irq_data[i].irq)
++			continue;
++
++		ret = irq_data[i].handler(priv);
++		if (ret < 0)
++			dev_err(priv->dev, "failed to handle interrupt for %s (%d)\n",
++				irq_data[i].name, ret);
++		break;
++	}
++
++	return IRQ_HANDLED;
++}
++
++static int s2m_muic_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct sec_pmic_dev *pmic_drvdata = dev_get_drvdata(dev->parent);
++	struct s2m_muic *priv;
++	int ret;
++	int i;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, priv);
++	priv->dev = dev;
++	priv->regmap = pmic_drvdata->regmap_pmic;
++
++	switch (platform_get_device_id(pdev)->driver_data) {
++	case S2MU005:
++		priv->extcon_cable = s2mu005_muic_extcon_cable;
++		priv->irq_data = s2mu005_muic_irq_data;
++		/* Initialize MUIC */
++		ret = s2mu005_muic_init(priv);
++		break;
++	default:
++		return dev_err_probe(dev, -ENODEV,
++				     "device type %d is not supported by driver\n",
++				     pmic_drvdata->device_type);
++	}
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed to initialize MUIC\n");
++
++	priv->extcon = devm_extcon_dev_allocate(dev, priv->extcon_cable);
++	if (IS_ERR(priv->extcon))
++		return dev_err_probe(dev, PTR_ERR(priv->extcon),
++				     "failed to allocate memory for extcon\n");
++
++	ret = devm_extcon_dev_register(dev, priv->extcon);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to register extcon device\n");
++
++	for (i = 0; priv->irq_data[i].handler; i++) {
++		int irq = platform_get_irq_byname_optional(pdev,
++							   priv->irq_data[i].name);
++		if (irq == -ENXIO)
++			continue;
++		if (irq <= 0)
++			return dev_err_probe(dev, -EINVAL, "failed to get IRQ %s\n",
++					     priv->irq_data[i].name);
++
++		priv->irq_data[i].irq = irq;
++		ret = devm_request_threaded_irq(dev, irq, NULL,
++						s2m_muic_irq_func, IRQF_ONESHOT,
++						priv->irq_data[i].name, priv);
++		if (ret)
++			return dev_err_probe(dev, ret, "failed to request IRQ\n");
++	}
++
++	return 0;
++}
++
++static void s2m_muic_remove(struct platform_device *pdev)
++{
++	struct s2m_muic *priv = dev_get_drvdata(&pdev->dev);
++
++	/*
++	 * Disabling the MUIC device is important as it disables manual
++	 * switching mode, thereby enabling auto switching mode.
++	 *
++	 * This is to ensure that when the board is powered off, it
++	 * goes into LPM charging mode when a USB charger is connected.
++	 */
++	switch (platform_get_device_id(pdev)->driver_data) {
++	case S2MU005:
++		s2mu005_muic_detach(priv);
++		break;
++	}
++}
++
++static const struct platform_device_id s2m_muic_id_table[] = {
++	{ "s2mu005-muic", S2MU005 },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(platform, s2m_muic_id_table);
++
++static const struct of_device_id s2m_muic_of_match_table[] = {
++	{
++		.compatible = "samsung,s2mu005-muic",
++		.data = (void *)S2MU005,
++	}, {
++		/* sentinel */
++	},
++};
++MODULE_DEVICE_TABLE(of, s2m_muic_of_match_table);
++
++static struct platform_driver s2m_muic_driver = {
++	.driver = {
++		.name = "s2m-muic",
++	},
++	.probe = s2m_muic_probe,
++	.remove = s2m_muic_remove,
++	.id_table = s2m_muic_id_table,
++};
++module_platform_driver(s2m_muic_driver);
++
++MODULE_DESCRIPTION("Extcon Driver For Samsung S2M Series PMICs");
++MODULE_AUTHOR("Kaustabh Chakraborty <kauschluss@disroot.org>");
++MODULE_LICENSE("GPL");
 
 -- 
 2.53.0
