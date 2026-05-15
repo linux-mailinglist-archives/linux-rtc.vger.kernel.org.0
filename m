@@ -1,243 +1,207 @@
-Return-Path: <linux-rtc+bounces-6515-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6516-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aL0KL7MZB2rnrgIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6515-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 15:03:47 +0200
+	id eBCZJNIpB2rgsQIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6516-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 16:12:34 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AE5F5501FD
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 15:03:47 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 343E5551185
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 16:12:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C222302E7B7
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 12:41:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 69FE83095BD9
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 14:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C3147DD4E;
-	Fri, 15 May 2026 12:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA20448BD22;
+	Fri, 15 May 2026 14:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MI4hhL7x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qrgqacc3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE623F4129;
-	Fri, 15 May 2026 12:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1E948BD2D
+	for <linux-rtc@vger.kernel.org>; Fri, 15 May 2026 14:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778848912; cv=none; b=LuCTYLYKKcCnVvlWZnQQ+X9bMQt1lZ/TU+dGnZNYrE0/ihkbOVMZ6Q1KQGlQqAJBCBf8lz5bMa5geDnF8FaSDxPe9us22HnI1ezllWUOJ99lKBSMPjH1jBREWvOxTGG7lZaNdvhSA2lcI3Pb3tIJn1a3lJ9tlGfyJFO8bjBvfFY=
+	t=1778853871; cv=none; b=siWKNtRRN+XA9BUWyakBpL9FH+mzA/aB/Pz4JNGLN3qOEMAB01eQCWAHryFhDWBe1EQ9cfGMh6Ycn6x7uBxpjMml5Vcf/3lGP6SQMv9o7UABaXiaK1spLFoEIUvLETaADR83iOTB9pduNFy0cwo1REeUVHQK0/8qTy+jJ+HluJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778848912; c=relaxed/simple;
-	bh=byBYAVDjaoKlALuDppBYnRFz/zySWNjJSefSLftspx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkxqRe0cjhU6ypSE8pjo48R7cilIAGihRAojNDJmrKoKtCk5+Zj6YVYBryPwhOCNJjfFkHTlVcTzAJ0xdOZpc1wvgzg3yjhpD21h9eHV9pju2lCLvSYWKBVFNtLctykHcQof43F1EvT3H+ztZXn8s1pFcu4R6b1LN3oA7E/mxo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MI4hhL7x; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=GmifB1ZCgimZhhcProIdhFi1yPDkpQoTGWkF/PVYbRI=; b=MI4hhL7xpbSSCovw03l08oGGxy
-	4aCxc3/gYL4DWmKHvrrF6Q3sDAUEp7GH6jVoTWzQ3ZvC9YjK2wKVKwr3Y+PWbjqIVs18fBbYSq/MB
-	4I3TwbQ9aH4rXl93K/R7NUuvTjl5CJ7QexImPqsTiO4gx5Ec1kNF8qITUUStvsZVitTE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wNrrC-0033vB-IM; Fri, 15 May 2026 14:41:34 +0200
-Date: Fri, 15 May 2026 14:41:34 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: a0282524688@gmail.com
-Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org,
-	mkl@pengutronix.de, mailhol@kernel.org,
-	alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
- NCT6694
-Message-ID: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
-References: <20260515085746.114361-1-a0282524688@gmail.com>
- <20260515085746.114361-2-a0282524688@gmail.com>
+	s=arc-20240116; t=1778853871; c=relaxed/simple;
+	bh=GG46pSh5d0vn9yBp53h1hxap4udjkrgURZeJc5+2YyE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rtu+kNEC39Z6UKanntFR2YYEh2xovVLi/R6TwlVZWyBqE3l1EHNUCl0ZUlrzYuxYUSpcdp9zz7iktzWOXzb/c5d87uDDoPRA55GjbuPCamFpAoQ9yAOhqtBrqI6oIQ46ndIN+UHkJFDEEIxaAdFeVh4cK9C57CM6gI+Ht3X7p8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qrgqacc3; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2ff5472f263so5592071eec.1
+        for <linux-rtc@vger.kernel.org>; Fri, 15 May 2026 07:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778853866; x=1779458666; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xq8W0xM16bA8z+e9ItjmHiUZEnug/7oVf/JqPTdq4Q=;
+        b=qrgqacc3bN3q4/aMGMXmyVsjVbYFnMF9yaTqR6tKQj5sKos+LG9K/Oj951Ijhy33lp
+         Ouy2EjLVatPBLFLFDFfiuXJRllLrfHu40dvyogEkuH+BBvq7/7FqQhSdKe693raoDdmD
+         LsP7sP4ILMGFejpioDq6dE0rBH5tHSQL/TgCzbmhLAQ5DNSCdAzmlec+nf91zE9aRW16
+         EwzisdEzHwLx2Vo+81XlG9ZkghK/ASdD6SoOL6mpOCwYH3/2Ha+07fgHqVxQbdPOMN0B
+         9Dat3cUb6sS4DkY6BG7ssnWcExPZHSGUVvJkbY46BYTBMX9vP7NzKYPKPpyDCWik6PPV
+         3lSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778853866; x=1779458666;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1xq8W0xM16bA8z+e9ItjmHiUZEnug/7oVf/JqPTdq4Q=;
+        b=Nf+JJvLWNOSFLAXw5ohH6XYbbgLLhhBOPedu4RKaCcCYMl4I2EbEiByLTKrD0oVJDR
+         kOnQzARW04ncH2qPM30hmfEaW04WSc7O8p9JzyrYxd39PicZy+92zfyJCY19WsNa+DDq
+         4QXEo9YNrxM2amGPUMKFeE6PdbnCSOwGT7QUk+50b3iLHKnJHud4itSDBgnJG4Xi2KRt
+         yWsbl4Dt8IKKd5pTZ6E4WA2UwxXVSzsT6PLi8CId6fU8IMGwLC1GAfiLXwqJdgZr2SYf
+         gtKYVd3/ZGz4wlsqoL/ODwtuyOkgkJ15och9H4/aHAGWbeUPs4cE+GbIpfP1bSFJBSj0
+         MEgA==
+X-Forwarded-Encrypted: i=1; AFNElJ86eewUlFIWXPIt3RqYthfR0q96FONCEUtxX75fwIlfOvJvsVViQIsB/4AiogAr4lsC85i3uI0C/C0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVXGYJpqzOYOxwNqZfpP2wm6rUCG7V8B6aEOplN2HPClDHe5eQ
+	hH0k8aVyMtmkFRrOKrfW7eoptne4c9C1fcK11zqDVK/YfDJQvp8SciDP
+X-Gm-Gg: Acq92OGiw4RIVAmJK2xxhuGvKH0d32dd9iKe4TMBjZBN6WrA4iRR38n36R868yTBXXv
+	fTobSaz1zqVCZoLNkv1sdXef8Fz50vmes8oLGbK9UPe8ztNrok1cmEBaQDgPMbDIzQOf4aG6izA
+	YBodXR3o78wR4i5KIZwW3TMmE1kIWYi8fcHxZSVwUBojdZ2RjA3e1sF3BnZvHdaZQmZWxhk4+yS
+	BHE81UZ4S+g9GL7MExmvsRbYjHm+5SS0s+r4HSRQtS8w1rLC78BtWjk1e/owLU2FGUiivzfu3Km
+	V4R5I4IxRJs1cS0NVg+NeGaKx/tdeiKOUpIGztAh0hN+N7Tp9/g8dub57wITgTlr/H81BSMSL0x
+	IgKK1vJgIlq/VjuITmpv+vEoNyxlomL2D1O2eNMKlV85RTm33Z115el+ajUHAmW81DQ83D8aARm
+	dGKCHbOc7tzjINRNb8IdADbfM4xcgS1C0tbalMIPavU9Ka21KAYw5lNhZIDKa5mFNOs1klH5Z1
+X-Received: by 2002:a05:7301:6448:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-3039867fa16mr2160782eec.22.1778853864553;
+        Fri, 15 May 2026 07:04:24 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302977a9474sm7099623eec.25.2026.05.15.07.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 May 2026 07:04:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <17828a1b-86c7-4ad6-a93b-3f91c6b2c24f@roeck-us.net>
+Date: Fri, 15 May 2026 07:04:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260515085746.114361-2-a0282524688@gmail.com>
-X-Rspamd-Queue-Id: 6AE5F5501FD
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/1] mfd: Add Host Interface (HIF) support for Nuvoton
+ NCT6694
+To: Andrew Lunn <andrew@lunn.ch>, a0282524688@gmail.com
+Cc: tmyu0@nuvoton.com, linusw@kernel.org, brgl@kernel.org,
+ andi.shyti@kernel.org, lee@kernel.org, mkl@pengutronix.de,
+ mailhol@kernel.org, alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20260515085746.114361-1-a0282524688@gmail.com>
+ <20260515085746.114361-2-a0282524688@gmail.com>
+ <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <ef9449dc-ef2a-415e-8acc-a15f349bac24@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 343E5551185
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
-	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6515-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-6516-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[lunn.ch,gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DKIM_TRACE(0.00)[lunn.ch:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_NONE(0.00)[];
+	DMARC_NA(0.00)[roeck-us.net];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[linux@roeck-us.net,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-rtc];
 	MID_RHS_MATCH_FROM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[roeck-us.net:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
->  MAINTAINERS                         |   1 +
->  drivers/gpio/gpio-nct6694.c         |   7 -
->  drivers/hwmon/nct6694-hwmon.c       |  21 -
->  drivers/i2c/busses/i2c-nct6694.c    |   7 -
->  drivers/mfd/Kconfig                 |  47 +-
->  drivers/mfd/Makefile                |   3 +-
->  drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
->  drivers/mfd/nct6694.c               | 111 +++--
->  drivers/net/can/usb/nct6694_canfd.c |   6 -
+On 5/15/26 05:41, Andrew Lunn wrote:
+>>   MAINTAINERS                         |   1 +
+>>   drivers/gpio/gpio-nct6694.c         |   7 -
+>>   drivers/hwmon/nct6694-hwmon.c       |  21 -
+>>   drivers/i2c/busses/i2c-nct6694.c    |   7 -
+>>   drivers/mfd/Kconfig                 |  47 +-
+>>   drivers/mfd/Makefile                |   3 +-
+>>   drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
+>>   drivers/mfd/nct6694.c               | 111 +++--
+>>   drivers/net/can/usb/nct6694_canfd.c |   6 -
+> 
+> The networking change here is very small, so my influence as a
+> networking Maintainer should be considered small.
+> 
+> However, i would say this patch is too big, does too many different
+> things at once, making it harder to review. Please could you break it
+> up into lots of small patches, each with good commit messages, and
+> being obviously correct.
+> 
+Add my influence as hardware monitoring maintainer. I very much agree.
 
-The networking change here is very small, so my influence as a
-networking Maintainer should be considered small.
+Guenter
 
-However, i would say this patch is too big, does too many different
-things at once, making it harder to review. Please could you break it
-up into lots of small patches, each with good commit messages, and
-being obviously correct.
-
-> +F:	drivers/mfd/nct6694-hif.c
-
-Maybe move all the usb code into nct6694-usb.c ?
-
-> - * USB command module type for NCT6694 GPIO controller.
-> - * This defines the module type used for communication with the NCT6694
-> - * GPIO controller over the USB interface.
-> - */
-> -#define NCT6694_GPIO_MOD	0xFF
-> -
->  #define NCT6694_GPIO_VER	0x90
->  #define NCT6694_GPIO_VALID	0x110
->  #define NCT6694_GPI_DATA	0x120
-
-Moving code from one place to another can be a patch. Just moving code
-is quick and easy to review, and it gets it out of more complex
-patches which are harder to review.
-
-> +static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +{
-> +	switch (err_status) {
-> +	case NCT6694_NO_ERROR:
-> +		return 0;
-> +	case NCT6694_NOT_SUPPORT_ERROR:
-> +		dev_err(nct6694->dev, "Command is not supported!\n");
-> +		break;
-
-Maybe EOPNOTSUPP?
-
-> +	case NCT6694_NO_RESPONSE_ERROR:
-> +		dev_warn(nct6694->dev, "Command received no response!\n");
-> +		break;
-> +	case NCT6694_TIMEOUT_ERROR:
-> +		dev_warn(nct6694->dev, "Command timed out!\n");
-> +		break;
-
-Maybe ETIMEDOUT?
-
-
-> +	case NCT6694_PENDING:
-> +		dev_err(nct6694->dev, "Command is pending!\n");
-> +		break;
-
-EBUSY?
-
-Having different error codes can make it easier to debug when things
-so wrong. But you also have dev_err(), so it is less important.
-
-> -static int nct6694_response_err_handling(struct nct6694 *nct6694, unsigned char err_status)
-> +static int nct6694_usb_err_handling(struct nct6694 *nct6694,
-> +				    unsigned char err_status)
-
-These renames can happen in one patch. Again, it is quick and easy to
-review.
-
->  
-> -	guard(mutex)(&nct6694->access_lock);
-> +	guard(mutex)(&udata->access_lock);
-
-This change is not obviously correct. Can moving the lock be made of
-patch of its own, with an explanation of why?
-
-> -	nct6694->usb_msg = devm_kzalloc(dev, sizeof(union nct6694_usb_msg), GFP_KERNEL);
-> -	if (!nct6694->usb_msg)
-> +	udata = devm_kzalloc(dev, sizeof(*udata), GFP_KERNEL);
-> +	if (!udata)
->  		return -ENOMEM;
->  
-> -	nct6694->int_buffer = devm_kzalloc(dev, sizeof(*nct6694->int_buffer), GFP_KERNEL);
-> -	if (!nct6694->int_buffer)
-> +	udata->usb_msg = devm_kzalloc(dev, sizeof(*udata->usb_msg), GFP_KERNEL);
-> +	if (!udata->usb_msg)
->  		return -ENOMEM;
->  
-> -	nct6694->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> -	if (!nct6694->int_in_urb)
-> +	udata->int_buffer = devm_kzalloc(dev, sizeof(*udata->int_buffer), GFP_KERNEL);
-> +	if (!udata->int_buffer)
->  		return -ENOMEM;
->  
-> +	udata->int_in_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +	if (!udata->int_in_urb)
-> +		return -ENOMEM;
-
-
-In this hunk, diff(1) has done a poor job and made it harder to
-review. If i understand the code correctly, udata contains USB
-specific data? Maybe call it usdata? That also has the same length as
-ntc6694, which has some minor advantages. What you might find is that
-if you have a patch adding only the allocation of usbdata, and then a
-patch moving things into usbdata, diff(1) does a better job, and the
-code is more obviously correct.
-
-> @@ -305,16 +344,15 @@ static int nct6694_usb_probe(struct usb_interface *iface,
->  	}
->  
->  	nct6694->dev = dev;
-> -	nct6694->udev = udev;
-> +
-> +	spin_lock_init(&nct6694->irq_lock);
->  
->  	ida_init(&nct6694->gpio_ida);
->  	ida_init(&nct6694->i2c_ida);
->  	ida_init(&nct6694->canfd_ida);
->  	ida_init(&nct6694->wdt_ida);
->  
-> -	spin_lock_init(&nct6694->irq_lock);
-> -
-
-Why has the spin_lock_init() moved? Having lots of small patches would
-make that stand out, and when you reviewed your own patches, you might
-decided to change it back, because it does not appear to be needed.
-
-Given the size of this patch, i'm finding it hard to see the overall
-structure. Generally, when you have one device with two different
-access mechanisms, you end up with three files, two implementing
-access, and the third with the common code. With one big patch, i
-don't see this common code.
-
-	Andrew
 
