@@ -1,94 +1,104 @@
-Return-Path: <linux-rtc+bounces-6500-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6501-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KE58OlcJBmpOeQIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6500-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 May 2026 19:41:43 +0200
+	id 6P6uHiHqBmpKowIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6501-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 11:40:49 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48EFF54579A
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 May 2026 19:41:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA4C654C99B
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 11:40:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB61D306D96F
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 May 2026 17:39:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D73AE3175FF4
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2026 08:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B2238734A;
-	Thu, 14 May 2026 17:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59944426EAC;
+	Fri, 15 May 2026 08:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tNS7kQUl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IwdJwuu3"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB99332614
-	for <linux-rtc@vger.kernel.org>; Thu, 14 May 2026 17:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E7B426D05
+	for <linux-rtc@vger.kernel.org>; Fri, 15 May 2026 08:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778780354; cv=none; b=SB9RbTfqGPepV5lZve9rMLIQ9F6kY0ZSxF142TyQj91pz1oO0bOw6/2m6Nkx+uVTDzzAICg6Ztw8soM5nURiENXbZ4Qh50sPXRAYvA7yPh6lYJ2m0iIzBe5bUFzH8HBot8qIJcVLTDfv2cJYxCUZ3nac9RpVY8PY6qmrx2OdDNU=
+	t=1778835485; cv=none; b=iXLntOMbsDpMNWznmfJxYnz3BqmBrO3M6ollfkUM1yu12vptze/vt0KOGLbWEFaJI2itbx0SbZos1iZJfWKYYYNHTpDT2UwsfltH0u/y57Kda6lLa65SqgWfNHRhoO045R6NV6JsUW81NAbVHuuVIGXBQy0wppJ7i2VT/Fn+2Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778780354; c=relaxed/simple;
-	bh=8qCAdLHW0851OwVJ51V1JECzXkY9eSPFZ4kSDfU9Vf4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JbJDWtq4sSkujNH4pCoBYgUGk7yF1QuZWyGzbu4a8xTFTTJURGQbV1PCHtfQ09aNEseq/Hap/NXxUoe7gbIPQ5dOB6MUJs++ivLpnJ3Npu/3iDRcSA3dwxW2nzzEUhrk/VLWpOrOz7jezyzpslpocS5icFlGVJA3RLBEBUX26fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tNS7kQUl; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1778835485; c=relaxed/simple;
+	bh=dyP4n9uPfOXLtZxIOJmI/uU/nI5UYjP6DCnh6DbN2Hc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XC8qy5UeiehWCfCWFXdu3KDKEOzl5sUP0GvLxRI6IFuLoTXnJVZjosVY1ic+yjaAa2muGVGrMxMnVzefD2Vi7hI3uSbBUjHNDo6oQYw4lbxF1GymAcEn8tUORc+Drms1xUAY5RSNOjsE+MiKU6r99cyZkBc25jn2X8nRlLgVaTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IwdJwuu3; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2bccb978bd9so735945ad.0
-        for <linux-rtc@vger.kernel.org>; Thu, 14 May 2026 10:39:12 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ba21d32776so61019325ad.2
+        for <linux-rtc@vger.kernel.org>; Fri, 15 May 2026 01:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778780352; x=1779385152; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778835483; x=1779440283; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SuVg/btevpEI3G6fDRzlICOaAv8x5JhKdoYPDB2ISDI=;
-        b=tNS7kQUlmDyJ3JcoDrp6Ne0ACBrCOVhiYrrQtY5DC+RF78DA/OTcjnOra2y0KPlHIk
-         rGLxyz6nBpJY/vDmpnPGdonpC650mVz7o7bqRX7dfqesKrIehkdzS4YOxoHXCwiKxv2J
-         YoM7lZFn+W7wGtRP0IVHzF4tL6utacNAWqZ2nRZrVflHj2H+MPh85FsJ1nmFohnxavwu
-         sNxtSODIFtY5ub56NiHMwQDrD7u5lR1aJFusv5LNcUIARP1YrDvilVwcwTEj0Ih/UgR1
-         wUpEnOz0G6TkOzONyiVf+e52iuCYCtlKvI883KAHD0icr3ajFX3qfxZPFN7IimgufQLN
-         WxHw==
+        bh=JI5rbOuDA7OsqPK6rS6KZm2RpgqeyURJ5czLB7dxhv4=;
+        b=IwdJwuu3fbspKY4M46qwfE07A8WvFOSz4mMgl34oOxhRdGNhwzqBAkAzgmDJONgcWO
+         /rfrYcNtRiGEnyAdrmqYH84LLCQeREjdpE0zwj5994JUXOoj/DAkMppV2j5NZuXIPy/Z
+         CAFd7/E9sd+mjo+k5Nh9NvOcNjYIuF/OZ+Fisj83doFwXoSObViUphY97xLhYncQSPUL
+         VVtx2JdUsemqY9xKlxSj8mwZz7fPIlHoJFxZea9sY4qW5mhQiYPX7IhVOIB7DpFKo0sY
+         igrikZblRT7S9fnn8mpMayBfG/pL35ZYWfBObHkmDZ5RJKXklCdxeH9Bg0OAftjaCVKH
+         F+lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778780352; x=1779385152;
+        d=1e100.net; s=20251104; t=1778835483; x=1779440283;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SuVg/btevpEI3G6fDRzlICOaAv8x5JhKdoYPDB2ISDI=;
-        b=m0UM0yH5Gmpncuo0i7HccZtXdpSA+aivsqmMqsdoBcoiKMQ0B33lYx69fziskApNB9
-         RNptgjuRDmftfUeE0i0Dz9Cn14GI1D8yDRStotPYyf0+QI6kO55Fhvu2fGkJsfLPAgxF
-         UGqxOj+frZpyF+8MqGeJZ6vfB4UxXRzRi9buD0uXHiwxJwwgN80Zhj8Ap4YQ75oM7N6X
-         3ocjyyUfNmvpUIKSAWtt2FX4QGzAr3kXxIPhjuJKWpXBF5VAHebPiDnwJwsW+fgExeWc
-         EKrTftZ1ltYqjQE9ogjvmLYJo8LdT94nIggkDdIidKujnJPn/4HJLw/mXQtb2xzOTov4
-         d4Bw==
-X-Forwarded-Encrypted: i=1; AFNElJ9Bbg3H6YhJcCIYlVL4klYPvcBEYWHksWhVLpP3V/iuiiGCXzFKfV1wgPJy5NI1Ij/KKWwREuCsQ64=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjB0sfstjuZdhQ5cUIFySe8ql0FNZk5+Z3RyvRUTTJYBUuwc/f
-	Ij07GvqTcZc9Cz20E7SlKuS7ogGw++1JTjDim6t2/upksznQ0aB+GuO8
-X-Gm-Gg: Acq92OHPRMXBD38T4Tsoqsj/aTt2aRoQyQUfD3XnEKtis50xJN3Ri20H0cYaaa7fCTv
-	EHyMmG4Ns+5ILEXSGkcnXAyC3wdEZRYjn3sNqsMOy9KrYcChF2xdZti6kuTGEgRUAjx9by257pr
-	TycbL9LU6kZ8VHNDbXZwZwhRzf+NhkVYvmpODB0GzWohiNLRssfmoMBqzn+ThewJ9uyH5Vb47hu
-	ELA44IDbJElfWCODoxFhgsof/QwqSQrQrqNeNkzpfZeDar55BgeahR4M1Z+ebY5LCAV0mU+5Vg9
-	Q0Hl9ADUq/GOxSUNpS/H/NDlNih2D75jz+neI3ULW006YyFgSksugY5qgyyx8dlmWvy5De3q84c
-	xKtfpzKLZ1RFK4n6NN+h9yU7urMoiPoUbzwzAu2gKtgfe9Yn1dyA/LvqUEOW/tolsbh+dKrNC/3
-	WNS2c8li1Z7YExgkuqGLa0rvXbz3QU6l4Jqr6YJA==
-X-Received: by 2002:a17:903:2c08:b0:2bc:8e7d:3dce with SMTP id d9443c01a7336-2bd52b54312mr40934675ad.27.1778780351727;
-        Thu, 14 May 2026 10:39:11 -0700 (PDT)
-Received: from ultimate.. ([58.84.61.157])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5f2cesm33273585ad.14.2026.05.14.10.39.08
+        bh=JI5rbOuDA7OsqPK6rS6KZm2RpgqeyURJ5czLB7dxhv4=;
+        b=fFUzy8ym+o4Bfuszoom3pGjQGqLrqfM77pJFp1y7jZZI2EmEsm0eOveSq0/OrjY7kk
+         tweB6zpEkiNq9YZNL6X0VlUWGVQf1nW20jWjX0t4BD4TqHchHj9l1hEv6nktOf8C1yc0
+         Ql9ZHpQa3tylrsF4cFVpdz6fHnlL+X7rQjTW7kMWjGjJOfgcgVWcu3YqqXu/hx66Iw9p
+         2C/neHbv3xyUdafW9FrG6l48FT4j9qVexlo7KetPw+4EnBeJRcqac3zECaZBjF3DM8u5
+         jpek3h9roX2Kw3VFbEmQ1piIXu+Oeqbrx+w76EmqPHsr/h53E4ukKb3jpxRDQldu0Z/d
+         W2Jg==
+X-Forwarded-Encrypted: i=1; AFNElJ9KTbOK4gJeiEG/936RVKdqqucE8sEtkPwpT3JIGbqzDVWM6JouuTTfjhVVpVit92xOfdUOo0d4x7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv1nXDnLxGfW6TekYViL1kJU5jlPSLT7E57RyiYfIm3m6ded+w
+	rOOqvJF0oBfR+8XU8FbaVvNJ65NfY9Hy0V/NHEPnS4WUPHRfChTLCzij
+X-Gm-Gg: Acq92OEWH83Y+2Oc1KY0hXxVrhhIMEI8TWoJIvnJrlYtJoPv9fso2jQiLHcECVhJTKK
+	L7q2zlnWASJdklAZ4Ynf5wRR4eFebEitJCh3LQIsXJsD0jBLqXYE5P9B2gasXZmoAFaWT1xrjvz
+	YihL8pP/V4qDw9Is3WhOXjpfwnqukctdyGqo2ykmMVp6DpGOqvVHUpBLdsclErqFBrHJXZbo9Dc
+	FLlBmTizB9rsxSIsSzFSk5iYOaOEObSVULg5G8M2A8I3h8IgDuXAVfFbLKLtvnw1yPGRgwGkpnF
+	iHcpVNKbidZEmoaKFsxg87NSe7eD358FhYZrTb8io6apc6CwJNHH9gniw/GVSvheAk8o1JPn6/e
+	BsfoitqU8PK2CfQhs75D9cmhWlNJwcC7qJKufqH+4I1ljcSyU55QUCByWKyquyBCN8EhHh8siYu
+	3YIxEc6Mtn6MixatLRDOe0KX42M0XmXI6O44wfYpEdA537yfbatjlB9DX6zx8jjpQaog==
+X-Received: by 2002:a17:903:390b:b0:2bd:1903:6ced with SMTP id d9443c01a7336-2bd7e93cf74mr34268585ad.41.1778835482629;
+        Fri, 15 May 2026 01:58:02 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe6512sm52249325ad.52.2026.05.15.01.57.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 10:39:11 -0700 (PDT)
-From: Udaya Kiran Challa <challauday369@gmail.com>
-To: alexandre.belloni@bootlin.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
+        Fri, 15 May 2026 01:58:02 -0700 (PDT)
+From: a0282524688@gmail.com
+To: tmyu0@nuvoton.com,
+	linusw@kernel.org,
+	brgl@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	mkl@pengutronix.de,
+	mailhol@kernel.org,
+	alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Udaya Kiran Challa <challauday369@gmail.com>
-Subject: [PATCH v5] dt-bindings: rtc: epson,rx6110: Convert to DT Schema
-Date: Thu, 14 May 2026 23:03:32 +0530
-Message-ID: <20260514173851.25088-1-challauday369@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-usb@vger.kernel.org,
+	Ming Yu <a0282524688@gmail.com>
+Subject: [PATCH v4 0/1] mfd: nct6694: Refactor transport layer and add HIF (eSPI) support
+Date: Fri, 15 May 2026 16:57:45 +0800
+Message-Id: <20260515085746.114361-1-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -96,7 +106,7 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 48EFF54579A
+X-Rspamd-Queue-Id: EA4C654C99B
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -104,189 +114,74 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,brighamcampbell.com,vger.kernel.org,gmail.com];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6500-lists,linux-rtc=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6501-lists,linux-rtc=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,devicetree.org:url,bootlin.com:email,0.0.0.3:email,0.0.0.32:email]
+	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-rtc@vger.kernel.org]
 X-Rspamd-Action: no action
 
-Convert the Epson RX6110 Real Time Clock devicetree binding
-from the legacy text format to DT schema.
+From: Ming Yu <a0282524688@gmail.com>
 
-Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
----
-Changelog:
+The Nuvoton NCT6694 is a peripheral expander that provides GPIO, I2C,
+CAN-FD, Watchdog, HWMON, PWM, and RTC sub-devices. Currently, the
+driver only supports USB as the host transport interface.
 
-Changes since v4:
-- Replace conditional SPI mode properties with dependencies
-- Simplify description formatting and wrap lines at 80 chars
+This series refactors the NCT6694 MFD core to support multiple transport
+backends and adds a new Host Interface (HIF) transport driver that
+communicates over eSPI using Super-I/O shared memory.
 
-Link to v4:https://lore.kernel.org/all/20260509185735.21557-1-challauday369@gmail.com/
+Changes since version 3:
+- Remove redundant module type macro definitions from sub-device drivers
+  that are now provided by the shared header <linux/mfd/nct6694.h>,
+  fixing -Wmacro-redefined warnings.
 
-Changes since v3:
-- Add conditional validation for SPI mode properties using anyOf
+Changes since version 2:
+- Restore per-device IDA and mfd_add_hotplug_devices()/PLATFORM_DEVID_AUTO
+  to avoid child device ID conflicts with multiple NCT6694 chips.
+- Validate irq_find_mapping() return value before dispatching IRQs.
+- Check superio_enter() return value in nct6694_irq_init().
 
-Link to v3:https://lore.kernel.org/all/20260509181909.21871-1-challauday369@gmail.com/
+Changes since version 1:
+- Reworked the Super-I/O access helpers.
 
-Changes since v2:
-- Reference rtc.yaml for common RTC properties
-- Add conditional validation for SPI mode properties
+Ming Yu (1):
+  mfd: Add Host Interface (HIF) support for Nuvoton NCT6694
 
-Link to v2:https://lore.kernel.org/all/20260509095713.5818-1-challauday369@gmail.com/
+ MAINTAINERS                         |   1 +
+ drivers/gpio/gpio-nct6694.c         |   7 -
+ drivers/hwmon/nct6694-hwmon.c       |  21 -
+ drivers/i2c/busses/i2c-nct6694.c    |   7 -
+ drivers/mfd/Kconfig                 |  47 +-
+ drivers/mfd/Makefile                |   3 +-
+ drivers/mfd/nct6694-hif.c           | 663 ++++++++++++++++++++++++++++
+ drivers/mfd/nct6694.c               | 111 +++--
+ drivers/net/can/usb/nct6694_canfd.c |   6 -
+ drivers/rtc/rtc-nct6694.c           |   7 -
+ drivers/watchdog/nct6694_wdt.c      |   7 -
+ include/linux/mfd/nct6694.h         |  54 ++-
+ 12 files changed, 813 insertions(+), 121 deletions(-)
+ create mode 100644 drivers/mfd/nct6694-hif.c
 
-Changes since v1:
-- Reuse common SPI peripheral properties
-- Drop redundant SPI-specific comment
-- Remove unused labels from examples
-
-Link to v1:https://lore.kernel.org/all/20260504183728.27412-1-challauday369@gmail.com/
----
- .../devicetree/bindings/rtc/epson,rx6110.txt  | 39 -----------
- .../devicetree/bindings/rtc/epson,rx6110.yaml | 68 +++++++++++++++++++
- 2 files changed, 68 insertions(+), 39 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/epson,rx6110.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
-
-diff --git a/Documentation/devicetree/bindings/rtc/epson,rx6110.txt b/Documentation/devicetree/bindings/rtc/epson,rx6110.txt
-deleted file mode 100644
-index 3dc313e01f77..000000000000
---- a/Documentation/devicetree/bindings/rtc/epson,rx6110.txt
-+++ /dev/null
-@@ -1,39 +0,0 @@
--Epson RX6110 Real Time Clock
--============================
--
--The Epson RX6110 can be used with SPI or I2C busses. The kind of
--bus depends on the SPISEL pin and can not be configured via software.
--
--I2C mode
----------
--
--Required properties:
--  - compatible: should be: "epson,rx6110"
--  - reg : the I2C address of the device for I2C
--
--Example:
--
--	rtc: rtc@32 {
--		compatible = "epson,rx6110"
--		reg = <0x32>;
--	};
--
--SPI mode
----------
--
--Required properties:
--  - compatible: should be: "epson,rx6110"
--  - reg: chip select number
--  - spi-cs-high: RX6110 needs chipselect high
--  - spi-cpha: RX6110 works with SPI shifted clock phase
--  - spi-cpol: RX6110 works with SPI inverse clock polarity
--
--Example:
--
--	rtc: rtc@3 {
--		compatible = "epson,rx6110"
--		reg = <3>
--		spi-cs-high;
--		spi-cpha;
--		spi-cpol;
--	};
-diff --git a/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml b/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
-new file mode 100644
-index 000000000000..55086ac7d1e2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/epson,rx6110.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/epson,rx6110.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Epson RX6110 Real Time Clock
-+
-+description:
-+  The Epson RX6110 can be used with SPI or I2C busses. The kind of bus depends
-+  on the SPISEL pin and cannot be configured via software.
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    const: epson,rx6110
-+
-+  reg:
-+    maxItems: 1
-+
-+  spi-cs-high: true
-+  spi-cpha: true
-+  spi-cpol: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+dependencies:
-+  spi-cs-high: [ spi-cpha, spi-cpol ]
-+  spi-cpha: [ spi-cs-high, spi-cpol ]
-+  spi-cpol: [ spi-cs-high, spi-cpha ]
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  # I2C mode
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      rtc@32 {
-+        compatible = "epson,rx6110";
-+        reg = <0x32>;
-+      };
-+    };
-+
-+  # SPI mode
-+  - |
-+    spi {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      rtc@3 {
-+        compatible = "epson,rx6110";
-+        reg = <3>;
-+        spi-cs-high;
-+        spi-cpha;
-+        spi-cpol;
-+      };
-+    };
 -- 
-2.43.0
+2.34.1
 
 
