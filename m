@@ -1,145 +1,235 @@
-Return-Path: <linux-rtc+bounces-6533-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6534-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id lhT+I6zsCGoQAAQAu9opvQ
-	(envelope-from <linux-rtc+bounces-6533-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 17 May 2026 00:16:12 +0200
+	id yD+hC/vuCGriAQQAu9opvQ
+	(envelope-from <linux-rtc+bounces-6534-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 17 May 2026 00:26:03 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC93D55E123
-	for <lists+linux-rtc@lfdr.de>; Sun, 17 May 2026 00:16:11 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99BE355E162
+	for <lists+linux-rtc@lfdr.de>; Sun, 17 May 2026 00:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D37CF30071E4
-	for <lists+linux-rtc@lfdr.de>; Sat, 16 May 2026 22:16:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 825E63012CF6
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 May 2026 22:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A79386C3B;
-	Sat, 16 May 2026 22:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E0B938D3E0;
+	Sat, 16 May 2026 22:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8WtsUQQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGyv3taR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021CE27453
-	for <linux-rtc@vger.kernel.org>; Sat, 16 May 2026 22:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AAE35FF58;
+	Sat, 16 May 2026 22:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778969769; cv=none; b=pK2RQsdgyWm8t/Mj7JdmSOU3XmsMTTQJ0Br2Xjt57h/pXU9azW91V2evDNSLVcFquC28pjOWWHS9+0JeBx6BhndnBPQZXKJCVavejbPxj0+oZq/trh7qSSv9rFUAuLJ3yfbwwGHgrBNGKKcSxFJXjV3NWJIHA4WKnvbd4ata4rA=
+	t=1778970359; cv=none; b=fxff+zGJe+W6INMddQWiWfgM5btgklt158lyIyBhTQN1vkrznyaUmrjwn+TTk4YNWEswey485CFOqfkO6JcvwWfhyra+dWuW6ErhLqYj+CP/g37JJxjAvUIAIQfoL0lQX+bveVfFIfWp8NjYs9pQ6zOYjiTdcEEgERGB9HkBPR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778969769; c=relaxed/simple;
-	bh=65HFTt3mBp1NtGCq5iKKI+LYlmbhAW1WNa0HWEy5zqQ=;
+	s=arc-20240116; t=1778970359; c=relaxed/simple;
+	bh=5nuPSDXwXXI1QlcU8CMtcUqyC9vn/weJSX9GgChGGvI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owFQm7cMbTZuxU2+9L+4yzxqh5MTfE4JlGw45/EUV9TA0nVjxyiAnfaEUnLt0CPwD/dfVYWpAd82rTeUJXWr4qwrKK5iJctvkeobpKBJFL4bho189ZtLOErAEJUQ6APBCdy9/6g+2i/x8wzO7K7yPA7xG5hH1KrDeXKZJHyBDs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8WtsUQQ; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48e8132c6d0so5214805e9.1
-        for <linux-rtc@vger.kernel.org>; Sat, 16 May 2026 15:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778969766; x=1779574566; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=65HFTt3mBp1NtGCq5iKKI+LYlmbhAW1WNa0HWEy5zqQ=;
-        b=I8WtsUQQ3MidlM4hlb0jy0kBGVBbE7pVptI2E6+3H7ZqItBVSr0eMKsi5IamWLuAZd
-         ZYdDgFb1H5BDc9whoWR9Xu+2y/GjorfEZjMUMNXWODA2eTiyJ0xAVgx1gNNNrLVfwwe9
-         RT8irVxwGbH3+Ky8lG0bX1IWZulBGPXfYivbOVWQxgj+kWanYX/XMKuussWPiXKIRuAV
-         gUHZn+LCrvO+5KUbGM4WsQ1H0XI6gvHnxhV+vr0+AgIFgfuAAJGPOKN9bPLNGc2L1A3G
-         9OjjDw59/jKOuNBa12nwsrKLG+Zgvx5CZOadRnzBW/nYNdJeeXIjH7N3Pjx5/S/j8YX+
-         vIZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778969766; x=1779574566;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=65HFTt3mBp1NtGCq5iKKI+LYlmbhAW1WNa0HWEy5zqQ=;
-        b=K9fzogRIG9QTQKESHKD9zY6EAPEK6Tw8Nhc6StjbX5ysFCYa8kIAJFzGFijMw3zgiw
-         ZzTNcnY5wMAm4a45yoBInl6KoBw4pIVT7lherPouHQTsvP81Tyre30JgbQfg6ejGB/fs
-         r6L/Bnm8YsDLXW4bAXAWLi9iWKQIcJg8OCvEbO8/rUaXQZ/4uFQZGro+5SZCLcOKg+Ms
-         GsnSRE+8dw6e4zjdk/MMF3AOzRdNBGbgzaygXCVyZVD5DulbwcMq+5e4Z7oisnAU8Bot
-         vCkTeyjLeIW8avjRTkFRA5MCoYv7199QLInjP+pm3FNEjPg0fKsk+NFOBW32sJeCu1zt
-         zzHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/XrIJlDe+JeGizO10Qw++8e8vAJwAbgzc+zydPAoSaCu9s7UHVx3GwDPX9fl8HRrPC5tlDdHY2fTg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfWtb4nP9Z9Ia+jMHIpU7a6UrggubasW3hhqTs4HITUVw3fxwC
-	bFdliXMHsl1ABPzgkLlSjT175SRzq/+7EzI6hJK7V9yTcxaahXSexEmw
-X-Gm-Gg: Acq92OF5D2oRInxJR4U9f867Q/KFJxqoiuTjfqHZ/0NVeOwZJFBWB2ZvhQQyUuiuRWG
-	yUohDACq7yq2eSan3+Ts8Ugs5IlcIzu3odMG60p4sLtZh2KrJnsGFOcuEAHrw3but8m3T4i9nqw
-	NpVrQmo5C7kPkRuix4m/Yvd2FHTqJ0/53EaPvlQ/xGIrVPv3vdksGPxUpZlwZaA2uQPJqY5YrcM
-	GEWrpyUTUnUNfhddqbNApmou45b0rCPfwoBPGICgDlMmaJ60+tpUh9VZJowaF4r/hEUFPNJBE0v
-	2mXNn0r6Ux36cplMuwrB0ZGsoQ049CfdDc18M/9e316U3bICRt43KHO6yhUFDeDnJNgA6D9ub+d
-	N+3kPuzolrIYwXdRqNfWxBomy5qP9OfKzoeez8vi3IKMwXXd8ZhWAk6bfgSjHmw1vtdxjeIuHyk
-	WuIlCScBk+RML1ZBMqswMJixCtQs8ILtTPwiL22w2OUYTgShx/KYNSh9v1/B51fPh6tctVfOsV8
-	+/2bVNYT4QHX3HlDzoM/8yQy9fAKeIrMZkCtz2KO5z0/LS8dk+e/ts9aTi104v2CVTN0KnEQ4D5
-	5wjP
-X-Received: by 2002:a05:600c:4455:b0:487:2671:fb8f with SMTP id 5b1f17b1804b1-48fe60ea92dmr120229895e9.8.1778969766225;
-        Sat, 16 May 2026 15:16:06 -0700 (PDT)
-Received: from GMBS-DESKTOP.localdomain (20014C4C1D61E800CCC0A798ED610253.catv.pool.telekom.hu. [2001:4c4c:1d61:e800:ccc0:a798:ed61:253])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0a19b1dsm24239272f8f.17.2026.05.16.15.16.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 May 2026 15:16:05 -0700 (PDT)
-Date: Sun, 17 May 2026 00:16:03 +0200
-From: =?utf-8?B?VMOzdGggSsOhbm9z?= <gomba007@gmail.com>
-To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Antoniu Miclaus <antoniu.miclaus@analog.com>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Dianlong Li <long17.cool@163.com>, linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v1] rtc: Use named initializers for arrays of
- i2c_device_data
-Message-ID: <20260516221603.p5xuz5qczonz3sbz@GMBS-DESKTOP.localdomain>
-References: <20260515154720.406128-2-u.kleine-koenig@baylibre.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=UepDJYEcErIt1xIpDoOXKPExi4J8WSvvdMPjB4YU2Qg3qT7Sqzr+aCoMC/YHH2fYFlcjdFRY6DCjjSidd6aIRDOsGcCmqYhwtIrCbjRDTqJZvLz5dg+Fv5lofzYNrvGrs0LBgDawqhh3KVSS3MxBu58c1XbEgXAOvvT/t2dheOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGyv3taR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4382DC19425;
+	Sat, 16 May 2026 22:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778970359;
+	bh=5nuPSDXwXXI1QlcU8CMtcUqyC9vn/weJSX9GgChGGvI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bGyv3taRr2+TNdsQzb9eKRhOujnF19Fy5WDzL5XrdjELsZHjW4y7wtbe1/4iGbwVU
+	 /Kv7gv2B8qNNQ7sjekIOKxKluW5Xng0VTOnyciymMpR94VViVd349pdUbyv0oFK4L/
+	 bVs6ouljOkBYdSZOVh8RDZWSF9MZoIDJSUvCFh9GcMQA4rbMcm0IqQWNWtRYQ9pLy3
+	 5gAoteO7XXYvUGdxLTspaQj9mXDffqL+5Rdv7Zt3GKQJV60pXou24DBdECulFu7oHp
+	 twUQYCo1jMkRjVvTGlLgQFGgmP/ZFMgk2F/Iq5n39yXRndeyz2qlRnfG2c7YY1KkBM
+	 pf6gEG2pEEGvA==
+Date: Sat, 16 May 2026 23:25:52 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
+Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Nam Tran <trannamatk@gmail.com>,
+	=?utf-8?B?xYF1a2FzeiBMZWJpZWR6acWEc2tp?= <kernel@lvkasz.us>,
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 03/11] dt-bindings: mfd: add documentation for S2MU005
+ PMIC
+Message-ID: <20260516-esquire-chitchat-0fffa597e2f3@spud>
+References: <20260515-s2mu005-pmic-v6-0-1979106992d4@disroot.org>
+ <20260515-s2mu005-pmic-v6-3-1979106992d4@disroot.org>
+ <20260515-justly-recite-6028f4bfb24a@spud>
+ <DIJK5FTQ5KWG.HOKZAOXHTGU7@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="OXmzgMHNmty/qj6e"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260515154720.406128-2-u.kleine-koenig@baylibre.com>
-X-Rspamd-Queue-Id: DC93D55E123
+In-Reply-To: <DIJK5FTQ5KWG.HOKZAOXHTGU7@disroot.org>
+X-Rspamd-Queue-Id: 99BE355E162
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.84 / 15.00];
-	R_MIXED_CHARSET(2.50)[subject];
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[bootlin.com,analog.com,codeconstruct.com.au,gmail.com,google.com,163.com,vger.kernel.org,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-6533-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[gomba007@gmail.com,linux-rtc@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6534-lists,linux-rtc=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,bootlin.com,lwn.net,linuxfoundation.org,gmail.com,lvkasz.us,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	SINGLE_SHORT_PART(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,devicetree.org:url]
 X-Rspamd-Action: no action
 
-Reviewed-by: Tóth János <gomba007@gmail.com>
 
+--OXmzgMHNmty/qj6e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, May 16, 2026 at 02:41:29AM +0530, Kaustabh Chakraborty wrote:
+> On 2026-05-15 18:14 +01:00, Conor Dooley wrote:
+> > On Fri, May 15, 2026 at 04:08:59PM +0530, Kaustabh Chakraborty wrote:
+> >> Samsung's S2MU005 PMIC includes subdevices for a charger, an MUIC (Mic=
+ro
+> >> USB Interface Controller), and flash and RGB LED controllers.
+> >>=20
+> >> Add the compatible and documentation for the S2MU005 PMIC. Also, add an
+> >> example for nodes for supported sub-devices, i.e. MUIC, flash LEDs, and
+> >> RGB LEDs. Charger sub-device uses the node of the parent.
+> >>=20
+> >> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+> >> ---
+> >>  .../bindings/mfd/samsung,s2mu005-pmic.yaml         | 120 ++++++++++++=
++++++++++
+> >>  1 file changed, 120 insertions(+)
+> >>=20
+> >> diff --git a/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmi=
+c.yaml b/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml
+> >> new file mode 100644
+> >> index 0000000000000..0e6afb7d2017b
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/mfd/samsung,s2mu005-pmic.yaml
+> >> @@ -0,0 +1,120 @@
+> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/mfd/samsung,s2mu005-pmic.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Samsung S2MU005 Power Management IC
+> >> +
+> >> +maintainers:
+> >> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
+> >> +
+> >> +description: |
+> >> +  The S2MU005 is a companion power management IC which includes subde=
+vices for
+> >> +  a charger controller, an MUIC (Micro USB Interface Controller), and=
+ flash and
+> >> +  RGB LED controllers.
+> >> +
+> >> +allOf:
+> >> +  - $ref: /schemas/power/supply/power-supply.yaml#
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: samsung,s2mu005-pmic
+> >> +
+> >> +  flash:
+> >> +    $ref: /schemas/leds/samsung,s2mu005-flash.yaml
+> >> +    description:
+> >> +      Child node describing flash LEDs.
+> >> +
+> >> +  interrupts:
+> >> +    maxItems: 1
+> >> +
+> >> +  muic:
+> >> +    $ref: /schemas/extcon/samsung,s2mu005-muic.yaml#
+> >> +    description:
+> >> +      Child node describing MUIC device.
+> >> +
+> >> +  multi-led:
+> >> +    type: object
+> >> +
+> >> +    allOf:
+> >> +      - $ref: /schemas/leds/leds-class-multicolor.yaml#
+> >
+> > Does this need to be an allOf when the other refs are not?
+>=20
+> It has it's own properties, that's the reason. This used to be it's own
+> thing in dt-bindings/leds, but I was asked to move it here in prior
+> reviews.
+
+What do you mean by "its own properties"?
+
+>=20
+> >> +
+> >> +    properties:
+> >> +      compatible:
+> >> +        const: samsung,s2mu005-rgb
+> >> +
+> >> +    required:
+> >> +      - compatible
+> >> +
+> >> +    unevaluatedProperties: false
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >
+> > Move this above the child nodes please.
+>=20
+> But properties are sorted in lex order?
+
+Typically the binding is sorted in the same order as properties go in
+nodes. Common stuff like reg/clocks/interrupts therefore send up above
+child nodes.
+
+--OXmzgMHNmty/qj6e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCagju7QAKCRB4tDGHoIJi
+0tjjAP0QsRcLbAtRF7Rn4i6Ab0p2bDEVzxlNA01dpuXvDbgO6wD8CJqmCw9C5IDb
+CgukiLh67dRUC0V2lBjZP7sW7or87AQ=
+=Qrl5
+-----END PGP SIGNATURE-----
+
+--OXmzgMHNmty/qj6e--
 
