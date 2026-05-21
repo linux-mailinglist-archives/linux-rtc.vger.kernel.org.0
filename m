@@ -1,62 +1,62 @@
-Return-Path: <linux-rtc+bounces-6557-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6559-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6HAAODyMDmrG/QUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6557-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2026 06:38:20 +0200
+	id qPQwKHOMDmrG/QUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6559-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2026 06:39:15 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A0A59ED8B
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2026 06:38:19 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFF7859EDA8
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2026 06:39:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 66BE130038F9
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2026 04:37:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D08B530686E7
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2026 04:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0278D3783BB;
-	Thu, 21 May 2026 04:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71EB8385D96;
+	Thu, 21 May 2026 04:37:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kITL3kKj"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MuzH+7Q4"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010029.outbound.protection.outlook.com [52.101.46.29])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012026.outbound.protection.outlook.com [52.101.48.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4B534CDD;
-	Thu, 21 May 2026 04:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EFF363C6B;
+	Thu, 21 May 2026 04:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.26
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779338272; cv=fail; b=IY35yYHWYRS+t8jtpOVulHk7i+SsLlZzsIrzQI8AHn55q7XpgujoQ6yqZFENbudekThn6A84Xtnkdf3hNzJWy52LwFsZe1X7pyUmTOZmRDnKTGx/E4uz4xAmL1R4m2Qw9kUuDKYlH6GyWY/2yzDq3xQTf+sOac7nBl19hj5l7sQ=
+	t=1779338274; cv=fail; b=hd0PsErjlPmya0JfOnn13gjVh5BOU0dRILcyhjuHIWg91AnDcckxv85HMTBU5zNwLSrljpmG6gC3YGZgfz1FmBkXyKpK/yWGf3vA5UmQEQr94y5/+5hZ3w1WkYWiv980kazZEpyRDhqQYo3GNZoPjMdSdPHWu9zul0KyZff46VY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779338272; c=relaxed/simple;
-	bh=dgsK2d52bCsjZqSPhuuZXa46gmPI35boAelEQZ4U3o0=;
+	s=arc-20240116; t=1779338274; c=relaxed/simple;
+	bh=tI7QH4DFYaarys5Fjp42DkFCG6vXxhQ+I/o9FNxWbM4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ldYMH0MEo0X3wmhZMoba+EgPflehQuab8FOQVpvCjU1UHmF8+yI4hFFzpktHGF67nHXz6zmHAVXl4MByYqbpWhJ/qt4qOLw2rTV5NQDtHCh5B49ufO2CpGigsrx+9KVIw6lc6pxTuJf4I9mNQtnC7XnfqEa/MxIFMCyTxC7MMVs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kITL3kKj; arc=fail smtp.client-ip=52.101.46.29
+	 MIME-Version:Content-Type; b=IQGUPZ9yc2T245jq1O7fuyCS82CzUbTudXCNjavigBPmORqLRUTnLw76LjHZvSRpsvCnZWu7tAzXrdZalJ67wc7qeBifv/uxBVFqByyUlzEcSFt0uq8XZesdPGbAsRgJjWKMIYklYI8aKaK3yS6DNxKIexuTFr7f8Cug8j/Y8Kk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MuzH+7Q4; arc=fail smtp.client-ip=52.101.48.26
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OUSXM2CR3pI+a3Q7EL6p3OPJfZVxE9KpgzGd4bMTWb84bPDNYeKRwiP7clQjSr6oJpjNmijlwZHCEpBYGHrwRc+vWAw1vu6p8HpB3QU/4pxpokYFYOCSWXGbnZO14uyPz/KRPEPZ3N72yitA6S6VyhnDjAXavLdkyMPdurNfpw4Tjbbsz8Ce8tgGXrw8KaSgAKrmMNpH2JaFdEZZyj6ChpGYriMhGyFEYReq5KfkZw0RynVEHICZbB6UZEsL2S7xpxIegxXrHl5u3vDyJTguaJqADL1QLFDy/J6PmxP++dWZGemZIRTAeq3Oit5l1ddoXWIUzprHVDYwj2oU6+MMkQ==
+ b=TlRqF10yNyUCNDqv+po1lZflmL/fIiYWmJ7cHrujXwezsC1FJ520L91pePIsFaqnxpsCbHQCKDuLZfUp6I4x7tDdL889+eQlTUB75PCAod31X5Xx0EKB7NicN3ET6ccKQFcQNKKDAXfbIV4aQ1vKK8qStlVqDys3YMyV4WveqoREwj8TktMtI02aRsYTAPfobRfOlV3/3Yy5JKZ0LuPPCMAWtl+LjhJt6nbVj7ZHNEZ6f7P0GO5+vM9WyvEx0fovZSaeQ1GJWprvVTDwpKakdad515EFuts/5j4zpJQ5IkAxv1PqK9UYH+z117E3O9yfMFIv33nIVO42YUORFAMUbQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+55idXKHDcxVbIt0y8pNeb2eD7hdj+4QL9yMBkr5Hvw=;
- b=KvUyj0SEVX6XmtItORPwrPAkpGhUeRgWkwWOxQ3JIhxjZ60+R21ZvWDlThAe5lqNmxJIXUY5UCWqmLT5cTyGYdiyTGUj+JDXyJ4IiiXsCiFBSDYlTkzoURE8+Q2sDUkx+WDeWJYkacaXUh6smVD0liwUkybAdaalG/cP732BApMyb2e7t+dxnCd+f6/WcB73U3Mr1EMPyh/qXjTNir9KbbfqqpkAKDoi0JF8kpKUUXVnXJqmfc9Stua+b3Q4aqDK122ZWuTlKBQeefwqigANvJwUZZ+YyVAd7jfGqaiOvVbRh8Tm/Mkcb0sEBWo9k8GkezyTV3AKqLQnodrJZCQSlw==
+ bh=oGrxSfgx9jUgbI3xaJUQk9EKdeW4sTzz1Yi1wx/8OPQ=;
+ b=mt5E1udPpf9r4b9+RnCFSrX3P3A56wInKVrUNyxyOZfvDR39ZtsVkj3k+si1VqZ6yZWKO6Q8+iwxLAnelTvCwHVoagAWdpmZxQgrG0h+L2VuOp+O9SpuMGNDD/qqX9H1KNB80xyJAiXLWd6ttyN4mJZL9ZVxwXnvL9h5zyKl8+hlc5AnnEWg755m1DcvH2TvxWHP0AnIT5yGjpeuvNef/S3lE383fr5/4veVicqSOp6CVkrEoHRwYbW9ln/OzZrK3l6GwIH7clcl5wa+Jgpv0NxDoe+yih81/D3Mi3QNV1jalAS+aGrT6bvxSyu+Qr2tpRFC6olaA54do8U2xnTlwg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=bootlin.com smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+55idXKHDcxVbIt0y8pNeb2eD7hdj+4QL9yMBkr5Hvw=;
- b=kITL3kKjUzJ2yTDiFWjwf4Sp/U2+FAstDtvW2gkvl2jBYvKJ1LsQPPzuhyeL47VcrBzs1DWEWs2TI6ZWXUbrLovGNv1cnttg07E0AvR1yBN9L2IQYtl6Z9ehODyUeXAJB9MwhSWM8uYc4g+uHoIuL7aznh4va41fFpMhlomPSC0=
-Received: from CH5P223CA0018.NAMP223.PROD.OUTLOOK.COM (2603:10b6:610:1f3::25)
- by SA1PR12MB9491.namprd12.prod.outlook.com (2603:10b6:806:458::21) with
+ bh=oGrxSfgx9jUgbI3xaJUQk9EKdeW4sTzz1Yi1wx/8OPQ=;
+ b=MuzH+7Q4iAGrQf0IGFfRlFufFd1QoqsLbcDFEmslC+mZwrSdJ1wp7Yj8mbTThysbuArzM6p4xSLc0o2L89vNykpILpTf1ydc+8Ke9p5D44FdVFCzyiiw+L8NvIoHZhmmZw7LRn1/FhXwC/CvnpirrEDH5PD5B+3s0NqtRWTYfPc=
+Received: from CH5P223CA0021.NAMP223.PROD.OUTLOOK.COM (2603:10b6:610:1f3::22)
+ by DM6PR12MB4331.namprd12.prod.outlook.com (2603:10b6:5:21a::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Thu, 21 May
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.23; Thu, 21 May
  2026 04:37:48 +0000
 Received: from CH2PEPF0000009E.namprd02.prod.outlook.com
- (2603:10b6:610:1f3:cafe::7a) by CH5P223CA0018.outlook.office365.com
- (2603:10b6:610:1f3::25) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:610:1f3:cafe::41) by CH5P223CA0021.outlook.office365.com
+ (2603:10b6:610:1f3::22) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.17 via Frontend Transport; Thu, 21
  May 2026 04:37:48 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
@@ -72,7 +72,7 @@ Received: from satlexmb07.amd.com (165.204.84.17) by
 Received: from ausmlimonci-lx1.amd.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Wed, 20 May
- 2026 23:37:46 -0500
+ 2026 23:37:47 -0500
 From: Mario Limonciello <mario.limonciello@amd.com>
 To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Alexandre Belloni
 	<alexandre.belloni@bootlin.com>
@@ -80,9 +80,9 @@ CC: Hans de Goede <hansg@kernel.org>, =?UTF-8?q?Ilpo=20J=C3=A4rvinen?=
 	<ilpo.jarvinen@linux.intel.com>, <platform-driver-x86@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>, Thomas Gleixner
 	<tglx@linutronix.de>, Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 1/2] rtc: Add rtc_read_next_alarm() to read next expiring timer
-Date: Wed, 20 May 2026 23:37:13 -0500
-Message-ID: <20260521043714.1022930-2-mario.limonciello@amd.com>
+Subject: [PATCH v2 2/2] platform/x86: amd-pmc: Fix S0i3 wakeup with alarmtimer
+Date: Wed, 20 May 2026 23:37:14 -0500
+Message-ID: <20260521043714.1022930-3-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260521043714.1022930-1-mario.limonciello@amd.com>
 References: <20260521043714.1022930-1-mario.limonciello@amd.com>
@@ -98,151 +98,105 @@ X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
  (10.181.42.216)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF0000009E:EE_|SA1PR12MB9491:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6b65c795-5d6e-4b08-7995-08deb6f2b5c3
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000009E:EE_|DM6PR12MB4331:EE_
+X-MS-Office365-Filtering-Correlation-Id: d9a68916-3d29-4444-1ebb-08deb6f2b635
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|376014|82310400026|1800799024|18002099003|22082099003|56012099003|11063799006;
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700016|376014|13003099007|56012099003|22082099003|11063799006|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	MAHDeExDP3tMRl9NSb2j1ZGc9exeSL6YuMiusAyS9osdkqmz2z2cwsJ8jtiZZTWDfokYZNxS/umTf8RPaFE3j38GW3DvvOOFiK5XkqB1aRhpTBiKDr7iqMLwsow7LEgdz+etysji+n0kOI2MQeNQ1h91k+VsXgHplUOfiCJpJxEHmirXl+8UuBBrJFUs0J9PcLkAEDKrx6BPdY07YarsobtobFP48BCqGzV/JtqSZGoixWdgglZKy7bcwcnMpRKxm9JwAFn7wDGdu7EstIP051sa5rn7qUy4am3Y/Ia/IKx9wi6oB4bXHMaRAu/Qw78el9R6rwcpiz3VpYobVuGAaJkgr4kNW+cLjfWwZHkfATRXiMzruo5Hrqhx4Fjrj4PUJ2LSCbe9vZucDdS/phSQ49RJ1jjtcm99LrGtcNrvY81USn97i7LaVXXh3E/GWn0QbETtzpR3aj1ADpDi19qZMfkVrw2gK1yj7IV5DmbdMXrvcjp31CwaP9QyMszK/S/iUmq+3ddyDJA5++0lmwcKmVKYH0Rsb3eFYcXbkvbyywLyR/0yO9adNMVWjYgsSXjhf7EX1mdkJXIfZNRp/Ie6DlVFESr5aBkIsE9thukxmTQFY/otKSv5pEcm+acqKoZjb1StwqIQLSh0RJwIiRoi2/OK+FPFNVST6niixecPWNdEcAu0aRlMjgPf6hK+ps+b
+	BNeUVvPaO1OtsVSJMxxjT5K0RG97RwmXqg7PEagjkI+DIiPZeEnAy4SQUVDiZpL8e+QASzbmNg0U406LReEnQpB2RDmdpLjQK3UPw/RKULMI/sqkyZvaIYTMdzRsndHXWcRZhSJnVDPaTtZzuFStpM8yvmGNUSkqC+lZ0LELIqI7RED4SuDyi+sqU7vV9VMeiHcmxaVJINoV75bG6JpGy9raSICzhboRr+ROLVHQigq2MJ1/Cwmyrwl59838zcabgcIdr3NEXGfWlXZ3grYAJhbv5cwfQpRAzbk2hT+Y9WMt8zq43yybma3gAy1lM5QCELVHr3HlkSRJO3+Qw1HvfqWzq0yj4ekPxo+ySdom8XzVyCZqi0c6QaSbfs0SCCkiWwYnYReMSKF23cR+PdjhyT6pq5M+izdFQE6QZivqRjsiZ3twXNmVULT2GKHViqKQUO0Kd2eHJme1ZnHCXVQyEyBQrxL4GhyFu41P/2X/969xjJXcbIwHpQx6IFUyAldsxYOVUOa7exvKQuTT6vuZg6JUXG1TV7pBqvqqsktUeStaD3u+ACWFM3CWWXrepqwk/bU7USRIV5aFnG3+TcTxqqtTzGvE71XQxBOvyesjmsN4BCc4vMnRIEhO8fw0gVmCsnhJnylLWacsSIL3WED6170rE3cnYE43YutFjYHTMaLw/jriJN6Y6jiX+/uRlINC
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(376014)(82310400026)(1800799024)(18002099003)(22082099003)(56012099003)(11063799006);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700016)(376014)(13003099007)(56012099003)(22082099003)(11063799006)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	udfs3j59VbWfocTDauF+Ld1LMOSLSFV2bQCO5Zp2NUyhPmzBwMRTIS961JatgLWEmbVAhk6/h2JvGrT7u/srLZDo75TYU5lbXV+kqI4OIzhazooESIuLPAPEWRuTKMxFcyfClMqIKqGo6yJO8dKkErHTWPq1g3bJg6+1xBBjptsD/CMwRhuhfw/obE7AabKIjgGkC9Em5Hov7BUh8/8kSydWPV1bCVFXf84o9CZkXJuMyj+IQivKhITOnYV5O7aX99D0jE9NszAtXB3H40YwWmqZkNA2kX6F1vdSoUU5SIAgqqZjQvx3bYmtqrtMlehdyF9yBl1mHkVEa66k3Si7Tx5Vp7Yq2XeDwzPRNuBXLBT4CJBb/bYii63fDnuDhm9kiEmQSFYox1gy0vtjDK1d/xUF20R6lJafuHyBA88eKgTB/ESJryW4y71LIZCIxdsR
+	88ISQqgUGu03C9Fv3fQRzAal8bXV3AVZ4+W/nUUwi30gnMGoOU9LfwZA7Fo1GoqnMAdWYUq5G1/h5bsR6jqW/J71wtZfNnHNfghdUK4y9Zir1nZTdU4s5UdVVNhWQv7VHXF1aCsR2hSxQPblh/Ljkl8qWCTOdAwa6DRIxu71lZvdpLMyPPIdVKVYNI2iyj6H3POf7y6vTPO2xOFe0AoWT98fYLBLLFqkJTsN/FddJtfKhC7nuFgbtjPgscZLRzobq05XEYmOtpZ4IoaNVArg/C4bcZEoV8zLLnZ28rrfdTDID0kX8aB2L7XnZFH85eo8obvytdYe1jghfpuMOQvktQOzn+W1LvosqzvaprBPGMTKKG1mUBxyvlnre+P5tmJHH8SNYcRDYxwzuTiINfXAMV0/RvAfgjnTvd9grA0B02i8fJ7F2yrdk9sLH/Fmq5BY
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 04:37:48.0399
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 04:37:48.7924
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b65c795-5d6e-4b08-7995-08deb6f2b5c3
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9a68916-3d29-4444-1ebb-08deb6f2b635
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	CH2PEPF0000009E.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB9491
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4331
 X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6557-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6559-lists,linux-rtc=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,amd.com:email,amd.com:mid,amd.com:dkim,gitlab.freedesktop.org:url];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[amd.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mario.limonciello@amd.com,linux-rtc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,amd.com:mid,amd.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,linutronix.de:email];
+	PRECEDENCE_BULK(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-rtc];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 41A0A59ED8B
+X-Rspamd-Queue-Id: EFF7859EDA8
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add a new function rtc_read_next_alarm() that reads the next expiring
-alarm from the RTC timerqueue. This is different from rtc_read_alarm(),
-which only reads the aie_timer.
+It was reported that suspend-then-hibernate stopped working with modern
+systemd versions on AMD Cezanne systems. The reason for this breakage
+was because systemd switched to using alarmtimer instead of the wakealarm
+sysfs file.
 
-The wakealarm sysfs file programs the rtc->aie_timer, whereas the
-alarmtimer suspend routine programs its own timer into the RTC timerqueue.
-Both timers end up in the RTC's timerqueue, and the first expiring timer
-is what gets armed in the hardware.
+On AMD Cezanne systems, amd_pmc_verify_czn_rtc() programs a secondary
+timer with the alarm time. This was introduced by
+commit 59348401ebed ("platform/x86: amd-pmc: Add special handling for
+timer based S0i3 wakeup"). However, this function uses rtc_read_alarm(),
+which only reads the aie_timer, not the next expiring timer from the
+timerqueue.
 
-This new function allows code to query which alarm will actually fire
-next, regardless of which subsystem programmed it. This is needed by
-platform code that needs to program secondary timers based on the
-actual next wakeup time.
+When both alarmtimer and wakealarm are active, the first expiring timer
+might be the alarmtimer, but amd_pmc_verify_czn_rtc() would only see
+the aie_timer, potentially missing the earlier alarm.
 
-Link: https://lore.kernel.org/all/87ed50z0le.ffs@tglx
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Assisted-by: Claude:claude-opus-4-6
+Switch to rtc_read_next_alarm() to read whichever timer will fire next.
+Also handle -ENOENT (no alarm pending) explicitly as a non-error case.
+
+Closes: https://gitlab.freedesktop.org/drm/amd/-/issues/3591
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v2:
- * Drop pointless variable assignments
- * Add missing ":" in kdoc for returns
----
- drivers/rtc/interface.c | 40 ++++++++++++++++++++++++++++++++++++++++
- include/linux/rtc.h     |  2 ++
- 2 files changed, 42 insertions(+)
+ drivers/platform/x86/amd/pmc/pmc.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 1906f4884a834..7859be8f2a923 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -384,6 +384,46 @@ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
- 	return err;
- }
- 
-+/**
-+ * rtc_read_next_alarm - read the next expiring alarm
-+ * @rtc: RTC device
-+ * @alarm: storage for the alarm information
-+ *
-+ * Read the next expiring alarm from the RTC timerqueue. This returns
-+ * the alarm that will actually fire next, which may be different from
-+ * rtc_read_alarm() if multiple timers are queued (e.g., alarmtimer
-+ * and wakealarm sysfs both active).
-+ *
-+ * Returns: 0 on success, -ENOENT if no alarm is pending, or other error.
-+ */
-+int rtc_read_next_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
-+{
-+	struct timerqueue_node *next;
-+	int err;
-+
-+	if (!rtc || !alarm)
-+		return -EINVAL;
-+
-+	err = mutex_lock_interruptible(&rtc->ops_lock);
-+	if (err)
-+		return err;
-+
-+	next = timerqueue_getnext(&rtc->timerqueue);
-+	if (!next) {
-+		err = -ENOENT;
-+		goto unlock;
+diff --git a/drivers/platform/x86/amd/pmc/pmc.c b/drivers/platform/x86/amd/pmc/pmc.c
+index 50f5784f2aa2e..8cd2db0ccaacd 100644
+--- a/drivers/platform/x86/amd/pmc/pmc.c
++++ b/drivers/platform/x86/amd/pmc/pmc.c
+@@ -595,9 +595,12 @@ static int amd_pmc_verify_czn_rtc(struct amd_pmc_dev *pdev, u32 *arg)
+ 	rtc_device = rtc_class_open("rtc0");
+ 	if (!rtc_device)
+ 		return 0;
+-	rc = rtc_read_alarm(rtc_device, &alarm);
+-	if (rc)
+-		return rc;
++	rc = rtc_read_next_alarm(rtc_device, &alarm);
++	if (rc) {
++		if (rc == -ENOENT)
++			dev_dbg(pdev->dev, "no alarm pending\n");
++		return rc == -ENOENT ? 0 : rc;
 +	}
-+
-+	memset(alarm, 0, sizeof(struct rtc_wkalrm));
-+	alarm->time = rtc_ktime_to_tm(next->expires);
-+	alarm->enabled = 1;
-+
-+unlock:
-+	mutex_unlock(&rtc->ops_lock);
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(rtc_read_next_alarm);
-+
- int rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
- {
- 	int err;
-diff --git a/include/linux/rtc.h b/include/linux/rtc.h
-index 95da051fb155d..c09fc22819d0c 100644
---- a/include/linux/rtc.h
-+++ b/include/linux/rtc.h
-@@ -190,6 +190,8 @@ extern int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm);
- int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
- extern int rtc_read_alarm(struct rtc_device *rtc,
- 			struct rtc_wkalrm *alrm);
-+extern int rtc_read_next_alarm(struct rtc_device *rtc,
-+			       struct rtc_wkalrm *alrm);
- extern int rtc_set_alarm(struct rtc_device *rtc,
- 				struct rtc_wkalrm *alrm);
- extern int rtc_initialize_alarm(struct rtc_device *rtc,
+ 	if (!alarm.enabled) {
+ 		dev_dbg(pdev->dev, "alarm not enabled\n");
+ 		return 0;
 -- 
 2.43.0
 
