@@ -1,154 +1,468 @@
-Return-Path: <linux-rtc+bounces-6569-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6570-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kp80DC71Emqj5gYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6569-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 14:55:10 +0200
+	id YDpdJikVE2q67QYAu9opvQ
+	(envelope-from <linux-rtc+bounces-6570-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 17:11:37 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7201A5C26D7
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 14:55:09 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 464575C2CCA
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 17:11:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D5C203007360
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 12:55:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3E8E6300A603
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 15:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0733955D5;
-	Sun, 24 May 2026 12:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA79399369;
+	Sun, 24 May 2026 15:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5zD2G5M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LMXQD5jB"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CF02D8DBB;
-	Sun, 24 May 2026 12:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFC9397E96
+	for <linux-rtc@vger.kernel.org>; Sun, 24 May 2026 15:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779627306; cv=none; b=M/Y1w/IXsGTnJJX3mVAItOEXsTl1yShr8UYrpcNSmRe5T2zJz51kw7B9onjAzsjjjODmGbw6gitd6YZ7jjPXe4WVD+HDBVDF9JcOidDqwEF1TtY+PjfPT6rTK239QRONMQJ7jV/G//CvumV3oFVUkq39GclXLPmXXfJN4+Ti+M8=
+	t=1779635491; cv=none; b=EtedQFckwMmnlBbgCekByxSYur3jBcNbwMWI/zekZfcRlxOXKGhEwpMCVMs7KY2Z1DDv4B6GAMrbLh8TQBg8b22q7EPkAG8raYVpqT0rKV8hFiJK8z3I7cYn134oOrFPh++Gb4ymfB5wLg9mhY4pc4FgBdsGjV5c4BAURpc5i00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779627306; c=relaxed/simple;
-	bh=2MmTYYmNMdoy9YDoTAuniLeIxG02J7j8NpdTUNIlBN0=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=NwOGEZlThJpFQRlLfrXPdvDR2CaVUAB2/zsmlQVen3GryLGgOfwiEXJQSvE98a6s88jxeE/jY4e3inXVQhKDpT9Rhnhn3xxc+kPSmG/A9EbDKa5SPcffjAD1or7msMDeR64eWzytAgsxp9k9zMWdpsn7r4TPhzK3O61Lx4XphXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5zD2G5M; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 062211F000E9;
-	Sun, 24 May 2026 12:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779627305;
-	bh=JiuDywnm3igzdQQaVPLFAQ64QuF8vXCtXGCdgupz9Ro=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject;
-	b=l5zD2G5MSuD2wRs+oGzjg/O5h57w0+02gobon5o9WMW0CREXLHDjB7sKo6E3RPlP7
-	 MpNK6N8KUypIcWKhum5KjXT87zcFrwMvq5aAetYLYQn/gOoEfSHUOrJbygIG0UXv4N
-	 m9A7/sOfmtNlZvuOvBh+Sl/5PsjOUATrj1Sq48FS54C2kNtblZB2t8xVIa0dh61adk
-	 gKp9CXabFHioesBDOFDabidd/ic6HTQYuvgDlPi2dhgIYFDn2VGxBVdlTnv9aNTpGg
-	 nzRL5ILSuc3XtsS8cbwuVZ3l3dtnWlwEE1E3nZozohh+2hn8zRnj9qh0pr5pXqmb6w
-	 gLmZ8Qvmkip5A==
-Date: Sun, 24 May 2026 07:55:04 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1779635491; c=relaxed/simple;
+	bh=OUtAOVwne9bvsXDe3iQGcZBu/tBOqt/Kf3mXhe2EU1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=skiEbGcuePZSCNB1SBK6AxJVeObhJp8MClkZFp2BdPl7vHHMB3XEBe02USqDyrFA9pD2vGgq2sV/tdGKQuaHR2Php1sJ3Far03n3xIBGANm/P/GqpgX1b0OuQkflYgSAl4QqHOoR+V5k/D/VRcYb6YLCcKSkbkYkf/cekD3g+wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LMXQD5jB; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ba6485d219so67492355ad.3
+        for <linux-rtc@vger.kernel.org>; Sun, 24 May 2026 08:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779635488; x=1780240288; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xx4kXC0gPV4SZPi2HPcoBpfpiipwhrpU54HmKY1vzdQ=;
+        b=LMXQD5jBAWO9D4PrP9aCIDdZ6Lyz4ioyR4kiCuN9+OwQYXfChHQsYkAgg/HtVqgxFE
+         X2inUcvJSd82SnU5DEfEX1J+VlibSPV+JC7ZNrF1BrDb8oWUlm6+iH9UBGUq4tnlnpa5
+         eR/YKGf26iUBuW15CO8MakJW1bMjulpIfQ7IYwnM5JUk59JTZffFFjlxvcxodyXPiKvw
+         ZPsl1jXVCfC5nWu46o34AIussMO/qsWnAXCT2sy3d+/4f93KUoPinw89r2yw0pmAF1bz
+         X4XGvuq+pf/A4iN5pp3VtvLxe14CfkO7CBy+PMd5QOwaNlKzraHGxVpN15JoQWMW4p7E
+         4g+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779635488; x=1780240288;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xx4kXC0gPV4SZPi2HPcoBpfpiipwhrpU54HmKY1vzdQ=;
+        b=UIPVbspFUAz20Nij1a/EdD3fcdP7cb405AsG7nckTnn9DmfpHPs5ahuhq5sfW5CU4U
+         ciP4ZaY4GocBz4HMBJkkNmtNYTmY8EIzkLzXimet2XlX3NfvD87h+avrhg5mP0PgTFyB
+         /rF/+Lc2JC9iDXpD4cM2yBOx+sidoO8kM0Hvb9Zu0BLNr6CbC9qlLUf+2mZ8pLJs4y9m
+         mi+HmnFoB0c2+bQFZXr1rmsjNVwxPpkADFl165tAvOGJQU3g8JfVoQMUOKYagr8wtzPE
+         EV4gN4AoAYvL/YCsEbXGAVecyYxnLA48UV4RkB2Y4FKUCHzx3AcqZlXd5fY9r9/FGMXo
+         g7sw==
+X-Forwarded-Encrypted: i=1; AFNElJ9JEsE3BUw/zwAB0MHyjXqn02jhhEXNNrSugMY+yQg+vMH+pwKtB60XlLGR4CUJsfIVdSJAvTDkqEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIlrM+dUmHy3b/KED65sBKHiDcd6OSJ+rp8G3FxBsLRJffcBr1
+	Ap/fYoOFkTghQ0AV1ycjSC3x1gzoPofv7TnXMGnWlx/DCNRly2nSxBdY
+X-Gm-Gg: Acq92OEGMyJZLX0RkyDtbD98febf3eE0V2tc7EKOP1hCKkmN+qCjicUD/YM0iJCEVcb
+	ubXbtLmDbPIBNyJkKPwA/XpPxdxnqyd8jZntYTwaluOqc+kcpJXnCB1ED6x5C+Kb+0QS2NAE4Ul
+	j/fDBQesFpau50ySqgRSFl7mtrNHAqIrXJ6mWRKTZPPRdAlLSM5+XpvOXrR4Q4qvslcOL8SFp2P
+	fBd9kfiJmSUqoey7bM8GAWnbrDFlxbhsr+Hssg6llXcNZ+SmXdF9sFks9FZaIePUXgZm/xz4PBz
+	Y4JiWf8d0vF3TZKQRY1V5G/FEz9N0Sp/j82nF7aZg6aDlBckYHeTjPvLvoAb5BrA46BOhVCON61
+	NZJRCUYwI4BXLfQdBqI2KMC5hi/oja4DP8rNSQw4Q/nlmTRxOx8zLc/efabVsybJzDq9zznNyqC
+	VHpi4Nugok7jIltkA16jc05hvq81mu9xAZDLB0nA==
+X-Received: by 2002:a17:902:f78b:b0:2bd:7684:34b0 with SMTP id d9443c01a7336-2beb057fd79mr137000465ad.15.1779635487568;
+        Sun, 24 May 2026 08:11:27 -0700 (PDT)
+Received: from ultimate.. ([58.84.60.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb591f63dsm90061775ad.83.2026.05.24.08.11.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 May 2026 08:11:27 -0700 (PDT)
+From: Udaya Kiran Challa <challauday369@gmail.com>
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Udaya Kiran Challa <challauday369@gmail.com>
+Subject: [PATCH v4] dt-bindings: clock: via,vt8500: Convert to DT Schema
+Date: Sun, 24 May 2026 20:40:26 +0530
+Message-ID: <20260524151110.21277-1-challauday369@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: mturquette@baylibre.com, conor+dt@kernel.org, krzk+dt@kernel.org, 
- linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
- devicetree@vger.kernel.org, sboyd@kernel.org, linux-rtc@vger.kernel.org, 
- me@brighamcampbell.com
-To: Udaya Kiran Challa <challauday369@gmail.com>
-In-Reply-To: <20260524111813.39810-1-challauday369@gmail.com>
-References: <20260524111813.39810-1-challauday369@gmail.com>
-Message-Id: <177962730423.2180503.17189385178806268512.robh@kernel.org>
-Subject: Re: [PATCH v3] dt-bindings: clock: via,vt8500: Convert to DT
- Schema
-X-Spamd-Result: default: False [0.34 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6569-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.997];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,brighamcampbell.com,vger.kernel.org,gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6570-lists,linux-rtc=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 7201A5C26D7
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	NEURAL_HAM(-0.00)[-0.998];
+	DBL_PROHIBIT(0.00)[0.0.0.200:email,0.0.0.204:email];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,devicetree.org:url]
+X-Rspamd-Queue-Id: 464575C2CCA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Convert the VIA/Wondermedia VT8500 and Wondermedia WM8xxx series SoCs clock
+controller binding from the legacy text format to DT schema.
 
-On Sun, 24 May 2026 16:47:57 +0530, Udaya Kiran Challa wrote:
-> Convert the VIA/Wondermedia VT8500 and Wondermedia WM8xxx series SoCs clock
-> controller binding from the legacy text format to DT schema.
-> 
-> Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
-> ---
-> Changelog:
-> Changes since v2:
-> - Drop redundant description for clocks
-> - Disable reg property for device clocks
-> - Fix schema hierarchy to match actual DTS structure
-> 
-> Link to v2:https://lore.kernel.org/all/20260521170810.19702-1-challauday369@gmail.com/
-> 
-> Changes since v1:
-> - Add default value for divisor-mask
-> - Add required properties compatible and model
-> - Fix example node name
-> - Update example size cells and reg value
-> 
-> Link to v1:https://lore.kernel.org/all/20260520025131.17772-1-challauday369@gmail.com/
-> ---
->  .../bindings/clock/via,vt8500-clock.yaml      | 179 ++++++++++++++++++
->  .../devicetree/bindings/clock/vt8500.txt      |  74 --------
->  2 files changed, 179 insertions(+), 74 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
->  delete mode 100644 Documentation/devicetree/bindings/clock/vt8500.txt
-> 
+Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
+---
+Changelog:
+Changes since v3
+- Add schema select matching for via,vt8500-pmc
+- Allow hyphen in node names under patternProperties
+- Add dependentRequired validation for enable-reg/enable-bit
+- Fix example validation against PMC schema
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Link to v3:https://lore.kernel.org/all/20260524111813.39810-1-challauday369@gmail.com/
 
-yamllint warnings/errors:
+Changes since v2:
+- Drop redundant description for clocks
+- Disable reg property for device clocks
+- Fix schema hierarchy to match actual DTS structure
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/clock/via,vt8500-clock.example.dtb: /example-0/pmc@d8130000: failed to match any schema with compatible: ['via,vt8500-pmc']
+Link to v2:https://lore.kernel.org/all/20260521170810.19702-1-challauday369@gmail.com/
 
-doc reference errors (make refcheckdocs):
+Changes since v1:
+- Add default value for divisor-mask
+- Add required properties compatible and model
+- Fix example node name
+- Update example size cells and reg value
 
-See https://patchwork.kernel.org/project/devicetree/patch/20260524111813.39810-1-challauday369@gmail.com
+Link to v1:https://lore.kernel.org/all/20260520025131.17772-1-challauday369@gmail.com/
+---
+ .../bindings/clock/via,vt8500-clock.yaml      | 209 ++++++++++++++++++
+ .../devicetree/bindings/clock/vt8500.txt      |  74 -------
+ 2 files changed, 209 insertions(+), 74 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/vt8500.txt
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml b/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
+new file mode 100644
+index 000000000000..51a68df6c2f3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
+@@ -0,0 +1,209 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/via,vt8500-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: VIA/Wondermedia VT8500 Clock Controller
++
++maintainers:
++  - Michael Turquette <mturquette@baylibre.com>
++  - Stephen Boyd <sboyd@kernel.org>
++
++description:
++  Clock controller bindings for VIA/Wondermedia VT8500 and Wondermedia WM8xxx
++  series SoCs.
++
++select:
++  properties:
++    compatible:
++      const: via,vt8500-pmc
++
++  required:
++    - compatible
++
++properties:
++  compatible:
++    const: via,vt8500-pmc
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    type: object
++    additionalProperties: true
++
++    properties:
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++    required:
++      - "#address-cells"
++      - "#size-cells"
++
++    patternProperties:
++      "^[a-z0-9-]+(@[0-9a-f]+)?$":
++        type: object
++
++        properties:
++          compatible:
++            enum:
++              - via,vt8500-pll-clock
++              - wm,wm8650-pll-clock
++              - wm,wm8750-pll-clock
++              - wm,wm8850-pll-clock
++              - via,vt8500-device-clock
++
++          reg:
++            maxItems: 1
++            description:
++              Offset of the PLL register within the PMC register space.
++
++          clocks:
++            maxItems: 1
++
++          "#clock-cells":
++            const: 0
++
++          enable-reg:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description:
++              Offset of the clock enable register within the PMC
++              register space.
++
++          enable-bit:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            maximum: 31
++            description:
++              Bit index controlling clock enable.
++
++          divisor-reg:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            description:
++              Offset of the clock divisor register within the PMC
++              register space.
++
++          divisor-mask:
++            $ref: /schemas/types.yaml#/definitions/uint32
++            default: 0x1f
++            description:
++              Bitmask describing the divisor field inside divisor-reg.
++
++        dependentRequired:
++          enable-reg:
++            - enable-bit
++
++          enable-bit:
++            - enable-reg
++
++        required:
++          - compatible
++          - "#clock-cells"
++
++        allOf:
++          - if:
++              properties:
++                compatible:
++                  enum:
++                    - via,vt8500-pll-clock
++                    - wm,wm8650-pll-clock
++                    - wm,wm8750-pll-clock
++                    - wm,wm8850-pll-clock
++            then:
++              required:
++                - reg
++                - clocks
++
++          - if:
++              properties:
++                compatible:
++                  const: via,vt8500-device-clock
++            then:
++              properties:
++                reg: false
++
++              required:
++                - clocks
++
++              anyOf:
++                - required:
++                    - enable-reg
++                    - enable-bit
++
++                - required:
++                    - divisor-reg
++
++        additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    pmc@d8130000 {
++        compatible = "via,vt8500-pmc";
++        reg = <0xd8130000 0x1000>;
++
++        clocks {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            ref24: ref24M {
++                compatible = "fixed-clock";
++                #clock-cells = <0>;
++                clock-frequency = <24000000>;
++            };
++
++            ref25: ref25M {
++                compatible = "fixed-clock";
++                #clock-cells = <0>;
++                clock-frequency = <25000000>;
++            };
++
++            plla: clock@200 {
++                compatible = "wm,wm8650-pll-clock";
++                #clock-cells = <0>;
++                clocks = <&ref25>;
++                reg = <0x200>;
++            };
++
++            pllb: clock@204 {
++                compatible = "wm,wm8650-pll-clock";
++                #clock-cells = <0>;
++                clocks = <&ref25>;
++                reg = <0x204>;
++            };
++
++            clkarm: arm {
++                compatible = "via,vt8500-device-clock";
++                #clock-cells = <0>;
++                clocks = <&plla>;
++                divisor-reg = <0x300>;
++            };
++
++            clkuart0: uart0 {
++                compatible = "via,vt8500-device-clock";
++                #clock-cells = <0>;
++                clocks = <&ref24>;
++                enable-reg = <0x250>;
++                enable-bit = <1>;
++            };
++
++            clksdhc: sdhc {
++                compatible = "via,vt8500-device-clock";
++                #clock-cells = <0>;
++                clocks = <&pllb>;
++                divisor-reg = <0x328>;
++                divisor-mask = <0x3f>;
++                enable-reg = <0x254>;
++                enable-bit = <18>;
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/clock/vt8500.txt b/Documentation/devicetree/bindings/clock/vt8500.txt
+deleted file mode 100644
+index 91d71cc0314a..000000000000
+--- a/Documentation/devicetree/bindings/clock/vt8500.txt
++++ /dev/null
+@@ -1,74 +0,0 @@
+-Device Tree Clock bindings for arch-vt8500
+-
+-This binding uses the common clock binding[1].
+-
+-[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+-
+-Required properties:
+-- compatible : shall be one of the following:
+-	"via,vt8500-pll-clock" - for a VT8500/WM8505 PLL clock
+-	"wm,wm8650-pll-clock" - for a WM8650 PLL clock
+-	"wm,wm8750-pll-clock" - for a WM8750 PLL clock
+-	"wm,wm8850-pll-clock" - for a WM8850 PLL clock
+-	"via,vt8500-device-clock" - for a VT/WM device clock
+-
+-Required properties for PLL clocks:
+-- reg : shall be the control register offset from PMC base for the pll clock.
+-- clocks : shall be the input parent clock phandle for the clock. This should
+-	be the reference clock.
+-- #clock-cells : from common clock binding; shall be set to 0.
+-
+-Required properties for device clocks:
+-- clocks : shall be the input parent clock phandle for the clock. This should
+-	be a pll output.
+-- #clock-cells : from common clock binding; shall be set to 0.
+-
+-
+-Device Clocks
+-
+-Device clocks are required to have one or both of the following sets of
+-properties:
+-
+-
+-Gated device clocks:
+-
+-Required properties:
+-- enable-reg : shall be the register offset from PMC base for the enable
+-	register.
+-- enable-bit : shall be the bit within enable-reg to enable/disable the clock.
+-
+-
+-Divisor device clocks:
+-
+-Required property:
+-- divisor-reg : shall be the register offset from PMC base for the divisor
+-	register.
+-Optional property:
+-- divisor-mask : shall be the mask for the divisor register. Defaults to 0x1f
+-	if not specified.
+-
+-
+-For example:
+-
+-ref25: ref25M {
+-	#clock-cells = <0>;
+-	compatible = "fixed-clock";
+-	clock-frequency = <25000000>;
+-};
+-
+-plla: plla {
+-	#clock-cells = <0>;
+-	compatible = "wm,wm8650-pll-clock";
+-	clocks = <&ref25>;
+-	reg = <0x200>;
+-};
+-
+-sdhc: sdhc {
+-	#clock-cells = <0>;
+-	compatible = "via,vt8500-device-clock";
+-	clocks = <&pllb>;
+-	divisor-reg = <0x328>;
+-	divisor-mask = <0x3f>;
+-	enable-reg = <0x254>;
+-	enable-bit = <18>;
+-};
+-- 
+2.43.0
 
 
