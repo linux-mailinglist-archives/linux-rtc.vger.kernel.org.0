@@ -1,95 +1,107 @@
-Return-Path: <linux-rtc+bounces-6570-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6571-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YDpdJikVE2q67QYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6570-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 17:11:37 +0200
+	id mFW8FMMFFGpSIwcAu9opvQ
+	(envelope-from <linux-rtc+bounces-6571-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 May 2026 10:18:11 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 464575C2CCA
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 17:11:36 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1234C5C7929
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 May 2026 10:18:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3E8E6300A603
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 May 2026 15:11:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3265030158BC
+	for <lists+linux-rtc@lfdr.de>; Mon, 25 May 2026 08:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA79399369;
-	Sun, 24 May 2026 15:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A923DB994;
+	Mon, 25 May 2026 08:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LMXQD5jB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2D5s7BR"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFC9397E96
-	for <linux-rtc@vger.kernel.org>; Sun, 24 May 2026 15:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBF326D4E5
+	for <linux-rtc@vger.kernel.org>; Mon, 25 May 2026 08:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779635491; cv=none; b=EtedQFckwMmnlBbgCekByxSYur3jBcNbwMWI/zekZfcRlxOXKGhEwpMCVMs7KY2Z1DDv4B6GAMrbLh8TQBg8b22q7EPkAG8raYVpqT0rKV8hFiJK8z3I7cYn134oOrFPh++Gb4ymfB5wLg9mhY4pc4FgBdsGjV5c4BAURpc5i00=
+	t=1779697086; cv=none; b=RkMvSwtQ/yqKC1tq6u9oTJ0KBMiy1VsRR5fappzRMoniI0VyUo4UommVpFoeqj36MrjodU9mwLZ94dPAvILQ7BsU+pTkbSvgZv/T01QmyI1nHjyO448AdRZS7WRcgQO4BXRpXEhZVoYIrXfV2jTwJzcegKyoZFr2z7h0nmRsir8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779635491; c=relaxed/simple;
-	bh=OUtAOVwne9bvsXDe3iQGcZBu/tBOqt/Kf3mXhe2EU1E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=skiEbGcuePZSCNB1SBK6AxJVeObhJp8MClkZFp2BdPl7vHHMB3XEBe02USqDyrFA9pD2vGgq2sV/tdGKQuaHR2Php1sJ3Far03n3xIBGANm/P/GqpgX1b0OuQkflYgSAl4QqHOoR+V5k/D/VRcYb6YLCcKSkbkYkf/cekD3g+wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LMXQD5jB; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1779697086; c=relaxed/simple;
+	bh=2EmRJVOu9kxZujWs9EHUsfBKTk0WixSaolqBsSe+3cw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=S0BVqOEKfdFOVo7b4ksV6Lvp9nShTyMvILPUpCMd2DhZgtXW8z5oz9UCezA/dU/34og6g64NPJrIKEkiRMBXxehpsFRPkUyqLNDI4IhA2835wkDCqcQLzI5phpfPvaKgHWgaSsv8KswLDt85KdRiavLzG8lOXS5CfWASQSNqVTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i2D5s7BR; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ba6485d219so67492355ad.3
-        for <linux-rtc@vger.kernel.org>; Sun, 24 May 2026 08:11:28 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36abfe17c11so1149635a91.0
+        for <linux-rtc@vger.kernel.org>; Mon, 25 May 2026 01:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779635488; x=1780240288; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xx4kXC0gPV4SZPi2HPcoBpfpiipwhrpU54HmKY1vzdQ=;
-        b=LMXQD5jBAWO9D4PrP9aCIDdZ6Lyz4ioyR4kiCuN9+OwQYXfChHQsYkAgg/HtVqgxFE
-         X2inUcvJSd82SnU5DEfEX1J+VlibSPV+JC7ZNrF1BrDb8oWUlm6+iH9UBGUq4tnlnpa5
-         eR/YKGf26iUBuW15CO8MakJW1bMjulpIfQ7IYwnM5JUk59JTZffFFjlxvcxodyXPiKvw
-         ZPsl1jXVCfC5nWu46o34AIussMO/qsWnAXCT2sy3d+/4f93KUoPinw89r2yw0pmAF1bz
-         X4XGvuq+pf/A4iN5pp3VtvLxe14CfkO7CBy+PMd5QOwaNlKzraHGxVpN15JoQWMW4p7E
-         4g+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779635488; x=1780240288;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779697083; x=1780301883; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xx4kXC0gPV4SZPi2HPcoBpfpiipwhrpU54HmKY1vzdQ=;
-        b=UIPVbspFUAz20Nij1a/EdD3fcdP7cb405AsG7nckTnn9DmfpHPs5ahuhq5sfW5CU4U
-         ciP4ZaY4GocBz4HMBJkkNmtNYTmY8EIzkLzXimet2XlX3NfvD87h+avrhg5mP0PgTFyB
-         /rF/+Lc2JC9iDXpD4cM2yBOx+sidoO8kM0Hvb9Zu0BLNr6CbC9qlLUf+2mZ8pLJs4y9m
-         mi+HmnFoB0c2+bQFZXr1rmsjNVwxPpkADFl165tAvOGJQU3g8JfVoQMUOKYagr8wtzPE
-         EV4gN4AoAYvL/YCsEbXGAVecyYxnLA48UV4RkB2Y4FKUCHzx3AcqZlXd5fY9r9/FGMXo
-         g7sw==
-X-Forwarded-Encrypted: i=1; AFNElJ9JEsE3BUw/zwAB0MHyjXqn02jhhEXNNrSugMY+yQg+vMH+pwKtB60XlLGR4CUJsfIVdSJAvTDkqEk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIlrM+dUmHy3b/KED65sBKHiDcd6OSJ+rp8G3FxBsLRJffcBr1
-	Ap/fYoOFkTghQ0AV1ycjSC3x1gzoPofv7TnXMGnWlx/DCNRly2nSxBdY
-X-Gm-Gg: Acq92OEGMyJZLX0RkyDtbD98febf3eE0V2tc7EKOP1hCKkmN+qCjicUD/YM0iJCEVcb
-	ubXbtLmDbPIBNyJkKPwA/XpPxdxnqyd8jZntYTwaluOqc+kcpJXnCB1ED6x5C+Kb+0QS2NAE4Ul
-	j/fDBQesFpau50ySqgRSFl7mtrNHAqIrXJ6mWRKTZPPRdAlLSM5+XpvOXrR4Q4qvslcOL8SFp2P
-	fBd9kfiJmSUqoey7bM8GAWnbrDFlxbhsr+Hssg6llXcNZ+SmXdF9sFks9FZaIePUXgZm/xz4PBz
-	Y4JiWf8d0vF3TZKQRY1V5G/FEz9N0Sp/j82nF7aZg6aDlBckYHeTjPvLvoAb5BrA46BOhVCON61
-	NZJRCUYwI4BXLfQdBqI2KMC5hi/oja4DP8rNSQw4Q/nlmTRxOx8zLc/efabVsybJzDq9zznNyqC
-	VHpi4Nugok7jIltkA16jc05hvq81mu9xAZDLB0nA==
-X-Received: by 2002:a17:902:f78b:b0:2bd:7684:34b0 with SMTP id d9443c01a7336-2beb057fd79mr137000465ad.15.1779635487568;
-        Sun, 24 May 2026 08:11:27 -0700 (PDT)
-Received: from ultimate.. ([58.84.60.222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb591f63dsm90061775ad.83.2026.05.24.08.11.23
+        bh=Dc4O5/kSgHyWkY3Qo5dJGWH4VWfSLL8bPtdDsIJFGxs=;
+        b=i2D5s7BRJpcTb8H4a2tfRzC1PkmLFikC/gQNEOWlJMtpBNxSBiyUstqNqEmoVCC1Rl
+         7bRFbG5vXwxY7+5Ec2TTfYAP2uEm1Swf1kXCoixwkmJjlOBCcRNYQgr740yENfKUEcdh
+         c8VlBxDJbBjThI8SPAh5mDIegj+VHtdrPqer9xqSL3rQLWeTSOMInK7NYcwcuwCvTHLA
+         H+AVxQW/eNLwyR6KJMANVRiuJB7LPiFC9l+7w/gDy6+0asfUNwvXVlWKob2pFBUgv98L
+         4qyfu6R86SVSi2x19VnXw+0nJr9TXspQ2z8XJm63mxMi1AD5cZWKkNuhqWtAQAy5lq7/
+         Es9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779697083; x=1780301883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Dc4O5/kSgHyWkY3Qo5dJGWH4VWfSLL8bPtdDsIJFGxs=;
+        b=igLTVMMsP4yehNGAk7z0K7hmITQGjhDGTjeXA8YP+XNMUodHJFxqEKcYmY2x5CqRqi
+         3MfwlnoqdA6nQBaC34U/x4C3r/oa5ez0kF/1KHLPHZKFpDz1sZ5+XqiCZjBWws8wwCc9
+         3c5sXeo5Qr9o/1+nurCb+2IeUt2yqC/piUvD9kveGEkC59KyfoOPzPTgYG7uCjAu/TAQ
+         8PTTABV4CdLl/Mx1EwZTjtR6rrml28BnEprEl1BR9LtjNjEwv1bmxNlZH7sYsYKqw93C
+         bMRv6HbslcBSoFKY/c1ojRTkZNa3WXgIImkUUfu6qCYIYB84caCLsilXHq4vJUPSneZt
+         VMTw==
+X-Forwarded-Encrypted: i=1; AFNElJ/y2tDEpyIo90TJds1yYQumUXTAHI0bLB98q9B8MbGT/e2XR52OniBfLTwwA0x6/PKicjhjvI0xKkY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqP13Ezzk5qhhqkPNk92UI9aQtSV4nU8HunHO8d0rly2szZd2W
+	DY5cbRRKRepMICPNas8WlS29WYVSh9mWekenLk3zPV3fB5a3eKvpOKA7z9Tn8g==
+X-Gm-Gg: Acq92OGxfKbyYJ2CvaVzaiaccZIG4Ftm5iboqldV995FaXZ0YttCyRclYt94e4R9wK1
+	JOtHzkASyC/NHxJ+2fcoVU45XZ/lV1tJBw82eeW5gyPX20BNPK3PSpw5gohMAhP0cZo5k5eYhcK
+	h3LxBOFzC9H4k4VJ9vPjc7GhvmByFramemlqoCbqYNISvEElwtR2Dt8KxRvbEOORkPyslZtpqGU
+	D1NFd88bpnjKPSjuS9+VBl2KcxXiOXeKRw0LcEQp+nPeXTruuyk+2ldajU+bYe2USjhZ89R+tEb
+	ESAwmqZkpZMliDMLz5Dz7v8MBicrEd8ju/KdqLmjTHTl9zuMPm82xbvkQsLmJPDbY3BxVlw19M0
+	FfkInMsc7vZcNZe+nPrblF9jJLA2YxZj7FSqeeWxObag2PVmHkcgdKCNH16n93sitUeVKgYOJzE
+	Xg5bEXnmZwWJVLZlUcSL3L7/hM1rqPwK2qa+cBdw4ZntEktWt1LQihkbYJfCfDFHxj1tXluPN7c
+	Q6L
+X-Received: by 2002:a17:90b:3a10:b0:369:a359:b192 with SMTP id 98e67ed59e1d1-36a67475b45mr12807202a91.10.1779697082704;
+        Mon, 25 May 2026 01:18:02 -0700 (PDT)
+Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36a721c7cf9sm8964102a91.10.2026.05.25.01.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 May 2026 08:11:27 -0700 (PDT)
-From: Udaya Kiran Challa <challauday369@gmail.com>
-To: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
-	linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
+        Mon, 25 May 2026 01:18:02 -0700 (PDT)
+From: a0282524688@gmail.com
+To: Ming Yu <tmyu0@nuvoton.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Lee Jones <lee@kernel.org>
+Cc: Ming Yu <a0282524688@gmail.com>,
+	linux-gpio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Udaya Kiran Challa <challauday369@gmail.com>
-Subject: [PATCH v4] dt-bindings: clock: via,vt8500: Convert to DT Schema
-Date: Sun, 24 May 2026 20:40:26 +0530
-Message-ID: <20260524151110.21277-1-challauday369@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH v5 1/7] mfd: nct6694: Move module type macros to shared header
+Date: Mon, 25 May 2026 16:17:30 +0800
+Message-Id: <20260525081736.2904310-2-a0282524688@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260525081736.2904310-1-a0282524688@gmail.com>
+References: <20260525081736.2904310-1-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -99,370 +111,218 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linuxfoundation.org,brighamcampbell.com,vger.kernel.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6570-lists,linux-rtc=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	NEURAL_HAM(-0.00)[-0.998];
-	DBL_PROHIBIT(0.00)[0.0.0.200:email,0.0.0.204:email];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-6571-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[a0282524688@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	NEURAL_HAM(-0.00)[-0.997];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,devicetree.org:url]
-X-Rspamd-Queue-Id: 464575C2CCA
+	TAGGED_RCPT(0.00)[linux-rtc];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 1234C5C7929
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Convert the VIA/Wondermedia VT8500 and Wondermedia WM8xxx series SoCs clock
-controller binding from the legacy text format to DT schema.
+From: Ming Yu <a0282524688@gmail.com>
 
-Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
+Move NCT6694_XXX_MOD  macro definitions from individual sub-device
+drivers into the shared header include/linux/mfd/nct6694.h.
+
+This is a prerequisite for supporting multiple transport interfaces
+(USB, HIF) without duplicating these definitions.
+
+No functional change.
+
+Signed-off-by: Ming Yu <a0282524688@gmail.com>
 ---
-Changelog:
-Changes since v3
-- Add schema select matching for via,vt8500-pmc
-- Allow hyphen in node names under patternProperties
-- Add dependentRequired validation for enable-reg/enable-bit
-- Fix example validation against PMC schema
+Changes in v5:
+- Split from the monolithic v4 patch to follow the single logical change principle.
 
-Link to v3:https://lore.kernel.org/all/20260524111813.39810-1-challauday369@gmail.com/
+ drivers/gpio/gpio-nct6694.c         |  7 -------
+ drivers/hwmon/nct6694-hwmon.c       | 21 ---------------------
+ drivers/i2c/busses/i2c-nct6694.c    |  7 -------
+ drivers/net/can/usb/nct6694_canfd.c |  6 ------
+ drivers/rtc/rtc-nct6694.c           |  7 -------
+ drivers/watchdog/nct6694_wdt.c      |  7 -------
+ include/linux/mfd/nct6694.h         |  9 +++++++++
+ 7 files changed, 9 insertions(+), 55 deletions(-)
 
-Changes since v2:
-- Drop redundant description for clocks
-- Disable reg property for device clocks
-- Fix schema hierarchy to match actual DTS structure
-
-Link to v2:https://lore.kernel.org/all/20260521170810.19702-1-challauday369@gmail.com/
-
-Changes since v1:
-- Add default value for divisor-mask
-- Add required properties compatible and model
-- Fix example node name
-- Update example size cells and reg value
-
-Link to v1:https://lore.kernel.org/all/20260520025131.17772-1-challauday369@gmail.com/
----
- .../bindings/clock/via,vt8500-clock.yaml      | 209 ++++++++++++++++++
- .../devicetree/bindings/clock/vt8500.txt      |  74 -------
- 2 files changed, 209 insertions(+), 74 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/vt8500.txt
-
-diff --git a/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml b/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
-new file mode 100644
-index 000000000000..51a68df6c2f3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
-@@ -0,0 +1,209 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/via,vt8500-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: VIA/Wondermedia VT8500 Clock Controller
-+
-+maintainers:
-+  - Michael Turquette <mturquette@baylibre.com>
-+  - Stephen Boyd <sboyd@kernel.org>
-+
-+description:
-+  Clock controller bindings for VIA/Wondermedia VT8500 and Wondermedia WM8xxx
-+  series SoCs.
-+
-+select:
-+  properties:
-+    compatible:
-+      const: via,vt8500-pmc
-+
-+  required:
-+    - compatible
-+
-+properties:
-+  compatible:
-+    const: via,vt8500-pmc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    type: object
-+    additionalProperties: true
-+
-+    properties:
-+      "#address-cells":
-+        const: 1
-+
-+      "#size-cells":
-+        const: 0
-+
-+    required:
-+      - "#address-cells"
-+      - "#size-cells"
-+
-+    patternProperties:
-+      "^[a-z0-9-]+(@[0-9a-f]+)?$":
-+        type: object
-+
-+        properties:
-+          compatible:
-+            enum:
-+              - via,vt8500-pll-clock
-+              - wm,wm8650-pll-clock
-+              - wm,wm8750-pll-clock
-+              - wm,wm8850-pll-clock
-+              - via,vt8500-device-clock
-+
-+          reg:
-+            maxItems: 1
-+            description:
-+              Offset of the PLL register within the PMC register space.
-+
-+          clocks:
-+            maxItems: 1
-+
-+          "#clock-cells":
-+            const: 0
-+
-+          enable-reg:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description:
-+              Offset of the clock enable register within the PMC
-+              register space.
-+
-+          enable-bit:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            maximum: 31
-+            description:
-+              Bit index controlling clock enable.
-+
-+          divisor-reg:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            description:
-+              Offset of the clock divisor register within the PMC
-+              register space.
-+
-+          divisor-mask:
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            default: 0x1f
-+            description:
-+              Bitmask describing the divisor field inside divisor-reg.
-+
-+        dependentRequired:
-+          enable-reg:
-+            - enable-bit
-+
-+          enable-bit:
-+            - enable-reg
-+
-+        required:
-+          - compatible
-+          - "#clock-cells"
-+
-+        allOf:
-+          - if:
-+              properties:
-+                compatible:
-+                  enum:
-+                    - via,vt8500-pll-clock
-+                    - wm,wm8650-pll-clock
-+                    - wm,wm8750-pll-clock
-+                    - wm,wm8850-pll-clock
-+            then:
-+              required:
-+                - reg
-+                - clocks
-+
-+          - if:
-+              properties:
-+                compatible:
-+                  const: via,vt8500-device-clock
-+            then:
-+              properties:
-+                reg: false
-+
-+              required:
-+                - clocks
-+
-+              anyOf:
-+                - required:
-+                    - enable-reg
-+                    - enable-bit
-+
-+                - required:
-+                    - divisor-reg
-+
-+        additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    pmc@d8130000 {
-+        compatible = "via,vt8500-pmc";
-+        reg = <0xd8130000 0x1000>;
-+
-+        clocks {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            ref24: ref24M {
-+                compatible = "fixed-clock";
-+                #clock-cells = <0>;
-+                clock-frequency = <24000000>;
-+            };
-+
-+            ref25: ref25M {
-+                compatible = "fixed-clock";
-+                #clock-cells = <0>;
-+                clock-frequency = <25000000>;
-+            };
-+
-+            plla: clock@200 {
-+                compatible = "wm,wm8650-pll-clock";
-+                #clock-cells = <0>;
-+                clocks = <&ref25>;
-+                reg = <0x200>;
-+            };
-+
-+            pllb: clock@204 {
-+                compatible = "wm,wm8650-pll-clock";
-+                #clock-cells = <0>;
-+                clocks = <&ref25>;
-+                reg = <0x204>;
-+            };
-+
-+            clkarm: arm {
-+                compatible = "via,vt8500-device-clock";
-+                #clock-cells = <0>;
-+                clocks = <&plla>;
-+                divisor-reg = <0x300>;
-+            };
-+
-+            clkuart0: uart0 {
-+                compatible = "via,vt8500-device-clock";
-+                #clock-cells = <0>;
-+                clocks = <&ref24>;
-+                enable-reg = <0x250>;
-+                enable-bit = <1>;
-+            };
-+
-+            clksdhc: sdhc {
-+                compatible = "via,vt8500-device-clock";
-+                #clock-cells = <0>;
-+                clocks = <&pllb>;
-+                divisor-reg = <0x328>;
-+                divisor-mask = <0x3f>;
-+                enable-reg = <0x254>;
-+                enable-bit = <18>;
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/clock/vt8500.txt b/Documentation/devicetree/bindings/clock/vt8500.txt
-deleted file mode 100644
-index 91d71cc0314a..000000000000
---- a/Documentation/devicetree/bindings/clock/vt8500.txt
-+++ /dev/null
-@@ -1,74 +0,0 @@
--Device Tree Clock bindings for arch-vt8500
+diff --git a/drivers/gpio/gpio-nct6694.c b/drivers/gpio/gpio-nct6694.c
+index a8607f0d9915..53bfc5983648 100644
+--- a/drivers/gpio/gpio-nct6694.c
++++ b/drivers/gpio/gpio-nct6694.c
+@@ -13,13 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 GPIO controller.
+- * This defines the module type used for communication with the NCT6694
+- * GPIO controller over the USB interface.
+- */
+-#define NCT6694_GPIO_MOD	0xFF
 -
--This binding uses the common clock binding[1].
+ #define NCT6694_GPIO_VER	0x90
+ #define NCT6694_GPIO_VALID	0x110
+ #define NCT6694_GPI_DATA	0x120
+diff --git a/drivers/hwmon/nct6694-hwmon.c b/drivers/hwmon/nct6694-hwmon.c
+index 6dcf22ca5018..581451875f2c 100644
+--- a/drivers/hwmon/nct6694-hwmon.c
++++ b/drivers/hwmon/nct6694-hwmon.c
+@@ -15,13 +15,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 report channel
+- * This defines the module type used for communication with the NCT6694
+- * report channel over the USB interface.
+- */
+-#define NCT6694_RPT_MOD			0xFF
 -
--[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+ /* Report channel */
+ /*
+  * The report channel is used to report the status of the hardware monitor
+@@ -38,13 +31,6 @@
+ #define NCT6694_TIN_STS(x)		(0x6A + (x))
+ #define NCT6694_FIN_STS(x)		(0x6E + (x))
+ 
+-/*
+- * USB command module type for NCT6694 HWMON controller.
+- * This defines the module type used for communication with the NCT6694
+- * HWMON controller over the USB interface.
+- */
+-#define NCT6694_HWMON_MOD		0x00
 -
--Required properties:
--- compatible : shall be one of the following:
--	"via,vt8500-pll-clock" - for a VT8500/WM8505 PLL clock
--	"wm,wm8650-pll-clock" - for a WM8650 PLL clock
--	"wm,wm8750-pll-clock" - for a WM8750 PLL clock
--	"wm,wm8850-pll-clock" - for a WM8850 PLL clock
--	"via,vt8500-device-clock" - for a VT/WM device clock
+ /* Command 00h - Hardware Monitor Control */
+ #define NCT6694_HWMON_CONTROL		0x00
+ #define NCT6694_HWMON_CONTROL_SEL	0x00
+@@ -53,13 +39,6 @@
+ #define NCT6694_HWMON_ALARM		0x02
+ #define NCT6694_HWMON_ALARM_SEL		0x00
+ 
+-/*
+- * USB command module type for NCT6694 PWM controller.
+- * This defines the module type used for communication with the NCT6694
+- * PWM controller over the USB interface.
+- */
+-#define NCT6694_PWM_MOD			0x01
 -
--Required properties for PLL clocks:
--- reg : shall be the control register offset from PMC base for the pll clock.
--- clocks : shall be the input parent clock phandle for the clock. This should
--	be the reference clock.
--- #clock-cells : from common clock binding; shall be set to 0.
+ /* PWM Command - Manual Control */
+ #define NCT6694_PWM_CONTROL		0x01
+ #define NCT6694_PWM_CONTROL_SEL		0x00
+diff --git a/drivers/i2c/busses/i2c-nct6694.c b/drivers/i2c/busses/i2c-nct6694.c
+index 1413ab6f9462..ef3329f34246 100644
+--- a/drivers/i2c/busses/i2c-nct6694.c
++++ b/drivers/i2c/busses/i2c-nct6694.c
+@@ -12,13 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ 
+-/*
+- * USB command module type for NCT6694 I2C controller.
+- * This defines the module type used for communication with the NCT6694
+- * I2C controller over the USB interface.
+- */
+-#define NCT6694_I2C_MOD			0x03
 -
--Required properties for device clocks:
--- clocks : shall be the input parent clock phandle for the clock. This should
--	be a pll output.
--- #clock-cells : from common clock binding; shall be set to 0.
+ /* Command 00h - I2C Deliver */
+ #define NCT6694_I2C_DELIVER		0x00
+ #define NCT6694_I2C_DELIVER_SEL		0x00
+diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+index e5f7f8849a73..262b4c26c9d4 100644
+--- a/drivers/net/can/usb/nct6694_canfd.c
++++ b/drivers/net/can/usb/nct6694_canfd.c
+@@ -18,12 +18,6 @@
+ 
+ #define DEVICE_NAME "nct6694-canfd"
+ 
+-/* USB command module type for NCT6694 CANfd controller.
+- * This defines the module type used for communication with the NCT6694
+- * CANfd controller over the USB interface.
+- */
+-#define NCT6694_CANFD_MOD			0x05
 -
+ /* Command 00h - CAN Setting and Initialization */
+ #define NCT6694_CANFD_SETTING			0x00
+ #define NCT6694_CANFD_SETTING_ACTIVE_CTRL1	BIT(0)
+diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
+index 35401a0d9cf5..c06902f150c9 100644
+--- a/drivers/rtc/rtc-nct6694.c
++++ b/drivers/rtc/rtc-nct6694.c
+@@ -14,13 +14,6 @@
+ #include <linux/rtc.h>
+ #include <linux/slab.h>
+ 
+-/*
+- * USB command module type for NCT6694 RTC controller.
+- * This defines the module type used for communication with the NCT6694
+- * RTC controller over the USB interface.
+- */
+-#define NCT6694_RTC_MOD		0x08
 -
--Device Clocks
+ /* Command 00h - RTC Time */
+ #define NCT6694_RTC_TIME	0x0000
+ #define NCT6694_RTC_TIME_SEL	0x00
+diff --git a/drivers/watchdog/nct6694_wdt.c b/drivers/watchdog/nct6694_wdt.c
+index bc3689bd4b6b..4c06ac105562 100644
+--- a/drivers/watchdog/nct6694_wdt.c
++++ b/drivers/watchdog/nct6694_wdt.c
+@@ -20,13 +20,6 @@
+ 
+ #define NCT6694_WDT_MAX_DEVS		2
+ 
+-/*
+- * USB command module type for NCT6694 WDT controller.
+- * This defines the module type used for communication with the NCT6694
+- * WDT controller over the USB interface.
+- */
+-#define NCT6694_WDT_MOD			0x07
 -
--Device clocks are required to have one or both of the following sets of
--properties:
--
--
--Gated device clocks:
--
--Required properties:
--- enable-reg : shall be the register offset from PMC base for the enable
--	register.
--- enable-bit : shall be the bit within enable-reg to enable/disable the clock.
--
--
--Divisor device clocks:
--
--Required property:
--- divisor-reg : shall be the register offset from PMC base for the divisor
--	register.
--Optional property:
--- divisor-mask : shall be the mask for the divisor register. Defaults to 0x1f
--	if not specified.
--
--
--For example:
--
--ref25: ref25M {
--	#clock-cells = <0>;
--	compatible = "fixed-clock";
--	clock-frequency = <25000000>;
--};
--
--plla: plla {
--	#clock-cells = <0>;
--	compatible = "wm,wm8650-pll-clock";
--	clocks = <&ref25>;
--	reg = <0x200>;
--};
--
--sdhc: sdhc {
--	#clock-cells = <0>;
--	compatible = "via,vt8500-device-clock";
--	clocks = <&pllb>;
--	divisor-reg = <0x328>;
--	divisor-mask = <0x3f>;
--	enable-reg = <0x254>;
--	enable-bit = <18>;
--};
+ /* Command 00h - WDT Setup */
+ #define NCT6694_WDT_SETUP		0x00
+ #define NCT6694_WDT_SETUP_SEL(idx)	(idx ? 0x01 : 0x00)
+diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+index 6eb9be2cd4a0..3c683e317aa3 100644
+--- a/include/linux/mfd/nct6694.h
++++ b/include/linux/mfd/nct6694.h
+@@ -8,6 +8,15 @@
+ #ifndef __MFD_NCT6694_H
+ #define __MFD_NCT6694_H
+ 
++#define NCT6694_HWMON_MOD	0x00
++#define NCT6694_PWM_MOD		0x01
++#define NCT6694_I2C_MOD		0x03
++#define NCT6694_CANFD_MOD	0x05
++#define NCT6694_WDT_MOD		0x07
++#define NCT6694_RTC_MOD		0x08
++#define NCT6694_RPT_MOD		0xFF
++#define NCT6694_GPIO_MOD	NCT6694_RPT_MOD
++
+ #define NCT6694_VENDOR_ID	0x0416
+ #define NCT6694_PRODUCT_ID	0x200B
+ #define NCT6694_INT_IN_EP	0x81
 -- 
-2.43.0
+2.34.1
 
 
