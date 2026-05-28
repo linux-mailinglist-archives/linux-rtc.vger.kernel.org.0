@@ -1,69 +1,69 @@
-Return-Path: <linux-rtc+bounces-6578-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6579-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id COJXLOm6F2rMOwgAu9opvQ
-	(envelope-from <linux-rtc+bounces-6578-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:47:53 +0200
+	id yPwrD/i6F2rMOwgAu9opvQ
+	(envelope-from <linux-rtc+bounces-6579-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:48:08 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 348C55EC49F
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EF585EC4AD
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:48:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0AF9830C2528
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 03:47:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7B7C030CED69
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 03:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1804305693;
-	Thu, 28 May 2026 03:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CCF311954;
+	Thu, 28 May 2026 03:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="wxOvI3kd"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="S8wUAJds"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83316301472;
-	Thu, 28 May 2026 03:47:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED41D2DF12F;
+	Thu, 28 May 2026 03:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779940022; cv=none; b=OYlBm0g1rB0bvEgPt/VWwlW4VUtzmQkqBiuTgi5ZI6iU0VIjBwhZom0osUJt5T2MNyZy8sosBd9rpJ1MPyYNWvk5TrGeMS6Jh+PnITocer+d18/n2QlvTObWSZfRU6ALvMsohGQ2iHynnD5hHH20Ub0AxSM4WbAYEPWj9RJTzSY=
+	t=1779940024; cv=none; b=ScdEwsI7VQxbJpMCcnD5SSDAAZNfDDO1Y4BUYyDg2yK9FkUV1+v1TG0TzZqTxa/kt6YiHZMgc3SbJ/C3RJoomoWEvc24n/hZlFGpP+/c6SfpXBR7Crz0FtEhZGZcPEKu/CE/h0xQZP3ezln2+Rsatr44TeBILZCHTY/rUGm5Xis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779940022; c=relaxed/simple;
-	bh=qYgQsEk3n99i/U85hwk5jhpAZurLiXSldhvkeh96t6Q=;
+	s=arc-20240116; t=1779940024; c=relaxed/simple;
+	bh=N/+7UgqP3hDoMpdcWGIoFqQQDTgfq+jlToGKPISYtQw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=r4lu+sS1kJtszRCPqCALdY8R8yBya+BmsQz5ra+VgYmqSPIaA/e9KOhEtUl+1sQUJlBIfOEnG63CtUNYCB+7pDynF2USnux1S6Pe8zi9TMHhFomuqf0jj4yG3MMjZoLEKZiUUxLA9yL3ATM3qACJACFGgowu/1SJkr+W2825jdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=wxOvI3kd; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=GCzeqecQZvu4B2fT5K6DwH4DIclkixp4SJbhkw5ipuEVAu+yFGPhf3FYp4RETusDpigjJgNbvu1nAvy55sFTqw5ow1P+YWGBRXlq/swmgy4smDOX7SSTG5un4cw5vQC1JJABUtls9USMRZio/5NbC7lGdtwoVO4SRW0mpI8+5uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=S8wUAJds; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1779940021; x=1811476021;
+  t=1779940022; x=1811476022;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=qYgQsEk3n99i/U85hwk5jhpAZurLiXSldhvkeh96t6Q=;
-  b=wxOvI3kda/p0gpzhyVKIciUZ7Rmvge/ElM4E7aUmTrjVa1wQWOQqJU4f
-   U+YQTCoAm+ZFLCg3eCEUtVYD1gOkJ83oetDV/Gr1KzmWtNoZm3Kk6XTfv
-   INj+uMXj9Gp4TBOXE75dfcU3FhfYXD52yteNDU7MDFVfD5Lv4zidT6jLL
-   k3SaEnWfCIdP1UidXxgfAfeZvQUB2wVrggLs2nJKOF+/LtgrDdbVuo1NU
-   aMKrgCWhLKYWXPV5JlFpUjxAnz23OSRvO5hNUjUNioEn6yFkgcl0zxrjL
-   /G0Pwo/9y4y/ZtW16AayPKJSUyEmbAcxfgJL+hyBdEx1Iv7yRDPEsAkyp
+  bh=N/+7UgqP3hDoMpdcWGIoFqQQDTgfq+jlToGKPISYtQw=;
+  b=S8wUAJds8oBe7J8cpusYX6x0yyj/+6NgvMjmR3lVmQsRHtn800BUfO1C
+   xxzbHzK/fioS2mJG+diY4BNfYTkDTQqi11pm7NP3xAEwaoKvrMv2AQSVt
+   /MuOrdEXWB1PUDUUqigVl6SxyfDzZUNTzO1JFc2kFR20EEVS3lPe00xDX
+   0GexkodtnnNNtoyLHvwu5moBG17ok0uOT1tPuwBa5Y49qRw2vdIdphIpV
+   yRYyL+Edkzg0wa9fnXJ5qhC+CPOo8KA/WxayWl/8GC7kZGvlU1f8u+0UH
+   reZZ1isa8oL1EZVS2GyfDz33POEMjqjJ038Wpzvj+gOvM6VwVvlz1TmnR
    w==;
-X-CSE-ConnectionGUID: zqfwHDKVSeu+1EmyMnmlVg==
-X-CSE-MsgGUID: snKCs0atRe+0gv5L7W+OXQ==
+X-CSE-ConnectionGUID: g5WiT7AxRUSGqWE/rya/Jg==
+X-CSE-MsgGUID: jGORMBdnRS6eUJhIYGtpGQ==
 X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
-   d="scan'208";a="225400142"
+   d="scan'208";a="225400144"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 20:46:54 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 20:47:00 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
+ chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.41; Wed, 27 May 2026 20:46:54 -0700
+ 15.2.2562.41; Wed, 27 May 2026 20:46:58 -0700
 Received: from [127.0.0.1] (10.10.85.11) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Wed, 27 May 2026 20:46:51 -0700
+ Transport; Wed, 27 May 2026 20:46:55 -0700
 From: Balakrishnan Sambath <balakrishnan.s@microchip.com>
-Date: Thu, 28 May 2026 09:16:45 +0530
-Subject: [PATCH 2/4] rtc: moxart: convert to dev_err_probe()
+Date: Thu, 28 May 2026 09:16:46 +0530
+Subject: [PATCH 3/4] rtc: sc27xx: convert to dev_err_probe()
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260528-cleanup-dev-err-probe-rtc-v1-2-29dc9cb6c3f0@microchip.com>
+Message-ID: <20260528-cleanup-dev-err-probe-rtc-v1-3-29dc9cb6c3f0@microchip.com>
 References: <20260528-cleanup-dev-err-probe-rtc-v1-0-29dc9cb6c3f0@microchip.com>
 In-Reply-To: <20260528-cleanup-dev-err-probe-rtc-v1-0-29dc9cb6c3f0@microchip.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Baolin Wang
@@ -91,7 +91,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6578-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6579-lists,linux-rtc=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FREEMAIL_TO(0.00)[bootlin.com,linux.alibaba.com,gmail.com];
 	RCVD_TLS_LAST(0.00)[];
@@ -109,7 +109,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:email,microchip.com:mid,microchip.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 348C55EC49F
+X-Rspamd-Queue-Id: 8EF585EC4AD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
@@ -120,60 +120,59 @@ No functional change.
 
 Signed-off-by: Balakrishnan Sambath <balakrishnan.s@microchip.com>
 ---
- drivers/rtc/rtc-moxart.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+ drivers/rtc/rtc-sc27xx.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/rtc/rtc-moxart.c b/drivers/rtc/rtc-moxart.c
-index 2247dd39ee4..e1766f03d73 100644
---- a/drivers/rtc/rtc-moxart.c
-+++ b/drivers/rtc/rtc-moxart.c
-@@ -253,26 +253,20 @@ static int moxart_rtc_probe(struct platform_device *pdev)
- 	moxart_rtc->gpio_data = devm_gpiod_get(&pdev->dev, "rtc-data",
- 					       GPIOD_IN);
- 	ret = PTR_ERR_OR_ZERO(moxart_rtc->gpio_data);
+diff --git a/drivers/rtc/rtc-sc27xx.c b/drivers/rtc/rtc-sc27xx.c
+index 2b83561d4d2..2c6d4565389 100644
+--- a/drivers/rtc/rtc-sc27xx.c
++++ b/drivers/rtc/rtc-sc27xx.c
+@@ -574,10 +574,8 @@ static int sprd_rtc_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 
+ 	ret = of_property_read_u32(node, "reg", &rtc->base);
 -	if (ret) {
--		dev_err(&pdev->dev, "can't get rtc data gpio: %d\n", ret);
+-		dev_err(&pdev->dev, "failed to get RTC base address\n");
 -		return ret;
 -	}
 +	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "can't get rtc data gpio\n");
++		return dev_err_probe(&pdev->dev, ret, "failed to get RTC base address\n");
  
- 	moxart_rtc->gpio_sclk = devm_gpiod_get(&pdev->dev, "rtc-sclk",
- 					       GPIOD_ASIS);
- 	ret = PTR_ERR_OR_ZERO(moxart_rtc->gpio_sclk);
+ 	rtc->irq = platform_get_irq(pdev, 0);
+ 	if (rtc->irq < 0)
+@@ -592,26 +590,20 @@ static int sprd_rtc_probe(struct platform_device *pdev)
+ 
+ 	/* check if we need set the alarm interrupt */
+ 	ret = sprd_rtc_check_alarm_int(rtc);
 -	if (ret) {
--		dev_err(&pdev->dev, "can't get rtc sclk gpio: %d\n", ret);
+-		dev_err(&pdev->dev, "failed to check RTC alarm interrupt\n");
 -		return ret;
 -	}
 +	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "can't get rtc sclk gpio\n");
++		return dev_err_probe(&pdev->dev, ret, "failed to check RTC alarm interrupt\n");
  
- 	moxart_rtc->gpio_reset = devm_gpiod_get(&pdev->dev, "rtc-reset",
- 						GPIOD_ASIS);
- 	ret = PTR_ERR_OR_ZERO(moxart_rtc->gpio_reset);
+ 	/* check if RTC time values are valid */
+ 	ret = sprd_rtc_check_power_down(rtc);
 -	if (ret) {
--		dev_err(&pdev->dev, "can't get rtc reset gpio: %d\n", ret);
+-		dev_err(&pdev->dev, "failed to check RTC time values\n");
 -		return ret;
 -	}
 +	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "can't get rtc reset gpio\n");
++		return dev_err_probe(&pdev->dev, ret, "failed to check RTC time values\n");
  
- 	spin_lock_init(&moxart_rtc->rtc_lock);
- 	platform_set_drvdata(pdev, moxart_rtc);
-@@ -280,10 +274,9 @@ static int moxart_rtc_probe(struct platform_device *pdev)
- 	moxart_rtc->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
- 						   &moxart_rtc_ops,
- 						   THIS_MODULE);
--	if (IS_ERR(moxart_rtc->rtc)) {
--		dev_err(&pdev->dev, "devm_rtc_device_register failed\n");
--		return PTR_ERR(moxart_rtc->rtc);
+ 	ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
+ 					sprd_rtc_handler,
+ 					IRQF_ONESHOT | IRQF_EARLY_RESUME,
+ 					pdev->name, rtc);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "failed to request RTC irq\n");
+-		return ret;
 -	}
-+	if (IS_ERR(moxart_rtc->rtc))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(moxart_rtc->rtc),
-+				     "devm_rtc_device_register failed\n");
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "failed to request RTC irq\n");
  
- 	return 0;
- }
+ 	device_init_wakeup(&pdev->dev, true);
+ 
 
 -- 
 2.34.1
