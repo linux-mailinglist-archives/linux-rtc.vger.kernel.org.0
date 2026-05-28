@@ -1,69 +1,69 @@
-Return-Path: <linux-rtc+bounces-6576-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6577-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6fnsLLS6F2rMOwgAu9opvQ
-	(envelope-from <linux-rtc+bounces-6576-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:47:00 +0200
+	id WFB2GNe6F2rMOwgAu9opvQ
+	(envelope-from <linux-rtc+bounces-6577-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:47:35 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B015EC471
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B62215EC497
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 05:47:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0E6BE3021716
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 03:46:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F22E3308F91C
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2026 03:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075D72F8EA0;
-	Thu, 28 May 2026 03:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D396430DD2F;
+	Thu, 28 May 2026 03:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="iLnpGP8b"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ecgDFNMl"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FDF1A682B;
-	Thu, 28 May 2026 03:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF123126D0;
+	Thu, 28 May 2026 03:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779940016; cv=none; b=OZ28HfGHBeVjR8DZgumEKnSuJdt9SS7/Ib8dVg55PLgI7CIBuKuuxgENSJFjb2C28QNQDmxcOgq9Wa5QVUuAMSwk4XKEMH7/IX1OrTKIz3lIksigTaIt/cDhlBaCNY8Cncw+iE+g14RuI8Ea+9Y9X6dNdzpphHrjcsGGTAAR724=
+	t=1779940019; cv=none; b=WEfp0Iawb/G7W0UUN1m/yKH6xGbKOXF15TTmfF4PEzKZmx2dSO315yEnssieY3AR3j5W5QpRs1Ru7Yiyxl/0mMko5c7mIHU52Qpoi7mMKtlaxjhQgouPAKlHj3ikOBDQ9O4qfAhf/Qgk8nCGfuV/fxCTGGD2tS+OgwEYA0CBFYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779940016; c=relaxed/simple;
-	bh=Q3e7GS24NZWO8n+pR1VieccH/HXq4xPQg7nQSsXSHtA=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=KRiFCc3pcCahzvc224raevZ8KmoveoP61YP3TjS++3J1Qm+YYa/2SFsMxs4XbxQsZL2wRXSejXuXGT+QJOpxpldIchEF3SKIyZlWErOF2ENh5rmRWhZ1mgV6pYq0I2ouamXJM6eoLLEmZ0UJ/ca9JbH8gEleisX8Knodj8FNNq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=iLnpGP8b; arc=none smtp.client-ip=68.232.153.233
+	s=arc-20240116; t=1779940019; c=relaxed/simple;
+	bh=XAYwosETQlgTdWFDYwvk1cIdE1sPk2gmVdWmA3M7CUE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=K6/58qOMc144IPt0T232IxF1eGhP0aKsZxuwtVMdUm3pMS7bv498At+ze1cylvnHjdafc/VEW51sV+zmesS/Iqq6oJoGrWX4N1CPjjOCctN143H2eDqAJe+hr7mTWDe9ewqkT6Lb+BzPhQ3lMk02TyZJpsGyeiefqbuDOgkv1GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ecgDFNMl; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1779940015; x=1811476015;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=Q3e7GS24NZWO8n+pR1VieccH/HXq4xPQg7nQSsXSHtA=;
-  b=iLnpGP8bC9QDT00gcrRReLQuLCWgesJIrPU+7XNYxhROJeEa6QarEwQG
-   +7kLbAqJ0t1V3nsE9rpnpkoHf48awwrxQPFZDEAEFFyQ3rRbJcKtSn7dV
-   iDbtcCVX0QqvvPp1B8Esj73UekizlCgFmuLLkLLZoMpj5arfwPTioS4qt
-   awYRmBk5C+xEEIDIFlv4O3KYi+28VEW56Ypl9CKtHDsvWH7FkJPuR61+y
-   MZR0Md8ZTscpkWWiOC23g5nd05cMR9hhgOZ8jW0SNGH01B8fXTH5ZLN0D
-   h53oFrO23c1XHTPKZ91cQvcfqohv3cRE2o0/Jn9tHgwMSogakesBdSFEZ
-   A==;
-X-CSE-ConnectionGUID: hUTYoKN3SwSWX+HnMTj47g==
-X-CSE-MsgGUID: wZReTwe/TzCBa4PIx8zIkg==
+  t=1779940019; x=1811476019;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=XAYwosETQlgTdWFDYwvk1cIdE1sPk2gmVdWmA3M7CUE=;
+  b=ecgDFNMlkHFr3ANqsIGGUZaIdEQdJiGAeBY0d9vVKHNDyeJVdns90vtM
+   lH9RWILLETqevdXcluEEmGr0FqIFYtgjkiWlZRB0ikc/osdiO5o76rWXZ
+   0v9ADRBQAjG4NnGMd7EX+b87mcRy1gjrXYisNmdxG1VhzM7isITR2a7xR
+   PDFBWhP4XHZSDsYu2r2f5gWLOl2Tca9eZQAllpIoGjFRgKzVQesUiR3je
+   gCCd2Rz9avkuIvJcult14HkRnv/hb+XVbfpj5aiULCsfVVV7I4IzUHLZ4
+   xng6ugUGd6mxvMKhVA2HP4woXw3v2NDuAUv6Tm+tdM9g7F6ihtryv8fiu
+   Q==;
+X-CSE-ConnectionGUID: QqRB4jt9Rnec6qn95pzP2g==
+X-CSE-MsgGUID: mEsV2YGsQn2Iq6l9+eToTQ==
 X-IronPort-AV: E=Sophos;i="6.24,172,1774335600"; 
-   d="scan'208";a="58160222"
+   d="scan'208";a="289548683"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 20:46:49 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 May 2026 20:46:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.41; Wed, 27 May 2026 20:46:48 -0700
+ 15.1.2507.58; Wed, 27 May 2026 20:46:51 -0700
 Received: from [127.0.0.1] (10.10.85.11) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Wed, 27 May 2026 20:46:45 -0700
+ Transport; Wed, 27 May 2026 20:46:48 -0700
 From: Balakrishnan Sambath <balakrishnan.s@microchip.com>
-Subject: [PATCH 0/4] rtc: convert several drivers to dev_err_probe()
-Date: Thu, 28 May 2026 09:16:43 +0530
-Message-ID: <20260528-cleanup-dev-err-probe-rtc-v1-0-29dc9cb6c3f0@microchip.com>
+Date: Thu, 28 May 2026 09:16:44 +0530
+Subject: [PATCH 1/4] rtc: palmas: convert to dev_err_probe()
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -72,10 +72,9 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKO6F2oC/x3MQQqDMBBG4avIrDsQg4r0KsWFGX91QGKYWCmId
- 29w+S3euyjDFJne1UWGU7PusaB+VSTrGBewTsXkne9c63uWDWP8Jp5wMsw42R7AdggHaZq5Ewn
- iaip9Msz6e96f4b7/NoMtcGsAAAA=
-X-Change-ID: 20260528-cleanup-dev-err-probe-rtc-bc44f6ccbc01
+Message-ID: <20260528-cleanup-dev-err-probe-rtc-v1-1-29dc9cb6c3f0@microchip.com>
+References: <20260528-cleanup-dev-err-probe-rtc-v1-0-29dc9cb6c3f0@microchip.com>
+In-Reply-To: <20260528-cleanup-dev-err-probe-rtc-v1-0-29dc9cb6c3f0@microchip.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Baolin Wang
 	<baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, "Orson
  Zhai" <orsonzhai@gmail.com>
@@ -91,11 +90,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6576-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[bootlin.com,linux.alibaba.com,gmail.com];
+	TAGGED_FROM(0.00)[bounces-6577-lists,linux-rtc=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_TO(0.00)[bootlin.com,linux.alibaba.com,gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[microchip.com:+];
@@ -109,36 +108,75 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,microchip.com:email,microchip.com:mid,microchip.com:dkim]
-X-Rspamd-Queue-Id: 14B015EC471
+	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:email,microchip.com:mid,microchip.com:dkim,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: B62215EC497
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Use dev_err_probe() in place of dev_err() and return across four rtc
-drivers, which communicates the error type and helps debugging
-hardware issues.
+Use dev_err_probe() in place of dev_err() and return, which
+communicates the error type and helps debugging hardware issues.
 
-Build-tested with x86_64 allmodconfig. No functional change.
+No functional change.
 
 Signed-off-by: Balakrishnan Sambath <balakrishnan.s@microchip.com>
 ---
-Balakrishnan Sambath (4):
-      rtc: palmas: convert to dev_err_probe()
-      rtc: moxart: convert to dev_err_probe()
-      rtc: sc27xx: convert to dev_err_probe()
-      rtc: s35390a: convert to dev_err_probe()
+ drivers/rtc/rtc-palmas.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
- drivers/rtc/rtc-moxart.c  | 25 +++++++++----------------
- drivers/rtc/rtc-palmas.c  | 21 +++++++--------------
- drivers/rtc/rtc-s35390a.c | 18 ++++++------------
- drivers/rtc/rtc-sc27xx.c  | 24 ++++++++----------------
- 4 files changed, 30 insertions(+), 58 deletions(-)
----
-base-commit: b72386864481cf7fb6153842d22561ac3032302f
-change-id: 20260528-cleanup-dev-err-probe-rtc-bc44f6ccbc01
+diff --git a/drivers/rtc/rtc-palmas.c b/drivers/rtc/rtc-palmas.c
+index aecada6bcf8..25fe7a8b73a 100644
+--- a/drivers/rtc/rtc-palmas.c
++++ b/drivers/rtc/rtc-palmas.c
+@@ -242,10 +242,8 @@ static int palmas_rtc_probe(struct platform_device *pdev)
+ 
+ 	/* Clear pending interrupts */
+ 	ret = palmas_clear_interrupts(&pdev->dev);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "clear RTC int failed, err = %d\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "clear RTC int failed\n");
+ 
+ 	palmas_rtc->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, palmas_rtc);
+@@ -280,10 +278,8 @@ static int palmas_rtc_probe(struct platform_device *pdev)
+ 	ret = palmas_update_bits(palmas, PALMAS_RTC_BASE, PALMAS_RTC_CTRL_REG,
+ 			PALMAS_RTC_CTRL_REG_STOP_RTC,
+ 			PALMAS_RTC_CTRL_REG_STOP_RTC);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "RTC_CTRL write failed, err = %d\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "RTC_CTRL write failed\n");
+ 
+ 	palmas_rtc->irq = platform_get_irq(pdev, 0);
+ 
+@@ -292,18 +288,15 @@ static int palmas_rtc_probe(struct platform_device *pdev)
+ 				&palmas_rtc_ops, THIS_MODULE);
+ 	if (IS_ERR(palmas_rtc->rtc)) {
+ 		ret = PTR_ERR(palmas_rtc->rtc);
+-		dev_err(&pdev->dev, "RTC register failed, err = %d\n", ret);
+-		return ret;
++		return dev_err_probe(&pdev->dev, ret, "RTC register failed\n");
+ 	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, palmas_rtc->irq, NULL,
+ 			palmas_rtc_interrupt,
+ 			IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+ 			dev_name(&pdev->dev), palmas_rtc);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "IRQ request failed, err = %d\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "IRQ request failed\n");
+ 
+ 	return 0;
+ }
 
-Best regards,
 -- 
-Balakrishnan Sambath <balakrishnan.s@microchip.com>
+2.34.1
 
 
