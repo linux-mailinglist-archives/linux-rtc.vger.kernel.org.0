@@ -1,188 +1,202 @@
-Return-Path: <linux-rtc+bounces-6590-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6591-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GLzqJzwHGmrK0ggAu9opvQ
-	(envelope-from <linux-rtc+bounces-6590-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2026 23:38:04 +0200
+	id YNeUFWiTGmoe5wgAu9opvQ
+	(envelope-from <linux-rtc+bounces-6591-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 30 May 2026 09:36:08 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2FF6608F52
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2026 23:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7C5A60B99B
+	for <lists+linux-rtc@lfdr.de>; Sat, 30 May 2026 09:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 556EA302D96A
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2026 21:36:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 17FCB303D12C
+	for <lists+linux-rtc@lfdr.de>; Sat, 30 May 2026 07:35:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13CBC3A63F2;
-	Fri, 29 May 2026 21:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC787393DF2;
+	Sat, 30 May 2026 07:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZuXh3riY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGyo8Ujh"
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89A8375AD0
-	for <linux-rtc@vger.kernel.org>; Fri, 29 May 2026 21:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780090560; cv=pass; b=TZ7wRcYT09GWNwpsMSbKDJFJUGU4KsfSFPK5Jk+ZmBjGqcndT15U/a0OhOIo/RoEaeKHtMq0Y4anK/QX+Mk8GESn1W00VOCdLrhIsUxArbvEBGKMlwnaQmLysELJN9Rs5FJXAijwKnMrPBsFRHKx1Ad81JzyfnLl2Z6mWFub574=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780090560; c=relaxed/simple;
-	bh=/p+Nhsf4ZHcEuShSG9PqsTYgsO2Q5b1iHPWMwcUaRfg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lH1jbjf+YVMiA57O++GAsW3iyXhHQotssrSXss2hhUP8YoxSa97Qva/A+fym+rePlp/5tRh66RuTvci77+qVKTDJOx4LSaOV2qprIXVl/rZppoOjbi8bTffaq/+gOFbK/OVWIPlCFs5pSkpfIFvB7h3lsPfxZquBOWInPAy4Q5I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZuXh3riY; arc=pass smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-45ee1a56328so2547668f8f.3
-        for <linux-rtc@vger.kernel.org>; Fri, 29 May 2026 14:35:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780090557; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UMfjydZjxfOP7xSNxkj0KPTe0xZkNoMTYZyAHGESAzMQCcG0Ch2RDj8pgyWHh5CDEv
-         EFugj2a8TNlHQkt3UGN+T6aM1vORYqgLuoZ1iNNcWGtIq6uenWtxbBsr/HLSn6GCLKN8
-         53Repw80/O+Moft6ipf74a50rSW6tcHn1Qia7D/gxyTypyNl0lxY7SOuyHoTkCbusheg
-         I5gtAYg053lQkyeraFX/4jUtymi0hSpy+DTyh/DJbgUjVBVc5QIPxWUG1MtJFPtfgmOg
-         AezqMEBGUKveYcT2h5HAEi3xig3gZWK5BimMd250m8tHCMixZN9+N+XO6IB44wOujaic
-         afDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KdTTkoXA1F/pQA1Bi5kR0R37zi8RrCHvoR+ZJclo8dg=;
-        fh=5A/ah8gnPB5ox7hYPPD4GWgdm5L5ylEqY9q0DEM5Pno=;
-        b=U3OYL0Jp9N4s5QfyXkSyOaSFuIH1/wNOfubZoqwlQ2vi/AmTYKiFeaBA1blUaGAe7Z
-         nsmrqx4ooZ6PNa8Ey81pgiTRcRascamXQKqts0pTJvsyT5TFLAdjvZ4XFDXjFudovPtT
-         TwbhksXvsSZWUIMFYzFZuNdAMRJWrZ8F6dcLtq016zsRXJtC+ST/zzEN69a3uNDo0amJ
-         aU3HvFkN/tJB8AxGxgWjMLgul+/DiSaw5XZEK/Ot5SJlqyy2Vddg7tG++CPUfPTyCzWV
-         3ESwz8+2/otf3fqXFjlyM1GXZrNAqVCm1yKuvXqiHuOjMMkPzjZx+jkyiTtzTW850Czj
-         Nk6Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780090557; x=1780695357; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KdTTkoXA1F/pQA1Bi5kR0R37zi8RrCHvoR+ZJclo8dg=;
-        b=ZuXh3riYuRKmiglLiZybwLTG6wDzeqjQxb672Iacf4hLGeVfzrTQ/DHcvBTbIHV0YY
-         Lcl7VpavH8c6gYO2uvjpsOvMHPKDB1AYRIr1ozEJtSX6Ql479ggd1yWtmgVfvJP56xvf
-         nupcf0MqH6dDYuaHD7+25LEQgE/b1/yO9K6W0gKTW9viSsN+KmDvHB+PoTvkZyLx1Xbj
-         x+pbVAd7yYjH/uYDPttcX5LGHp4BFDuF/HdJpH2dvXapUdYAoCv2nJK3iRqOQgB6SXEJ
-         wr/tQeNTsVNEq2Os5ahKJydjEy3Q0DO5CQfOdiORKEqaYWow+02gBylbaazE6UFPxrcQ
-         2E4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780090557; x=1780695357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KdTTkoXA1F/pQA1Bi5kR0R37zi8RrCHvoR+ZJclo8dg=;
-        b=gmte9dCfELJ9L3+oNGnOT5fvzWpBEr/SdZajPwYjFnFGkO2yZnsNMGasBU5+CEL+Oj
-         R+D7geiQwfFh9lNm9Cv1x2cHksdhZ73j7FWS+C/IYDXYHfw1yvJbHJnNMvZEhnEuZrN2
-         V9yq8ovAvDsybjOY2yW+4HVJR4cFXQ2iS/hJJ2n8cwpWVvdqqeXHOe1HyerHEb20tSwb
-         2mrPHH0bJvaKBCr/VTMIXtMmSSJHuiLJoim2uWC0Q14BPmA0vw+20Kjj1HebtTDIr0q6
-         6Cmj941h00+p0+tYwh594GAVtTBtAHHuw5ByQyqTJAxxVIvgAWQ+9gV8T9/pSwKSEXHt
-         70Hg==
-X-Gm-Message-State: AOJu0Yx7DwLnHJho/jnsg6Mks7oLBHaA5O8s3SuuEEvzTRxUhUDez5kG
-	9J2USDSmzcRfF/Hlzq+0MT+o3lRrantByr52M4M1KbjKxZ0zJPAk0JFsc95mFabbdi9REVknfqG
-	XLXFLXxsZ6o5HbnKVIsbUE5wcfE2h69w=
-X-Gm-Gg: Acq92OF10eSUgKFnwXnEM5VQ5s7N9w39e8LOh5lQK+sdGPzhfJuE/RKATTpzFDsR9UA
-	9MJiRvX4ROMoJo6yjZd4g/7kdplcdZ9kdPmDP3LxdDDC5dzmnDTELmRENWv11faw96EdeKEpkjk
-	GkIG89Jvzrl2ttkpzW5+h3aQYpnzJxUIqsd4Cjx3E/VnDDaXKwntHfOcaLizp4Ze5844/kxL/Sg
-	CBH4Q1/zkfyLO+eiOfwncqzHOq34pYmmDMDBEKCswLxW7xPwziRxrfXc+zY+wKy8I6pUvn5p95A
-	DWGfrEjVEKVECmpfa2SIMif6CmqrKQYWjcZAu0h6AiNvOdmekwsaQcLP6ewpORtbQqmjRyq4N/+
-	db2Sa3ABCUtAnmks=
-X-Received: by 2002:a05:6000:1285:b0:45e:7997:8b7a with SMTP id
- ffacd0b85a97d-45ef6b159bbmr2183611f8f.16.1780090556805; Fri, 29 May 2026
- 14:35:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A605626ACC;
+	Sat, 30 May 2026 07:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780126543; cv=none; b=dh3ApjlE0LuBPnQY6uhmZJVuIVqm/SFaS9pDM2tUF1ZQ0Avv4BEM0j6UoQV86eB7XotRqZI896JGu13a9A5y65YCllYJxNlxN/lnmsOV94bYsPyeCmqAhEDq3DNjyhBjyctBP6lXjteg9iuXe9tK+t6XquVqYlJS7otizwZlQgU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780126543; c=relaxed/simple;
+	bh=fz4kdclOKSBRy51d/iLLaCqas2Mv20qDCh8w8frH0mc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JcvEavBGO8V63RiFpco5KopQpYpd1Mrdc3AODKT21ejbQ3l4kt+9irEYipDWz4q12nbPv8lcUwDkHqXijv3H15qL7+5MIK+KpUebIY2lJnSguMh0vvEkCe2XflYur+fYJjK5D/Dg/7ZRXBb6KqeUY8ZEiZFk89cKZOqYBI38ET8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGyo8Ujh; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A491F00893;
+	Sat, 30 May 2026 07:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780126542;
+	bh=rDIbbdNi1ZPTfTLbF+VNsLtotcL6i/wU5AbKPo4BQ64=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=JGyo8Ujh7/+5pZQcje0jWZ1okxvyqmivYsmzANrPJxwM5VOM9DRmFKOUCVLobY0Oz
+	 QJQwPydZay0rb8blSuZeM5GE/rL6j7+M1uwH3xa/BNyNqNKp7oH3tvLOeZhxYtE7nF
+	 stSptYVpiS102sxmLswqT1OnHnOXt4lVlJdamL1BQwbLRIkPRwBaml7Kg1gZ/tdlRW
+	 vE8mnRl78aoUFjjNtudZnG4QyltEfR+kRt5jr9L3qXy6ajQsnhLumQC2qf/wnRX5OI
+	 NGH/7XWhc9/bR10lfEeahEMiHvSHgHxv0IW2M0YbpepqQO4FgW61FnTjWONigEXrVE
+	 /9rxZXxxmRpxg==
+Date: Sat, 30 May 2026 09:35:39 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Udaya Kiran Challa <challauday369@gmail.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, skhan@linuxfoundation.org, 
+	me@brighamcampbell.com, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] dt-bindings: clock: via,vt8500: Convert to DT Schema
+Message-ID: <20260530-academic-aspiring-sawfly-7dcfab@quoll>
+References: <20260524151110.21277-1-challauday369@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260506164914.3987293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20260506164914.3987293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Fri, 29 May 2026 22:35:30 +0100
-X-Gm-Features: AVHnY4J1HrehAlQEavxBOnGVjqVE1ymhht1RenFbTtp33jQ3RWkemXVxLG2IC5Y
-Message-ID: <CA+V-a8vVZPaNYkzfncT_GfUyc0UtiSj+JpRnLt0u99z3oAvMaQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] rtc: renesas-rtca3: Various fixes and improvements
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260524151110.21277-1-challauday369@gmail.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6590-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6591-lists,linux-rtc=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,renesas];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	TO_DN_SOME(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: D2FF6608F52
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,baylibre.com:email,devicetree.org:url]
+X-Rspamd-Queue-Id: A7C5A60B99B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On Sun, May 24, 2026 at 08:40:26PM +0530, Udaya Kiran Challa wrote:
+> Convert the VIA/Wondermedia VT8500 and Wondermedia WM8xxx series SoCs clock
+> controller binding from the legacy text format to DT schema.
+> 
+> Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
+> ---
+> Changelog:
+> Changes since v3
+> - Add schema select matching for via,vt8500-pmc
+> - Allow hyphen in node names under patternProperties
+> - Add dependentRequired validation for enable-reg/enable-bit
+> - Fix example validation against PMC schema
+> 
+> Link to v3:https://lore.kernel.org/all/20260524111813.39810-1-challauday369@gmail.com/
+> 
+> Changes since v2:
+> - Drop redundant description for clocks
+> - Disable reg property for device clocks
+> - Fix schema hierarchy to match actual DTS structure
+> 
+> Link to v2:https://lore.kernel.org/all/20260521170810.19702-1-challauday369@gmail.com/
+> 
+> Changes since v1:
+> - Add default value for divisor-mask
+> - Add required properties compatible and model
+> - Fix example node name
+> - Update example size cells and reg value
+> 
+> Link to v1:https://lore.kernel.org/all/20260520025131.17772-1-challauday369@gmail.com/
+> ---
+>  .../bindings/clock/via,vt8500-clock.yaml      | 209 ++++++++++++++++++
+>  .../devicetree/bindings/clock/vt8500.txt      |  74 -------
+>  2 files changed, 209 insertions(+), 74 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/clock/vt8500.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml b/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
+> new file mode 100644
+> index 000000000000..51a68df6c2f3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/via,vt8500-clock.yaml
+> @@ -0,0 +1,209 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/via,vt8500-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: VIA/Wondermedia VT8500 Clock Controller
 
-On Wed, May 6, 2026 at 5:49=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.co=
-m> wrote:
->
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Hi all,
->
-> This patch series includes various fixes and improvements for the
-> Renesas RTCA-3 RTC driver, including:
-> - Fixing the polling condition when clearing the PIE bit during alarm
->   setup error handling.
-> - Checking the result of the RADJ polling during initial setup and
->   propagating errors.
-> - Correcting an error message related to reset control.
-> - Fixing a typo in the documentation for the rtca3_ppb_per_cycle struct.
-> - Refactoring year decoding logic into a helper function for better
->   readability.
->
-> Cheers,
-> Prabhakar
->
-> Lad Prabhakar (5):
->   rtc: renesas-rtca3: Fix PIE clear polling condition in alarm setup
->     error path
->   rtc: renesas-rtca3: Check RADJ poll result during initial setup
->   rtc: renesas-rtca3: Fix incorrect error message for reset assert
->   rtc: renesas-rtca3: Fix typo in rtca3_ppb_per_cycle documentation
->   rtc: renesas-rtca3: Factor out year decoding helper
->
->  drivers/rtc/rtc-renesas-rtca3.c | 26 +++++++++++++++-----------
->  1 file changed, 15 insertions(+), 11 deletions(-)
->
-Gentle ping.
+How PMC is a clock controller? Really?
 
-Cheers,
-Prabhakar
+> +
+> +maintainers:
+> +  - Michael Turquette <mturquette@baylibre.com>
+> +  - Stephen Boyd <sboyd@kernel.org>
+
+
+Subsystem maintainers do not care about PMC. This can be platform
+maintainer.
+
+> +
+> +description:
+> +  Clock controller bindings for VIA/Wondermedia VT8500 and Wondermedia WM8xxx
+> +  series SoCs.
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      const: via,vt8500-pmc
+> +
+> +  required:
+> +    - compatible
+
+Why do you have select?
+
+I don't understand your changes. This was not at v2 and I did not ask to
+change that.
+
+> +
+> +properties:
+> +  compatible:
+> +    const: via,vt8500-pmc
+
+
+So via,vt8500-clock.yaml or pmc? Why aren't you removing the pmc file?
+Why is this located at clocks?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    type: object
+> +    additionalProperties: true
+
+No, this cannot be "true".
+
+I finished review here.
+
+Best regards,
+Krzysztof
+
 
