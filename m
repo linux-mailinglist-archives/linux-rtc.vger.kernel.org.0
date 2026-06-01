@@ -1,51 +1,51 @@
-Return-Path: <linux-rtc+bounces-6603-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6604-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wCmbNBZwHWqWawkAu9opvQ
-	(envelope-from <linux-rtc+bounces-6603-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 01 Jun 2026 13:42:14 +0200
+	id UKtiGkNxHWrFawkAu9opvQ
+	(envelope-from <linux-rtc+bounces-6604-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 01 Jun 2026 13:47:15 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C048E61E802
-	for <lists+linux-rtc@lfdr.de>; Mon, 01 Jun 2026 13:42:13 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFB9661E8A4
+	for <lists+linux-rtc@lfdr.de>; Mon, 01 Jun 2026 13:47:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BB308300159E
-	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jun 2026 11:42:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C493D300B460
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jun 2026 11:43:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B60368D49;
-	Mon,  1 Jun 2026 11:42:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F6E36A34E;
+	Mon,  1 Jun 2026 11:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="deUkJsC6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TMEGOS2b"
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25E91F0991;
-	Mon,  1 Jun 2026 11:42:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A391363C53;
+	Mon,  1 Jun 2026 11:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780314129; cv=none; b=YGx04mJpynyAcwj5hQyXLweG1OPOdRwKaX5kHym5itYNaI7UD26c4XfgTJHJ9rfpV+OvthFzCa4nvOac41KgBy4LnYuY3013HCVAezGi9juT7NpEf85KUsfKBSwAS1w9zLlT3oH3IrdO3zhsNupScyugnxT0+Z1SiWv5JAEeLuE=
+	t=1780314182; cv=none; b=rwBbP5unJ16TQ8Hr9JOMDtTGwbLnMSQDKrD8iec8yBcJj9oQrCMFMjJ31pMKRBDHywL3nJlKzvh2DV6Sbhd6UgiAM6AwUlhSEznYW+Hfa+REruBy93PL9XW4V0CpShDHffaUsdJ7OkTFmMIeNMedoLvyw47r5TI1n4XwHh3VVFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780314129; c=relaxed/simple;
-	bh=7TxheB9O18/SbOh3Ukrj1w6MfP2nHK3ZkSpL+tRahnw=;
+	s=arc-20240116; t=1780314182; c=relaxed/simple;
+	bh=WwTMlmFtuAgiZKmyF7AQMdP6/QDvdtwL2QfOFrx4s3I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MSYTJFie7/EMxbX4voA43Gug4ieoNuXKM4D9GpMs1J7q5kRAkm12ySgbS+NvM1q8YVxx0YzEHgMKSbH3qbTtgWAQrPoPvbTrz5YM7E/jANcX21eNXCZw5W9JmZeAVLZZ9t4hEUUHPlJj0b1qhb4wkxFusfzAoaW8yCJG4FAO9L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=deUkJsC6; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90711F00893;
-	Mon,  1 Jun 2026 11:42:05 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=iwG4gN/gTt9TQhpzx1O70O3TQ8/cNNb7c/iAzV/6xXVV8+MKURBWs+V3JsgIoFhTRO4T3e+rAgb8dLJYXsV28seztLrT2Xb0UyVldiTNKZoy1RgupOGy8SB69Bg1TH4TdTNOuU1jAlLto56a0iHmJ5vsem7MO5wHUywxhQ6Cg4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TMEGOS2b; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635311F00893;
+	Mon,  1 Jun 2026 11:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780314128;
-	bh=dyye1v07Nn9bVB6lcmedUTXdCUcDrQw1lJ+rwzuZ024=;
+	s=k20260515; t=1780314181;
+	bh=OGsiOpHkkAn8U2JBhAjRKXv+f+ncPCsV7XY3NzM6Pns=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=deUkJsC6x0FBAgSM69NGjMQuMIGj6Ux3Uv/YgUO39M7evMQPhr9mNeyN+BZdXNL1c
-	 wsfRorUR+w/VFTxpuNjsAC994H5CeCCudhDTNYFhp9fjY7mNAD9kg3OJWmp/XwugfN
-	 BLoko3j154Qo0fzlWzB6b3jUjwnVtW+5NvObYHyPsCDw8KzuJvCRmSa2Pye2sV12ma
-	 wO327tAGOU8ynOhxzh+ZsFZn4A6KaceWXkHFFqXUPdr1UiQeOS7RSa6fA/Ii3wPeyC
-	 DYH/DjoLiqBhGUuPWv+XqnaS20nVRgb/HnWFiWBXpjA0vz8z1UIvv5wzYuvh2sDMlM
-	 sKPjEKgIHebWg==
-Message-ID: <2668d1d4-81d1-4672-98b5-d60d8ad32e9f@kernel.org>
-Date: Mon, 1 Jun 2026 13:42:03 +0200
+	b=TMEGOS2bL/SJyESj+bOKSZwcHm25n+BJ48IUOY5eoLlFo7DmvFpR/hIz98zl0LM0u
+	 5f2Jr/JmKzhS4F1cBCnQ3/fmdNm/+xZ/53U52U8iN5Aqgv3N4NFSo/OlOdweWSCQLT
+	 MuSnTJYpqf0iHoXo9ZEeudRpk+fqxivyXsyzokukQSkF0/+Geowj8sRdSjZYeFUAgL
+	 8yirH6snsXZYnJ8Awb8g4TSEYmo98c7e51TlaNmTxGo2hJLGYXCd3EXsZSeb/NRaND
+	 2ktfqe8mUkQ3pH1gERKK8bLeCLVLgkOUH0MXfrbJt7ZcU53ZhFc80Oeayuq33t8F4G
+	 hdIenwrCp/cmw==
+Message-ID: <0c698377-fbe5-44cb-866a-23a0afc6de24@kernel.org>
+Date: Mon, 1 Jun 2026 13:42:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -53,14 +53,16 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: arm: vt8500: via,vt8500-pmc: Convert to
- DT Schema
-To: Udaya Kiran Challa <challauday369@gmail.com>, alchark@gmail.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: skhan@linuxfoundation.org, me@brighamcampbell.com,
+Subject: Re: [PATCH] dt-bindings: arm: vt8500: via,vt8500-pmc: Convert to DT
+ Schema
+To: Uday Kiran <challauday369@gmail.com>
+Cc: linux@prisktech.co.nz, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, skhan@linuxfoundation.org, me@brighamcampbell.com,
  linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20260531171612.4536-1-challauday369@gmail.com>
+References: <20260524110047.37590-1-challauday369@gmail.com>
+ <20260530-devious-magnificent-jackdaw-cc48c1@quoll>
+ <CAAj-GBnDiiKPwCQz1KDp6kMx9mQzmxSJpAuanbWsjt4iSzoZQQ@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -106,58 +108,62 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260531171612.4536-1-challauday369@gmail.com>
+In-Reply-To: <CAAj-GBnDiiKPwCQz1KDp6kMx9mQzmxSJpAuanbWsjt4iSzoZQQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6603-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-6604-lists,linux-rtc=lfdr.de];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: C048E61E802
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: BFB9661E8A4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 31/05/2026 19:15, Udaya Kiran Challa wrote:
-> +  clocks:
-> +    type: object
-> +    description: Container node for VT8500/WM8xxx clock provider nodes.
-> +    properties:
-> +      "#address-cells":
-> +        const: 1
-> +      "#size-cells":
-> +        const: 0
-> +    required:
-> +      - "#address-cells"
-> +      - "#size-cells"
-> +    additionalProperties: true
+On 31/05/2026 18:51, Uday Kiran wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    const: via,vt8500-pmc
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    type: object
+>>> +    additionalProperties: true
+>>
+>> No, binding must be constrained. See writing-bindings or any other
+>> binding. If you are unsure how to do something - open other existing
+>> bindings. Do you see anywhere such syntax?
+> 
+> Agreed. The clocks child node is now fully constrained: #address-cells and
+
+No, it is not. What are you speaking about? Open this patch and look -
+how anything "IS" there constrained?
 
 
-No improvements. Which part was confusing? Or let's rephrase, from where
-did you take such syntax?
 
 Best regards,
 Krzysztof
