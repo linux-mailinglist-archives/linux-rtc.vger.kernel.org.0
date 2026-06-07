@@ -1,184 +1,170 @@
-Return-Path: <linux-rtc+bounces-6632-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6633-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id ad2rCMJiJGp/5wEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6632-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 06 Jun 2026 20:11:14 +0200
+	id Dyx7Ck0zJWoBEgIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6633-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sun, 07 Jun 2026 11:01:01 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73F4164E008
-	for <lists+linux-rtc@lfdr.de>; Sat, 06 Jun 2026 20:11:13 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 797AF64F30F
+	for <lists+linux-rtc@lfdr.de>; Sun, 07 Jun 2026 11:01:00 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=DyTj39YO;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6632-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6632-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=yoseli.org header.s=gm1 header.b=ifxKt4OF;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6633-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6633-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=yoseli.org;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7DE79301E590
-	for <lists+linux-rtc@lfdr.de>; Sat,  6 Jun 2026 18:11:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 264F8300C010
+	for <lists+linux-rtc@lfdr.de>; Sun,  7 Jun 2026 09:00:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC7E3AFB06;
-	Sat,  6 Jun 2026 18:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00ACA37BE96;
+	Sun,  7 Jun 2026 09:00:59 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649D3384CED
-	for <linux-rtc@vger.kernel.org>; Sat,  6 Jun 2026 18:11:08 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780769469; cv=pass; b=PSLGegZV7w1enStA2qBt4ZNZkJanAdsJkM9Qf1gLs6PQZYI9KbZbWw5f9onaEgz45wEAFusTbsL5m6i1RBz4wPx2a/ED92+vKakcH+6PGJEP3ueSnYgLEK/RkJ9CBY5WNnXrFEyNk+kh6QFaWvs0JYWh5tauSpmBPBNEsdhRiEo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780769469; c=relaxed/simple;
-	bh=g1Sr0VV2Gjr2KczGOo3OW7moNzxZ++f8NtW3I8eGzCI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GWLz/mxp7nip/KQWF8tOmdKTPjSNipncKGft2acuBHEziZnjzkNTBXjnfx4LC6KBxh/as0+RFvZkbn4KDOAw0LcHIO4UOqbuJVgu0robdJ2ueyXMH9u5QgdmzYS6fjq3TV+l0g5uzEnZBUeJQ+NV4y+Sy9iBJ8lJ80nQZLUyvjE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DyTj39YO; arc=pass smtp.client-ip=209.85.128.180
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7e0aa486af8so29031107b3.1
-        for <linux-rtc@vger.kernel.org>; Sat, 06 Jun 2026 11:11:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780769467; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bwdm8imKsZNIHuMkOxMH2bIqpNrWGSqmGpRnLIeOt+sg9vDcZhVbH+5iPOws/VjdON
-         vtxci6MfXJ4mWiXVKjJxz2sX64emthPMVdevedM5t7mHzheIk0JE0Xnqdu895lv886Fk
-         pr7BvbpPXlnqQLXtiw4RE6BR3IYWgeqqAkpZBZD4QpkJcBeMOMLzShJre8H1VGZLYwvu
-         d18Het6tWaeOSidThj6yBSvp5PREK0dCsN59C1pNn0nOhtrROa7RB7pe/WAM3Zk4je1i
-         UgY5wqdyLnxie7w9XKFYQ402MYRnU72jucOC9lIMdCo0LI4Se9+yhfU7IHXphHC0eWuH
-         UZ/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=g1Sr0VV2Gjr2KczGOo3OW7moNzxZ++f8NtW3I8eGzCI=;
-        fh=2tp+bgLlkGsUiOrHRlHK+jMDmxSa2y+2M9UD6H63hJI=;
-        b=G0P2oas5O5j/gy5vLm9U8CHXQc7I2ERYPbtVLDiSamPaUIp4Z2zZdWWSTg/EDXrGVp
-         yWT16GsIxvF9wmt5h8g4EIZvPG755X7Rxiw/r16B9E4o0KhQrp46LxEYue2OcJnDFO0U
-         cQfomGXfDhzShaPspc+O+/FyxSMKkWWek/2M6MpdMNyB2E4Nqb8xwWFf6gbiCH1cRaY+
-         ZgnmBpewSX3ghwxJZukH8OBWSxvYx74anwKCWhmdVkIaQLfiGgKVdcHcu0gQ/6uW5jHD
-         TVrYgYsiuaUxnZjaxzmVmsdabJiOqjHZfPWYM2hjhzc/R05YcZ70fAPC5xGZclwKnjZi
-         7TYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780769467; x=1781374267; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g1Sr0VV2Gjr2KczGOo3OW7moNzxZ++f8NtW3I8eGzCI=;
-        b=DyTj39YOkw9t90HL3tbwMbOW4P4oNp3qnzCgSpWsl2dBUIgN/PP5+0rMsLTlJGKTZW
-         sNir0/NuCBD7Bz4YA7nz6VoFVjeUoRaWeWiO4I1M5pGiv43AEpKiGjMd9He32U9ykZ9H
-         +FzjrfL2UArQcTwuGJeUI3ON/QA9lgqxEGkfpgHkrTdhWBu9JWJM+gVIFfDrQVJcXXYS
-         /XrITCgVfwY1exreYHnrwfAupY5BAJKPodJe1YNgTb1Gm9Kk/846tMC8QMybH16kWwJL
-         bbHyLzmftZNuEBTcrO/8gzqCA0kGLW1U7EPpkmM8T1T9jJ1GIAezndBz8LzqsoG2NLxC
-         YIfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780769467; x=1781374267;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g1Sr0VV2Gjr2KczGOo3OW7moNzxZ++f8NtW3I8eGzCI=;
-        b=I/BIHlVnwwlEpE23A7iB+QLw+sdci2/wUdd9K9RGl010hGXTtgs2kTaZ2SXD6+AQ1/
-         NlUgun05zAMIdpeT08okCRH+UNy9SvOdwN3b+ZvP0RHW0Yx6Hbh4xYWuKOU9cstXwyiX
-         7G7A4CKyyUjLBuiEQLF/uumUE/U/SF13rnp5aQEYTem+/0Y+UfUZEWyN6P32n+0gOsu3
-         RkOj3fTMNtD55QXbWF9KxUjpU/a86Z+lHk3xRQH68bhM3zVg68+LD2lp740SXpp3ZMdU
-         DTQqR7NAx+4eJHowThGHPSJohs0SUMFWebSn8JNit2Apco43b7jubm7swunLNMt9NwPU
-         MVNQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+vkug2S/fHp6xgogTiyxVEemrbuyOzmDg8sVr3dEpQxHzJsxiWPvqkVOcvTle8o19BNz5QLbzLOGc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2atGcOQWDxLsSJ6q5KrCg3sebocQblREo/D8Cb/EjgSCtTlYq
-	nU6mxnWvtZV6M3X03Slpv7t3ll6T6TurpRjLy+qvx4X31kCQapP6NyWOSGGc8RqDHzvm+rG5z96
-	x2aNc2QUBEoUnVw0sqCjH4nc0G2yaWWw=
-X-Gm-Gg: Acq92OH29oY0LI+qhZs9EURaWWLJtUKjRDp12pRidVWRgn/Z4KVG6paGVAJ8Rmkb9hA
-	9fr0v6xAVT6+TFQL544gBt/3TxUwY0RUY4noTSb9Gt+Dlh8iuVxNRiMkv69F50G+BgBCdMWle97
-	N3L1C1OAuAt+idaAE90AJFVMond7onk3GHmA1Qfjdqw9ZKLlMcszsn/73yr85j4vux1agZmA42s
-	9BdwPsoF0Xoy3JJUmEhxIpHkhEmhadB76ei2j249SFUYtHM3oAjVzJJRxST89/1NxW7Q3xTk269
-	qElctUfp/dON4fnIeA==
-X-Received: by 2002:a05:690c:4426:b0:7dc:1c56:2901 with SMTP id
- 00721157ae682-7ed5028e9b9mr47127027b3.1.1780769467287; Sat, 06 Jun 2026
- 11:11:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E6737BE93;
+	Sun,  7 Jun 2026 09:00:56 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780822858; cv=none; b=IUlGDNAGYqmgjTtwyv5GhGs5JVX/k/Er0kVYb4fWOhgaL/CWxsTVUdWiWhqxEGwpqJR4V31meEtCEPP1Dgz/XayYjTSr6HFjpl87L8lRx0K//1K3nyntnhExaoCtA6flS/5cA9IDwQYDtl926K0pNRQ48Hjeyjsht7b6mfwgWIw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780822858; c=relaxed/simple;
+	bh=lZlmYjhH5lcKC+wcaIyZsZolPJosiL9oQdkaC2Tj37c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eX79Q+YVylfmGgKDwor3WMw02O5JrasA47y8+tgRHP9OAKiqtSchh7G8I1vjxbNmhzJp4FTkl/ustfaPgfLunlOhX7P9NNOyrwcSE5ct8MRoH/ufeZNAHN6JHrBA4uWIgpU8lmUofv8Ut8B/ios6hFQQug7tMW6f+OuNkpxeZhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yoseli.org; spf=pass smtp.mailfrom=yoseli.org; dkim=pass (2048-bit key) header.d=yoseli.org header.i=@yoseli.org header.b=ifxKt4OF; arc=none smtp.client-ip=217.70.183.198
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 973393EBBC;
+	Sun,  7 Jun 2026 09:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yoseli.org; s=gm1;
+	t=1780822849;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6xcpIg2hT8E09rThYFsm1gWVtrpT8JJHtcR5VBXH8zc=;
+	b=ifxKt4OFaUa9aQeMVpUGx5hr47FIj6a/qiJnB7uTWrNCpm3O7U1fde9UDyLzEeBN6vRGpT
+	jQGKSL5tZSSiQHQ4xtezTAHq7S4M9RfmQlXi5G0I0f858xpecYYK2vduzYQFn0fcCyCpZ3
+	nG1wxlD+wFQ4RBBNc4bXvOzR7GZXp52Ao6Hk4DqRfRZF6wNJzyUc1g+V7lj1fOj9pO97NP
+	x9S+QvvY0shkfCHR02mYs7PhdImJDQJDryuJzXrLFxvBNlM0dmPhpCSrM7iFBTexB1b4gh
+	03nRm5KjPoaX3dk8rkJCWw9zk/vgJGpjQpmjFUx132L4Hsm1FSjlyWMuSQL4tQ==
+From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Subject: [PATCH v2 0/2] rtc: add a driver for the Freescale MCF5441x
+ on-chip RTC
+Date: Sun, 07 Jun 2026 11:00:39 +0200
+Message-Id: <20260607-jmh-upstream-coldfire-rtc-v2-0-948d2b1ed146@yoseli.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260531171041.4149-1-challauday369@gmail.com> <20260601-zealous-loutish-termite-ccfc8f@quoll>
-In-Reply-To: <20260601-zealous-loutish-termite-ccfc8f@quoll>
-From: Uday Kiran <challauday369@gmail.com>
-Date: Sat, 6 Jun 2026 23:40:54 +0530
-X-Gm-Features: AVVi8Ce7u1p9uE7h60hWReuv8ATRkce56Melx_UbYFY28UGi2pRVU4y3Gq9-E8U
-Message-ID: <CAAj-GBkEVOUgGxXZHmp3XFbvKD-7sDaVepWoGzij8y=gBciMOg@mail.gmail.com>
-Subject: Re: [PATCH v5] dt-bindings: clock: via,vt8500: Convert to DT Schema
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: alchark@gmail.com, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, skhan@linuxfoundation.org, me@brighamcampbell.com, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADczJWoC/32NywqDMBBFf0Wybkoy4Kur/kdxoXGiI2pkEqUi/
+ nt97Ls8cO85m/DIhF68ok0wLuTJjQfAIxKmLccGJdUHC1CQqBhy2Q2tnCcfGMtBGtfXlhglByO
+ zrFJ5XIGxkInjPzFa+l7uT3Gzn6sOTTiF56IlHxyvV3zR5+7uJAr+dBYtldSoIS91mtZg36vz2
+ NPTcSOKfd9/PoTQuNUAAAA=
+X-Change-ID: 20260529-jmh-upstream-coldfire-rtc-88b095b2cf28
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Greg Ungerer <gerg@linux-m68k.org>, 
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-m68k@lists.linux-m68k.org, 
+ Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1780822848; l=2399;
+ i=jeanmichel.hautbois@yoseli.org; s=20240925; h=from:subject:message-id;
+ bh=lZlmYjhH5lcKC+wcaIyZsZolPJosiL9oQdkaC2Tj37c=;
+ b=nXPoCiWDDm+KVdnPhuc67qCNDATPekHijnSK8i7CON6IUY5iv3zUytimNwtGSWI166XY6/1Nb
+ 080KsUvQLQICcHUmw8AQlY1o54Nd2NMPMlHCXpSeRizTNycYpB06GfS
+X-Developer-Key: i=jeanmichel.hautbois@yoseli.org; a=ed25519;
+ pk=MsMTVmoV69wLIlSkHlFoACIMVNQFyvJzvsJSQsn/kq4=
+X-GND-Sasl: jeanmichel.hautbois@yoseli.org
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: dmFkZTFDk84YLy1veZXYw5Wq2Rsrn4DWp01f6DDUbIlK8WrRsH+Zr5YRmoRn6Ob+XIPpijCvRE2GRDUgU+6IG4FnmtRoj0x6QuP7W6KVYQovCadkZIP+dI/+IMUFVOR3OgZEdtYpwP7GCvvBggBevFALHZrTabA2Zvz2XhLnXbUxUquGWDUpYIhuVj4Ki13LksxmBRv7/i44Z1JmbLAOBCVbm6g4AtR8D6xf5uqZkKrAPR605UmeusD1MNgiT+NXTfkSKq0zDyWB1dVTvqcB39DP9o+y1fYgQvQ80XnnOM9Vy1QJzt0hASTA8Saa6lrihM6RuIcRjY/VBckZ93G0xdXqFFjHf3xxM1W30ru0gSc6W4K4DdWPo1N25kUkuEE2SQS0JN2aLlKHEq9rYpEuPJ/w+sDTk8W0sUsFNvAOa3xdbBGXFuCP1ARyHSrB2h/pw0Z7YjWhAo/ucLQ9PbViKOdJAV5gTZDpgfpyLv/VPsPRARjhoWNXqxjtxxt1zl9fVfmmyLuDtaVPyx5V5iTT6oHtMfUGJ3YY1grjqL2EGCHd+VaVjA/8a48zrKvuH6AUwyK82muqKhiY1qzKl2Q4Yn2Wj0i7cgnZmoTHH+UM9iu9BO8dWyAtPE3ZAzaR+f5Q7Fr6rtgTuXDXWbfHAAlwFrs4nqTmuRUT0u90eyFHLhZ1M0xOeg
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[yoseli.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[yoseli.org:s=gm1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6633-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6632-lists,linux-rtc=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,linuxfoundation.org,brighamcampbell.com,vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:krzk@kernel.org,m:alchark@gmail.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:skhan@linuxfoundation.org,m:me@brighamcampbell.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
-	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:gerg@linux-m68k.org,m:geert@linux-m68k.org,m:linux-kernel@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:linux-m68k@lists.linux-m68k.org,m:jeanmichel.hautbois@yoseli.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[yoseli.org:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[jeanmichel.hautbois@yoseli.org,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FROM_NEQ_ENVFROM(0.00)[jeanmichel.hautbois@yoseli.org,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,mail.gmail.com:mid]
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 73F4164E008
+X-Rspamd-Queue-Id: 797AF64F30F
 
-> > Convert the VIA/Wondermedia VT8500 and Wondermedia WM8xxx series SoCs clock
-> > controller binding from the legacy text format to DT schema.
-> >
-> > Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
-> > ---
-> > Changelog:
-> > Changes since v4:
->
-> My comments from v2 still apply. Almost all of them.
->
-> You a PMC binding and preferrably all this goes to that binding.
+This series adds support for the "robust" real time clock found on the
+Freescale MCF5441x family of ColdFire SoCs.
 
-Understood, Krzysztof!
+Patch 1 adds the rtc-class driver. Besides the usual time/calendar and a
+one-shot alarm, the block contains 2KB of battery-backed standby RAM that
+survives a main-power loss while VSTBY_RTC is supplied; the driver exposes
+it through the nvmem framework so userspace can persist data (for example a
+reset/reboot counter) across power cycles. Register and standby-RAM writes
+go through the RTC_CR[WE] knock sequence, the time counters are read under
+the RTC_SR[INVAL] guard described in the reference manual, and the time/date
+encoding is forced to binary at probe.
 
-The current separation between the PMC binding and the clock binding may not
-reflect the hardware correctly, since the clock controller functionality is
-implemented as part of the PMC and all clock-specific registers are offsets
-within the PMC register space.
+Patch 2 registers the platform device from the m5441x ColdFire SoC support
+code so that every MCF5441x board gets the RTC. The MCFRTC_BASE, MCFRTC_SIZE
+and MCF_IRQ_RTC definitions it relies on already exist in
+arch/m68k/include/asm/m5441xsim.h.
 
-Request you to please confirm on the below points to proceed for next revision
-of YAML conversion.
+The driver has been exercised on an MCF54418-based board: it registers
+as an rtc device, exposes the standby RAM as an nvmem device, and a value
+written to the standby RAM survives a mains power-cycle.
 
-1. It will be a standalone PMC schema (`via,vt8500-pmc.yaml`) which also
-describes the clock-related child nodes and replaces both legacy text bindings
-(clock.txt & pmc.txt) , or
-2. As per Alexey, PMC compatibles should be expanded to per-SoC values.
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+---
+Changes in v2:
+- Patch 1: wait_valid() now uses read_poll_timeout_atomic() instead of an
+  open-coded busy-wait. The atomic variant is required because it runs with
+  p->lock held and interrupts off. (Geert Uytterhoeven)
+- Patch 1: nvram_read()/nvram_write() use unsigned int rather than size_t
+  for the chunk/index locals, and scoped_guard(spinlock_irqsave) instead of
+  explicit spin_lock_irqsave()/spin_unlock_irqrestore(). (Geert Uytterhoeven)
+- Link to v1: https://patch.msgid.link/20260602-jmh-upstream-coldfire-rtc-v1-0-1e129a177d2f@yoseli.org
 
-If it has to be expanded to per-SoC values, can it be taken as separate DT-ABI
-change or should be done in the same series now?
+---
+Jean-Michel Hautbois (2):
+      rtc: m5441x: add MCF5441x on-chip RTC driver
+      m68k: coldfire/m5441x: register the on-chip RTC
 
-Regards,
-Udaya Kiran Challa
+ MAINTAINERS                 |   6 +
+ arch/m68k/coldfire/m5441x.c |  29 +++
+ drivers/rtc/Kconfig         |  12 +
+ drivers/rtc/Makefile        |   1 +
+ drivers/rtc/rtc-m5441x.c    | 579 ++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 627 insertions(+)
+---
+base-commit: 979c294509f9248fe1e7c358d582fb37dd5ca12d
+change-id: 20260529-jmh-upstream-coldfire-rtc-88b095b2cf28
+
+Best regards,
+--  
+Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+
 
