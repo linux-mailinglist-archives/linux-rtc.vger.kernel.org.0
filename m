@@ -1,69 +1,59 @@
-Return-Path: <linux-rtc+bounces-6640-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6641-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1iieI8QeKmoFjAMAu9opvQ
-	(envelope-from <linux-rtc+bounces-6640-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jun 2026 04:34:44 +0200
+	id dLcdHGguKmrcjgMAu9opvQ
+	(envelope-from <linux-rtc+bounces-6641-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jun 2026 05:41:28 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E927C66DD65
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jun 2026 04:34:43 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79F4D66E03B
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jun 2026 05:41:27 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=windriver.com header.s=PPS06212021 header.b=S1JuR9bO;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6640-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6640-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=windriver.com;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6641-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6641-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6BAFE3026164
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jun 2026 02:34:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CD17C300334D
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jun 2026 03:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1659F26F293;
-	Thu, 11 Jun 2026 02:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7F43128A3;
+	Thu, 11 Jun 2026 03:41:24 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6E81F1513;
-	Thu, 11 Jun 2026 02:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2333009E2;
+	Thu, 11 Jun 2026 03:41:20 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781145240; cv=none; b=osZRRvsKoVQXrPskCeAnu1OJOpQe1W8shKCnRKAbWj6W1r3Cl7PYTVYjaCPuvJnWKuQcHKJlszPBcMVUAjO5fj1RarCtwXgn77d/i3lbwptdnpaaV7J/1Eggl9gx0UDG6Gw+t2zLCCSE1IAEhO7e/1trRr09IDY0hnls3yWUis0=
+	t=1781149284; cv=none; b=DJfS2nPRgedvwpmAvaTlvy5Y9L1c6/ml0fvqQG2PiNmYkfyInDmzAMPE7tma16i9r25dozLv+I//UySPQb7eoZ5NStqyXQI7oOYad4/8ZiJlNjaNiaSotkrP3LHVajpTBYi1yYtGrKGfYZwMSrfCigs9yzr3WKt5dC8Dk0T7OPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781145240; c=relaxed/simple;
-	bh=HCKsj/0Eqvf7BBel4od38eR5CgjD4TPsXr0qPW9XY2c=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RCfVh0xjz9tpOr+JhZ+GtArsCfqc8d77CDx8bkhlhrl04uFtszsDc/go1Nuv4bl2+baVe/f8O7GsR6041V56GuPA1rHtIl8u0HI3mcn+wpmWhkth++yNcpooNsiqcl0TLg+mVKGxtlIrJ0CSIkEEE9cDnbsixeuuqFz81x2MClg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b=S1JuR9bO; arc=none smtp.client-ip=205.220.178.238
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65B1hKYp2428073;
-	Thu, 11 Jun 2026 02:33:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:message-id:mime-version:subject:to; s=PPS06212021; bh=3Qf+323Ii
-	pbAKKO8YFiCQo9USBM6NBOOnsLQXwzwcLw=; b=S1JuR9bOcLSmU7PDVVh8fhO8B
-	3HsA1mAR4TToTjwS0R6tx3WHfTOHk/zvVDK99MhQgQQLWPFZKjPvtR1ie6u9JI96
-	xfQBqUkZp4BWaITa3swQMro0PXYYfpwRk9ZXWot3pEe4L+oSPXWZmJZkppZRdbj1
-	t795AFE8Dpu3xnqdTmT6QjQER6eN959nz7sulHzIKIuSUNfRvJQ0BwEt1EzE4irz
-	X0x6KsNIzR3RONYWIM3zCJIV67/ihAPn5uvh+WqIYYKA+FydKegzIN2ZR+o2qgeA
-	JvqfpGa/2DaH8Td4UIi6bis+vfy5nhxi5q5jqe1yBdvk3lRAIFtNNEg16hToQ==
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [128.224.246.36])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 4eqe7frd73-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 11 Jun 2026 02:33:53 +0000 (GMT)
-Received: from ala-exchng01.corp.ad.wrs.com (10.11.224.121) by
- ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.61; Wed, 10 Jun 2026 19:33:52 -0700
-Received: from pek-lpd-ccm6.wrs.com (10.11.232.110) by
- ala-exchng01.corp.ad.wrs.com (10.11.224.121) with Microsoft SMTP Server id
- 15.1.2507.61 via Frontend Transport; Wed, 10 Jun 2026 19:33:51 -0700
-From: Xue Lei <Xue.Lei@windriver.com>
-To: <alexandre.belloni@bootlin.com>
-CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xue.lei@windriver.com>
-Subject: [PATCH] rtc: mv: add suspend/resume support for wakeup
-Date: Thu, 11 Jun 2026 10:33:50 +0800
-Message-ID: <20260611023350.1370881-1-Xue.Lei@windriver.com>
-X-Mailer: git-send-email 2.49.1
+	s=arc-20240116; t=1781149284; c=relaxed/simple;
+	bh=0Rtqmc6efXIydn0WxSiX1lOQQP7FHUZ/FlnPWtmI3rk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SSb4yUlY+ocEF4oRk4LN+GruyWIJvrOcQhNvGItyCM5gSC64XlJrA6QlrEv+sAYC78RWhqwqxVLugA8xIq9oGPvAoMTk11Y/mu+vwP/J5QnzDpLzjcabNVkjiLFwIVJDYC8rWF7uRKjsBk9z4Ukqv53roTVTkv958gsSZWDSVf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Received: from localhost.localdomain (unknown [117.182.75.76])
+	by APP-05 (Coremail) with SMTP id zQCowABHkcRFLipqY2YLEw--.20162S2;
+	Thu, 11 Jun 2026 11:40:56 +0800 (CST)
+From: WenTao Liang <vulab@iscas.ac.cn>
+To: alexandre.belloni@bootlin.com
+Cc: neil.armstrong@linaro.org,
+	khilman@baylibre.com,
+	jbrunet@baylibre.com,
+	martin.blumenstingl@googlemail.com,
+	p.zabel@pengutronix.de,
+	ben.dooks@codethink.co.uk,
+	linux-rtc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	WenTao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] rtc: meson: fix refcount leak in meson_rtc_get_bus
+Date: Thu, 11 Jun 2026 11:40:40 +0800
+Message-ID: <20260611034040.59682-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,121 +61,97 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=PKk/P/qC c=1 sm=1 tr=0 ts=6a2a1e91 cx=c_pps
- a=AbJuCvi4Y3V6hpbCNWx0WA==:117 a=AbJuCvi4Y3V6hpbCNWx0WA==:17
- a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=bi6dqmuHe4P4UrxVR6um:22
- a=klDOsUkWDRETUCZYPvoE:22 a=t7CeM3EgAAAA:8 a=M1d-zidf5v9J7YHPdqcA:9
- a=FdTzh2GWekK77mhwV6Dw:22
-X-Proofpoint-GUID: Tws-VbeLqYsiX14UyC5GDCyq8pTM6N8W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjExMDAyMiBTYWx0ZWRfX9GDG/lpa6+6r
- qBI5uvXxXHm/H4jWW6HWQe2oRfxVoTxw0YqJcPGppmptOlQPL+l3gK44Gp+I/R8TuWVCc6F3oP4
- xiJG/KKF1X/3AfH9SH0HP9K1L0r2DSYh+vOlqapSQsMQxF23mtJwZKQyYvbcBo1q9xrCD/wjV8A
- CKsfwJcaw/GOFL+p3gex2wGDfx3kP7mXiqpu6G/inzjBQWM2SwmzCXbNREgLpRRBovJPfVtvaRs
- F2x3KadH/L2QfV9hxL9RqC7PQl17d5rX/ceVND6L8dDC4UwHCAcjLjaRIllmc6okN/X0ZM+dSgr
- X+pN+qKJFn+sFU+rytVA38Bnn+nHizIuFC/Vga+mukOaE1bEp2uifbwgEsMbfLQlNsOkkBWot8x
- C1FeqHTbBZfjhkm12RW2zikh62VGspYBjwQNAdkr3FOCkMOlCsNteCDahp2fkkaqN2+sGmX3Jsj
- gIub2YSXvJwklgrIDYg==
-X-Proofpoint-ORIG-GUID: Tws-VbeLqYsiX14UyC5GDCyq8pTM6N8W
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjExMDAyMiBTYWx0ZWRfX85CqUJhBtbhj
- z35WBOUY3BjaAusQiHejsmFhXwWrQhAiqsewqlEokS182iTNu1sDoBRvme42kRpcSmn0RGRxpd8
- Heh77CzbuOoQnqM+bCdKi83T/SeyW5BfBUaDK/JeOPO2eKj48/kd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-11_01,2026-06-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606110022
+X-CM-TRANSID:zQCowABHkcRFLipqY2YLEw--.20162S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar43JFWxWw1rJw17Zw1kKrg_yoW8Gryfpr
+	43KFy7tryDtr4fJanrGw4ruFW3ZFnIqFWUGrsFyw1S9w1fJa1UJry2kF4rJayUWr1kG3y5
+	XFsrGF1F9F1DKF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+	1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFV
+	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+	x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
+	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+	sGvfC2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCRAPA2op-rvB+gAAso
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [1.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[windriver.com,reject];
-	R_DKIM_ALLOW(-0.20)[windriver.com:s=PPS06212021];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6640-lists,linux-rtc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[Xue.Lei@windriver.com,linux-rtc@vger.kernel.org];
-	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:xue.lei@windriver.com,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
+	DMARC_NA(0.00)[iscas.ac.cn];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[windriver.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6641-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:neil.armstrong@linaro.org,m:khilman@baylibre.com,m:jbrunet@baylibre.com,m:martin.blumenstingl@googlemail.com,m:p.zabel@pengutronix.de,m:ben.dooks@codethink.co.uk,m:linux-rtc@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-amlogic@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:vulab@iscas.ac.cn,m:stable@vger.kernel.org,m:martinblumenstingl@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[vulab@iscas.ac.cn,linux-rtc@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Xue.Lei@windriver.com,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[vulab@iscas.ac.cn,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linaro.org,baylibre.com,googlemail.com,pengutronix.de,codethink.co.uk,vger.kernel.org,lists.infradead.org,iscas.ac.cn];
 	ALIAS_RESOLVED(0.00)[];
-	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
+	R_DKIM_NA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E927C66DD65
+X-Rspamd-Queue-Id: 79F4D66E03B
 
-Add PM suspend/resume callbacks to enable/disable IRQ wake for the
-RTC alarm interrupt. This allows the RTC alarm to wake the system
-from STR (e.g. via rtcwake -m mem -s N).
+In meson_rtc_get_bus(), reset_control_reset() is called to trigger
+a hardware reset when the serial bus is not ready. The function may
+retry up to three times, but neither the successful nor the failure
+path calls reset_control_rearm() to balance the reference count,
+leaking the triggered_count on shared reset controls.
 
-Without this, the RTC IRQ is masked during suspend by the MPIC's
-IRQCHIP_MASK_ON_SUSPEND behavior, preventing alarm-based wakeup.
+Fix this by adding reset_control_rearm() after reset_control_reset()
+on both the error return path and the success path within the retry
+loop, ensuring the reset control can be re-triggered on subsequent
+bus acquisition attempts.
 
-Signed-off-by: Xue Lei <Xue.Lei@windriver.com>
+Cc: stable@vger.kernel.org
+Fixes: d8fe6009aa3e ("rtc: support for the Amlogic Meson RTC")
+Signed-off-by: WenTao Liang <vulab@iscas.ac.cn>
 ---
- drivers/rtc/rtc-mv.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/rtc/rtc-meson.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-mv.c b/drivers/rtc/rtc-mv.c
-index db31da56bfa7..55fa937f9f70 100644
---- a/drivers/rtc/rtc-mv.c
-+++ b/drivers/rtc/rtc-mv.c
-@@ -301,6 +301,28 @@ static const struct of_device_id rtc_mv_of_match_table[] = {
- MODULE_DEVICE_TABLE(of, rtc_mv_of_match_table);
- #endif
+diff --git a/drivers/rtc/rtc-meson.c b/drivers/rtc/rtc-meson.c
+index 21eceb9e2e13..729384dceb12 100644
+--- a/drivers/rtc/rtc-meson.c
++++ b/drivers/rtc/rtc-meson.c
+@@ -146,8 +146,12 @@ static int meson_rtc_get_bus(struct meson_rtc *rtc)
+ 		dev_warn(rtc->dev, "failed to get bus, resetting RTC\n");
  
-+#ifdef CONFIG_PM_SLEEP
-+static int mv_rtc_suspend(struct device *dev)
-+{
-+	struct rtc_plat_data *pdata = dev_get_drvdata(dev);
+ 		ret = reset_control_reset(rtc->reset);
+-		if (ret)
++		if (ret) {
++			reset_control_rearm(rtc->reset);
+ 			return ret;
++		}
 +
-+	if (device_may_wakeup(dev) && pdata->irq >= 0)
-+		enable_irq_wake(pdata->irq);
-+	return 0;
-+}
-+
-+static int mv_rtc_resume(struct device *dev)
-+{
-+	struct rtc_plat_data *pdata = dev_get_drvdata(dev);
-+
-+	if (device_may_wakeup(dev) && pdata->irq >= 0)
-+		disable_irq_wake(pdata->irq);
-+	return 0;
-+}
-+#endif
-+
-+static SIMPLE_DEV_PM_OPS(mv_rtc_pm_ops, mv_rtc_suspend, mv_rtc_resume);
-+
- /*
-  * mv_rtc_remove() lives in .exit.text. For drivers registered via
-  * module_platform_driver_probe() this is ok because they cannot get unbound at
-@@ -312,6 +334,7 @@ static struct platform_driver mv_rtc_driver __refdata = {
- 	.driver		= {
- 		.name	= "rtc-mv",
- 		.of_match_table = of_match_ptr(rtc_mv_of_match_table),
-+		.pm	= &mv_rtc_pm_ops,
- 	},
- };
++		reset_control_rearm(rtc->reset);
+ 	}
  
+ 	dev_err(rtc->dev, "bus is not ready\n");
 -- 
-2.49.1
+2.50.1 (Apple Git-155)
 
 
