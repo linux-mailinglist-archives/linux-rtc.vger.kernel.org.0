@@ -1,62 +1,62 @@
-Return-Path: <linux-rtc+bounces-6652-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6653-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id E0WZHjibL2qODAUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6652-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jun 2026 08:27:04 +0200
+	id qyRRM4eaL2prDAUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6653-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jun 2026 08:24:07 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB65E683C7A
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jun 2026 08:27:03 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25367683C19
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jun 2026 08:24:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=nxp.com header.s=selector1 header.b=TioGeIaC;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6652-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6652-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=nxp.com header.s=selector1 header.b=j5KG1zRu;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6653-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6653-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=nxp.com;
 	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB04730048D3
-	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jun 2026 06:23:15 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 882823002325
+	for <lists+linux-rtc@lfdr.de>; Mon, 15 Jun 2026 06:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF773A0E80;
-	Mon, 15 Jun 2026 06:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFAA3AFAEA;
+	Mon, 15 Jun 2026 06:24:04 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011002.outbound.protection.outlook.com [52.101.70.2])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010038.outbound.protection.outlook.com [52.101.84.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E326A2DFA3A;
-	Mon, 15 Jun 2026 06:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39BC2F83A2;
+	Mon, 15 Jun 2026 06:24:02 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781504595; cv=fail; b=kV6STcXmYqghYdJj3N1uyIfQ8qx/FmnAynqrzbRfIZ4HvOQmtVaecwjDRsa6+IYf4uXzV+VHYrQWw2pc5V1hFaKN9C8KSRtWALk/eQ09NmtSJa6MxpMpVAC9aTwlZ5EYkg23cnFhWOy4obzfcVe8cKh6rS8NjkhUKXwtQffOLFE=
+	t=1781504644; cv=fail; b=QBzl4ob3PHeh0HRooMG9lvMRSiwSboNhFOkMzqkO4FZ3m+co4pySaGjUc57XF70PP3escvnjlKPdOCbjl/IJYLf2n/27kYssUtcOASD5SfKFbh9f24+UQ9iIR5hQ80NCM/kyDuW7XX1wIxQqSnIzPGrXNx31Zh0n66TdQq8UrLg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781504595; c=relaxed/simple;
-	bh=kpwYwRGuGjgoFvAhZ0hahR/cdoQCA85i1XVYRJmYSjI=;
+	s=arc-20240116; t=1781504644; c=relaxed/simple;
+	bh=qX4JANRi+dGHK272JRBcBnNK+p8SHXC1UPMkzcwmbyw=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=dgrc2Po1Cm21F/3gbwMUNHHvaLzJZC+aPNTwc8XRpJlyYsrEqg7YU0xROjGW6G3YP19Ac2tXv5MtheTcpoA6VGQZrJdushIEw/UDoAykOpxBH8anfrFzVWj1sWXDbUpHXTt1nuZBKgDEGZUqZ2wVu8eX6chKlQ3BCeSZSm27DG8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TioGeIaC; arc=fail smtp.client-ip=52.101.70.2
+	 Content-Type:MIME-Version; b=eJnmNNyIOwaSDAtml3q+8MIVhMpUHf6Ll4Aqor272uaY4z9WdpPOZ/hemnUvFIZPuqQPUBTp3P5W03oSOTZtZQyBA3z9qu/GEddAEncO6iWFT+GoJ0yxytFGaVVaHTm+hzz2EE1dAS8kw1t6AWNtsM8jNMpegCouxka2Nr0ebBE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=j5KG1zRu; arc=fail smtp.client-ip=52.101.84.38
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bpRiWMZlDxOeC0dAgJyzXM4pSdLVuhb32XFcNol20IQ0VbeZqcfAv2K6Sbj0HcJjZBaOauY4DH+w/DXl2wyMKvkKBlD93Xu6JDYOJt8Epug9uH6oW5p+sDw8CmtBP00wM81wBMQ1PqsVf2c8ly1Z5RUIj48THxalED1JGlvE/MGimT9crUgLIg6NvyUeJtkJUSVWKG+eVEcnUMNcw/PWq3YIowT0y5/hmUS3Tp638RBYJMSEaeAMKbClf6jXv8iGZcUAnyzqPOj6whxJDnyWZOB/G8mxm/FcxraXd+oY+Ro1oOAimqZliy4wWLT5sCTuQhxO/TXqYY8st8F5mV75ZA==
+ b=yGH++Aw41wngGk2ytt55ojsaGxT3WqVwUBUhaZ/Moww2aywIi1t/79tnlTkJhT8vhs5I7mPCWzD9c4z/TCC1fyNdlhZsSAR0BwOQ5HfqnfjZKmdU2p1pYQRCfxI5SQsluiMASihQre4KVIRzzePgGISWHnJs2RyA0z4DGfiiT2/FEKpfC14phJTCLSBz4xtLHV8aIZvBrqRhrR78xtNngvGxvGYT2YjQMm1hCzl1TVa8a8kA1eVwUsnHosm/hDkVDrLKjznPmQhHSWiam5EXrqbWluG6Mj4Rr5BqRtOaKdgtIacStbK+wX2Zk1DgsBw6b6NX7/GzVjcnktghHCjmvg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S1radrsCNIubQJu24Z7gmOJTjYnvlxq6ucaLgwBfT0o=;
- b=NFZJxFtg88j11NvzVyhHIUw9L6O2iWOdE3UXSjY1N7l6+0faMtT6JLQEol1e+dSBpRMU+1rYDP/rj5kuTTfdOTXi7B4CxRIDxaVwoyBIQS63yjKDS4vlh0lkx/4HYmHhGNPxrgVvZY5QMkuHorD2u9hwihpVvVYjvX49sdP4dvR9E9Sexbieqpb880GnXMjVB1I9Yiit8CQm6r1ZU65VCMSDpwqW0dxe9oe0pkdgERSzC/XfjQewwzF29k8DPs8OS2g+gNx5uObxWtwqf9S6tCd0p1DBK2e9g0dNnqY8mOia66epFFBGLGDyJFxwqRyv6bnQAOalK5hNr6gCoNkHRg==
+ bh=y2eJNN4dCHKXCHO0PloeRFlBAY6RwNLqAxvDklrwRSw=;
+ b=TfM7ZaYih7Y9suPaukwrTmofmnRpQUkJDyeGcaSB5YCvMqBo3X8SDUi/kSZgpC+7qN/yfeHBqiwz+K04SC/5AqoBohuAbm7m3A/60k3plw5rQMoQJ20ofo3nT7xZs6OT7TQbXvrquJGlseg6PymXa7EcM727nH82q1RXfPO+Q96wY0Dm031UR6GAD9fCrluUiocnrMIK4vpWWPFIUlorxNEID5rMS6EeMjb9ICRFsFI6aXM4C++yIJfFJTnmkM46ZOqLmtycDT8EPbOBqzCOWgtG3E+2xgSmWEVFq3Xjlmc8uONZhgQSOHZkl1m9FXlffMatBXbwZneugsr9USqdBw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S1radrsCNIubQJu24Z7gmOJTjYnvlxq6ucaLgwBfT0o=;
- b=TioGeIaCVmpBppRZ2Hlw8V3CheCv8p9qFD49lalj2rTKx6NDoS+yFGFagvRNXjJrTuG1pJWXz/EMKtFERc7EtoBGD7XuSrK10c5CTu4kYJhwB+NIB2T1/s4xHQiyMuKj+F1f6aLpeciQ+x6vAZltWPFXLB24zTEE3KYtzY5SRilg9vXG9LWYX42od53Wk8SGi7D3QufOgFkb5pLp8KNFA5WkK2vK9pddfE7qLi1SBHniG+7D91FDiv9ubXxXYfwymlPGHEnsmVQl0UNkBB7U/H67KA9hUWrnuAboKe1OD+gFSc3AcOZDAvcAxVo1Jc/ioSW2ZJS0uuFhYPQ6cXRY7A==
+ bh=y2eJNN4dCHKXCHO0PloeRFlBAY6RwNLqAxvDklrwRSw=;
+ b=j5KG1zRuS7isbksrZK5x93bPHZHqlGiulOdwuQjXzSMxkpoUHtrA9N7qv83LL/k7uVDeQXZEfToHnSnFdv+36I2ypu7duFr12zwCcIZFiT9gvprr07aQr8t08JToiFKLlyWFFhbKkeSvaubgX8wE44ndVmxqbK9F3AQMEWCiVMwasIjZM3fDaDtMguVDYGKUrHIGz7TzKXxnwO4XcFeZtnY8LkM8HCGmNsB5TQ2hAZXZPZiJ0bVfnjaUGCNqvWHuxMAL87+U15lvNewNXEOJpuQGuH6InN59Qql18ay5s0Rb2jyy6/sQawzn03OIoqUDPchQIrYwQVCnOon78DnViA==
 Received: from AS4PR04MB9362.eurprd04.prod.outlook.com (2603:10a6:20b:4e7::9)
  by PA1PR04MB10442.eurprd04.prod.outlook.com (2603:10a6:102:44a::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Mon, 15 Jun
- 2026 06:23:10 +0000
+ 2026 06:24:00 +0000
 Received: from AS4PR04MB9362.eurprd04.prod.outlook.com
  ([fe80::abe7:4a6e:a51:baf0]) by AS4PR04MB9362.eurprd04.prod.outlook.com
  ([fe80::abe7:4a6e:a51:baf0%6]) with mapi id 15.21.0113.015; Mon, 15 Jun 2026
- 06:23:09 +0000
+ 06:24:00 +0000
 From: Lakshay Piplani <lakshay.piplani@nxp.com>
 To: Lakshay Piplani <lakshay.piplani@nxp.com>, "alexandre.belloni@bootlin.com"
 	<alexandre.belloni@bootlin.com>, "linux-rtc@vger.kernel.org"
@@ -69,64 +69,64 @@ To: Lakshay Piplani <lakshay.piplani@nxp.com>, "alexandre.belloni@bootlin.com"
 	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
 CC: Vikash Bansal <vikash.bansal@nxp.com>, Priyanka Jain
 	<priyanka.jain@nxp.com>
-Subject: RE: [PATCH v4 3/5] rtc: pcf85363: add timestamp support with
- configurable timestamp mode
-Thread-Topic: [PATCH v4 3/5] rtc: pcf85363: add timestamp support with
- configurable timestamp mode
-Thread-Index: AQHcWuAC0fEfpvKJ+EqE1HLqhxCRU7ZAaMlQ
-Date: Mon, 15 Jun 2026 06:23:09 +0000
+Subject: RE: [PATCH v4 4/5] rtc: pcf85363: add oscillator offset calibration
+ support
+Thread-Topic: [PATCH v4 4/5] rtc: pcf85363: add oscillator offset calibration
+ support
+Thread-Index: AQHcWuACYg9aBq8NxE+gxgdP8rIcubZAaSDA
+Date: Mon, 15 Jun 2026 06:23:59 +0000
 Message-ID:
- <AS4PR04MB9362A6437652BED0090C665CFBE62@AS4PR04MB9362.eurprd04.prod.outlook.com>
+ <AS4PR04MB9362CCF065D9A8A26C7325D5FBE62@AS4PR04MB9362.eurprd04.prod.outlook.com>
 References: <20251121121137.3043764-1-lakshay.piplani@nxp.com>
- <20251121121137.3043764-3-lakshay.piplani@nxp.com>
-In-Reply-To: <20251121121137.3043764-3-lakshay.piplani@nxp.com>
+ <20251121121137.3043764-4-lakshay.piplani@nxp.com>
+In-Reply-To: <20251121121137.3043764-4-lakshay.piplani@nxp.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: AS4PR04MB9362:EE_|PA1PR04MB10442:EE_
-x-ms-office365-filtering-correlation-id: 63948792-6853-4344-5968-08decaa6922a
+x-ms-office365-filtering-correlation-id: f9c25cfd-63ae-4ad8-0f15-08decaa6b00c
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|19092799006|376014|7416014|23010399003|1800799024|56012099006|4143699003|11063799006|22082099003|18002099003|921020|38070700021;
+ BCL:0;ARA:13230040|366016|19092799006|376014|7416014|23010399003|1800799024|56012099006|4143699003|11063799006|6133799003|22082099003|18002099003|921020|38070700021;
 x-microsoft-antispam-message-info:
- 6KvxS567OB9XbLgBC7S37ZviDp1VFmNfd+OlKWgl81uVx8GxUZ8fzvLCH9u1y0h+dmBWRjifr6kMCN65fZCZsequ4Jp+sqd4HKAdWj3g27a5DigLk1sQp+eAUL9PKLq01DpHbYfKE8wC64eEvbKg0H56Y/vCI8FfxZ9B/APQWRsE5/M+yOluktKKE4iprQKfZk3it1tBIKk2R+rSuQncExD08AmU5wtHEDyg6LaFoSeOKIfBvpv6CM7j+m3dsDiQRXB56PyAtNazCAQp77bewZNTD8SCdK34R69rsLZle71o/VmluMf+z1K922pPJy2wIesLRo2hETSREh4AtrnsOvkbVJDz0q7thaHWhBlPxK1+rk45OX8hyXoWnRXo9ysyCZ/EHb+Cdlz0n9O8/8ax/FY/cvmbneH9BXcSBEWmLlLM5GKzX7woJUKzoV5sF9J610HnJi8jhSwBPsUkyyVaGWfz49dMMSdf9PqhEPHZE1afhk7+1EWar9RDkyVnYpmYQY/BeXeoX2tB8sDqy5V6HFbPPDiDRBjq3y/nhDf7e8XQ68mXtoa3MdCgRu5GdYtmULsgCx/3ml8HJcQxKeONEMdZP0nqasEmpGVTvfSR7OHlRz2njS16qmTr6F46rnyJ5+UtvxTu3ouMqXakM1ELaDdlCN2dg8goV6epA0jnaXM7K0CR05iaS33YhJFdyf9yNrwtaKbTgAPZE7Z/bOqVKLZKfEnEE1l3EkUMwGAtP0QbaQWtsvx80ewT5KSZLtEIJIu139A72YAnX/yekvCrvw==
+ 2dQJklRyhTG1opkqWu4/esQZosyR6qXJ11w8dUPhjoaeBpzGWFom4idUFmagn9DQxOA/wvQQz8FM3enmUANUQcoBvnywr2jCCHTl05KSYaAFGWpJRMAeT9hgPFbo+HjnWqIGmPtAtwVQC9xZSDbCLDDbZbSQgeU+RydsZxwlWEc7fYKwxQqkwGf1Y7phGVpA0HY2zlGgZPSqj+AQjo2AQVEhL5B+RiqcDLMIciWj+02h0iRNs856S4kNm9dnl2WCSuXojSkJdmm8BiHapxUjKap8sD6L8aBRdF7QzCFfCtkJWtxfVvymqFKsYAVcXjuIZikXeeNLfg8mwEEe+EA2RXFIZ9UzKxLOAV/Gx78im6O56zwf50ruoBVKW2ii5N/C/UWXpNU8Mi6h5XoVYxxMo20qXI8S2zVvfYX+KntlVLc55/6tiQZvg8F8leAtMHzGYVXPjxOqJDK0sQdyE4ApWk9t6yb3xEHkneQXa1ePY6pMgPfVMNyjPUo4cZvYffyUz+Cc9N+Zq4iL5Nt1vDYYFy8pUETPRqrr9DEAEK/ED+kfAVs04g0DgDjycLJmQRJtOFB2r4kelB2paUw7ujFBnCJxOUSZzFf3bxNMg6QIaYHqYV3nF6nr5AzXL94P7k6zDB9397VTs7pLxooVaNEa6CQ/db5VCR+jNxd2yUgGuVKkRmY5ddDfKVqCmK4rLebEDunfzfjekkmXWdi3X7kQbXhMjHRWYXYeAaLerWlTjamJiRaX/pufW7aR5SjUikA4Fe+2+AYh6jo8AY81sHZzZg==
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9362.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(376014)(7416014)(23010399003)(1800799024)(56012099006)(4143699003)(11063799006)(22082099003)(18002099003)(921020)(38070700021);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9362.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(376014)(7416014)(23010399003)(1800799024)(56012099006)(4143699003)(11063799006)(6133799003)(22082099003)(18002099003)(921020)(38070700021);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?10BuFzSchNC/2M4VIiAGryKQdZVtfjN3poyDGp/YQKiJic88HHPozT8mzP1M?=
- =?us-ascii?Q?/OHYNmb3Q3a41vwNETjAxgQPk6Sli35/Uh1QROFvDYoOyXnyTxxOBPqQiama?=
- =?us-ascii?Q?vYr9F782gQ2IDGiuqzWWApw3ca/pelqqF+lkAvJDGibGXizj1Xx7MiMEk0Pr?=
- =?us-ascii?Q?iEjgSyNyqbY6fYSL3lz46duo0av1jpjJhwhb3uX98RKsET2taKEsrUgUSeQe?=
- =?us-ascii?Q?bTz6iWxuzpPmTDHn/79tiKWh5TvyV6yOMwdt5JxsmBWYb3mxuLWd55MwGVsk?=
- =?us-ascii?Q?omnH1aSB8fkCixndxfQjnKBkeEGCtE/PjmhYTsDNbqbwV2RHwjagLNNvUDDJ?=
- =?us-ascii?Q?kmi32NPHKsMxzxn3EM8lK6hcztpSbZAWNxu8BJeaWm1wH05L3oYN9cxU+ooI?=
- =?us-ascii?Q?7E/s84xjplmULE4/cSUv7zlwkbd1k3+d4l7S+IeCklyy9iMic/lzhZXqkwWA?=
- =?us-ascii?Q?C2gL9AEYAFu9Cu9s6C/5xH7+bB7VxA90Dqu2ICA2ZaYOtmPzAe3tqNOtCls/?=
- =?us-ascii?Q?ZvwOGhGyIBtAxN8/VLYP0Dk+k3d70Xakho30q+W49w4hLFwEVZk8j1yTuBup?=
- =?us-ascii?Q?3PodrxNkRYzbIrGID8xCvgHuMeMeqyY1/KTMWgmfyrhfgATzNRMaegqOsLPv?=
- =?us-ascii?Q?MEDX/EK4sdlVVNnn6+ZNGwJRAqwufLCl8RS/+BisLUhJ2Ez3ZiZ6jm5M44IY?=
- =?us-ascii?Q?oMlDf9jjJi2sCdaWE3S6yvxKos5h9uPJmsFgmydlJhyGm4vMO4RxXAO1b5P8?=
- =?us-ascii?Q?N2m2g5zF3Hd4uaVpI8rkhZTBRW8LsQuStf7qdBsaBnIGeFKeT4WhkWQJ3VPi?=
- =?us-ascii?Q?vDNdima8Ipj6/u4wvTusGrhS8ppA4ZFRlVneqFp988lshZ8JpHmbTTxMpRSw?=
- =?us-ascii?Q?sMVQu0F7MqIchGPn+5cjxt2dBuTxkqDx5mmPWkvj2djpWTq3MKzLkCKkIEGE?=
- =?us-ascii?Q?DIbBK/LrHP2DugDMRT93axSBW/kmPidUtw9tIlNlz8IYCa7qeuDdJ0Ssubq4?=
- =?us-ascii?Q?WcEaCsl6LUJEt9TD6/bohQ3Vb5IRWK+381K5JBPzfmORVzm2ODR1PYn95k+E?=
- =?us-ascii?Q?0cFN5HPhsE/vt2K9pQhXTXT8il0peO1RPriT3n/m4mHLcHAMGE90wK6J4kdT?=
- =?us-ascii?Q?5nQbPBuedBrOu9Awi9WgEC1et59ISnW6xAAgSwaGGmbGieHMAFmTjvVFtQVf?=
- =?us-ascii?Q?9Bfpp2sLnhOMXVVWSbXbJZ2FLa8snNwREFyjHRg7X3q10lbiH7KUxVtoEWVP?=
- =?us-ascii?Q?SZ4A3y9xmBNzu6To1Hjgkz9vfU7Fwpcx5OmivLZCd/Gm1A/EurFub2E8mX+6?=
- =?us-ascii?Q?ZCFB5P/6mtnD+P/hNpvbq/iebjBfAOZ0YewX4fd3d6wpJusdpIcLuIlU/u55?=
- =?us-ascii?Q?AOkFiLQkQA1I9kbe33obUPdGZ4s2bbZrUM40//rmiFJQgLY1Bz06C/Cpd+u5?=
- =?us-ascii?Q?Syq8rWc8evlzHRwzjs/n+EO1XIT8l6GmKXGMMNCRY4ZH5zGQrvwSuUbrvCHK?=
- =?us-ascii?Q?Acf3IVSuRIN5eV+PiRrZh6TXxFdfi7nQjmtrgD18FKJfGzlthPDccV65YB9s?=
- =?us-ascii?Q?kdbzP+Ledo/ftzE9kglk60HWiWmWPr2HTN5cxm1U8DnlHEZxoWZGNjTnqSLI?=
- =?us-ascii?Q?GUdHWu/nQp7EaToHPUdDjuqtiVK2SR7fYMs/igsFBS+JY2j7Y+cgk9rsnEtP?=
- =?us-ascii?Q?dnCfIuRLHb5gvqirSdm0de6s7CdTN1L/Y80IeGaDiuweKwpnTE0NWtlZvLrQ?=
- =?us-ascii?Q?pTzMfiFP+w=3D=3D?=
+ =?us-ascii?Q?qj3hOGxCJP8+lZIn1TdMuSFTizzKKBwkV2rzhGqEr+muP9qKv1VF9/Znfn6D?=
+ =?us-ascii?Q?YG+KLSxaH1Tqb5XGH3lZ7BuzQaCnDGpYhMjKFxCdNIWn9FmpRnFWOovFKw6R?=
+ =?us-ascii?Q?/QVHz8ieP5E28Pf8stVvbjPvMeDsby/tzu4HgZ6mICP3hTX2zm1KBGtnurDU?=
+ =?us-ascii?Q?/1JC7PjskwpbDINUzAsU1pwkWbDE9eKGD613UFikUvrj/8IsvKRUklDUw14x?=
+ =?us-ascii?Q?dzCsxBs49rYuWYGAquTbauf6coTuTG2K/zlwntr+IcqBxrZ7NIqp0tpL6sJX?=
+ =?us-ascii?Q?AFTqedYibSETFyN6iUNynm52GMR5P7u60orQqV6xBVJ1qi1B9XIKHrdVzJMo?=
+ =?us-ascii?Q?153tQbiBmVG1nF5nWq1CYaJB/TC1HvR0fykzTTRRt2K4OHk4mt3VWjg4MVOf?=
+ =?us-ascii?Q?vaJA2u7vJLMzrrHx7z4nj9rO0CpR8hMpCHMwqP6e5T8jlPVaOkMpGTros5eb?=
+ =?us-ascii?Q?/A5RCXkE46APqFsxadx0kZyathPDRvmF6gGH6N81BxsimkLQVb2S3MI6HMb5?=
+ =?us-ascii?Q?04JrNAcqShOvY0TPB8u0i/5BdSJIxtDMonFoL1uu79NlG4h1opQAaua5tFqD?=
+ =?us-ascii?Q?Rn+3nnSxvzJg3Ooq+MnwI+oqKljgcoQkCHCIHjHB927aOH7d6bcDXNbyACSj?=
+ =?us-ascii?Q?5l7QaUrh234oZIxuyoJmDqZt0ttBV8OJj/6fX0xUN/4TH+wgWGhvw9AC5a+T?=
+ =?us-ascii?Q?SR/HQVhevPlQ9RzUgHqhq94uOmON47r6uQ+5n5pNV9vWoRDpDoq1PmFJfDU5?=
+ =?us-ascii?Q?oDfy/yUx3f7uyJiHuiZNq5DAc/bG3kULjs2OTAYQkVMTHT2SVYTVTVdzfxmy?=
+ =?us-ascii?Q?aQ/7MjUXc9H5I2ezROMSxsZX0lDVqw9nkSIejN52GdH4JtVZueRevlKfR24i?=
+ =?us-ascii?Q?NVjgvjjKzDnUKYahrmCQ2CpZgxAR0zlADVC5FOVw7rqE005G2r4NitpU+3en?=
+ =?us-ascii?Q?vqxXvWfBFqyyv2ggVGNI6HhpcMa9MzWD8Bst+dJro1je6mSlYcsfwD9YVQYq?=
+ =?us-ascii?Q?ktotZGn/hv6FWll+Le+bo4CnbN3m6grhT4bqyjIDC5t5C0SEKIlG14CeN3n6?=
+ =?us-ascii?Q?KA0G/KLbch/pmP0oWmIUazx+jr5hYYYtUvYQKoQPdxVE+RuGkEbjsgmmZigX?=
+ =?us-ascii?Q?PG1zRkzBMloPZviJRWMEQfcKua0+57lw4X/nMfxrvjwFngm8Z+X5pfBqcMPh?=
+ =?us-ascii?Q?A201JoJ2WC4VKOplDKp5Lbdhtkx9JMtTLoNNG9688/622gYr8p0RNDbe52dU?=
+ =?us-ascii?Q?j+9JZpJsqFiE5CILx1nhJi/ytqpiwfF/T7/7BqIFz/D8NlwIO24VSr8Mk5ph?=
+ =?us-ascii?Q?yy4CVn3jZ5DaTcBel88tei4DEOjG3S2kWwdbJ0fQd9ljk/9N4B+Hrsxk2QVj?=
+ =?us-ascii?Q?8trK/5xRMFrT0aqOCPmSAVdFqvFNkTwf4vV3Fx7sjrnbXq6xplbS9yY4dExJ?=
+ =?us-ascii?Q?sJss7vGLKpiu859IkbxWqCciVkp+omvCrA3yv2HE53RQH4w17HYmFmfcSTjn?=
+ =?us-ascii?Q?wMvWxoGLL72VH9XvlNo5Oa3O3bYgKpkiOQicJrTnU8KO81+1QQ1VQM6qjG8k?=
+ =?us-ascii?Q?pFWaO2B8xtF+MCDyvrmFaZmcDJWQzgUW8ysBMmmgxPNXuNLwrwzwiCFlUA/O?=
+ =?us-ascii?Q?UCRizyVZ1jsB1q8SkIOnouu4P0ohEvJ6ITaM7CxIMyBrs/rKADOLWHqoIoDv?=
+ =?us-ascii?Q?vb+tYcJSeEUfaPzS0Yt/ws9ZoozF4kyU+9IFZv646Cx0zBwMdorTaWCwaGO+?=
+ =?us-ascii?Q?xorPgfpG7Q=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -138,26 +138,26 @@ MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9362.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63948792-6853-4344-5968-08decaa6922a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2026 06:23:09.7821
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9c25cfd-63ae-4ad8-0f15-08decaa6b00c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2026 06:24:00.0059
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4/+W+KPfYRF63jqClaiRPaU0zD/wNQQYjrYgeN+Kka0DHVIAz2QM+n3Yy6Szfi7Ev1e7ibwn6rf4m8j2FohiMQ==
+X-MS-Exchange-CrossTenant-userprincipalname: bUgduAXCOxW5cdNU9nNa2YE9A/8lCzIpndJ7w9GAxEVHHjWjPOBKvYmwiPhMRq1rikmM6MZG6EP4Sfz/6CB+zA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10442
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_REJECT(1.00)[cv is fail on i=2];
 	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6652-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6653-lists,linux-rtc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_SENDER(0.00)[lakshay.piplani@nxp.com,linux-rtc@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
@@ -175,11 +175,11 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	TO_DN_SOME(0.00)[]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CB65E683C7A
+X-Rspamd-Queue-Id: 25367683C19
 
 
 
@@ -194,23 +194,18 @@ X-Rspamd-Queue-Id: CB65E683C7A
 > <priyanka.jain@nxp.com>; Shashank Rebbapragada
 > <shashank.rebbapragada@nxp.com>; Lakshay Piplani
 > <lakshay.piplani@nxp.com>
-> Subject: [PATCH v4 3/5] rtc: pcf85363: add timestamp support with
-> configurable timestamp mode
+> Subject: [PATCH v4 4/5] rtc: pcf85363: add oscillator offset calibration =
+support
 >=20
-> Add support for the timestamp capture registers available on PCF85263 and
-> PCF85363. The registers latch the current time when selected events occur=
-,
-> such as TS pin activation or battery switch-over.
+> Expose the oscillator offset register of PCF85263/PCF85363 through the
+> rtc_class_ops read_offset and set_offset callbacks, allowing userspace to=
+ apply
+> frequency correction for drift compensation.
 >=20
-> The capture source can be configured via the nxp,timestamp-mode device tr=
-ee
-> property, and latched values are exported through read-only sysfs attribu=
-tes.
->=20
-> Additionally:
-> - Use rtc_add_group() instead of sysfs_create_group() to register the
->   timestamp attributes under the RTC class device (/sys/class/rtc/rtcX).
-> - Perform minor cleanups in the probe function for better readability.
+> The correction mode defaults to normal mode (OFFM =3D 0), where each step
+> introduces an offset of approximately 2.170 ppm and corrections occur eve=
+ry 4
+> hours.
 >=20
 > Signed-off-by: Lakshay Piplani <lakshay.piplani@nxp.com>
 > ---
@@ -235,8 +230,83 @@ tes.
 > - Use dev_dbg instead of dev_info for debug related print messages
 > - Minor cleanup and comments.
 >=20
->  drivers/rtc/rtc-pcf85363.c | 209 +++++++++++++++++++++++++++++++------
->  1 file changed, 175 insertions(+), 34 deletions(-)
+>  drivers/rtc/rtc-pcf85363.c | 46
+> ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>=20
+> diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c inde=
+x
+> e10e58f69012..665bbbb169b0 100644
+> --- a/drivers/rtc/rtc-pcf85363.c
+> +++ b/drivers/rtc/rtc-pcf85363.c
+> @@ -123,6 +123,11 @@
+>  #define TSR2_SHIFT      2
+>  #define TSR3_SHIFT      6
+>=20
+> +#define OFFSET_SIGN_BIT 7
+> +#define OFFSET_MINIMUM  -128
+> +#define OFFSET_MAXIMUM  127
+> +#define OFFSET_MASK     0xFF
+> +
+>  struct pcf85363 {
+>  	struct rtc_device	*rtc;
+>  	struct regmap		*regmap;
+> @@ -359,6 +364,45 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq,
+> void *dev_id)
+>  	return handled ? IRQ_HANDLED : IRQ_NONE;  }
+>=20
+> +/*
+> + * Read the current RTC offset from the CTRL_OFFSET
+> + * register. This value is an 8-bit signed 2's complement
+> + * value that corrects osciallator drift.
+> + */
+> +static int pcf85363_read_offset(struct device *dev, long *offset) {
+> +	struct pcf85363 *pcf85363 =3D dev_get_drvdata(dev);
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	ret =3D regmap_read(pcf85363->regmap, CTRL_OFFSET, &val);
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	*offset =3D sign_extend32(val & OFFSET_MASK, OFFSET_SIGN_BIT);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Write an oscillator offset correction value to
+> + * the CTRL_OFFSET register. The valid range is
+> + * -128 to 127 (8-bit signed), typically used to fine
+> + * tune accuracy.
+> + */
+> +static int pcf85363_set_offset(struct device *dev, long offset) {
+> +	struct pcf85363 *pcf85363 =3D dev_get_drvdata(dev);
+> +
+> +	if (offset < OFFSET_MINIMUM || offset > OFFSET_MAXIMUM) {
+> +		dev_warn(dev, "Offset out of range: %ld\n", offset);
+> +		return -ERANGE;
+> +	}
+> +
+> +	return regmap_write(pcf85363->regmap, CTRL_OFFSET, offset &
+> +OFFSET_MASK); }
+> +
+>  static int pcf85363_rtc_ioctl(struct device *dev,
+>  			      unsigned int cmd, unsigned long arg)  { @@ -396,6
+> +440,8 @@ static const struct rtc_class_ops rtc_ops =3D {
+>  	.read_alarm	=3D pcf85363_rtc_read_alarm,
+>  	.set_alarm	=3D pcf85363_rtc_set_alarm,
+>  	.alarm_irq_enable =3D pcf85363_rtc_alarm_irq_enable,
+> +	.read_offset =3D pcf85363_read_offset,
+> +	.set_offset =3D pcf85363_set_offset,
+>  };
+>=20
+>  static int pcf85363_nvram_read(void *priv, unsigned int offset, void *va=
+l,
+> --
+> 2.25.1
+
 
 Hi,
 
