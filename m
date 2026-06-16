@@ -1,341 +1,362 @@
-Return-Path: <linux-rtc+bounces-6677-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 1LiuMXwFMWrjaQUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6677-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 10:12:44 +0200
+	id 0Zh6O/gPMWoMbAUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 10:57:29 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3EB68D0CD
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 10:12:43 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E81868D56A
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 10:57:28 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=huawei.com header.s=dkim header.b=HstdFvyi;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6677-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6677-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=huawei.com;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=gaWOaeaX;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E259F302B75E
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 08:12:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 71560302BCD0
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 08:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF0D34CFC7;
-	Tue, 16 Jun 2026 08:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AE841B37D;
+	Tue, 16 Jun 2026 08:57:22 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53D82F8E96;
-	Tue, 16 Jun 2026 08:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAAF4219F2
+	for <linux-rtc@vger.kernel.org>; Tue, 16 Jun 2026 08:57:19 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781597561; cv=none; b=uqwD03yLxZiss1vLas9DvTds5PbIUCHXrAmTYT3eiwWzU55uTawvzRErYMtdJOZNBJ2iFLqpdz68P4161sVUPAD0RzTrn3kSKvNPJUURPm4pdyri56JZapI/I5qYfi+a31qKP0DJJTMC4EaFx6QkIYIt5yDqN/c98LNtmupjbjQ=
+	t=1781600242; cv=none; b=ltY/XpyLUv+rX4tYD0wtAS2GcMNaY7yb6nt2LI1VDlLzGLRPmM603mlmCJp9yW80TQIRD0P+Y73W7ozWMN6cW3ngwoCrSQ62uKuIeIaK90TRddqZRqmR3E0YKKfonQN1Tcs85fzqClwt12UnLy2Wk7mRWLutCfRnuxNK1QDhFNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781597561; c=relaxed/simple;
-	bh=1MmelEp6/m3S8NTSCRkOpyUqWPdpgwVdRePCX3mcE+M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=EO05n9vEkZo98r90sHBDCfZKAe+djJcMY9+H+i31XEsX2Gwr32+eufUtP1NC6rIMVq5XRq2WehVZOm9YRiUVObhn2wfFRxu4ZpDoKkdQaKLbcYXvr/hF0bZqBMbmF9lLQ+AjnsE80BZRHadQmscGgocggzocS/vA6hPcyO43e9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=HstdFvyi; arc=none smtp.client-ip=113.46.200.220
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=LlKiBELfr4qNbf8wJfnrCup1p9c0PXtVZ5mYojHAPAs=;
-	b=HstdFvyi8lE1ZI09ZVGdjysnmGZD9s9cfGDEfNzcrme8wheBNcSWWGkGgJzxgHDH7+M/jsT88
-	zKVyTrdNoJ+Sg+FHF5p+JVaEl/uzrAykX6UaiPsyDij6u0N1yyfF48CC7xUZIXBeOKO6ZQXCR5G
-	qREgYz0+Q2E4k2PkacYMbyA=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gffd92Zp7z12LF9;
-	Tue, 16 Jun 2026 16:03:41 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 01FAE40537;
-	Tue, 16 Jun 2026 16:12:33 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 16 Jun 2026 16:12:32 +0800
-Message-ID: <8586708c-f531-4c19-b06f-e40c4923755b@huawei.com>
-Date: Tue, 16 Jun 2026 16:12:31 +0800
+	s=arc-20240116; t=1781600242; c=relaxed/simple;
+	bh=YQTPaERZZEVfDy3cbkgqveLx6aZM/khTCmkBnMIkHzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=au6r4Nu1owYnQAd0UUSLKtO0upJtw0JoUZDqHd9ygSZ7QsRnIunGYBuiLlKpkPUZ4uSgkLIDmIBdpUSdyR7tjGqdakwYlgCgQRsm1LFuFD0Dh0BpuhNjGh+T5YaE+rl4o7K38npMk/pRoEtbFsdwwHxVIuwDdrR0SRkF4Hfze5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gaWOaeaX; arc=none smtp.client-ip=209.85.210.194
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-84237c55ef9so2710471b3a.0
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Jun 2026 01:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781600239; x=1782205039; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9yNlL/Fch0KIwV+VLb90p7R9gZLFeyNye+IbISH5/PI=;
+        b=gaWOaeaX2J1PXtTO6DYazCZuO/wZgABeqHvpIBsMR5ePCLQ75YYmnlyp45IBxQJhxc
+         YHkMPmp09gvEZI+2o82ac6EGV8QbwOZiJfr1TdBYOY4Sn0VH/Aq61/p23GFA8n95v+ct
+         GOdS6DvvMgk4ARkAdsfWgs/F+KWjaklm1EA/TYEb7WEkqPXNpBuMFI3TP3M0lsiTwBC5
+         Kx4whI+HvNLhp07YmHSuNyOs9o9TodTO5Oj5V/ff9T0ngexfNXaIkhf4pHE4ZfcwbDzz
+         LZYHrIpWTnPwGQ0gc0O4TDdK+GQwTFcK3zIR59TG8fSwGjsNJq/KZMOG0aZzd+s/8Wlh
+         UMvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781600239; x=1782205039;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9yNlL/Fch0KIwV+VLb90p7R9gZLFeyNye+IbISH5/PI=;
+        b=EYQPofxHXjN8apz72ZXS7Gx5PP6xWD1xuYWalXJIYORlsqf5eF8Ma2Tt9S7ctHn2aR
+         pMoJb2z+zy/5KgacZJUNnvEuBVFnHzfYrVneiG7iRQ45SvmGOytY+4BT4nr227bn3M46
+         oQaMXQI6akwMTp8bxuZQiYTJQpakIrwN0LnQ/6BoMh87x6+KtMH1Ae6CRT5000x6mz1A
+         P1PmeWky32CpvT771ArKtxpx8167Agj+uO8JHU/OkBRsfJux+XSVokgjfsjCULvuwtGD
+         FvI1LVVyTE3GB2GczbFxoRvxkcYeV/ayHeMOV+pUy6M1VWWwqX6iCO1Y9nlWSED3NUYi
+         Iaxg==
+X-Gm-Message-State: AOJu0Yys0hB5BLlGtdMTYem6+y2o0wyJlXD61YojdA2cnyIdVc7JcF+L
+	bYxU0jOKTGy/bySKZ96BnwJS8CZOi2YSz8SG5vK+DVLhCwPnuH8LmKfH
+X-Gm-Gg: Acq92OEF36/yCchjp0OGcpTCEx2P/UGFJJ7PA0fYOP6MHQZhwZArr0GQbOR1pf+AwsS
+	ZXNaK9sxrGs7MIPUdIS+x5cm+y1j+LFPgU7EZjVxzgYFeXGRMYBi7KxkxsGZ2oBACPClaJOB5c4
+	ugUHoZDsC/hgIqNuAmtks8+ER4hO8Bj1u2260Ei9gXZOq2s5aAlTtT0VGwFNlIieEeprzmKCuaK
+	8FDub7X/ebRfFxdo023pkYge+i23PN49tPQL586MtVYoOLqrdbeaM8FqhoIQ+xE0RdM1Fbthszy
+	Rq59O440NK4qgWWCaXaIARVLhTPMrOSGCGmvpkHQS5BGbgADL37GBGjsfLi0gJgteRzG2zTkU7m
+	Ve8ENubj4d5V9w3hXcbwD+/s6ZXjhykGDPLfw8FuYjJtqDCUsy0IrU1z6CKvDxBb7ihFRHAS/cb
+	KHBW8OMNnOHtddjz6MvaGN15OUuM9lSyJL74wFdfRRdV2dpL5nsjyk
+X-Received: by 2002:a05:6a00:391d:b0:842:6482:adc with SMTP id d2e1a72fcca58-8434cd0ca2emr18698657b3a.9.1781600239218;
+        Tue, 16 Jun 2026 01:57:19 -0700 (PDT)
+Received: from Tejas-Legion-7-16IRX9.. ([103.159.249.83])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434accbc89sm12689662b3a.15.2026.06.16.01.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2026 01:57:18 -0700 (PDT)
+From: Teja Sai Charan B <tejaasaye@gmail.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Teja Sai Charan Bellamkonda <tejaasaye@gmail.com>
+Subject: [PATCH v2] dt-bindings: rtc: Convert rtc-cmos binding to YAML
+Date: Tue, 16 Jun 2026 14:26:58 +0530
+Message-ID: <20260616085659.12809-1-tejaasaye@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rtc: interface: Add rtc time jump debug in
- rtc_timer_do_work()
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC: <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20260525130825.954214-1-ruanjinjie@huawei.com>
- <2026061515223171f111f5@mail.local>
- <06cdb8b3-8a5d-4f1d-b686-6122fa6f7af9@huawei.com>
- <202606160657465eab6e41@mail.local>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <202606160657465eab6e41@mail.local>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-9.16 / 15.00];
-	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6677-lists,linux-rtc=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[ruanjinjie@huawei.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6678-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:tejaasaye@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[tejaasaye@gmail.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ruanjinjie@huawei.com,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tejaasaye@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:dkim,huawei.com:email,huawei.com:mid,huawei.com:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,devicetree.org:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2B3EB68D0CD
+X-Rspamd-Queue-Id: 5E81868D56A
 
+From: Teja Sai Charan Bellamkonda <tejaasaye@gmail.com>
 
+Convert the rtc-cmos devicetree bindings to dt schema.
 
-On 6/16/2026 2:57 PM, Alexandre Belloni wrote:
-> Hi,
-> 
-> On 16/06/2026 10:10:19+0800, Jinjie Ruan wrote:
->>
->>
->> On 6/15/2026 11:22 PM, Alexandre Belloni wrote:
->>> Hello,
->>>
->>> On 25/05/2026 21:08:25+0800, Jinjie Ruan wrote:
->>>> In virtualization environments like QEMU [1], or during hardware
->>>> clocksource anomalies, an extreme time-warp event can occur. When
->>>> the system time abruptly jumps forward, the rtc_timer_do_work() handler
->>>> falls into a prolonged processing loop to clear accumulated historical
->>>> timers via timerqueue_getnext(). Running this loop indefinitely under
->>>> the rtc->ops_lock mutex triggers a kernel softlockup, stalling
->>>> the system.
->>>>
->>>> Introduce an adaptive telemetry and loop guard mechanism to enhance debug
->>>> visibility and prevent softlockups:
->>>>
->>>> 1. Record `start_jiffies` upon entry and leverage `time_after()` to
->>>>    check if the loop has monopolized the CPU for more than 1s (HZ). If so,
->>>>    the handler prints a telemetry warning, triggers a WARN stack dump, and
->>>>    breaks the loop to safely yield the CPU.
->>>>
->>>> 2. Track the execution via a `loop_count` metric. Printing this counter
->>>>    in the warning log provides vital diagnostics to distinguish
->>>>    an aggressive time-warp storm (high count) from a bogged-down callback
->>>>    bug (low count).
->>>>
->>>> 3. Utilize the kernel format specifier `%ptR` to convert the raw ktime
->>>>    into a human-readable timestamp (YYYY-MM-DD HH:MM:SS), allowing
->>>>    developers to instantly pinpoint the exact boundary of the time
->>>>    jump in dmesg.
->>>>
->>>> This non-destructive telemetry guard provides precise hardware/emulator
->>>> diagnostic visibility while ensuring core kernel availability.
->>>>
->>>> [1]: https://lore.kernel.org/all/20260114013257.3500578-1-ruanjinjie@huawei.com/
->>>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->>>> ---
->>>>  drivers/rtc/interface.c | 15 +++++++++++++--
->>>>  1 file changed, 13 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
->>>> index 1906f4884a83..f6c5fd16cc4e 100644
->>>> --- a/drivers/rtc/interface.c
->>>> +++ b/drivers/rtc/interface.c
->>>> @@ -927,10 +927,12 @@ static void rtc_timer_remove(struct rtc_device *rtc, struct rtc_timer *timer)
->>>>   */
->>>>  void rtc_timer_do_work(struct work_struct *work)
->>>>  {
->>>> -	struct rtc_timer *timer;
->>>> +	unsigned long start_jiffies = jiffies;
->>>>  	struct timerqueue_node *next;
->>>> -	ktime_t now;
->>>> +	struct rtc_timer *timer;
->>>>  	struct rtc_time tm;
->>>> +	int loop_count = 0;
->>>> +	ktime_t now;
->>>>  	int err;
->>>>  
->>>>  	struct rtc_device *rtc =
->>>> @@ -945,6 +947,15 @@ void rtc_timer_do_work(struct work_struct *work)
->>>>  	}
->>>>  	now = rtc_tm_to_ktime(tm);
->>>>  	while ((next = timerqueue_getnext(&rtc->timerqueue))) {
->>>> +		loop_count++;
->>>> +
->>>> +		if (unlikely(time_after(jiffies, start_jiffies + HZ))) {
->>>> +			dev_warn(&rtc->dev, "RTC time jump (loop: %d) to %ptR.\n",
->>>> +				 loop_count, &tm);
->>>> +			WARN_ON_ONCE(1);
->>>
->>> So, your issue is that it is too slow so you make it even slower? There
->>> are already plenty of tracepoints that allow proper debugging in this
->>> loop, I'm pretty sure we don't want to bloat the kernel with more
->>> messages.
->>
->> Hi, Alexandre,
->>
->> The point here is not about the performance of the rtc_timer_do_work()
->> loop — it’s about making the problem debuggable when things go wrong.
->> And we can put it under a debug Kconfig option, so production kernels
->> see no extra overhead at all.
-> 
-> 
-> But then aren't the tracepoint enough? There are 3 tracepoints in the
-> loop that are exactly for debugging your issue.
+Signed-off-by: Teja Sai Charan Bellamkonda <tejaasaye@gmail.com>
 
-Hi, Alexandre,
+---
 
-Regarding the `trace_rtc_timer_dequeue` and `trace_rtc_timer_enqueue`
-tracepoints, they are unfortunately insufficient to pinpoint this issue
-for three reasons:
+Changes in v2:
+- Allow intel,ce4100-rtc compatible used by existing DTS files
+---
+ .../devicetree/bindings/rtc/rtc-cmos.txt      | 27 ---------
+ .../devicetree/bindings/rtc/rtc-cmos.yaml     | 60 +++++++++++++++++++
+ result.txt                                    | 17 ++++++
+ 3 files changed, 77 insertions(+), 27 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-cmos.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc-cmos.yaml
+ create mode 100644 result.txt
 
-1. Ring Buffer Overwrite during Softlockup:
-
-When the loop iterates tens of millions of times continuously on a
-locked-up CPU, it floods the ftrace ring buffer in milliseconds. The
-earliest trace logs—which contain the exact moment the time jumped—will
-be completely overwritten and lost before anyone can read them.
-
-2. Lack of Causality Context:
-These tracepoints only log the timer's expiration and queue state.They
-show the symptom (infinite re-enqueuing). But these are not the primary
-scene, the time jump is the primary scene. They do not capture why are
-there so many UIE timers being re-enqueued?
-
-> 
->>
->> The patch is installed in the following scenarios:
->>
->> If the RTC hardware fails, or if the QEMU-emulated RTC device code in a
->> KVM virtual machine has a problem (for example, the x86 RTC emulation
->> hardware mc146818 has an overflow issue[1]), the time may jump as shown
->> in the log below, which can cause a soft lockup.
-> 
-> This is not clear, you are not explaining the issue. You seem to mix
-> system time and RTC time. What I understand is that there was a periodic
-> timer enqueued and then for some reason, the system time jumped forward
-> by a large amount and now rtc_timer_do_work is firing events for each of
-> the missed timers. You are not explaining the relationship with the RTC
-> hardware (I see none). 
-
-The time here all means the RTC time got by __rtc_read_time(), not the
-system time.
-
-And the RTC time jump is caused by RTC hardware failure or
-`QEMU-emulated RTC device` code bug, which means the rtc hardware
-returns an unstable rtc time or is not completely linear growth..
-
-The original issue is as follows：
-
-On kvm qemu with cmos rtc and mc146818 chip, after set the UIE timer
-expire with a normal RTC time （for example 2026 year）, In
-rtc_timer_do_work(), the rtc time jump to a future time (for example
-2033 year), it will loop for a while util softlockup because all
-subsequent enqueued UIE timers expires, as below:
-
-RTC_UIE_ON:
-	read now: 2019:04:08:12:32:27, add timer0 (expire: 2019:04:08:12:32:28)
-^^^^^^^^^^^^^^^^^^^^
-...
-rtc_timer_do_work() iterate the list in a loop:
-	read now: 2033:12:02:07:27:15
-		  ^^^^^^^^^^^^^^^^^^^
-	handle timer0, add timer1 to the list (expire: 2019:04:08:12:32:29)
-	handle timer1, add timer2 to the list (expire: 2019:04:08:12:32:30)
-	handle timer2, add timer3: 2019:04:08:12:32:31
-	...
-	-> softlockup
-
-> 
->>
->> However, when the issue occurs, it is only possible to know that too
->> many pending timers have accumulated in the timerqueue (for example, the
->> log shows that tens of millions of timer nodes have been processed) by
->> temporarily adding diagnostic code in rtc_timer_do_work().
->>
-> 
-> This is not true, there are 3 tracepoints to know what is happening with
-> the timers. Also, there are always exactly zero, one or two timers in
-> the queue, never tens of millions.
-
-Timer Queue Size vs. Loop Iteration Count:
-
-You are completely correct that there are only ever 0, 1, or 2 timer
-nodes linked in the timerqueue. My previous phrasing was inaccurate, I
-mean the loop Iteration.
-
-> 
->> To determine whether the root cause is hardware, kernel RTC code, an RTC
->> driver issue, or an RTC hardware problem, more debugging is needed. But
->> if the problem is indeed caused by RTC hardware, adding a diagnostic
->> print of the current RTC time when the loop takes too long (as this
->> diagnostic patch does) would make it easy to tell whether QEMU or the
->> hardware is faulty.
->>
->> [1]: https://lore.kernel.org/all/20260613195116.1807273-21-mjt@tls.msk.ru/
->>
->>      kworker/0:1-37      [000] .N..   489.159634: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281423
->>      kworker/0:1-37      [000] .N..   489.159635: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281424
->>      kworker/0:1-37      [000] .N..   489.159635: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281425
->>      kworker/0:1-37      [000] .N..   489.159636: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281426
->>      kworker/0:1-37      [000] .N..   489.159637: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281427
->>      kworker/0:1-37      [000] .N..   489.159638: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281428
->>      kworker/0:1-37      [000] .N..   489.159638: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281429
->>      kworker/0:1-37      [000] .N..   489.159639: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281430
->>      kworker/0:1-37      [000] .N..   489.159640: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281431
->>      kworker/0:1-37      [000] .N..   489.159641: rtc_timer_do_work:
->> timerqueue_getnext handle timer node count: 13281432
->>
->>
->>    swapper/0-1       [001] .N..    11.579334: __rtc_read_time: rtc:
->> 0xff11000109896800, ops->read_time:2026:01:05:09:36:21
->>        swapper/0-1       [001] .N..    11.579421: __rtc_read_time: rtc:
->> 0xff11000109896800, ops->read_time:2026:01:05:09:36:21
->>        swapper/0-1       [001] .N..    11.579469: __rtc_read_time: rtc:
->> 0xff11000109896800, ops->read_time:2026:01:05:09:36:21
->>        swapper/0-1       [001] .N..    11.580816: __rtc_read_time: rtc:
->> 0xff11000109896800, ops->read_time:2026:01:05:09:36:21
->>   syz-executor.5-7492    [003] ....   129.807406: __rtc_read_time: rtc:
->> 0xff11000109896800, ops->read_time:2033:05:04:07:03:51
->>   syz-executor.5-7492    [003] ....   129.807419:
->> __rtc_update_irq_enable.part.8: rtc uie on: 0xff11000109896800, now:
->> 2033:05:04:07:03:51, expire: 2033:05:04:07:03:52
->>
->>
->> Best regards,
->> Jinjie
->>
->>>
->>>
->>
-> 
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-cmos.txt b/Documenta=
+tion/devicetree/bindings/rtc/rtc-cmos.txt
+deleted file mode 100644
+index 7d7b5f6bda65..000000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-cmos.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+- Motorola mc146818 compatible RTC
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-
+-Required properties:
+-  - compatible : "motorola,mc146818"
+-  - reg : should contain registers location and length.
+-
+-Optional properties:
+-  - interrupts : should contain interrupt.
+-  - ctrl-reg : Contains the initial value of the control register also
+-    called "Register B".
+-  - freq-reg : Contains the initial value of the frequency register also
+-    called "Register A".
+-
+-"Register A" and "B" are usually initialized by the firmware (BIOS for
+-instance). If this is not done, it can be performed by the driver.
+-
+-ISA Example:
+-
+-	rtc@70 {
+-	         compatible =3D "motorola,mc146818";
+-	         interrupts =3D <8 3>;
+-	         interrupt-parent =3D <&ioapic1>;
+-	         ctrl-reg =3D <2>;
+-	         freq-reg =3D <0x26>;
+-	         reg =3D <1 0x70 2>;
+-	 };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-cmos.yaml b/Document=
+ation/devicetree/bindings/rtc/rtc-cmos.yaml
+new file mode 100644
+index 000000000000..ba4812778115
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/rtc-cmos.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/rtc-cmos.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Motorola mc146818 compatible RTC
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++properties:
++  compatible:
++    oneOf:
++      - const: motorola,mc146818
++
++      - items:
++          - const: intel,ce4100-rtc
++          - const: motorola,mc146818
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  ctrl-reg:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Initial value of the control register
++      (also known as Register B).
++
++  freq-reg:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Initial value of the frequency register
++      (also known as Register A).
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    bus {
++        #address-cells =3D <2>;
++        #size-cells =3D <1>;
++
++        rtc@70 {
++            compatible =3D "motorola,mc146818";
++            reg =3D <1 0x70 2>;
++
++            interrupts =3D <8 3>;
++
++            ctrl-reg =3D <2>;
++            freq-reg =3D <0x26>;
++        };
++    };
+diff --git a/result.txt b/result.txt
+new file mode 100644
+index 000000000000..5e90660b93ec
+--- /dev/null
++++ b/result.txt
+@@ -0,0 +1,17 @@
++arch/x86/kernel/x86_init.c:42:	{ .compatible =3D "motorola,mc146818" },
++arch/x86/platform/ce4100/falconfalls.dts:420:					compatible =3D "intel,ce=
+4100-rtc", "motorola,mc146818";
++arch/mips/boot/dts/loongson/rs780e-pch.dtsi:31:				compatible =3D "motorol=
+a,mc146818";
++arch/mips/boot/dts/mti/malta.dts:110:			compatible =3D "motorola,mc146818";
++arch/alpha/kernel/rtc.c:25: * We don't want to use the rtc-cmos driver, be=
+cause we don't want to support
++drivers/built-in.a:1031:rtc/rtc-cmos.o/
++drivers/rtc/built-in.a:11:rtc-cmos.o/
++drivers/rtc/.rtc-mc146818-lib.o.cmd:1:savedcmd_drivers/rtc/rtc-mc146818-li=
+b.o :=3D gcc -Wp,-MMD,drivers/rtc/.rtc-mc146818-lib.o.d -nostdinc -I./arch/=
+x86/include -I./arch/x86/include/generated -I./include -I./include -I./arch=
+/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./=
+include/generated/uapi -include ./include/linux/compiler-version.h -include=
+ ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KE=
+RNEL__ -std=3Dgnu11 -fshort-wchar -funsigned-char -fno-common -fno-PIE -fno=
+-strict-aliasing -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -mno-sse4a=
+ -fcf-protection=3Dnone -m64 -falign-jumps=3D1 -falign-loops=3D1 -mno-80387=
+ -mno-fp-ret-in-387 -mpreferred-stack-boundary=3D3 -mskip-rax-setup -march=
+=3Dx86-64 -mtune=3Dgeneric -mno-red-zone -mcmodel=3Dkernel -mstack-protecto=
+r-guard-reg=3Dgs -mstack-protector-guard-symbol=3D__ref_stack_chk_guard -Wn=
+o-sign-compare -fno-asynchronous-unwind-tables -mindirect-branch=3Dthunk-ex=
+tern -mindirect-branch-register -mindirect-branch-cs-prefix -mfunction-retu=
+rn=3Dthunk-extern -fno-jump-tables -mharden-sls=3Dall -fpatchable-function-=
+entry=3D16,16 -fno-delete-null-pointer-checks -O2 -fno-allow-store-data-rac=
+es -fstack-protector-strong -fno-omit-frame-pointer -fno-optimize-sibling-c=
+alls -ftrivial-auto-var-init=3Dzero -fno-stack-clash-protection -fzero-call=
+-used-regs=3Dused-gpr -pg -mrecord-mcount -mfentry -DCC_USING_FENTRY -falig=
+n-functions=3D16 -fstrict-flex-arrays=3D3 -fms-extensions -fno-strict-overf=
+low -fno-stack-check -fconserve-stack -fno-builtin-wcslen -Wall -Wextra -Wu=
+ndef -Werror=3Dimplicit-function-declaration -Werror=3Dimplicit-int -Werror=
+=3Dreturn-type -Werror=3Dstrict-prototypes -Wno-format-security -Wno-trigra=
+phs -Wno-frame-address -Wno-address-of-packed-member -Wmissing-declarations=
+ -Wmissing-prototypes -Wframe-larger-than=3D1024 -Wno-main -Wno-dangling-po=
+inter -Wvla-larger-than=3D1 -Wno-pointer-sign -Wcast-function-type -Wno-arr=
+ay-bounds -Wno-stringop-overflow -Wno-alloc-size-larger-than -Wimplicit-fal=
+lthrough=3D5 -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Werr=
+or=3Ddesignated-init -Wenum-conversion -Wunused -Wno-unused-but-set-variabl=
+e -Wno-unused-const-variable -Wno-packed-not-aligned -Wno-format-overflow -=
+Wno-format-truncation -Wno-stringop-truncation -Wno-override-init -Wno-miss=
+ing-field-initializers -Wno-type-limits -Wno-shift-negative-value -Wno-mayb=
+e-uninitialized -Wno-sign-compare -Wno-unused-parameter -g -gdwarf-5  -fsan=
+itize=3Dbounds-strict -fsanitize=3Dshift -fsanitize=3Dbool -fsanitize=3Denu=
+m      -DKBUILD_MODFILE=3D'"drivers/rtc/rtc-mc146818-lib"' -DKBUILD_BASENAM=
+E=3D'"rtc_mc146818_lib"' -DKBUILD_MODNAME=3D'"rtc_mc146818_lib"' -D__KBUILD=
+_MODNAME=3Drtc_mc146818_lib -c -o drivers/rtc/rtc-mc146818-lib.o drivers/rt=
+c/rtc-mc146818-lib.c=20=20
++drivers/rtc/.built-in.a.cmd:1:savedcmd_drivers/rtc/built-in.a :=3D rm -f d=
+rivers/rtc/built-in.a;  printf "drivers/rtc/%s " lib.o class.o interface.o =
+nvmem.o dev.o proc.o sysfs.o rtc-mc146818-lib.o rtc-cmos.o | xargs ar cDPrS=
+T drivers/rtc/built-in.a
++drivers/rtc/Kconfig:1065:	  will be called rtc-cmos.
++drivers/rtc/Makefile:45:obj-$(CONFIG_RTC_DRV_CMOS)	+=3D rtc-cmos.o
++drivers/rtc/.rtc-cmos.o.cmd:1:savedcmd_drivers/rtc/rtc-cmos.o :=3D gcc -Wp=
+,-MMD,drivers/rtc/.rtc-cmos.o.d -nostdinc -I./arch/x86/include -I./arch/x86=
+/include/generated -I./include -I./include -I./arch/x86/include/uapi -I./ar=
+ch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -=
+include ./include/linux/compiler-version.h -include ./include/linux/kconfig=
+.h -include ./include/linux/compiler_types.h -D__KERNEL__ -std=3Dgnu11 -fsh=
+ort-wchar -funsigned-char -fno-common -fno-PIE -fno-strict-aliasing -mno-ss=
+e -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -mno-sse4a -fcf-protection=3Dnone =
+-m64 -falign-jumps=3D1 -falign-loops=3D1 -mno-80387 -mno-fp-ret-in-387 -mpr=
+eferred-stack-boundary=3D3 -mskip-rax-setup -march=3Dx86-64 -mtune=3Dgeneri=
+c -mno-red-zone -mcmodel=3Dkernel -mstack-protector-guard-reg=3Dgs -mstack-=
+protector-guard-symbol=3D__ref_stack_chk_guard -Wno-sign-compare -fno-async=
+hronous-unwind-tables -mindirect-branch=3Dthunk-extern -mindirect-branch-re=
+gister -mindirect-branch-cs-prefix -mfunction-return=3Dthunk-extern -fno-ju=
+mp-tables -mharden-sls=3Dall -fpatchable-function-entry=3D16,16 -fno-delete=
+-null-pointer-checks -O2 -fno-allow-store-data-races -fstack-protector-stro=
+ng -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-i=
+nit=3Dzero -fno-stack-clash-protection -fzero-call-used-regs=3Dused-gpr -pg=
+ -mrecord-mcount -mfentry -DCC_USING_FENTRY -falign-functions=3D16 -fstrict=
+-flex-arrays=3D3 -fms-extensions -fno-strict-overflow -fno-stack-check -fco=
+nserve-stack -fno-builtin-wcslen -Wall -Wextra -Wundef -Werror=3Dimplicit-f=
+unction-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Werror=3D=
+strict-prototypes -Wno-format-security -Wno-trigraphs -Wno-frame-address -W=
+no-address-of-packed-member -Wmissing-declarations -Wmissing-prototypes -Wf=
+rame-larger-than=3D1024 -Wno-main -Wno-dangling-pointer -Wvla-larger-than=
+=3D1 -Wno-pointer-sign -Wcast-function-type -Wno-array-bounds -Wno-stringop=
+-overflow -Wno-alloc-size-larger-than -Wimplicit-fallthrough=3D5 -Werror=3D=
+date-time -Werror=3Dincompatible-pointer-types -Werror=3Ddesignated-init -W=
+enum-conversion -Wunused -Wno-unused-but-set-variable -Wno-unused-const-var=
+iable -Wno-packed-not-aligned -Wno-format-overflow -Wno-format-truncation -=
+Wno-stringop-truncation -Wno-override-init -Wno-missing-field-initializers =
+-Wno-type-limits -Wno-shift-negative-value -Wno-maybe-uninitialized -Wno-si=
+gn-compare -Wno-unused-parameter -g -gdwarf-5  -fsanitize=3Dbounds-strict -=
+fsanitize=3Dshift -fsanitize=3Dbool -fsanitize=3Denum      -DKBUILD_MODFILE=
+=3D'"drivers/rtc/rtc-cmos"' -DKBUILD_BASENAME=3D'"rtc_cmos"' -DKBUILD_MODNA=
+ME=3D'"rtc_cmos"' -D__KBUILD_MODNAME=3Drtc_cmos -c -o drivers/rtc/rtc-cmos.=
+o drivers/rtc/rtc-cmos.c=20=20
++drivers/rtc/.rtc-cmos.o.cmd:3:source_drivers/rtc/rtc-cmos.o :=3D drivers/r=
+tc/rtc-cmos.c
++drivers/rtc/.rtc-cmos.o.cmd:5:deps_drivers/rtc/rtc-cmos.o :=3D \
++drivers/rtc/.rtc-cmos.o.cmd:1372:drivers/rtc/rtc-cmos.o: $(deps_drivers/rt=
+c/rtc-cmos.o)
++drivers/rtc/.rtc-cmos.o.cmd:1374:$(deps_drivers/rtc/rtc-cmos.o):
++drivers/rtc/rtc-cmos.c:1382:		.compatible =3D "motorola,mc146818",
+--=20
+2.43.0
 
 
