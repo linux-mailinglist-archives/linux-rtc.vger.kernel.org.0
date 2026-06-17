@@ -1,53 +1,53 @@
-Return-Path: <linux-rtc+bounces-6687-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6688-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id D+8bC5ZnMmoNzgUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6687-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:23:34 +0200
+	id pMK8Iw5uMmpUzwUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6688-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:51:10 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84DC8697DC1
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DFFFF69818A
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:51:09 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sang-engineering.com header.s=k1 header.b="Qh+AZ//b";
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6687-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6687-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=sang-engineering.com header.s=k1 header.b="XaPtupS/";
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6688-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6688-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0A3AB306B360
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 09:18:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 08852326FE28
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 09:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD8739E9A0;
-	Wed, 17 Jun 2026 09:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033C73D1AAA;
+	Wed, 17 Jun 2026 09:38:40 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A9D39B4A3
-	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 09:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A48A37F732
+	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 09:38:37 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781687926; cv=none; b=Xepjw3mJFF4cRtz+vjOwGoXk0qY2APcYVc6QLeQUwLRz1nMv+ArH3SveycaPY2cCe1nY/1DEceIVJG/VSM9P49BFEbFagnDswKy0ZIyYi0kFwuSpyNjqvuqo8sizZZg8uKTMESPFt5VG59Xp563HKgbEQ9jYB34f/UJK9awO+8k=
+	t=1781689119; cv=none; b=CPxi897XV5N5nPLaANZH/WEiDD+mdz2kWq3jdXzsnhFDC9oOk0yr2aZ2co5hV7tHAWd0oe9aviUD5LCtG2fou3+H22aV8GlNyZIWKg5OGwUEfpGFvi5a0mBhvfoJqN71FRx8H4VnixIPuUZQU0s3dW0wXr/fu7Mxf7LP7cUFaWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781687926; c=relaxed/simple;
-	bh=u/PcLubphUScZEyBHaDZmnw+jmhYqzbxcAUrT0FPOEk=;
+	s=arc-20240116; t=1781689119; c=relaxed/simple;
+	bh=rgm36y2OpGnpfZDyJq45v+u5S54koPvVYpOixi6Jo6E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rEjTaFHeDd0dEh/+TTZfb9e6G24icdqM27NAKfjmqSvrtqRleMsUy2qWlrd4NqJQMKiTRawvyx7FZV7hS1LpG4E7yUNpLpSa+N/ogYPkxen/Prfn5BrUtTIKfbGksdM6VfbmSkEk7bj8GXQ07LHIxTDc3qMdjzUagNzGDo5PXNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Qh+AZ//b; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=i/kT7o/U/XjKLegnjoNKDvMQ2jkYNwIZQE5qb+JtoZkQJ5aL9PIzKdd5LZL8TpEyjAo2P3Kydfq8uJlP7gqHL+Tj5VlFfiWbwz79eKnvV3VHCthMKfUXoUkM8ZiApTzR1IXKuXCOvLGQx4tdmttNQjCA6TxtxVXZ/1xfhXchAG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=XaPtupS/; arc=none smtp.client-ip=194.117.254.33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=Ur2A
-	Kqttq9C1jxhZMMt3HsRHBG/YG9LFX2Iyhl4yrOI=; b=Qh+AZ//bH0G/NG/VBV2F
-	6IOC4T7Yp8U1WSc51+01gHzjXBcOO6m4SQ1pWrbkfc6v8tmaVhLpvXmOVnjvS3ON
-	46/wlwHstUkrjiLQduGCozHACdg+9ppc4aBhLRkWzjPweZ7LXHM1fMZGcJEB4Z2K
-	50vdMsswM5H8etycmGqmsbBQiIQ59ZjOTWck6aNV2WAQc7eviYk+wwvl7yP8VPWj
-	xJp4xtKYLYpKDBYsNbNQsm+MyKvz2ZKXDf9cUU3PWxb70k+UMt+w9v6Y1YQO6Ftd
-	BsMJtddJjvlBLCe4GIds2JF02tM7xW9oFMY9HRojruh2+uGQ2w/dl2cuAaQLsTbO
-	fQ==
-Received: (qmail 99205 invoked from network); 17 Jun 2026 11:18:33 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 11:18:33 +0200
-X-UD-Smtp-Session: l3s3148p1@XKwpi29UEJQujnvI
-Date: Wed, 17 Jun 2026 11:18:33 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=rgm3
+	6y2OpGnpfZDyJq45v+u5S54koPvVYpOixi6Jo6E=; b=XaPtupS/JnmjRKBJ4YPp
+	0DigDPNogMfztF9OWk+MC+NvlOQB/SJWWIdeGMxxyt1n7b0tuu9g9nmSqmlbgmuO
+	VErKW7IZ8TQXGF+jI3kqVpN9vSKEWRkTFhGNl6IwHtYXoufSPNq3P1tkCxn5yLju
+	w1wtD5mdq7A+OoUg+eHwDM4eyx51jlDosw9198ziES7uqKuspNXH+3vuxdQM6iUL
+	XQ7VuoJxe/k6vVCGWZ7KajoslCiBn0x7l6vCxOEtsHCdzK84IsuNPhlWFhuZxG4M
+	IAcOp+JdkuaMFRHD4xoIs5UiwY7O0eIQKd8GfjTDlsdqyUS6Eupll80dR67Bbzvc
+	AQ==
+Received: (qmail 106160 invoked from network); 17 Jun 2026 11:38:36 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 11:38:36 +0200
+X-UD-Smtp-Session: l3s3148p1@2HrX0m9UiKQujnvI
+Date: Wed, 17 Jun 2026 11:38:35 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -61,9 +61,11 @@ Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
 	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 00/12] Add RTC support for Renesas RZ/T2H and RZ/N2H SoCs
-Message-ID: <ajJmacl9ZJtkoLyf@shikoro>
+Subject: Re: [PATCH 01/12] dt-bindings: rtc: renesas,rzn1-rtc: Add RZ/T2H and
+ RZ/N2H support
+Message-ID: <ajJrG51jysbJQujR@shikoro>
 References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260615154805.1619693-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,9 +73,9 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ESSLquH2XRyJzGVh"
+	protocol="application/pgp-signature"; boundary="9KewOfIgVqcuK8jH"
 Content-Disposition: inline
-In-Reply-To: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20260615154805.1619693-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.26 / 15.00];
 	SIGNED_PGP(-2.00)[];
@@ -85,8 +87,8 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
 	DMARC_NA(0.00)[sang-engineering.com];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS(0.00)[m:prabhakar.csengg@gmail.com,m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:prabhakarcsengg@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[wsa@sang-engineering.com,linux-rtc@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
@@ -95,7 +97,7 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6687-lists,linux-rtc=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-6688-lists,linux-rtc=lfdr.de,renesas];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[sang-engineering.com:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -109,71 +111,64 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
 	MISSING_XM_UA(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sang-engineering.com:dkim,sang-engineering.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,shikoro:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,renesas.com:email,vger.kernel.org:from_smtp,shikoro:mid,sang-engineering.com:dkim,sang-engineering.com:email,sang-engineering.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 84DC8697DC1
+X-Rspamd-Queue-Id: DFFFF69818A
 
 
---ESSLquH2XRyJzGVh
+--9KewOfIgVqcuK8jH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-> The RTC block is closely related to the RZ/N1 implementation and can
-> reuse the existing driver infrastructure when operating in SCMP mode,
-> which is required on these SoCs due to their 195.3 kHz RTC input clock.
-
-Yes, I implemented SCMP mode because the (back then) upcoming R-Car X5H
-also dropped SUBU mode. And SCMP works on my RZ/N1D board as well, so I
-could test it already.
-
-> While the RZ/T2H and RZ/N2H variants do not implement the RTCA0SUBU and
-> RTCA0TCR registers present on RZ/N1, those registers are not accessed by
-> the driver in SCMP mode, allowing support to be added with minimal
-> changes.
-
-Note that even for RZ/N1, RTCA0TCR is marked as "not available".
-
-> The RZ/T2H RTC variant also supports a 1 Hz output signal on the
+On Mon, Jun 15, 2026 at 04:47:54PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> Add compatible strings for the RTC block found on the Renesas RZ/T2H
+> (R9A09G077) and RZ/N2H (R9A09G087) SoCs.
+>=20
+> These SoCs integrate a closely related variant of the RZ/N1 RTC IP.
+> Unlike RZ/N1, they do not implement the RTCA0SUBU and RTCA0TCR
+> registers. This is not a limitation for Linux support, as these
+> registers are not used when the RTC operates in "scmp" clock mode, which
+> is required on RZ/T2H and RZ/N2H due to their 195.3 kHz input clock.
+>=20
+> The RZ/T2H RTC variant also supports a 1Hz output signal on the
 > RTCAT1HZ pin, controlled by the RTCA0CTL1[RTCA01HZE] bit. This bit is
-> marked as reserved in the RZ/N1 hardware manual, making RZ/T2H a
-> distinct RTC variant despite its overall compatibility with the RZ/N1
-> implementation.
+> marked as reserved in the RZ/N1 hardware manual.
+>=20
+> Update the binding schema to require the additional clock inputs used by
+> these SoCs.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-R-Car X5H is the same for the above as well.
+Sashiko is wrong here because
 
-> The series consists of:
-> dt-bindings updates to describe the RZ/T2H and RZ/N2H RTC variants,
-> driver updates to recognize the new compatible string and enable
-> support for these SoCs.
+a) TCR is the "Test Register"
+b) TCR is not even present on RZ/N1D. Cover-letter misses that, too.
 
-I will review and test in on my N1D-board today.
-
-Thanks for your work and happy hacking,
-
-   Wolfram
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---ESSLquH2XRyJzGVh
+--9KewOfIgVqcuK8jH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoyZmUACgkQFA3kzBSg
-KbbAzxAAgB3BEg7c5V1u7545NG7MVNtSPrNRk8H1VT4T+L5DuGNgxnr5LVOFoLEJ
-/7qp1hGauNt1dV72FQms45UvscsIf0anF4aI9WlitN/J8cc8wR4W6zbs8OMDfz7w
-v+66/fkSDHpnZL37oOxCsdjvUr8acZG2MjiP5yuYRMGWDDj+jZ/AS5fWYQ0OA8oH
-CqBZIQT1r8Y1RbOHrHQfYC9DnUwswKcc7KUeASnc49xteDVLs55BduZclR+C4c2q
-1XB7Q71vUCGJIX0JjtwS26kM1SKRiUBx5rR78MelFYFvo++nXGtsZUKy8RcK6i2I
-COn12npVL7Z2TaaoFH0FpGLAbEGQUm8hT6zPqMTtEr/M5tQB9TY92JAv72OoGcmJ
-UuEpQ+ZEilH6OqZAGBn4FhN2ufTTHZHEM7Fv+/PlKKWql1rRvWA9HKRd3pBu6ulf
-PeM97qRU8dFY2dND/9Lk8tnolzWZU/Sh4r34acRd0A0990hf2Mu+d55Ci6XQEzmW
-SuEKUQkfDROP1TkFKeEwEIXzA11KHByUqiM9qY0wx2y9VmvNMSdFkyvudlbHfSVj
-hzdJhbDEVH5zE8Nxab1zvEuYB1bvcLdtHQp2Hrsa9E0WlZ8eaNRmti1nPz5K1SvN
-dYlLbGfvozx11Hwpc1/aWzIsvwESXq2pNQsamR8PpDTjBx2FZlM=
-=CbMX
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoyaxsACgkQFA3kzBSg
+Kbb8RA//b1xWUiwEPvJfSOWW96169F2XSyhe0K7AtnjiPwqycXdgnN67t/VyHqiM
+ujexSHD/Xm5N/l2xIW7B23X+yXlMov5iZBrH4y1z2jS7DXafrlpyjy8CuINfUfcw
+UfH9hBv4lUaudlXBXpHaofVlygOGHnCZQm8UGB6gyBPWCt7pK4hQ2Zq5EK4oMJDh
+1yH0sZIMmrJLJwhECbtJFdcgoVxugiY4wdnjvyKZ+ukP/fTNYZJaDnwOf89uNMl3
+94lsBSobIFs2x9k60KV1x8UKrcz0nuvbGOLzraplen1OrUmsUjgxtvbK1oe0goKV
+nGoSHfIZXXULSvHGdSnMU3xWv0IPifJX+Mn3+QEsT1v4rhKLIyOVXwoQDfJk/BV8
+0LaHrfy0v4y4Q94lchcm+SYBBUS6dE+O0GJQ9n1WCaXA4oYY2O0LO3wpaviVwftC
+kBCatWPQi0AWe2IXUr/EOBaq4Z42XK+ecctJH4EBAbkRJZNveQ3nJea1TzCkmZ1z
+vCYjtQ3vmDd+cfgtwuvzM0x++CTVmUbbY4P3HgQtpWX0k0udZ8EkWiIbFT+K1nm4
+zYwGZdbg3hXJFQXM9NijCfv91lRUNnfHIivoC3IxtvXPPiMp4ItgsMHtOCoeWHNh
+p2emQw6UibeA5ezXcnTGW8SD/dpmGUmyAshZrQ0yDVzq028LWE0=
+=Y5jp
 -----END PGP SIGNATURE-----
 
---ESSLquH2XRyJzGVh--
+--9KewOfIgVqcuK8jH--
 
