@@ -1,53 +1,53 @@
-Return-Path: <linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6699-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id KJp8DsF+Mmpn0wUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:02:25 +0200
+	id IbkOGWJ/MmqX0wUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6699-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:05:06 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30CCB698C3E
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:02:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2481698CA8
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:05:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=TF48Qm7l;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=Pg7EPL5x;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6699-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6699-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1DDDC301D699
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:00:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 173B1313A806
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1452E738B;
-	Wed, 17 Jun 2026 11:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C274D378D9F;
+	Wed, 17 Jun 2026 11:01:40 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F122E739A
-	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 11:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1953E30BB8A
+	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 11:01:37 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781694052; cv=none; b=qvRyDp3/3rwa1wdx1MVYX+QSfEr1ohDHNiSigOm11i2rUYDaHy59GGEY33RXfvNeNn74KHydtzeBEQ75qjunoX+D5ztGi86EcjoyLgGuhtAbCBmMCIVxrsf7PYet2zG2wYZhS7NmSYF/qqpzTTNv+SkoT4JcosxfreaatnPOme4=
+	t=1781694100; cv=none; b=L4MdqBBWUBW6B46un7jREIuRq3Mmg3sY97klzy+w8DHp4+ZS746V70cKgv15D5iJf/1jPRmXMQuf2ocFvkqavcjPpz6fEODmU4hq+Eg46ku7+HHth70jTatsw3ngj9QPcv/nodmTL6spLDG5m2AZnVTqhqRF/f1wRojxgI1gZXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781694052; c=relaxed/simple;
-	bh=t/0M6FtlG2AhpicjI57jtSrBD7lIUbI6bhh1cBmC/hw=;
+	s=arc-20240116; t=1781694100; c=relaxed/simple;
+	bh=Tl4Z4BqCviMYKctx1lwpEAGhFTPdhr4eNsYvfmtVgPo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hVLxzS/llZyXC6kVHUy+VaqOkiD9x5UAzuPCwyYD7c9kC9GXv5J44gGxzbqcaPEJ4/ayyI22DDapbZij0PSOB3cfo13b7u1zW6nGAPEAYwU+6Q8COslAIdAn54N4ItQssMa706RcPSXoWWgnpvd0VQA3qgmMBSRKBwLAB17EbC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TF48Qm7l; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=bTU2OSpgiCKMG6vXR93qyjJNUuNp7n9AMNt3FEMwzXVFKJLDb+CieAuJsovPyjZovsuaw6hRmgwN8nlxcNaDkJwuCk6o+ecwbNLurlQMJH0MytCdKtL3mJNpd8fHT2Sb5jixzd0ftehHVgJObcD0TbpSFA23r3vorAuUvJ6c/cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=Pg7EPL5x; arc=none smtp.client-ip=194.117.254.33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=t/0M
-	6FtlG2AhpicjI57jtSrBD7lIUbI6bhh1cBmC/hw=; b=TF48Qm7lUd7Ct3VI27CH
-	5foioDyJGTt5T96vTUquIrmQz8dqkMpUPwNh2ZLtABC4ZD1kcHaxcSzAOGjRlGRJ
-	NbBUN78gWpbJLTvajnhHsj6HTFkx1v6PYE8xY8KPVEhZROKf15wPoltte6oJ7eZJ
-	OZz3KfPQhvt4YI76RpVlD2UV0ub4QAI0JmlDJk3zIMqrgdSUj9m6pT3Vg65My/kx
-	IgV2EWLZgpLlXI/+W8ChzYfwKmhr6xHnNGrROh5F33YVvQu5qdrndGn7i1enwMnG
-	8A0EnIeK1PMNoprFD8TMVNEg5vzfvTF695i/qtsf3cvHVqUoS5KAqxVEfZIKTGXg
-	xg==
-Received: (qmail 133285 invoked from network); 17 Jun 2026 13:00:48 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 13:00:48 +0200
-X-UD-Smtp-Session: l3s3148p1@pfze+HBUWMgujnvI
-Date: Wed, 17 Jun 2026 13:00:48 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=Tl4Z
+	4BqCviMYKctx1lwpEAGhFTPdhr4eNsYvfmtVgPo=; b=Pg7EPL5xj9Xy5YihZGHv
+	Xw5TmWe87h5hNhApCLJHD2n5inPruExxvSWaYG/MymS08YpRVmQBwcLGNdTEkGqX
+	eVNJ4vxgjD3JLymsLKs/EYuauKixyB0Jevq8vGpHsIR8UutjtYSvNaw7qHH078Xj
+	IsXoKdCbvvAQq/3eonWnPfzlCaCAeT6zcgpJ4G4obTFbTTKdi5rYc/xXj7e6u69Z
+	jZs8goNzb43hNmtAe+0+bxG6GpwuJyeO3IsOT6Kxsr9vj0L3nWauEZsn6aqnbaWw
+	HPhm4sAV2mvI1UhLVSC7BxQwODL0kuqEEgHEVeGM3MSGIYhw7I8wnvTkDV5buoxg
+	DA==
+Received: (qmail 133539 invoked from network); 17 Jun 2026 13:01:36 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 13:01:36 +0200
+X-UD-Smtp-Session: l3s3148p1@C+is+3BUCOgujnvI
+Date: Wed, 17 Jun 2026 13:01:35 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -61,10 +61,10 @@ Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
 	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 09/12] rtc: rzn1: Use temporary variable for struct device
-Message-ID: <ajJ-YGFKIL5Ksz6U@shikoro>
+Subject: Re: [PATCH 10/12] rtc: rzn1: Consistently use dev_err_probe()
+Message-ID: <ajJ-j4ZfLxOzltSR@shikoro>
 References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260615154805.1619693-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -72,22 +72,22 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mNkDObJwTT0FPziH"
+	protocol="application/pgp-signature"; boundary="4MFPohSmB5fsdAaj"
 Content-Disposition: inline
-In-Reply-To: <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20260615154805.1619693-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.26 / 15.00];
 	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
 	DMARC_NA(0.00)[sang-engineering.com];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS(0.00)[m:prabhakar.csengg@gmail.com,m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:prabhakarcsengg@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[wsa@sang-engineering.com,linux-rtc@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
@@ -96,7 +96,7 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6698-lists,linux-rtc=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-6699-lists,linux-rtc=lfdr.de,renesas];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[sang-engineering.com:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -109,49 +109,47 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,renesas.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sang-engineering.com:dkim,sang-engineering.com:email,sang-engineering.com:from_mime]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:dkim,sang-engineering.com:email,sang-engineering.com:from_mime,vger.kernel.org:from_smtp,renesas.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 30CCB698C3E
+X-Rspamd-Queue-Id: B2481698CA8
 
 
---mNkDObJwTT0FPziH
+--4MFPohSmB5fsdAaj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 15, 2026 at 04:48:02PM +0100, Prabhakar wrote:
+On Mon, Jun 15, 2026 at 04:48:03PM +0100, Prabhakar wrote:
 > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >=20
-> Use a temporary variable for the struct device pointers to avoid
-> dereferencing.
+> Use dev_err_probe() in the IRQ request error path to make error handling
+> consistent with the rest of rzn1_rtc_probe().
 >=20
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Some churn, but still okay in my book:
 
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---mNkDObJwTT0FPziH
+--4MFPohSmB5fsdAaj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoyfmAACgkQFA3kzBSg
-KbbcNA//f8uBKI6kVyGhctFC4YwfKpMIFYHRN+Roo5MKdnP76zdgzeGzzQYvZ1U0
-bzsMdlTSD6VKHFnxHlymQ62QRbLHHpQ4Z32j4loN+bbs0n6pnxYn9rqJQgZDW1uq
-d0jgLNbo3YSLOb8sCvzlK6NtXWuVr8B/15kkU/CYC/wL6ATZUtknHhOaKnj7nCfj
-zBCCI3/bqq9T1eFvvUKkF33AY7FeaVovE5fo1eVqJXHxFGKNCWuwR/pD+hNnOfAp
-A4QMpP8H21JuqOY63JY/+5QKoINCH6PeIPg3ZgVRlkPVn7v10YKbM2y8VgKlxiuh
-NevJyYsyLipIw0bTaRvDRtWWznstHrU04kP85o0sv4rFkarjKUJYOOssH6/Ow5AK
-+lBLOOMSIuF2/8aNwrbJ9YjN9qF7/h0FfoHAgTD/yPB4J3N4UBIIK78CJV0vZZKo
-0cR2VEGa93RqBqJ4G6wwYtynxKXd+mrK+Sj02R/RJEOjM0UUd8tozv94XVlGfQ3t
-xIpoMHG51Sx9bNCv0hi9PRczJw3CtZbXcTd6PXMbtCt1dbP72dxyknymrKI9AIHx
-dLd7YzfqgDZj5+LCdWvB+3PK8uCRsHxvnZ5DpqejXxopLcE5sOjpQpexrKC48HUF
-XPh4+vC5xVxQgDY9Hg/tRS6lNYQ5m7g3+dJm1dkwQLRZgZKF6Qw=
-=acJU
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoyfo8ACgkQFA3kzBSg
+Kbb2zA//abihGqxyQrIWaGjp/tCRstkxb6bNhljQpKadPNi/VlsfsK74WfRpkXbB
+Yu9g9RcAun/2CjOnElNDt2joG9cz2t+xVC4KdDz+CuaewGSGUCSUEjEXse6isb1M
+OolLTOF7kAOuob1VejivIs1qBkr66SsfIvsRJrzrITcS67xu9fT0yLsqk96EyjBb
+z9/fJwE/Dk2lAMY/3TE1uhzGM8fRqwMoO+Wl5hcTMWcQQOVk6mAxm6Tv8QgWvdQm
+RoQWTZybxQnEhtv373HiLwJR8CbtmST+LdLQKfZdkjTFSETRU0GC1rIDx9yFOmlD
+LDgZyZDjPwf8nC3DJDhGxBS3Y+O7nnK/ksI5BMHYTXuuY6LPYlGSOo1yHuNrj/eu
+qg3nU4KhyKsh2vFuMOTBmhufqzu7gEly1d3Ik9E1qld6jegCaLd+MaNEwKIPhocU
+ncyYMrjvGG3gVGeTtSrIppAGkALdmaiJHrg79SuiqzGuQUoMm/ZEmy5tdScS+/od
+S/rsIe+yv/nbob6Hlqk4a5S+GF562yi21owIpkwWQcDBmRbX+c3HIdCURVyhmJlc
+AcEDAMFktqZ8+yhHyRQHAeYxbotAVno7S1Kwc8LYpI3RPBEtM7kH19fZSB4tyJeM
+mufrP7xRXl6FB5t3fDVXSTh3gRDmmlYl3uXRxTPTU1QRiF4rNK4=
+=FhHi
 -----END PGP SIGNATURE-----
 
---mNkDObJwTT0FPziH--
+--4MFPohSmB5fsdAaj--
 
