@@ -1,53 +1,53 @@
-Return-Path: <linux-rtc+bounces-6697-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 063KJxl/MmqA0wUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6697-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:03:53 +0200
+	id KJp8DsF+Mmpn0wUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:02:25 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF0EF698C73
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:03:52 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30CCB698C3E
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:02:23 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=VHJLQGJb;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6697-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6697-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=TF48Qm7l;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6698-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3343B3030374
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 10:58:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1DDDC301D699
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE8F3AFD01;
-	Wed, 17 Jun 2026 10:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1452E738B;
+	Wed, 17 Jun 2026 11:00:52 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA134378830
-	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 10:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F122E739A
+	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 11:00:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781693932; cv=none; b=YpRJuKUsBfJDzI2c8Y6t1KYdqMvTxEVsIurVUtcjC9i9hLMdrEvWzV1RtfdZWqqB9o6IYs+/Ll+wtn6THVjZtPQmHMhULyJxqzMadFLpuMSBQ6CJgo+I8obMDHmy8jwe7k5W0hvtjrjOduaybeTDYRe49Xcm9lxxcoyjsTNOeqY=
+	t=1781694052; cv=none; b=qvRyDp3/3rwa1wdx1MVYX+QSfEr1ohDHNiSigOm11i2rUYDaHy59GGEY33RXfvNeNn74KHydtzeBEQ75qjunoX+D5ztGi86EcjoyLgGuhtAbCBmMCIVxrsf7PYet2zG2wYZhS7NmSYF/qqpzTTNv+SkoT4JcosxfreaatnPOme4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781693932; c=relaxed/simple;
-	bh=cLjo9s5X8S7uXGdMEwPgj8pN7cxLDACJURIhOC46EHg=;
+	s=arc-20240116; t=1781694052; c=relaxed/simple;
+	bh=t/0M6FtlG2AhpicjI57jtSrBD7lIUbI6bhh1cBmC/hw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nh0xsy64CJATPR847Odvj3pjHweijqi7pCOtog6UW17RumtF0k5qEqIVIekcQ5R++cW4TN0YKKN59GNJAnA+I/PNMloFUtW/PExZWXaHsThmrX5WEnw/ovHMVPwf4kAOdFxbch20vRKgDs8+CGPju9Jcemuy6auOxGAeqsd/LKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=VHJLQGJb; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=hVLxzS/llZyXC6kVHUy+VaqOkiD9x5UAzuPCwyYD7c9kC9GXv5J44gGxzbqcaPEJ4/ayyI22DDapbZij0PSOB3cfo13b7u1zW6nGAPEAYwU+6Q8COslAIdAn54N4ItQssMa706RcPSXoWWgnpvd0VQA3qgmMBSRKBwLAB17EbC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=TF48Qm7l; arc=none smtp.client-ip=194.117.254.33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=3WSg
-	4noCdqmqODRlIZWDlHRZMDx26KJ/5lYpnLFLNic=; b=VHJLQGJbVrgl6GHo3/oo
-	+NJONtDg8iCUkuTOpsJyJY7HW4L2WynxgAUx/NxZlSoD/crRa5iuNt7TFHdx2/pJ
-	MdTqB8Gf7SVRsJNBBWRzAZCo3rRUrbAIY4p2z03/TwrSAEmx4taKfiiGwvjL0XLi
-	OmNWfG/FGsni1recELHLBa+fXz4xIQ4iWECTQuyHdsHZJjhRKZiFC1z8P3nUNKg6
-	9syL0tVlboKHx/1auFjfStwM26vztwh3ua+Tnsrq2UrolcbDky+Wzfhx2kZpt4p2
-	EHsbMTDDCYii0RzujCd2sxOhSyFZCo5PPAG6CZ6cjvRxDnprrAyKOmvCUn251A/y
-	cw==
-Received: (qmail 132594 invoked from network); 17 Jun 2026 12:58:44 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 12:58:44 +0200
-X-UD-Smtp-Session: l3s3148p1@2Hx08XBUiu0ujnvI
-Date: Wed, 17 Jun 2026 12:58:44 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=t/0M
+	6FtlG2AhpicjI57jtSrBD7lIUbI6bhh1cBmC/hw=; b=TF48Qm7lUd7Ct3VI27CH
+	5foioDyJGTt5T96vTUquIrmQz8dqkMpUPwNh2ZLtABC4ZD1kcHaxcSzAOGjRlGRJ
+	NbBUN78gWpbJLTvajnhHsj6HTFkx1v6PYE8xY8KPVEhZROKf15wPoltte6oJ7eZJ
+	OZz3KfPQhvt4YI76RpVlD2UV0ub4QAI0JmlDJk3zIMqrgdSUj9m6pT3Vg65My/kx
+	IgV2EWLZgpLlXI/+W8ChzYfwKmhr6xHnNGrROh5F33YVvQu5qdrndGn7i1enwMnG
+	8A0EnIeK1PMNoprFD8TMVNEg5vzfvTF695i/qtsf3cvHVqUoS5KAqxVEfZIKTGXg
+	xg==
+Received: (qmail 133285 invoked from network); 17 Jun 2026 13:00:48 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 13:00:48 +0200
+X-UD-Smtp-Session: l3s3148p1@pfze+HBUWMgujnvI
+Date: Wed, 17 Jun 2026 13:00:48 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -61,11 +61,10 @@ Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
 	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 08/12] rtc: rzn1: Dynamically calculate synchronization
- delay based on clock rate
-Message-ID: <ajJ95P-jxChrTY9w@shikoro>
+Subject: Re: [PATCH 09/12] rtc: rzn1: Use temporary variable for struct device
+Message-ID: <ajJ-YGFKIL5Ksz6U@shikoro>
 References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260615154805.1619693-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -73,16 +72,16 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="I+lGIvlppK+LgZCG"
+	protocol="application/pgp-signature"; boundary="mNkDObJwTT0FPziH"
 Content-Disposition: inline
-In-Reply-To: <20260615154805.1619693-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.26 / 15.00];
 	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -97,7 +96,7 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6697-lists,linux-rtc=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-6698-lists,linux-rtc=lfdr.de,renesas];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[sang-engineering.com:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -110,67 +109,49 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:dkim,sang-engineering.com:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,renesas.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sang-engineering.com:dkim,sang-engineering.com:email,sang-engineering.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EF0EF698C73
+X-Rspamd-Queue-Id: 30CCB698C3E
 
 
---I+lGIvlppK+LgZCG
+--mNkDObJwTT0FPziH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-As mentioned in another thread:
-
->  drivers/rtc/rtc-rzn1.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
+On Mon, Jun 15, 2026 at 04:48:02PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >=20
-> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> index 06339adae71f..bc6af59744e4 100644
-> --- a/drivers/rtc/rtc-rzn1.c
-> +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -71,6 +71,7 @@ struct rzn1_rtc {
->  	 */
->  	spinlock_t ctl1_access_lock;
->  	struct rtc_time tm_alarm;
-> +	unsigned long sync_time;
->  	int alarm_irq;
->  	int sec_irq;
->  	bool alarm_enabled;
+> Use a temporary variable for the struct device pointers to avoid
+> dereferencing.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-rate =3D 32768 here...
+Some churn, but still okay in my book:
 
-> +		rtc->sync_time =3D DIV_ROUND_UP(2 * NSEC_PER_MSEC, rate);
-> +
->  	}
-
-=2E.. and move this to the main body of the function.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
-Then, we should have all values always initialized.
-
-
---I+lGIvlppK+LgZCG
+--mNkDObJwTT0FPziH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoyfeQACgkQFA3kzBSg
-KbZ8MRAAiUIskbQZ7nfnyM94FicQ9r5vhi2Q9D1qWdONXbmfXkYE2BgHMmPSo4KO
-D6GKdNiWpXtFWU5uuBt6xv5nkmLAVaTPfG7Rq3shO1aSOx6fiZK25CXyGGxhgb5Y
-FN8IzOGQ8NjdVecXMKY4Pbp6BwKhOD1vSyE3sHEPiWAt/Db9Jxq7ZDsgupTC6662
-QBrv8lMyhqWXekUs8LTOt+2OxEpT8/WrOskbDmY4osN+LPcJKNj0x1a9jPv32bvS
-FXFZIme88bn5MCj2RmcXWxK7NT6QaBfhgXTjVKq+maY6jO1RF5FWBGeK+7cWTEUg
-yBPBz4+2AtfGgnODEeXPYST4g2NURcwarpgl3LQlmG7b4Edh28dv+/mty1xZXsjp
-XU5VzUtxhe6RPjsgyHvdOoG3LgW35WNf/QAFvq+7RcjbhsGEYaFLVx5c6bsYDzMm
-wNLCtUpXHZ6tsdlVkpiE64nIti2q5lweOcOLEsBgQIPy3r+WCizUYOITS/W+uQNF
-EcNSaKOClBCD3YKxzhrkLhboEZxapJvz56aXdRJ1Grr6baHVRqRAagRossVhOCd7
-rjyaijo4oepkviwwRFxzxzajatoWfkSdeJ91d5UJX3g1n/BHl4+bgvr5N2otI0Xi
-AY1qM62uPRt70vTyVhRp2SijU+6qUhiklB/Tz2wQus1/wlhHDgI=
-=P6B/
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoyfmAACgkQFA3kzBSg
+KbbcNA//f8uBKI6kVyGhctFC4YwfKpMIFYHRN+Roo5MKdnP76zdgzeGzzQYvZ1U0
+bzsMdlTSD6VKHFnxHlymQ62QRbLHHpQ4Z32j4loN+bbs0n6pnxYn9rqJQgZDW1uq
+d0jgLNbo3YSLOb8sCvzlK6NtXWuVr8B/15kkU/CYC/wL6ATZUtknHhOaKnj7nCfj
+zBCCI3/bqq9T1eFvvUKkF33AY7FeaVovE5fo1eVqJXHxFGKNCWuwR/pD+hNnOfAp
+A4QMpP8H21JuqOY63JY/+5QKoINCH6PeIPg3ZgVRlkPVn7v10YKbM2y8VgKlxiuh
+NevJyYsyLipIw0bTaRvDRtWWznstHrU04kP85o0sv4rFkarjKUJYOOssH6/Ow5AK
++lBLOOMSIuF2/8aNwrbJ9YjN9qF7/h0FfoHAgTD/yPB4J3N4UBIIK78CJV0vZZKo
+0cR2VEGa93RqBqJ4G6wwYtynxKXd+mrK+Sj02R/RJEOjM0UUd8tozv94XVlGfQ3t
+xIpoMHG51Sx9bNCv0hi9PRczJw3CtZbXcTd6PXMbtCt1dbP72dxyknymrKI9AIHx
+dLd7YzfqgDZj5+LCdWvB+3PK8uCRsHxvnZ5DpqejXxopLcE5sOjpQpexrKC48HUF
+XPh4+vC5xVxQgDY9Hg/tRS6lNYQ5m7g3+dJm1dkwQLRZgZKF6Qw=
+=acJU
 -----END PGP SIGNATURE-----
 
---I+lGIvlppK+LgZCG--
+--mNkDObJwTT0FPziH--
 
