@@ -1,362 +1,212 @@
-Return-Path: <linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6679-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 0Zh6O/gPMWoMbAUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 10:57:29 +0200
+	id 7RYXIBQYMmrxugUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6679-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 05:44:20 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E81868D56A
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 10:57:28 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A559A696544
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 05:44:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=gaWOaeaX;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6678-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=alliedtelesis.co.nz header.s=mail181024 header.b=J2Xi8xMH;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6679-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6679-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=alliedtelesis.co.nz;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 71560302BCD0
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2026 08:57:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id CE8823003715
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 03:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AE841B37D;
-	Tue, 16 Jun 2026 08:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A940311C2D;
+	Wed, 17 Jun 2026 03:44:13 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAAF4219F2
-	for <linux-rtc@vger.kernel.org>; Tue, 16 Jun 2026 08:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DCB3112B2
+	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 03:44:11 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781600242; cv=none; b=ltY/XpyLUv+rX4tYD0wtAS2GcMNaY7yb6nt2LI1VDlLzGLRPmM603mlmCJp9yW80TQIRD0P+Y73W7ozWMN6cW3ngwoCrSQ62uKuIeIaK90TRddqZRqmR3E0YKKfonQN1Tcs85fzqClwt12UnLy2Wk7mRWLutCfRnuxNK1QDhFNQ=
+	t=1781667853; cv=none; b=f64WY9Q9oPu/gIXegMgxG1fJgKCYZbYMYSxcE75UsDywyAnXQDLY6IH4KDcfyUmxjaSK6ngqBytMyrpEZaP88Xa7N243rPEpSoIpuvTYPkwJ1CZ+o5temvnnLmwvStzMUMl8ky6Pvx5GQ8DdwjPyd9NZSlFd4W/Yt8m7G+9M0Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781600242; c=relaxed/simple;
-	bh=YQTPaERZZEVfDy3cbkgqveLx6aZM/khTCmkBnMIkHzU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=au6r4Nu1owYnQAd0UUSLKtO0upJtw0JoUZDqHd9ygSZ7QsRnIunGYBuiLlKpkPUZ4uSgkLIDmIBdpUSdyR7tjGqdakwYlgCgQRsm1LFuFD0Dh0BpuhNjGh+T5YaE+rl4o7K38npMk/pRoEtbFsdwwHxVIuwDdrR0SRkF4Hfze5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gaWOaeaX; arc=none smtp.client-ip=209.85.210.194
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-84237c55ef9so2710471b3a.0
-        for <linux-rtc@vger.kernel.org>; Tue, 16 Jun 2026 01:57:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781600239; x=1782205039; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yNlL/Fch0KIwV+VLb90p7R9gZLFeyNye+IbISH5/PI=;
-        b=gaWOaeaX2J1PXtTO6DYazCZuO/wZgABeqHvpIBsMR5ePCLQ75YYmnlyp45IBxQJhxc
-         YHkMPmp09gvEZI+2o82ac6EGV8QbwOZiJfr1TdBYOY4Sn0VH/Aq61/p23GFA8n95v+ct
-         GOdS6DvvMgk4ARkAdsfWgs/F+KWjaklm1EA/TYEb7WEkqPXNpBuMFI3TP3M0lsiTwBC5
-         Kx4whI+HvNLhp07YmHSuNyOs9o9TodTO5Oj5V/ff9T0ngexfNXaIkhf4pHE4ZfcwbDzz
-         LZYHrIpWTnPwGQ0gc0O4TDdK+GQwTFcK3zIR59TG8fSwGjsNJq/KZMOG0aZzd+s/8Wlh
-         UMvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781600239; x=1782205039;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9yNlL/Fch0KIwV+VLb90p7R9gZLFeyNye+IbISH5/PI=;
-        b=EYQPofxHXjN8apz72ZXS7Gx5PP6xWD1xuYWalXJIYORlsqf5eF8Ma2Tt9S7ctHn2aR
-         pMoJb2z+zy/5KgacZJUNnvEuBVFnHzfYrVneiG7iRQ45SvmGOytY+4BT4nr227bn3M46
-         oQaMXQI6akwMTp8bxuZQiYTJQpakIrwN0LnQ/6BoMh87x6+KtMH1Ae6CRT5000x6mz1A
-         P1PmeWky32CpvT771ArKtxpx8167Agj+uO8JHU/OkBRsfJux+XSVokgjfsjCULvuwtGD
-         FvI1LVVyTE3GB2GczbFxoRvxkcYeV/ayHeMOV+pUy6M1VWWwqX6iCO1Y9nlWSED3NUYi
-         Iaxg==
-X-Gm-Message-State: AOJu0Yys0hB5BLlGtdMTYem6+y2o0wyJlXD61YojdA2cnyIdVc7JcF+L
-	bYxU0jOKTGy/bySKZ96BnwJS8CZOi2YSz8SG5vK+DVLhCwPnuH8LmKfH
-X-Gm-Gg: Acq92OEF36/yCchjp0OGcpTCEx2P/UGFJJ7PA0fYOP6MHQZhwZArr0GQbOR1pf+AwsS
-	ZXNaK9sxrGs7MIPUdIS+x5cm+y1j+LFPgU7EZjVxzgYFeXGRMYBi7KxkxsGZ2oBACPClaJOB5c4
-	ugUHoZDsC/hgIqNuAmtks8+ER4hO8Bj1u2260Ei9gXZOq2s5aAlTtT0VGwFNlIieEeprzmKCuaK
-	8FDub7X/ebRfFxdo023pkYge+i23PN49tPQL586MtVYoOLqrdbeaM8FqhoIQ+xE0RdM1Fbthszy
-	Rq59O440NK4qgWWCaXaIARVLhTPMrOSGCGmvpkHQS5BGbgADL37GBGjsfLi0gJgteRzG2zTkU7m
-	Ve8ENubj4d5V9w3hXcbwD+/s6ZXjhykGDPLfw8FuYjJtqDCUsy0IrU1z6CKvDxBb7ihFRHAS/cb
-	KHBW8OMNnOHtddjz6MvaGN15OUuM9lSyJL74wFdfRRdV2dpL5nsjyk
-X-Received: by 2002:a05:6a00:391d:b0:842:6482:adc with SMTP id d2e1a72fcca58-8434cd0ca2emr18698657b3a.9.1781600239218;
-        Tue, 16 Jun 2026 01:57:19 -0700 (PDT)
-Received: from Tejas-Legion-7-16IRX9.. ([103.159.249.83])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8434accbc89sm12689662b3a.15.2026.06.16.01.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2026 01:57:18 -0700 (PDT)
-From: Teja Sai Charan B <tejaasaye@gmail.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Teja Sai Charan Bellamkonda <tejaasaye@gmail.com>
-Subject: [PATCH v2] dt-bindings: rtc: Convert rtc-cmos binding to YAML
-Date: Tue, 16 Jun 2026 14:26:58 +0530
-Message-ID: <20260616085659.12809-1-tejaasaye@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1781667853; c=relaxed/simple;
+	bh=gyYnGdg7H/1xiLUN9Z0cxmwRKrOPdnD4i8OB80CRT2k=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=TfNTTEhoMG7HyvjjmACiyJMPvZ3Obau3e47ijd+FgUiz35Gk+j4ojO5fHFxcpJD6lvof9S+J/8gq2lXAbw9VNbgxbfLrxVoJbAnsmYcMd22yxf4+Oaq42AdPxelDEjnu0KyxbAq7as8pC2BfRZwKHekIipKsm/pjXz537Opc7Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=J2Xi8xMH; arc=none smtp.client-ip=202.36.163.20
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 682FD2C0276;
+	Wed, 17 Jun 2026 15:34:01 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1781667241;
+	bh=gyYnGdg7H/1xiLUN9Z0cxmwRKrOPdnD4i8OB80CRT2k=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=J2Xi8xMHMoROilhOPKxoynxuC2BOpRrioac0xjzrXSQBKL28Q8C1a5+Yqimy3UxBm
+	 GN8mnH24OAODlYXZo1YiUIxzblT+skk3aGOxCBRrdpBp99bYhHHnnTyg5iBO5xtX0R
+	 yVOXqkrZYVIhBo5OLmCqb+ttWSlsvo0RMthN5PEJ+pfPo8W1F91Y0byZm4WQ8W5wVT
+	 8tdmLtC6QB3VoaEopI9C8xqKGxQiLIMwScuhZKkjdKpvWmszqTvTcFrQE9zchgmTIy
+	 QQmpckOeVDkAQND6r7FRvQzJVZKtkJqhiU8OpNXwzHQ9WlaM5koEg5+jrPLJvoSy43
+	 c1QJQDckc8D8w==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6a3215a90001>; Wed, 17 Jun 2026 15:34:01 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.39; Wed, 17 Jun 2026 15:34:01 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1748.039; Wed, 17 Jun 2026 15:34:01 +1200
+From: Ronan Dalton <Ronan.Dalton@alliedtelesis.co.nz>
+To: "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC: "sashal@kernel.org" <sashal@kernel.org>, "code@tyhicks.com"
+	<code@tyhicks.com>, "giometti@enneenne.com" <giometti@enneenne.com>,
+	"linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"meaganlloyd@linux.microsoft.com" <meaganlloyd@linux.microsoft.com>, "Chris
+ Packham" <Chris.Packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v3] rtc: ds1307: handle oscillator stop flag for
+ ds1337/ds1339/ds3231
+Thread-Topic: [PATCH v3] rtc: ds1307: handle oscillator stop flag for
+ ds1337/ds1339/ds3231
+Thread-Index: AQHc3pqCjudPSiLHA0qYJELJg23AUrZBjeYA
+Date: Wed, 17 Jun 2026 03:34:01 +0000
+Message-ID: <70aa1e06a8f16d9ab56c1a8deb26b84e216d0484.camel@alliedtelesis.co.nz>
+References: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
+In-Reply-To: <20260508032518.3696705-2-ronan.dalton@alliedtelesis.co.nz>
+Accept-Language: en-US, en-NZ
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7C8A15D04FFA1E45BE57283DABB54911@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=TI3mSEla c=1 sm=1 tr=0 ts=6a3215a9 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=BhaoXNk7gXQA:10 a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VwQbUJbxAAAA:8 a=P-IC7800AAAA:8 a=FLmnqZ5pAAAA:8 a=yMhMjlubAAAA:8 a=gUfQWItQAAAA:8 a=eA2nYO4OpW7o5kGJ8vYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=zY0JdQc1-4EAyPf5TuXT:22 a=d3PnA9EDa4IxuAV0gXij:22 a=8DxQ4-P9FUvTN4rw3Xy2:22 a=Xud5aiJGVNusHZ8q4fKI:22
+X-SEG-SpamProfiler-Score: 0
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.06 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[alliedtelesis.co.nz,quarantine];
+	R_DKIM_ALLOW(-0.20)[alliedtelesis.co.nz:s=mail181024];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_BASE64_TEXT(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-6679-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6678-lists,linux-rtc=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:tejaasaye@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:sashal@kernel.org,m:code@tyhicks.com,m:giometti@enneenne.com,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:meaganlloyd@linux.microsoft.com,m:Chris.Packham@alliedtelesis.co.nz,s:lists@lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,vger.kernel.org:from_smtp,bootlin.com:email,alliedtelesis.co.nz:dkim,alliedtelesis.co.nz:email,alliedtelesis.co.nz:mid,alliedtelesis.co.nz:from_mime];
+	FORGED_SENDER(0.00)[Ronan.Dalton@alliedtelesis.co.nz,linux-rtc@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[tejaasaye@gmail.com,linux-rtc@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tejaasaye@gmail.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ALIAS_RESOLVED(0.00)[];
+	DKIM_TRACE(0.00)[alliedtelesis.co.nz:+];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[Ronan.Dalton@alliedtelesis.co.nz,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_SEVEN(0.00)[8];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp,devicetree.org:url]
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5E81868D56A
+X-Rspamd-Queue-Id: A559A696544
 
-From: Teja Sai Charan Bellamkonda <tejaasaye@gmail.com>
-
-Convert the rtc-cmos devicetree bindings to dt schema.
-
-Signed-off-by: Teja Sai Charan Bellamkonda <tejaasaye@gmail.com>
-
----
-
-Changes in v2:
-- Allow intel,ce4100-rtc compatible used by existing DTS files
----
- .../devicetree/bindings/rtc/rtc-cmos.txt      | 27 ---------
- .../devicetree/bindings/rtc/rtc-cmos.yaml     | 60 +++++++++++++++++++
- result.txt                                    | 17 ++++++
- 3 files changed, 77 insertions(+), 27 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-cmos.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-cmos.yaml
- create mode 100644 result.txt
-
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-cmos.txt b/Documenta=
-tion/devicetree/bindings/rtc/rtc-cmos.txt
-deleted file mode 100644
-index 7d7b5f6bda65..000000000000
---- a/Documentation/devicetree/bindings/rtc/rtc-cmos.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
-- Motorola mc146818 compatible RTC
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--
--Required properties:
--  - compatible : "motorola,mc146818"
--  - reg : should contain registers location and length.
--
--Optional properties:
--  - interrupts : should contain interrupt.
--  - ctrl-reg : Contains the initial value of the control register also
--    called "Register B".
--  - freq-reg : Contains the initial value of the frequency register also
--    called "Register A".
--
--"Register A" and "B" are usually initialized by the firmware (BIOS for
--instance). If this is not done, it can be performed by the driver.
--
--ISA Example:
--
--	rtc@70 {
--	         compatible =3D "motorola,mc146818";
--	         interrupts =3D <8 3>;
--	         interrupt-parent =3D <&ioapic1>;
--	         ctrl-reg =3D <2>;
--	         freq-reg =3D <0x26>;
--	         reg =3D <1 0x70 2>;
--	 };
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-cmos.yaml b/Document=
-ation/devicetree/bindings/rtc/rtc-cmos.yaml
-new file mode 100644
-index 000000000000..ba4812778115
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/rtc-cmos.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/rtc-cmos.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Motorola mc146818 compatible RTC
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: motorola,mc146818
-+
-+      - items:
-+          - const: intel,ce4100-rtc
-+          - const: motorola,mc146818
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  ctrl-reg:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Initial value of the control register
-+      (also known as Register B).
-+
-+  freq-reg:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Initial value of the frequency register
-+      (also known as Register A).
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    bus {
-+        #address-cells =3D <2>;
-+        #size-cells =3D <1>;
-+
-+        rtc@70 {
-+            compatible =3D "motorola,mc146818";
-+            reg =3D <1 0x70 2>;
-+
-+            interrupts =3D <8 3>;
-+
-+            ctrl-reg =3D <2>;
-+            freq-reg =3D <0x26>;
-+        };
-+    };
-diff --git a/result.txt b/result.txt
-new file mode 100644
-index 000000000000..5e90660b93ec
---- /dev/null
-+++ b/result.txt
-@@ -0,0 +1,17 @@
-+arch/x86/kernel/x86_init.c:42:	{ .compatible =3D "motorola,mc146818" },
-+arch/x86/platform/ce4100/falconfalls.dts:420:					compatible =3D "intel,ce=
-4100-rtc", "motorola,mc146818";
-+arch/mips/boot/dts/loongson/rs780e-pch.dtsi:31:				compatible =3D "motorol=
-a,mc146818";
-+arch/mips/boot/dts/mti/malta.dts:110:			compatible =3D "motorola,mc146818";
-+arch/alpha/kernel/rtc.c:25: * We don't want to use the rtc-cmos driver, be=
-cause we don't want to support
-+drivers/built-in.a:1031:rtc/rtc-cmos.o/
-+drivers/rtc/built-in.a:11:rtc-cmos.o/
-+drivers/rtc/.rtc-mc146818-lib.o.cmd:1:savedcmd_drivers/rtc/rtc-mc146818-li=
-b.o :=3D gcc -Wp,-MMD,drivers/rtc/.rtc-mc146818-lib.o.d -nostdinc -I./arch/=
-x86/include -I./arch/x86/include/generated -I./include -I./include -I./arch=
-/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./=
-include/generated/uapi -include ./include/linux/compiler-version.h -include=
- ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KE=
-RNEL__ -std=3Dgnu11 -fshort-wchar -funsigned-char -fno-common -fno-PIE -fno=
--strict-aliasing -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -mno-sse4a=
- -fcf-protection=3Dnone -m64 -falign-jumps=3D1 -falign-loops=3D1 -mno-80387=
- -mno-fp-ret-in-387 -mpreferred-stack-boundary=3D3 -mskip-rax-setup -march=
-=3Dx86-64 -mtune=3Dgeneric -mno-red-zone -mcmodel=3Dkernel -mstack-protecto=
-r-guard-reg=3Dgs -mstack-protector-guard-symbol=3D__ref_stack_chk_guard -Wn=
-o-sign-compare -fno-asynchronous-unwind-tables -mindirect-branch=3Dthunk-ex=
-tern -mindirect-branch-register -mindirect-branch-cs-prefix -mfunction-retu=
-rn=3Dthunk-extern -fno-jump-tables -mharden-sls=3Dall -fpatchable-function-=
-entry=3D16,16 -fno-delete-null-pointer-checks -O2 -fno-allow-store-data-rac=
-es -fstack-protector-strong -fno-omit-frame-pointer -fno-optimize-sibling-c=
-alls -ftrivial-auto-var-init=3Dzero -fno-stack-clash-protection -fzero-call=
--used-regs=3Dused-gpr -pg -mrecord-mcount -mfentry -DCC_USING_FENTRY -falig=
-n-functions=3D16 -fstrict-flex-arrays=3D3 -fms-extensions -fno-strict-overf=
-low -fno-stack-check -fconserve-stack -fno-builtin-wcslen -Wall -Wextra -Wu=
-ndef -Werror=3Dimplicit-function-declaration -Werror=3Dimplicit-int -Werror=
-=3Dreturn-type -Werror=3Dstrict-prototypes -Wno-format-security -Wno-trigra=
-phs -Wno-frame-address -Wno-address-of-packed-member -Wmissing-declarations=
- -Wmissing-prototypes -Wframe-larger-than=3D1024 -Wno-main -Wno-dangling-po=
-inter -Wvla-larger-than=3D1 -Wno-pointer-sign -Wcast-function-type -Wno-arr=
-ay-bounds -Wno-stringop-overflow -Wno-alloc-size-larger-than -Wimplicit-fal=
-lthrough=3D5 -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Werr=
-or=3Ddesignated-init -Wenum-conversion -Wunused -Wno-unused-but-set-variabl=
-e -Wno-unused-const-variable -Wno-packed-not-aligned -Wno-format-overflow -=
-Wno-format-truncation -Wno-stringop-truncation -Wno-override-init -Wno-miss=
-ing-field-initializers -Wno-type-limits -Wno-shift-negative-value -Wno-mayb=
-e-uninitialized -Wno-sign-compare -Wno-unused-parameter -g -gdwarf-5  -fsan=
-itize=3Dbounds-strict -fsanitize=3Dshift -fsanitize=3Dbool -fsanitize=3Denu=
-m      -DKBUILD_MODFILE=3D'"drivers/rtc/rtc-mc146818-lib"' -DKBUILD_BASENAM=
-E=3D'"rtc_mc146818_lib"' -DKBUILD_MODNAME=3D'"rtc_mc146818_lib"' -D__KBUILD=
-_MODNAME=3Drtc_mc146818_lib -c -o drivers/rtc/rtc-mc146818-lib.o drivers/rt=
-c/rtc-mc146818-lib.c=20=20
-+drivers/rtc/.built-in.a.cmd:1:savedcmd_drivers/rtc/built-in.a :=3D rm -f d=
-rivers/rtc/built-in.a;  printf "drivers/rtc/%s " lib.o class.o interface.o =
-nvmem.o dev.o proc.o sysfs.o rtc-mc146818-lib.o rtc-cmos.o | xargs ar cDPrS=
-T drivers/rtc/built-in.a
-+drivers/rtc/Kconfig:1065:	  will be called rtc-cmos.
-+drivers/rtc/Makefile:45:obj-$(CONFIG_RTC_DRV_CMOS)	+=3D rtc-cmos.o
-+drivers/rtc/.rtc-cmos.o.cmd:1:savedcmd_drivers/rtc/rtc-cmos.o :=3D gcc -Wp=
-,-MMD,drivers/rtc/.rtc-cmos.o.d -nostdinc -I./arch/x86/include -I./arch/x86=
-/include/generated -I./include -I./include -I./arch/x86/include/uapi -I./ar=
-ch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -=
-include ./include/linux/compiler-version.h -include ./include/linux/kconfig=
-.h -include ./include/linux/compiler_types.h -D__KERNEL__ -std=3Dgnu11 -fsh=
-ort-wchar -funsigned-char -fno-common -fno-PIE -fno-strict-aliasing -mno-ss=
-e -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -mno-sse4a -fcf-protection=3Dnone =
--m64 -falign-jumps=3D1 -falign-loops=3D1 -mno-80387 -mno-fp-ret-in-387 -mpr=
-eferred-stack-boundary=3D3 -mskip-rax-setup -march=3Dx86-64 -mtune=3Dgeneri=
-c -mno-red-zone -mcmodel=3Dkernel -mstack-protector-guard-reg=3Dgs -mstack-=
-protector-guard-symbol=3D__ref_stack_chk_guard -Wno-sign-compare -fno-async=
-hronous-unwind-tables -mindirect-branch=3Dthunk-extern -mindirect-branch-re=
-gister -mindirect-branch-cs-prefix -mfunction-return=3Dthunk-extern -fno-ju=
-mp-tables -mharden-sls=3Dall -fpatchable-function-entry=3D16,16 -fno-delete=
--null-pointer-checks -O2 -fno-allow-store-data-races -fstack-protector-stro=
-ng -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-i=
-nit=3Dzero -fno-stack-clash-protection -fzero-call-used-regs=3Dused-gpr -pg=
- -mrecord-mcount -mfentry -DCC_USING_FENTRY -falign-functions=3D16 -fstrict=
--flex-arrays=3D3 -fms-extensions -fno-strict-overflow -fno-stack-check -fco=
-nserve-stack -fno-builtin-wcslen -Wall -Wextra -Wundef -Werror=3Dimplicit-f=
-unction-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Werror=3D=
-strict-prototypes -Wno-format-security -Wno-trigraphs -Wno-frame-address -W=
-no-address-of-packed-member -Wmissing-declarations -Wmissing-prototypes -Wf=
-rame-larger-than=3D1024 -Wno-main -Wno-dangling-pointer -Wvla-larger-than=
-=3D1 -Wno-pointer-sign -Wcast-function-type -Wno-array-bounds -Wno-stringop=
--overflow -Wno-alloc-size-larger-than -Wimplicit-fallthrough=3D5 -Werror=3D=
-date-time -Werror=3Dincompatible-pointer-types -Werror=3Ddesignated-init -W=
-enum-conversion -Wunused -Wno-unused-but-set-variable -Wno-unused-const-var=
-iable -Wno-packed-not-aligned -Wno-format-overflow -Wno-format-truncation -=
-Wno-stringop-truncation -Wno-override-init -Wno-missing-field-initializers =
--Wno-type-limits -Wno-shift-negative-value -Wno-maybe-uninitialized -Wno-si=
-gn-compare -Wno-unused-parameter -g -gdwarf-5  -fsanitize=3Dbounds-strict -=
-fsanitize=3Dshift -fsanitize=3Dbool -fsanitize=3Denum      -DKBUILD_MODFILE=
-=3D'"drivers/rtc/rtc-cmos"' -DKBUILD_BASENAME=3D'"rtc_cmos"' -DKBUILD_MODNA=
-ME=3D'"rtc_cmos"' -D__KBUILD_MODNAME=3Drtc_cmos -c -o drivers/rtc/rtc-cmos.=
-o drivers/rtc/rtc-cmos.c=20=20
-+drivers/rtc/.rtc-cmos.o.cmd:3:source_drivers/rtc/rtc-cmos.o :=3D drivers/r=
-tc/rtc-cmos.c
-+drivers/rtc/.rtc-cmos.o.cmd:5:deps_drivers/rtc/rtc-cmos.o :=3D \
-+drivers/rtc/.rtc-cmos.o.cmd:1372:drivers/rtc/rtc-cmos.o: $(deps_drivers/rt=
-c/rtc-cmos.o)
-+drivers/rtc/.rtc-cmos.o.cmd:1374:$(deps_drivers/rtc/rtc-cmos.o):
-+drivers/rtc/rtc-cmos.c:1382:		.compatible =3D "motorola,mc146818",
---=20
-2.43.0
-
+SGkgQWxleGFuZHJlLA0KDQpJIGp1c3Qgd2FudGVkIHRvIGZvbGxvdyB1cCBvbiB0aGlzIHBhdGNo
+IGJlY2F1c2UgSSB0aGluayBpdCBtYXkgaGF2ZQ0KYmVlbiBtaXNzZWQgYnkgYWNjaWRlbnQuIEkn
+bSBzdGlsbCBpbnRlcmVzdGVkIGluIGdldHRpbmcgaXQgbWVyZ2VkLsKgDQoNCkNvdWxkIHlvdSBn
+aXZlIGl0IGEgbG9vaz8NCg0KVGhhbmtzLA0KUm9uYW4uDQoNCk9uIEZyaSwgMjAyNi0wNS0wOCBh
+dCAxNToyNCArMTIwMCwgUm9uYW4gRGFsdG9uIHdyb3RlOg0KPiBQcmlvciB0byBjb21taXQgNDg0
+NTg2NTQ2NTljICgicnRjOiBkczEzMDc6IHJlbW92ZSBjbGVhciBvZg0KPiBvc2NpbGxhdG9yDQo+
+IHN0b3AgZmxhZyAoT1NGKSBpbiBwcm9iZSIpLCB0aGUgb3NjaWxsYXRvciBzdG9wIGZsYWcgKE9T
+RikgYml0IHdhcw0KPiBjaGVja2VkIGR1cmluZyBkZXZpY2UgcHJvYmUgZm9yIHRoZSBkczEzMzcs
+IGRzMTMzOSwgZHMxMzQxLCBhbmQNCj4gZHMzMjMxDQo+IGNoaXBzOyBpZiBpdCB3YXMgc2V0LCBp
+dCB3b3VsZCBiZSBjbGVhcmVkIGFuZCBhIHdhcm5pbmcgd291bGQgYmUNCj4gbG9nZ2VkDQo+IHNh
+eWluZyAiU0VUIFRJTUUhIi4gU2luY2UgdGhhdCBjb21taXQsIHRoZSBPU0YgYml0IGlzIG5vIGxv
+bmdlcg0KPiBjbGVhcmVkLA0KPiBidXQgdGhlIHdhcm5pbmcgaXMgc3RpbGwgcHJpbnRlZC4NCj4g
+DQo+IERpcmVjdGx5IGZvbGxvd2luZyB0aGF0IGNvbW1pdCwgdGhlcmUgd2FzIG5vIHdheSB0byBn
+ZXQgcmlkIG9mIHRoaXMNCj4gd2FybmluZyBiZWNhdXNlIG5vdGhpbmcgY2xlYXJlZCB0aGUgT1NG
+IGJpdCBvbiB0aGVzZSBjaGlwcy4NCj4gDQo+IFRoZSBjb21taXQgYXNzb2NpYXRlZCB3aXRoIHRo
+ZSBwcmV2aW91cyBjb21taXQsIDUyMzkyM2NmZDVkNiAoInJ0YzoNCj4gZHMxMzA3OiBoYW5kbGUg
+b3NjaWxsYXRvciBzdG9wIGZsYWcgKE9TRikgZm9yIGRzMTM0MSIpLCBtYWRlIHByb3Blcg0KPiB1
+c2UNCj4gb2YgdGhlIE9TRiB3aGVuIGdldHRpbmcgYW5kIHNldHRpbmcgdGhlIHRpbWUgaW4gdGhl
+IFJUQy4gSG93ZXZlciwgdGhlDQo+IG90aGVyIFJUQyB2YXJpYW50cyBkczEzMzcsIGRzMTMzOSBh
+bmQgZHMzMjMxIGRpZG4ndCBoYXZlIGENCj4gY29ycmVzcG9uZGluZw0KPiBjaGFuZ2UgbWFkZS4N
+Cj4gDQo+IEdpdmVuIHRoYXQgdGhlIE9TRiBiaXQgaXMgbm8gbG9uZ2VyIGNsZWFyZWQgYXQgcHJv
+YmUgdGltZSB3aGVuIGl0IGlzDQo+IHNldCwgdGhlIHJlbWFpbmluZyB0aHJlZSBjaGlwcyBzaG91
+bGQgaGF2ZSB0aGUgc2FtZSBoYW5kbGluZyBhcyB0aGUNCj4gZHMxMzQxIGNoaXAgaGFzIGZvciB0
+aGUgT1NGIGJpdC4NCj4gDQo+IEZpeCB0aGUgaXNzdWUgb24gdGhlIGRzMTMzNywgZHMxMzM5IGFu
+ZCBkczMyMzEgY2hpcHMgYnkgYXBwbHlpbmcgdGhlDQo+IHNhbWUgbG9naWMgYXMgdGhlIGRzMTM0
+MSBoYXMgdG8gdGhlc2UgY2hpcHMuDQo+IA0KPiBOb3RlIHRoYXQgYW55IGRldmljZXMgYnJvdWdo
+dCB1cCBiZXR3ZWVuIHRoZSBmaXJzdCByZWZlcmVuY2VkIGNvbW1pdA0KPiBhbmQNCj4gdGhpcyBv
+bmUgbWF5IGJlZ2luIG1pc3RydXN0aW5nIHRoZSB0aW1lIHJlcG9ydGVkIGJ5IHRoZSBSVEMgdW50
+aWwgaXQNCj4gaXMNCj4gc2V0IGFnYWluLCBpZiB0aGUgYml0IHdhcyBuZXZlciBleHBsaWNpdGx5
+IGNsZWFyZWQuDQo+IA0KPiBOb3RlIHRoYXQgb25seSB0aGUgZHMxMzM5IHdhcyB0ZXN0ZWQgd2l0
+aCB0aGlzIGNoYW5nZSwgYnV0IHRoZQ0KPiBkYXRhc2hlZXRzIGZvciB0aGUgb3RoZXIgY2hpcHMg
+Y29udGFpbiBlc3NlbnRpYWxseSBpZGVudGljYWwNCj4gZGVzY3JpcHRpb25zIG9mIHRoZSBPU0Yg
+Yml0IHNvIHRoZSBzYW1lIGNoYW5nZSBzaG91bGQgd29yay4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6
+IFJvbmFuIERhbHRvbiA8cm9uYW4uZGFsdG9uQGFsbGllZHRlbGVzaXMuY28ubno+DQo+IENjOiBs
+aW51eC1ydGNAdmdlci5rZXJuZWwub3JnDQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
+b3JnDQo+IENjOiBBbGV4YW5kcmUgQmVsbG9uaSA8YWxleGFuZHJlLmJlbGxvbmlAYm9vdGxpbi5j
+b20+DQo+IENjOiBUeWxlciBIaWNrcyA8Y29kZUB0eWhpY2tzLmNvbT4NCj4gQ2M6IFNhc2hhIExl
+dmluIDxzYXNoYWxAa2VybmVsLm9yZz4NCj4gQ2M6IE1lYWdhbiBMbG95ZCA8bWVhZ2FubGxveWRA
+bGludXgubWljcm9zb2Z0LmNvbT4NCj4gQ2M6IFJvZG9sZm8gR2lvbWV0dGkgPGdpb21ldHRpQGVu
+bmVlbm5lLmNvbT4NCj4gQ2M6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVs
+ZXNpcy5jby5uej4NCj4gRml4ZXM6IDQ4NDU4NjU0NjU5YyAoInJ0YzogZHMxMzA3OiByZW1vdmUg
+Y2xlYXIgb2Ygb3NjaWxsYXRvciBzdG9wDQo+IGZsYWcgKE9TRikgaW4gcHJvYmUiKQ0KPiAtLS0N
+Cj4gQ2hhbmdlcyBpbiB2MzoNCj4gLSBSZW1vdmUgcGFyYWdyYXBoIG1lbnRpb25pbmcgYWx0ZXJu
+YXRpdmUgZml4IGZyb20gY29tbWl0IG1lc3NhZ2UNCj4gDQo+IENoYW5nZXMgaW4gdjI6DQo+IC0g
+Rml4IGhhc2hlcyBvZiByZWZlcmVuY2VkIGNvbW1pdHMNCj4gDQo+IMKgZHJpdmVycy9ydGMvcnRj
+LWRzMTMwNy5jIHwgMjggKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLQ0KPiDCoDEgZmlsZSBj
+aGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3J0Yy9ydGMtZHMxMzA3LmMgYi9kcml2ZXJzL3J0Yy9ydGMtZHMxMzA3LmMN
+Cj4gaW5kZXggNzIwNWM1OWZmNzI5Li5lZGY4MWI5NzVkZWMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZl
+cnMvcnRjL3J0Yy1kczEzMDcuYw0KPiArKysgYi9kcml2ZXJzL3J0Yy9ydGMtZHMxMzA3LmMNCj4g
+QEAgLTI2OSw2ICsyNjksMTYgQEAgc3RhdGljIGludCBkczEzMDdfZ2V0X3RpbWUoc3RydWN0IGRl
+dmljZSAqZGV2LA0KPiBzdHJ1Y3QgcnRjX3RpbWUgKnQpDQo+IMKgCQlpZiAodG1wICYgRFMxMzM4
+X0JJVF9PU0YpDQo+IMKgCQkJcmV0dXJuIC1FSU5WQUw7DQo+IMKgCQlicmVhazsNCj4gKwljYXNl
+IGRzXzEzMzc6DQo+ICsJY2FzZSBkc18xMzM5Og0KPiArCWNhc2UgZHNfMTM0MToNCj4gKwljYXNl
+IGRzXzMyMzE6DQo+ICsJCXJldCA9IHJlZ21hcF9yZWFkKGRzMTMwNy0+cmVnbWFwLCBEUzEzMzdf
+UkVHX1NUQVRVUywNCj4gJnRtcCk7DQo+ICsJCWlmIChyZXQpDQo+ICsJCQlyZXR1cm4gcmV0Ow0K
+PiArCQlpZiAodG1wICYgRFMxMzM3X0JJVF9PU0YpDQo+ICsJCQlyZXR1cm4gLUVJTlZBTDsNCj4g
+KwkJYnJlYWs7DQo+IMKgCWNhc2UgZHNfMTM0MDoNCj4gwqAJCWlmICh0bXAgJiBEUzEzNDBfQklU
+X25FT1NDKQ0KPiDCoAkJCXJldHVybiAtRUlOVkFMOw0KPiBAQCAtMjc5LDEzICsyODksNiBAQCBz
+dGF0aWMgaW50IGRzMTMwN19nZXRfdGltZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+IHN0cnVjdCBy
+dGNfdGltZSAqdCkNCj4gwqAJCWlmICh0bXAgJiBEUzEzNDBfQklUX09TRikNCj4gwqAJCQlyZXR1
+cm4gLUVJTlZBTDsNCj4gwqAJCWJyZWFrOw0KPiAtCWNhc2UgZHNfMTM0MToNCj4gLQkJcmV0ID0g
+cmVnbWFwX3JlYWQoZHMxMzA3LT5yZWdtYXAsIERTMTMzN19SRUdfU1RBVFVTLA0KPiAmdG1wKTsN
+Cj4gLQkJaWYgKHJldCkNCj4gLQkJCXJldHVybiByZXQ7DQo+IC0JCWlmICh0bXAgJiBEUzEzMzdf
+QklUX09TRikNCj4gLQkJCXJldHVybiAtRUlOVkFMOw0KPiAtCQlicmVhazsNCj4gwqAJY2FzZSBk
+c18xMzg4Og0KPiDCoAkJcmV0ID0gcmVnbWFwX3JlYWQoZHMxMzA3LT5yZWdtYXAsIERTMTM4OF9S
+RUdfRkxBRywNCj4gJnRtcCk7DQo+IMKgCQlpZiAocmV0KQ0KPiBAQCAtMzgwLDE0ICszODMsMTcg
+QEAgc3RhdGljIGludCBkczEzMDdfc2V0X3RpbWUoc3RydWN0IGRldmljZSAqZGV2LA0KPiBzdHJ1
+Y3QgcnRjX3RpbWUgKnQpDQo+IMKgCQlyZWdtYXBfdXBkYXRlX2JpdHMoZHMxMzA3LT5yZWdtYXAs
+DQo+IERTMTMwN19SRUdfQ09OVFJPTCwNCj4gwqAJCQkJwqDCoCBEUzEzMzhfQklUX09TRiwgMCk7
+DQo+IMKgCQlicmVhazsNCj4gKwljYXNlIGRzXzEzMzc6DQo+ICsJY2FzZSBkc18xMzM5Og0KPiAr
+CWNhc2UgZHNfMTM0MToNCj4gKwljYXNlIGRzXzMyMzE6DQo+ICsJCXJlZ21hcF91cGRhdGVfYml0
+cyhkczEzMDctPnJlZ21hcCwNCj4gRFMxMzM3X1JFR19TVEFUVVMsDQo+ICsJCQkJwqDCoCBEUzEz
+MzdfQklUX09TRiwgMCk7DQo+ICsJCWJyZWFrOw0KPiDCoAljYXNlIGRzXzEzNDA6DQo+IMKgCQly
+ZWdtYXBfdXBkYXRlX2JpdHMoZHMxMzA3LT5yZWdtYXAsIERTMTM0MF9SRUdfRkxBRywNCj4gwqAJ
+CQkJwqDCoCBEUzEzNDBfQklUX09TRiwgMCk7DQo+IMKgCQlicmVhazsNCj4gLQljYXNlIGRzXzEz
+NDE6DQo+IC0JCXJlZ21hcF91cGRhdGVfYml0cyhkczEzMDctPnJlZ21hcCwNCj4gRFMxMzM3X1JF
+R19TVEFUVVMsDQo+IC0JCQkJwqDCoCBEUzEzMzdfQklUX09TRiwgMCk7DQo+IC0JCWJyZWFrOw0K
+PiDCoAljYXNlIGRzXzEzODg6DQo+IMKgCQlyZWdtYXBfdXBkYXRlX2JpdHMoZHMxMzA3LT5yZWdt
+YXAsIERTMTM4OF9SRUdfRkxBRywNCj4gwqAJCQkJwqDCoCBEUzEzODhfQklUX09TRiwgMCk7DQoN
+Cg==
 
