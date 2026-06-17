@@ -1,53 +1,53 @@
-Return-Path: <linux-rtc+bounces-6701-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6702-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id yETHCSSCMmqP1AUAu9opvQ
-	(envelope-from <linux-rtc+bounces-6701-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:16:52 +0200
+	id CmYTGSqGMmrm1QUAu9opvQ
+	(envelope-from <linux-rtc+bounces-6702-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:34:02 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71637698E97
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:16:51 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6409F6991CE
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 13:34:01 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=UdrB4awJ;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6701-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6701-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=KCnPNYAJ;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6702-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6702-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3695F31DC456
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:09:03 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E4F8D30795FD
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2026 11:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76666382361;
-	Wed, 17 Jun 2026 11:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0809388E40;
+	Wed, 17 Jun 2026 11:10:38 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F5F37F735
-	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 11:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4025037EFE4
+	for <linux-rtc@vger.kernel.org>; Wed, 17 Jun 2026 11:10:36 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781694528; cv=none; b=F66htg4iWY8t030L6Dtfxh+Z1rCanNh5qWNxqLkfHA7dD5PcbcTnKyPZr0ghB2+tfjdQLiMH7CAMssCZ4jBJdCIgFhqzuphk8r9dLggQeVd62N8h54CYbaEMAY1hhtAGQPlWlsNuwZM9ULZjutrt3vcojR1TLUg2wiyPELPhPSo=
+	t=1781694638; cv=none; b=ZoEwmpFRNHGunRNifT9IWYeK8yJdgcEPh2hr5AxfRT+3pvFdnZBhsFclyWIQLC5DHM2lO5hEqZYa2X4CH8Qd7bfPptWqQ8tjP0Kjugg4TeYhyeg6i1Zq435Jq4SDOsw3TdX5qSsw/QZBNfib7oeZfOF68MormwJdM8vgyhpLuck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781694528; c=relaxed/simple;
-	bh=2eeJvJ00yuhhBXupeaZByMRu2PEkREljI41m93Ip2EY=;
+	s=arc-20240116; t=1781694638; c=relaxed/simple;
+	bh=jrnjpfjWAj2gCwYMXgtp+HmbJSErYJxq9mIT1gb3HQs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kuVVyrA8bO1gtCyiof36fOe2k2TxrX2k+7NkaecIKasasXWpUUNzpSR0jPG39RCjqefnS+KtHtQShEtrbxwgZhGAKvMSzqyawhiqy4B9nLGOtY31ZACOXfBPS30GeWR16FvQoCcLwcBwE4osSPTn5Tz7eEl+knYPCi1DaWn/AWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UdrB4awJ; arc=none smtp.client-ip=194.117.254.33
+	 Content-Type:Content-Disposition:In-Reply-To; b=GabHOHGXOEczQFku69e1OyVRZM4usX7wP0CO9jezVqHOTQPIoFLr99P/oYI834TWauka5tNKZKiSJXraJO7kxDCWEZTUU+oO+SDr4ihl5b+fHLQk2m9bGD3FpbhThX0Q4TUa6hDO2oXRrhqC+nxjwKNvJXdVfCSdwql3+xM+LdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=KCnPNYAJ; arc=none smtp.client-ip=194.117.254.33
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=wZQs
-	+8krBZmwYGnjzofl87rt2yi49qGKHOJDbMffvto=; b=UdrB4awJaJBoakfmH3P3
-	inRN8+SQknYcVX1Nx0T77V43nQCl1ins9hpWAP3YSu5Zll96+oWMfTGdsVKet8zM
-	iTwPafgMJ45GOGWUPHXixzbboTC91zTY+voTNe6ZdnxKOtg7iOlC52RtPF4aBG7y
-	jp45K3ut7mz4LSTm9pJ6hIvumhxYUn6DBm3CywxaNEsm76NMZHZUnwJE4zPBG50D
-	9CBOrvbOwk4v+A6pZHD2H/rvf7pW/STrsbWMFtcBQ+68dFAPvAVp2wHn7pI2Q5dP
-	iGTktva0p8aKemnVKDVsoDKUqOJjHV0f9PD4CtiiG8K3IfubTLWaWZKfkOTce24D
-	IQ==
-Received: (qmail 136374 invoked from network); 17 Jun 2026 13:08:44 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 13:08:44 +0200
-X-UD-Smtp-Session: l3s3148p1@ugk5FXFUVp4ujnvI
-Date: Wed, 17 Jun 2026 13:08:44 +0200
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=FuAl
+	Trj2AiO+4ixzIlxrsr0EN8qN3zNP8tpsHRx8xww=; b=KCnPNYAJ5bJhBofWStP2
+	8GQ1leVhShAIemfP9olqqRlNKbBKI2jsqQrKvtGip/ABaa5KNOoyzjND2YwOVGZb
+	YhrcbSSOYLMNHL7Gqv16J8MfMd1j2+e7GVN3Q+cDbBOCrxxjmLUEE4GEmy6fjdER
+	XE/4DfibCA5FeNL2CCPGXakJ3t2kcwPUPhCGOqJE77nqjiURK9J2TzT+oDiskZcZ
+	a2ve2D9oY3LuSQ87LRcGMq60Xauj9oQST8qSUd82/T0DBgN22DOQ6G7a2bm/DQXs
+	fjRd9IXPfdIZ+pbgS33BP7JGJXCLcHM5r/CDo7CELZolU53xiKnYfW0RBul/5d2O
+	WA==
+Received: (qmail 136960 invoked from network); 17 Jun 2026 13:10:35 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Jun 2026 13:10:35 +0200
+X-UD-Smtp-Session: l3s3148p1@jh7NG3FUKrAujnvI
+Date: Wed, 17 Jun 2026 13:10:34 +0200
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Prabhakar <prabhakar.csengg@gmail.com>
 Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -61,10 +61,11 @@ Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
 	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 09/12] rtc: rzn1: Use temporary variable for struct device
-Message-ID: <ajKAPJGrea01XVeI@shikoro>
+Subject: Re: [PATCH 12/12] rtc: rzn1: Add support for Renesas RZ/T2H and
+ RZ/N2H SoCs
+Message-ID: <ajKAqn1F074JJazF@shikoro>
 References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260615154805.1619693-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -72,16 +73,16 @@ List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pRhRGaqgXYIT+eOr"
+	protocol="application/pgp-signature"; boundary="It5r3rNYSomVnrZg"
 Content-Disposition: inline
-In-Reply-To: <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20260615154805.1619693-13-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.26 / 15.00];
 	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -96,7 +97,7 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6701-lists,linux-rtc=lfdr.de,renesas];
+	TAGGED_FROM(0.00)[bounces-6702-lists,linux-rtc=lfdr.de,renesas];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[sang-engineering.com:+];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -109,133 +110,64 @@ X-Spamd-Result: default: False [-3.26 / 15.00];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sang-engineering.com:dkim,sang-engineering.com:from_mime,sashiko.dev:url,renesas.com:email,shikoro:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[shikoro:mid,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,renesas.com:email,sang-engineering.com:dkim,sang-engineering.com:email,sang-engineering.com:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 71637698E97
+X-Rspamd-Queue-Id: 6409F6991CE
 
 
---pRhRGaqgXYIT+eOr
-Content-Type: text/plain; charset=utf-8
+--It5r3rNYSomVnrZg
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Jun 15, 2026 at 04:48:05PM +0100, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> Add a new compatible string "renesas,r9a09g077-rtc" to the OF match table
+> to support the RTC IP variant found on the RZ/T2H and RZ/N2H SoCs.
+>=20
+> These newer SoCs integrate a closely related variant of the RZ/N1 RTC IP.
+> The RZ/T2H and RZ/N2H variants lack the RTCA0SUBU and RTCA0TCR  registers,
 
-Sashiko found issues, not introduced by your patch, but still. I
-curated the list and left only those which I think are valid. Do you
-have time to look at these issues?
+The RTCA0TCR is also not on RZ/N1.
 
-Thank you and happy hacking,
+> those registers are not accessed or used when operating under the
+> rzn1_rtc_ops_scmp configurations, making the current infrastructure
+> compatible.
+>=20
+> The RZ/T2H RTC variant also supports a 1 Hz output signal on the
+> RTCAT1HZ pin, controlled by the RTCA0CTL1[RTCA01HZE] bit. This bit is
+> marked as reserved in the RZ/N1 hardware manual, making RZ/T2H a
+> distinct RTC variant despite its overall compatibility with the RZ/N1
+> implementation.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-   Wolfram
+With that fixed:
 
-> Thank you for your contribution! Sashiko AI review found 3 potential issu=
-e(s) to consider:
->=20
-> Pre-existing issues:
-> - [High] Asynchronous pm_runtime_put() is used instead of pm_runtime_put_=
-sync() before runtime PM is disabled, potentially leaving the device powere=
-d on.
-> - [High] If the optional 'xtal' clock is missing, readl_poll_timeout() lo=
-ops forever with a 0 timeout, risking a boot hang.
-> - [High] The driver's `remove` callback prematurely disables hardware int=
-errupts and drops the runtime PM reference while the RTC device is still fu=
-lly registered.
-> --
->=20
-> commit b7f73c7d0932a6e78b12419c5912ad3243637b8f
-> Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> rtc: rzn1: Use temporary variable for struct device
->=20
-> This patch simplifies the rzn1_rtc_probe function by using a local tempor=
-ary
-> variable for the struct device pointer. This avoids repeated dereferences=
- of
-> pdev->dev throughout the function.
->=20
-> > diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> > index bc6af59744e48..25cad9213147d 100644
-> > --- a/drivers/rtc/rtc-rzn1.c
-> > +++ b/drivers/rtc/rtc-rzn1.c
-> [ ... ]
-> >  	if (IS_ERR(xtal)) {
-> >  		ret =3D PTR_ERR(xtal);
-> >  		goto dis_runtime_pm;
-> [ ... ]
-> > @@ -486,18 +487,18 @@ static int rzn1_rtc_probe(struct platform_device =
-*pdev)
-> [ ... ]
-> >  	device_init_wakeup(dev, true);
-> > =20
-> >  	ret =3D devm_rtc_register_device(rtc->rtcdev);
->=20
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does registering the RTC
-> device using devm_rtc_register_device() create a race condition during
-> teardown?
->=20
-> In rzn1_rtc_remove(), the driver manually disables interrupts and calls
-> pm_runtime_put() before devres has unregistered the RTC device:
->=20
-> 	writel(0, rtc->base + RZN1_RTC_CTL1);
-> 	pm_runtime_put(&pdev->dev);
->=20
-> Could userspace still interact with the RTC during this window via ioctls
-> or sysfs, potentially causing synchronous bus faults since the hardware is
-> already suspended? Should teardown be bound using
-> devm_add_action_or_reset() to guarantee correct reverse execution order?
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[wsa] Or maybe not use devm then?
 
->=20
-> >  	if (ret)
-> > @@ -506,7 +507,7 @@ static int rzn1_rtc_probe(struct platform_device *p=
-dev)
-> >  	return 0;
-> > =20
-> >  dis_runtime_pm:
-> > -	pm_runtime_put(&pdev->dev);
-> > +	pm_runtime_put(dev);
->=20
-> [Severity: High]
-> This is a pre-existing issue, but does using pm_runtime_put() here (and in
-> rzn1_rtc_remove) leave the device powered on indefinitely?
->=20
-> Since devm_pm_runtime_enable(dev) schedules pm_runtime_disable() to
-> execute during devres cleanup, calling pm_runtime_put() only queues an
-> asynchronous idle check. The immediate return triggers devres cleanup,
-> which executes a barrier that explicitly cancels pending async operations.
->=20
-> Should this use pm_runtime_put_sync() instead to ensure the device is
-> synchronously suspended before teardown?
->=20
-> >  	return ret;
-> >  }
->=20
-> --=20
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260615154805.16=
-19693-1-prabhakar.mahadev-lad.rj@bp.renesas.com?part=3D9
-
---pRhRGaqgXYIT+eOr
+--It5r3rNYSomVnrZg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoygDwACgkQFA3kzBSg
-KbZnPA/9Hu9SvBZVOcCSXgElgrkLR7AIqyaiRh+GFuVBMjAyZQVZugRCnvOEloHh
-GUvomfxa0Qrro8hAyA2sMUgvXoeQ3M3YBMlnuEE822V4Yic9f0OLQidApFEgbKq3
-JVI6NlVGLNu7mKLlnBlAl0U6V+T27rFTFCDxO0cvV9PSyF3zKCH5oBLn/xCTw4aI
-pK52cQNP1TPKmhmIjQnRBf6wefc6h37K4dAxDgRu2YOAgv00cAlzZPglZBqgzzbB
-q8apbLUZ7ItyIdg+M/ThoIejlEFErLREB1TbLKAG2qFeMdiAiPaa4cK63gu3ZtJf
-w0nHR9nXCUc7qmX6LgcFHp3otF7YP0VVEIf3kl+rxb3RdY5DuG4FBOGHaUnW510s
-WQZKAATnSzzUes7ade6FZRCCbdUAWCQY00vf6msgYy2in1GEFzeTdklgHWyw69G6
-f/KAJqqsvGzh7KJ+ojcQakak36xYHlivxRrS0S6unjmj97V1xcQKhK8sbBY6XViA
-8E1uvkbBO0dPEny+Lf/q8g/1PJmltjwT0n+d9IsCz2Yb+R9K4juAu+Aj/BdkSbI2
-E6bw8Y80tMb1zaDEHbeyS0ucO8amShvX7b3IZaRJLwdCkJDLRhP3w6VwK5eXy8+d
-Fznv5X/c8TOUWIhz2I7LuSemK35wuNzOlWD0lk1Qh5VuRK8ipDw=
-=CE1D
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmoygKoACgkQFA3kzBSg
+Kbbs8xAAmX10HSwI/vLKRU9rI0perg+e+xnS5czN/LRlwyNmXDwpegfH2kjyclO3
+lbdUwwN1WI7LAZtaWIW5Vhq3pJ5xiC3xP7i+pmYdBefXukLEtwjIQjKUnhmsoTWD
+8FZj9O8x+4oMbAJ69mAvt3bDU+8OIrcdhfMO/+1TTXhF0wrjPVGUCwvaLfuBnshm
+TtLDFWe8Wdq18C+yRe+DwoPODSAyZlXqxMYJFsBekJd4QvXWXy2IyMBUcR/Y+u9k
+7asdbBQrEC0V100NgvHFMINGZAaz8PjU6TxKjKmoCWZtlPoCjg0MmqIDPLs7F/4O
+ibPcdmkmg4Dat/WsWAc3aR7qZIPUcUQ8LDfXBLAdLmvv1jNLo3KvobDAJAI9XrqJ
+y73e/Djo3aX8GEKT2OOc95kfvmBVzJVeh92Ug+DktLEfWfo35Jia0pdtWRAroAxb
+IRBJXNRXYlwfXo2nseW4P+qURuyD3lgrc0jEeHFz0mnvWM71F/z60OaAPrI5KNVo
+Ne7qYH/ygWzNn/H/kth2K1d30ssiMfdtxeyXffwG5P8/g2LwtbTzJRjphtR/0HLF
+c7AIkKy2ji3paOXB0OmbiIT2yIKF424mC7U4J7piM0URhb1aEl1W//MaT5nqRXN4
+pv0NPzQnyCZJAzcnf96Z8IrjtW5lkTUt0UyMm4PsOKVY2kUs208=
+=pT8T
 -----END PGP SIGNATURE-----
 
---pRhRGaqgXYIT+eOr--
+--It5r3rNYSomVnrZg--
 
