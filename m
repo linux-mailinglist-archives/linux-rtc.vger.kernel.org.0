@@ -1,186 +1,226 @@
-Return-Path: <linux-rtc+bounces-6722-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6723-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id MJeRKFirNWqT2wYAu9opvQ
-	(envelope-from <linux-rtc+bounces-6722-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2026 22:49:28 +0200
+	id acOaEuLMNmo+FAcAu9opvQ
+	(envelope-from <linux-rtc+bounces-6723-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 20 Jun 2026 19:24:50 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 024CC6A7B64
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2026 22:49:28 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B96206A95CC
+	for <lists+linux-rtc@lfdr.de>; Sat, 20 Jun 2026 19:24:49 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=iM2VLsOK;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6722-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6722-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=SMwPyswu;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6723-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6723-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A450E3051D3F
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2026 20:48:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5C7BE300D613
+	for <lists+linux-rtc@lfdr.de>; Sat, 20 Jun 2026 17:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08DFD3B7B8E;
-	Fri, 19 Jun 2026 20:48:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0702C32B9B5;
+	Sat, 20 Jun 2026 17:24:09 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF59305679
-	for <linux-rtc@vger.kernel.org>; Fri, 19 Jun 2026 20:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD46930F7F7
+	for <linux-rtc@vger.kernel.org>; Sat, 20 Jun 2026 17:24:07 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781902134; cv=none; b=D6FXsk8BXLEh1+Z51Hvvn6JtcpuF3HOzwS0eG2qMTnC8B581G6cAQOWXUcoYMCAxvQ2EGtf3TaNkl0Vf1/7KJvtAlmzKhT99HOxx3+Y54CKwgOhplddRY5x/QWO4gt+uVxM4V9vaEz/CLnc3lsyDh7iubB4JMh1I2YF6SuSOT64=
+	t=1781976248; cv=none; b=mCObbUEwolCSNJZDcf5ZspvP3KLWsx4nQquPSceJwTmdElEoAwLmpaxUcXKdSZ1ZKlb+wJeP21T2Vnp7jWnx3BAHDPxNTdS1FLN0xJx1M+jDAsx6tQXs5S5i1WYo1anIihLtSBqZIDAYOJ1uVazBoSb4YNsGJIFm1QeZj65eWWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781902134; c=relaxed/simple;
-	bh=/DhohJZGTz9abykatRmBdgN8Jg9E90Yf3gikqPNftfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sRInlrsO2yssNCzDILcYtwxY3DiOSWX7Wplq2lPCoG8/6xdbZtX48e+ETT/9pt5y9uY586RDfDDaOMdDEq0twKD2b9JQOmzgNE8vfz4KbW+mOSECpQPH+l702VGDgh9B8tfhnnm4A7piV6vczq14lWMprYfdSsATHc3YrTDYfjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=iM2VLsOK; arc=none smtp.client-ip=194.117.254.33
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=djwa
-	D7/2v543piX+m0B8KYh8jLWg+1EPgr0osKN70mg=; b=iM2VLsOK27d5MQ2pkggG
-	SFQn+JvEtRNH9I6TJs1gWt/d9PdOVzJaFBVEKmQmEu3H7wCRh13VIJEZDxsDFJ+9
-	MOG4g1KTW/A34NeALkAv8JwlV0l5upmWADOOlFVVexOnN02EqLo0i5R/rBejIws0
-	nN4S0IFIFLSAINRpkuY/KHZCwWKuYIGhsxJuWHZQ2UhIZSfhBgsXELDuaoOFeBh1
-	tbaaA/nTYsrhH4LlORuNcN+dK8JKJ7y4TghcNYj8JDp4bROiDWZSE8zh04E2xxJ+
-	vvU7EjWGQMagkDXuROrkInjittaH+nh7DlW6Kw/NOAjdM6/02bK/JJFt7hGCVfRa
-	LQ==
-Received: (qmail 1078737 invoked from network); 19 Jun 2026 22:48:51 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 19 Jun 2026 22:48:51 +0200
-X-UD-Smtp-Session: l3s3148p1@wseMa6FUENEujnu2
-Date: Fri, 19 Jun 2026 22:48:50 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 09/12] rtc: rzn1: Use temporary variable for struct device
-Message-ID: <ajWrMuCaUEFJSbkF@shikoro>
-References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260615154805.1619693-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <ajKAPJGrea01XVeI@shikoro>
- <CA+V-a8t-phAuaH5g_3Nt=2d=KPw2QqA6r1dqOZv9k-Xhp5q2Zw@mail.gmail.com>
+	s=arc-20240116; t=1781976248; c=relaxed/simple;
+	bh=OrG173MpmokmQwAQnBCzHM3/1E6eo3eaEAN1nJggyq0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iicWJB823LEEkjMs0CUF3+yzVcRgiSHSyER7U1bXe7ecDnE/FZUMWHYmAUwa/EMzKbMD8SsfET15Le+BrWgrGgnqgpHxGeVu2rFuWYV0Vpjc+wvk9yLZzjP9DjqLl4xwLpANwAFpC89iPqfedT9IpxAKzswRzd2ugW/9WfuiHL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SMwPyswu; arc=none smtp.client-ip=209.85.216.45
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-36b95eb4bb4so1884592a91.3
+        for <linux-rtc@vger.kernel.org>; Sat, 20 Jun 2026 10:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781976247; x=1782581047; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VjVcopPtCu5wMI8L2H0z+lagnebo1hucNi83hHVH/j0=;
+        b=SMwPyswuMb4j1/r5qsBc/VBaGKeizc+7B4VAkw4IDmsUc4I3XHIir7ep4hPdb5F0+M
+         fWYnPJ9geKF2UwKrCfGCcbV/bGZqw8LEyYiU/nrgmuO+T8hM8YQ1hFBQofWWhKa/+zCi
+         OWcVpuxivH3j7BrmxyqzbrY9m67EcrT4nj0UfnD+aM9DE2PUUTHhRBCF68Kqb9lluez3
+         8MXJXR57L14laQzxF03T1U5a1UBGvyoN0MIe1OVtnXu6n+PF/t5BK3R+/pXZw5Y56gj/
+         haXiuoJTYRvGq/cq3Wuk6Ylmp3AS327zn9cQ3ByFddcZPGYgTH8YskGCbbH2uRHRT7e/
+         Drvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781976247; x=1782581047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VjVcopPtCu5wMI8L2H0z+lagnebo1hucNi83hHVH/j0=;
+        b=ht63LWcGs2AXyPnGZTuleqQPnluhvoxs1Xn/ThHSyAIoFhJp1hHbvqER3aRkYHvpxj
+         KahAAKGoPc0BrkgcxRsCL0dLtIdxAdlOLnvscvZklHSyLe/rk5c7K2IXloYOJSLEMd6P
+         v16itwHYdP5iES3dZihpBOvAZX7l4zf9raB5Hq2p05Al+aD4mN7YlQKJBrtlwNJnDvua
+         Pf2HeYIoRoKiQiP94YC2PAIjv04EQzegjc9UGfOj4CiEGa7r682vrvmJrITxU0ymo1nX
+         BpUDCqGCh+SRa2V5esyoiIox5gSnmsNjnr6MO45V1wvuhtCSsGh/zaE6+Sjbw3BBgorM
+         mhXQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrsmZqEEyu9TADCZ8mw2D+Rb8+wkgWp35OABszUk226v0wpjv0eNaRVp9c5rJSvuGjEiJjCHjoWOyY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1lHz+7KOw1d+rzqGAdas48bvIDjOnNzhqo/BgASuL+a/uR2Q0
+	Pd4VMp29O0Hg5cbaG1OOdHErtMoVTzDn4l71hlKNdyXQtRTJt0QKIJ6R
+X-Gm-Gg: AfdE7ckGubvHI4w+2F3ywwPaq0pGQenODmkEXT1bEDKZkH3ie5HjXLKNppuSzQbcrJg
+	iFj0zkQfUwfurKWWVj59J4cUg8hGJro8Q6uEDIdqqbRUatEUtxs0BRZbGy4JXYHQfOZevCqEEty
+	1mhxFI30M7ogUiaQhEa0iBbf+RprIllHCpIBO8qjlv3VElehLSFlDnSIiDej/GIxAnM8uiPbbYZ
+	HkzwpFl1Q8WMwffiD8BLvsvt9J78MZvF8qF2l1+1+9xg4ZTBqHkbd83GteBFJ/hXPs+UViwUkPN
+	WcIsvwq1YBtG4wqK655lX8p8M5OBky987k96okDMD2Hkzvej7XSVqFJn2AdW1HhHz6jVVViGXdv
+	7RKRtH5F4MGqLDmpz1q/RHOgUYB0qWk+c7GcG+cjYEgYR9zT5JfivrPbBL9Uz6U/KGcPPLMGqD6
+	QZVVXTE5T08k1cjQWZC2s37AcupdbM+O7xfQ==
+X-Received: by 2002:a17:90b:4b86:b0:36d:f28b:72e0 with SMTP id 98e67ed59e1d1-37d161465admr7528238a91.12.1781976246960;
+        Sat, 20 Jun 2026 10:24:06 -0700 (PDT)
+Received: from inhnjlux1020.ls.ege.ds ([2409:40f0:303b:e45d:521c:1231:d388:dc73])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37d15de5d3dsm6109920a91.10.2026.06.20.10.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jun 2026 10:24:06 -0700 (PDT)
+From: Udaya Kiran Challa <challauday369@gmail.com>
+To: tsbogend@alpha.franken.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: skhan@linuxfoundation.org,
+	me@brighamcampbell.com,
+	linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Udaya Kiran Challa <challauday369@gmail.com>
+Subject: [PATCH] dt-bindings: watchdog: microchip,pic32mzda-wdt: Convert to DT schema
+Date: Sat, 20 Jun 2026 22:53:54 +0530
+Message-Id: <20260620172354.155565-1-challauday369@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TTgDSYB9X45Zj4L1"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8t-phAuaH5g_3Nt=2d=KPw2QqA6r1dqOZv9k-Xhp5q2Zw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[sang-engineering.com];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:prabhakar.csengg@gmail.com,m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:prabhakarcsengg@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[wsa@sang-engineering.com,linux-rtc@vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6722-lists,linux-rtc=lfdr.de,renesas];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[sang-engineering.com:+];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wsa@sang-engineering.com,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,glider.be,gmail.com,vger.kernel.org,bp.renesas.com,renesas.com];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sang-engineering.com:dkim,sang-engineering.com:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,shikoro:mid]
+	FREEMAIL_CC(0.00)[linuxfoundation.org,brighamcampbell.com,vger.kernel.org,gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6723-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:tsbogend@alpha.franken.de,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:skhan@linuxfoundation.org,m:me@brighamcampbell.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:challauday369@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[challauday369@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 024CC6A7B64
+X-Rspamd-Queue-Id: B96206A95CC
 
+Convert Microchip PIC32 Watchdog Timer devicetree binding
+from legacy text format to DT schema.
 
---TTgDSYB9X45Zj4L1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Udaya Kiran Challa <challauday369@gmail.com>
+---
+ .../bindings/watchdog/microchip,pic32-wdt.txt | 18 --------
+ .../watchdog/microchip,pic32mzda-wdt.yaml     | 44 +++++++++++++++++++
+ 2 files changed, 44 insertions(+), 18 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/microchip,pic32-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/microchip,pic32mzda-wdt.yaml
 
-Hi Prabhakar,
+diff --git a/Documentation/devicetree/bindings/watchdog/microchip,pic32-wdt.txt b/Documentation/devicetree/bindings/watchdog/microchip,pic32-wdt.txt
+deleted file mode 100644
+index f03a29a1b323..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/microchip,pic32-wdt.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-* Microchip PIC32 Watchdog Timer
+-
+-When enabled, the watchdog peripheral can be used to reset the device if the
+-WDT is not cleared periodically in software.
+-
+-Required properties:
+-- compatible: must be "microchip,pic32mzda-wdt".
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-- clocks: phandle of source clk. Should be <&rootclk LPRCCLK>.
+-
+-Example:
+-
+-	watchdog@1f800800 {
+-		compatible = "microchip,pic32mzda-wdt";
+-		reg = <0x1f800800 0x200>;
+-		clocks = <&rootclk LPRCCLK>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/microchip,pic32mzda-wdt.yaml b/Documentation/devicetree/bindings/watchdog/microchip,pic32mzda-wdt.yaml
+new file mode 100644
+index 000000000000..5d91a7e22f17
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/microchip,pic32mzda-wdt.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/microchip,pic32mzda-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip PIC32MZDA Watchdog Timer
++
++maintainers:
++  - Thomas Bogendoerfer <tsbogend@alpha.franken.de>
++
++description:
++  The PIC32 watchdog timer can be used to reset the device if software fails
++  to periodically service the watchdog.
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    const: microchip,pic32mzda-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/microchip,pic32-clock.h>
++
++    watchdog@1f800800 {
++        compatible = "microchip,pic32mzda-wdt";
++        reg = <0x1f800800 0x200>;
++        clocks = <&rootclk REF2CLK>;
++       };
+-- 
+2.34.1
 
-> > > Could userspace still interact with the RTC during this window via ioctls
-> > > or sysfs, potentially causing synchronous bus faults since the hardware is
-> > > already suspended? Should teardown be bound using
-> > > devm_add_action_or_reset() to guarantee correct reverse execution order?
-> >
-> > [wsa] Or maybe not use devm then?
-> >
-> Maybe just add two `devm_add_action_or_reset()` calls: one to clear
-> interrupts and another to call pm_runtime_put()?
-
-Why two? I wouldn't think it matters much if the two are separated. Main
-problem seems to me the disabled clocks because of pm_runtime_put()? But
-maybe I am overlooking sth?
-
-> > > [Severity: High]
-> > > This is a pre-existing issue, but does using pm_runtime_put() here (and in
-> > > rzn1_rtc_remove) leave the device powered on indefinitely?
-> > >
-> > > Since devm_pm_runtime_enable(dev) schedules pm_runtime_disable() to
-> > > execute during devres cleanup, calling pm_runtime_put() only queues an
-> > > asynchronous idle check. The immediate return triggers devres cleanup,
-> > > which executes a barrier that explicitly cancels pending async operations.
-> > >
-> > > Should this use pm_runtime_put_sync() instead to ensure the device is
-> > > synchronously suspended before teardown?
-> > >
-> Although there were some patches accepted for similar kind of issue
-> reported by Sashiko, do you think I should switch to
-> pm_runtime_put_sync() (Ive not seen any issues)
-
-I am not a PM expert, so I can't guide you. The report from Sashiko
-sounds reasonable to me. But you'd have to look up the code path to
-verify the reasoning. Or ask an PM expert.
-
-Happy hacking,
-
-   Wolfram
-
-
---TTgDSYB9X45Zj4L1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmo1qzIACgkQFA3kzBSg
-Kbb1LQ/+JlXsCm6AwwIQftLvmKNpZmsL7YUrP3rt3fR5tKZJNMsg+4+as36AEEAh
-XWlRIvvvxgIHLhF1HOb52Mxfn3Fzdxiq3a1+wYSqfZQ30dTvq8CQA9CZC7oaHQzN
-EfooGbxN+2A9ypbp+Y3uIChoAUB02Kxy0DHtIpwCY1mU3wvQ+lgQFKHPvfLPI/zD
-4GWw6GGb6XWrV4dgSdG3EuLk7NtfFkUDmkMCMONTLKkoyT3U20v7cbj/jhgTroKt
-z6ZRIdU+hgzCLYRj3tmvsZi7dSN8EJjsLecidu0cJcBVHBOGs/khV41C7IVyLo08
-Rh3yrSTGlI3mxt08bYpxpKeR+OrmFCcecc0m5Mu/irmLmn8DWgblcISEPdstwKgC
-4O86JrNswWgjUOs8BtFsFn/rEtkrzyYI1LK7WL0etbmWfe/87oKvYhul5CCn3iHH
-+kBxZ88enMSOAZf9kz/IuiJkACBRLNyQrLRkHw63W7hE7rHVtNOWNobK42Uo76F5
-hQRBqvxtVc27EzXAtn1TsQ1zYOdJ+hqIriEho3zU2VSpIMVaWqp2JRJKaW7Mpys9
-IWoNQCVktyXkXSjl3O/5TmCaWhdCtxtu1/38BHcWnMCKmweA9xa04CPMwj1Bpekg
-5Dq6hoA6eatnLscgo2KozH/nvp2gDdI/w9csYJi4nQT0EvPixn8=
-=TgdY
------END PGP SIGNATURE-----
-
---TTgDSYB9X45Zj4L1--
 
