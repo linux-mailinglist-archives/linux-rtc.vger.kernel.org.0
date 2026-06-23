@@ -1,123 +1,157 @@
-Return-Path: <linux-rtc+bounces-6725-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6726-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id OOKOHUtJOmpl5QcAu9opvQ
-	(envelope-from <linux-rtc+bounces-6725-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2026 10:52:27 +0200
+	id /Da6DIpcOmpm7AcAu9opvQ
+	(envelope-from <linux-rtc+bounces-6726-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2026 12:14:34 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E3946B56E0
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2026 10:52:27 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AD426B625F
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2026 12:14:33 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=dr3CyVo9;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6725-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6725-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=163.com header.s=s110527 header.b=EHdpT5ha;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6726-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6726-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=163.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 51E033045C86
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2026 08:51:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 318D03003EC8
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2026 10:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F263CF1E0;
-	Tue, 23 Jun 2026 08:51:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A8F23655D4;
+	Tue, 23 Jun 2026 10:09:28 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55F9340A52;
-	Tue, 23 Jun 2026 08:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B0A21A92F;
+	Tue, 23 Jun 2026 10:09:22 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782204699; cv=none; b=fvJYuzqXoIGJZLJWR37x5uvC/vUBqHQ2eluHt1qhOLz8Vx53gtSVYNhCt7Lm/CryfceDmKZaDZfAwVzFHBerY7rWep4n2ttBUs/mvJ2dD+hcPUj4h7XbBtZX/yO6/koTJYojHPr2dfswtq8R4/JbSN5lkdHXQpLuRiPi4XqGlMc=
+	t=1782209368; cv=none; b=QZNVW1uNOMNCw/GKaXZg6zet1N3ZooMU5y3BhZNFxJgzpcx+QKFZgUnT8hJyIYXOy70x3H7lYuYdwbDJphCBjApKjnKAwDQ2hlesJw2hrFxwfSl8Gm3v81IuSZVu7cYsqijkIJNd/QSyCBQd0cJwBDPggftL05r3UIOJcGWaafU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782204699; c=relaxed/simple;
-	bh=zx6wkNEXy7nabLL5CN63qNZLUh17QaT/I/QukUuwlLE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gGQ8co/T5nCOLrNm4q1lJTUPKTFzRvuVirUZ0bBB+XZiYqGJy37lW0Hv930ovuekNOr5/OaCXQD1U7lgEJErAO8a5b6foCmAWyg+H3EMrzm4ICQZqIC2c1PMPDuC7uBeN4BLA/YF07EfiRLGosApUkeQpqiIVZP4aMqRtZ3saI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dr3CyVo9; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C89B1F000E9;
-	Tue, 23 Jun 2026 08:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782204698;
-	bh=4gysAP1S+0hzuOBim35EG8H2R8ov/qExOI6IXgApNZ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dr3CyVo9ouL9dLX/ZDOwZ2VhneLHcFdlzqrZ1e4a1sK6gxdq+rXJPjh3FGEwjhBw/
-	 798fAAVVrAFuE5tEZqVlo03qf088GLr3fK7HcQYsMYgjXJHU2ofiiTCm/2e1iWIAbL
-	 jpZoR3wA6bO03+mJHDBS54TgrLyslxij7rXmeRLnw4ZSxqUY6yxFgTLta6qTHKWyLH
-	 zt41nbp15pqbFPiCTyo+SFx8E3Z5XqvUvQ6ppN1vNoGtcDHvfA+wqNU+sDEe9JlC+W
-	 ridoUO7qyWlVMdv9ayeS9QzXecYhbwWyrEbtrht3DJ/qfUam96M7ZvLmR7jjCCrcuV
-	 cxI9xDRkxngpQ==
-Date: Tue, 23 Jun 2026 10:51:34 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Udaya Kiran Challa <challauday369@gmail.com>
-Cc: tsbogend@alpha.franken.de, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, skhan@linuxfoundation.org, me@brighamcampbell.com, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: microchip,pic32mzda-wdt: Convert
- to DT schema
-Message-ID: <20260623-small-roaring-bullfinch-b20baa@quoll>
-References: <20260620172354.155565-1-challauday369@gmail.com>
+	s=arc-20240116; t=1782209368; c=relaxed/simple;
+	bh=1hhTCQCjqwvG71DABL1oLSts8WcvngCyVK5FZ2xMDrg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hruohm4Wk9u0gG7nVIre1juz8IkuEm3Wkb5GKrE6NMUfBPkm62wIbg39BOC8gBTO+gES+OP2lXU7mcNWKAWzhG5eSPdvOMg9XqW13d8uDvo+a1GPHiSrd1DC2lyk0XC2WsDadmy8P7ixikA6zfc8adr8svc/DIR+cA2PKwSVVY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=EHdpT5ha; arc=none smtp.client-ip=117.135.210.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=pr
+	rZVqeAdymGUf+J6Qq11p4VnhLZAsuhJO+K9UWj9Ss=; b=EHdpT5hatVTO3Xjnu8
+	G5RYHfUNluUE+vs5zvVM+og8uu65nz7Ycx+YFNeJkP8RPYRGEo2Si3Bc/1soum3Q
+	FjAxrNGsB52SeXz6RvawXbn/mUGQqmo1SHgeC/qFIhhLSs+DKICjNbkydpVxyKJE
+	vvwmiyech92JKr0Y4Jz7vtC/8=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgD3HzMxWzpq54TPDg--.18142S2;
+	Tue, 23 Jun 2026 18:08:50 +0800 (CST)
+From: Haoxiang Li <haoxiang_li2024@163.com>
+To: alexandre.belloni@bootlin.com,
+	bwalle@suse.de,
+	akpm@linux-foundation.org
+Cc: linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haoxiang Li <haoxiang_li2024@163.com>
+Subject: [PATCH] rtc: cmos: unregister HPET IRQ handler on probe failure
+Date: Tue, 23 Jun 2026 18:08:48 +0800
+Message-Id: <20260623100848.2127281-1-haoxiang_li2024@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260620172354.155565-1-challauday369@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgD3HzMxWzpq54TPDg--.18142S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFW5WryrGrWUCr47JryfCrg_yoW8Aw17p3
+	Z3ua4DAr4qqr409a1UGa4jkFW8Wr18WrW3Arn3K3yagw48Jry0qFyqkasrAF45CryrZF1a
+	gr1Dtw4fCFs8AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piVOJUUUUUU=
+X-CM-SenderInfo: xkdr5xpdqjszblsqjki6rwjhhfrp/xtbC7RIMemo6WzKojAAA3U
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[163.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[163.com:s=s110527];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6725-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:bwalle@suse.de,m:akpm@linux-foundation.org,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:haoxiang_li2024@163.com,s:lists@lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:challauday369@gmail.com,m:tsbogend@alpha.franken.de,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:skhan@linuxfoundation.org,m:me@brighamcampbell.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[haoxiang_li2024@163.com,linux-rtc@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[163.com];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6726-lists,linux-rtc=lfdr.de];
+	DKIM_TRACE(0.00)[163.com:+];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[haoxiang_li2024@163.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,163.com];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,quoll:mid,vger.kernel.org:from_smtp,qualcomm.com:email]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1E3946B56E0
+X-Rspamd-Queue-Id: 7AD426B625F
 
-On Sat, Jun 20, 2026 at 10:53:54PM +0530, Udaya Kiran Challa wrote:
-> +    watchdog@1f800800 {
-> +        compatible = "microchip,pic32mzda-wdt";
-> +        reg = <0x1f800800 0x200>;
-> +        clocks = <&rootclk REF2CLK>;
-> +       };
+cmos_do_probe() registers cmos_interrupt() as the HPET RTC IRQ
+handler before requesting the RTC IRQ and registering the RTC
+device. If either request_irq() or devm_rtc_register_device()
+fails afterwards, the error path leaves the HPET RTC IRQ handler
+installed. This leaves a stale handler behind and make a later
+hpet_register_irq_handler() fail with -EBUSY.
 
-Indentaion needs fixing.
+Track whether the HPET handler was registered successfully and
+undo the registration on the probe error path. Also mask the HPET
+RTC IRQ bits to match the normal shutdown cleanup.
 
-With that:
+Fixes: 9d8af78b0797 ("rtc: add HPET RTC emulation to RTC_DRV_CMOS")
+Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+---
+ drivers/rtc/rtc-cmos.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index f89ab58f5048..fa04ece151b8 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -934,6 +934,7 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
+ 	unsigned char			rtc_control;
+ 	unsigned			address_space;
+ 	u32				flags = 0;
++	bool				hpet_registered = false;
+ 	struct nvmem_config nvmem_cfg = {
+ 		.name = "cmos_nvram",
+ 		.word_size = 1,
+@@ -1091,6 +1092,7 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
+ 						" failed in rtc_init().");
+ 				goto cleanup1;
+ 			}
++			hpet_registered = true;
+ 		} else
+ 			rtc_cmos_int_handler = cmos_interrupt;
+ 
+@@ -1140,6 +1142,10 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
+ 	if (is_valid_irq(rtc_irq))
+ 		free_irq(rtc_irq, cmos_rtc.rtc);
+ cleanup1:
++	if (hpet_registered) {
++		hpet_mask_rtc_irq_bit(RTC_IRQMASK);
++		hpet_unregister_irq_handler(cmos_interrupt);
++	}
+ 	cmos_rtc.dev = NULL;
+ cleanup0:
+ 	if (RTC_IOMAPPED)
+-- 
+2.25.1
 
 
