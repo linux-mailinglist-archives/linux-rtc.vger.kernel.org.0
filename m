@@ -1,157 +1,263 @@
-Return-Path: <linux-rtc+bounces-6733-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6734-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bzZvGceHO2o7ZQgAu9opvQ
-	(envelope-from <linux-rtc+bounces-6733-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 09:31:19 +0200
+	id +3slNFGqO2oTbAgAu9opvQ
+	(envelope-from <linux-rtc+bounces-6734-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 11:58:41 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B436BC2D8
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 09:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D4876BD1DE
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 11:58:41 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20201202 header.b=NeTVbvGF;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6733-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6733-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=dkaUqR50;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6734-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6734-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB801310784C
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 07:24:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 52C8B301AD0C
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 09:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1774391E7C;
-	Wed, 24 Jun 2026 07:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304673ABD83;
+	Wed, 24 Jun 2026 09:54:35 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC1D391E50;
-	Wed, 24 Jun 2026 07:24:38 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782285878; cv=none; b=JOQQHYfznK2lfJK1sp1kWeD7F4n87bj3x2mDdI7Ep95d0QllcO8nZ+dWUCRy9dlfzBeLZr6Iyv7OkzHa0JeS1b4dF1yPhD2mEpLmb9Ke94z7j5xIC8iVy7TxBNIqa7sfHyAjVe0UIakQKmgHhK2O3Q9Vp0i6zjLQ1EzqrHDcLnM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782285878; c=relaxed/simple;
-	bh=QojzKA+AL9yufTBuhEvjrEAhb+khx3/xRIV8QBdLzG8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YbffDg0DAeY2TM5k+9MI6WjQCa++/t8kIVfFX1ivTpT1U0IYRXA+5sMUtNJD8ZwpQhAEOoxInJPyYun+WOu9bTiRp/cKKDcSux58n2ufNUxu6b3dJ622fnheq6UyIl51OND1HsSVAK1s/RK7LWuTSpzzKWyPbfgs2NX0aC9Dm/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NeTVbvGF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2B638C2BCB4;
-	Wed, 24 Jun 2026 07:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1782285878;
-	bh=QojzKA+AL9yufTBuhEvjrEAhb+khx3/xRIV8QBdLzG8=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=NeTVbvGFlvNeKvstEQtBfIyYGoJnm7ajizM/Lp9dOFDZ0h+vIgcWB3uDx7zEpMmfh
-	 o6UAI4ESmvpaSiMJEUkI7Yr5WFr2K9LUVIKMsDRNN+XNuI2utxOKNutQi1Ye3Xi4nX
-	 hVXYcQ5alfZz57dKEdgn0HT4ns1Az70rrsmli1u69iWmI2WtN0CovChJHeCoWVzWUo
-	 8o1KPiS6SVvaRWGZAV0hUmvg2jHtk79nH8r3F+0zbYgKIMatz1BwWGiI+9cvC7HtU2
-	 4oiMZXUexp5fIVFXd6p1wOMYKilSd5ChPQ+WTSKjYxCKx8IWWWtq8GRuq7oLNZtZVM
-	 VTW+waKQ8eM7A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 026BCCDB47F;
-	Wed, 24 Jun 2026 07:24:38 +0000 (UTC)
-From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
-Date: Wed, 24 Jun 2026 07:24:34 +0000
-Subject: [PATCH] rtc: amlogic-a4: clear unsupported update interrupt
- feature
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14213B0AC7
+	for <linux-rtc@vger.kernel.org>; Wed, 24 Jun 2026 09:54:33 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782294875; cv=pass; b=GRgirnddy3Z8Y44evrmokfcRvp6gbNrGciwu6nacxeppwwCqJUJXTvIxL3LRjhzXL4600kgYDEFZJMNurVcBTiSbgYVu3a3TbW6d/7WwqdnKzclF2geVNVmjimR/8gAlHpVGps052F0H2eYLyd+CW+c2U26/W7L+YaU0AQlXmvE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782294875; c=relaxed/simple;
+	bh=G7McnGzDAgC/O+5kkADtYO2MXqBKflAE5Es+/QUD2pg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l1W1QwF1ak0gSE29BOkzd/b89VVlJS8l7mr9ST7/JCPsjEmyhC9+IdIsb8nbrZlwQN7ANn1l1SGEfckqx/NDXeFTQ73HExH0+T5qfdUdkYsxsGKEPzkAgEaedYbvNMSMbOVsoPfQrLen07/Z/p88gaPYmUk9BwGRIm3EzI3A6BE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dkaUqR50; arc=pass smtp.client-ip=209.85.128.50
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-490c0c92cffso5804855e9.2
+        for <linux-rtc@vger.kernel.org>; Wed, 24 Jun 2026 02:54:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782294872; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eHUfHCqcSlUPbN5iWF9en+hHenix2aNWQJAZuFfxc6UvrrupzRZWNcDu9/dBMyyNp3
+         2GkqxX2cOXj5tzazxi5u+zy+CjXLPzN9DU2k5248Il/6EF1eXN22dZfOjtOx7Q2t/Tej
+         q+SVRECqzBNSK4ijsj8W4ULb4JBS6Lj0HxZz2vPYEkQBim9O9VnnnbOaSpmCUIPvZn+S
+         xUZrIWLa2eNkveJdYAvpYCzr1mBDEj6NHN6jBmTFYkbu3slZCAgr3YPpI9sZHSwarQtd
+         aw4AAcKBWCSYEObFSKHH27sTTh4HdOoo2LZw/lbf0z0HMB87YY7GF9J7DSZCKL5XayBt
+         CHaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ObqsI1pCoD4Da2/XxZ9CqBQX9rgxlXpIUEI/2gcibd4=;
+        fh=UPtb7LfIm4chHMcbyqT0XKNE43cfRQCqDGJn8t4CdDU=;
+        b=YZotpjcHXcnwQjrz2fKBpARdmH+DbP9Hs/iK8xOin9+bY1lYIBqIg9NyHu2YyGTlnS
+         /88tx1vFsjKmw0YONoUBg8rUtHkqoDl7QSZ5wPr+o767+1esJVW9xOZgWk7TpL39+Knh
+         MMWsuge7HA51pCBUB6D/WKWZNOY3njwzilkpqQSco9RjBL+o1P5FHPttlHmu5lZWQRBp
+         i1PE6wAkmNDmcjiCe3kKslHCnsLVMg/Ffh4Sm5VxSPFaXU59CA/kG7oplCP1nwp+ltG2
+         zzIuuKFSsZsL3ZluCBTbnmAGnwSC+Lebg7fBjEgCQS9rlQoMyPk+ihn3TDXS0MqwXtTl
+         TQrA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782294872; x=1782899672; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ObqsI1pCoD4Da2/XxZ9CqBQX9rgxlXpIUEI/2gcibd4=;
+        b=dkaUqR50YTZlxtCAx72UdCM1RH7NxEvldd4TstWF1bQfzhwsIGA5bTSrQcByQCnqeH
+         BIIquIz6sNMxeFubAAidHW/QfDgoBe6Se7/8lF5u448nmE6khdBcO3gh5uriBlcwSaV7
+         dfnICjm+uf4oojzQjqINbkvK7GgEMrC/l+jam2jYd9++VcjD+Jr/msTMtT5u5Llv+AfM
+         ydw9vr1SWMIRBub6Fnr+I0me72Z+1fLlVN3jr2PPwqC+8GL5b58Z8XycFO6L09UsOGdG
+         BcPXuS4UsgRJbVZLO65YTVbaVAQ0pp+ALyCejnmhJY4ZR+bPb6s9VRCjxe6OuaO3kQ9V
+         Zz8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782294872; x=1782899672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ObqsI1pCoD4Da2/XxZ9CqBQX9rgxlXpIUEI/2gcibd4=;
+        b=Qg0b9ot8NkJmNrKHi8UjeE1VRqgT57WbFXBibS4d254jJfBOeC73CRybdaVG2Y7yiE
+         9wzEoGtwfX0YrnOsbaAtJHBwFoe4WtaYxT+LZ2qkC9uuTNywTUAUqX0Y4bNXVSQkFeU9
+         dhBz/WStaIR8+XoITgJvx9GYDRCGKOOda4g+DSVtaImqpRl9QZKrkh1Jwql0dQEQRQjH
+         l7GTGmMdqHi5L41MNiIi10AKRrFinrL5rzrxbhoGtvPRwvK0VNY51IuUMkZMgWOcuJfq
+         TWZyb1f4Pt67efwdii2GrTMPt8G5rPnSFs1Sjux+7a3XkLetUyFr77g8LG65K6MyQeah
+         979w==
+X-Forwarded-Encrypted: i=1; AFNElJ8bfEfQrFR5qOpl8+nWOYtyjrBp4xy1YWxmPnLvSOqLshzpqiaxDWGJCRE1jPbgBg6No22+Z8GHv1Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMRy9ziZoQou4sLrDCTGiNuf+emlL30RSjTQMc/tW9/nglBJ/C
+	hj2iQHNbJsPBlUGBxd1qWJuUhQEU2fi3vXVvYbiK8JtNBgL1QBb4L9kD8V9O7ajVvg/xwz03AB+
+	dvBjrdjrmK8s7TOBndn/Ii6QFsRv/EYUEaxB3KdNOxw==
+X-Gm-Gg: AfdE7cleX3kdd+lqXo12WximtGFwvFZOtlS10nSNOg78ptoy6oDH018I/6ko4EbHzOY
+	IVbSVRObeyhKfLtk014eOGhDXiT+nFyfXfmeZ6azfqHbuGKT/kQumwUOw2N9bf+Z+ET6+hNDGV7
+	kO+Xh9UIfoYY8kKaqh2ZvdQNVLGZklC7GKyEKldPL0+0YsJNoCZW3j0z8YGYvSuBq32BTDPqpF+
+	v9glC5Xjh7g9jILLgq/RtYAiNmzS+Ksu2ycEy5TRfxTGSDj9lo/yCzbfhmGwsVJErFluC6WtwS/
+	4tWijZP4I6Ihm0mrmzknTYF5ec1mFnPT76B77uQbarDpeFSs7AXrQEqiu7CB
+X-Received: by 2002:a05:600c:4f93:b0:490:3f7a:108b with SMTP id
+ 5b1f17b1804b1-49260852341mr31752025e9.16.1782294871891; Wed, 24 Jun 2026
+ 02:54:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260624-rtc-feature-v1-1-42dccd22c0ee@amlogic.com>
-X-B4-Tracking: v=1; b=H4sIADKGO2oC/x3MQQqAIBBA0avIrBNMRaqrRAuxsWZjMVoE4d2Tl
- m/x/wsZmTDDJF5gvCnTkRr6TkDYfdpQ0toMWmmnnLaSS5ARfbkYpTIBTTSDNX6EVpyMkZ7/Ni+
- 1fiM27XxdAAAA
-X-Change-ID: 20260624-rtc-feature-03ce3f3843a9
-To: Yiting Deng <yiting.deng@amlogic.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Xianwei Zhao <xianwei.zhao@amlogic.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1782285876; l=1071;
- i=xianwei.zhao@amlogic.com; s=20251216; h=from:subject:message-id;
- bh=pJ5eX/skfag9z0pkWfC/zXmkphBv9K7+CU5zNogQX00=;
- b=K8SW8U312kCtLZRTKBb2MmA6n7lo6AJUWoPjwyFhymEluNvfnNr7RierO1ahP2OjvK8nQydOZ
- 6+CcbiIlZ2AAj4mU+kcubK5ai8aeDsJBtdjFjvMwX5V1IViaFKEHLN5
-X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
- pk=dWwxtWCxC6FHRurOmxEtr34SuBYU+WJowV/ZmRJ7H+k=
-X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20251216 with
- auth_id=578
-X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Reply-To: xianwei.zhao@amlogic.com
+References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260615154805.1619693-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <ajJ9kNJtrY6DyQ-S@shikoro> <CA+V-a8u2wt6623mYjhipOvJPo4va+bXs3qirQewocFr2QmUFhA@mail.gmail.com>
+ <ajr1wXCI2U23d1sY@shikoro>
+In-Reply-To: <ajr1wXCI2U23d1sY@shikoro>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Wed, 24 Jun 2026 10:53:53 +0100
+X-Gm-Features: AVVi8Cevqm9oqdlggQH1rMr7Spj8hW-dVFTCrlA4kct0_6oDoVWBpLIfXWaxx4Y
+Message-ID: <CA+V-a8tfb5YFsh-K5F8OOBsuJi0PG72vQ=2PQb2avVNF8-kcrQ@mail.gmail.com>
+Subject: Re: [PATCH 07/12] rtc: rzn1: fix alarm range check truncation on
+ 32-bit systems
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	MID_RHS_MATCH_TO(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6733-lists,linux-rtc=lfdr.de,xianwei.zhao.amlogic.com];
+	TAGGED_FROM(0.00)[bounces-6734-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:wsa+renesas@sang-engineering.com,m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:wsa@sang-engineering.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	REPLYTO_DOM_EQ_TO_DOM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,amlogic.com:replyto,amlogic.com:email,amlogic.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
-	FORGED_SENDER(0.00)[devnull@kernel.org,linux-rtc@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:yiting.deng@amlogic.com,m:alexandre.belloni@bootlin.com,m:linux-amlogic@lists.infradead.org,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:xianwei.zhao@amlogic.com,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	HAS_REPLYTO(0.00)[xianwei.zhao@amlogic.com];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-rtc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FORGED_SENDER(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,glider.be,gmail.com,vger.kernel.org,bp.renesas.com,renesas.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	RCPT_COUNT_FIVE(0.00)[6]
+	TAGGED_RCPT(0.00)[linux-rtc,renesas,dt];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sang-engineering.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,mail.gmail.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 75B436BC2D8
+X-Rspamd-Queue-Id: 2D4876BD1DE
 
-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Hi Wolfram,
 
-The Amlogic A4 RTC does not support update interrupt. Clear
-RTC_FEATURE_UPDATE_INTERRUPT before registering the RTC device to
-prevent userspace from enabling an unsupported RTC UIE function.
+On Tue, Jun 23, 2026 at 10:08=E2=80=AFPM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+>
+> > Can you please share the commands you tried, I'll try and replicate it
+> > on my side.
+>
+> Sorry, can't give you the commands, just from my head: I tried to set an
+> alarm more than a week in the future, and the alarm was set to the next
+> day. But I was in a hurry, maybe I overlooked something, because that
+> handling used to work in the past IIRC. I can return to this topic on
+> Friday earliest, sadly. Maybe next week only...
+>
+I ran some tests for cases #1 and #2, and we see an out-of-range
+error. By adding a 1-sec leeway when checking the ranges I don't get
+the out-of-range error. Let me know what you think (I'll create a
+seprate patch for it).
 
-Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
----
-Clear RTC_FEATURE_UPDATE_INTERRUPT before registering the RTC device.
----
- drivers/rtc/rtc-amlogic-a4.c | 1 +
- 1 file changed, 1 insertion(+)
+Case #1 reverting this patch:
 
-diff --git a/drivers/rtc/rtc-amlogic-a4.c b/drivers/rtc/rtc-amlogic-a4.c
-index 50938c35af36..116cf095a9e9 100644
---- a/drivers/rtc/rtc-amlogic-a4.c
-+++ b/drivers/rtc/rtc-amlogic-a4.c
-@@ -379,6 +379,7 @@ static int aml_rtc_probe(struct platform_device *pdev)
- 	rtc->rtc_dev->ops = &aml_rtc_ops;
- 	rtc->rtc_dev->range_min = 0;
- 	rtc->rtc_dev->range_max = U32_MAX;
-+	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->rtc_dev->features);
- 
- 	return devm_rtc_register_device(rtc->rtc_dev);
- }
+root@rzn2h-evk:~# date -s "2026-06-24 10:34:00"; hwclock -w;
+Wed Jun 24 10:34:00 UTC 2026
+root@rzn2h-evk:~#
+root@rzn2h-evk:~#
+root@rzn2h-evk:~# rtcwake -m no -s 604800;cat /proc/driver/rtc
+rtcwake: set rtc wake alarm failed: Numerical result out of range
+rtc_time        : 10:34:32
+rtc_date        : 2026-06-24
+alrm_time       : 10:34:33
+alrm_date       : 2026-07-01
+alarm_IRQ       : no
+alrm_pending    : no
+update IRQ enabled      : no
+periodic IRQ enabled    : no
+periodic IRQ frequency  : 1
+max user IRQ frequency  : 64
+24hr            : yes
+root@rzn2h-evk:~#
 
----
-base-commit: 851d961ff248218f681c53cf0f7f08cf8201a117
-change-id: 20260624-rtc-feature-03ce3f3843a9
+Case #2 with this patch:
+root@rzn2h-evk:~# date -s "2026-06-24 10:46:00"; hwclock -w;
+Wed Jun 24 10:46:00 UTC 2026
+root@rzn2h-evk:~# rtcwake -m no -s 604800;cat /proc/driver/rtc
+rtcwake: set rtc wake alarm failed: Numerical result out of range
+rtc_time        : 10:46:30
+rtc_date        : 2026-06-24
+alrm_time       : 10:46:31
+alrm_date       : 2026-07-01
+alarm_IRQ       : no
+alrm_pending    : no
+update IRQ enabled      : no
+periodic IRQ enabled    : no
+periodic IRQ frequency  : 1
+max user IRQ frequency  : 64
+24hr            : yes
+root@rzn2h-evk:~#
 
-Best regards,
--- 
-Xianwei Zhao <xianwei.zhao@amlogic.com>
+Case #3: Add 1-sec  leeway:
+root@rzn2h-evk:~# date -s "2026-06-24 10:48:00"; hwclock -w;
+Wed Jun 24 10:48:00 UTC 2026
+root@rzn2h-evk:~# rtcwake -m no -s 604800;cat /proc/driver/rtc
+rtcwake: wakeup using /dev/rtc0 at Wed Jul  1 10:48:50 2026
+rtc_time        : 10:48:49
+rtc_date        : 2026-06-24
+alrm_time       : 10:48:50
+alrm_date       : 2026-07-01
+alarm_IRQ       : yes
+alrm_pending    : no
+update IRQ enabled      : no
+periodic IRQ enabled    : no
+periodic IRQ frequency  : 1
+max user IRQ frequency  : 64
+24hr            : yes
+root@rzn2h-evk:~#
 
 
+Changes for case #3:
+
+diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+index 173526d50d41..8fdb5114a6d8 100644
+--- a/drivers/rtc/rtc-rzn1.c
++++ b/drivers/rtc/rtc-rzn1.c
+@@ -279,7 +279,9 @@ static int rzn1_rtc_set_alarm(struct device *dev,
+struct rtc_wkalrm *alrm)
+        /* We cannot set alarms more than one week ahead */
+        farest =3D rtc_tm_to_time64(&tm_now) + rtc->rtcdev->alarm_offset_ma=
+x;
+        alarm =3D rtc_tm_to_time64(tm);
+-       if (alarm > farest)
++
++       /* Add a 1-second leeway for processing delay */
++       if (alarm > (farest + 1))
+                return -ERANGE;
+
+        /* Convert alarm day into week day */
+
+
+Cheers,
+Prabhakar
 
