@@ -1,177 +1,161 @@
-Return-Path: <linux-rtc+bounces-6736-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6737-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vao5N3n5O2qLhAgAu9opvQ
-	(envelope-from <linux-rtc+bounces-6736-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 17:36:25 +0200
+	id dyX8OL8KPGpujAgAu9opvQ
+	(envelope-from <linux-rtc+bounces-6737-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 18:50:07 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC14E6BFB3B
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 17:36:24 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 764536C017C
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 18:50:07 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=bootlin.com header.s=dkim header.b=KRmRG+ki;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6736-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6736-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=bootlin.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=gXuoHKe4;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6737-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6737-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B8C09301318E
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 15:31:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 467313016005
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jun 2026 16:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E943B38A9;
-	Wed, 24 Jun 2026 15:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C10B033BBD9;
+	Wed, 24 Jun 2026 16:48:41 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E44D306775
-	for <linux-rtc@vger.kernel.org>; Wed, 24 Jun 2026 15:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05F433A03A;
+	Wed, 24 Jun 2026 16:48:40 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782315091; cv=none; b=jBUFSG2x4wHIN4EiT8k9ZQeCljKOdt5PhHpbnhwLFaZgsYPaE15cASEYj0pXdl378zl2PZchCpz8tg+s0kTH/7VU/cVZlvMEpBvHm8cq5+diACnL3WPCQui+07jMwnvVqWbWyPXRV48fYm8fuSVFOpnwARPDvipODK1jDX8BpCU=
+	t=1782319721; cv=none; b=Gr+2CfIt0gdGQIVNquy5k7OTT7n9idfhb5ESm2ZbPw2fYVEZLa5yBF8MENj9m4Zotts9F/hOuQkRG8sIlOH+J4vkO8MCfs+yn+11wTI0MoxbanzyOQQ6FQT7R9RyB31KEjXx/9tgYEhopLVuSxwZqjPkn/yeux04MQF9wj5F/aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782315091; c=relaxed/simple;
-	bh=eW4k1pHqCpwpwM6gJNc84+hMnN4l2AHPh7s8jn+3aoM=;
+	s=arc-20240116; t=1782319721; c=relaxed/simple;
+	bh=r8SUQcCp3oOUGeXzp1ud6Kg1CzU0/PkvrDS3xpYQuSY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CzRa6dlfUpQg5Ka5LevWrFTdTfHD5IB/ZRQrSfs39bdYnNURZ2j1cTwYVrLzZANZf4CuIFpjtBbcyPA0wSVALKpk98tbwzaAuab8wYDETYqlft5Sxvc85ral9zFVGEBIVhYDXs6wIeG66APigZHm5oY5Cme8zMIz/ViETM7ORPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KRmRG+ki; arc=none smtp.client-ip=185.246.85.4
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id CB56C4E407BD
-	for <linux-rtc@vger.kernel.org>; Wed, 24 Jun 2026 15:31:25 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 94144601C5;
-	Wed, 24 Jun 2026 15:31:25 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CA883106C8382;
-	Wed, 24 Jun 2026 17:31:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782315085; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=zsZ+QNghO95DV5PBXvkCYl8L9YJ7ykhtAVrAXUbsUBc=;
-	b=KRmRG+kiaWBztDPyEI86236Z+X/IYUMPxzHhRWetsAhxVkpXF3GwbexuaD60/Ce6irKiE1
-	dfBXQePieoEN4+lL/7I5S6iwa71GOuS+1U0HBDtZ9oXl3P/J5INSfCeqCL3L6avCagVEWB
-	oejh5jqNpIQz5pX6xtimUof405Sp7PbAHw9zG+6NFZNRvdiPpyE1+Gq/PNkWTwkxrpC3em
-	mcaC6PpQh+ou+xzNP2TkLMsBO8U62bHt9vYoo639U73RHwcfNmffl4MwCJmF9LKV0tzGBk
-	CNXps58lA6NBRzGyHxpxcghzJ/ht+YKT/8V8hOBV/Q4GqljJWgtr/swGLpCOiA==
-Date: Wed, 24 Jun 2026 17:31:23 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Elad Nachman <enachman@marvell.com>
-Cc: linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: rtc: handle OTF clock changes
-Message-ID: <20260624153123af6b28e3@mail.local>
-References: <20260624123103.3523728-1-enachman@marvell.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kSa5PMtzJw8BEn3JbfuZ0A7xijKQBaerIk4Upy5KhoYmiLXhY0YcW1LUZsuNtkn2wCZGQ+986atVo3thcu5vsVUs98xsImfX/Fz2qW25bJd2MRTHTu+cUOCn7RXpNtbo887WuUQZmKU3Dce2fnyL/dLvLy86AlJNINFLGsZ6fnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXuoHKe4; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09641F000E9;
+	Wed, 24 Jun 2026 16:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782319720;
+	bh=B16ZfGRW2FDD4EalRw6jbRvtQww1cSDj03208KZHuAg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gXuoHKe4o9cHfmCPOeJIPd1HCF7c1/UjlzpQL7H5m4AZNo2rIZuqTHGtvNX/IroLs
+	 oxS96QhkGJLEImOSPlzezHJV30pvDhWBfEsCRXXN0g4DSbmTdnN6tU08pUXCOBI4+2
+	 BuZyUPAgpe93gslNOdfPPuR9CSeoaz55eIxjMG0DsxaUlyhTZvC1lq3ZTEXToz2nvA
+	 ajfLPg0DlEiGQI/cxOqNPOHzTBHdFsRursT+Tg3gpEx/MSevawtbMP7HFmewelIa+F
+	 3KdE84bWJHlgWiY2AXuF+7B09pIucISZBNZsz+eb8Q/c3WBLOCA4wNnvNLwV1ZPoGq
+	 IOnbiqJwShVag==
+Date: Wed, 24 Jun 2026 17:48:36 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Udaya Kiran Challa <challauday369@gmail.com>
+Cc: tsbogend@alpha.franken.de, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, skhan@linuxfoundation.org,
+	me@brighamcampbell.com, linux-rtc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: microchip,pic32mzda-sqi: Convert to DT
+ schema
+Message-ID: <20260624-charter-footless-9752837b15f3@spud>
+References: <20260624061329.130468-1-challauday369@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kJnnb0MVSAAFGHi3"
 Content-Disposition: inline
-In-Reply-To: <20260624123103.3523728-1-enachman@marvell.com>
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <20260624061329.130468-1-challauday369@gmail.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-5.26 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6736-lists,linux-rtc=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6737-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:enachman@marvell.com,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_RECIPIENTS(0.00)[m:challauday369@gmail.com,m:tsbogend@alpha.franken.de,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:skhan@linuxfoundation.org,m:me@brighamcampbell.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
 	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:url,bootlin.com:from_mime,marvell.com:email,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,spud:mid,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: DC14E6BFB3B
+X-Rspamd-Queue-Id: 764536C017C
 
-On 24/06/2026 15:31:03+0300, Elad Nachman wrote:
-> From: Elad Nachman <enachman@marvell.com>
-> 
-> When processing expired RTC events and rearming them, use now
-> instead of expiry to prevent endless loops.
-> Issue seen with Armada 385 SOC.
 
-The loop is not endless, it may be long however. How do you reproduce
-this? Or maybe the question is what is enabling PIE on your system?
+--kJnnb0MVSAAFGHi3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Your patch breaks existing code because it will expect to get one event
-per elapsed period while your patch will cause events to be skipped.
+On Wed, Jun 24, 2026 at 11:43:29AM +0530, Udaya Kiran Challa wrote:
 
-> 
-> Fixes commit 6610e0893b8b ("RTC: Rework RTC code to use timerqueue for events")
-> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> ---
->  drivers/rtc/interface.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> index 96626f8068f9..c32ef95a07d4 100644
-> --- a/drivers/rtc/interface.c
-> +++ b/drivers/rtc/interface.c
-> @@ -126,6 +126,7 @@ EXPORT_SYMBOL_GPL(rtc_read_time);
->  int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
->  {
->  	int err, uie;
-> +	struct rtc_time new_tm;
->  
->  	err = rtc_valid_tm(tm);
->  	if (err != 0)
-> @@ -159,6 +160,17 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
->  	else
->  		err = -EINVAL;
->  
-> +	if (rtc && rtc->ops && rtc->ops->read_time) {
-> +		if (!rtc->ops->read_time(rtc->dev.parent, &new_tm)) {
-> +			pr_debug("new rtc time secs %d mins %d hours %d mday %d mon %d year %d way %d yday %d dst %d\n",
-> +					new_tm.tm_sec, new_tm.tm_min,
-> +					new_tm.tm_hour, new_tm.tm_mday,
-> +					new_tm.tm_mon, new_tm.tm_year,
-> +					new_tm.tm_wday, new_tm.tm_yday,
-> +					new_tm.tm_isdst);
-> +		}
-> +	}
+> +  clocks:
+> +    maxItems: 2
+
+Please make this an items list too (and drop the maxItems while you're
+doing so).
+pw-bot: changes-requested
+
 > +
+> +  clock-names:
+> +    items:
+> +      - const: spi_ck
+> +      - const: reg_ck
 
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/microchip,pic32-clock.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    sqi1: spi@1f8e2000 {
 
-This is unrelated to the patch.
+And remove the unused label here.
 
->  	pm_stay_awake(rtc->dev.parent);
->  	mutex_unlock(&rtc->ops_lock);
->  	/* A timer might have just expired */
-> @@ -999,7 +1011,7 @@ void rtc_timer_do_work(struct work_struct *work)
->  		trace_rtc_timer_fired(timer);
->  		/* Re-add/fwd periodic timers */
->  		if (ktime_to_ns(timer->period)) {
-> -			timer->node.expires = ktime_add(timer->node.expires,
-> +			timer->node.expires = ktime_add(now,
->  							timer->period);
->  			timer->enabled = 1;
->  			timerqueue_add(&rtc->timerqueue, &timer->node);
-> -- 
-> 2.25.1
-> 
+Thanks,
+Conor.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +        compatible = "microchip,pic32mzda-sqi";
+> +        reg = <0x1f8e2000 0x200>;
+> +        interrupts = <169 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&rootclk REF2CLK>, <&rootclk PB5CLK>;
+> +        clock-names = "spi_ck", "reg_ck";
+> +    };
+
+--kJnnb0MVSAAFGHi3
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCajwKZAAKCRB4tDGHoIJi
+0lbZAQDKDnqx+ZFA3ZbN+nQW+roXEoYvmzMt1ukqFJxMyQdgzgEAh0lyj2De4ZOH
+mSzxJOJN3m7u5GZrxUqJi8l+vd/bGAQ=
+=ElHG
+-----END PGP SIGNATURE-----
+
+--kJnnb0MVSAAFGHi3--
 
