@@ -1,191 +1,121 @@
-Return-Path: <linux-rtc+bounces-6768-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6769-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id Zy+LMl0aP2p4OwkAu9opvQ
-	(envelope-from <linux-rtc+bounces-6768-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Sat, 27 Jun 2026 02:33:33 +0200
+	id 7t5AFgA9QGrxdwkAu9opvQ
+	(envelope-from <linux-rtc+bounces-6769-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Sat, 27 Jun 2026 23:13:36 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22C1E6D09E5
-	for <lists+linux-rtc@lfdr.de>; Sat, 27 Jun 2026 02:33:33 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422866D2AC6
+	for <lists+linux-rtc@lfdr.de>; Sat, 27 Jun 2026 23:13:35 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=RLBA68eq;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6768-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6768-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=HoasTjhd;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6769-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6769-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5FAE303AB6E
-	for <lists+linux-rtc@lfdr.de>; Sat, 27 Jun 2026 00:33:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C98F2300A583
+	for <lists+linux-rtc@lfdr.de>; Sat, 27 Jun 2026 21:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5010B15B998;
-	Sat, 27 Jun 2026 00:33:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2CB37F8AD;
+	Sat, 27 Jun 2026 21:13:19 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E5C7082D
-	for <linux-rtc@vger.kernel.org>; Sat, 27 Jun 2026 00:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953F937FF53;
+	Sat, 27 Jun 2026 21:13:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782520409; cv=none; b=VnsF/8KJAzMCQX59lgakC2qbV8WyH7OrFzYeIZrlNdDDCDS1vWVJ7vo0joxdTNCi8vrMEcS8wwkKPUaRtTTeP6mIsllcaWGZANmu5knmQuan/E6Cd7nPGGuMLICn0DqXQ6kwu4Td36Thz9gg41MTuikv1VkfqUS+uP/PeUIaD28=
+	t=1782594799; cv=none; b=DkdyPMAbhKUyPdDKKSBBdEo0fjI5mFsymR/xmuyVXsiVhSNYoThTHhQGTmn+CL2wsIMHscSftOGvTpm5qLck9uuFaefat/gwsTVo/l18JEj6pooyTJbvlINEt85PFmZv5mxDjKnKgFmq32ovIGaEUQfS9uajSv5HyMiPFMA19R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782520409; c=relaxed/simple;
-	bh=B3B4yO9P2L8o0IRObU9sjwviTxDzLvplw+tkThIuol4=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=iQcymACPp11d+PMKm2CTC8VNgasfinN8LR1EnLSiFcXAdbZTig3QFod3GzfSXFO0u/KzGPARpvO24vnavvDQj89ydEqEMELUsQgiPsUvoovfcVBupV2XZzAET5xC3TOIvQxg7BxTTa7/dwBqkMRx2DTtD0xcokQa56Y/qloCuEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=RLBA68eq; arc=none smtp.client-ip=209.85.221.48
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-46cdcec58c2so1360881f8f.1
-        for <linux-rtc@vger.kernel.org>; Fri, 26 Jun 2026 17:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1782520405; x=1783125205; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jab/0pW1fz76Y5/uJAulqVYquWQ3NLRaXXuJvCZMKL0=;
-        b=RLBA68eqBsfEIg2pvTXkA0KOMl0DJI51iYBk+iYbNzZ9BSWKEWZv16vYV2mGI5xTva
-         POONeD4JgNDQDAu6CEiKzi8XO5o2OVzpzaqSKIYYi9OINzKW/viAU+xitYJuAngnyNH2
-         ttxVeoT0cKC2sfR8C6x8cfAptfwCiUuJxCdw3ggRj1p3sBvLB9zFCpnIaldpO6XmmMuV
-         sHWCpaS87c57rvo+EU0ORJwo48BK7RYvE0v9IxK4PDCjsO1APLZm/fEA3c4lfW9z7CWo
-         5ZLfC6iMpBNlzQk7OCt6CYb2GfA5jzFpKU7h2WmIUulR/fHSZH5biFiHsRy1zY5kLKMK
-         qpEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782520405; x=1783125205;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jab/0pW1fz76Y5/uJAulqVYquWQ3NLRaXXuJvCZMKL0=;
-        b=BvropIRpEyQ45I0/SCe8naT6ayK5knrLAJODNcFZ2B9un+XHSwvYaTHYVYCnl7WxtH
-         YwPWQKqmCIyEpWqNKFmAFNoc1cYZKTK+2W6wjMIcarVGQWrnzn8EpGHBOcVqvEnHKfBa
-         c5BT6lecUtFhFvkihb0Px6a2Zs7sM+hSDCwb3dF5zzNgcHVN0Ta2tCuUa0fwsk4lumGw
-         3f7YaMfDf6RJ5XXHsdffDoXfOohMoMrXVHDIbXrVcm2Fc8enm1VdMh7hcoHt7jCW+RNp
-         ETbjKNOrsiAKzkE1dR+Wpfoue8ytMpH6t3HretgVZnfI18ZuWuTrgjKtLuCRaN5AMijk
-         jZwg==
-X-Forwarded-Encrypted: i=1; AHgh+RrD+eln0rakHDRmatpZXOIXBgtAI5GmNbB6qRWM2FVY6JbpCXjP8Ok12XXmaDcOJjsq3skhpoVQem8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9KlIK3UNjFOercZBCdym3CLBWYobFn5cVD7g4+jjthw2Wvu9f
-	G4Q0TzE9+FxJ7f+HVE4lKwo+iZsDB/v7j3Pgj1rNB0LZGFUYPnzSwEK/BsG4JURglVBvLeEKxFp
-	5N0o0xnQ=
-X-Gm-Gg: AfdE7ckdC50Z1LLO6GaRtznERMzhHA3fci2UAjd1C3OsRDLP8L/pHh6RWS6FPtuWtYZ
-	p4Xkdal7SttUdPDsnetCwIU64Zm+fktzYUR6M0l1IkM33nEWpr40vAcL2sHfD4WgKeAwVE96C/p
-	aezFW1a/7QlHBdjWWTPV9WMmPjvxooX4xjEE3sW4eo5FDjEqcuQbN28uMZstMgS74NKMff7qz2h
-	BQ7F+N7WdQANAB9TNySQjXDEpNK7JkE14B7a0Fpy5OFA7sn0ORThJQ3uoYp1aj1nKi3dxYZa6WT
-	hnrYS90r+NEE5xEHm5BOk+51HBBlWZervLpnXFRFMWeWhp09TrzHrOSV6R6Jarl2SG8ispbxfRE
-	UlDaas8Mh+dFTQJ/A3ajdn+d+7l0LHVaNVBKU0f9195Rfd+wezJJhVqs12RDdn6S5uP+dKc2Ouh
-	uT1qI8St2hfM8Oi057lBygUoGUQbbi9u40/ydwQrnekQLSY5Qq2y81
-X-Received: by 2002:a05:6000:4202:b0:45e:f295:33cd with SMTP id ffacd0b85a97d-46da8c5ff94mr14346680f8f.11.1782520405361;
-        Fri, 26 Jun 2026 17:33:25 -0700 (PDT)
-Received: from [192.168.7.218] (88-127-185-231.subs.proxad.net. [88.127.185.231])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-46c2279b7d7sm27134685f8f.31.2026.06.26.17.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2026 17:33:24 -0700 (PDT)
+	s=arc-20240116; t=1782594799; c=relaxed/simple;
+	bh=8048SI3nKxrMwc+0fNNgVXPkGZBuXpupulLxgwnn7HM=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=R4nLJTPHtYkt0Ois33IpOMKekXZ5bvtCAAy0JrN4BwvnqDz1vARRag3ak7jRYAGCe1WAr1oAzqHvqQT3u80R3QjnVKi6sgKIvjbdnOTsRF3JB4AMwJkXMy10e+VGKfZqXXmutwShOjKK1KVYP1yzo8z9tXWHmd5EM4V1+dcN6GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HoasTjhd; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F4A31F000E9;
+	Sat, 27 Jun 2026 21:13:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782594798;
+	bh=5XsPvFFb3/WokPxnq6tWYJPkmad/O6mtyRdok2UMGj0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc;
+	b=HoasTjhdwKvLMH7vH3o0+ubnkIDqc7OfbivPyitVFOzavY5Nd2S7hwxgR1/fdqOz1
+	 h++TEe3z9akAdQDZuTCZOOH5OzxISTJP4SHMWtcgOZA0DYBm9affdpgYuZDm3sfC9q
+	 5Aq9HvlXSCgYlrFh5rcVdpi0qxj3+AvqBNYhwGTvv8Jxm0e2rJSMBwLc++u2idq6h6
+	 ocTK3BJo887kq3Jv76OgQKdRKHxC18KvNgjrb05EDrbRZEv7Ii66tST1TX5rRPGpQ/
+	 MObLpJujiL3scqShylO/hxZY6am9iCvxcgRtw61fXTd0TlrWDdQo0+7v/aWAttm+gm
+	 PqAyRVKeuG8fg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B713938452;
+	Sat, 27 Jun 2026 21:13:05 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC for 7.2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20260626220226c3609b27@mail.local>
+References: <20260626220226c3609b27@mail.local>
+X-PR-Tracked-List-Id: <linux-rtc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20260626220226c3609b27@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-7.2
+X-PR-Tracked-Commit-Id: 3c8f28578a0d68bc7fb91d881b832d55f734270c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: da7ca04e331e3e83f661e29c30d381a91e6ca245
+Message-Id: <178259478421.1431938.7234379663395881763.pr-tracker-bot@kernel.org>
+Date: Sat, 27 Jun 2026 21:13:04 +0000
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v1] rtc: m41t80: clean up watchdog on probe failure
-From: Alexandre Mergnat <amergnat@baylibre.com>
-To: Yuho Choi <dbgh9129@gmail.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260601194615.1979101-1-dbgh9129@gmail.com>
-References: <20260601194615.1979101-1-dbgh9129@gmail.com>
-Date: Sat, 27 Jun 2026 02:33:05 +0200
-Message-Id: <178252038524.1704966.578320083174571195.b4-review@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1658; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=B3B4yO9P2L8o0IRObU9sjwviTxDzLvplw+tkThIuol4=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBqPxpTnnStAlt+fcdNOnWbbPUR6gMo5dzxGfXAt
- sMvIMtdOB2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCaj8aUwAKCRArRkmdfjHU
- RYv7EAC6mqQiftyPS0ElJPLknIRA/UbXiSs8fVm8lbjnaDvHfN3spnJk8qsTz8pdPBndNXbpIrl
- /4OXeIyCeftNBqAHHde3m9XTnOkrEgSe9hGywXR4rxzYjYrljPZssLeIR2QvSfAQvwMTvqn2kHP
- CDMxz4yhWWCbnMKLaZwr8PNoAT8FHUTtn720d0dMa3S0CbRlzfe+r5tYvSeFAGZC8nxluhGNxTv
- Wg4gaR2xfZrbUluJszk62ROmUaSqe16dYE2onxvDx9n8ph9twg8DT3EjF4VlAIJ4Unndhgb0kRa
- W3KWNprEdsOm0Vu+MN63GzQa9bABSGbnWlwidX+SObeb3kXxnY3KugE06AVCsQCAFs5I6syUC84
- VPt+HODuHKgc1D/1AgAhWXoIZIyjBlSQFF3fjDNEtMqjYpFeM/WeoapHD1dr99XKDjNT9iRYkKG
- Q8EELhPI+2R33N8J19jBIkNG5jomOctmibQzQDul1t7aCyuZBtHE31vhkHTy/2pFJK12ZfJhmub
- m1oC/Cni1U9DRjucaFITAe7xtxudluZCb+KJ8oOtefDUjQSvr7NjNjlcSY5zCl6GZM2QsE9PC8J
- KK65ZNwTfgOX3QluKeo4i2NfK8ETiYlSbWW6X627ZIhUczRJFATPPNvxsCHSdYvb+Y2oXyOiMBO
- WFnvcy6H3Gbhrgw==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:dbgh9129@gmail.com,m:alexandre.belloni@bootlin.com,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-6768-lists,linux-rtc=lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[amergnat@baylibre.com,linux-rtc@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6769-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:torvalds@linux-foundation.org,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[pr-tracker-bot@kernel.org,linux-rtc@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[amergnat@baylibre.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[baylibre.com:+];
+	FROM_NEQ_ENVFROM(0.00)[pr-tracker-bot@kernel.org,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc];
+	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 22C1E6D09E5
+X-Rspamd-Queue-Id: 422866D2AC6
 
-On Mon, 01 Jun 2026 15:46:15 -0400, Yuho Choi <dbgh9129@gmail.com> wrote:
-> diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-> index b26afef37d9c..f4a30320c6ed 100644
-> --- a/drivers/rtc/rtc-m41t80.c
-> +++ b/drivers/rtc/rtc-m41t80.c
-> @@ -1009,9 +1009,17 @@ static int m41t80_probe(struct i2c_client *client)
->  
->  	rc = devm_rtc_register_device(m41t80_data->rtc);
->  	if (rc)
-> -		return rc;
-> +		goto err_wdt;
+The pull request you sent on Sat, 27 Jun 2026 00:02:26 +0200:
 
-IMHO the right fix is to move the watchdog to the watchdog core.
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-7.2
 
-The leak comes from the watchdog being built on three non-devres
-save_client. A probe failure strands all three, after which the watchdog
-dereferences freed driver state (wdt_ping() reads
-i2c_get_clientdata(save_client), i.e. the devres-freed m41t80_data).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/da7ca04e331e3e83f661e29c30d381a91e6ca245
 
-Built on the watchdog core (CONFIG_WATCHDOG_CORE), none of that
-machinery is needed:
-
-- devm_watchdog_register_device() unregisters automatically on any probe
-  failure and on unbind.
-- watchdog_stop_on_reboot() replaces the reboot notifier.
-- watchdog_set/get_drvdata() replaces the global save_client, closing
-  the use-after-free surface itself.
-- m41t80_remove() does nothing but watchdog teardown today, so it goes
-  away too.
-
-This is exactly what was done for the sibling driver rtc-ds1374, which
-carried the same legacy pattern: d3de4beb14a8 ("rtc: ds1374: wdt: Use
-watchdog core for watchdog part"), net -135 lines, adding "select
-WATCHDOG_CORE" in Kconfig. It is a usable template.
-
-primitives: a misc device, a reboot notifier, and the global
-
-primitives: a misc device, a reboot notifier, and the global
+Thank you!
 
 -- 
-Alexandre Mergnat <amergnat@baylibre.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
