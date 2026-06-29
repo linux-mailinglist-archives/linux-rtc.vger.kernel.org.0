@@ -1,71 +1,71 @@
-Return-Path: <linux-rtc+bounces-6784-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6786-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id p2npOHrSQmoqDgoAu9opvQ
-	(envelope-from <linux-rtc+bounces-6784-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 22:15:54 +0200
+	id LdsdA4bfQmqFGAoAu9opvQ
+	(envelope-from <linux-rtc+bounces-6786-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 23:11:34 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 592F26DE923
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 22:15:54 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FC516DECDA
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 23:11:33 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=intel.com header.s=Intel header.b=BU+cqPNH;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6784-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6784-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=intel.com header.s=Intel header.b=NJmPRkeL;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6786-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6786-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=intel.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6333930048D0
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 20:15:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 732803038D3B
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 21:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E55F337D13A;
-	Mon, 29 Jun 2026 20:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B97D389101;
+	Mon, 29 Jun 2026 21:11:23 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEDB1D5CC9;
-	Mon, 29 Jun 2026 20:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C853C7E1D;
+	Mon, 29 Jun 2026 21:11:09 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782764152; cv=none; b=oMzI5VC7Ww6gjvkttl08T7qCUtIdIO48IfvEI56FxwD/p58u/TNasai+PpI9jI87CIIrhtCi38SvkNl9Vw/QFV36qf+RGDW/q0/vhdCoODmqvkfOL6a+YOymGHruY1H0OdR8QlEF8EaeEg1q2RKnlma7dB++let7jEobqJRugaI=
+	t=1782767482; cv=none; b=i32G93zRTq5SIxplZg5eT6JNNMycQnhCUxU+UQH/wMJJbZYGta1zF1mW+nzG4+p5rwnMkqnpRv2aU109eSjqEuKqq40B0eaMUYHHvl+hggqCedMeXfbSk2FkQpw97VreCz1cE1I2kpSxHkRguvM4tUlU+6kpbItmOev0ySnfNYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782764152; c=relaxed/simple;
-	bh=warvnjTh95sGDX/8A07vELdrkgGkZEgvBNy7SkTRJqw=;
+	s=arc-20240116; t=1782767482; c=relaxed/simple;
+	bh=MjMuyiEiT7hz3Zll61O2Dlr8UrFTewEY5kUnhavfLC0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SjAQHRgU9PJkk/tMVgQJ+pvXa6xWxOT2xbPJtAw+JrW3ORyaBviQwsfveBLVILEtA+NNHDAofAKJdrFmnAYVNTeLZPC9hzxKMpqQw8rLeEXyrR4vTRV91rQtYxnp6346bznevq4nbZLqEH12ZYtP/cw1onPPL5tmz1THfYY+XN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BU+cqPNH; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=t3xGw8+pK0qRQYsXxXlOOr3hSN5V9Bqt2xEKh+45Wv9eX5ZdByZ/JZfCRbc8AjHRKTEP3O2h/bwMHloTUqjxdjOFI+WlVF+8siYrTGoAqL6BjWN2/Pftn4DoApLou+0WOFlV9KRqNbMyWzpNAnWlataq7tsRbowphOdEIksOKqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NJmPRkeL; arc=none smtp.client-ip=198.175.65.17
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782764151; x=1814300151;
+  t=1782767470; x=1814303470;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=warvnjTh95sGDX/8A07vELdrkgGkZEgvBNy7SkTRJqw=;
-  b=BU+cqPNHQDov/oFmmmvYJxBUhW30Y7Su4OEerTAlP8YkGVf+SjnajPts
-   j1bs2rphArpmrusUSeiGUHoxhNfjXBUoO/Mgmaketyd+Fd8sYSk7memDL
-   DL+lfNzp1PX3MrgCaDDU3VxmJtCY41v7kpKBuVa5r9mnQVncf40VO1Zok
-   W4WdQusvqZw4gT5qkD/zCPH8oNgaW244RJjH3SgbgaAdRKDkvsAv3m1f7
-   CHl8a0z2pGJPYVGMXm1ylFPOSjGrhF5xTtzCFcAG475JVAaFPSGny/OrC
-   30fikWPnShpOntfuSZ8JXrfvlksZJ6Ee4sXkdqdV0aGsi8UPkdqaz4zgV
-   Q==;
-X-CSE-ConnectionGUID: coLUuBKmSpWaFmbDAzA+eg==
-X-CSE-MsgGUID: p3lWy+lSQX66/eGnqUkIOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="83341512"
+  bh=MjMuyiEiT7hz3Zll61O2Dlr8UrFTewEY5kUnhavfLC0=;
+  b=NJmPRkeLEJCqDXUfXsqZfE2+OOObpgegoUuh4iJzUnEYDsN16j/pDDxr
+   Rt9cXE8YDf8hbAIAcri1Ge0afbRefYBvzrR9Nemz8nVsucAw0Lvt5zsxc
+   /hctJCFET8IcIuqJiSVQGwCDGWiXz/2vvsve49OTQnsBpEcVu+ichVXha
+   +ZMbZFARJS/s4qDqVutY357sJzyse14wQBf+0BYg41pWy3R2SSeaURFvj
+   xehquJk66sYXBE8Zgjq2AItMBWErDHTPPRQS8HaR3m3pjJD07p11SRHcm
+   nLcKtktMfaBEL82QEO0AqVRGbCedWWWq0gS86QYuyv6Z0s6JNQhjbmd+P
+   g==;
+X-CSE-ConnectionGUID: UPXr0D8mQ+eP/en9XKEi1Q==
+X-CSE-MsgGUID: lzkkAuUNQdKnwd7gpzw3Bw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="83502820"
 X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="83341512"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 13:15:51 -0700
-X-CSE-ConnectionGUID: wLTvkwjwQPalUaB2SDAT/w==
-X-CSE-MsgGUID: 2j8evGvhT6eHpyC+VHxEXQ==
+   d="scan'208";a="83502820"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 14:10:56 -0700
+X-CSE-ConnectionGUID: /Xic7++iRh2P5K14e+woKg==
+X-CSE-MsgGUID: inGOC2mNSVu5491mi9hXYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="282132890"
+   d="scan'208";a="250375617"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 29 Jun 2026 13:15:48 -0700
+  by orviesa006.jf.intel.com with ESMTP; 29 Jun 2026 14:10:53 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1weIOO-000000007iv-3vOP;
-	Mon, 29 Jun 2026 20:15:44 +0000
-Date: Tue, 30 Jun 2026 04:15:37 +0800
+	id 1weJFi-000000007lX-13zX;
+	Mon, 29 Jun 2026 21:10:50 +0000
+Date: Tue, 30 Jun 2026 05:10:36 +0800
 From: kernel test robot <lkp@intel.com>
 To: Fredrik M Olsson <fredrik.m.olsson@axis.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -78,7 +78,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org, kernel@axis.com,
 	Fredrik M Olsson <fredrik.m.olsson@axis.com>
 Subject: Re: [PATCH v3] rtc: ds1307: Add driver for Epson RX8901CE
-Message-ID: <202606300447.wDrgfpSn-lkp@intel.com>
+Message-ID: <202606300521.DkMaPRKi-lkp@intel.com>
 References: <20260629-ds1307-rx8901-add-v3-1-302dc3cbb71e@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -96,20 +96,19 @@ X-Spamd-Result: default: False [-2.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-6786-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6784-lists,linux-rtc=lfdr.de];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[172.105.105.114:from];
-	FORGED_SENDER(0.00)[lkp@intel.com,linux-rtc@vger.kernel.org];
 	RCPT_COUNT_TWELVE(0.00)[13];
-	FORGED_RECIPIENTS(0.00)[m:fredrik.m.olsson@axis.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk@kernel.org,m:conor+dt@kernel.org,m:nobuhiro.iwamatsu.x90@mail.toshiba,m:llvm@lists.linux.dev,m:oe-kbuild-all@lists.linux.dev,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kernel@axis.com,m:conor@kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[lkp@intel.com,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:fredrik.m.olsson@axis.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk@kernel.org,m:conor+dt@kernel.org,m:nobuhiro.iwamatsu.x90@mail.toshiba,m:llvm@lists.linux.dev,m:oe-kbuild-all@lists.linux.dev,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kernel@axis.com,m:conor@kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
@@ -119,14 +118,13 @@ X-Spamd-Result: default: False [-2.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-rtc@vger.kernel.org];
 	DKIM_TRACE(0.00)[intel.com:+];
 	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[100.90.174.1:received,192.198.163.17:received];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,01.org:url,intel.com:dkim,intel.com:email,intel.com:mid,intel.com:from_mime]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,intel.com:dkim,intel.com:email,intel.com:mid,intel.com:from_mime,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 592F26DE923
+X-Rspamd-Queue-Id: 6FC516DECDA
 
 Hi Fredrik,
 
@@ -138,18 +136,18 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Fredrik-M-Olsson/rtc-ds13
 base:   dc59e4fea9d83f03bad6bddf3fa2e52491777482
 patch link:    https://lore.kernel.org/r/20260629-ds1307-rx8901-add-v3-1-302dc3cbb71e%40axis.com
 patch subject: [PATCH v3] rtc: ds1307: Add driver for Epson RX8901CE
-config: um-randconfig-002-20260630 (https://download.01.org/0day-ci/archive/20260630/202606300447.wDrgfpSn-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260630/202606300447.wDrgfpSn-lkp@intel.com/reproduce)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260630/202606300521.DkMaPRKi-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260630/202606300521.DkMaPRKi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606300447.wDrgfpSn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606300521.DkMaPRKi-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/rtc/rtc-ds1307.c:2332:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+>> drivers/rtc/rtc-ds1307.c:2332:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
     2332 |         }
          |         ^
    1 warning generated.
