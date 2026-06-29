@@ -1,84 +1,83 @@
-Return-Path: <linux-rtc+bounces-6776-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6777-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id pMFLDThvQmpS7AkAu9opvQ
-	(envelope-from <linux-rtc+bounces-6776-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 15:12:24 +0200
+	id wvWoIzpsQmpu6wkAu9opvQ
+	(envelope-from <linux-rtc+bounces-6777-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 14:59:38 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B136DADC7
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 15:12:23 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ADAA6DAA8A
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 14:59:38 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=kRxnQMEb;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6776-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6776-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=baylibre.com header.s=google header.b=oxMca8I7;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6777-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6777-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5837313FDC6
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 12:44:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CCEC93065F14
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2026 12:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47270407CE8;
-	Mon, 29 Jun 2026 12:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC500408008;
+	Mon, 29 Jun 2026 12:42:39 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F7C407583
-	for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2026 12:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0B4407CDA
+	for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2026 12:42:38 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782736958; cv=none; b=LcX5bNXh0jfmKs0riXrmagPl18vxLPWr807H2R+D/6eZKJQwaCFAK+lHscJKknfMVIl4aXgYiYcIkp6fz1B1a6n+9se05kf0oC9ylQDuJMiM9kvMCK+PTq6WCQaVadpWcYidQ8l32uPURsUYp0C+m3i6Aoop3CQ7MTqzm8G8xp8=
+	t=1782736959; cv=none; b=aLxUdIXyBdInDAmguxZZV4HW8kb4dRtzi/s0bxKYNrCiAR/SKJgBbRZVYOnhMt/AW3FUaRbKXcaWM2fnKcX2bXoRashEDFRHhEHp54Kkbivro6QjIyfftrBUj6C+dhge13vWSJfX5TMxURRbYjTh8pWl+bOKXmSlBgSDAfstyBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782736958; c=relaxed/simple;
-	bh=CMXkvBKW25otLd9mL3jHlLeuFI1KrOKFlpzgrTR57uM=;
+	s=arc-20240116; t=1782736959; c=relaxed/simple;
+	bh=FoMUBVpR32MtJZer6V8lgBnEQWSbZvsirk0xN6alb7w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B7OpZsVYV+I65Xqp6R8gkm+a3yhN79DZkI5vOhNmqdmUfuuR6Tte7k9oDFbGjWqFcrfArvGp2KN/o9LlqmwXKqVO5+EUHE8drMJ6rak9TQCWE8Y5UJusVkRBaAE0ExG1SdFNkIqRc5RabGWsdJlyqZW9ibS8lB1YQc/pElU+7gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=kRxnQMEb; arc=none smtp.client-ip=209.85.128.52
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493b0fe95feso5174665e9.3
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2026 05:42:36 -0700 (PDT)
+	 In-Reply-To:To:Cc; b=Go7bQQL9BeUKVkxAaTc1kNAGiYG2NnpNl+T1l/S6waBiXVM3DAYT+cjGSn8fTKSV0W50LLc4sj8FxP/EwTQjamYcu6CepooHOq8aBPA51lwqSCsLsrK8OC2mwsBtPe6bL7Dj5PNlK/iXrREplt2c1aPQM7vlFi97km9WG0aSxVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=oxMca8I7; arc=none smtp.client-ip=209.85.221.45
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4745492ed3aso444611f8f.1
+        for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2026 05:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1782736955; x=1783341755; darn=vger.kernel.org;
+        d=baylibre.com; s=google; t=1782736957; x=1783341757; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YhNzJtjd4g7I67fgHg1GjtzbDZpsXvz5OahsTzru97E=;
-        b=kRxnQMEbMQ82qNV/zF3MZOVNW0+35PoZwyiRTnmV3f57ZThweaD7slku01XV5t6H9i
-         bZS2vHf/FpMXeUIgB0ODc6dwBp45lzDHJ/61F/Yi4KFksRH6+iRiJnVWjdCk8Gl8W94i
-         U1hTC46d7RRpNedze1ir/N38ANv88hF4ERref3np7S8xGdUJ8cuYDIDJGuXuoi85qyFc
-         hezvQ4Yz6/bJbXwMC6DXPlcc59CPFB0LdmwEGbzKPFzrrTkfPHEN7aFwvf7XQ9cPrKc8
-         Uy6y32Z75ub0UpFkdeAre0kuA5rMydkAGp4GcJrLvLIqtl7FH7x2e09WFBK+2zJO/AGP
-         F4ug==
+        bh=pw83rsiBFZIUZWx5sliCML1fBJ0c8WhT+nfZEUBGdLM=;
+        b=oxMca8I7GdgmO4i914/lyl/hFCkTFtoMBubny5FlnhvelebvEQ3tX4Xx6AQ0Dd95HK
+         D4wlOl5uNmHpl1o+gd6u45F+Hzd1fRHBEtu7ZYw6lLIXNCbvu0UoQPEdALmAc/84iXrp
+         Eh/T8ncbfyFVwBT4t29ZmEbjQf+6S9AYYA6xHsaXAINByrPsjm1MsUhSu3gJr5CEWUvF
+         OCyqpaNMMYUlQoeRXZkoSXgUob6HxJAPFwXMbZhGrn32fNxppaJ8HBPxz8vzYFbcRIaQ
+         dyJR5kb5XjQWrXZOrOqXPCOYTQEutzGfNN4zPemi8DcztEbWXghOLoJr9rXxoU1ZpLkr
+         GOHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782736955; x=1783341755;
+        d=1e100.net; s=20251104; t=1782736957; x=1783341757;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=YhNzJtjd4g7I67fgHg1GjtzbDZpsXvz5OahsTzru97E=;
-        b=PRbXhxE6Ov6itZVOS7H68x4yLUf/IfFJgWAwwJslmkaxcbmNcH1jZsCA+XWejbJPfQ
-         P9/IhHc9ELCOvYGUeKNI47nrCdw3C4ZJCoP5CIWi1ndP7SMBamvUSkMTMMX87LNfSPNf
-         z7iTs4+8P+9h3kqGRYkWSN4Gy/y65IW3zX18MnvUWliYo4KSi+OkUQ7R5YQfn7jmXRnH
-         TISoZzIUM48u5m0yCe5o9g8hEhTwKG4XBgYcKDv84akqTfOPi1M0Wn/agVLKHeXpcvAH
-         yFrIirH+J12SNJ+/aQpXH7BXH24Lu7g6EXuPVDxcS/VJ14a2P3AO8dSNpBVcRUn2yawb
-         9qGQ==
-X-Gm-Message-State: AOJu0Yz0eEBPPOCn4/81wbiOaWZR28Oe7/ld3aUbzvtrHRs84Gpliw2c
-	BRtCInSXpgKRfXG6Taa0T03arBgy+Lk/frf58YHmVqFPM5n4rs676FNA+Mh7W0bfXEo=
-X-Gm-Gg: AfdE7cmbJn7g7j5DiJAsTgzXnuSI89JOd8HJmtmQstBZ1EykPGZpTVLShd/pstjdlnA
-	/FY37CS5tqMz0ILMdyzhlzTeRA2IBpgH5SqGmKgZEOFzfuHbe8T2eHGFfMcE5NdvmbAo380gEog
-	LFesFbZR2ppPUL870gAaGuYRZ7naFrLlcPn2SO/80hLAebQ53nT/krcu0DOzOGM+/SBI7FcHsWv
-	9e4muyBlb9Wi5ex25ioeuWDAnwhbWiAoFbW4fxjMS/VJl/B35XsUDy97vFpDqmbhbQSMqqx5fBZ
-	WK9bR+aQIIxj8umNNhZHhROIJts/pcffgb0J4P2wvApXrxSuxzX8d+/3rN79x2ty2auyw6376GO
-	9NrErEPlacBHSL3X2GDfGvkd3J3y1XsJ8buV38+tDh0JiLcY67Kp0vicJU6VEuTjwDJRBOxQ9PT
-	ntLW2rhEJpUjs=
-X-Received: by 2002:a05:600c:5487:b0:493:a623:d090 with SMTP id 5b1f17b1804b1-493a623d54emr88606515e9.10.1782736954582;
-        Mon, 29 Jun 2026 05:42:34 -0700 (PDT)
+        bh=pw83rsiBFZIUZWx5sliCML1fBJ0c8WhT+nfZEUBGdLM=;
+        b=jWmt74aDTgMZTG/BVKN2tMc2c5V5oc4NrUbundRL/0r/Lajj0iwWnvpwv6pvx63Grc
+         wQKDEOluNNYRwIs7Z5Jfg4nY0pxdwp+n0gmwiEtpQx+cEjqFAC2U8KvDrFd6IyBRTkTl
+         hLE9tyu+Av1iA5Ar2gEg25uWO163U908LLFmX7rQuAplRfpC23sw47edbWEb0VLHzY2j
+         INOoABYSyPfyAWnnzb1lcldnV1hhy/68DGFV5RlwnsTVIqXxf2nHqR0WevrJkiJ8h00e
+         MktgF1l9msV1CGZyG8h/ni1r9ZZWnOYma5l8dmSB9kdk6zYnLZvIMZTbY98lJnDm/Cor
+         1FVw==
+X-Gm-Message-State: AOJu0YxL19SM3alWuGUIibMZIZxSBbxMThoGY9+nx1256wHzCFm45f3m
+	du26MgJasYmBxZXmkUBMxL0VBuajBgijQ0CzaZ4+ocw7zmDxLkmDhZ6dNGRAPERNza8=
+X-Gm-Gg: AfdE7ckCxetUmFxYoU9beAbAOfBm0t/7RFiLxVl0uYpdV7Y+ofuRYMWdPP7jMpkjmRW
+	zkqTWROq19KItvKNV62mLciRNajOV/oDIsttmfMlF0h71gihx7NguFztRpPVvbymkh+se5HmfXE
+	Xfm033LlYoiKgTjFiEAn7r/Cr4aZTqRGWdXJsXr4TYKCkWUV0sdwIK/ToGBbzVLu6m2etSt+o8t
+	BgxDwF9ijQHuYnz01RONtScPdZv/peU/llcdZxny6ojmJZ+DsEu3tBduosk+m671uLVRgvLiA/G
+	dO2Wcdet8zzXrbRPdnNWPSs5LH+6oGydeBnjdqU3Bj4N5vgAASn6JBnyQpEa3bhYxPN8Z8RqGCu
+	rOd7PVh9ajHiZo7K3Zdcm/YJtPeMf4lrDTU2SOmuGHtZoEl/9D7wYKgimHunYOL+xUhHa829Did
+	pnxfpM3NLdRaA=
+X-Received: by 2002:a05:6000:2c0b:b0:466:6ed8:1e1b with SMTP id ffacd0b85a97d-46dc263a79fmr26849485f8f.21.1782736956641;
+        Mon, 29 Jun 2026 05:42:36 -0700 (PDT)
 Received: from localhost ([2a01:e0a:3c5:5fb1:1d21:f5d5:2d3c:23a7])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-46f8d6f10absm43899161f8f.5.2026.06.29.05.42.34
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-46f9db29b15sm21643420f8f.18.2026.06.29.05.42.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2026 05:42:34 -0700 (PDT)
+        Mon, 29 Jun 2026 05:42:36 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Mon, 29 Jun 2026 14:42:07 +0200
-Subject: [PATCH v2 3/6] clk: sunxi-ng: sun6i-rtc: Add feature bit for IOSC
- calibration
+Date: Mon, 29 Jun 2026 14:42:08 +0200
+Subject: [PATCH v2 4/6] clk: sunxi-ng: div: add read-only operation support
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -87,7 +86,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260629-a733-rtc-v2-3-7b72112784f8@baylibre.com>
+Message-Id: <20260629-a733-rtc-v2-4-7b72112784f8@baylibre.com>
 References: <20260629-a733-rtc-v2-0-7b72112784f8@baylibre.com>
 In-Reply-To: <20260629-a733-rtc-v2-0-7b72112784f8@baylibre.com>
 To: Junhui Liu <junhui.liu@pigmoral.tech>, 
@@ -103,20 +102,20 @@ Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
  Jerome Brunet <jbrunet@baylibre.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3514; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=qw1svrvYiRbA39e1tTAaC53/r39CysR7OZmJk6EA0P8=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqQmguZlIuTKrBwsDM7sE3NJOiNO0633kiU5jvw
- iqmqtZQIPGJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakJoLgAKCRDm/A8cN/La
- hVowEACbP1RgJeS6oBE7ZfdUCvyvRI5L1vmoVseCOL6b9LQ+Tk6FNRtcrw63NqYvazVySfNE3L9
- IElyTcJyOiet2Y//r9bS9tHvlsPRAGsGNudc47AIrhEB0xj+NWaA7vOy7+vB6P7yF+HmmAJZDPP
- Qj6m5ooIyFzyPpORnjN9fKeC43a3DDed2F6wPGCng3GkNO6SWNfMYkCHSdi9oXpIw6Xbz1V6Ckg
- 7d8XtcOzdu4XAv5QMghkEuwjxLgD8iMEgLUx7R01RE0NVn2h+yHKOmGovBWFrKG6+yToDxHiY+u
- Ly6xRyt0rAYmtFCymRKEURq5j13T5FBOWS75ZjtoIsbdiEnsd6h+wuAm43sHNCIzkFUlW3Rvic7
- i4xiS6fnlrKm6oPE46TR4QHptzGgAEPuuIyE2b7RwW6WI3vEVXl4DBa1B1cZ+dFvgp7Dy8mtq2a
- VIrHKq/a4KDYOpRpMioC8BaVoRTCtpIlMbOGxTuAg//xyLVA8xVJZ3x3bOUigiNdkfxUE4zjbDG
- gOUNewajibt80USpU8Dd42aX3AoTHHAwErV8QOhBA67pf5spWQYZ/IH9NymwqWqpvk2ftCX+pfF
- hBZqiqDzoq2+utsG0Xt7/d9OH41U1qohcK6T/VeSRdyGSTABkFfpgEBxgTL33d/TXiloHWohvfl
- Wn+LMvsA0AiuzZw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1337; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=FoMUBVpR32MtJZer6V8lgBnEQWSbZvsirk0xN6alb7w=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqQmgvEGszTwRXVQ3roYF7XUovP55Mn6aarufxX
+ 8kePw4A99SJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakJoLwAKCRDm/A8cN/La
+ hTF3D/wL66zdurLSHBXauyOo/Zxl5eIu+ExlDjOXHuoU9nsyPbxB/Fvr5arOgZKgvkzeEFBeNyD
+ rAJUqyTmc6DVlZirO2UJrSavRMrcf+PRwdB+UnjMkSCdqVrVRG57FRA69nk1XXGZooC99EBbYdG
+ bhssIXwrI+pW1uDUGU5nLIn5+FoTUHgyM1DL9Wldf6WnJjpfYxvSmQLtGGwBK6Jp80BbtvgBVka
+ FTJVT0SjaBvXOqJOYhqJaAHPveNEpUEhV1DgPiydlgT0i88N6GkXizHXfgPNom3dpTjQ1vPrRum
+ QCL5QHaaIPndE7AZcGSyZAQ4OaxI/yEOEIbKFlAggihe0wBUWdf9tH9wiUVdvDZWrpErGfeD92F
+ c9w3gkhEKwy47mVjQJcH9gGIF+CTmr3ND2kG3EzotXk+61Ok3LmVZcKWPSDrddLk2rY4x6LNqh9
+ dJyxjsiE4Ee3WyWGcaDN1ajaqAavcA25KwmSg3BooXCtZPsk9rMDvcvylni/8+CoIqKYOwNwh7c
+ xdUuJ66mrS6VvpM8TLvIHuoyK2t9uhapPTa7a64zx7i4RW6FP+20MIBepUl4nU8BvisqT3l+iKy
+ AfZQswZZ7g+C8UCJH2Xb000LCLKJRgS/Ym4EDI5eEbwLYMTbotAmQnFlaOzSmJoxoU3bav2VMNW
+ v1fkXBQp4GKAnTQ==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 X-Rspamd-Action: no action
@@ -124,7 +123,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -139,7 +138,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6776-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6777-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -150,110 +149,51 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,pigmoral.tech:email,vger.kernel.org:from_smtp,baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 82B136DADC7
+X-Rspamd-Queue-Id: 3ADAA6DAA8A
 
-From: Junhui Liu <junhui.liu@pigmoral.tech>
+Add support for sunxi-ng read-only dividers. This will be
+useful to the a733 oscillator detection logic.
 
-The sun6i-rtc CCU driver currently uses a global static variable to
-denote whether calibration is supported, which makes IOSC operations
-tightly coupled to this file.
-
-Convert this into a feature bit to decouple the logic. This allows the
-IOSC clock code to be moved into a shared module for reuse by other SoCs.
-
-Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
-Signed-off-by: Jerome Brunet<jbrunet@baylibre.com>
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 17 +++++++++--------
- drivers/clk/sunxi-ng/ccu_common.h    |  1 +
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ drivers/clk/sunxi-ng/ccu_div.c | 11 +++++++++++
+ drivers/clk/sunxi-ng/ccu_div.h |  1 +
+ 2 files changed, 12 insertions(+)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index 0f528bfaed00..b24c8b196e66 100644
---- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -52,8 +52,6 @@ struct sun6i_rtc_match_data {
- 	u8				osc32k_fanout_nparents;
+diff --git a/drivers/clk/sunxi-ng/ccu_div.c b/drivers/clk/sunxi-ng/ccu_div.c
+index 62d680ccb524..0e3d9e6e30fb 100644
+--- a/drivers/clk/sunxi-ng/ccu_div.c
++++ b/drivers/clk/sunxi-ng/ccu_div.c
+@@ -143,3 +143,14 @@ const struct clk_ops ccu_div_ops = {
+ 	.set_rate	= ccu_div_set_rate,
  };
+ EXPORT_SYMBOL_NS_GPL(ccu_div_ops, "SUNXI_CCU");
++
++const struct clk_ops ccu_rodiv_ops = {
++	.disable	= ccu_div_disable,
++	.enable		= ccu_div_enable,
++	.is_enabled	= ccu_div_is_enabled,
++
++	.get_parent	= ccu_div_get_parent,
++
++	.recalc_rate	= ccu_div_recalc_rate,
++};
++EXPORT_SYMBOL_NS_GPL(ccu_rodiv_ops, "SUNXI_CCU");
+diff --git a/drivers/clk/sunxi-ng/ccu_div.h b/drivers/clk/sunxi-ng/ccu_div.h
+index be00b3277e97..a30a92780a05 100644
+--- a/drivers/clk/sunxi-ng/ccu_div.h
++++ b/drivers/clk/sunxi-ng/ccu_div.h
+@@ -300,5 +300,6 @@ static inline struct ccu_div *hw_to_ccu_div(struct clk_hw *hw)
+ }
  
--static bool have_iosc_calibration;
--
- static int ccu_iosc_enable(struct clk_hw *hw)
- {
- 	struct ccu_common *cm = hw_to_ccu_common(hw);
-@@ -80,7 +78,7 @@ static unsigned long ccu_iosc_recalc_rate(struct clk_hw *hw,
- {
- 	struct ccu_common *cm = hw_to_ccu_common(hw);
+ extern const struct clk_ops ccu_div_ops;
++extern const struct clk_ops ccu_rodiv_ops;
  
--	if (have_iosc_calibration) {
-+	if (cm->features & CCU_FEATURE_IOSC_CALIBRATION) {
- 		u32 reg = readl(cm->base + IOSC_CLK_CALI_REG);
- 
- 		/*
-@@ -119,7 +117,7 @@ static int ccu_iosc_32k_prepare(struct clk_hw *hw)
- 	struct ccu_common *cm = hw_to_ccu_common(hw);
- 	u32 val;
- 
--	if (!have_iosc_calibration)
-+	if (!(cm->features & CCU_FEATURE_IOSC_CALIBRATION))
- 		return 0;
- 
- 	val = readl(cm->base + IOSC_CLK_CALI_REG);
-@@ -134,7 +132,7 @@ static void ccu_iosc_32k_unprepare(struct clk_hw *hw)
- 	struct ccu_common *cm = hw_to_ccu_common(hw);
- 	u32 val;
- 
--	if (!have_iosc_calibration)
-+	if (!(cm->features & CCU_FEATURE_IOSC_CALIBRATION))
- 		return;
- 
- 	val = readl(cm->base + IOSC_CLK_CALI_REG);
-@@ -148,7 +146,7 @@ static unsigned long ccu_iosc_32k_recalc_rate(struct clk_hw *hw,
- 	struct ccu_common *cm = hw_to_ccu_common(hw);
- 	u32 val;
- 
--	if (have_iosc_calibration) {
-+	if (cm->features & CCU_FEATURE_IOSC_CALIBRATION) {
- 		val = readl(cm->base + IOSC_CLK_CALI_REG);
- 
- 		/* Assume the calibrated 32k clock is accurate. */
-@@ -167,7 +165,7 @@ static unsigned long ccu_iosc_32k_recalc_accuracy(struct clk_hw *hw,
- 	struct ccu_common *cm = hw_to_ccu_common(hw);
- 	u32 val;
- 
--	if (have_iosc_calibration) {
-+	if (cm->features & CCU_FEATURE_IOSC_CALIBRATION) {
- 		val = readl(cm->base + IOSC_CLK_CALI_REG);
- 
- 		/* Assume the calibrated 32k clock is accurate. */
-@@ -358,7 +356,10 @@ int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
- 		return 0;
- 
- 	data = match->data;
--	have_iosc_calibration = data->have_iosc_calibration;
-+	if (data->have_iosc_calibration) {
-+		iosc_clk.features |= CCU_FEATURE_IOSC_CALIBRATION;
-+		iosc_32k_clk.features |= CCU_FEATURE_IOSC_CALIBRATION;
-+	}
- 
- 	if (!data->have_ext_osc32k) {
- 		/* ext-osc32k-gate is an orphan, so do not register it. */
-diff --git a/drivers/clk/sunxi-ng/ccu_common.h b/drivers/clk/sunxi-ng/ccu_common.h
-index bbec283b9d99..d9dc24ad5503 100644
---- a/drivers/clk/sunxi-ng/ccu_common.h
-+++ b/drivers/clk/sunxi-ng/ccu_common.h
-@@ -21,6 +21,7 @@
- #define CCU_FEATURE_CLOSEST_RATE	BIT(9)
- #define CCU_FEATURE_DUAL_DIV		BIT(10)
- #define CCU_FEATURE_UPDATE_BIT		BIT(11)
-+#define CCU_FEATURE_IOSC_CALIBRATION	BIT(12)
- 
- /* MMC timing mode switch bit */
- #define CCU_MMC_NEW_TIMING_MODE		BIT(30)
+ #endif /* _CCU_DIV_H_ */
 
 -- 
 2.47.3
