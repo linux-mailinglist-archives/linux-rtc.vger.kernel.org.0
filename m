@@ -1,63 +1,64 @@
-Return-Path: <linux-rtc+bounces-6797-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6798-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id DB9vHSsZRGrtoQoAu9opvQ
-	(envelope-from <linux-rtc+bounces-6797-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:29:47 +0200
+	id N+V/MaoZRGoeogoAu9opvQ
+	(envelope-from <linux-rtc+bounces-6798-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:31:54 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D58936E7920
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 530666E798F
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:31:54 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=oEaZMxvI;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6797-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6797-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=V3kByLAh;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6798-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6798-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8B3603029779
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 19:24:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8EC5830E851E
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 19:28:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB373BF696;
-	Tue, 30 Jun 2026 19:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D893C5DB6;
+	Tue, 30 Jun 2026 19:28:45 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333E7282F1E;
-	Tue, 30 Jun 2026 19:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CBB202F71;
+	Tue, 30 Jun 2026 19:28:44 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782847496; cv=none; b=h6afvrmE58PWCsNoJmBmxS9ebvZ1dzQTjgAts8xNXycb6N2xzePTz2XhfWNGZW+bVM/gEm4C2oymJSupV00Y4Mz4QQs+i3a8x0nYY7Khx9OefU60FGuHsW6ciLo9EsdYDN7X/hvPZppgFy9flGbOvHzOiriG337qiBBOLUacIZo=
+	t=1782847725; cv=none; b=LBxvTaE5fy9RZfGv9PfA3tkqlah8NQdfitu2L9lUmmbjRTJHkPacnEpiG1QOkdscHh8/05DZapuS39BJsOWsqp1qX4ZgnYSiBLRjXNMi/sGeJ+vEseFavbACgZDu0Y2qFxEr9bHUbqfHdUE4DwiZZeaHxRXqtMUxZu5MgbLAfgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782847496; c=relaxed/simple;
-	bh=hqAUe8yBH7exQn2XAdv+Lc/Y8o9ItkY1mG8eIahUBo8=;
+	s=arc-20240116; t=1782847725; c=relaxed/simple;
+	bh=6vivW5XDH+zbeSdDI3Q94cMlRFbgFu+Ah9jxDnyVH6g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ui9+x1hitm/oPT8QAPGye3vug18LMbI1Q9splSX5SyumkhUP1KHLj+v5x7C7BG0/XAi49vwzBpW/wBvTlUa16cnfo37xxVthZ31ydf/PCqTbc7734kmfmQHkDgJcC2fjJwBsCyLNrYIoSiln5zsD4RYStGda96sVVRrMrBxKWzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEaZMxvI; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB211F000E9;
-	Tue, 30 Jun 2026 19:24:54 +0000 (UTC)
+	 Message-Id; b=SMwAIN5s01nOX0ozU7hFf/EvUf7HTdykOkWz7PzMl6EQxKFEdbmyRM+0IqZKINufkmsOc5vssHMXzwqwCzPs9AzyI76EBWZAvYoAwcUYqgN0WMQ8Hp1cxBmPYHi//oW2G0W/Y8EyBUaZiWXazg2/nwWrnzSCRFJLeRKWnFgBRbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V3kByLAh; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29CF1F000E9;
+	Tue, 30 Jun 2026 19:28:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782847494;
-	bh=hqAUe8yBH7exQn2XAdv+Lc/Y8o9ItkY1mG8eIahUBo8=;
+	s=k20260515; t=1782847724;
+	bh=6vivW5XDH+zbeSdDI3Q94cMlRFbgFu+Ah9jxDnyVH6g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oEaZMxvIOa8T5d65gn7rcQtafWN0w171Ww8LgiHTPHvOKYwwWp7FdsZi7MThZDYRK
-	 YmFyxQ3tk5Psa+vXSJehD/WD6+IPLCnjPwSr+bI3yubnYSJdRWJccqCPR9FaQDE9uE
-	 8cu0Wg3sW7bJ+P2bG6/p+jHl+hvlVGONjq3WwGlu7OMjBA8nJBauaegfIme7nCH1Pz
-	 TJzzVAWbXM04CeycOn0/RdZgPiq8L+hcNmCExA72G+XpBFPadh6kVQgEhPDLp/qCiV
-	 MUK/7+P/Z3lQK0vX/ABrJdAq4pzR3blzHdruKhAbAmx6uL/SyP5z8Fs8AbFqzRcaqW
-	 sUahdnWmp8iKw==
+	b=V3kByLAhldM2wz9DqQ6RvL5rUxnzYOo1tWRZ01CfGI7uaX1hRodejD62+LUvJVPwD
+	 +Dvn27DFvY/PXdvsuAFPzvcpXB5nz5q4HP860hpDV51tD3nkcCLhU7jGAYBZlVdilu
+	 4QNZ8gyy/wsiE8l7KXYPqPehk3fN17vHx/2J69YuMfSlqHgDj7GqUlVKLyHHMWIaCt
+	 PJt4kr9Y9ezMp7PdByoIdGyrxC4JG3/P74QIDpHhYhJ3m6Y8Jztr/0+AmF12fDPTtl
+	 bXdVV/TDbh4ZmKL1mn+2LrkgvZT4175RoCGIyfFFqm5Uj1aUBo4XINjVJCJmvl3ob+
+	 TwdKUc+51bCaA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] rtc: s35390a: Add missing newline to dev_err
+Subject: Re: [PATCH 3/3] rtc: s35390a: make use of interrupt signal 1
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Markus Probst" <markus.probst@posteo.de>
-Cc: "Alexandre Belloni" <alexandre.belloni@bootlin.com>, robh@kernel.org, conor+dt@kernel.org, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20260630-rtc_s35390a_int1-v1-2-1b2239e16be2@posteo.de>
+Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, robh@kernel.org, conor+dt@kernel.org
+In-Reply-To: <20260630-rtc_s35390a_int1-v1-3-1b2239e16be2@posteo.de>
 References: <20260630-rtc_s35390a_int1-v1-0-1b2239e16be2@posteo.de>
- <20260630-rtc_s35390a_int1-v1-2-1b2239e16be2@posteo.de>
+ <20260630-rtc_s35390a_int1-v1-3-1b2239e16be2@posteo.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 30 Jun 2026 19:24:53 +0000
-Message-Id: <20260630192454.0FB211F000E9@smtp.kernel.org>
+Date: Tue, 30 Jun 2026 19:28:42 +0000
+Message-Id: <20260630192843.B29CF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -78,11 +79,11 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-6797-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6798-lists,linux-rtc=lfdr.de];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sashiko.dev:url,smtp.kernel.org:mid,lists.linux.dev:replyto,posteo.de:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-rtc@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:markus.probst@posteo.de,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:conor+dt@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:markus.probst@posteo.de,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:conor+dt@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -104,15 +105,18 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[6]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D58936E7920
+X-Rspamd-Queue-Id: 530666E798F
 
-> Fixes: 3bd32722c827d ("rtc: s35390a: improve irq handling")
+> If configured, use output pin for interrupt signal 1 for the wake alarm.
+>=20
+> Successfully Tested on a Synology DS923+.
+>=20
 > Signed-off-by: Markus Probst <markus.probst@posteo.de>
 
 Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260630-rtc_s35390=
-a_int1-v1-0-1b2239e16be2@posteo.de?part=3D2
+a_int1-v1-0-1b2239e16be2@posteo.de?part=3D3
 
 
