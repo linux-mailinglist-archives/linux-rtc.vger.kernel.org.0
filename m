@@ -1,59 +1,58 @@
-Return-Path: <linux-rtc+bounces-6794-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6796-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nejxGT0YRGq0oQoAu9opvQ
-	(envelope-from <linux-rtc+bounces-6794-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:25:49 +0200
+	id rB9gBHgXRGqRoQoAu9opvQ
+	(envelope-from <linux-rtc+bounces-6796-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:22:32 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B73DB6E78A8
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:25:48 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E11A6E7875
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 21:22:31 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=posteo.de header.s=2017 header.b=oOLgsgIZ;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6794-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6794-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=posteo.de header.s=2017 header.b=FGD8uXKo;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6796-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6796-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=posteo.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 09A8730D13B9
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 19:22:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 45C5B306672E
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2026 19:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CABCD3B4EAC;
-	Tue, 30 Jun 2026 19:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6A8D3C09FF;
+	Tue, 30 Jun 2026 19:22:27 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294753955D2
-	for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2026 19:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD2F3BF696
+	for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2026 19:22:25 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782847344; cv=none; b=VRg7qy7fCNuYCTH3Iia3KVVKwEuyLqMcJFB3/Yt1rLzahVR1toiy53oN0p3/Xow9jTqGy4yqQwYBd498jXT4vGsRg76ERDsj6tRguP4/81P1xYqAMSyCb4bBv5V2t56j55TilZgA8ISEfvDcZhZA5CLsSGwk2rIV2EUC49erTmU=
+	t=1782847347; cv=none; b=dr/phb7hnErK/fpargjxC5HLnmSBNR6t/1NI586EfU/HlgqbQKlfQOZWs606k6wODciHOxfer8pNj6v7TBq5DrB5YdRwCskuxM/wOfH6X7W5vu+zQ2MjPsMo6W9sGjN38TPy9uvfoAGWqcqMxo9YpseFDVE8BkH/AiFEpcy695I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782847344; c=relaxed/simple;
-	bh=iaAF+yS936aMUd2uo2ERhF4xGvZqCHabIEA/vQVk0Kw=;
+	s=arc-20240116; t=1782847347; c=relaxed/simple;
+	bh=QV/D+X9L6iHtWxf2FTb2FsPSMVe+HAIVh5ovcaU9Yq0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Gag2f1N8R6IX6Msay0ChgZOuCP7H1KQH0Q+oqbzIRkDqcuV7cQqTjjHzCS9sbkqwy+2qQudZvlM+emUtvVh7bGj5/5q+ZDVfb5iumcMBuB4Lr6qPZX+u1gID0EIQxHMbX72KH3v6t8btDcNcuo4awtIqcOrDgnNst90p+xZxtqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=oOLgsgIZ; arc=none smtp.client-ip=185.67.36.66
+	 In-Reply-To:To:Cc; b=oH1Z5Au6WXAxqMuXCwdxleEyJmjAM/9MFT1T33jN4qFhIgLkOe8Ezucy9G0RyMcRp/RV0Sy1/vUOnVE3muyP6RRxb7lrQMlcTk0AKXmmnhyOySGwhst7cYgYKZ8hkvgjN2ktZROlpkhthjdbbwT0vms5tmrL796GcP/qhwPOXVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=FGD8uXKo; arc=none smtp.client-ip=185.67.36.66
 Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id B30A9240103
-	for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2026 21:22:21 +0200 (CEST)
+	by mout02.posteo.de (Postfix) with ESMTPS id B8BB6240107
+	for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2026 21:22:22 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1782847341; bh=rgjwVdw/2f/R8g0IOrUVxokMD0ga5Bc0eQVVG555Fmc=;
+	t=1782847342; bh=RGGhD71B+UtcIgYaLVJcbUJD2ZD+NnVvBK4/H22TbeY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:To:Cc:Autocrypt:OpenPGP:From;
-	b=oOLgsgIZi4IdjAzkjhQn3nyAV3HAEp2jGBReD+IYW3eSJwmGTE+IBLE3MU8nxdH7/
-	 YMLo0Q2akfmUAxydla6meQ/CZufxZE93RFpKED7B27CJq+QXoU7iy8TFPJPtQVs4D9
-	 VsyofZEiX6cCKXeAJPBMnLdCR3bcD9lH31HL1W6tVJQiyxas0zq5nnCYvq4uGE4877
-	 nkpFTjVkKV45twcEKtSXrBaVetrKtuQvW0mao9tbF44jCfyYscZdWPPnTHp+wVL7iG
-	 QU5n/LyNWnf1fHN5XJ2bmUgw54wLlBZpi8mkW/vmDMvTVK7xDuo6QPE/X5SZL+jIpT
-	 jGA/vvQtvqaUg==
+	b=FGD8uXKovqyM0y+yb6KVHFj8Fy769k1nFj0w1fG2z/7YDxrwkoQfCDy6YDhoEA0gT
+	 qwRZzot3Bf1Uop5OsDzB5Cnjb1RqLmxsorie7aoZLJUBRX7WJF7P4cu5grSYWc3y1r
+	 us9WnsNqx/c6C3rEEEcuKb6ucwpoOpNj+lJyueC05ShEQEGHX+j7wT2gUSfcxwV3M1
+	 A51pKfFyujLXRB4IW5Q5e86XrHMHFcUHjCuoOqrlINQFmhWnEkIhKg9zpAYBs4lMDA
+	 6rCS1khiCICoHaFSWyp7+MhUkZC+HSQYnD62dQKv8nFgQsQFQjE9fVXSnS+M2RTXWs
+	 PL204+5tkM0XA==
 Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4gqY1m1MnVz9rxD;
-	Tue, 30 Jun 2026 21:22:20 +0200 (CEST)
+	by submission (posteo.de) with ESMTPSA id 4gqY1n2Mxtz9rxB;
+	Tue, 30 Jun 2026 21:22:21 +0200 (CEST)
 From: Markus Probst <markus.probst@posteo.de>
-Date: Tue, 30 Jun 2026 19:22:21 +0000
-Subject: [PATCH 1/3] dt-bindings: rtc: Add sii,wakealarm-output-pin
- property for S35390A
+Date: Tue, 30 Jun 2026 19:22:22 +0000
+Subject: [PATCH 2/3] rtc: s35390a: Add missing newline to dev_err
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -62,7 +61,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260630-rtc_s35390a_int1-v1-1-1b2239e16be2@posteo.de>
+Message-Id: <20260630-rtc_s35390a_int1-v1-2-1b2239e16be2@posteo.de>
 References: <20260630-rtc_s35390a_int1-v1-0-1b2239e16be2@posteo.de>
 In-Reply-To: <20260630-rtc_s35390a_int1-v1-0-1b2239e16be2@posteo.de>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
@@ -74,21 +73,21 @@ To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 Cc: linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Markus Probst <markus.probst@posteo.de>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3977;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=693;
  i=markus.probst@posteo.de; h=from:subject:message-id;
- bh=iaAF+yS936aMUd2uo2ERhF4xGvZqCHabIEA/vQVk0Kw=;
- b=owEBiQJ2/ZANAwAIATR2H/jnrUPSAcsmYgBqRBdqXhgSYQ1G0bopxHbsIuyeWtyg/MBsZTTdf
- 45ajFXDTO2JAk8EAAEIADkWIQSCdBjE9KxY53IwxHM0dh/4561D0gUCakQXahsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQNHYf+OetQ9Iv/xAAtmzNsqZ4vd/U9yb6fnuvE0OUx2FSk6q
- JXb2Vxdyfz7KcUoszlul4uvlrhilvBkGE8KK354Sgf8Chpbe8YpBdtgQ4X1P8IgSh68ZKNw+a/8
- z6Fu4qUhm3hhUDC1jY2qy9ytPR3Y+FFHZfxxMtuwi4sHF3F6FwwCHXEVhAAe+oJWAq/1mbGNvQ0
- tRWFtVuGIomUo/iRtVJHi04FOxZXQ0CNZBBTGLdH0pl31t52hITTss5gvXU9PYCpY2YM8TDXSHn
- +e6WBfYpYXJjX14L8svGmx1dpfhghclfK7xvCalzzm7lrbtRrH69QoVpYq3zCc9BqKzbxziOth8
- xNkNPuNjARR/Oz19IFE+ud14gLdXQWBZpICXzmcueFzH2ioQUSWDzs/HazTA6lENe73mk2jd2LL
- N08cRMrafMkD+LGcuX4q1UFFB7CXI24jhnhiJnn3rB8cFQZV6ULS+X8TLKDuQfwBJjL7aeCUW8D
- iNC3gwtLt8VhqGKcFTAXrjkugysHs/MnYOvHQhxZbDbFsn0uh04X6CWPhzraGZDfgkhGhnNdnHR
- gG0moiXumuCnOH3v9exAVMaVsHUYItMpD37BOIgmPEz5Sj5UHgsot63dI3TtcudoDxLkOI/JLMa
- UtLSCdeX2n0dxO/hCSw2nTtWc1VQhyjWrJrp6fs7rYcedsBvaG5A=
+ bh=QV/D+X9L6iHtWxf2FTb2FsPSMVe+HAIVh5ovcaU9Yq0=;
+ b=owEBiQJ2/ZANAwAIATR2H/jnrUPSAcsmYgBqRBdqgh0URn4xbFyEX3QaMJKFEAZRKEzPDlUk6
+ FjTe7KXEE2JAk8EAAEIADkWIQSCdBjE9KxY53IwxHM0dh/4561D0gUCakQXahsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQNHYf+OetQ9LfBw/+O344j6uHJ0kT0XZ6XIfyPdtmr8MEBMt
+ kxDF99ZnpWd5eS+fk7j3p8VA3x5WvhHBgHqaF0RYjLau27gHtmnadD+3WZD0ubg3hOrFPnsGlnN
+ ENvXJmoGB5ZTju0Qch487UuUIoIMAU5FJdtyfIHVSLko7ly9iJ0QK84bT/E7HWG0vVwatVfWspK
+ BiOcYN/0fFmZ4mRA2l9VCN/AI4rIC7+XCMOZzxEPbbT7G9Daph8X3v66DDWzuMwAm/M2h+uQ/2e
+ adG5w4aRRbUY8vuEkVS9/xXNU9qTE5vaEoIdSnS1QmD7t5Ot867a/sEUhWxsANhIVfe2PdbP6dl
+ jlufvPT7eMb21glu0IKsYT9pfb145VnS9d5mYhmZcLwrndNMJ5+pBTWlOUMJJl65POP2Ka1m8Ve
+ +Ep3ltGLQo7ZXCnBaChPqEr3RNCxYmHLfkt2qZ4NRW/87OG3Iwah6ZUDN3sozPCpGZLj+IU7Wb5
+ akv3T6Z571OCybsrMazYSjMcAN/mvhAMWVEve0zXRkdsgt0VENrGCnCIVO932jLT6U5DLkW7pWv
+ NJ+mLW55iQKK+LYHUq8AyDhNBmUKCRyhZ08VOBjU5lT6B/oHuCSHLDIu+XnGRoJ3I7ESnabQYuo
+ JHNqbPpjqrvwY9ZmeaMUHp00gZufSESY2Dx7nVHCmEGOTsbi+SHI=
 X-Developer-Key: i=markus.probst@posteo.de; a=openpgp;
  fpr=827418C4F4AC58E77230C47334761FF8E7AD43D2
 Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
@@ -138,12 +137,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[posteo.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[posteo.de:s=2017];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6794-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6796-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,kleine-koenig.org,lunn.ch,gmail.com];
@@ -163,136 +162,33 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,bootlin.com:email,posteo.de:dkim,posteo.de:email,posteo.de:mid,posteo.de:from_mime,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,devicetree.org:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,posteo.de:dkim,posteo.de:email,posteo.de:mid,posteo.de:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B73DB6E78A8
+X-Rspamd-Queue-Id: 9E11A6E7875
 
-Synology NAS devices use the output pin for interrupt signal 1 to wake up
-the system.
-
-Move devicetree bindings for sii,s35390a into its own file.
-Add sii,wakealarm-output-pin property to enable the use of the output
-pin for interrupt signal 1 for the wake alarm, which makes it possible to
-set an wake alarm on Synology NAS devices.
-
+Fixes: 3bd32722c827d ("rtc: s35390a: improve irq handling")
 Signed-off-by: Markus Probst <markus.probst@posteo.de>
 ---
- .../devicetree/bindings/rtc/sii,s35390a.yaml       | 54 ++++++++++++++++++++++
- .../devicetree/bindings/rtc/trivial-rtc.yaml       |  3 --
- MAINTAINERS                                        |  1 +
- include/dt-bindings/rtc/s35390a.h                  |  9 ++++
- 4 files changed, 64 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-s35390a.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml b/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml
-new file mode 100644
-index 000000000000..31a578673870
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/sii,s35390a.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: S-35390A 2-WIRE REAL-TIME CLOCK
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+description:
-+  The S-35390A is a CMOS 2-wire real-time clock IC which operates with the
-+  very low current consumption in the wide range of operation voltage.
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    const: sii,s35390a
-+
-+  reg:
-+    maxItems: 1
-+
-+  sii,wakealarm-output-pin:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2]
-+    description: |
-+      The output pin to wake up the system.
-+      Default will use the output pin for interrupt signal 2.
-+        <S35390A_OUTPUT_PIN_INT1> : Output pin for interrupt signal 1
-+        <S35390A_OUTPUT_PIN_INT2> : Output pin for interrupt signal 2
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/rtc/s35390a.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc: rtc@30 {
-+            compatible = "sii,s35390a";
-+            reg = <0x30>;
-+            sii,wakealarm-output-pin = <S35390A_OUTPUT_PIN_INT2>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index f4d0eed98a08..7b3f682ef4d5 100644
---- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-@@ -81,8 +81,6 @@ properties:
-       - ricoh,rv5c386
-       # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-       - ricoh,rv5c387a
--      # 2-wire CMOS real-time clock
--      - sii,s35390a
-       # ST SPEAr Real-time Clock
-       - st,spear600-rtc
-       # VIA/Wondermedia VT8500 Real-time Clock
-@@ -105,5 +103,4 @@ required:
-   - reg
- 
- additionalProperties: false
--
- ...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 15011f5752a9..46a19a0873e0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22690,6 +22690,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git
- F:	Documentation/admin-guide/rtc.rst
- F:	Documentation/devicetree/bindings/rtc/
- F:	drivers/rtc/
-+F:	include/dt-bindings/rtc/
- F:	include/linux/rtc.h
- F:	include/linux/rtc/
- F:	include/uapi/linux/rtc.h
-diff --git a/include/dt-bindings/rtc/s35390a.h b/include/dt-bindings/rtc/s35390a.h
-new file mode 100644
-index 000000000000..bd99db118d31
---- /dev/null
-+++ b/include/dt-bindings/rtc/s35390a.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
-+
-+#ifndef __DT_BINDINGS_RTC_S35390A_H
-+#define __DT_BINDINGS_RTC_S35390A_H
-+
-+#define S35390A_OUTPUT_PIN_INT1	1
-+#define S35390A_OUTPUT_PIN_INT2	2
-+
-+#endif /* __DT_BINDINGS_RTC_S35390A_H */
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index b72eef4fb099..4cfe7034c516 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -494,7 +494,7 @@ static int s35390a_probe(struct i2c_client *client)
+ 		buf = 0;
+ 		err = s35390a_set_reg(s35390a, S35390A_CMD_STATUS2, &buf, 1);
+ 		if (err < 0) {
+-			dev_err(dev, "error disabling alarm");
++			dev_err(dev, "error disabling alarm\n");
+ 			return err;
+ 		}
+ 	} else {
 
 -- 
 2.54.0
