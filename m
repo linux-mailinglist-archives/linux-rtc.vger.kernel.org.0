@@ -1,175 +1,272 @@
-Return-Path: <linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id w35QJXEZRWrn6woAu9opvQ
-	(envelope-from <linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:43:13 +0200
+	id 53fAIvcWRWor6woAu9opvQ
+	(envelope-from <linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:32:39 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2DDF6EE42F
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:43:12 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 342486EE24D
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:32:39 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=i8SCwyQh;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=posteo.de header.s=2017 header.b=KOnh0Hog;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=posteo.de;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8EE5531F50CE
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 13:04:17 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 337E43026AF7
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 13:26:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2C148AE32;
-	Wed,  1 Jul 2026 13:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6148A48AE3C;
+	Wed,  1 Jul 2026 13:25:53 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0CC48AE20;
-	Wed,  1 Jul 2026 13:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFC948AE34
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 13:25:49 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782910919; cv=none; b=DYl+XolukXmSYM8wc8+w+8yukdhimrfmM1SuX59wZut5lwRZ0tU12PnAGlYV6LJCki3N5O7tv0d3t0Dk707nTWp+5TFz9PB6xtw0NY0lRSZ6pX72LyDvuuxJMytpapUDVC4HBjZPzXOX95CGL0XXn3v83/p6Zx+1WPgthbslI0A=
+	t=1782912353; cv=none; b=maHZhln20NKo/FfQhUMW9Q2VgsZWP+4H/ZfyrXPDPKcQYtE2baYgoxbWTWm387NgPxTJQoFw+iqEOWtdhANRTkXWUbKSne5BDxHuKm7Q20hYNRabqZ8XSjrNULp0qt4DT+clKUokPvlceTIkJyzGweLoL93ONqHmYWRCuGeUKUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782910919; c=relaxed/simple;
-	bh=jnxZnh5V2zsErqh9R6TXWkelWIbod9lmGFF4LYtgJDc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OsEBDKJX8tNSynfVAVgGjP6WYgNPCvdMpr8ZpFo6/62PrHgM3sALgw3UBesgu4ojkw06SP9+ywT/wfHyPnN4Yau9vVRNgruuDas+an2nqiXH+N4RFhYiZMHMz5Zz+ld8alCYmcowi0DUgpmENmc4BR7I2Ck2E2SEO1ma/lnGDok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i8SCwyQh; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9F11F000E9;
-	Wed,  1 Jul 2026 13:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782910918;
-	bh=xSQsmx4MwF6oqeO3x1f6iZ8pIkIJYGGq6vkgVXhfEIs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=i8SCwyQhVICEaZZJ/Lp98o2+s119rdkjdwIfsz+v3x7mfvCZzQVIGsEvAj9X0l1Dk
-	 FBJejEC86nG5uBNPNuhJ3QvmBxBNGDb5NIVcuY3Yw7vx1VKXdNYUtjebwoBNUk77Ft
-	 vTpL3/bY4JTA0KDlgDLDP3nCRUJ//eXv1Itxtkba0Vpl/03h8JOmPssHq0TikKln7J
-	 Z4hC3HS8vVR19GIJW7+0bovNE8h7r5AmKj5DlMhiSs8xGpa7DhzzSKob0vj6wG/xKv
-	 a6VK22t7YXHmSK3EB0qdMtswtECqe7XABbPBwSX+m5U2RhIC8XQQxQ+n0fFNoNzKLq
-	 DytaDNZ3kcFQg==
-Date: Wed, 1 Jul 2026 14:01:52 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <matti.vaittinen@linux.dev>,
-	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 5/8] regulator: bd71828: Support ROHM BD73800
-Message-ID: <bf744d4f-eabe-48e7-92e4-b147b8d79d91@sirena.org.uk>
-References: <cover.1782909323.git.mazziesaccount@gmail.com>
- <1d00359236272fd1fab0dfbcb9119d2f91aa0d23.1782909323.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1782912353; c=relaxed/simple;
+	bh=dl02RFf8AY28wqYtWzRYHJ20QelKfp7SUPcU3Oa8w40=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WzJQlRNvupU3cp1hyO/KjEK60iCU1uapVZH2DojUxezPvR3kFhiIiL8vCKTQX1ARG2phlXOXnHcgFFCPXJgEv/qGLg68ONmZZGizrGG055L2vOApEV4NeYZ4I4vaDU3MhRCsltDPGz6ZHp1vPvFKKWvj0nYQ2HTsqoayAL406Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=KOnh0Hog; arc=none smtp.client-ip=185.67.36.66
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 7802E240101
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 15:25:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
+	t=1782912342; bh=VxEq/S494Z5PbRo663SR5Dd2jfwNSj1QIO3Pt6Fy5pw=;
+	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
+	 MIME-Version:OpenPGP:From;
+	b=KOnh0HogLDcANJ6lTCZfT7PJNzL/xDxBIIxhHtWtTpjlVTRL3BSQa8/mR9dh56ScP
+	 Vzxz+O2fbLCXciVvbu10ICs0WCehoslUc5TXR/B9if4cK7NuW/N3gzSdqDwaKfYzKY
+	 pAhvTmKkJxERZIXiBmuvkMXu77YYauqziGDnZhBj1rsM8PZywe9lz21y1mJwml7BEf
+	 ptG0V1t/EWlQ17LPHAqnKBQXXzCVq9r1eXoGn9mN3fq+vPK5XJjpP0axyecez+1q2V
+	 ZnJjyXOtL+PyiggtHilWeUdTz5vMrYurXZA3EnxxNGWv0oZHZeoRBdGqusMaBMC4b+
+	 aTvuZWSZUDWBg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4gr13m2Pn5z6ty8;
+	Wed,  1 Jul 2026 15:25:40 +0200 (CEST)
+Message-ID: <45e8157be53c3d8827fcccece7f706968bc056d3.camel@posteo.de>
+Subject: Re: [PATCH 1/3] dt-bindings: rtc: Add sii,wakealarm-output-pin
+ property for S35390A
+From: Markus Probst <markus.probst@posteo.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring
+	 <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	 <conor+dt@kernel.org>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+	 <uwe@kleine-koenig.org>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement
+	 <gregory.clement@bootlin.com>, Sebastian Hesselbarth
+	 <sebastian.hesselbarth@gmail.com>, linux-arm-kernel@lists.infradead.org, 
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Wed, 01 Jul 2026 13:25:41 +0000
+In-Reply-To: <20260701-bronze-jaguar-of-perfection-028bac@quoll>
+References: <20260630-rtc_s35390a_int1-v1-0-1b2239e16be2@posteo.de>
+	 <20260630-rtc_s35390a_int1-v1-1-1b2239e16be2@posteo.de>
+	 <20260701-bronze-jaguar-of-perfection-028bac@quoll>
+Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
+ keydata=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
+ jfGillcaQOqFZ3WwVqyzG1BUfTow==
+Content-Type: multipart/signed; micalg="pgp-sha256";
+	protocol="application/pgp-signature"; boundary="=-Y0mVF0q2Sx3qDWBOxLMy"
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jcOo3Xx3B2XL56n0"
-Content-Disposition: inline
-In-Reply-To: <1d00359236272fd1fab0dfbcb9119d2f91aa0d23.1782909323.git.mazziesaccount@gmail.com>
-X-Cookie: Do unto others before they undo you.
+OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.76 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [-2.76 / 15.00];
 	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[posteo.de,none];
 	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[posteo.de:s=2017];
 	MAILLIST(-0.15)[generic];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:mazziesaccount@gmail.com,m:matti.vaittinen@fi.rohmeurope.com,m:matti.vaittinen@linux.dev,m:lee@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:lgirdwood@gmail.com,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:linusw@kernel.org,m:brgl@kernel.org,m:alexandre.belloni@bootlin.com,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6819-lists,linux-rtc=lfdr.de];
-	FORGED_SENDER(0.00)[broonie@kernel.org,linux-rtc@vger.kernel.org];
+	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,kleine-koenig.org,lunn.ch,gmail.com,lists.infradead.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-6820-lists,linux-rtc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[fi.rohmeurope.com,linux.dev,kernel.org,gmail.com,baylibre.com,redhat.com,bootlin.com,vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FORGED_SENDER(0.00)[markus.probst@posteo.de,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FORGED_RECIPIENTS(0.00)[m:krzk@kernel.org,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:uwe@kleine-koenig.org,m:andrew@lunn.ch,m:gregory.clement@bootlin.com,m:sebastian.hesselbarth@gmail.com,m:linux-arm-kernel@lists.infradead.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:conor@kernel.org,m:sebastianhesselbarth@gmail.com,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[posteo.de:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[markus.probst@posteo.de,linux-rtc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:email,vger.kernel.org:from_smtp,posteo.de:dkim,posteo.de:email,posteo.de:mid,posteo.de:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E2DDF6EE42F
+X-Rspamd-Queue-Id: 342486EE24D
 
 
---jcOo3Xx3B2XL56n0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-Y0mVF0q2Sx3qDWBOxLMy
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 01, 2026 at 03:42:35PM +0300, Matti Vaittinen wrote:
-> From: Matti Vaittinen <mazziesaccount@gmail.com>
+On Wed, 2026-07-01 at 09:35 +0200, Krzysztof Kozlowski wrote:
+> On Tue, Jun 30, 2026 at 07:22:21PM +0000, Markus Probst wrote:
+> > Synology NAS devices use the output pin for interrupt signal 1 to wake =
+up
+> > the system.
+> >=20
+> > Move devicetree bindings for sii,s35390a into its own file.
+> > Add sii,wakealarm-output-pin property to enable the use of the output
+> > pin for interrupt signal 1 for the wake alarm, which makes it possible =
+to
+> > set an wake alarm on Synology NAS devices.
+> >=20
+> > Signed-off-by: Markus Probst <markus.probst@posteo.de>
+> > ---
+> >  .../devicetree/bindings/rtc/sii,s35390a.yaml       | 54 ++++++++++++++=
+++++++++
+> >  .../devicetree/bindings/rtc/trivial-rtc.yaml       |  3 --
+> >  MAINTAINERS                                        |  1 +
+> >  include/dt-bindings/rtc/s35390a.h                  |  9 ++++
+> >  4 files changed, 64 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml b/D=
+ocumentation/devicetree/bindings/rtc/sii,s35390a.yaml
+> > new file mode 100644
+> > index 000000000000..31a578673870
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml
+> > @@ -0,0 +1,54 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/sii,s35390a.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: S-35390A 2-WIRE REAL-TIME CLOCK
+> > +
+> > +maintainers:
+> > +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+>=20
+> This should be someone caring about this hardware.
+He does have the majority of commits on this driver (excluding merge
+commits and commits not exclusive to this driver), although most of
+them are pretty tiny.
 
-> +	nproot = of_get_child_by_name(nproot, "regulators");
-> +	if (!nproot) {
-> +		dev_err(dev, "failed to find regulators node\n");
-> +		return -ENODEV;
-> +	}
-> +	for_each_child_of_node(nproot, np) {
-> +		if (of_node_name_eq(np, LDO1_NODE_NAME))
-> +			ldo1_use_high_range = of_property_read_bool(np,
-> +							"rohm,ldo-range-high");
-> +		if (of_node_name_eq(np, LDO3_NODE_NAME))
-> +			ldo3_use_high_range = of_property_read_bool(np,
-> +							"rohm,ldo-range-high");
-> +	}
+Who would you suggest instead?
+>=20
+> > +
+> > +description:
+> > +  The S-35390A is a CMOS 2-wire real-time clock IC which operates with=
+ the
+> > +  very low current consumption in the wide range of operation voltage.
+> > +
+> > +allOf:
+> > +  - $ref: rtc.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: sii,s35390a
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  sii,wakealarm-output-pin:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [1, 2]
+> > +    description: |
+> > +      The output pin to wake up the system.
+> > +      Default will use the output pin for interrupt signal 2.
+> > +        <S35390A_OUTPUT_PIN_INT1> : Output pin for interrupt signal 1
+> > +        <S35390A_OUTPUT_PIN_INT2> : Output pin for interrupt signal 2
+>=20
+> Does that mean device generates the interrupts?
+Yes.
 
-Why do we iterate over all nodes rather than doing additional
-of_get_child_by_name()s?
+Thanks
+- Markus Probst
 
-> +	if (ldo1_use_high_range) {
-> +		d[BD73800_LDO1].desc.linear_ranges = bd73800_ldo13_high_volts;
-> +		d[BD73800_LDO1].desc.n_linear_ranges =
-> +					ARRAY_SIZE(bd73800_ldo13_high_volts);
-> +	}
-> +	if (ldo3_use_high_range) {
-> +		d[BD73800_LDO3].desc.linear_ranges = bd73800_ldo13_high_volts;
-> +		d[BD73800_LDO3].desc.n_linear_ranges =
-> +					ARRAY_SIZE(bd73800_ldo13_high_volts);
-> +	}
+>=20
+> Best regards,
+> Krzysztof
 
-You could just do these updates without the intermediate variables.
-
---jcOo3Xx3B2XL56n0
+--=-Y0mVF0q2Sx3qDWBOxLMy
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpFD78ACgkQJNaLcl1U
-h9CBDAf/dk5xA9JPiqbs7lGosK1R3IusuArR8QLpFeRkO7UbIwwMHxsEiTpllWzW
-gEIuuygVMXAiQ/2K7lt3KwQnEguJnlm3419HhOX7Iuvr5QbXq4Elyf044UvaveHM
-OCU8sANA3BvR+7CfSHWhymoA+e71GnjArm6MiTsh9zU+qNEIgCmMlSBqg9KoI7qn
-uJEjHHrLwfWgOdM2jdSLRvkF7P482F4+yIJYjBeZ4xur4DaYkV1/GI7J7iaTWl0c
-9keWXd0Sb5B33DUC15jCrkXh0qVx0qZ0CENPNOg91cgsy/GE0h0TwgNQSI82NK3Q
-LIr8J90ZTo3udY4NKj6vEl7v/vvGtw==
-=Zag+
+iQJPBAABCAA5FiEEgnQYxPSsWOdyMMRzNHYf+OetQ9IFAmpFFT4bFIAAAAAABAAO
+bWFudTIsMi41KzEuMTIsMiwyAAoJEDR2H/jnrUPSF9QQAIlTW2RitdXOXXdYqEfk
+gbi0hd5i1sym518x5IFnTKhoNfTK3T1sRGdCwHcYFNq/0irFoR8/1YqVrxgDNFk0
+v/iWAn5C/nRGtEEQZdjvUppCLNuoAI+QRvIt4k5IburQvSvxUPPT8ECBSAiIK4EV
+PP3JRa3iXzkJ8Q1NFnuH6RPvLmy39c83MPyX4z3U8UtZ+HfNLGEs16r7qbVe8P4I
+15WtPSbL9Swc3lSoXkg0qbEXvM1OXFNSlsMxoOb8H6k7/kX0o6lciod+22z94793
+KY7ld20AOGLoKhuYakfVHIl2tvKcv/0wZjc+hF8BvOyx9fTryaqTpHPz1dthJnZh
+6UW02DpAgFoBjlX+lp8ertDYQjLufEHLeL1rOGyGqYpFNpWd86pYTSDSuI6Gr00s
+8i1Rt758ZPOTwCZzqb/dZxnQzMDcttVr/UYxIILxTLNQvYQbAbsgkxW1/wvnokXl
+wNVcxkM/mKYpjGYcv1YC/58VOhCvZpMjNr1GqB9U61Wl72PsWAXJ0bgmOC1bC5mH
+7Z9rqCiPvUMix+u+jqc/O9ULvV3F2vOUVEA4cG0mE8ApIbqaDOvFXiI7pCZlHVq5
+5q2roctL6f0VtHKh0JKNQiac97LYACaEL3gEueC2ZH2FOU2io9/gmSWoAmec3BBz
+keH8uBR9oM7tSDmKPOpSyupZ
+=oQ4z
 -----END PGP SIGNATURE-----
 
---jcOo3Xx3B2XL56n0--
+--=-Y0mVF0q2Sx3qDWBOxLMy--
 
