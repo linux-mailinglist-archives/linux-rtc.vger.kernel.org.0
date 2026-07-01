@@ -1,64 +1,64 @@
-Return-Path: <linux-rtc+bounces-6839-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6840-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nnDzE+wqRWqK8AoAu9opvQ
-	(envelope-from <linux-rtc+bounces-6839-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 16:57:48 +0200
+	id Jey2KOspRWpZ8AoAu9opvQ
+	(envelope-from <linux-rtc+bounces-6840-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 16:53:31 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96A2F6EF0C5
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 16:57:47 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 443256EF033
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 16:53:31 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=I9pD6tKO;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6839-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6839-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=UwIgfLHA;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6840-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6840-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DDD1731CE571
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 14:49:56 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id ED0D5300DEFB
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 14:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 407F435200D;
-	Wed,  1 Jul 2026 14:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACB635E1B6;
+	Wed,  1 Jul 2026 14:50:55 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1E43546FE;
-	Wed,  1 Jul 2026 14:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9F0348C5C;
+	Wed,  1 Jul 2026 14:50:53 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782917383; cv=none; b=heSPwlUy8FNw4/NzEjiPqTnSiP5+b3I0yJM0RtyqhqrZAig/idyhSpGWCukyGqhQhWKfcq1h+JR6JS+mA7Y2aOlsZZbpaN26JjlNIJ29yH+l33m7OPeL1XlUWtAdXHBRr7IHZFxmeok8vf50Nv1VotkAH1Fu52pEyxbDUkNJtC4=
+	t=1782917455; cv=none; b=ehxBcwAw/jkbe/2kUJGR1tewxm54W0XTXERn7LULcRDNBS+PF3Q+DaBa6IUnXrqmy9pZUDcBVzy1Gxkp9sEXYJWLA7VlCjTLq3tsCjn21kVJMuZJXzA5G6IYVOe0lWdN3vQSFQ5Cfq+kI5DU3z4paoQhN64qo6BCBHH439H0JbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782917383; c=relaxed/simple;
-	bh=L0xWX7Wtx9qwHDdwcxyDAdRmlOY0qKyCfbuY5UD+zuM=;
+	s=arc-20240116; t=1782917455; c=relaxed/simple;
+	bh=MDlHhwvbadiOZHKr1JF3JUzDSAh5NSOcXZOekgyLkYY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=C5G/j7cgtgxFW+x/wE4Buoiw3dbK/r5tjw/+6V/XPZFNLXcaSM6BLuyFvApHa7wZR5RDZaZjqn+T5CClu5nfhnqz4PDeTRzQAao8kiCe0UAT7pE+ePqbLSX4nQQ6Ooep3rwZ9sKj1PUC1BMwuLuQreGT1ZNvNz+GUkJzBwt9t38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I9pD6tKO; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69FD71F000E9;
-	Wed,  1 Jul 2026 14:49:40 +0000 (UTC)
+	 Message-Id; b=MFR3hrkO8njiMpwpcKoegoFYzTRiKdWAOEQ4vz3UO6n00GxPwl5DX40zYEL1WbgDlYdmJrXsogFygqWfSq3AC2pp9/L2fCR6QHK6GfZMw96FWQrptux6YnwWzAlycPoOet1P+KhVhA2e2dH10b7vud2A6s5aGBvXmIhh5mjHxN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UwIgfLHA; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757001F000E9;
+	Wed,  1 Jul 2026 14:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782917380;
-	bh=mj6pPtJ0VEAuuFxI6oWIODyCrQlhIOR3jB/m96+kxsw=;
+	s=k20260515; t=1782917453;
+	bh=4dulwvD55+9wwlESTkQpE/4rzpGt4X57YDRb66/k8w4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=I9pD6tKOEz4wEP1wzacLCXKcCGhM1xEW8o8aSd0EQ2fAbxrE/ILX1B3SnsZgJGNCH
-	 IiUxWZKn9gTpOUcTrYaR2apB6S+1Y+1uc5xCXopTPegrtG9Yu+XwG10opDooHe6vp6
-	 +YeSwI60hS88eKoxRMU1SVl2rrscBJZhfGOTiT5K24yV1hTYboj3Js8sJO5zpNpqhE
-	 6o9pG5wg4dHNrkQGM5VLg2tYCBk2+p2U+VLQidatsOXWaF6oyNrndaC/uVrnbCa3lD
-	 mLZF4IESstatxr9XlqZh69FqZpizQDx6/o9jSda4BUXIpUbulFDFoj98spxxz5Nis9
-	 RvbRa/UpEf1sQ==
+	b=UwIgfLHAhusuK5G/5qODflNM7essgFMbNsqt+xCet5ZI+JU3YpCj2vedRW/5dJ6/z
+	 O508RWR71aRlA+xhM4LXDdI+QG3nUddolMt8rMug4nR1731yRAFV2Qpo9qDmEOEgjD
+	 3RdQzCHm/DGDpZT+Rr8kO2IVMn69CTkieeygHAbmpnRqp8pkkHXS58uEnJA18/VVea
+	 RmUODdpD0+tjdkG/rHkABbSFtLBVbt2gdrIcGmFFzKMzkaVe5VhBeGD85p+9Gbo3AL
+	 f8St9tprZWmiKLqCk1rnjqgv6TsUKMOp/6mSAUcB6p0aZkt0BkzE5jSWB0QWa17HzR
+	 vmZ2UiAhuZl7A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 06/10] rtc: rzn1: Dynamically calculate
- synchronization delay based on clock rate
+Subject: Re: [PATCH v2 08/10] rtc: rzn1: Consistently use dev_err_probe()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: linux-rtc@vger.kernel.org, conor+dt@kernel.org, "Alexandre Belloni" <alexandre.belloni@bootlin.com>, robh@kernel.org, devicetree@vger.kernel.org, wsa+renesas@sang-engineering.com
-In-Reply-To: <20260701142953.2014895-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: wsa+renesas@sang-engineering.com, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, conor+dt@kernel.org, robh@kernel.org, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>
+In-Reply-To: <20260701142953.2014895-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20260701142953.2014895-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20260701142953.2014895-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260701142953.2014895-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 01 Jul 2026 14:49:39 +0000
-Message-Id: <20260701144940.69FD71F000E9@smtp.kernel.org>
+Date: Wed, 01 Jul 2026 14:50:53 +0000
+Message-Id: <20260701145053.757001F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -71,13 +71,13 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-6839-lists,linux-rtc=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:prabhakar.csengg@gmail.com,m:linux-rtc@vger.kernel.org,m:conor+dt@kernel.org,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:devicetree@vger.kernel.org,m:wsa+renesas@sang-engineering.com,m:prabhakarcsengg@gmail.com,m:conor@kernel.org,m:wsa@sang-engineering.com,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6840-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:prabhakar.csengg@gmail.com,m:wsa+renesas@sang-engineering.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:conor+dt@kernel.org,m:robh@kernel.org,m:alexandre.belloni@bootlin.com,m:prabhakarcsengg@gmail.com,m:wsa@sang-engineering.com,m:conor@kernel.org,s:lists@lfdr.de];
 	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-rtc@vger.kernel.org];
@@ -89,94 +89,82 @@ X-Spamd-Result: default: False [-3.16 / 15.00];
 	FORWARDED(0.00)[lists@lfdr.de];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,renesas,dt];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FROM_NO_DN(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sashiko.dev:url,renesas.com:email,smtp.kernel.org:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,sashiko.dev:url,vger.kernel.org:from_smtp,renesas.com:email,smtp.kernel.org:mid,lists.linux.dev:replyto]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 96A2F6EF0C5
+X-Rspamd-Queue-Id: 443256EF033
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [Low] Incorrect time conversion macro NSEC_PER_MSEC used instead of USEC_=
-PER_SEC for microsecond calculation.
-
 Pre-existing issues:
-- [High] Race condition between PM runtime teardown and devres device unreg=
-istration can lead to accessing powered-down hardware.
+- [High] Premature pm_runtime_put() in remove callback leads to a potential=
+ bus fault or kernel panic due to devres teardown ordering.
 --
 
-commit f3a6e4b28e451318639b10e7927bf136a7d225d3
+commit 20388d9c3bb9eb8111711742d828f2997e736384
 Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-rtc: rzn1: Dynamically calculate synchronization delay based on clock rate
+rtc: rzn1: Consistently use dev_err_probe()
 
-This patch replaces hardcoded hardware synchronization delays with a
-calculated time window derived from the runtime clock rate. It stores this
-synchronization time in the driver private structure to dynamically adjust
-wait boundaries.
+This patch updates rzn1_rtc_probe() to use dev_err_probe() when the alarm
+interrupt request fails. This brings the error handling into alignment with
+the rest of the probe function.
 
 > diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> index 9969bcefede72..583d174954043 100644
+> index 244d0fc70fdad..d990075839c13 100644
 > --- a/drivers/rtc/rtc-rzn1.c
 > +++ b/drivers/rtc/rtc-rzn1.c
-[ ... ]
-> @@ -432,12 +433,20 @@ static int rzn1_rtc_probe(struct platform_device *p=
-dev)
->  			scmp_val =3D RZN1_RTC_CTL0_SLSB_SCMP;
->  	}
+> @@ -471,7 +471,7 @@ static int rzn1_rtc_probe(struct platform_device *pde=
+v)
 > =20
-> +	/*
-> +	 * The internal clock counter operates in synchronization with the
-> +	 * RTC_PCLK clock. Calculate the duration of two RTC_PCLK clock
-> +	 * cycles in microseconds required for operations to complete.
-> +	 */
-> +	rtc->sync_time =3D DIV_ROUND_UP(2 * NSEC_PER_MSEC, rate);
-
-[Severity: Low]
-This isn't a bug, but should this macro be USEC_PER_SEC instead?
-
-The comment mentions calculating the duration in microseconds. While
-NSEC_PER_MSEC evaluates to 1,000,000 which produces the correct runtime
-result for converting cycles per second into microseconds, using
-USEC_PER_SEC would more accurately reflect the intended units and improve
-readability.
+>  	ret =3D devm_request_irq(dev, irq, rzn1_rtc_alarm_irq, 0, "RZN1 RTC Ala=
+rm", rtc);
+>  	if (ret) {
+> -		dev_err(dev, "RTC alarm interrupt not available\n");
+> +		dev_err_probe(dev, ret, "RTC alarm interrupt not available\n");
+>  		goto dis_runtime_pm;
+>  	}
 
 [Severity: High]
-This is a pre-existing issue, but is there a race condition between the
-PM runtime teardown and devres cleanup?
+This isn't a bug introduced by this patch, but since we are looking at driv=
+er
+error handling and teardown paths, is there a potential use-after-suspend
+issue during device removal?
 
-In drivers/rtc/rtc-rzn1.c, the RTC device is registered via devres
-during rzn1_rtc_probe():
+Since the RTC is registered using devm_rtc_register_device() in
+rzn1_rtc_probe(), it remains registered and accessible to user space until
+the devres teardown runs, which happens after rzn1_rtc_remove() returns.
 
-    ret =3D devm_rtc_register_device(rtc->rtcdev);
+However, rzn1_rtc_remove() manually drops the runtime PM reference:
 
-Devres runs its cleanup (which calls rtc_unregister_device()) strictly
-after the driver's remove callback returns. However, in rzn1_rtc_remove(),
-the driver manually drops the PM runtime reference:
+drivers/rtc/rtc-rzn1.c:rzn1_rtc_remove() {
+	...
+	/* Disable all interrupts */
+	writel(0, rtc->base + RZN1_RTC_CTL1);
 
-    pm_runtime_put(&pdev->dev);
+	pm_runtime_put(&pdev->dev);
+}
 
-This powers down the hardware while the RTC character device is still
-registered and exposed to userspace. If a userspace process calls an ioctl,
-such as RTC_RD_TIME, during this window, the driver's rzn1_rtc_read_time()
-callback executes and attempts to access unclocked registers, which could
-lead to a synchronous external abort or bus fault.
+If a user-space process accesses the RTC device (like reading the time via
+ioctl) precisely during driver unbinding after pm_runtime_put() is called,
+would this access hardware registers while the clock is gated and trigger
+a kernel panic?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260701142953.2014=
-895-1-prabhakar.mahadev-lad.rj@bp.renesas.com?part=3D6
+895-1-prabhakar.mahadev-lad.rj@bp.renesas.com?part=3D8
 
