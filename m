@@ -1,57 +1,53 @@
-Return-Path: <linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 2+DHE8gSRWr26QoAu9opvQ
-	(envelope-from <linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:14:48 +0200
+	id w35QJXEZRWrn6woAu9opvQ
+	(envelope-from <linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:43:13 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4A4A6EDEDC
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:14:47 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2DDF6EE42F
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:43:12 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=bootlin.com header.s=dkim header.b=IFVbIJn4;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=bootlin.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=i8SCwyQh;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6819-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D15463167E22
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 12:58:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8EE5531F50CE
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 13:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BFB4963A8;
-	Wed,  1 Jul 2026 12:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2C148AE32;
+	Wed,  1 Jul 2026 13:01:59 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CB4481A9A;
-	Wed,  1 Jul 2026 12:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0CC48AE20;
+	Wed,  1 Jul 2026 13:01:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782910528; cv=none; b=j/iFcDJqa1z/D5wCo8CH9SwhpH8HpXcjQWYA/9Jqvc1PWs36g8cc3IUM4ycRV121kIECy2MW3yRLxuWnGdXOtYcCD0/ixyGarnC8eQWUHloF/RF2hQKqLlOMk+6JFRi+oa0ppB9qknd0FyNVw8GHQvsmVPLsa9LHu4uf9dkoS6k=
+	t=1782910919; cv=none; b=DYl+XolukXmSYM8wc8+w+8yukdhimrfmM1SuX59wZut5lwRZ0tU12PnAGlYV6LJCki3N5O7tv0d3t0Dk707nTWp+5TFz9PB6xtw0NY0lRSZ6pX72LyDvuuxJMytpapUDVC4HBjZPzXOX95CGL0XXn3v83/p6Zx+1WPgthbslI0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782910528; c=relaxed/simple;
-	bh=srBFXGO98uQWDvyIh+xYsIJkj/+Hax1EgreZTyqJMQI=;
+	s=arc-20240116; t=1782910919; c=relaxed/simple;
+	bh=jnxZnh5V2zsErqh9R6TXWkelWIbod9lmGFF4LYtgJDc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3GePVMeMZNxIOrD5JaVxlDduEjepfv1LIlZ3tmedEu8Q+YoPFuGNtvHKxMeJgHVqnTWvJ1OcxbLCPAyKIuxpvUrzAHotV37ZFiRlnxXGgawyjL0TkeR7XGsdcZHsAKeZemWFz1CsOGpANhNIXgTMAhhI/ImBA2A6j/dBD30MKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IFVbIJn4; arc=none smtp.client-ip=185.246.84.56
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id AE4A41A0DB3;
-	Wed,  1 Jul 2026 12:55:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7E85960288;
-	Wed,  1 Jul 2026 12:55:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 77650104C95FB;
-	Wed,  1 Jul 2026 14:55:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782910523; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=FjLiQzO1cIpZ7Od9KYcaF/iY79A+Cq0/W7IciQmSFaU=;
-	b=IFVbIJn4X3EtjE9D3aub7A1QcOOoPWSmn00E1sI/TAsiXDZoQYlUFXVwioqQwwjnFOp9Fk
-	O/vVZo2MdriGgfn0iUeqqAIQdAd64dVe6L9lLGEzvqicPTl2QaGhnKVmv7MS2pDcCTWVki
-	tzrGv7Cf6fJc2hZQJLul334cdooc050ArIixY2LTQMgGRc7+ska8/iBW/zYZWTUTxjY2mF
-	bdnoz13SU5nrSNN+89ALANnI8NMG0TPlaZSi93W4aRumRG+hKR0Rzw9KTbJTz6UzQlUcnL
-	80EnJ8WpUI7ENwSPcUEDxmxGxThOrEa+MZ+rLyYnBxEx8PhPnU+Of3qGVoIYKw==
-Date: Wed, 1 Jul 2026 14:55:19 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OsEBDKJX8tNSynfVAVgGjP6WYgNPCvdMpr8ZpFo6/62PrHgM3sALgw3UBesgu4ojkw06SP9+ywT/wfHyPnN4Yau9vVRNgruuDas+an2nqiXH+N4RFhYiZMHMz5Zz+ld8alCYmcowi0DUgpmENmc4BR7I2Ck2E2SEO1ma/lnGDok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i8SCwyQh; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9F11F000E9;
+	Wed,  1 Jul 2026 13:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782910918;
+	bh=xSQsmx4MwF6oqeO3x1f6iZ8pIkIJYGGq6vkgVXhfEIs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=i8SCwyQhVICEaZZJ/Lp98o2+s119rdkjdwIfsz+v3x7mfvCZzQVIGsEvAj9X0l1Dk
+	 FBJejEC86nG5uBNPNuhJ3QvmBxBNGDb5NIVcuY3Yw7vx1VKXdNYUtjebwoBNUk77Ft
+	 vTpL3/bY4JTA0KDlgDLDP3nCRUJ//eXv1Itxtkba0Vpl/03h8JOmPssHq0TikKln7J
+	 Z4hC3HS8vVR19GIJW7+0bovNE8h7r5AmKj5DlMhiSs8xGpa7DhzzSKob0vj6wG/xKv
+	 a6VK22t7YXHmSK3EB0qdMtswtECqe7XABbPBwSX+m5U2RhIC8XQQxQ+n0fFNoNzKLq
+	 DytaDNZ3kcFQg==
+Date: Wed, 1 Jul 2026 14:01:52 +0100
+From: Mark Brown <broonie@kernel.org>
 To: Matti Vaittinen <mazziesaccount@gmail.com>
 Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	Matti Vaittinen <matti.vaittinen@linux.dev>,
@@ -59,120 +55,121 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
 	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 4/8] rtc: bd70528: Support RTC on ROHM BD73800
-Message-ID: <20260701125519b00c5f03@mail.local>
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 5/8] regulator: bd71828: Support ROHM BD73800
+Message-ID: <bf744d4f-eabe-48e7-92e4-b147b8d79d91@sirena.org.uk>
 References: <cover.1782909323.git.mazziesaccount@gmail.com>
- <d9f5b1c6b165699627c7cf127a7ec64d28e15cca.1782909323.git.mazziesaccount@gmail.com>
+ <1d00359236272fd1fab0dfbcb9119d2f91aa0d23.1782909323.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jcOo3Xx3B2XL56n0"
 Content-Disposition: inline
-In-Reply-To: <d9f5b1c6b165699627c7cf127a7ec64d28e15cca.1782909323.git.mazziesaccount@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <1d00359236272fd1fab0dfbcb9119d2f91aa0d23.1782909323.git.mazziesaccount@gmail.com>
+X-Cookie: Do unto others before they undo you.
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-5.76 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_RECIPIENTS(0.00)[m:mazziesaccount@gmail.com,m:matti.vaittinen@fi.rohmeurope.com,m:matti.vaittinen@linux.dev,m:lee@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:lgirdwood@gmail.com,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:linusw@kernel.org,m:brgl@kernel.org,m:alexandre.belloni@bootlin.com,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6818-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FORGED_RECIPIENTS(0.00)[m:mazziesaccount@gmail.com,m:matti.vaittinen@fi.rohmeurope.com,m:matti.vaittinen@linux.dev,m:lee@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:linusw@kernel.org,m:brgl@kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_CC(0.00)[fi.rohmeurope.com,linux.dev,kernel.org,gmail.com,baylibre.com,redhat.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6819-lists,linux-rtc=lfdr.de];
+	FORGED_SENDER(0.00)[broonie@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-rtc@vger.kernel.org];
+	FREEMAIL_CC(0.00)[fi.rohmeurope.com,linux.dev,kernel.org,gmail.com,baylibre.com,redhat.com,bootlin.com,vger.kernel.org];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:email,bootlin.com:url,bootlin.com:from_mime,vger.kernel.org:from_smtp,mail.local:mid]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sirena.org.uk:mid,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: B4A4A6EDEDC
+X-Rspamd-Queue-Id: E2DDF6EE42F
 
-On 01/07/2026 15:42:20+0300, Matti Vaittinen wrote:
+
+--jcOo3Xx3B2XL56n0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Jul 01, 2026 at 03:42:35PM +0300, Matti Vaittinen wrote:
 > From: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-> BD73800 contains similar RTC block as BD71828 and BD71815. Only the address
-> offsets seem different. Support also BD73800 RTC using the rtc-bd70528.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-> ---
->  drivers/rtc/rtc-bd70528.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
-> index 482810b61495..fd415e327ea6 100644
-> --- a/drivers/rtc/rtc-bd70528.c
-> +++ b/drivers/rtc/rtc-bd70528.c
-> @@ -8,6 +8,7 @@
->  #include <linux/mfd/rohm-bd71815.h>
->  #include <linux/mfd/rohm-bd71828.h>
->  #include <linux/mfd/rohm-bd72720.h>
-> +#include <linux/mfd/rohm-bd73800.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> @@ -284,6 +285,12 @@ static int bd70528_probe(struct platform_device *pdev)
->  		bd_rtc->bd718xx_alm_block_start = BD72720_REG_RTC_ALM_START;
->  		hour_reg = BD72720_REG_RTC_HOUR;
->  		break;
-> +	case ROHM_CHIP_TYPE_BD73800:
-> +		bd_rtc->reg_time_start = BD73800_REG_RTC_START;
-> +		bd_rtc->bd718xx_alm_block_start = BD73800_REG_RTC_ALM_START;
-> +		hour_reg = BD73800_REG_RTC_HOUR;
-> +		break;
-> +
->  	default:
->  		dev_err(&pdev->dev, "Unknown chip\n");
->  		return -ENOENT;
-> @@ -344,6 +351,7 @@ static const struct platform_device_id bd718x7_rtc_id[] = {
->  	{ .name = "bd71828-rtc", .driver_data = ROHM_CHIP_TYPE_BD71828 },
->  	{ .name = "bd71815-rtc", .driver_data = ROHM_CHIP_TYPE_BD71815 },
->  	{ .name = "bd72720-rtc", .driver_data = ROHM_CHIP_TYPE_BD72720 },
-> +	{ .name = "bd73800-rtc", .driver_data = ROHM_CHIP_TYPE_BD73800 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(platform, bd718x7_rtc_id);
-> -- 
-> 2.54.0
-> 
+> +	nproot = of_get_child_by_name(nproot, "regulators");
+> +	if (!nproot) {
+> +		dev_err(dev, "failed to find regulators node\n");
+> +		return -ENODEV;
+> +	}
+> +	for_each_child_of_node(nproot, np) {
+> +		if (of_node_name_eq(np, LDO1_NODE_NAME))
+> +			ldo1_use_high_range = of_property_read_bool(np,
+> +							"rohm,ldo-range-high");
+> +		if (of_node_name_eq(np, LDO3_NODE_NAME))
+> +			ldo3_use_high_range = of_property_read_bool(np,
+> +							"rohm,ldo-range-high");
+> +	}
 
+Why do we iterate over all nodes rather than doing additional
+of_get_child_by_name()s?
 
+> +	if (ldo1_use_high_range) {
+> +		d[BD73800_LDO1].desc.linear_ranges = bd73800_ldo13_high_volts;
+> +		d[BD73800_LDO1].desc.n_linear_ranges =
+> +					ARRAY_SIZE(bd73800_ldo13_high_volts);
+> +	}
+> +	if (ldo3_use_high_range) {
+> +		d[BD73800_LDO3].desc.linear_ranges = bd73800_ldo13_high_volts;
+> +		d[BD73800_LDO3].desc.n_linear_ranges =
+> +					ARRAY_SIZE(bd73800_ldo13_high_volts);
+> +	}
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You could just do these updates without the intermediate variables.
+
+--jcOo3Xx3B2XL56n0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpFD78ACgkQJNaLcl1U
+h9CBDAf/dk5xA9JPiqbs7lGosK1R3IusuArR8QLpFeRkO7UbIwwMHxsEiTpllWzW
+gEIuuygVMXAiQ/2K7lt3KwQnEguJnlm3419HhOX7Iuvr5QbXq4Elyf044UvaveHM
+OCU8sANA3BvR+7CfSHWhymoA+e71GnjArm6MiTsh9zU+qNEIgCmMlSBqg9KoI7qn
+uJEjHHrLwfWgOdM2jdSLRvkF7P482F4+yIJYjBeZ4xur4DaYkV1/GI7J7iaTWl0c
+9keWXd0Sb5B33DUC15jCrkXh0qVx0qZ0CENPNOg91cgsy/GE0h0TwgNQSI82NK3Q
+LIr8J90ZTo3udY4NKj6vEl7v/vvGtw==
+=Zag+
+-----END PGP SIGNATURE-----
+
+--jcOo3Xx3B2XL56n0--
 
