@@ -1,272 +1,283 @@
-Return-Path: <linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6821-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 53fAIvcWRWor6woAu9opvQ
-	(envelope-from <linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:32:39 +0200
+	id sp3jEeYlRWpJ7woAu9opvQ
+	(envelope-from <linux-rtc+bounces-6821-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 16:36:22 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 342486EE24D
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:32:39 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99B036EED34
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 16:36:21 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=posteo.de header.s=2017 header.b=KOnh0Hog;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6820-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=posteo.de;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=nikOKHcq;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6821-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6821-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 337E43026AF7
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 13:26:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6CB553151AC0
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 14:30:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6148A48AE3C;
-	Wed,  1 Jul 2026 13:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9B23438B3;
+	Wed,  1 Jul 2026 14:30:08 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFC948AE34
-	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 13:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A13313E38
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 14:30:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782912353; cv=none; b=maHZhln20NKo/FfQhUMW9Q2VgsZWP+4H/ZfyrXPDPKcQYtE2baYgoxbWTWm387NgPxTJQoFw+iqEOWtdhANRTkXWUbKSne5BDxHuKm7Q20hYNRabqZ8XSjrNULp0qt4DT+clKUokPvlceTIkJyzGweLoL93ONqHmYWRCuGeUKUg=
+	t=1782916208; cv=none; b=iM9LSk8w9OxEp84+5MCu32nbo9s95C9lt5G48UjRkQk44k1434OxQlQo5OcYvHa+7EQxniE9RWRwP+Cn2hVjKsAWEZv9E7kiq5nZ3dHaShOLnoBrSa+3p4pNM+Z4Zjjk44LrrGjTDxUtBvoFiYaC8DtVWXpXpTyfaQGNQwzVffQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782912353; c=relaxed/simple;
-	bh=dl02RFf8AY28wqYtWzRYHJ20QelKfp7SUPcU3Oa8w40=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WzJQlRNvupU3cp1hyO/KjEK60iCU1uapVZH2DojUxezPvR3kFhiIiL8vCKTQX1ARG2phlXOXnHcgFFCPXJgEv/qGLg68ONmZZGizrGG055L2vOApEV4NeYZ4I4vaDU3MhRCsltDPGz6ZHp1vPvFKKWvj0nYQ2HTsqoayAL406Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=KOnh0Hog; arc=none smtp.client-ip=185.67.36.66
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 7802E240101
-	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 15:25:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1782912342; bh=VxEq/S494Z5PbRo663SR5Dd2jfwNSj1QIO3Pt6Fy5pw=;
-	h=Message-ID:Subject:From:To:Cc:Date:Autocrypt:Content-Type:
-	 MIME-Version:OpenPGP:From;
-	b=KOnh0HogLDcANJ6lTCZfT7PJNzL/xDxBIIxhHtWtTpjlVTRL3BSQa8/mR9dh56ScP
-	 Vzxz+O2fbLCXciVvbu10ICs0WCehoslUc5TXR/B9if4cK7NuW/N3gzSdqDwaKfYzKY
-	 pAhvTmKkJxERZIXiBmuvkMXu77YYauqziGDnZhBj1rsM8PZywe9lz21y1mJwml7BEf
-	 ptG0V1t/EWlQ17LPHAqnKBQXXzCVq9r1eXoGn9mN3fq+vPK5XJjpP0axyecez+1q2V
-	 ZnJjyXOtL+PyiggtHilWeUdTz5vMrYurXZA3EnxxNGWv0oZHZeoRBdGqusMaBMC4b+
-	 aTvuZWSZUDWBg==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4gr13m2Pn5z6ty8;
-	Wed,  1 Jul 2026 15:25:40 +0200 (CEST)
-Message-ID: <45e8157be53c3d8827fcccece7f706968bc056d3.camel@posteo.de>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: Add sii,wakealarm-output-pin
- property for S35390A
-From: Markus Probst <markus.probst@posteo.de>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring
-	 <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	 <conor+dt@kernel.org>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
-	 <uwe@kleine-koenig.org>, Andrew Lunn <andrew@lunn.ch>, Gregory Clement
-	 <gregory.clement@bootlin.com>, Sebastian Hesselbarth
-	 <sebastian.hesselbarth@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Wed, 01 Jul 2026 13:25:41 +0000
-In-Reply-To: <20260701-bronze-jaguar-of-perfection-028bac@quoll>
-References: <20260630-rtc_s35390a_int1-v1-0-1b2239e16be2@posteo.de>
-	 <20260630-rtc_s35390a_int1-v1-1-1b2239e16be2@posteo.de>
-	 <20260701-bronze-jaguar-of-perfection-028bac@quoll>
-Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
- keydata=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
- jfGillcaQOqFZ3WwVqyzG1BUfTow==
-Content-Type: multipart/signed; micalg="pgp-sha256";
-	protocol="application/pgp-signature"; boundary="=-Y0mVF0q2Sx3qDWBOxLMy"
+	s=arc-20240116; t=1782916208; c=relaxed/simple;
+	bh=8tMf9of1hA9B09zTsEqb9QfyRZFVq2ZhtoD+Z207EwM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E2uX2WiSBauAkBO4P3QkdPRG3pmK3RAQ9zmmqkLm+SMltCzsqG5eSrCVTBgroGfwVoafpbcBc1syOd1kZcBIqDhow0ob6+ihIO6yn0xlNljZxcZ4MfYwlaVHcCVogh2KNintLWi690QyQpOGh2iaNdv0GyciepcwQZ0AdOdYn7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nikOKHcq; arc=none smtp.client-ip=209.85.221.49
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-4703bc0a99aso408317f8f.3
+        for <linux-rtc@vger.kernel.org>; Wed, 01 Jul 2026 07:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782916205; x=1783521005; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g8MY1uOb0e6tl5YdQ6QswXclbgEru5/Lk+DRQtl6luA=;
+        b=nikOKHcqFY9WpyU3/JhTBhw/63nMuThfAGlYGdfGakZR8c/hcaMZW0RYx/1q6w5Kth
+         Fa8Pgb67y+MOc8f6H9dQP3Mf4J/foUjZks/pI+HUlbhQzB9Emt5TvnilDONNXndvKM1u
+         1iPBVK8qDhp81esPQznNbIhN4dKYaSeKxJ+2ud7z0PjcGXjiUs6SZKYgrcaCf1+d3zfF
+         UvnVW+7dLeFmTnFb+tRxJLRIU0uWi3MtIfnlrZ61mIiSL1BOwXfMUnRe8GVneCJuyott
+         oldOg5M5VKLYbjIfYILK7amS7qJR46mFzWXJFUXOgnvu7UBh4Wyl1L/mm4tqW9IJXB6R
+         x70A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782916205; x=1783521005;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g8MY1uOb0e6tl5YdQ6QswXclbgEru5/Lk+DRQtl6luA=;
+        b=nG03nstKeF/ycSnE51gls5ovLE4mm9bD5Ih8Y78Wq5J0/LQQnz+8R+ZagsOOcNDThC
+         RWjsVJ6EvV7z4/75Bn+3iks48xCk1l6IBSIk6vLsDE4MOQW5sdUFfh8Ln9hAMxyEjqV4
+         jc8nlQ/AKycP94lX60Ie+gkOkWri0s3DLumnf3ZVauLKMdVGAU4UeMOzODg80lA6TWNW
+         rHTLPfw9bm84KC8XxPaqaA1TgyTmkhJieH575d8U6UMS9veDrU0wNRpbfOH2aC1gMCvE
+         Uk2WSg5Eh8az3l8+oKhPvNUu5SHsfFy1pY1HfQKO5G12PlaBRjHSj8k8WUknt+fTSiw8
+         r5dA==
+X-Gm-Message-State: AOJu0YxTEqd8OWRUuUrJU+E8Q3bdzcfikv3RhD4G71OYQ3Fn2NQszVMz
+	f7ewgYDM+vIi51n3tbuD9auRVw2nKZggi/58ClOI+gLXEXmUT9Pb9e4Ye3HjC4GY
+X-Gm-Gg: AfdE7ckkKiH/Z5BuFAGjNe+dd0qruEjO8tcccoi9pZe6kVgg0vIkCJR1yW4qHwNULgV
+	YbmxCmPfMp21AgFJAeOvMTWaUdEFz441eGbKixfCkKUS3dX9noc2DVoOpUA5ntCZkzGd+toEEu2
+	xv/DMrD/V48l+XC68t5CKRmBDQkTTRFDnvmsHyZvWyvMEh2y2ZwhXOM/AhJ64Cky0qAqk+zQoFw
+	/fl4vaPh+RjRzL1Q/uhpV9JGIlCG0Fvf01wZFjT2yIeOoW+XykCWbHtgAQ6WMXqfDWmd+Bss9KO
+	hRuz/hPr+CfwKSNe3x/CYCsY65leLGGCDam6ECDZXZaXGC99FK/qtw31Y6RqUwDT8bxnU+DG7iN
+	KgtIpDdtYHdyq04itNY9W0FI3D+4Iptled6cvx6lWypAYqWK3X01uQflaLkAWr70PHM5fSC0/PX
+	ZAIYxo3j6rXnm75+DMl5lVrnaN2fzXzfk8rpwZynbMN+kPPrkfSuxki2w/jI6suaDqhJi9UWJIw
+	HIyXNtv8R3+iIlJKYreGz1c6uz9oR7c6QaAxg==
+X-Received: by 2002:a05:6000:460d:b0:461:a161:8102 with SMTP id ffacd0b85a97d-47759098042mr2799561f8f.28.1782916204804;
+        Wed, 01 Jul 2026 07:30:04 -0700 (PDT)
+Received: from iku.Home ([2a06:5906:61b:2d00:5353:5ce3:a6a2:3b98])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-477dd94c829sm184902f8f.24.2026.07.01.07.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 07:30:04 -0700 (PDT)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar <prabhakar.csengg+renesas@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 00/10] Add RTC support for Renesas RZ/T2H and RZ/N2H SoCs
+Date: Wed,  1 Jul 2026 15:29:43 +0100
+Message-ID: <20260701142953.2014895-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[posteo.de,none];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[posteo.de:s=2017];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,kleine-koenig.org,lunn.ch,gmail.com,lists.infradead.org,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-6820-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[markus.probst@posteo.de,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FORGED_RECIPIENTS(0.00)[m:krzk@kernel.org,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:uwe@kleine-koenig.org,m:andrew@lunn.ch,m:gregory.clement@bootlin.com,m:sebastian.hesselbarth@gmail.com,m:linux-arm-kernel@lists.infradead.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:conor@kernel.org,m:sebastianhesselbarth@gmail.com,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6821-lists,linux-rtc=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:wsa+renesas@sang-engineering.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:prabhakar.csengg+renesas@gmail.com,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,m:wsa@sang-engineering.com,m:prabhakarcsengg@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,glider.be,gmail.com,sang-engineering.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,bp.renesas.com,renesas.com];
 	FORWARDED(0.00)[lists@lfdr.de];
-	DKIM_TRACE(0.00)[posteo.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[markus.probst@posteo.de,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:email,vger.kernel.org:from_smtp,posteo.de:dkim,posteo.de:email,posteo.de:mid,posteo.de:from_mime]
+	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,renesas.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 342486EE24D
+X-Rspamd-Queue-Id: 99B036EED34
 
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
---=-Y0mVF0q2Sx3qDWBOxLMy
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi all,
 
-On Wed, 2026-07-01 at 09:35 +0200, Krzysztof Kozlowski wrote:
-> On Tue, Jun 30, 2026 at 07:22:21PM +0000, Markus Probst wrote:
-> > Synology NAS devices use the output pin for interrupt signal 1 to wake =
-up
-> > the system.
-> >=20
-> > Move devicetree bindings for sii,s35390a into its own file.
-> > Add sii,wakealarm-output-pin property to enable the use of the output
-> > pin for interrupt signal 1 for the wake alarm, which makes it possible =
-to
-> > set an wake alarm on Synology NAS devices.
-> >=20
-> > Signed-off-by: Markus Probst <markus.probst@posteo.de>
-> > ---
-> >  .../devicetree/bindings/rtc/sii,s35390a.yaml       | 54 ++++++++++++++=
-++++++++
-> >  .../devicetree/bindings/rtc/trivial-rtc.yaml       |  3 --
-> >  MAINTAINERS                                        |  1 +
-> >  include/dt-bindings/rtc/s35390a.h                  |  9 ++++
-> >  4 files changed, 64 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml b/D=
-ocumentation/devicetree/bindings/rtc/sii,s35390a.yaml
-> > new file mode 100644
-> > index 000000000000..31a578673870
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/sii,s35390a.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/sii,s35390a.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: S-35390A 2-WIRE REAL-TIME CLOCK
-> > +
-> > +maintainers:
-> > +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
->=20
-> This should be someone caring about this hardware.
-He does have the majority of commits on this driver (excluding merge
-commits and commits not exclusive to this driver), although most of
-them are pretty tiny.
+This series adds support for the RTC IP found on the Renesas RZ/T2H and
+RZ/N2H SoCs.
 
-Who would you suggest instead?
->=20
-> > +
-> > +description:
-> > +  The S-35390A is a CMOS 2-wire real-time clock IC which operates with=
- the
-> > +  very low current consumption in the wide range of operation voltage.
-> > +
-> > +allOf:
-> > +  - $ref: rtc.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: sii,s35390a
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  sii,wakealarm-output-pin:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [1, 2]
-> > +    description: |
-> > +      The output pin to wake up the system.
-> > +      Default will use the output pin for interrupt signal 2.
-> > +        <S35390A_OUTPUT_PIN_INT1> : Output pin for interrupt signal 1
-> > +        <S35390A_OUTPUT_PIN_INT2> : Output pin for interrupt signal 2
->=20
-> Does that mean device generates the interrupts?
-Yes.
+The RTC block is closely related to the RZ/N1 implementation and can
+reuse the existing driver infrastructure when operating in SCMP mode,
+which is required on these SoCs due to their 195.3 kHz RTC input clock.
 
-Thanks
-- Markus Probst
+While the RZ/T2H and RZ/N2H variants do not implement the RTCA0SUBU
+register present on RZ/N1, this register is not accessed by the driver
+in SCMP mode, allowing support to be added with minimal changes.
 
->=20
-> Best regards,
-> Krzysztof
+The RZ/T2H RTC variant also supports a 1 Hz output signal on the
+RTCAT1HZ pin, controlled by the RTCA0CTL1[RTCA01HZE] bit. This bit is
+marked as reserved in the RZ/N1 hardware manual, making RZ/T2H a
+distinct RTC variant despite its overall compatibility with the RZ/N1
+implementation.
 
---=-Y0mVF0q2Sx3qDWBOxLMy
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+Patches have been rebased on top of next-20260630.
 
------BEGIN PGP SIGNATURE-----
+Test Logs:
+----------
+#rtctest
+root@rzn2h-evk:~# rtctest
+TAP version 13
+1..8
+# Starting 8 tests from 1 test cases.
+#  RUN           rtc.date_read ...
+# rtctest.c:59:date_read:Current RTC date/time is 01/01/2000 00:03:09.
+#            OK  rtc.date_read
+ok 1 rtc.date_read
+#  RUN           rtc.date_read_loop ...
+# rtctest.c:124:date_read_loop:Continuously reading RTC time for 30s (with 11ms
+# rtctest.c:151:date_read_loop:Performed 2790 RTC time reads.
+#            OK  rtc.date_read_loop
+ok 2 rtc.date_read_loop
+#  RUN           rtc.uie_read ...
+#            OK  rtc.uie_read
+ok 3 rtc.uie_read
+#  RUN           rtc.uie_select ...
+#            OK  rtc.uie_select
+ok 4 rtc.uie_select
+#  RUN           rtc.alarm_alm_set ...
+# rtctest.c:262:alarm_alm_set:Alarm time now set to 00:03:49.
+# rtctest.c:282:alarm_alm_set:data: 1a0
+#            OK  rtc.alarm_alm_set
+ok 5 rtc.alarm_alm_set
+#  RUN           rtc.alarm_wkalm_set ...
+# rtctest.c:334:alarm_wkalm_set:Alarm time now set to 01/01/2000 00:03:52.
+#            OK  rtc.alarm_wkalm_set
+ok 6 rtc.alarm_wkalm_set
+#  RUN           rtc.alarm_alm_set_minute ...
+# rtctest.c:394:alarm_alm_set_minute:Alarm time now set to 00:04:00.
+# rtctest.c:414:alarm_alm_set_minute:data: 1a0
+#            OK  rtc.alarm_alm_set_minute
+ok 7 rtc.alarm_alm_set_minute
+#  RUN           rtc.alarm_wkalm_set_minute ...
+# rtctest.c:464:alarm_wkalm_set_minute:Alarm time now set to 01/01/2000 00:05:00
+#            OK  rtc.alarm_wkalm_set_minute
+ok 8 rtc.alarm_wkalm_set_minute
+# PASSED: 8 / 8 tests passed.
+# Totals: pass:8 fail:0 xfail:0 xpass:0 skip:0 error:0
+root@rzn2h-evk:~#
+root@rzn2h-evk:~#
 
-iQJPBAABCAA5FiEEgnQYxPSsWOdyMMRzNHYf+OetQ9IFAmpFFT4bFIAAAAAABAAO
-bWFudTIsMi41KzEuMTIsMiwyAAoJEDR2H/jnrUPSF9QQAIlTW2RitdXOXXdYqEfk
-gbi0hd5i1sym518x5IFnTKhoNfTK3T1sRGdCwHcYFNq/0irFoR8/1YqVrxgDNFk0
-v/iWAn5C/nRGtEEQZdjvUppCLNuoAI+QRvIt4k5IburQvSvxUPPT8ECBSAiIK4EV
-PP3JRa3iXzkJ8Q1NFnuH6RPvLmy39c83MPyX4z3U8UtZ+HfNLGEs16r7qbVe8P4I
-15WtPSbL9Swc3lSoXkg0qbEXvM1OXFNSlsMxoOb8H6k7/kX0o6lciod+22z94793
-KY7ld20AOGLoKhuYakfVHIl2tvKcv/0wZjc+hF8BvOyx9fTryaqTpHPz1dthJnZh
-6UW02DpAgFoBjlX+lp8ertDYQjLufEHLeL1rOGyGqYpFNpWd86pYTSDSuI6Gr00s
-8i1Rt758ZPOTwCZzqb/dZxnQzMDcttVr/UYxIILxTLNQvYQbAbsgkxW1/wvnokXl
-wNVcxkM/mKYpjGYcv1YC/58VOhCvZpMjNr1GqB9U61Wl72PsWAXJ0bgmOC1bC5mH
-7Z9rqCiPvUMix+u+jqc/O9ULvV3F2vOUVEA4cG0mE8ApIbqaDOvFXiI7pCZlHVq5
-5q2roctL6f0VtHKh0JKNQiac97LYACaEL3gEueC2ZH2FOU2io9/gmSWoAmec3BBz
-keH8uBR9oM7tSDmKPOpSyupZ
-=oQ4z
------END PGP SIGNATURE-----
+#Alarm for next day
+root@rzn2h-evk:~# date -s "2026-07-01 12:45:00"; hwclock -w;
+Wed Jul  1 12:45:00 UTC 2026
+root@rzn2h-evk:~# rtcwake -m no -s 86400;cat /proc/driver/rtc
+rtcwake: wakeup using /dev/rtc0 at Thu Jul  2 12:45:35 2026
+rtc_time        : 12:45:34
+rtc_date        : 2026-07-01
+alrm_time       : 12:45:35
+alrm_date       : 2026-07-02
+alarm_IRQ       : yes
+alrm_pending    : no
+update IRQ enabled      : no
+periodic IRQ enabled    : no
+periodic IRQ frequency  : 1
+max user IRQ frequency  : 64
+24hr            : yes
+root@rzn2h-evk:~#
 
---=-Y0mVF0q2Sx3qDWBOxLMy--
+#Alarm for next week
+root@rzn2h-evk:~# rtcwake -m no -s 604799;cat /proc/driver/rtc
+rtcwake: wakeup using /dev/rtc0 at Wed Jul  8 12:47:38 2026
+rtc_time        : 12:47:38
+rtc_date        : 2026-07-01
+alrm_time       : 12:47:38
+alrm_date       : 2026-07-08
+alarm_IRQ       : yes
+alrm_pending    : no
+update IRQ enabled      : no
+periodic IRQ enabled    : no
+periodic IRQ frequency  : 1
+max user IRQ frequency  : 64
+24hr            : yes
+root@rzn2h-evk:~#
+
+v1->v2:
+- Dropped wakeup capability support patch.
+- Dropped header sort patch as it was already fixed upstream.
+- Updated commit message to drop reference about RTCA0TCR register.
+- Added Acked-by and Reviewed-by tags.
+- Updated Kconfig help text to keep it generic and not specific to
+  RZ/N1 SoCs.
+- Initialized rate variable to 32768 to avoid timeout_us of 0.
+- Made use of RZN1_RTC_SUBU_RTCA0FX mask for SUBU register access
+  instead of 0x3F.
+
+v1: https://lore.kernel.org/all/20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (10):
+  dt-bindings: rtc: renesas,rzn1-rtc: Add RZ/T2H and RZ/N2H support
+  rtc: rzn1: Handle EPROBE_DEFER for optional pps interrupt
+  rtc: rzn1: Fix malformed MODULE_AUTHOR string
+  rtc: Kconfig: Broaden RTC_DRV_RZN1 dependency to ARCH_RENESAS
+  rtc: rzn1: Fix alarm range check truncation on 32-bit systems
+  rtc: rzn1: Dynamically calculate synchronization delay based on clock
+    rate
+  rtc: rzn1: Use temporary variable for struct device
+  rtc: rzn1: Consistently use dev_err_probe()
+  rtc: rzn1: use FIELD_PREP/FIELD_GET and GENMASK for register access
+  rtc: rzn1: Add support for Renesas RZ/T2H and RZ/N2H SoCs
+
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        |  35 ++++--
+ drivers/rtc/Kconfig                           |   5 +-
+ drivers/rtc/rtc-rzn1.c                        | 104 +++++++++++-------
+ 3 files changed, 94 insertions(+), 50 deletions(-)
+
+-- 
+2.54.0
+
 
