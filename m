@@ -1,194 +1,177 @@
-Return-Path: <linux-rtc+bounces-6806-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6807-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id xxn/CMDXRGq41woAu9opvQ
-	(envelope-from <linux-rtc+bounces-6806-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 11:02:56 +0200
+	id 7b8ZAqvzRGqq3woAu9opvQ
+	(envelope-from <linux-rtc+bounces-6807-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 13:02:03 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF6966EB6B1
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 11:02:50 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E89396EC7E9
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 13:01:57 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=bootlin.com header.s=dkim header.b=LsJ3D6wO;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6806-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6806-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=reject) header.from=bootlin.com;
+	dkim=pass header.d=sang-engineering.com header.s=k1 header.b=UWxG8p5s;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6807-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6807-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C4F9B300A75E
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 08:57:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 491893009F87
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 11:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62AF93EFFA8;
-	Wed,  1 Jul 2026 08:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4C5C42DFEA;
+	Wed,  1 Jul 2026 11:01:03 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1963EF0A4;
-	Wed,  1 Jul 2026 08:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6F442B72C
+	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 11:00:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782896267; cv=none; b=tcYoChCyOMRSUUiXO7+SJiXMp7GgBMz4dftcTuNuOW3CKDDhGG1KNwSKZuh8mhYmH5LrxwyB00JdGDB+1yXZpTPwv6YcPMk36MJipzscEi+Ivm7zKVdJRRY/jQuqtModFGdUNKfF8djV9gZlpoH6H0iTbKpOMzEsC2ARVFfbQSg=
+	t=1782903663; cv=none; b=Q7JEpWCrbTbDxHIJ0TPWFEqrVxm+L+CPTU5XFIi5LTU2cfz6c5w7z6It9NMwkWg84FMSE6QA8snJgNmv4porRGbJcDs/JWKUMCtU9SAy3HXuFqzKZl0YXNlmD9TIfnGAakRq9Sozg5B2KS7sMTlNlsbX1cf2I1Oj1FJhqOi4Qrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782896267; c=relaxed/simple;
-	bh=8qjndy/hvk2z0aSIhvdIBLWQW/uMIsI8iw/CAEmcr9Y=;
+	s=arc-20240116; t=1782903663; c=relaxed/simple;
+	bh=UZy0n/01gszj1LovSYaViZ/RBxd5MKpgSyrcZMJ/Kgk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZMcJ0aw3hYLkecDZzTJT103meXJffscmXJ3whnZK32oh8EyJBwkDqwPUHD9DW+3eREjQLTfJYhPg4QMpkFqnc4aGihrb/idmW/xIRJ8ZFHMlIxFwoXWMRNKo7V/920vFOd8skA4R5SXOGYaZce09rP1ESq3DAyX+8I5tn0gY1/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LsJ3D6wO; arc=none smtp.client-ip=185.246.84.56
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 49A4C1A0DA9;
-	Wed,  1 Jul 2026 08:57:43 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1513660288;
-	Wed,  1 Jul 2026 08:57:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 06A99104C9A11;
-	Wed,  1 Jul 2026 10:57:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782896262; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=aBY1si8jAw7FZPH5hek8K7FZ8UegYnYcy82l6JhzA7E=;
-	b=LsJ3D6wOgyzYDBRRbG/uVCnLagrWmqyMxcb34Gyo16mnoVJedNronHVt3OLm9gEvBBdQDY
-	AOV1tO2B3yobq8DkmmnuasnB/Czss4ZYnZmfl94hexA3UA3AS+QrxzJQ8g4HP6yGUrv021
-	9xaYWfwIVBig7dHKbuCkDkPWqExtKNheY1HRekf+VsoYZavCURViVWMjIbsFz96zOAutFK
-	N91Mg1qG/jRPMFAPEpXeyGMfsuNk0KUwV/z54yAYnqEdQIHcWRLm+bEYGPS5G/i8lD3OLH
-	U8kJsj7CHPJ/62DNrLvhZd47jnymBk4p4syQljIcoKcqFrxyM573LssROF2W/A==
-Date: Wed, 1 Jul 2026 10:57:39 +0200
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Balakrishnan.S@microchip.com
-Cc: amergnat@baylibre.com, baolin.wang@linux.alibaba.com,
-	zhang.lyra@gmail.com, orsonzhai@gmail.com,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 4/4] rtc: s35390a: convert to dev_err_probe()
-Message-ID: <202607010857395be38657@mail.local>
-References: <20260528-cleanup-dev-err-probe-rtc-v1-0-29dc9cb6c3f0@microchip.com>
- <20260528-cleanup-dev-err-probe-rtc-v1-4-29dc9cb6c3f0@microchip.com>
- <178283943069.3929176.6475131827523489401.b4-review@b4>
- <7867be72-2f25-4ea7-9b08-9ee8a8037ca1@microchip.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SL/SMK7vI7RDhUp3iL1CiWbN8q0Rr0xBSMKIvFAe6pEWyEGzhyAAcMZODL/lG3iuL9eVUQ8WqouDTEpNxZv7NoiA7MiHmamKQtBQ/AatbMsALbuqT9/KDuRunzxjhu4Dwi9J9TQuSO3GhQ4hbiQUWwxVva/PZKMqpxJr19/3UZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=UWxG8p5s; arc=none smtp.client-ip=194.117.254.33
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=jHv5
+	jf6o0MBfPU0bNEf/sSgaluNexXsyMjiq7q5MTFs=; b=UWxG8p5sAeTl4gF/M64G
+	GI/za0sy9zeCbmwNh8AGmiiYTuaMbAn1fKCef1xHAabmKteJiX9yUYV4lSfsAZZT
+	kjk8Xev6AaIwtD/uOwsA0v1bHWqSp/WFc4ARm+weO0RPZcLkQGDtP/OJLfybaI6d
+	p2UcErIPx4XWSDy8D8xf4OPATL4I0ohgmnLiQHaQ5Et0AXfY0d7/yQjZMYnny3Tb
+	pPJp0xzz6iqecpUFYnp4UImVfb6YISDPmZs7iEKFkc4pLPUX0bWm3vocEV1S8P4Z
+	Bcx9S1LpqlSElb1/8JCFiQWgCErlgF14qK7AYz2Pt9hWPB+Bw/oY5IQz61I/UvtE
+	Nw==
+Received: (qmail 667004 invoked from network); 1 Jul 2026 13:00:51 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 1 Jul 2026 13:00:51 +0200
+X-UD-Smtp-Session: l3s3148p1@FbLPmopV6FZUhsc0
+Date: Wed, 1 Jul 2026 13:00:51 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 07/12] rtc: rzn1: fix alarm range check truncation on
+ 32-bit systems
+Message-ID: <akTzY0hQqwAprV4g@shikoro>
+References: <20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20260615154805.1619693-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <ajJ9kNJtrY6DyQ-S@shikoro>
+ <CA+V-a8u2wt6623mYjhipOvJPo4va+bXs3qirQewocFr2QmUFhA@mail.gmail.com>
+ <ajr1wXCI2U23d1sY@shikoro>
+ <CA+V-a8tfb5YFsh-K5F8OOBsuJi0PG72vQ=2PQb2avVNF8-kcrQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6yLW7/UnYGTOQ+QC"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8tfb5YFsh-K5F8OOBsuJi0PG72vQ=2PQb2avVNF8-kcrQ@mail.gmail.com>
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
+	MAILLIST(-0.15)[generic];
+	HAS_LIST_UNSUB(-0.01)[];
+	DMARC_NA(0.00)[sang-engineering.com];
+	FORGED_RECIPIENTS(0.00)[m:prabhakar.csengg@gmail.com,m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:prabhakarcsengg@gmail.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[wsa@sang-engineering.com,linux-rtc@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6807-lists,linux-rtc=lfdr.de,renesas];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[sang-engineering.com:+];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wsa@sang-engineering.com,linux-rtc@vger.kernel.org];
+	FREEMAIL_CC(0.00)[bootlin.com,kernel.org,glider.be,gmail.com,vger.kernel.org,bp.renesas.com,renesas.com];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:dkim,sang-engineering.com:from_mime,vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Server: lfdr
+X-Rspamd-Queue-Id: E89396EC7E9
+
+
+--6yLW7/UnYGTOQ+QC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7867be72-2f25-4ea7-9b08-9ee8a8037ca1@microchip.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
-	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[baylibre.com,linux.alibaba.com,gmail.com,vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6806-lists,linux-rtc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:Balakrishnan.S@microchip.com,m:amergnat@baylibre.com,m:baolin.wang@linux.alibaba.com,m:zhang.lyra@gmail.com,m:orsonzhai@gmail.com,m:linux-kernel@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:zhanglyra@gmail.com,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RSPAMD_URIBL_FAIL(0.00)[mail.local:query timed out];
-	FORGED_SENDER(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TO_DN_NONE(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:url,bootlin.com:from_mime,microchip.com:email,mail.local:mid]
-X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: AF6966EB6B1
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi Prabhakar,
 
-On 01/07/2026 07:26:29+0000, Balakrishnan.S@microchip.com wrote:
-> Hi Alexandre,
-> 
-> Thanks for the review/feedback.
-> 
-> On 30/06/26 10:40 pm, Alexandre Mergnat wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On Thu, 28 May 2026 09:16:47 +0530, Balakrishnan Sambath <balakrishnan.s@microchip.com> wrote:
-> >> diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-> >> index a4678d7c6cf6..342fd2b568a3 100644
-> >> --- a/drivers/rtc/rtc-s35390a.c
-> >> +++ b/drivers/rtc/rtc-s35390a.c
-> >> @@ -479,10 +479,8 @@ static int s35390a_probe(struct i2c_client *client)
-> >>                return PTR_ERR(rtc);
-> >>
-> >>        err_read = s35390a_read_status(s35390a, &status1);
-> >> -     if (err_read < 0) {
-> >> -             dev_err(dev, "error resetting chip\n");
-> >> -             return err_read;
-> >> -     }
-> >> +     if (err_read < 0)
-> >> +             return dev_err_probe(dev, err_read, "error resetting chip\n");
-> > 
-> > The devm_i2c_new_dummy_device() loop above this hunk still uses
-> > dev_err()+return PTR_ERR("Address %02x unavailable"). dev_err_probe() takes
-> > format args, so it converts cleanly:
-> > 
-> >      return dev_err_probe(dev, PTR_ERR(s35390a->client[i]),
-> >                           "Address %02x unavailable\n", client->addr + i);
-> > 
-> > Worth converting for consistency with the rest of the probe.
-> Sure, I'll fix this too in next revision.
-> > 
-> >> @@ -493,16 +491,12 @@ static int s35390a_probe(struct i2c_client *client)
-> >>                /* disable alarm (and maybe test mode) */
-> >>                buf = 0;
-> >>                err = s35390a_set_reg(s35390a, S35390A_CMD_STATUS2, &buf, 1);
-> >> -             if (err < 0) {
-> >> -                     dev_err(dev, "error disabling alarm");
-> >> -                     return err;
-> >> -             }
-> >> +             if (err < 0)
-> >> +                     return dev_err_probe(dev, err, "error disabling alarm");
-> > 
-> > This message is missing its trailing newline (pre-existing). dev_err_probe()
-> > formats as "error %pe: %pV" and does not append "\n" itself, so the line
-> > runs into the next log message. Since you are touching this line, adding
-> > "\n" is a cheap fix even if the issue was here before your patch.
-> > I recommand to fix it ;)
-> Okay noted. Will fix it too.
+So, when I improved this driver back then, 'rtctest' from within the
+kernel was my reference. This test still passes with the current kernel.
+However, setting an alarm one day in the future does not work for me. It
+just stays the old alarm. Without your patch series, that is. So, I
+think this issue should not affect your series. Especially if you can
+set an alarm more than one day in the future (and less than a week, of
+course, because of the HW limit). Can you? I recall I had issues with
+RTC programs compiled against uclibc. Despite I am sure I used a
+glibc-compiled version of the rtc-tools, I need to investigate this. But
+not now, but somewhen. I have to take care of other issues first. Let's
+assume for now that I am the problem.
 
-Honestly, my plan was to not apply those patches because once I do
-that, I'll get hundreds of those. There is no benefit to the change and
-I'll cite the dev_err_probe doc:
+> I ran some tests for cases #1 and #2, and we see an out-of-range
+> error. By adding a 1-sec leeway when checking the ranges I don't get
+> the out-of-range error. Let me know what you think (I'll create a
+> seprate patch for it).
 
- * This helper implements common pattern present in probe functions for error
- * checking: print debug or error message depending if the error value is
- * -EPROBE_DEFER and propagate error upwards.
- * In case of -EPROBE_DEFER it sets also defer probe reason, which can be
- * checked later by reading devices_deferred debugfs attribute.
- * It replaces the following code sequence::
- *
- * 	if (err != -EPROBE_DEFER)
- * 		dev_err(dev, ...);
- * 	else
- * 		dev_dbg(dev, ...);
- * 	return err;
+=46rom a glimpse, I think -ERANGE is correct. Increasing the already
+calculated 'farest' doesn't sound like a good idea to me TBH, unless I
+am missing something.
+
+Happy hacking,
+
+   Wolfram
 
 
-We are not checking for EPROBE_DEFER in any of the drivers so there is
-no point in doing the change.
+--6yLW7/UnYGTOQ+QC
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmpE814ACgkQFA3kzBSg
+KbZuQw/9F8vOkvGVvom2XSpAo4p7tOaRGeP4N4aAoV6daZ1amS+Nqy9Bo2Ydd4yz
+Jj1JWxrCXRy8aagau7ITRF0jAQ7Eh+bSo5ZFdK8Iq+6mFozyhAAPUBqqBPHQQMGl
+t021ZcvrBDevjpwuXkoWz0ka18MrleDAiRuN0YPLXtUzq4+oGIrlwCtPgzZpERv4
+rIIv5A1h92HtQVee59fumaPO25w9Wgy7vG3zZkiyhxRSr6DMUUj0c0bDgOlnt4xE
+xIW5qHoLWrN3Lg8DtAfflkMrWPJXNksot+583+33UwyA5fVjkfKhigBCGNapZESu
+cPKQ1BIGnBktKQieQG59XFuDzxTslJhSQ/APxCMbQ+Nj+gl5c8xQZosnmTv+KjuX
+s/vEUtw208jrg+NO5rf2hd8tilRX6OYKRThTC9ml3B6E9x66REu6WcyDGw4WOGOY
+42UB6a0l1+rM6BNz22OclrHiCbrHZavF+9XeeDrIl72wHwsirJNfnkSrNqOrI/KV
+Bja1xsHAnW484NlR+FE1+yxWYaZkWYcRqVvx4QO6CReCvlzkn6WdNtMvtTQGBCfs
+xkkdKLPZAJafMbiLsDHdPxV+lZkx1zW/wmZ84LjLB3/BYPN1CqWjy4jH8hVIFCwN
+S/5F2yikYzWobxgDDYvH19H/XWHq8SfUJ4zqS+GwcqufreyL17M=
+=Nc8W
+-----END PGP SIGNATURE-----
+
+--6yLW7/UnYGTOQ+QC--
 
