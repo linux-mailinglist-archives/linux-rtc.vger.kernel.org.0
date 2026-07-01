@@ -1,180 +1,178 @@
-Return-Path: <linux-rtc+bounces-6817-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id IMcPHPcURWqp6goAu9opvQ
-	(envelope-from <linux-rtc+bounces-6817-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:24:07 +0200
+	id 2+DHE8gSRWr26QoAu9opvQ
+	(envelope-from <linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:14:48 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5996EE0D0
-	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:24:07 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4A4A6EDEDC
+	for <lists+linux-rtc@lfdr.de>; Wed, 01 Jul 2026 15:14:47 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.dev header.s=key1 header.b=e4vV2phO;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6817-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6817-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linux.dev;
+	dkim=pass header.d=bootlin.com header.s=dkim header.b=IFVbIJn4;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6818-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=reject) header.from=bootlin.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1F6B63075B52
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 12:45:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D15463167E22
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2026 12:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0A748124D;
-	Wed,  1 Jul 2026 12:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BFB4963A8;
+	Wed,  1 Jul 2026 12:55:28 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F801481641
-	for <linux-rtc@vger.kernel.org>; Wed,  1 Jul 2026 12:43:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CB4481A9A;
+	Wed,  1 Jul 2026 12:55:26 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782909839; cv=none; b=QzkaboWCHiwDnahh5bAs3lseX3Rv+1nNQCpreq27XhvtGMc+wMe/nMWSwdi23jnhSVxEWvLX/HzSgQiSfpiD7/4AGTGOMUGlJFKo00tuxPfRIhtutQJ84naTgdeSc4N0i0z17VVUfieJQeVtShBC6RdCgKF4gHCnIeT69fpPFxE=
+	t=1782910528; cv=none; b=j/iFcDJqa1z/D5wCo8CH9SwhpH8HpXcjQWYA/9Jqvc1PWs36g8cc3IUM4ycRV121kIECy2MW3yRLxuWnGdXOtYcCD0/ixyGarnC8eQWUHloF/RF2hQKqLlOMk+6JFRi+oa0ppB9qknd0FyNVw8GHQvsmVPLsa9LHu4uf9dkoS6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782909839; c=relaxed/simple;
-	bh=6t6TRoE3H/XPSUTPmMbz5ishetNjDBcVUQXQegWXEiA=;
+	s=arc-20240116; t=1782910528; c=relaxed/simple;
+	bh=srBFXGO98uQWDvyIh+xYsIJkj/+Hax1EgreZTyqJMQI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B6VYUoqx86U6CLuJxVebXCvWF7nDv6ols2Cr4E9lRQZ+/GuP2q69etvVf76BByK/o0IBtSWVMKUebbYm0C4l5sObEYsxnei99CEba48SBHZWecVgc4zJWYBtOu2DDPG63WJAIXm8He1lo7CHY9lU2PtGuWnD4UjDibD8UOAhbWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e4vV2phO; arc=none smtp.client-ip=95.215.58.181
-Date: Wed, 1 Jul 2026 15:43:46 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782909836; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=MiQ1/C1jpe96dAYn+Baq5dQ8BcaDntA255UEyCOTILQ=;
-	b=e4vV2phOsDtihHVJ+K8nZUPzvB6o6KPg6J1kPpGLgeKHETTupGMW7UMNnnpN7Zarar21B8
-	AcsvNCogj2cVvF7To0PvBt9PXDMXetI/mLf9GSK4OGP14bxCPiEtO8FqmnCQ6FTyYfWT5J
-	8j5h1kaNM33d5rMBRx8TNemRqjIjOz8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Matti Vaittinen <matti.vaittinen@linux.dev>
-To: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <matti.vaittinen@linux.dev>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=O3GePVMeMZNxIOrD5JaVxlDduEjepfv1LIlZ3tmedEu8Q+YoPFuGNtvHKxMeJgHVqnTWvJ1OcxbLCPAyKIuxpvUrzAHotV37ZFiRlnxXGgawyjL0TkeR7XGsdcZHsAKeZemWFz1CsOGpANhNIXgTMAhhI/ImBA2A6j/dBD30MKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IFVbIJn4; arc=none smtp.client-ip=185.246.84.56
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id AE4A41A0DB3;
+	Wed,  1 Jul 2026 12:55:24 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 7E85960288;
+	Wed,  1 Jul 2026 12:55:24 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 77650104C95FB;
+	Wed,  1 Jul 2026 14:55:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1782910523; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=FjLiQzO1cIpZ7Od9KYcaF/iY79A+Cq0/W7IciQmSFaU=;
+	b=IFVbIJn4X3EtjE9D3aub7A1QcOOoPWSmn00E1sI/TAsiXDZoQYlUFXVwioqQwwjnFOp9Fk
+	O/vVZo2MdriGgfn0iUeqqAIQdAd64dVe6L9lLGEzvqicPTl2QaGhnKVmv7MS2pDcCTWVki
+	tzrGv7Cf6fJc2hZQJLul334cdooc050ArIixY2LTQMgGRc7+ska8/iBW/zYZWTUTxjY2mF
+	bdnoz13SU5nrSNN+89ALANnI8NMG0TPlaZSi93W4aRumRG+hKR0Rzw9KTbJTz6UzQlUcnL
+	80EnJ8WpUI7ENwSPcUEDxmxGxThOrEa+MZ+rLyYnBxEx8PhPnU+Of3qGVoIYKw==
+Date: Wed, 1 Jul 2026 14:55:19 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <matti.vaittinen@linux.dev>,
+	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Liam Girdwood <lgirdwood@gmail.com>,
 	Mark Brown <broonie@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
 	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: [PATCH 8/8] MAINTAINERS: Add ROHM BD73800 PMIC files
-Message-ID: <1eebab6c729762d30b843edda6b4d94c7d2f7a5f.1782909323.git.mazziesaccount@gmail.com>
-Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
+	Bartosz Golaszewski <brgl@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 4/8] rtc: bd70528: Support RTC on ROHM BD73800
+Message-ID: <20260701125519b00c5f03@mail.local>
 References: <cover.1782909323.git.mazziesaccount@gmail.com>
+ <d9f5b1c6b165699627c7cf127a7ec64d28e15cca.1782909323.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kDmr9dI/n9pZMDFs"
-Content-Disposition: inline
-In-Reply-To: <cover.1782909323.git.mazziesaccount@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.24 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	FREEMAIL_REPLYTO_NEQ_FROM(2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_TO(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	MAILLIST(-0.15)[generic];
-	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,linux.dev:dkim,linux.dev:from_mime];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	TAGGED_FROM(0.00)[bounces-6817-lists,linux-rtc=lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:mazziesaccount@gmail.com,m:matti.vaittinen@fi.rohmeurope.com,m:matti.vaittinen@linux.dev,m:lee@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:linusw@kernel.org,m:brgl@kernel.org,m:alexandre.belloni@bootlin.com,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	FREEMAIL_TO(0.00)[gmail.com,fi.rohmeurope.com,linux.dev];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_REPLYTO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[matti.vaittinen@linux.dev,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	FORWARDED(0.00)[lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	HAS_REPLYTO(0.00)[mazziesaccount@gmail.com];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[matti.vaittinen@linux.dev,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,baylibre.com,redhat.com,bootlin.com,vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 0F5996EE0D0
-
-
---kDmr9dI/n9pZMDFs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <d9f5b1c6b165699627c7cf127a7ec64d28e15cca.1782909323.git.mazziesaccount@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6818-lists,linux-rtc=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FORGED_RECIPIENTS(0.00)[m:mazziesaccount@gmail.com,m:matti.vaittinen@fi.rohmeurope.com,m:matti.vaittinen@linux.dev,m:lee@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:linusw@kernel.org,m:brgl@kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[fi.rohmeurope.com,linux.dev,kernel.org,gmail.com,baylibre.com,redhat.com,vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexandre.belloni@bootlin.com,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:email,bootlin.com:url,bootlin.com:from_mime,vger.kernel.org:from_smtp,mail.local:mid]
+X-Rspamd-Server: lfdr
+X-Rspamd-Queue-Id: B4A4A6EDEDC
 
-=46rom: Matti Vaittinen <mazziesaccount@gmail.com>
+On 01/07/2026 15:42:20+0300, Matti Vaittinen wrote:
+> From: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> BD73800 contains similar RTC block as BD71828 and BD71815. Only the address
+> offsets seem different. Support also BD73800 RTC using the rtc-bd70528.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Add the undersigned as a maintainer for the ROHM BD73800 PMIC related
-files.
+> ---
+>  drivers/rtc/rtc-bd70528.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
+> index 482810b61495..fd415e327ea6 100644
+> --- a/drivers/rtc/rtc-bd70528.c
+> +++ b/drivers/rtc/rtc-bd70528.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/mfd/rohm-bd71815.h>
+>  #include <linux/mfd/rohm-bd71828.h>
+>  #include <linux/mfd/rohm-bd72720.h>
+> +#include <linux/mfd/rohm-bd73800.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -284,6 +285,12 @@ static int bd70528_probe(struct platform_device *pdev)
+>  		bd_rtc->bd718xx_alm_block_start = BD72720_REG_RTC_ALM_START;
+>  		hour_reg = BD72720_REG_RTC_HOUR;
+>  		break;
+> +	case ROHM_CHIP_TYPE_BD73800:
+> +		bd_rtc->reg_time_start = BD73800_REG_RTC_START;
+> +		bd_rtc->bd718xx_alm_block_start = BD73800_REG_RTC_ALM_START;
+> +		hour_reg = BD73800_REG_RTC_HOUR;
+> +		break;
+> +
+>  	default:
+>  		dev_err(&pdev->dev, "Unknown chip\n");
+>  		return -ENOENT;
+> @@ -344,6 +351,7 @@ static const struct platform_device_id bd718x7_rtc_id[] = {
+>  	{ .name = "bd71828-rtc", .driver_data = ROHM_CHIP_TYPE_BD71828 },
+>  	{ .name = "bd71815-rtc", .driver_data = ROHM_CHIP_TYPE_BD71815 },
+>  	{ .name = "bd72720-rtc", .driver_data = ROHM_CHIP_TYPE_BD72720 },
+> +	{ .name = "bd73800-rtc", .driver_data = ROHM_CHIP_TYPE_BD73800 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(platform, bd718x7_rtc_id);
+> -- 
+> 2.54.0
+> 
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 15011f5752a9..92795b08bc52 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -23539,6 +23539,7 @@ F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/gpio/gpio-bd72720.c
-+F:	drivers/gpio/gpio-bd73800.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-@@ -23556,6 +23557,7 @@ F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
- F:	include/linux/mfd/rohm-bd72720.h
-+F:	include/linux/mfd/rohm-bd73800.h
- F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-bd96802.h
---=20
-2.54.0
 
 
---kDmr9dI/n9pZMDFs
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmpFC4EACgkQeFA3/03a
-ocVcuwf/V8mvdJre7xxJ4FAz8hw8Mqz8mjvmSZnGNnbVkH7ZoKolHDW53cyJlNmZ
-C+Gz586iz/lXmQSssIMJcm1xUKvkULFKS6lLMn3108fdmoc2xbtIiJT78fZevNfp
-2Mgg+GPmgxEXHheyB06ih6qf32UlaDlrZwb2nUAKchyNFWoz6zTUBI23nv+CiHpq
-0knu0LeM4MAzOBxKO3ZqB4BYgixbcw6t5XnWLwmaeABbgVsxy8VOHj7IqmoYYKMI
-LNQg60m/eo0wPIs9QI0unQUQetbECr3WkcBDGy2P8U3SaHLq9v1p9nTwa2DhhDNX
-Wny0/puUnjqFBZvPUAmWTrg1tvBZhA==
-=uRdm
------END PGP SIGNATURE-----
-
---kDmr9dI/n9pZMDFs--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
