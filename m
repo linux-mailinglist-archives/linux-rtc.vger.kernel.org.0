@@ -1,84 +1,84 @@
-Return-Path: <linux-rtc+bounces-6860-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6861-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 6DAaI2oeRmoYKQsAu9opvQ
-	(envelope-from <linux-rtc+bounces-6860-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:16:42 +0200
+	id PjT+LjQfRmpOKQsAu9opvQ
+	(envelope-from <linux-rtc+bounces-6861-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:20:04 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FC096F4ACF
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:16:42 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539026F4B3C
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:19:14 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=kJugaat4;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6860-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6860-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=baylibre.com header.s=google header.b=dLtPVpiH;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6861-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6861-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6D6B4303CC70
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jul 2026 08:11:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 656CD3048FC2
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jul 2026 08:11:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 367F14192EF;
-	Thu,  2 Jul 2026 08:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A57D4229B8;
+	Thu,  2 Jul 2026 08:10:58 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEDD420E6A
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Jul 2026 08:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B954189AF
+	for <linux-rtc@vger.kernel.org>; Thu,  2 Jul 2026 08:10:56 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782979856; cv=none; b=NItaTYsM4QX84NJNyrqK0DaKQgZazQWqxTCCejYVWcwpSIMRFJxoP1ppKs2Df46h47jEa6xHiy/vvXtZEQcMvxfQ2mqlecjzeQnlXdtHs280ILC395rPkY4BzLFtbME7DDUgaui6c9siw3SDSZzTZveVWGGVA4OsZQKlrhJhfGI=
+	t=1782979858; cv=none; b=lZ5w6A/l4T5ocXEpQ8QU2X4HdV7ee8IcZTozdO6cvUKh1tstaPDEzVSF+ITLNdBHcsNnnQqhwDdRirxYSql0t2pjEbN8AWfhE9qTSwjxylsYg/1f8IPOLqhQdPtV14z+8PCsp0dQF7fDV518Soic1lPrYrugnT8nV2bgamfuMnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782979856; c=relaxed/simple;
-	bh=0uBL/FtS3qxYddEpWPm85zwv8RTdX1Kl9yqgj170ams=;
+	s=arc-20240116; t=1782979858; c=relaxed/simple;
+	bh=gRy0cN4LadJrCLwhwvNgyXM95hAtl0BkbsLdjuQgW6A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HwACRKdEI3nh0iY15aNlJu6SUjtj1KFTlqPZwp1350cHZvqML/bXdhtZMYnHcipTMRlXWujwrZUiIVtNFRl+kduMPnEx0DL2zgpFdMmhDmKmG1+5smOueX07w4Vsb/r4S0D1UHTozrzf//a20P/RHXIF4e2SIbQ/mk2RoKG/kw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=kJugaat4; arc=none smtp.client-ip=209.85.128.47
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-493c83474ddso236135e9.3
-        for <linux-rtc@vger.kernel.org>; Thu, 02 Jul 2026 01:10:54 -0700 (PDT)
+	 In-Reply-To:To:Cc; b=S1CgAqETGNJ2HrnQOTYCYlhuaMj+sRfCyKHomqLly48m5sVfnqt9KZgvsbBwJFCATjdUtt3uZp2mLwVX8as+WCtmQsxaoo2ubEwrc2PSVeOSVD7uk5+Q3cKaugqmnxCQOv+1J9gg2y7qxYJCZaorua9Ls+7lB9qLrTyIOctdeQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=dLtPVpiH; arc=none smtp.client-ip=209.85.221.46
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4758bd3731bso218353f8f.0
+        for <linux-rtc@vger.kernel.org>; Thu, 02 Jul 2026 01:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1782979853; x=1783584653; darn=vger.kernel.org;
+        d=baylibre.com; s=google; t=1782979855; x=1783584655; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1QZ/tzJaIkMNpKGsZtD20B+8zLkYYTOKlJtJuY0qjaA=;
-        b=kJugaat4h4Myzwry9c8tX9puD7aD2Wg/LhZ8Fe12dHc04XPId4xU0Nk4CCN2pRE9Ss
-         k6GmI9mSY2w33BDE370S6nFQucosLDoQkNnrzPDmBGd1a+JBf+1STSel57sA6nELBMzA
-         qm2pzP2XuQwhXmPuK2kbCutYaTfoQJ9l9cj/Bq9/0uI8SeWJyabuaSAcWGlUVvDgU07b
-         +O52ROrQNBxANmLuzM1L0tAKUBMGWxAxdQwwyrg3IKKomiDku2XrjWlwN+7k8XkDDusa
-         bdxCMDU+TtuI57KeEbmLt+uYFmhMEO3ckei2XqjKKyALMdykB5PxBQhW1r1bL6OmF6Fz
-         VyIw==
+        bh=gpZvamYw9AnVrZnk1GFQEFXSHxgLU3wS0Rp+AMjlVD0=;
+        b=dLtPVpiHVpG5sM2IZhCfFjfPuib1TLayWDLEzOIauXInU9Tw+16SQBIpLJVBHMD8Z0
+         NWYjN5o8Xee2Y+6KWG0YNt2VEsChuCslDtOdgDN99k6dyCLfTzZ484qUA4M4XSDb92H6
+         Cw7xG79lZkI+NOUSIsV4Yht5j7NIiLtBPP8dex7s0Jxz8WwK7AZv2+b+6DTRkeg96n4a
+         n7QWu1KRuAIFbTmIinhZtHU51RJuCUqRF24rqGAactR9KsOsU3wmsGpNx9zbSka0Bxy8
+         QmytW15Aa4vsCj8SjW8JuhPCGl5PoEEZKf49efDcOKFWb3BEIFSNHkyafov9PPRcbXAM
+         yS3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782979853; x=1783584653;
+        d=1e100.net; s=20251104; t=1782979855; x=1783584655;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=1QZ/tzJaIkMNpKGsZtD20B+8zLkYYTOKlJtJuY0qjaA=;
-        b=hhCEqyUKgtNrd2WjX2DiYdFPK05kZl0sNKGXS/Z+XfUdgejbJSVtxvwB++JJrY3Gwu
-         zKWl2MGrm/2ziI8xXXAwJgzMjFFYz/Xchio4Bz7t7dGaZEStRiOu3mp/Yk5YDbHWMY6P
-         p1pVXVkF7zHp/poOWa+dacr5/PdMlX5sVgfLEjwqxEU94Pn/XND7BukewcNORSbgPPAj
-         h8mI/mvYYGY8uNXTmCFV6rZZ677JsJ3EzX9WPytlvvschAPm14nmIWJChvtaDCehib1h
-         YUjHMrhLu6rnEXwQwW88WgknmsqdTCVHOjMfZD6VwsX1nXhbAqeGFkl/O5uay1ynuRl3
-         rGcw==
-X-Gm-Message-State: AOJu0YyjOuyg3a0+ML80NIv9Ldd2HMGSDi5EbM/XIU0oofTXElf5fwW5
-	W9a0BwapZFgSs+RiiK3Di++pHPPfWDpiw9rN9Pfrkm657bUdMgqR9xJUnHMfEZuvXNEEuE3Fo6A
-	9M2BY
-X-Gm-Gg: AfdE7cn2PCSnl9SR/LhNWo5LTHvy9AdVoXyW8Y6EJMZjk2oHKZCr7L84tC+LjJKOCQX
-	yKpRH7jiMakaSarNx/W9609uN4JlUrxJDsKFKG3lYlo8/9F+LstSl/iC1CYR1aYSoYOAMhe1kSM
-	FAVUfZ2oppLRey6GUa/DYPpFjxjD8RJ7tqgaG5bmqnbK4xoJEipyM98WWz/k+6dq9vcFwOrEvPE
-	xNH4Stc185jKJl7c2DqremnZNRIvVDqDeSa4aVmubdaqqp3Gu0XsOrUUKyEQm/11eJyUM+tZM4k
-	jUUu7ZB3ypbx+OFykHxlgYR4V6BO0456UspkXXtnF++ntXDEZ0gWBinoMOQZc2rI1nGq5R7Vdeq
-	aiN5om5yRUoi+gwGk/HbDT+LtTm+hB10spj88bUv+s9GX5R4U2ubFgZ2c5AOVoqFsUM1nYTnSWj
-	xH/5+WMXnGJGk=
-X-Received: by 2002:a05:600c:a4b:b0:493:bef8:ba8 with SMTP id 5b1f17b1804b1-493c3dfc635mr53639805e9.39.1782979852907;
-        Thu, 02 Jul 2026 01:10:52 -0700 (PDT)
+        bh=gpZvamYw9AnVrZnk1GFQEFXSHxgLU3wS0Rp+AMjlVD0=;
+        b=fO8nJ9PVa1jAfRh7lvIK3nEHhBpkNs2I7hrYlvRiteU2FFJNULeUweZ0sVi3SiqFhK
+         a4Rbzpm0h6mrge2Hew3+bK2/xqCGHZSJVdQHfcR7FT0IUbaapVBLzhy/H69u2gbqOPXf
+         2LeAlwR0n9NPGBwQonUqZsqoQ2uFLdXpue27EoKdGXGgDWTJ0/jhGKHWdgDA8sOH3DrI
+         6qm6TsAIyE8i4/QVcd/xllUWd+IZeDSFzjrbQOIPe0esIrNyzb2ifDazAVO/x6XVgjb3
+         13warplV4mgvyNsdoetqaieOPHSETVLXNzNPLzRKIAdhrt5++12roy3esn4q5kdCF632
+         ItYw==
+X-Gm-Message-State: AOJu0YwkeTpz2aOvreNpFxlXR8NdSA6Rmn/TE7sJ7H5Jw2VRnRt4k489
+	Z1QtUZBOabnC3dgu8/+n0eRhgH34qM+cDAsPC7qeDJjDTIiMVw+W+m7z6ghmSLKMuFg=
+X-Gm-Gg: AfdE7cmAnhVz8SzBnEgV4tdXhNBE3niDhpEVd03kptDnoO+NnvklZifUssCto8+IlY0
+	MGLYyaL47oH/2ayi/KizTwis5D1HVPJAInPEuHx912tP6TnrRvAJIaFhmRH+DuTIt+hvaOosxTM
+	5mUKaO67JCiCIJg5Mb9fopSoo8YMmzvalPj5eXxAgR276v8ZRYkE+9NKt3zPxHUHO1kFSVXscUq
+	nL+E9kEl/9aUcRuSof3bhMUjiQC9FCWJ4v/S2NV6876sTMMvNhhugg+GF9xWk1uDw8b/qmmUUOb
+	zy10tjI2lFIeYQsQZLTIioDMGH+3QZFc+t4eJht41kNTbZLX8+NMVK3j5gjiAToV8QrDOPVvr4F
+	x1btx12Fe2ccxniBQCi3GBDvCFQ6li/trbObtC44Oeunu1kyhm+AQhPVTvt+hi35iK7iLe/U4kJ
+	DjQH4evYNK+yM=
+X-Received: by 2002:a05:6000:40ce:b0:473:c2ec:7a79 with SMTP id ffacd0b85a97d-4774424350cmr7132004f8f.12.1782979855094;
+        Thu, 02 Jul 2026 01:10:55 -0700 (PDT)
 Received: from localhost ([2a01:e0a:3c5:5fb1:2e3a:7dcd:d2a4:6556])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-493bfe7427dsm70001875e9.2.2026.07.02.01.10.51
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-477db3dba3csm6687967f8f.3.2026.07.02.01.10.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2026 01:10:51 -0700 (PDT)
+        Thu, 02 Jul 2026 01:10:54 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Thu, 02 Jul 2026 10:10:03 +0200
-Subject: [PATCH v3 4/8] clk: sunxi-ng: sun6i-rtc: clean up DT usage
+Date: Thu, 02 Jul 2026 10:10:04 +0200
+Subject: [PATCH v3 5/8] clk: sunxi-ng: sun6i-rtc: Add feature bit for IOSC
+ calibration
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -87,7 +87,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260702-a733-rtc-v3-4-eb2580374de6@baylibre.com>
+Message-Id: <20260702-a733-rtc-v3-5-eb2580374de6@baylibre.com>
 References: <20260702-a733-rtc-v3-0-eb2580374de6@baylibre.com>
 In-Reply-To: <20260702-a733-rtc-v3-0-eb2580374de6@baylibre.com>
 To: Junhui Liu <junhui.liu@pigmoral.tech>, 
@@ -103,20 +103,20 @@ Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
  Jerome Brunet <jbrunet@baylibre.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2679; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=0uBL/FtS3qxYddEpWPm85zwv8RTdX1Kl9yqgj170ams=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqRhz5uKxhDHKubvZxQtlYpXYIvwPrXCLC0seV1
- WNDhZX/FeWJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakYc+QAKCRDm/A8cN/La
- hUh9EACSTxeO/WGvg3k425s7xQALo9JT+meGwuevXCEpXNGpfJmYnCeWBOdYw76IaUfLZz8piWu
- fiie9pcLKv1IbGsRhzkUQ7XXb+AWMbWYTy18NjnDAw3JR02bSjqY31qrNTtj82Ih153RgolV+R3
- GGRtx8Uz1+F/a/RDy5GWAInXgSjazJtka1+8wQIXbpx6Tb4fnXXhUEsROIJlCGLx+GYAGM2Jo6N
- Yb/OBdqgFyOez1K4IgYerUPByqDRq9jRpN0FOR436buNMnAT+gAt7crVCsKOTHpE1TEkTqmbvUs
- abVPh1Xlf0XYjv/t8Pu9E/jCgA2illPyEo2OHZWAqfDexBOATbzlUJHAIiMOGrHEIGgipt81JtU
- dC1hmgoUzL1fkDvnkbwya7VSwPMtCYVTLNAvvPNu+UPq76zDxvG5xNmJGbJaAdFp/nZShjy2l1x
- KaBHVbcJxomgjd7eHdzdAaygeCz1OFPyd2iSNaTPCme9xFnKGDbC07oxPyYMsWHz807sGzm8lbE
- P8Z2fu5YN0DeEEZvIcTDYh5B7kTyjcpDYeYF7tPnQXGnnJ5aihpkIZMs1R1IPavzLOosR+BAXzm
- VU84Lp4KFojc8TShzVyouOFSlPDx9zE8qRCNN14oHHIJb6hMwcqlSMXGCMk09BFbGUt8yq0HLrL
- vPhFA0vSiaoyD0Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3560; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=LjKLqtELI/k5Bm86qG39EiNLmLLQg2pvRCFKcypyAtM=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqRhz6iQ4ImmQHndHiBUqhJRQYIbF2ssh6u4zet
+ LAX/Wa+q56JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakYc+gAKCRDm/A8cN/La
+ hevvEACvUM3ca8OwIt1oufqC2tSNAYGaxdWOw46j08bNcil+NPfmr/5Af1LlNbH/cnK2mvD9i17
+ uhUOtHab6h+C5k9mFrYY1/iEpNmMfiAqNP9b/SiohQo4XXQ7vH9aCSJwWzZAlrArxDjOkodWaUc
+ h88RZxUvA7mpw29FBOGQWAxNpADzCWGUspkbA8rAQRvm8euwYNVi7o/O/eqFeiyK5NHr1BWiZjK
+ qHzdkatztZ1pM4D298w9UADjl6bwZ/dDwaRXP5VQp1nZW8W8YDaCjG7yS+RO7IomoAJgRApUaRZ
+ fCv2H2xgcSB9tIG2M6bbAzlbJe9oHGE8VwmGCk4XO2n42566JCVwypwJDkjpELB7bHudEQpOe0N
+ KAlOo18K8PAcZ5uZNFnxWTOZXeiYLXjOxPAUdCpyQm7RyTZ7oXKsm2oT5k8painM4yMkDUXnRVB
+ T03tesm9gVdVWILE+46J+kE4sOjXiNG1Pp2Rw1TPyVPSHfgQ0dFqutz5HsYLHOAQYgz67YjOXfU
+ pzBqi+eTBeBslVZK09E9N6D9jQjjoLPsCuxdb87P8ml5T5tLNLxjNmQtkhUUGOERDfIenO571u8
+ S/AJZCLIex6hlXowPOaM5FRdQFsxE2H3MNvMuOYOZfpG14rbnirk8o1Ip4YH603HjyOic3M3jSz
+ A40fFvy4QCn3l1A==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 X-Rspamd-Action: no action
@@ -124,7 +124,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -139,7 +139,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6860-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6861-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -150,77 +150,111 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,vger.kernel.org:from_smtp,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,pigmoral.tech:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 2FC096F4ACF
+X-Rspamd-Queue-Id: 539026F4B3C
 
-With sun6i-rtc compatible devices, the "ext-osc32k" clock input
-is optional for the devices that support this input (r329 and onward).
+From: Junhui Liu <junhui.liu@pigmoral.tech>
 
-Probably preparing for older SoC support, the driver does something funny
-when parsing DT. It check if "ext-osc32k" is present in the clock-names and
-if it is not, it uses the first clock as "ext-osc32k". This clock will
-actually be the rtc bus clock so what the driver does is wrong.
+The sun6i-rtc CCU driver currently uses a global static variable to
+denote whether calibration is supported, which makes IOSC operations
+tightly coupled to this file.
 
-At the moment, the driver does not support the older SoCs that would have
-an external 32k clock provided on index #0 so just remove this quirk.
+Convert this into a feature bit to decouple the logic. This allows the
+IOSC clock code to be moved into a shared module for reuse by other SoCs.
 
+Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
 Reviewed-by: Chen-Yu Tsai <wens@kernel.org>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 23 +++--------------------
- 1 file changed, 3 insertions(+), 20 deletions(-)
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 17 +++++++++--------
+ drivers/clk/sunxi-ng/ccu_common.h    |  1 +
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index f6bfeba009e8..0f528bfaed00 100644
+index 0f528bfaed00..b24c8b196e66 100644
 --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
 +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -191,10 +191,8 @@ static struct ccu_common iosc_32k_clk = {
- 					 CLK_GET_RATE_NOCACHE),
+@@ -52,8 +52,6 @@ struct sun6i_rtc_match_data {
+ 	u8				osc32k_fanout_nparents;
  };
  
--static const struct clk_hw *ext_osc32k[] = { NULL }; /* updated during probe */
+-static bool have_iosc_calibration;
 -
--static SUNXI_CCU_GATE_HWS(ext_osc32k_gate_clk, "ext-osc32k-gate",
--			  ext_osc32k, 0x0, BIT(4), 0);
-+static SUNXI_CCU_GATE_FW(ext_osc32k_gate_clk, "ext-osc32k-gate",
-+			  "ext-osc32k", 0x0, BIT(4), 0);
- 
- static const struct clk_hw *osc32k_parents[] = {
- 	&iosc_32k_clk.hw,
-@@ -352,7 +350,6 @@ MODULE_DEVICE_TABLE(of, sun6i_rtc_ccu_match);
- int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
+ static int ccu_iosc_enable(struct clk_hw *hw)
  {
- 	const struct sun6i_rtc_match_data *data;
--	struct clk *ext_osc32k_clk = NULL;
- 	const struct of_device_id *match;
+ 	struct ccu_common *cm = hw_to_ccu_common(hw);
+@@ -80,7 +78,7 @@ static unsigned long ccu_iosc_recalc_rate(struct clk_hw *hw,
+ {
+ 	struct ccu_common *cm = hw_to_ccu_common(hw);
  
- 	/* This driver is only used for newer variants of the hardware. */
-@@ -363,21 +360,7 @@ int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
+-	if (have_iosc_calibration) {
++	if (cm->features & CCU_FEATURE_IOSC_CALIBRATION) {
+ 		u32 reg = readl(cm->base + IOSC_CLK_CALI_REG);
+ 
+ 		/*
+@@ -119,7 +117,7 @@ static int ccu_iosc_32k_prepare(struct clk_hw *hw)
+ 	struct ccu_common *cm = hw_to_ccu_common(hw);
+ 	u32 val;
+ 
+-	if (!have_iosc_calibration)
++	if (!(cm->features & CCU_FEATURE_IOSC_CALIBRATION))
+ 		return 0;
+ 
+ 	val = readl(cm->base + IOSC_CLK_CALI_REG);
+@@ -134,7 +132,7 @@ static void ccu_iosc_32k_unprepare(struct clk_hw *hw)
+ 	struct ccu_common *cm = hw_to_ccu_common(hw);
+ 	u32 val;
+ 
+-	if (!have_iosc_calibration)
++	if (!(cm->features & CCU_FEATURE_IOSC_CALIBRATION))
+ 		return;
+ 
+ 	val = readl(cm->base + IOSC_CLK_CALI_REG);
+@@ -148,7 +146,7 @@ static unsigned long ccu_iosc_32k_recalc_rate(struct clk_hw *hw,
+ 	struct ccu_common *cm = hw_to_ccu_common(hw);
+ 	u32 val;
+ 
+-	if (have_iosc_calibration) {
++	if (cm->features & CCU_FEATURE_IOSC_CALIBRATION) {
+ 		val = readl(cm->base + IOSC_CLK_CALI_REG);
+ 
+ 		/* Assume the calibrated 32k clock is accurate. */
+@@ -167,7 +165,7 @@ static unsigned long ccu_iosc_32k_recalc_accuracy(struct clk_hw *hw,
+ 	struct ccu_common *cm = hw_to_ccu_common(hw);
+ 	u32 val;
+ 
+-	if (have_iosc_calibration) {
++	if (cm->features & CCU_FEATURE_IOSC_CALIBRATION) {
+ 		val = readl(cm->base + IOSC_CLK_CALI_REG);
+ 
+ 		/* Assume the calibrated 32k clock is accurate. */
+@@ -358,7 +356,10 @@ int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
+ 		return 0;
+ 
  	data = match->data;
- 	have_iosc_calibration = data->have_iosc_calibration;
+-	have_iosc_calibration = data->have_iosc_calibration;
++	if (data->have_iosc_calibration) {
++		iosc_clk.features |= CCU_FEATURE_IOSC_CALIBRATION;
++		iosc_32k_clk.features |= CCU_FEATURE_IOSC_CALIBRATION;
++	}
  
--	if (data->have_ext_osc32k) {
--		const char *fw_name;
--
--		/* ext-osc32k was the only input clock in the old binding. */
--		fw_name = of_property_present(dev->of_node, "clock-names")
--			? "ext-osc32k" : NULL;
--		ext_osc32k_clk = devm_clk_get_optional(dev, fw_name);
--		if (IS_ERR(ext_osc32k_clk))
--			return PTR_ERR(ext_osc32k_clk);
--	}
--
--	if (ext_osc32k_clk) {
--		/* Link ext-osc32k-gate to its parent. */
--		*ext_osc32k = __clk_get_hw(ext_osc32k_clk);
--	} else {
-+	if (!data->have_ext_osc32k) {
+ 	if (!data->have_ext_osc32k) {
  		/* ext-osc32k-gate is an orphan, so do not register it. */
- 		sun6i_rtc_ccu_hw_clks.hws[CLK_EXT_OSC32K_GATE] = NULL;
- 		osc32k_init_data.num_parents = 1;
+diff --git a/drivers/clk/sunxi-ng/ccu_common.h b/drivers/clk/sunxi-ng/ccu_common.h
+index bbec283b9d99..d9dc24ad5503 100644
+--- a/drivers/clk/sunxi-ng/ccu_common.h
++++ b/drivers/clk/sunxi-ng/ccu_common.h
+@@ -21,6 +21,7 @@
+ #define CCU_FEATURE_CLOSEST_RATE	BIT(9)
+ #define CCU_FEATURE_DUAL_DIV		BIT(10)
+ #define CCU_FEATURE_UPDATE_BIT		BIT(11)
++#define CCU_FEATURE_IOSC_CALIBRATION	BIT(12)
+ 
+ /* MMC timing mode switch bit */
+ #define CCU_MMC_NEW_TIMING_MODE		BIT(30)
 
 -- 
 2.47.3
