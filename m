@@ -1,83 +1,84 @@
-Return-Path: <linux-rtc+bounces-6858-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6859-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 4N+nIkAeRmoMKQsAu9opvQ
-	(envelope-from <linux-rtc+bounces-6858-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:16:00 +0200
+	id EKkcH0geRmoQKQsAu9opvQ
+	(envelope-from <linux-rtc+bounces-6859-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:16:08 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 235AA6F4AA8
-	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 255BB6F4AB2
+	for <lists+linux-rtc@lfdr.de>; Thu, 02 Jul 2026 10:16:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=nQlvWCLE;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6858-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6858-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=baylibre.com header.s=google header.b=ZE6IuqGW;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6859-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6859-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 1AE8B3035FE2
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jul 2026 08:11:11 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 12742300824F
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jul 2026 08:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1678A420E9A;
-	Thu,  2 Jul 2026 08:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E1B4218A0;
+	Thu,  2 Jul 2026 08:10:53 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDD741C307
-	for <linux-rtc@vger.kernel.org>; Thu,  2 Jul 2026 08:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657D6420E92
+	for <linux-rtc@vger.kernel.org>; Thu,  2 Jul 2026 08:10:51 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782979852; cv=none; b=U4UKAUjKI1gocR/nHUJV92V19JteunX1hpQnwDa2zWT0v233i56oM1FVJ7hfX7p2g8WM1v5MYr3i/5E/ZkwRQUclggSE8d/1AhiGGiSCzc4ij0mgNHEyJTFIYRxF9msmlxNZYqjyyDa/zQuWaGNvRuxdT6PJu6kyPe3Zq7+Xf2c=
+	t=1782979852; cv=none; b=FYFUs2U4k9Q6ZSp/Rz01jOo0d4TIDjeb80b3NRkJSXX1lKOFoPiuWZ6+V0ujNzs16984hUhlKkH6a/PJqhzbTVfQaLwkqH4Z9pp5D7hFKVHdXLMRNQ2REjBDNsaFE7jab6H8hB9jgXYYKCzXGTDsSb/2AkJwRc67Hhs3kjDb1W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782979852; c=relaxed/simple;
-	bh=CzBUXV7sOVhx3D4ZGCj9tufXm0ii5Jrd89A5CtNYTv4=;
+	bh=xEow9YFv9tWxKuTGRmYBanqZYgnlQCz+XPTruWbAxlY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=p0bR39xxgwPAlG7kAzjBHQNNf13t95FVvfGlY5921O6D6baMDJ4vUjybyprlUfYFePz5rDdd0HsChBj7c0FfM5FPu634AoKp1Qg2TtKD7FnaMMg2za5xpVbxWXpwLkqv/RcYTnVETP5Fn+Ed35gNiNXbdLg4JKN2yCyXx4H7vvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=nQlvWCLE; arc=none smtp.client-ip=209.85.221.43
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-472326ca506so1101487f8f.2
-        for <linux-rtc@vger.kernel.org>; Thu, 02 Jul 2026 01:10:49 -0700 (PDT)
+	 In-Reply-To:To:Cc; b=mLLSVPdWUcyz167lXgtnOK0DUbZKfdzgSU5PL5eqtrsA7OxONrHQgA1SE+5lpUttkk3zYEy9PY2BazEfsUpRU08AzZfyoFOBYEvHIK8z3aIlnjOtp7k9IOCUYKpgrqNktEwj7+0NMEsyi2Evf8mMRbV8YHC4HF6Tqv60LkSzWJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=ZE6IuqGW; arc=none smtp.client-ip=209.85.128.41
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-493c52cde9eso6436015e9.3
+        for <linux-rtc@vger.kernel.org>; Thu, 02 Jul 2026 01:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1782979848; x=1783584648; darn=vger.kernel.org;
+        d=baylibre.com; s=google; t=1782979850; x=1783584650; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XOiiEpGpIC5lxOzEa7sAsZH1/Y83nzXYTBPvtikqmXw=;
-        b=nQlvWCLEPlHDW/pUxu38mncdVLzDn6n9Pv/pyUqEW2loAADwDYlLTS82eya7dv1b0F
-         1LnxN43oXYC5ygOn/YdX+f1VALXJo2k8QQf2WnUfz0JxbbfoxV1xJFQU/iAhMe7d9gEB
-         LgwIw3clh1kJtsrcGsgCa3P91j4zQeOy8+IOWJYbQIXUSLID6BgyAIrMDLa9Ikk+Tnvo
-         Kjl/KqhHnZ9OnHhLRTgIlKvXKrKzfsrs97AncHGtOmRqxCs5gbngLjrvPNE9Z8Pi9V7R
-         azaccBga62+15UXUarzY3RkAqFz4BwYqLUhZjp5CWwOZgyflyYt0P16b6IiiFOh1bYoF
-         zqpg==
+        bh=n4DUzlDYde7+nlA7K6gg98zrSYXmo4pVwxHlPtRIQOc=;
+        b=ZE6IuqGW/XCDIfi+4yOik3qLAUFuqsFD646rK+ZhZKnIc73JkNI1iuuBlun0SCCdHr
+         CdHjCCtY6nQamF+4nDuxtte4Ia4CAiGdlEoAahzdhGErcfInrhm6v45b3zZJhnauEac6
+         yBWHBpNpEllCbRoz5MdqOAXZZ1BxvN5pjp2YgbXiS4XpJXZaXUsePaSf+wC5QS4It/nW
+         VPreHekyTuWSqay+MbirOTYifQGNAbBAHG7VSLkIRCpZ9e7Kg43bJbcYSl2k5EtmvdSO
+         xxFvm2w+1yxbEl2SX1+e4J8RegE0CJDEIIgaK7ki2UhyvBR9VpRSKIupfjXTx8mkK4Vq
+         6gUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782979848; x=1783584648;
+        d=1e100.net; s=20251104; t=1782979850; x=1783584650;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=XOiiEpGpIC5lxOzEa7sAsZH1/Y83nzXYTBPvtikqmXw=;
-        b=cinxr+tCEv3Qgj1uz1TRNAPEKyHuVF3phf6sU7YR2D5BR7VnpCNb3pflW/i62K64bN
-         asgm6X0kPA32hUH3sD2OcQHvkSbVLCwT3ljfVJYkqwNfHdb32Y4yyB2Acx1SHyIraip1
-         OpzGNMryuVgEgx+vMS8wsnzttFFBfRfuge5Iee2MvHrnKC4GRYNJzA57e1Lifi1iC/EV
-         Yi3Y9rZf5JA4vxhQKePd6zRc6cFUCKwllphkV8ptPtIZICnIvwzp+GpvODWHmVYtXGt6
-         KoZe8fZQbBK4jiIHxtk5Sb5pwdBu7QiswNZuYoJf1maDZ0IFGlCYEI7qarco0CG3u0Q4
-         kqiA==
-X-Gm-Message-State: AOJu0YzO909iKfY9IUAxhY/Ar8OlvSFR9aeQOVyTkZxlZAZAuyDko1GD
-	YcBl+uEKH1ofm96un7YmbDwlVasSTpHwr2V0p7X9uwO3Z982wWKnDUoo7Xg2CTE15To=
-X-Gm-Gg: AfdE7cnanpxE7HR7VQEHs0j/euLdwSrZEgWueF4hFSPrCesmAIHdxKD1yvSyHIJToqM
-	DkDZOdwtWjtmLGAn30UE/YDlqOnMurA/DJHdzNDXj6cVsENl0KX5lXhRC9hAIj3ps3jnealCc/o
-	RcK+rS4ss+jenYG0A8/EZ0NFFsbVsbbZJZ0rxPN7cxGzeFVbQ9jWy++xj7PlKBLCw69fFm7W0Hj
-	kMYr6kgKpXD3HRj6/UHSOKXxyEPS1ExeN84RxZcdHpMEJpxYETf3vA4UPC0ehZCU5HqPpZQfwJq
-	nNRVV6EhhiqrKP/YgNSa3nDBeypND8+4zf0jVqm76gMOf1o5+i6sv8O7oOn3Rl3N5qpO1uEbDSm
-	Hvf7AiQw7CUIyhsyBLJu5wjLCSc8C81WBdRA4uKhFUjhlxLprjGRRa3hZ7OOUftpejD0uQugPx+
-	IS3+bhHAHahxw=
-X-Received: by 2002:a05:6000:18a4:b0:465:ba53:a006 with SMTP id ffacd0b85a97d-477588e7d03mr7472094f8f.23.1782979847883;
-        Thu, 02 Jul 2026 01:10:47 -0700 (PDT)
+        bh=n4DUzlDYde7+nlA7K6gg98zrSYXmo4pVwxHlPtRIQOc=;
+        b=CHtd+kRWtryGwVSRLePcBqJU385TGqm2/QXwazhBYc7XBKF4ob5hFlebqxRs0wTPnR
+         qDkrlBdk9BOll6ilAQm3v7zzuPNB1BuRJvgHRKZ6upvE09T4mnewK+yrNAlETF7lbipy
+         +6zWAZ7/Q6r4jF4UfLMjusYdNQ3Ttsqwo8gKXFux5+v9So+B1m5AauMGV9zklwFl3E++
+         nyo7DvWkiyTiaSOR0xFMSb8ZBBZ6OtI9ace1QegXaCo/x+TJ5/NLmU//UqZwfvdmzq2q
+         LwUrBp4NedFGyOaHheOx7HZrfEya1J+0FpE5ckO2vBJll7E/cCco/wUnqLXUUVwQN9An
+         T+xg==
+X-Gm-Message-State: AOJu0Yy+Us2rsC4U2E/3LARR8SiiLCTiKX0s1s2Hkez/2dTFTAkJ7fjz
+	DC0f2ptRg2sKUwO0AS3PvM/tY8u570J94w4Fo2M9NdQ+dy8l90LrWo0BO03wpY7s8Zk=
+X-Gm-Gg: AfdE7clTdvn772gA85fGr/tGt32tOf/y/8dwObmGVuQ05sdDMPsiVUP2cyQKXs0VfUM
+	zNoxelK4gxM6ozUW8ng5vyzCxkIvMCfmamKjQvw9VMXcOc0gEXT9uvyp+ovAFND1V2a+siO/Oma
+	MnIuOb7lBkZrMp0ZpTvJDhWWZ2SN66ToRtNNvHPGx2X+cZiEXa8v1xcjtH/qup9ZXBXWYotAAdi
+	oqIy+/5ULblGqVzSw2p3OHayrmwqwrLPxd9/SrS0RQt5G3GGECjEKRZSO+qcr1v9pel+lAID9wb
+	uhBBGNIDehS/0A76hmKBaGAh33kzRkhD2O6F1e+BYU2iBM7gGTf3AkYT7Yaq7jdeRLOP1qyzNfL
+	xSQY/dyIR3hKNvEQmmmFXI96ue9/xzE5lzkNumWAPca7mhkcTujSgnnefuTitGrhbqkEXkOFTs7
+	KofyeS+Tk3zUA=
+X-Received: by 2002:a05:600c:4ba1:b0:493:af56:8e64 with SMTP id 5b1f17b1804b1-493c2b9e74fmr46177105e9.32.1782979849885;
+        Thu, 02 Jul 2026 01:10:49 -0700 (PDT)
 Received: from localhost ([2a01:e0a:3c5:5fb1:2e3a:7dcd:d2a4:6556])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-477dd94c829sm6374826f8f.24.2026.07.02.01.10.47
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-493c636ea60sm26008745e9.3.2026.07.02.01.10.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2026 01:10:47 -0700 (PDT)
+        Thu, 02 Jul 2026 01:10:49 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Thu, 02 Jul 2026 10:10:01 +0200
-Subject: [PATCH v3 2/8] dt-bindings: rtc: sun6i: add sun60i-a733 support
+Date: Thu, 02 Jul 2026 10:10:02 +0200
+Subject: [PATCH v3 3/8] clk: sunxi-ng: fix ccu probe clock unregister on
+ error
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -86,7 +87,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260702-a733-rtc-v3-2-eb2580374de6@baylibre.com>
+Message-Id: <20260702-a733-rtc-v3-3-eb2580374de6@baylibre.com>
 References: <20260702-a733-rtc-v3-0-eb2580374de6@baylibre.com>
 In-Reply-To: <20260702-a733-rtc-v3-0-eb2580374de6@baylibre.com>
 To: Junhui Liu <junhui.liu@pigmoral.tech>, 
@@ -100,22 +101,22 @@ To: Junhui Liu <junhui.liu@pigmoral.tech>,
 Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
  linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
- Jerome Brunet <jbrunet@baylibre.com>
+ Sashiko <sashiko-bot@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1439; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=CzBUXV7sOVhx3D4ZGCj9tufXm0ii5Jrd89A5CtNYTv4=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqRhz3c3Z+CDWtJbpQmgihyGCywyiqoUE3JkQyt
- 6xSTIHXDA6JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakYc9wAKCRDm/A8cN/La
- hev+D/9qqaYp4+SX4EN+QRwhZL9SKx/Rjuxo5TLCmPxSfNWP/r82A0hPjW8lkiXBaHr0JFpStVl
- jzHLZcQ93NroFjk9JyixfEnW2GKdPE/DADdhVBQBRnB8rwQxJHJWFuWFL6JrbU1MW9Wj48laRaa
- 6cmou7Koc4vN+e9OClHXcB+Nw8NQ1okWbDUzwmbsZfMypkIyQnIPsvc/HX4u5tsUDCfVbU3x8+n
- iyPB2URXAHkgLi2muc2ZWr2FTnuSYE7rFOjsax5ymg7+CQzHWLED0nz8JFxqd2BaraF+Qeg95T/
- +fCm1g8Rjb4/vkW63foqIcmbd4PdtFdq5SPpcG5jWN8PXRcU+PrZ3gng3z2/Yl9+lSZtxJHplnG
- rM7K78UOnSYxqV0XZb75pVHjQSkgFC1JNOk+XtV3dTi1Oc7o21Twp4ct6qLAeJ5vV+WWYivLCPR
- t9TGq2qozq7pQPVtqppeCAXrgwi3U4O2bWOu3CYOv3ZJrVvXScRmFujVs8Gr5p1N5y4w2Rf9p/a
- 3PKVMaOyiM1tf8rUsiCGqyl8HffUlRS/Ih34/QYfrutYr/EJfx7lTzxu6Guntcq93hoEVXn7vsy
- I69t0vQV7mb0t2d+pLhEXvDPk+OaCQ2lD2nOrPz0aMGgCg8r/ez2P+dYIfEpxKh5fqfbk1zpoqw
- 3YvXKzSzMXDUKZQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2127; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=xEow9YFv9tWxKuTGRmYBanqZYgnlQCz+XPTruWbAxlY=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqRhz4y0UzWpG2vq9pNsBeXNaVPQAXpCwoH/CqF
+ 5UKSr9tabGJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakYc+AAKCRDm/A8cN/La
+ heBcEACG7fRdAKaggYdYW+Kmy5AukfFGo0WDxvZitKeqqERRluPiowtv+fiW72Eh+xmI6rB88xT
+ A9NgJkcYyLsMKEa30ZOg6paZS/e1Wyfg3apNWs04HXG/SCHZ1TO5FUrXxjDAynwHEvOprtof54n
+ ZLep4U6cVL48VOhgvX+nqF5WLDhVSQbK1jnIVR2kaMNj7a/240tzf/mAmrrUKOJMVH5qzNP1+qZ
+ /PR38HOQLqe+7u8mM3QBRDraZ2jCio4OxQy1IgVN5hXCEXCiCf2FmN+bmfZ/jcJNZlBJ9GPgz4W
+ G8PAZ3AvDVIcT8KAtgqJ2tCqZ3yeKPrXB28FAJc+40ocBqjJBa+LUWI+KqyRQe014Xyl/FMvbSf
+ gQ3jd+LBj+Rzu0p6SMgkS1qdOhtsYBT3FX4LMuKFGeU66/pWtS8JorozPyetUsdhu1jVEafMysx
+ EAdBUqHexlFlrIaiRITCK2q72pAO87AEBno0EjyJp50T3JM+X3TuZ3Q5DxPQeiLA6go+cc8p3yn
+ w5SNHC+GNWQK3GXnqjK5KaUQkw0IJu/QZIk+UadfkrPS8A6qY8+MmDPytdCqXoXBn5SzIHQ6uGI
+ lr7rCwIHXbb0Zb9O2YfDG2T/vooP48C9zFfsO9fx6pXw5qjqEWU64yAokgm1wxnnYPZJjKY4a5s
+ LgBFgUmnX/HASMQ==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 X-Rspamd-Action: no action
@@ -130,15 +131,15 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:junhui.liu@pigmoral.tech,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:mripard@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-sunxi@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:jbrunet@baylibre.com,m:krzk@kernel.org,m:conor@kernel.org,m:jernejskrabec@gmail.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:junhui.liu@pigmoral.tech,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:wens@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:mripard@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-sunxi@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:sashiko-bot@kernel.org,m:jbrunet@baylibre.com,m:krzk@kernel.org,m:conor@kernel.org,m:jernejskrabec@gmail.com,s:lists@lfdr.de];
 	FREEMAIL_TO(0.00)[pigmoral.tech,bootlin.com,kernel.org,gmail.com,sholland.org,baylibre.com];
 	FORGED_SENDER(0.00)[jbrunet@baylibre.com,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	RCPT_COUNT_TWELVE(0.00)[19];
 	DMARC_NA(0.00)[baylibre.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6858-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6859-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -151,45 +152,71 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:dkim,baylibre.com:email,baylibre.com:mid,baylibre.com:from_mime,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 235AA6F4AA8
+X-Rspamd-Queue-Id: 255BB6F4AB2
 
-Add a new rtc compatible for the sun60i-a733 SoC and new IDs for the
-peripheral oscillator clock gates of this SoC.
+When registering clocks with sunxi_ccu_probe(), the number of ccu_clocks
+and the number of hw clocks might be different, eventhough they usually are
+the same.
 
+If they are different, it could lead to out-of-bound access or registered
+clock left behind on error.
+
+Use a different variable when iterating on hw clocks so every registered
+clock, and only those, gets unregistered on error.
+
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/r/20260629131254.7E34C1F00A3A@smtp.kernel.org
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml | 1 +
- include/dt-bindings/clock/sun6i-rtc.h                              | 4 ++++
- 2 files changed, 5 insertions(+)
+ drivers/clk/sunxi-ng/ccu_common.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-index 959a012c626f..f2b91186ed37 100644
---- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-@@ -33,6 +33,7 @@ properties:
-           - enum:
-               - allwinner,sun20i-d1-rtc
-               - allwinner,sun55i-a523-rtc
-+              - allwinner,sun60i-a733-rtc
-           - const: allwinner,sun50i-r329-rtc
+diff --git a/drivers/clk/sunxi-ng/ccu_common.c b/drivers/clk/sunxi-ng/ccu_common.c
+index 1c083b4d0b7e..43d8eca6abee 100644
+--- a/drivers/clk/sunxi-ng/ccu_common.c
++++ b/drivers/clk/sunxi-ng/ccu_common.c
+@@ -114,7 +114,7 @@ static int sunxi_ccu_probe(struct sunxi_ccu *ccu, struct device *dev,
+ 			   const struct sunxi_ccu_desc *desc)
+ {
+ 	struct ccu_reset *reset;
+-	int i, ret;
++	int i, j, ret;
  
-   reg:
-diff --git a/include/dt-bindings/clock/sun6i-rtc.h b/include/dt-bindings/clock/sun6i-rtc.h
-index 3bd3aa3d57ce..5132a393ca4b 100644
---- a/include/dt-bindings/clock/sun6i-rtc.h
-+++ b/include/dt-bindings/clock/sun6i-rtc.h
-@@ -6,5 +6,9 @@
- #define CLK_OSC32K		0
- #define CLK_OSC32K_FANOUT	1
- #define CLK_IOSC		2
-+#define CLK_HOSC_UFS		8
-+#define CLK_HOSC_HDMI		9
-+#define CLK_HOSC_SERDES0	10
-+#define CLK_HOSC_SERDES1	11
+ 	ccu->desc = desc;
  
- #endif /* _DT_BINDINGS_CLK_SUN6I_RTC_H_ */
+@@ -130,8 +130,8 @@ static int sunxi_ccu_probe(struct sunxi_ccu *ccu, struct device *dev,
+ 		cclk->lock = &ccu->lock;
+ 	}
+ 
+-	for (i = 0; i < desc->hw_clks->num ; i++) {
+-		struct clk_hw *hw = desc->hw_clks->hws[i];
++	for (j = 0; j < desc->hw_clks->num ; j++) {
++		struct clk_hw *hw = desc->hw_clks->hws[j];
+ 		const char *name;
+ 
+ 		if (!hw)
+@@ -143,7 +143,7 @@ static int sunxi_ccu_probe(struct sunxi_ccu *ccu, struct device *dev,
+ 		else
+ 			ret = of_clk_hw_register(node, hw);
+ 		if (ret) {
+-			pr_err("Couldn't register clock %d - %s\n", i, name);
++			pr_err("Couldn't register clock %d - %s\n", j, name);
+ 			goto err_clk_unreg;
+ 		}
+ 	}
+@@ -186,8 +186,8 @@ static int sunxi_ccu_probe(struct sunxi_ccu *ccu, struct device *dev,
+ err_del_provider:
+ 	of_clk_del_provider(node);
+ err_clk_unreg:
+-	while (--i >= 0) {
+-		struct clk_hw *hw = desc->hw_clks->hws[i];
++	while (--j >= 0) {
++		struct clk_hw *hw = desc->hw_clks->hws[j];
+ 
+ 		if (!hw)
+ 			continue;
 
 -- 
 2.47.3
