@@ -1,129 +1,221 @@
-Return-Path: <linux-rtc+bounces-6885-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6886-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id NTEYHXThR2oWhAAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6885-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Fri, 03 Jul 2026 18:21:08 +0200
+	id I34tLUYgSGpimgAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6886-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Jul 2026 22:49:10 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D4B704351
-	for <lists+linux-rtc@lfdr.de>; Fri, 03 Jul 2026 18:21:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3BA705977
+	for <lists+linux-rtc@lfdr.de>; Fri, 03 Jul 2026 22:49:10 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=Ob47GSok;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=SVpP8JT3;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6885-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6885-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6886-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6886-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3FC063013862
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 Jul 2026 16:20:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0CD363001CC4
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Jul 2026 20:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65AA5305690;
-	Fri,  3 Jul 2026 16:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B23343D9D;
+	Fri,  3 Jul 2026 20:46:41 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8181304976;
-	Fri,  3 Jul 2026 16:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8945E23BD1D
+	for <linux-rtc@vger.kernel.org>; Fri,  3 Jul 2026 20:46:40 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783095657; cv=none; b=LbImny1sq6jk8RpykjwCIXguhB30hg8pum+nFTno6GV4F02dSmoJLm6gHcz8rVSy/hrFSB+9SRIxq++/K9KN0/y8oHloCl6Xs6q3MkfUZEVhH4I3XdNra0lgR6BPCvasj590GPXPnUuZjutIFVxXCpXvqEin/dOTpIJU3Hzs9I8=
+	t=1783111601; cv=none; b=ZZ0zVZ8FDMFSFURKHt4ZcqZHreIaEo5SGYPsXnT16KSIcffthq+1gGm0rNcqWOERKrPb4xzFt5544+faST804azQZk4LX2zCerSXbcZmKcAjQqWKiLRACG5UF13GEVRvevXaSzORKGlcbjzoGFFVKpeWYg+dzZA5aXgbldLBNtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783095657; c=relaxed/simple;
-	bh=OM5LeX7Z3zehI7Br7kaR6AJOzvkDGU+AsyY3eqD986Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rp9tJbhDWNHnn1mwdl8QTdJG9lfhmmOArEeGWUTxZfYGkDFEDZCslICTdWUoRMcZKhdSBWAbuhReR4sjCZGPUhiCrKi8Vx0HrbiokWALRRoT8HRaXfphJGk6CAvy2SIIGTOxnzECRBDWg5jaWu7tpSQ8pArn2wWf5A/JbFocXok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ob47GSok; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0271F000E9;
-	Fri,  3 Jul 2026 16:20:53 +0000 (UTC)
+	s=arc-20240116; t=1783111601; c=relaxed/simple;
+	bh=RrLlukxBD1h1NBSB9MXmLLKZMaRUnwb2D0vqnP16fyU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GYQ4rN/12ptd0N7ER46eahG2iimuRouxcXNjJBZAEvGNeENkd8hI+u58gQ4iIaCzRvJ/4KUYRkhfnKzFZRsDBuN9A6kUXc43Edl8t8PWFymNYKw4C5wLVkwFkGhzFnK6akqpyY9RGuHTHJkiDFe1aeLnftSfjcOzGNh/c8phLG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVpP8JT3; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEA51F00ADE
+	for <linux-rtc@vger.kernel.org>; Fri,  3 Jul 2026 20:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783095655;
-	bh=OM5LeX7Z3zehI7Br7kaR6AJOzvkDGU+AsyY3eqD986Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ob47GSokjsPQlNeF1DRo+w36Qqk3j9a2jBm2ZRPypV82dDcgEhaMtpO8cg1FfNnEk
-	 So4PGlSpvzqisjpgfs3gCKJ3Lf+Qq/pk/iPRWtk6uGoM8Nmi5lp4yvTgXxYwC7n8d2
-	 eN1pkTjnnb+767W300paAMsO5lA91HdlzkEUw0C4wrQ5yy+OuEtgOtn/D9dFkWjyMW
-	 PDYuVtgy2xN4HU7XRkh8tj2q4rFjBn/guryMnTHZ7rCW4wZT/Z0BGyfS2ZQq7Rf2OS
-	 BunNP/qYhgPuCDlWWzPjUHhKbugT0jBAVgStCALqGoFUKc4qld1OyGLc2UO9l/mvQ2
-	 c4ysojZEQUTLQ==
-Date: Fri, 3 Jul 2026 17:20:51 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Udaya Kiran Challa <challauday369@gmail.com>
-Cc: alexandre.belloni@bootlin.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, skhan@linuxfoundation.org,
-	me@brighamcampbell.com, linux-rtc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: rtc: microchip,pic32mzda-rtc: Convert to DT
- schema
-Message-ID: <20260703-identify-cringe-ef88079923cd@spud>
-References: <20260703110442.205026-1-challauday369@gmail.com>
+	s=k20260515; t=1783111600;
+	bh=j1aLSIyk5REh/r1kwHvSqeP5++R/SPhdVOZzb9nfTiM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=SVpP8JT3I9EQh/qgqiQ1MVKhqbP2QPv+peRU4as5t4vHnbByJ9K/miRyJ7PMIoMON
+	 soFru0OXS7vE2aLLiRrbjGLeEGXfYp/4+hjoNPtwXBrb6/A2eRgYINULSDV1BXYWU/
+	 hRtWXeye71TvX/9s6lQKzfkBoW5MVS1RUHU6xBmXv7l2HU5tEBqpccDuosSy8UaPBG
+	 itKIlfx5TOKdJ907Iqz7/xUSObvkJ94nmjASLI6+0hlo+CSLXEJv74tLv+a6DV+EMI
+	 ZDcMFOddYcbvtNxXLMWN73fLrkeq52VuCs4bSGZt8cVg+MTevy56GM6QH88+WlEq/s
+	 uRu9EO09xDrlA==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5aebfa21c62so1127109e87.3
+        for <linux-rtc@vger.kernel.org>; Fri, 03 Jul 2026 13:46:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rpg6n6R+IccKeftpCbepw48ZCUs6P5G+bipUo14zSTNtZPBU2aaZR/BQIMKWjtYeCz3NaXwX+j091w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzztyUqpjkjRvWHDHt0g1jstklIzoXPs8gGLiNNxMvaPUZwrZah
+	wFIuUlqm2sbEb79sMBnm0XpWZMvRQmMyEvUg081ayoSz40n9gzdw9GMTmzMWeD5JlHNIBAphhcw
+	cEW50PWXrbhxZH40DjARMHLtZe7Hme6c=
+X-Received: by 2002:a05:6512:6887:b0:5ae:a9ed:24a0 with SMTP id
+ 2adb3069b0e04-5aed50a0457mr34817e87.65.1783111598830; Fri, 03 Jul 2026
+ 13:46:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="OaoQxJwKPRf9lloS"
-Content-Disposition: inline
-In-Reply-To: <20260703110442.205026-1-challauday369@gmail.com>
+References: <cover.1782909323.git.mazziesaccount@gmail.com> <3e700a3fa7872a96257ff25a77670ec05cfd239c.1782909323.git.mazziesaccount@gmail.com>
+In-Reply-To: <3e700a3fa7872a96257ff25a77670ec05cfd239c.1782909323.git.mazziesaccount@gmail.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Fri, 3 Jul 2026 22:46:26 +0200
+X-Gmail-Original-Message-ID: <CAD++jLnaOOoLsLxzib4d1XXLxRpWBPrqCdRwqVVEUmKYS4ad6g@mail.gmail.com>
+X-Gm-Features: AVVi8Cda-_9zqWRXvuICvKpqlTILSjV5ilmg1ISZe1-qDyYHxd_AS7D-LvVUxRY
+Message-ID: <CAD++jLnaOOoLsLxzib4d1XXLxRpWBPrqCdRwqVVEUmKYS4ad6g@mail.gmail.com>
+Subject: Re: [PATCH 2/8] dt-bindings: mfd: ROHM BD73800 PMIC
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, 
+	Matti Vaittinen <matti.vaittinen@linux.dev>, Lee Jones <lee@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Brian Masney <bmasney@redhat.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.26 / 15.00];
+X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6885-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FORGED_RECIPIENTS(0.00)[m:challauday369@gmail.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:skhan@linuxfoundation.org,m:me@brighamcampbell.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6886-lists,linux-rtc=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:mazziesaccount@gmail.com,m:matti.vaittinen@fi.rohmeurope.com,m:matti.vaittinen@linux.dev,m:lee@kernel.org,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:bmasney@redhat.com,m:brgl@kernel.org,m:alexandre.belloni@bootlin.com,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:linux-gpio@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER(0.00)[linusw@kernel.org,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[fi.rohmeurope.com,linux.dev,kernel.org,gmail.com,baylibre.com,redhat.com,bootlin.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-rtc@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[spud:mid,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,mail.gmail.com:mid,linux.dev:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D5D4B704351
+X-Rspamd-Queue-Id: 5B3BA705977
 
---OaoQxJwKPRf9lloS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Matti,
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-pw-bot: not-applicable
+thanks for your patch!
 
---OaoQxJwKPRf9lloS
-Content-Type: application/pgp-signature; name=signature.asc
+I have some inevitable pin control nitpicks!
 
------BEGIN PGP SIGNATURE-----
+On Wed, Jul 1, 2026 at 2:41=E2=80=AFPM Matti Vaittinen
+<matti.vaittinen@linux.dev> wrote:
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCakfhYwAKCRB4tDGHoIJi
-0jHsAQDdBhJEQFSxOsFL/90Eml086rure97kHVAlfSAso8DvAAD/VYDXUUP+IoQ3
-WCNQ+7brY8b5e9u3ctKoD/7ml02CngA=
-=Wmta
------END PGP SIGNATURE-----
+> +  # The GPIO1, CLKOUT (GPIO2), FAULT_B and EXTEN_OUT pins can be
+> +  # configured to interrupt pins by OTP.
 
---OaoQxJwKPRf9lloS--
+Maybe move this helpful comment into the top description: instead?
+It's kind of generic helpful info.
+
+> +# The GPIO1, CLKOUT, FAULT_B and EXTEN_OUT pins may be configured for a
+> +# specific purpose (like ADC input, 32.768 clk output, fault indicator o=
+r
+> +# delivering power sequence to a companion PMIC when multiple PMICs are
+> +# used) - but also to be either a GPO or GPI. (When used as a GPI the pi=
+n
+> +# can also be used as an IRQ source). The pin purpose is determined by
+> +# OTP (One Time Programmable memory), typically during device manufactur=
+ing.
+> +# The OTP can't be read at runtime so device-tree should describe the pi=
+ns.
+> +  rohm,pin-gpio1:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Indicate if the GPIO1 pin has been set to GPI or GPO at manufactur=
+ing.
+> +    enum: [gpi, gpo]
+> +
+> +  rohm,pin-clkout:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Indicate if the CLKOUT pin has been set to GPI or GPO at manufactu=
+ring.
+> +    enum: [gpi, gpo]
+> +
+> +  rohm,pin-fault-b:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Indicate if the FAULT_B pin has been set to GPI or GPO at manufact=
+uring.
+> +    enum: [gpi, gpo]
+> +
+> +  rohm,pin-exten:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description:
+> +      Indicate if the EXTEN_OUT pin has been set to GPI or GPO at
+> +      manufacturing.
+> +    enum: [gpi, gpo]
+
+Can we explain what "GPI" and "GPO" means in this context?
+
+I read it as "general purpose input" and "general purpose output", but...
+you just describe the exact purpose? So what is "general purpose"
+about them in that case?
+
+I would re-use "input-enable" and "output-enable" from:
+Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+(I mean don't $rf that, just use these strings).
+
+I suppose:
+enum: [input-enable, output-enable]
+
+> +  rohm,clkout-open-drain:
+> +    description: clk32kout mode. Set to 1 for "open-drain" or 0 for "cmo=
+s".
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 1
+
+Here I would also reuse the generic pinconf properties,
+something like;
+
+rohm,clkout-drive-type:
+  enum: [drive-push-pull, drive-open-drain]
+
+(Push-pull is what is colloquially referred to as "cmos".)
+
+> +            rohm,pin-gpio1 =3D "gpo";
+> +            rohm,pin-exten =3D "gpi";
+
+If you instead use nodes with properties you can do this:
+
+rohm,pin-clkout {
+    output-enable;
+    drive-push-pull;
+};
+
+This collects the clkout config in one place and make
+it obvious what is going on. But I don't know what the DT
+maintainers think about this idea.
+
+Yours,
+Linus Walleij
 
