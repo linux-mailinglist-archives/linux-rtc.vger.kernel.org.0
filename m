@@ -1,83 +1,84 @@
-Return-Path: <linux-rtc+bounces-6907-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6909-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id TMzkF+iAS2opSgEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6907-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 12:18:16 +0200
+	id R/ANGMCVS2ryVwEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6909-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 13:47:12 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28BB70F10C
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 12:18:15 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADEC67100A6
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 13:47:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=etYY2VEh;
+	dkim=pass header.d=baylibre.com header.s=google header.b=K3526KCR;
 	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6907-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6907-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6909-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6909-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 82DC231EA3F7
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 09:46:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6164C340F22B
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 09:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4F14D8DAD;
-	Mon,  6 Jul 2026 09:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1A048A2AA;
+	Mon,  6 Jul 2026 09:32:56 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1271447ECDE
-	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 09:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10144C955B
+	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 09:32:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783330369; cv=none; b=IsVDMqoY6+SwS+C7zOO9OlSJBvumH0gfkjvkNdvQlJzkClg9WTQbPntQ64uGy754bfeeBDCP8QPTe1xQwqtfBaIXp6qfx5htSEdWmW8NDcDc8uA/tG7W+AntU3sHVq68bNJhourJc17xJX1Wkh1QXrgd9hxIM9/tE/uMWhuNY/E=
+	t=1783330375; cv=none; b=Dp2QG/SMN9FGXXV9gtoV8gbHDYdb1Bd6+NXELstqmCYR0WM7B9SVWo6oWqbLR3/yqGzqHuQ86dsBarDXJG/Ig0SWiDj9ZPR6cC92HSJnv0T17ACjR+l22BEMEoOtFDNQO1/agtDGYMj1nr4kWF+fEuITcnVN/sVP7OZTYsyHqOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783330369; c=relaxed/simple;
-	bh=kzpkNVHYIKUHVyZbGK6pa3WRAS/uHKJWiKBBr/HRbXI=;
+	s=arc-20240116; t=1783330375; c=relaxed/simple;
+	bh=mDE5aNV7J0YTDC++0PyqpQq+1LRXe/OEq5dNJJriQq0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ieViOx7SKh9fyAwKEFPNbjMvPt9xQF9Io57MCaqdAgkUWWITeFaTKpUWP2TzjQ2HaGUqE0AvrfUW0kFSu+CmK4uJ4WSL491dGvOlyW7l27koByi9XHDhwfnX1DYK1LgyG39ZvV8RV79olHnL3y4+SlzuDDeHGUbVTvK94piuBdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=etYY2VEh; arc=none smtp.client-ip=209.85.128.49
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493c55d5c7aso26827765e9.1
-        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 02:32:44 -0700 (PDT)
+	 In-Reply-To:To:Cc; b=SM3DC0Ru0lphHOvG7w2n235oBNg+yPssaheEVFNxQ3myKUhJK/LrRiKIWcboe4ytrr1pFHMJPMEDHvt6+NX6dNDqtz94+uJ7RHl2DwAg8Ja0RreqiRaK8W29h0JEpB7d/l4NEi4UPLEy7n6Pmz4E7ZzxstvoaEZX2u/xuvSLDjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=K3526KCR; arc=none smtp.client-ip=209.85.128.49
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493c52cde9eso28949845e9.3
+        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 02:32:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1783330361; x=1783935161; darn=vger.kernel.org;
+        d=baylibre.com; s=google; t=1783330363; x=1783935163; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l4sV8eYg/ZL+s2Al+u7P5bf0VrRg6z5DzP1Ps8nBcME=;
-        b=etYY2VEhxV0DUuy4HJmkTbcG48wwQKwpPDHdQM72HvfDsN/Tah5uU/0Wh1FB+J599t
-         zr+Nb5v5GgRD/CrZaXRWS6mFfCLRC8Ax2qG95n0dDewg/VRDv6HYaDNUHC8QST6TCkIY
-         VIowNpgsPzpSrsW6VNskMrUU1Do02DDH0ESH0scHtv4yCPmO6MaiNtgWmbB5QvTSv2Iw
-         +MxIY+nUT0FcfIYw9ZY5Qkq6SSiIQmCQi6xbZm2CvjGnFCSviicAgUPonCI0BjDccJ8T
-         2nof1/YocOZ25zHV7Tqi367snYX7+16gN+WtWVcX6T8YgsPuG3NwhGwBLhWePqBBm51D
-         LzXA==
+        bh=rSh1ZBRvKf6dioysT8A/x6MNdQs15mKol/PsSCRG53E=;
+        b=K3526KCR914YHslGiuIRPAhEM1pCpyAnNJrXLYLHUR0eOCgLp5gIJteVE2+9nXs3bD
+         xxZkjMNmRl7G6WxL/qJSKqEI9CRAokRnCQ8c7xlRwE0HaPzRaSk2+cipIpSeMR0cMELg
+         XI+FfENQ2fIHzRAXqo9htEW79cF7j5xdP05rhrrEsM6MWxiNdHeOtCfuASxi1JWN9acT
+         CBhqLbPJ8fZIhl7x6wVLvDEdEOxLsASA0AncRezYJBi5zqsdVV5SUox+sdiCvZkIjPQQ
+         2MSyMD3X6hCOuKQogWqSn92TMRGZYMPWT4DSoMIUu6YwHeUJy4pfTn9zklytAu8koCXu
+         hSsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783330361; x=1783935161;
+        d=1e100.net; s=20251104; t=1783330363; x=1783935163;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=l4sV8eYg/ZL+s2Al+u7P5bf0VrRg6z5DzP1Ps8nBcME=;
-        b=Ix2e51vhnxBb0Asq8oJXvPV+Yv2Q/u/+fahZUxy7QiklM2Qs2j7jAOJCHMDTg7bGaX
-         w5F+ykR/Rfi03BslBXRsYn9x5ho7hO58Nk0KeFjrQn4DT7QAwO2VYt++IX86Mk+67YDP
-         dEPETR1SBDqby//7kIOUE9yln6kSJXjLZAYzF5IayFY6N4e5o1hzw72YXkj4m77gsHn8
-         nBGVdN4uP8IRecVYL69IhXsE7qIOGTGmzgW5ECOPtvh8vhGl36Ig0h+Exrkmik3rLFCA
-         VeFkKlmhNp2o28hz8ZtdT1Um1ykbIguTzB2xBjb1uhBdG4MoaJOeUwNKwbp+IgPVqPSr
-         YMtA==
-X-Gm-Message-State: AOJu0YxufqegOaFsrldF9+lsCpTCNJydL7A8oK8u+YN+L8l1E9OKxnTs
-	duppV/UG3nUyViyZGm6TE4YMV4syn89FQDMc7v+1IuV2qCzCKI09IqLAqrraUxyQtLM=
-X-Gm-Gg: AfdE7clMuKccyD8cBE26jCixxQfKNiP90qoKlNBmZpBcs5Ot29Q9nfSHskxeGiOiNGN
-	gYjrHUzMmvhGcEzFjkQmI8YaSfztrnU8UOwY/c9H3OwpNcsc00F4pn26NPJbFLi2Wo/zTomQ8og
-	XtGU0Lbu5mua/MMUEuBs16jngN1wu3kef7oi+D9ZBP7FCFfypWtRoVmeBVrpd3kqYzawZllks4w
-	bsOBgFKJa96bpqygpR4bmxP5KMbwHo5VH0bpwecWieeP7nYz3ur8FEpEDziuf55v+g9n3N09v9w
-	6acchaN8yj23q48tUetpHAMZD4D2gynvdFmaF6/fjvtFzAsIa4sWdwwL0wDZpZqDhKH6XGTusD0
-	yicKFnUbZ0TK09v86hbNqyclN6QIRabpprS5fgeUwnJN0ez1ARc4FmVswo1ON8QILGdTy7A973B
-	/ZMubJk0zTNu8=
-X-Received: by 2002:a05:600c:154b:b0:493:b6c2:cd96 with SMTP id 5b1f17b1804b1-493d11d9d42mr108969265e9.12.1783330361468;
-        Mon, 06 Jul 2026 02:32:41 -0700 (PDT)
+        bh=rSh1ZBRvKf6dioysT8A/x6MNdQs15mKol/PsSCRG53E=;
+        b=lrvzk+Zt2sXzKNuIhdrSI7vqMwqqNzipknLh1Kn0v5zTym3vKueHnXWgAJU2mrK3TL
+         3rBfXCbDAUHyS4u/MZ/Ny2gFjGp48/5pplNEwl6dilDbSUKfu+tz59UfHJYRysnmC+r1
+         kWga7L/AXzJYTEavLreF/PE0YMw+LCJBgXLqw0d+e8ZSsejsA3ipj+ob7TdQOEouE7/Y
+         ZFKbrjUJdtiXGrBU8ObunExShdT3XmO7Bu8XLrLU9ez6DaQTUmopwQKN7rJ3IXVClvAk
+         GIcrVCNZHcZ7Tf+i3vml4vnNlbYnNcpv7iKDpwyBwjYWbETXiWGr/M/m0heCqj2qV/fa
+         k4Yw==
+X-Gm-Message-State: AOJu0YxYxfktPCzO4QQmGTPCpyXvCRFec6bfjhPsFG7QA/pj9qHSAFPe
+	VgI7Hm+JHzqZ7OrZZgbrKOxPVEBvz+6uQqoNwB4O9PAx4KSvDr1Bxe+GOz8Rxk2zf3s=
+X-Gm-Gg: AfdE7cksF6q9LTlbZsFcI8pzouaxm9KDQdON07X++KsbjRujgLboocyj7PrijKOc8vx
+	x3JrwWEouLbAyhVMkjWk+GafuMrkVgxID//rUxKqCDfRqA8Vwre/TBwqkPq3pI4GD5gIGe2Q9x/
+	Ehg4PuxVbrmaGFTRpew9DKAnG4kxJvGbLXeYKIJxXrpuTbRRWkRMfsHoIBJ9j9lTJQohF3zBBHR
+	v8HFBxzqwnTqilx7UFMy0IElB7sod8PibplO3sQ6GpfSpcaI93y6YPUY5MHm0SDf0poaYW08LSw
+	H8AD55ZPDL7RSV4tacxy3Bt98XjWXyBe5f4ZytyHoSeOWcsFGdqOaBIPMHFE305myyMNN1zF6QY
+	AM9qAPkoKNrwTv8MwsR5qMsTbteYbL4HXv0+KAhSofZCHoHAsICXrjLgzSzL9bAt4HbjCM46pyA
+	VCknASabXj+wQ=
+X-Received: by 2002:a05:600c:3f0a:b0:492:4a50:41fe with SMTP id 5b1f17b1804b1-493d11f05a3mr108518285e9.22.1783330363453;
+        Mon, 06 Jul 2026 02:32:43 -0700 (PDT)
 Received: from localhost ([2a01:e0a:3c5:5fb1:1495:8c97:96f4:dff8])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-493bef1807asm313598145e9.1.2026.07.06.02.32.40
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-47aa0960634sm24496957f8f.26.2026.07.06.02.32.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 02:32:41 -0700 (PDT)
+        Mon, 06 Jul 2026 02:32:43 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Mon, 06 Jul 2026 11:32:15 +0200
-Subject: [PATCH v4 7/9] clk: sunxi-ng: mux: remove unneeded export
+Date: Mon, 06 Jul 2026 11:32:16 +0200
+Subject: [PATCH v4 8/9] clk: sunxi-ng: sun6i-rtc: split main oscillator div
+ and gate.
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
@@ -86,7 +87,7 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260706-a733-rtc-v4-7-f330728db3d3@baylibre.com>
+Message-Id: <20260706-a733-rtc-v4-8-f330728db3d3@baylibre.com>
 References: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com>
 In-Reply-To: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com>
 To: Junhui Liu <junhui.liu@pigmoral.tech>, 
@@ -102,20 +103,20 @@ Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
  Jerome Brunet <jbrunet@baylibre.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=854; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=kzpkNVHYIKUHVyZbGK6pa3WRAS/uHKJWiKBBr/HRbXI=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqS3YmfyJmVNfRc9dDNX3FlRKXkCm2eEX+2FSO9
- mfy8XRdF/mJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakt2JgAKCRDm/A8cN/La
- hdH3EACDjsiUBV1SbTRjs1G5s78KTZ7oS6GSWyf2BTTtMn2V+5Nd2ocIN7/1OTU7qHO4E9aL3rN
- IMb4bcM6XqK+z8uxaQbFr0DrRbOlRiKi/XmUhyDUiIWESP6KvjBz4nHc3tmADEMTfUurLk4i8ZC
- jJI5yXP5XGOJnxN5gv6H/ys6bWkTwHvLwjtiQ2pt7JhjX9iygJIpSePXEJnUIU+Pqb+NX3VRZ+P
- DIbcyijahmDuqlXmLX9kEGF1ERLFAgkKu/NZxY2mlpYaii62SDIeSyTU08c6lU6dNgBjkQrxDSd
- lIaWjbHZ/aodMn8hJ3rR4fQQsQxH4qHroEo3j04r1zV1EblJSAzxUEZoszz6lVI1Fr7uwVWgauq
- mOvMReWiwP9yClUSeooOR7ImTXwXBAQomS3AymvWdRLuVg8E54+rxShJLJO4bU2mcX8JQbb3sZG
- fNMmPCK3wUYK5T//1e/Zz+UBYDuzWKPCkp+IHcyKZ6S01hoSp0BKHyPEpZUenx7vvXGe1NiKvEH
- Gm5iLLR+PbCJYa5t/+jroacHVeaXyBlh0jZEeg/6BhNaxisiSOcBgH/JV9VR3ZX1jeQxjmDb6JV
- 0OOwgs/kUxvIwbg7N2dx8FjWocPUJJKqJGP8lCym5w6a9r/kNPszSOSMaUvhWJQaw0NrtpJhxQc
- kUIvmMxZfVwXFxA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2479; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=mDE5aNV7J0YTDC++0PyqpQq+1LRXe/OEq5dNJJriQq0=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBqS3YmTWLBuAgutDebw3ejtGqAFUPS56EkSWc4A
+ wtGJpbqBNSJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCakt2JgAKCRDm/A8cN/La
+ hVRZD/9c7MLYh8cPg12ioyQi+NhtPqzROV5AnuK4OgtAmpPfUuF85geQbj6t5HzciSP2Hh5Mc07
+ aeHHxl1ymAujhPPVz/w0sx4tnU+MQcTN0E/JoNe6YjsD4IXSKB2UYWaz2Mzj2rHOBpz8Jt9BdFc
+ UQ+FcbGsS1mwn9pQK5kgnb/qp6qptHo5Kz/Rih4Zsnx17p0P6tn0hMHPUa1KSiBattQ0RX+xAt2
+ IWtiahvXeBrLgJyzYxnMeK70V8BtmwhBIPs1dFcCzFka/fKigZrksQx8e7ZsF0AUqwkcbbSdIRT
+ ZCd3xtLzkBr1JoH/pO9xhIl3YI4eAPZVc/jnTc1DfSNmnrplpCz3KKensHb+1OJgpT9r0h84CTP
+ c+cJ1JLw3U1lLEzIaDO8qd6WKjb6zIHaifi0TOp+L/JZ+HHGvyCaSc5Dq2tD7PGFpfwEVAMH3xZ
+ tL8TXrkKZuCXaxuOJNB7N3lFLcqjU/0C+Xi7RdoDJZDZ8p4ARlcQYEC6p/16tVFuvRWgKI7cEIL
+ mwOOfAGoQLdeKsNPTFgA5qOjVVZNIn24USq7nNhqzvmSXlZvTBpSswK5YjYXGrCCO79jPg3hdwR
+ POG1wdQfq4QO6f7JNq1s/CJgCpm662359uW9sY5QIdpPDl+Uui0d9y7VRYZHOHWijGo6fR3pkgT
+ ySkhTV0XZ+V7+gQ==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 X-Rspamd-Action: no action
@@ -123,7 +124,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -138,7 +139,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6907-lists,linux-rtc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6909-lists,linux-rtc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -149,33 +150,81 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:from_mime,baylibre.com:email,baylibre.com:mid,baylibre.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,baylibre.com:from_mime,baylibre.com:email,baylibre.com:mid,baylibre.com:dkim,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C28BB70F10C
+X-Rspamd-Queue-Id: ADEC67100A6
 
-The export ccu_mux_helper_apply_prediv() symbol is actually not
-necessary. No module other than sunxi-ccu would use it at the moment
-so just remove the export.
+On the a733 the "osc24M-32k" clock has the same gate bits as the previously
+supported SoC but a different divider implementation.
+
+Instead of a fixed 750 divider, the divider is selected based on the
+rate of the oscillator. It can be seen as a simple read-only divider.
+
+To easily replace the divider part depending the SoC, split the divider
+and gate into two separate clock entities.
 
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/sunxi-ng/ccu_mux.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 20 +++++++++++---------
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.h |  3 ++-
+ 2 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mux.c
-index 775d396ccf31..1a441745e796 100644
---- a/drivers/clk/sunxi-ng/ccu_mux.c
-+++ b/drivers/clk/sunxi-ng/ccu_mux.c
-@@ -66,7 +66,6 @@ unsigned long ccu_mux_helper_apply_prediv(struct ccu_common *common,
- {
- 	return parent_rate / ccu_mux_get_prediv(common, cm, parent_index);
- }
--EXPORT_SYMBOL_NS_GPL(ccu_mux_helper_apply_prediv, "SUNXI_CCU");
+diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+index b24c8b196e66..25dd87e78eb7 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
++++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+@@ -218,17 +218,18 @@ static const struct clk_parent_data osc24M[] = {
+ 	{ .fw_name = "hosc", .name = "osc24M" }
+ };
  
- unsigned long ccu_mux_helper_unapply_prediv(struct ccu_common *common,
- 					    struct ccu_mux_internal *cm,
+-static struct ccu_gate osc24M_32k_clk = {
+-	.enable	= BIT(16),
+-	.common	= {
+-		.reg		= LOSC_OUT_GATING_REG,
+-		.prediv		= 750,
+-		.features	= CCU_FEATURE_ALL_PREDIV,
+-		.hw.init	= CLK_HW_INIT_PARENTS_DATA("osc24M-32k", osc24M,
+-							   &ccu_gate_ops, 0),
+-	},
++static struct clk_fixed_factor osc24M_32k_div_clk = {
++	.mult = 1,
++	.div = 750,
++	.hw.init = CLK_HW_INIT_PARENTS_DATA("osc24M-32k-div",
++					    osc24M,
++					    &clk_fixed_factor_ops,
++					    0),
+ };
+ 
++static SUNXI_CCU_GATE_HW(osc24M_32k_clk, "osc24M-32k", &osc24M_32k_div_clk.hw,
++			 LOSC_OUT_GATING_REG, BIT(16), 0);
++
+ static const struct clk_hw *rtc_32k_parents[] = {
+ 	&osc32k_clk.common.hw,
+ 	&osc24M_32k_clk.common.hw
+@@ -286,6 +287,7 @@ static struct clk_hw_onecell_data sun6i_rtc_ccu_hw_clks = {
+ 		[CLK_EXT_OSC32K_GATE]	= &ext_osc32k_gate_clk.common.hw,
+ 		[CLK_OSC24M_32K]	= &osc24M_32k_clk.common.hw,
+ 		[CLK_RTC_32K]		= &rtc_32k_clk.common.hw,
++		[CLK_OSC24M_32K_DIV]	= &osc24M_32k_div_clk.hw,
+ 	},
+ };
+ 
+diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
+index 9ae821fc2599..ab7b92b47f59 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
++++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
+@@ -9,7 +9,8 @@
+ #define CLK_EXT_OSC32K_GATE	4
+ #define CLK_OSC24M_32K		5
+ #define CLK_RTC_32K		6
++#define CLK_OSC24M_32K_DIV	7
+ 
+-#define CLK_NUMBER		(CLK_RTC_32K + 1)
++#define CLK_NUMBER		(CLK_OSC24M_32K_DIV + 1)
+ 
+ #endif /* _CCU_SUN6I_RTC_H */
 
 -- 
 2.47.3
