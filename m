@@ -1,81 +1,81 @@
-Return-Path: <linux-rtc+bounces-6926-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6927-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id mKFQIswATGr1eQEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6926-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 21:23:56 +0200
+	id EhJ1DccATGr0eQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6927-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 21:23:51 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E67CB714EBA
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 21:23:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB818714EB5
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 21:23:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b="FUGNDx/7";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=ANT1YiiB;
 	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6926-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6926-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6927-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6927-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3ABB53373B51
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 17:51:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99D8A3388074
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 17:51:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27E63BA244;
-	Mon,  6 Jul 2026 17:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B00414A1A;
+	Mon,  6 Jul 2026 17:51:52 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DDB3BADA2
-	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 17:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544BA3BBFB6
+	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 17:51:50 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783360311; cv=none; b=V1+VqNCl66bRNIGtdYx8rYeHpq94+hebi5N17Fj2ELHLdpObQiQoC1aQvnKIV4VGIbJZdqpWeBOqc9yYgV6H5bRnKwxnG+6o659HXtxT8Z+SwwrMfpUbaGgcfesn3UxiKCWKhaubjuAElm01P0To7k0qyoewd8ja+3TvxY5EHsQ=
+	t=1783360312; cv=none; b=MHiYoWBhlJe2AY4iquXuQeIOea5GTqtwDj6oOxun85b+IMrm3860p7utMBmEaEtLfnhQY8ra+dKNuwpKUE7zqGmO4tKwZqYetNWuC5Qzo1LSIl1sgz0/vk5PncZU+e5TCbw6nAO/uMh4ZJDuW29909VkeZeHxz99JIj8TyuPs7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783360311; c=relaxed/simple;
-	bh=HpoKLu3V9es7opMjR7pFLLCqJR5zFl25bej0vBDOdBI=;
+	s=arc-20240116; t=1783360312; c=relaxed/simple;
+	bh=YQQ0swAPlNYOtdSZVBJo7dYA9mdh1pilQAEGfbWdZX4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CQdhlBrFR+k+QC8w+oqNFjTyRjJjlr+ddi9bXkvWjZHRBH8wXbNrz3K0+xguA1expZf65wuzrA79x8oSP0mJlvhXIXNi6/fTz3G3NVIbL5C5jdYanAuhjXMPYTCbYOm8MkkwoqQGgvFTZ4Qa0ukiANUQmMiRgQdCFYKC5hojlvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FUGNDx/7; arc=none smtp.client-ip=209.85.128.41
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-493b786d6c0so17911245e9.2
-        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 10:51:49 -0700 (PDT)
+	 MIME-Version; b=dmvQER8jdEHJBCwK3zFJ4q5Z785istKrGGRMNQeArJmCGcaTfLTpzgMx5itQlNCSzwoJs7HHObQzcGEBP9SGYEP2MEo15A5YY93AHVmtKiKLUsuT1rzLxo+KepUsATh619m5AOnVw+6NkmAAre8mXgyQC5npv9oyrqjrVRjBgqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ANT1YiiB; arc=none smtp.client-ip=209.85.128.43
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-493c83474ddso30174235e9.3
+        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 10:51:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783360308; x=1783965108; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783360309; x=1783965109; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oPWiZQln08GcBf8WEujKuispVEeODLsYsfgQWbMre4M=;
-        b=FUGNDx/7ylTJ2QP6gqcQgch9db8FBkH+5VNR06bW3VDxGj5k93UWpsuEm6AQO03lFE
-         6PpUz4JfHVNBUm+oQhLmh9/7qGuWgbczs5nFKYZZ+VgemA2mozh+6tt0SWjptaESAaB0
-         BPEKpNxg0oPz4uJTEddpXDMjXFUzHEtMcGBJLT3t6N463k9Jr/3JxS9K+DlTqcc2HchI
-         5v/VXHALSgHNaL4m/aJaSCGm+4BSGSK29VwQbTtbG14u9k1b3SKZf21kiydkU3+oxXVt
-         ZBBAsLLcN/SoTz4wGTc5XBfBPunwkqi78ZQ4vH2Z5QH/jeNKL8RdR7qkTzegytHG7Gas
-         FPzw==
+        bh=HmxkW83CI8zC2ie0tepZoqWs3zkGn93Bzp7pmV6Q/wI=;
+        b=ANT1YiiB7h5Lev2+khVHRrYkZnBrcNOFPSYPOPl5cjasSdfYe9QdMD0ZqDqiYZeIk7
+         0Fu5FyBVkLhfLlM/JvfgHkbrd+yQr02ek2I5Fkftaaxkdbweiu14ttOOymHbUyiymX1M
+         6Ee4lyvaGNFRcU0uUL1bk4Kdl+hgCpwQoJZBRWtMUVm49zU5x5OkPJUZ4XnmQzHJ7F/J
+         11+7cOh/QoT9Te9RvUHlv5+ilYEUXzVl8kkPJZ5BfUW25h1YKuAt4Mkj6mSEKAt6deAQ
+         eiyXIidGjEpQxw4ex8upbWm2DVb5wQHFcYZMKGLJ38G6DD0yx6S9wMp+DmbEt+CFf7cO
+         R2sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783360308; x=1783965108;
+        d=1e100.net; s=20251104; t=1783360309; x=1783965109;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oPWiZQln08GcBf8WEujKuispVEeODLsYsfgQWbMre4M=;
-        b=BSuQc/gEfREp/+2OeeN6Xw5gMJTAVl7I493m5oT/q+RT1GsKICKeEDi6D8z6igq5AQ
-         O+EsAiKh0n+UoYUB03XeqY/CFWEG314RXDYa2bSJ5j7fLRvwV4aryByIFYma6f5SQJlK
-         PD9kLa34FF7MEvLG2p58P9xFcK1Zx8kukMD6YBkvH0ixffn6eojrUQQWa+MZk2o6ZcTa
-         aBc1gy3PH4tLsVbnnZY46o3WxcsQPDzvHx8uixinsdNTamn5NuXzhJP8plDVd2tjun1t
-         AOrnfqbwjj4rvhdmIF3rdSE2whfN4DyO+49cBxr44w8vhYQgzBnBjB+GkkKS23didkvM
-         r5GQ==
-X-Gm-Message-State: AOJu0Yy5VhqyLjc4tEkZdhOkifemwds2yHxYSKkheOzKU9+OzgvbSmmt
-	tFrXWm3UJcnTLhSJpl9mCyu1qJvEglFxztEMqbi7NZ7l7Uu+W+e5gVWs
-X-Gm-Gg: AfdE7cngeCi2zyP7ybmqdyGGMAagKA7CgpSfoZUhiuRq08EkakJPBD6KVYiVuiIXJJj
-	Cz4mgDNKW98HD8r9fq2h/3Yq2omczAW6GnYgddmVnSQVvIVsmuupaSdzGIbn5i0tBi5HVuiB7gE
-	cZy1SBN7JgK/A6k663jgR/4so9azSVQ0NPNXDCbvxkgXFC7zamAVC/XKnQ6OUJonbYOb5iCeNg6
-	cNo7gLAeWj7sqgrFSGMZH+Md1cd8HsYgSF8TUergEj5YwQmuAZQ5OCE5r2YTjvZPFwi+zb+djH9
-	E0K5Vp5tswfG0Ulpc8ePilbqjBpO6azz80RM8NyzNwVk18Cmy5g2dxDIMcOSdpiWkGWk6Jyx3LG
-	uqycwFGYX0/YKOkqGBHLwkEJD6IkRsof6A2M4vMaTUp1mX334bV5C2HDtbKtdIhDeJe9dpSSYJX
-	8PwX5lNLB1oQh49OJP+lU4aIoePwVoltixeD1Kvnu/Og8Py5BgEhrgRKJa3WNpaSG6sHwiaR47g
-	GLGDWu4hbWeJUyM//G+VYWYeA/D+kEfSWjfGA==
-X-Received: by 2002:a05:600c:c167:b0:493:c98f:12e3 with SMTP id 5b1f17b1804b1-493df08f73cmr17773565e9.20.1783360307931;
-        Mon, 06 Jul 2026 10:51:47 -0700 (PDT)
+        bh=HmxkW83CI8zC2ie0tepZoqWs3zkGn93Bzp7pmV6Q/wI=;
+        b=LnnF/QhcqkWGHKGsEaFDjztSADJl3fGBd4pPbkyviBVBPi/PY9H/cigprZR4vqivPb
+         mP4E89IrlXBTU+0EVEUxngE3Kg9tq27+jbFzJyt0o9gyX1cja0dP18hdL4EcOCz9rLkI
+         85q+sEi/7A67N2ArOd0LEuErsCS2HNRsF++XnWSWXT/OpkHbgbq8ZhKYbx4fRw++uxma
+         Tsx0RUhzsUh6HqwiFmDioobpfsYVffACfHe5wZwNQjROzuu9depr2QwlpnKxUiLDGIBT
+         kvqw6Slkdyer0HoqdNRsz8VrMjpKyIjmECAj3MDVWvmOgmd87XI13lVLn6hLooNMc1g8
+         i6hQ==
+X-Gm-Message-State: AOJu0Yx4Oc9oMhzhK9DXguA9rCQHlQPSNlPpmRsiswctMS1wLkBfYZwr
+	uCg6ceAG8be6dPsFX6Job4KK38fvDl25vKomSYuLqkfJm6hSpKUFir0z
+X-Gm-Gg: AfdE7clcoyV+5QJeVV4hNztYnifLaLIGuT597PjIDeh2rpHf5nUCm40iiBiOBv5bTKv
+	emvRH5iWpIK+Z++wKYPyFdxGxqcinvI2JLboEFwGBpHVpsDrXo3uVtPn8gTzVmLaa3KKv7Ivz2G
+	+mWdJq9l7Ge8RgQ/ynaWDIGSn0tjAxGLRYM8T1VSMONHeL+vyomcdeMxFAGWJ8fR1HO5E0t64yB
+	WnBPSfekHVesT1n7mN4yJgLhVMsbb+EJkohvgU8CLZbDmOLuPWtTm0FKbSytXrHi/Rnxhh592Do
+	LLr/w+uJ+RIgkSqaogc9reOeVDkL46XkaB4npS3X1EZiIGad9QKvCyynQcnkR4Zf/uRPPLy55wb
+	TV6W+EZV4CxIS9g6yXGg2aHebIqoHBm2TGgs9Y0+hViq6x7+vz0Ra34yTu6EzDYvnzlqo5eE6xF
+	/j9JrETeap+WoUWSwVkTEC3HRZ36D/WfaumiWTAlievRG9jazF4WWpOdf553hhP+90XCF6QbvBA
+	IV+sY3tbHIo0/1Glv0j4tN85xaHo1ugb0K6eQ==
+X-Received: by 2002:a05:600c:a011:b0:493:a8eb:5145 with SMTP id 5b1f17b1804b1-493df063da1mr19180125e9.4.1783360308698;
+        Mon, 06 Jul 2026 10:51:48 -0700 (PDT)
 Received: from iku.Home ([2a06:5906:61b:2d00:8e02:886d:c345:c5e2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0078d49sm1263145e9.0.2026.07.06.10.51.47
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0078d49sm1263145e9.0.2026.07.06.10.51.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 10:51:47 -0700 (PDT)
+        Mon, 06 Jul 2026 10:51:48 -0700 (PDT)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -94,10 +94,10 @@ Cc: linux-rtc@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 01/12] dt-bindings: rtc: renesas,rzn1-rtc: Add RZ/T2H and RZ/N2H support
-Date: Mon,  6 Jul 2026 18:51:27 +0100
-Message-ID: <20260706175138.12587-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	stable@vger.kernel.org
+Subject: [PATCH v3 02/12] rtc: rzn1: Handle EPROBE_DEFER for optional pps interrupt
+Date: Mon,  6 Jul 2026 18:51:28 +0100
+Message-ID: <20260706175138.12587-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260706175138.12587-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20260706175138.12587-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -109,27 +109,26 @@ List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6926-lists,linux-rtc=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS(0.00)[m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:wsa+renesas@sang-engineering.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:prabhakar.csengg+renesas@gmail.com,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:conor.dooley@microchip.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,m:wsa@sang-engineering.com,m:prabhakarcsengg@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6927-lists,linux-rtc=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:wsa+renesas@sang-engineering.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:prabhakar.csengg+renesas@gmail.com,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:stable@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,m:wsa@sang-engineering.com,m:prabhakarcsengg@gmail.com,s:lists@lfdr.de];
 	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,glider.be,gmail.com,sang-engineering.com];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,bp.renesas.com,renesas.com,microchip.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,bp.renesas.com,renesas.com];
+	FORWARDED(0.00)[lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -139,101 +138,52 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,vger.kernel.org:from_smtp,bp.renesas.com:mid,bootlin.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,sang-engineering.com:email,microchip.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[renesas.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,bp.renesas.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: E67CB714EBA
+X-Rspamd-Queue-Id: AB818714EB5
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Add compatible strings for the RTC block found on the Renesas RZ/T2H
-(R9A09G077) and RZ/N2H (R9A09G087) SoCs.
+Check for -EPROBE_DEFER from platform_get_irq_byname_optional() and handle
+the deferred probe request properly.
 
-These SoCs integrate a closely related variant of the RZ/N1 RTC IP.
-Unlike RZ/N1, they do not implement the RTCA0SUBU register. This is
-not a limitation for Linux support, as these registers are not used
-when the RTC operates in "scmp" clock mode, which is required on
-RZ/T2H and RZ/N2H due to their 195.3 kHz input clock.
+Although the "pps" interrupt is optional, an error code of -EPROBE_DEFER
+indicates that the interrupt subsystem is not yet ready. Intercept this
+specific error condition, assign it to the return value, and jump to the
+dis_runtime_pm label to avoid ignoring a valid probe deferral.
 
-The RZ/T2H RTC variant also supports a 1Hz output signal on the
-RTCAT1HZ pin, controlled by the RTCA0CTL1[RTCA01HZE] bit. This bit is
-marked as reserved in the RZ/N1 hardware manual.
-
-Update the binding schema to require the additional clock inputs used by
-these SoCs.
-
+Fixes: eea7791e00f33 ("rtc: rzn1: implement one-second accuracy for alarms")
+Cc: stable@vger.kernel.org
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
 v2->v3:
 - No changes
 
 v1->v2:
-- Updated commit message to drop reference about RTCA0TCR register.
-- Added Acked-by and Reviewed-by tags.
+- No changes
 ---
- .../bindings/rtc/renesas,rzn1-rtc.yaml        | 35 +++++++++++++++----
- 1 file changed, 28 insertions(+), 7 deletions(-)
+ drivers/rtc/rtc-rzn1.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-index 1860f0e4c31a..ea7b039a91e7 100644
---- a/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-@@ -9,15 +9,19 @@ title: Renesas RZ/N1 SoCs Real-Time Clock
- maintainers:
-   - Miquel Raynal <miquel.raynal@bootlin.com>
+diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+index 305f10a8a85b..aa27ad7f5941 100644
+--- a/drivers/rtc/rtc-rzn1.c
++++ b/drivers/rtc/rtc-rzn1.c
+@@ -464,6 +464,10 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+ 	}
  
--allOf:
--  - $ref: rtc.yaml#
--
- properties:
-   compatible:
--    items:
--      - enum:
--          - renesas,r9a06g032-rtc
--      - const: renesas,rzn1-rtc
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,r9a06g032-rtc
-+          - const: renesas,rzn1-rtc
-+
-+      - const: renesas,r9a09g077-rtc
-+
-+      - items:
-+          - const: renesas,r9a09g087-rtc
-+          - const: renesas,r9a09g077-rtc
+ 	irq = platform_get_irq_byname_optional(pdev, "pps");
++	if (irq == -EPROBE_DEFER) {
++		ret = irq;
++		goto dis_runtime_pm;
++	}
+ 	if (irq >= 0)
+ 		ret = devm_request_irq(&pdev->dev, irq, rzn1_rtc_1s_irq, 0, "RZN1 RTC 1s", rtc);
  
-   reg:
-     maxItems: 1
-@@ -54,6 +58,23 @@ required:
-   - clock-names
-   - power-domains
- 
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,r9a09g077-rtc
-+              - renesas,r9a09g087-rtc
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 2
-+        clock-names:
-+          minItems: 2
-+
- unevaluatedProperties: false
- 
- examples:
 -- 
 2.54.0
 
