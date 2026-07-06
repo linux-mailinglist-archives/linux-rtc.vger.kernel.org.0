@@ -1,333 +1,212 @@
-Return-Path: <linux-rtc+bounces-6924-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6925-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id R+u2L+/1S2r3dgEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6924-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 20:37:35 +0200
+	id 8mjGBavtS2p0dAEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6925-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 20:02:19 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1934471494A
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 20:37:35 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30AD67143AB
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 20:02:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=QmN0xgzG;
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6924-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6924-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=H28pe6VE;
+	dmarc=pass (policy=none) header.from=gmail.com;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6925-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6925-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C7EA30CB84E
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 16:47:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A75B63013189
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 17:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39BE423764;
-	Mon,  6 Jul 2026 16:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DDB3D88F5;
+	Mon,  6 Jul 2026 17:51:50 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251FB3E8C64
-	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 16:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06FE399011
+	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 17:51:48 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783356467; cv=none; b=NWpVQ19UKsHMXJsvR4/2tcPrtM02hn6O04JaC9/RDE1Y6tWD8nBCpRfaFG2mJdISCy6H/uGw31IoLcABI0lfp7GCnE7HCRHW7nqcAmczeVyTkGpEz1k5dYs4aUs/ZQhF/ApiTW+1kfWN+sgwVb5cmo5XWwIASifGiqyZ4NUsIh0=
+	t=1783360310; cv=none; b=IeuOi28P//xJrrsMimuskdrG+7iP6yxDhl+sUn9Rh/1rLkZm4t1vlcLybiYXLDM6k7DXkC6soWdbqWmyctgxxkDdpRU7RCu8csOPRobbnCvTtz7tWRAzlf2/AHd17fl1Qq72S/ATab/e4r9RljEvvmhIhbeUl4dPRDDXNsi4bXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783356467; c=relaxed/simple;
-	bh=R+o8YtHgJXSHgO5eq7i1Q8n7rZuYFQCp5qW/KIOcLKE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sW95Yh6R6Xlm4y9vi6M0gQVkT+CcvT2voPKaenaufbZL7qkFLf9pH+lnBF1yK0I8LY+xpsNbKEiQKD+wmay8dNrD889q8dfdMBAU1xPzq+i2/OPYFpXSNKEuMTFdLpXp7yNvEjwfGXeBzoOLxBkajVoajAeigntxnTLREfKpQec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QmN0xgzG; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767D71F00ACF
-	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 16:47:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783356465;
-	bh=LB2/p+oWL4RCfKiVWgBz4FzWrGlF5lzHpnv1b38gamw=;
-	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc;
-	b=QmN0xgzGzQ+V0jLldCISuCSfKjJIAhVQGbwgK/x7q8s0S+B4d1sytLyrP18xGpJ6f
-	 PDWIyLHJjvr6jXOZOOI6wnOq5P6hyBaiM1AaL1B7I0jgo+GADFe/L5XY7UHGRNpS5M
-	 MJr+lF+9uWI/154nJIJrRzwHdKrkZrhVA2ZOJF2Cr/qaIdhNnlbDMvEoVgE+iSQqop
-	 1eRmkB3QZfNZ9OU7O/iAB+JnEYfK3KgYO6XmCNFrtTi8DCGunqKCRD3wu3nX+UH7Fj
-	 1iVjR23hsmbkiZCH8axJAB6CKx1I3KzGP0gjUgVn7Js+DrcNWgLzG4+JTfOuLPDDFx
-	 WkBtuhs0kktPQ==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-39669bcaadfso36606651fa.0
-        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 09:47:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rrx9E5/gPGdYLKwPDX3Sk5xtr8/0/GDcWx01xxZRP1NWHTeNhbqPa2GzPypl2xrS2Oj5JCmiIzEiMU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7YBm1J5muHS1IlUPnr1Gxnr5LTVXuW2CbulaPUrC5DFM3tMFb
-	0K/qTBOSwNc7ugu5nVoufI+vEjWxhtMxIxiPqIOseTB147NXOjKc5iq8tVnLsnJg6zOP1TBthAD
-	FGBtLeQ/1/dXGHKuxjd0VOnCUAuoMfog=
-X-Received: by 2002:a05:651c:549:b0:39b:5a79:ebdf with SMTP id
- 38308e7fff4ca-39c5ffcf5a0mr3892111fa.20.1783356463703; Mon, 06 Jul 2026
- 09:47:43 -0700 (PDT)
+	s=arc-20240116; t=1783360310; c=relaxed/simple;
+	bh=K89syd3g6tBclCMV6bI9+wkGYB7Ri8EqjsqIU7uC7FQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ASiHNOL6Lh8qSfD4puKMvfHAU22ibpRQ7x6QCxsBb45cxNMEGUommbxr+2Sjakl69yMbnleDbmGNmdaKf3YJ4Re/Be+nwmZ3aweXzjJq3sTTA6ZOE/Q2wRyaCFrVVJk0JjyyOEp7eQReAvPvii5df30RRei13RtqZFLezviP5vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H28pe6VE; arc=none smtp.client-ip=209.85.128.52
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493b27c7451so828195e9.0
+        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 10:51:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783360307; x=1783965107; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lerme4TogeB5JN8nH5z+DAPP85cQrCMzcy5A3WRT738=;
+        b=H28pe6VEgxuuFE5gLSk/NsuExJw2o8oGKG1HVC1IZEGH3fRb3QOoXk3eHlbB5fRDoA
+         WKa54c8huZhTvaLOkdF4IkYsHQBfeE2VqanqrGe30HksG2wo3vx/HmgxvFGnXBJ8s5S9
+         RtnWKBqSx/fV4ztcnFPGxzcLzELxr/oKt6XI+ePSxiTJUKoiNEQtPLuf1eO9bwZ3HJpx
+         sViG+uR4hPGmY7zsMBIf5vzJulRM/C+/JP1hBw/2QDFbzLEdrJc2d8uVBDIAxGb8UD9c
+         WDi845bJlbNgeHdsfQc/c1Tv7Qs+DfOruhydgaPL4PRzwaJXdOJk1SAp7kVIxoAWaSau
+         LX+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783360307; x=1783965107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lerme4TogeB5JN8nH5z+DAPP85cQrCMzcy5A3WRT738=;
+        b=GgWMDAdlTCa3cYk7gM2UItZ6heSyY5oUutADScVCxXX9wDrbyQQu0KgrsnhHwqOcO8
+         s3MsueV5ODJMBx0SXxAv52Cl2dpYArg8sSH8v2IHQELhLyjCJWVEXjj507nsVi74Pm8/
+         kgbWWc2eshPm9V2+3TQLeFV20w/oLrobnN4UVm2WjNe+Zzqq+VAQFdReqFIPBIVDPmeq
+         3f1AwzoJAYbLFLX8tZxY8hX7UdY3SPrKn8eg4ShTSZnCfQRBbkLe5Z7bR6qMyM/3yAYF
+         ux3o/DEwH+7RfpP/+KXm4hWOsiUK2tpeaweohxkyyU2VWVDYjR4Mkkiw7irMYgAp+weY
+         D+Tg==
+X-Gm-Message-State: AOJu0YwpBu7vNGa9VNaCOzxUHSx8RwWhOH/VFbpyUN/gZJ7M1fezSj/E
+	d05X7OYs83J0hxloWjzMBFrxtRTL24ZODZVM/DTwO7nCKaPyp1qmm3BvYLi5LsSg04U=
+X-Gm-Gg: AfdE7clt1LUl4QiL5jWX8O1ctWUo0BnG2EJXaeMMxQar3N0wspArsJNetyDSTC0aewG
+	zsP+8ckfPSYm0BddFgMwtawyeflPejxq3FjEX/J//oBOthrOpjO1AwjpZpOYLvGJmDtoPqZ2r5K
+	RkqHaSCTOjob6jpiA8DQ1Eyf45PLC+dfALDkFHQkq7Z1SrChQiXdwbkpmttKSvF8lxyuYimRAW1
+	7U6UkBiPMjLkHne+3kuN6miFd45ssZFxnHm7dRTvkn6HaV93/lDFjplYkIqsmxjTxDtnwIJJZ4z
+	Rs9kAOJXaoqjKUOP/KQqa2YvRCmUkclollf7PPfpEo6Yg5EBQ4mv3qi5oFBi/joOxPZVbDNwO2r
+	XdgL5YI0I+yoIfZA2TznJBcPDkvrYIPrefAcWZPutMzO7hVesiG2tTiu4eDzxafGnLFEa0wn8OA
+	djBWSnGV+sryAvV9UDcW6kMskVKTff6hEAqYY/smZUJdT1dykGiL0dyDRnScPb8kA9pHmn4a1nE
+	LX/VLLQIAuGYHTImATky8wq3fM=
+X-Received: by 2002:a05:600c:811b:b0:490:af63:2cb1 with SMTP id 5b1f17b1804b1-493decbf15dmr20138875e9.7.1783360307120;
+        Mon, 06 Jul 2026 10:51:47 -0700 (PDT)
+Received: from iku.Home ([2a06:5906:61b:2d00:8e02:886d:c345:c5e2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0078d49sm1263145e9.0.2026.07.06.10.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 10:51:46 -0700 (PDT)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-rtc@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prabhakar <prabhakar.csengg+renesas@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 00/12] Add RTC support for Renesas RZ/T2H and RZ/N2H SoCs
+Date: Mon,  6 Jul 2026 18:51:26 +0100
+Message-ID: <20260706175138.12587-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com> <20260706-a733-rtc-v4-9-f330728db3d3@baylibre.com>
-In-Reply-To: <20260706-a733-rtc-v4-9-f330728db3d3@baylibre.com>
-Reply-To: wens@kernel.org
-From: Chen-Yu Tsai <wens@kernel.org>
-Date: Tue, 7 Jul 2026 00:47:30 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67AXz=TPzNFnRMS9-vweL+6g5T57dwwYCdorwdi8HWcjA@mail.gmail.com>
-X-Gm-Features: AVVi8CdByrsX-9_IhDg4o1yi7VabBipaYBE9WpxkiCIMPZgcujnRc2dyQoLeBWQ
-Message-ID: <CAGb2v67AXz=TPzNFnRMS9-vweL+6g5T57dwwYCdorwdi8HWcjA@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] clk: sunxi-ng: sun6i-rtc: add a733 support
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Junhui Liu <junhui.liu@pigmoral.tech>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Maxime Ripard <mripard@kernel.org>, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.66 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6924-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:jbrunet@baylibre.com,m:junhui.liu@pigmoral.tech,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:mripard@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-sunxi@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,m:jernejskrabec@gmail.com,s:lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER(0.00)[wens@kernel.org,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	TAGGED_FROM(0.00)[bounces-6925-lists,linux-rtc=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:miquel.raynal@bootlin.com,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:geert+renesas@glider.be,m:magnus.damm@gmail.com,m:wsa+renesas@sang-engineering.com,m:linux-rtc@vger.kernel.org,m:linux-renesas-soc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:prabhakar.csengg+renesas@gmail.com,m:biju.das.jz@bp.renesas.com,m:fabrizio.castro.jz@renesas.com,m:prabhakar.mahadev-lad.rj@bp.renesas.com,m:krzk@kernel.org,m:conor@kernel.org,m:geert@glider.be,m:magnusdamm@gmail.com,m:wsa@sang-engineering.com,m:prabhakarcsengg@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[bootlin.com,kernel.org,glider.be,gmail.com,sang-engineering.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,bp.renesas.com,renesas.com];
 	FORWARDED(0.00)[lists@lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[pigmoral.tech,bootlin.com,kernel.org,gmail.com,sholland.org,baylibre.com,vger.kernel.org,lists.infradead.org,lists.linux.dev];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-rtc@vger.kernel.org];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
-	HAS_REPLYTO(0.00)[wens@kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[prabhakarcsengg@gmail.com,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:email,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-rtc,dt,renesas];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp,bp.renesas.com:mid,renesas.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1934471494A
+X-Rspamd-Queue-Id: 30AD67143AB
 
-On Mon, Jul 6, 2026 at 5:32=E2=80=AFPM Jerome Brunet <jbrunet@baylibre.com>=
- wrote:
->
-> Add support for the sun60i a733 CCU RTC.
->
-> Compared to the a523, this SoC has a different input oscillator divider
-> which auto-detects the oscillator rate and select a divider to provide
-> a fixed 32768Hz clock. It also provides several phy reference clocks
-> with dedicated clock gates.
->
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
->  drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 73 ++++++++++++++++++++++++++++++=
-++++--
->  drivers/clk/sunxi-ng/ccu-sun6i-rtc.h |  2 +-
->  2 files changed, 71 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/=
-ccu-sun6i-rtc.c
-> index 25dd87e78eb7..6b71bbd80255 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-> @@ -44,9 +44,13 @@
->  #define DCXO_CTRL_REG                  0x160
->  #define DCXO_CTRL_CLK16M_RC_EN         BIT(0)
->
-> +#define DCXO_GATING_REG                        0x16c
-> +
->  struct sun6i_rtc_match_data {
->         bool                            have_ext_osc32k         : 1;
->         bool                            have_iosc_calibration   : 1;
-> +       bool                            have_dcxo_status        : 1;
-> +       bool                            have_phy_ref_gates      : 1;
->         bool                            rtc_32k_single_parent   : 1;
->         const struct clk_parent_data    *osc32k_fanout_parents;
->         u8                              osc32k_fanout_nparents;
-> @@ -213,7 +217,12 @@ static struct ccu_mux osc32k_clk =3D {
->         },
->  };
->
-> -/* This falls back to the global name for fwnodes without a named refere=
-nce. */
-> +/*
-> + * This falls back to the global name for fwnodes without a named refere=
-nce.
-> + * NOTE: osc24M name might be misleading the oscillator could also be a =
-26MHz
-> + * or a 19.2MHz one starting with the a733. The original name is kept an=
-yway
-> + * in case anything is relying on it.
-> + */
->  static const struct clk_parent_data osc24M[] =3D {
->         { .fw_name =3D "hosc", .name =3D "osc24M" }
->  };
-> @@ -227,8 +236,28 @@ static struct clk_fixed_factor osc24M_32k_div_clk =
-=3D {
->                                             0),
->  };
->
-> -static SUNXI_CCU_GATE_HW(osc24M_32k_clk, "osc24M-32k", &osc24M_32k_div_c=
-lk.hw,
-> -                        LOSC_OUT_GATING_REG, BIT(16), 0);
-> +static struct clk_div_table osc24M_32k_div_a733_table[] =3D {
-> +       { .val =3D 0, .div =3D 732 },
-> +       { .val =3D 1, .div =3D 586 },
-> +       { .val =3D 2, .div =3D 793 },
-> +       { .val =3D 3, .div =3D 732 },
-> +       { /* Sentinel */ },
-> +};
-> +
-> +static struct ccu_div osc24M_32k_div_a733_clk =3D {
-> +       .enable =3D BIT(1),
-> +       .div    =3D _SUNXI_CCU_DIV_TABLE(14, 2, osc24M_32k_div_a733_table=
-),
-> +       .common =3D {
-> +               .reg            =3D DCXO_CTRL_REG,
-> +               .hw.init        =3D CLK_HW_INIT_PARENTS_DATA("osc24M-32k-=
-div",
-> +                                                          osc24M,
-> +                                                          &ccu_rodiv_ops=
-,
-> +                                                          0),
-> +       },
-> +};
-> +
-> +static SUNXI_CCU_GATE(osc24M_32k_clk, "osc24M-32k", "osc24M-32k-div",
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-I'm not a big fan of using global clock parent names, especially when we
-can have proper struct clk_hw pointer references. However in this case
-it seems unavoidable without making a huge mess.
+Hi all,
 
-> +                     LOSC_OUT_GATING_REG, BIT(16), 0);
->
->  static const struct clk_hw *rtc_32k_parents[] =3D {
->         &osc32k_clk.common.hw,
-> @@ -267,6 +296,15 @@ static struct ccu_mux osc32k_fanout_clk =3D {
->         },
->  };
->
-> +static SUNXI_CCU_GATE_FW(hosc_serdes1_clk, "hosc-serdes1", "hosc",
-> +                     DCXO_GATING_REG, BIT(5), 0);
-> +static SUNXI_CCU_GATE_FW(hosc_serdes0_clk, "hosc-serdes0", "hosc",
-> +                     DCXO_GATING_REG, BIT(4), 0);
-> +static SUNXI_CCU_GATE_FW(hosc_hdmi_clk, "hosc-hdmi", "hosc",
-> +                     DCXO_GATING_REG, BIT(1), 0);
-> +static SUNXI_CCU_GATE_FW(hosc_ufs_clk, "hosc-ufs", "hosc",
-> +                     DCXO_GATING_REG, BIT(0), 0);
-> +
->  static struct ccu_common *sun6i_rtc_ccu_clks[] =3D {
->         &iosc_clk,
->         &iosc_32k_clk,
-> @@ -275,6 +313,11 @@ static struct ccu_common *sun6i_rtc_ccu_clks[] =3D {
->         &osc24M_32k_clk.common,
->         &rtc_32k_clk.common,
->         &osc32k_fanout_clk.common,
-> +       &osc24M_32k_div_a733_clk.common,
-> +       &hosc_serdes1_clk.common,
-> +       &hosc_serdes0_clk.common,
-> +       &hosc_hdmi_clk.common,
-> +       &hosc_ufs_clk.common,
->  };
->
->  static struct clk_hw_onecell_data sun6i_rtc_ccu_hw_clks =3D {
-> @@ -288,6 +331,10 @@ static struct clk_hw_onecell_data sun6i_rtc_ccu_hw_c=
-lks =3D {
->                 [CLK_OSC24M_32K]        =3D &osc24M_32k_clk.common.hw,
->                 [CLK_RTC_32K]           =3D &rtc_32k_clk.common.hw,
->                 [CLK_OSC24M_32K_DIV]    =3D &osc24M_32k_div_clk.hw,
-> +               [CLK_HOSC_UFS]          =3D &hosc_ufs_clk.common.hw,
-> +               [CLK_HOSC_HDMI]         =3D &hosc_hdmi_clk.common.hw,
-> +               [CLK_HOSC_SERDES0]      =3D &hosc_serdes0_clk.common.hw,
-> +               [CLK_HOSC_SERDES1]      =3D &hosc_serdes1_clk.common.hw,
->         },
->  };
->
-> @@ -330,6 +377,15 @@ static const struct sun6i_rtc_match_data sun55i_a523=
-_rtc_ccu_data =3D {
->         .osc32k_fanout_nparents =3D ARRAY_SIZE(sun50i_r329_osc32k_fanout_=
-parents),
->  };
->
-> +static const struct sun6i_rtc_match_data sun60i_a733_rtc_ccu_data =3D {
-> +       .have_ext_osc32k        =3D true,
-> +       .have_iosc_calibration  =3D true,
-> +       .have_dcxo_status       =3D true,
-> +       .have_phy_ref_gates     =3D true,
-> +       .osc32k_fanout_parents  =3D sun50i_r329_osc32k_fanout_parents,
-> +       .osc32k_fanout_nparents =3D ARRAY_SIZE(sun50i_r329_osc32k_fanout_=
-parents),
-> +};
-> +
->  static const struct of_device_id sun6i_rtc_ccu_match[] =3D {
->         {
->                 .compatible     =3D "allwinner,sun50i-h616-rtc",
-> @@ -343,6 +399,10 @@ static const struct of_device_id sun6i_rtc_ccu_match=
-[] =3D {
->                 .compatible     =3D "allwinner,sun55i-a523-rtc",
->                 .data           =3D &sun55i_a523_rtc_ccu_data,
->         },
-> +       {
-> +               .compatible     =3D "allwinner,sun60i-a733-rtc",
-> +               .data           =3D &sun60i_a733_rtc_ccu_data,
-> +       },
->         {},
->  };
->  MODULE_DEVICE_TABLE(of, sun6i_rtc_ccu_match);
-> @@ -375,6 +435,13 @@ int sun6i_rtc_ccu_probe(struct device *dev, void __i=
-omem *reg)
->         osc32k_fanout_init_data.parent_data =3D data->osc32k_fanout_paren=
-ts;
->         osc32k_fanout_init_data.num_parents =3D data->osc32k_fanout_npare=
-nts;
->
-> +       if (data->have_dcxo_status)
-> +               sun6i_rtc_ccu_hw_clks.hws[CLK_OSC24M_32K_DIV] =3D
-> +                       &osc24M_32k_div_a733_clk.common.hw;
-> +
-> +       if (!data->have_phy_ref_gates)
-> +               sun6i_rtc_ccu_hw_clks.num =3D CLK_OSC24M_32K_DIV + 1;
+This series adds support for the RTC IP found on the Renesas RZ/T2H and
+RZ/N2H SoCs.
 
-Maybe keep the old CLK_NUMBER macro and call the new one CLK_NUMBER_A733?
-The point is to not directly use a random macro + 1 here.
+The RTC block is closely related to the RZ/N1 implementation and can
+reuse the existing driver infrastructure when operating in SCMP mode,
+which is required on these SoCs due to their 195.3 kHz RTC input clock.
 
-Otherwise,
+While the RZ/T2H and RZ/N2H variants do not implement the RTCA0SUBU
+register present on RZ/N1, this register is not accessed by the driver
+in SCMP mode, allowing support to be added with minimal changes.
 
-Reviewed-by: Chen-Yu Tsai <wens@kernel.org>
+The RZ/T2H RTC variant also supports a 1 Hz output signal on the
+RTCAT1HZ pin, controlled by the RTCA0CTL1[RTCA01HZE] bit. This bit is
+marked as reserved in the RZ/N1 hardware manual, making RZ/T2H a
+distinct RTC variant despite its overall compatibility with the RZ/N1
+implementation.
 
-> +
->         return devm_sunxi_ccu_probe(dev, reg, &sun6i_rtc_ccu_desc);
->  }
->
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h b/drivers/clk/sunxi-ng/=
-ccu-sun6i-rtc.h
-> index ab7b92b47f59..4f4f4cb00f1d 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
-> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
-> @@ -11,6 +11,6 @@
->  #define CLK_RTC_32K            6
->  #define CLK_OSC24M_32K_DIV     7
->
-> -#define CLK_NUMBER             (CLK_OSC24M_32K_DIV + 1)
-> +#define CLK_NUMBER             (CLK_HOSC_SERDES1 + 1)
->
->  #endif /* _CCU_SUN6I_RTC_H */
->
-> --
-> 2.47.3
->
+Patches have been rebased on top of next-20260706.
+
+v2->v3:
+- Added new patch to fix weekday underflow when alarm crosses month
+  boundary.
+- Make use of devm_add_action_or_reset() to simplify driver teardown
+  and remove the .remove() callback.
+
+v1->v2:
+- Dropped wakeup capability support patch.
+- Dropped header sort patch as it was already fixed upstream.
+- Updated commit message to drop reference about RTCA0TCR register.
+- Added Acked-by and Reviewed-by tags.
+- Updated Kconfig help text to keep it generic and not specific to
+  RZ/N1 SoCs.
+- Initialized rate variable to 32768 to avoid timeout_us of 0.
+- Made use of RZN1_RTC_SUBU_RTCA0FX mask for SUBU register access
+  instead of 0x3F.
+
+v1: https://lore.kernel.org/all/20260615154805.1619693-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (12):
+  dt-bindings: rtc: renesas,rzn1-rtc: Add RZ/T2H and RZ/N2H support
+  rtc: rzn1: Handle EPROBE_DEFER for optional pps interrupt
+  rtc: rzn1: fix weekday underflow when alarm crosses month boundary
+  rtc: rzn1: Fix malformed MODULE_AUTHOR string
+  rtc: Kconfig: Broaden RTC_DRV_RZN1 dependency to ARCH_RENESAS
+  rtc: rzn1: Fix alarm range check truncation on 32-bit systems
+  rtc: rzn1: Replace remove callback with devm_add_action_or_reset()
+  rtc: rzn1: Dynamically calculate synchronization delay based on clock
+    rate
+  rtc: rzn1: Use temporary variable for struct device
+  rtc: rzn1: Consistently use dev_err_probe()
+  rtc: rzn1: use FIELD_PREP/FIELD_GET and GENMASK for register access
+  rtc: rzn1: Add support for Renesas RZ/T2H and RZ/N2H SoCs
+
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        |  35 +++-
+ drivers/rtc/Kconfig                           |   5 +-
+ drivers/rtc/rtc-rzn1.c                        | 159 ++++++++++--------
+ 3 files changed, 116 insertions(+), 83 deletions(-)
+
+-- 
+2.54.0
+
 
