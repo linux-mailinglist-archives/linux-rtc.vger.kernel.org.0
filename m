@@ -1,150 +1,218 @@
-Return-Path: <linux-rtc+bounces-6922-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6923-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 5Tg8GtDSS2q7awEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6922-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 18:07:44 +0200
+	id GEYoOr7ZS2qmbQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6923-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 18:37:18 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0589713050
-	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 18:07:43 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9F317135CF
+	for <lists+linux-rtc@lfdr.de>; Mon, 06 Jul 2026 18:37:17 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=EPY9l92B;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=NssBhG6O;
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6922-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6922-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6923-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6923-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8AB9E344E049
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 15:43:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A1FB030901C6
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jul 2026 15:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B163F39E8;
-	Mon,  6 Jul 2026 15:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2439C1E1DE5;
+	Mon,  6 Jul 2026 15:49:22 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A726441D4E0;
-	Mon,  6 Jul 2026 15:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7870241229E
+	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 15:49:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783352327; cv=none; b=gWi2cY5jzG3rfpcNnP+cHN+U8HpWwnQopofoIyMsjxeLkKkqXN3nEPN6Sd7To2QUuKaydDRAGaYnXfHQ+fA433otfZbo2kBU0n9c/8SGSkvGMqi7Bh+/KtkoJ9PQ7bc/+fOdDqvZ1/Ux0wwjAd04OzjVuFw9OabO6iXE+gi6M+Y=
+	t=1783352961; cv=none; b=dFymyPSfH8onr0pEMexmePnp1H3IXIUqi6SmuQfi/vAwfPflRyzABHM/jJrlLPFv4bgNvmo8PIpdqnQNiITOue8ViSGt8TOXoOCRJFKea5ohNsLuNZVIViX7l8MUo89P8GHvZMVALQ5zvwuHImX30ygklKJKHzqMUMeewcgTvL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783352327; c=relaxed/simple;
-	bh=LAXozm5gc1YwylcjaE4ISSaDXB57GpYDiTTghofaIKA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=mT3W6dKdJPTm/G0aibPOxdfeck9E16XuBbv0sVIl6ym4tzcSzgbDuyaaiOkLZIPeNLsbtETaXMHMlRjrGQ00Co7iPX28iY2fsOUj9QORvIsNtv+L9uggMhPPvEEYYPCB8lIu+awXaAgyLeEqQKnHbVWB5rOVcMMFxRl1eWHol3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EPY9l92B; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1AE51F000E9;
-	Mon,  6 Jul 2026 15:38:42 +0000 (UTC)
+	s=arc-20240116; t=1783352961; c=relaxed/simple;
+	bh=pl1KEDOMoRl8LBORmoKUvE6Y1V92qEX1J/mJ+bBXXcA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=akogAgxER8cgEXGMypRTSaL7bV8gNOMx0Z4MK0rJd5WrPSIwv6rWv1PUvfnAu0VXgW9PFfvPDLNWq47QiAEvoZPi8vnyXhK/tujl8qUIdTf1/qnBm791LqFtVkrf5ZllwS4SLmm6aOsx+NsDj/jhsXLIy87RsEaId2ML0qsmEr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NssBhG6O; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA221F00A3F
+	for <linux-rtc@vger.kernel.org>; Mon,  6 Jul 2026 15:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783352326;
-	bh=RSikxvuz0fdarLrs2WLzUhq/9C36cPYevojeibE+zuk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=EPY9l92BO8O5jYYnl7h9lLRbSlM0BEJa0uue0aFoOPStybvib7DPxEXFDhCT+/87B
-	 yFDDSSH4qFc8BCqDrkinXt+2bQ4aLt5Y5iSoigcYq4fFFmmCEhIC1kseBeMaLAyZ8v
-	 gFuMzofG6T70blVK6EPNMTncsGWWv/WjzDMB9DQgHdcfFyJEsuhclX92JoFgrDLhaf
-	 WhcUfPJez+GKPnMMvuQKkL+kXGW9ZmeZOJKbF0z8yx7t71U/aeVfPiTnLUdk8IRw4v
-	 QbGps9GIFsnFluaOH2xyhsq879YyNdu/TZ/VwmHRR/yrbxz+7Y/hnZImqhCuxN8pEG
-	 FlCpnEx4ehuKw==
-From: Chen-Yu Tsai <wens@kernel.org>
-To: Junhui Liu <junhui.liu@pigmoral.tech>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <mripard@kernel.org>, 
- Jerome Brunet <jbrunet@baylibre.com>
-Cc: linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
- Sashiko <sashiko-bot@kernel.org>, Conor Dooley <conor.dooley@microchip.com>
-In-Reply-To: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com>
-References: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com>
-Subject: Re: (subset) [PATCH v4 0/9] clk: sun6i-rtc: Add support for
- Allwinner A733 SoC
-Message-Id: <178335232274.3929059.7231678940771555249.b4-ty@kernel.org>
-Date: Mon, 06 Jul 2026 23:38:42 +0800
+	s=k20260515; t=1783352957;
+	bh=x7aoi7iDnEPU3KXLwcvJh+y+bvu9z1UExF3xdy/AKzk=;
+	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc;
+	b=NssBhG6OWSogreUfjnBrNElKqA+l46MsjNYMWeKs4z/Ib79yPFqrxuxiEvOqNOFbj
+	 k9I57Pa8Jvc5PhKKi/mMMWB5QA7u6vl8CDKeBmFf0zdzvkrf2Kn2wXYPR149zXzBsB
+	 qFkBIGoZySQzH2/602ENObjxGrF0j8nndKYNnK5dGzvTe+PKBeUMuUFIXCYgLcdsx/
+	 4DQT7WpdyChNpweoI+6Cfu9q0IlfN+ney66mI/W+6OPkbHrNrifngU2JLQDs+Q7ZkK
+	 fSQcoSE18HJzQxM9iLS86xphv6eabE4fEDOPH50tqnv2Pkx8pSwoM6CC4SHGhi46b7
+	 tMrZXJ9jCh5lw==
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-39c62764c7cso1756421fa.0
+        for <linux-rtc@vger.kernel.org>; Mon, 06 Jul 2026 08:49:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpbiAZMyNuCWSLO5i2Ia9dZygwpb3HoZ2Y4fO/yWjhb5L50PtrA2M29bJSvi9TlNGimV/x33Pcip3c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV8fUuMhtHs0SR4fCnCwbY9xLpMM7Xb6OyAcp2//iCe9hyrnX+
+	8nhGQ3U6IyoKZOtmQeoPh6RDG8QthntfCIEr3OZu/E5i2foqmr05OTmZWepTpFvv5SuIcaNzNjk
+	TqODoZwJ3Ds6Y9Ob1LQny3K4ph4TMZ8Y=
+X-Received: by 2002:a2e:a989:0:b0:393:aa48:8243 with SMTP id
+ 38308e7fff4ca-39b4536de31mr31562521fa.18.1783352955971; Mon, 06 Jul 2026
+ 08:49:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
+References: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com> <20260706-a733-rtc-v4-8-f330728db3d3@baylibre.com>
+In-Reply-To: <20260706-a733-rtc-v4-8-f330728db3d3@baylibre.com>
+Reply-To: wens@kernel.org
+From: Chen-Yu Tsai <wens@kernel.org>
+Date: Mon, 6 Jul 2026 23:49:03 +0800
+X-Gmail-Original-Message-ID: <CAGb2v67P9W9v-iWshJFqQfuB_qhD2S1PRCdwowGEcRBi=-ZHDw@mail.gmail.com>
+X-Gm-Features: AVVi8CeWczpk78VcWF1dP30DqhdG3iRBi9A4c_ikMSI7IzDTUwpjlrCHftcPHAU
+Message-ID: <CAGb2v67P9W9v-iWshJFqQfuB_qhD2S1PRCdwowGEcRBi=-ZHDw@mail.gmail.com>
+Subject: Re: [PATCH v4 8/9] clk: sunxi-ng: sun6i-rtc: split main oscillator
+ div and gate.
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Junhui Liu <junhui.liu@pigmoral.tech>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Maxime Ripard <mripard@kernel.org>, linux-rtc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-3.66 / 15.00];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:junhui.liu@pigmoral.tech,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:mripard@kernel.org,m:jbrunet@baylibre.com,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-sunxi@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:sashiko-bot@kernel.org,m:conor.dooley@microchip.com,m:krzk@kernel.org,m:conor@kernel.org,m:jernejskrabec@gmail.com,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6923-lists,linux-rtc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:jbrunet@baylibre.com,m:junhui.liu@pigmoral.tech,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:mripard@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-sunxi@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,m:jernejskrabec@gmail.com,s:lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[wens@kernel.org,linux-rtc@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FREEMAIL_TO(0.00)[pigmoral.tech,bootlin.com,kernel.org,gmail.com,sholland.org,baylibre.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-6922-lists,linux-rtc=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-rtc@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER(0.00)[wens@kernel.org,linux-rtc@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[pigmoral.tech,bootlin.com,kernel.org,gmail.com,sholland.org,baylibre.com,vger.kernel.org,lists.infradead.org,lists.linux.dev];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-rtc@vger.kernel.org];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	HAS_REPLYTO(0.00)[wens@kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,baylibre.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C0589713050
+X-Rspamd-Queue-Id: E9F317135CF
 
-On Mon, 06 Jul 2026 11:32:08 +0200, Jerome Brunet wrote:
-> Add support for the Allwinner A733 RTC and its internal Clock Control
-> Unit (CCU). Reuse the rtc-sun6i rtc driver while introducing a new
-> SoC-specific RTC CCU driver to handle the hardware's evolved clock
-> structure.
-> 
-> The A733 implementation supports hardware detection of three external
-> crystal frequencies (19.2MHz, 24MHz and 26MHz), which is represented in
-> the driver via read-only divider operations. Implement logic to derive a
-> normalized 32kHz reference from these DCXO sources using fixed
-> pre-dividers. Additionally, provide several new DCXO gate clocks for
-> peripherals, including SerDes, HDMI, and UFS.
-> 
-> [...]
+On Mon, Jul 6, 2026 at 5:32=E2=80=AFPM Jerome Brunet <jbrunet@baylibre.com>=
+ wrote:
+>
+> On the a733 the "osc24M-32k" clock has the same gate bits as the previous=
+ly
+> supported SoC but a different divider implementation.
+>
+> Instead of a fixed 750 divider, the divider is selected based on the
+> rate of the oscillator. It can be seen as a simple read-only divider.
+>
+> To easily replace the divider part depending the SoC, split the divider
+> and gate into two separate clock entities.
 
-Applied to sunxi/clk-for-7.3 in sunxi, thanks!
+Actually, an even bigger reason to do this is because the read-only divider
+and gate are in different registers, something that our combined clocks
+don't support. So they need to be separate clock entities.
 
-[1/9] dt-bindings: rtc: sun6i: no clock-output-names on h616/r329
-      https://git.kernel.org/sunxi/linux/c/7b9f8fe9c9e0
-[2/9] dt-bindings: rtc: sun6i: add sun60i-a733 support
-      https://git.kernel.org/sunxi/linux/c/38d6b194a21c
-[3/9] clk: sunxi-ng: fix ccu probe clock unregister on error
-      https://git.kernel.org/sunxi/linux/c/81f4ddc9f7e0
-[4/9] clk: sunxi-ng: sun6i-rtc: clean up DT usage
-      https://git.kernel.org/sunxi/linux/c/192c6220e14d
-[5/9] clk: sunxi-ng: sun6i-rtc: Add feature bit for IOSC calibration
-      https://git.kernel.org/sunxi/linux/c/d2fcd82ca07d
-[7/9] clk: sunxi-ng: mux: remove unneeded export
-      https://git.kernel.org/sunxi/linux/c/c52b5090bf1e
+I think this should be mentioned. Otherwise,
 
-Best regards,
--- 
-Chen-Yu Tsai <wens@kernel.org>
+Reviewed-by: Chen-Yu Tsai <wens@kernel.org>
 
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 20 +++++++++++---------
+>  drivers/clk/sunxi-ng/ccu-sun6i-rtc.h |  3 ++-
+>  2 files changed, 13 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/=
+ccu-sun6i-rtc.c
+> index b24c8b196e66..25dd87e78eb7 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+> @@ -218,17 +218,18 @@ static const struct clk_parent_data osc24M[] =3D {
+>         { .fw_name =3D "hosc", .name =3D "osc24M" }
+>  };
+>
+> -static struct ccu_gate osc24M_32k_clk =3D {
+> -       .enable =3D BIT(16),
+> -       .common =3D {
+> -               .reg            =3D LOSC_OUT_GATING_REG,
+> -               .prediv         =3D 750,
+> -               .features       =3D CCU_FEATURE_ALL_PREDIV,
+> -               .hw.init        =3D CLK_HW_INIT_PARENTS_DATA("osc24M-32k"=
+, osc24M,
+> -                                                          &ccu_gate_ops,=
+ 0),
+> -       },
+> +static struct clk_fixed_factor osc24M_32k_div_clk =3D {
+> +       .mult =3D 1,
+> +       .div =3D 750,
+> +       .hw.init =3D CLK_HW_INIT_PARENTS_DATA("osc24M-32k-div",
+> +                                           osc24M,
+> +                                           &clk_fixed_factor_ops,
+> +                                           0),
+>  };
+>
+> +static SUNXI_CCU_GATE_HW(osc24M_32k_clk, "osc24M-32k", &osc24M_32k_div_c=
+lk.hw,
+> +                        LOSC_OUT_GATING_REG, BIT(16), 0);
+> +
+>  static const struct clk_hw *rtc_32k_parents[] =3D {
+>         &osc32k_clk.common.hw,
+>         &osc24M_32k_clk.common.hw
+> @@ -286,6 +287,7 @@ static struct clk_hw_onecell_data sun6i_rtc_ccu_hw_cl=
+ks =3D {
+>                 [CLK_EXT_OSC32K_GATE]   =3D &ext_osc32k_gate_clk.common.h=
+w,
+>                 [CLK_OSC24M_32K]        =3D &osc24M_32k_clk.common.hw,
+>                 [CLK_RTC_32K]           =3D &rtc_32k_clk.common.hw,
+> +               [CLK_OSC24M_32K_DIV]    =3D &osc24M_32k_div_clk.hw,
+>         },
+>  };
+>
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h b/drivers/clk/sunxi-ng/=
+ccu-sun6i-rtc.h
+> index 9ae821fc2599..ab7b92b47f59 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
+> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
+> @@ -9,7 +9,8 @@
+>  #define CLK_EXT_OSC32K_GATE    4
+>  #define CLK_OSC24M_32K         5
+>  #define CLK_RTC_32K            6
+> +#define CLK_OSC24M_32K_DIV     7
+>
+> -#define CLK_NUMBER             (CLK_RTC_32K + 1)
+> +#define CLK_NUMBER             (CLK_OSC24M_32K_DIV + 1)
+>
+>  #endif /* _CCU_SUN6I_RTC_H */
+>
+> --
+> 2.47.3
+>
 
