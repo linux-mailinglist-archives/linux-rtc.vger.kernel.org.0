@@ -1,236 +1,172 @@
-Return-Path: <linux-rtc+bounces-6951-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6952-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id GW0zFmpGTmodKAIAu9opvQ
-	(envelope-from <linux-rtc+bounces-6951-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 08 Jul 2026 14:45:30 +0200
+	id 3yanJh94T2ovhQIAu9opvQ
+	(envelope-from <linux-rtc+bounces-6952-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Thu, 09 Jul 2026 12:29:51 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B09E7266C1
-	for <lists+linux-rtc@lfdr.de>; Wed, 08 Jul 2026 14:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAEDE72F9A4
+	for <lists+linux-rtc@lfdr.de>; Thu, 09 Jul 2026 12:29:50 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=baylibre.com header.s=google header.b=c69r4ZX6;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6951-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6951-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=F03vhvIw;
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6952-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6952-lists+linux-rtc=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 29837308E611
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Jul 2026 12:38:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF143302F3AA
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jul 2026 10:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29C6944D681;
-	Wed,  8 Jul 2026 12:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF6A40BCAB;
+	Thu,  9 Jul 2026 10:10:21 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B53444D021
-	for <linux-rtc@vger.kernel.org>; Wed,  8 Jul 2026 12:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0EA40B38F;
+	Thu,  9 Jul 2026 10:10:19 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783514294; cv=none; b=VpbVb1z5rtQjurTf5zEnVb1k++nXXSD3Lpvr0heJZe3M3Iyjv2N564zA/mYI56wbdL6ZHkgp1xxmkOqv7HupwOk6V+wxDKrKOSXLvgFHDqvaZ/CF3RjBN0gf90fgByRu3ghP69CtsiQ3kJQapZOLaJ7s1QPbcQHcQKWfboYvooM=
+	t=1783591821; cv=none; b=pd5lRw1LnOwpW5ZFo9s8h3N6sSHhSTmqXvmfyZjkqhfrfMfTUxC77FGQjLcZyWE8cY9ZFsGIr7UnxAtfKoZTgVpOj68/J5K7EQgpgET3KpAWFUR3Ib36v+KuvJCvy95nK5IeCoaohFQY5Psl0AQG88bBAER9Vswf2s5tsXtUwc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783514294; c=relaxed/simple;
-	bh=+JRPwrOZ+ypwkQ7iD5bSYPKHGljtOUaxDrIScQnpVQY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RA7Ya/QCiVJ73QfNT5OFZsLaWKiJGPYKbmmzgsrPtYXH3kdBiyD3EjN2MxQu/UlrQ2u0SligmugSIVsBA6yxjWnH3d2vMGXgmiC7BACnn9DmVJ6VJ6a6PMNMDcLSJHUB/igPmWXuBJl7t4rC07sHHVmen/ySdQHnpXvh28Cawfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=c69r4ZX6; arc=none smtp.client-ip=209.85.128.44
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493bc8fda98so4737165e9.0
-        for <linux-rtc@vger.kernel.org>; Wed, 08 Jul 2026 05:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1783514290; x=1784119090; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=rFFEb1yJr4W/OXQaHP4cwompeqYq2+VX2v909Wsi6ek=;
-        b=c69r4ZX6TXcMbont5OsxB9wtWwMzbaxViO8iCNAp+S4ODLF2UIFTtSIZ779mybKXwz
-         5HsVBhS0n0jHiEO1cbRBRCnDCQgoTv3ii7AG4zwomYSmZtnIgYo/qTjLk/n+haWReQaC
-         o94M91qvvditNZTKKmEAqswp5NDf+VazLqvQio3ee4eMomsq6KxjQrBKX8QfZudREoDc
-         783ztMV+4iXy283TGlF1YmjL+gAKgmNzbAX+5F2e/Ooc2aDlyQ45fEhmOLWo4XNy/YXH
-         bkpNg7OZj7ui5sEFTBiQq5haoinuYNr9lZEQEEEaYxX7V3er+l/7+PP0FyLkoFndGFg4
-         ibGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783514290; x=1784119090;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=rFFEb1yJr4W/OXQaHP4cwompeqYq2+VX2v909Wsi6ek=;
-        b=LcBQzJvfDQ3a38gO8hNyJ1FLDhi8nWtGQZ8ZQ6aCneVDkEbvcUQo37ycLKdljqER0t
-         O6fwyfKWZL0vnImWD9qSIevK5m1SZApSdT+7KhAjY56HaQN4ik+f8tdNdDJN+abFW6rn
-         0ey7fC2IJUWAWNbeKhgyvMOONM5ox1rC3eLeSNUzv26wf+BZ2vLM/GP1jRZo6Y5tIOJO
-         w8l+A6krRmzC7e8AWIQmOSkDeoYsvPeAxDxHUMhFT69+N2Y5nJTQdtKOgoXy/laKAzUx
-         2GEs3/fox8gwKGlB5YN+w+OPinhc/J6DCYq8bT+aaIu9V8Os6bKb1ffav91DTPv7MiIe
-         DLmg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq3z2X+81aNqPxWrRDeX5P1xvEatnoNA0uIKNk6ju/Lh1pBlad9WzJ1GPdF78kDkkcarvIaWYxYOR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaEfYN866F8Ike51Ypmi4ELcPq6zrQX9I4VGGKd7sQLTpmL3C6
-	HJXc6OpXP/I8AwzSMJObLaGv3TQrI/zhjF/ecCxtI4VQIWau9+MN9sjM4kg64LwMrvY=
-X-Gm-Gg: AfdE7cnS2uh+b1pLYyPm2LJbkbr7qG6dT0w89CfLDWELAtKv89tm0SoCJGJoO2XRyRQ
-	0MBIqNX+/+HpbLO3A/DEzweHi3TnIwKseC0Eq/ZREq5Y+4Ki4RI4TYYokOStay6AUZfgNESrRYk
-	Rin3NCFmtBVtw2VkSwzsf5xw7X9KDwdWaLA6SHvx/mJU1ssGtJWlkUJqGxKjoVGpcgHI2KcDoj2
-	krQZXgqeFY56wyQgmUymvhp34XN/n0sBsfylRqom1/BOMxNiMZjIoOI77azFw0I2+4IgqOv/CyC
-	bM214YJIRF6VGlkVXla/oRsRQc4HndWGBsValzwuFsHA8JrUPTN1xRUmUIAoEHasQlzTkhfwo2n
-	xjBw1MvS/sYaXgB8qQgnxagUtJ2h8IvAFXMV5eyOlYSS2QGF4s2+zBysiHtR6x0sbJ+59mLZTtL
-	QSGiWnnrEl/Ak=
-X-Received: by 2002:a05:600c:a00f:b0:493:bc4b:b8c with SMTP id 5b1f17b1804b1-493e69e9902mr24247945e9.38.1783514290519;
-        Wed, 08 Jul 2026 05:38:10 -0700 (PDT)
-Received: from localhost ([2a01:e0a:3c5:5fb1:6a8f:4433:b91b:5334])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-493e0f4fc0bsm125307795e9.10.2026.07.08.05.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 05:38:09 -0700 (PDT)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Chen-Yu Tsai <wens@kernel.org>
-Cc: Junhui Liu <junhui.liu@pigmoral.tech>,  Alexandre Belloni
- <alexandre.belloni@bootlin.com>,  Rob Herring <robh@kernel.org>,
-  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor Dooley
- <conor+dt@kernel.org>,  Jernej Skrabec <jernej.skrabec@gmail.com>,  Samuel
- Holland <samuel@sholland.org>,  Michael Turquette
- <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>,  Maxime
- Ripard <mripard@kernel.org>,  linux-rtc@vger.kernel.org,
-  devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
-  linux-sunxi@lists.linux.dev,  linux-kernel@vger.kernel.org,
-  linux-clk@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] clk: sunxi-ng: sun6i-rtc: add a733 support
-In-Reply-To: <CAGb2v67AXz=TPzNFnRMS9-vweL+6g5T57dwwYCdorwdi8HWcjA@mail.gmail.com>
-	(Chen-Yu Tsai's message of "Tue, 7 Jul 2026 00:47:30 +0800")
-References: <20260706-a733-rtc-v4-0-f330728db3d3@baylibre.com>
-	<20260706-a733-rtc-v4-9-f330728db3d3@baylibre.com>
-	<CAGb2v67AXz=TPzNFnRMS9-vweL+6g5T57dwwYCdorwdi8HWcjA@mail.gmail.com>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Wed, 08 Jul 2026 14:38:08 +0200
-Message-ID: <1jpl0xhd1r.fsf@starbuckisacylon.baylibre.com>
+	s=arc-20240116; t=1783591821; c=relaxed/simple;
+	bh=fRNeER7LnUmcwoquzvpNn39F7hoZUAISetj6EkZZm2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZAglQaMDywneEb1thEshAVduxVhdTQAdza10AKSLHiCwHo//34ycBrSULpSST9TXkIaxsJI25G1amlNVvCSXhbQaTsbXrQ+iKaJjZl3wExj1ioZNlTwnV7EsOw8TczW1fWk7H5eHj+XIfWjv0wqxCY1W7gB2KXQgiQxjz1pheWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F03vhvIw; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C8C61F00A3D;
+	Thu,  9 Jul 2026 10:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783591819;
+	bh=oWFW04FqDfkqF6FQ5XuyyPvQ7Y46Kanl78+AV4Ugsl8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=F03vhvIwmj4StkRYQPee7Mpo8rhhvPDYa1ZUqMf2+g/CIeGCVIfCN0xnG5MJNYpgT
+	 G/xk+YiSmjsIpQ2a+ZCD1F7xW6UWIvVaIlA6EZhjtHM2GrgY2ZJp+KTKbZzmfeMY3V
+	 YI9cy3UqYXyMdyhNZ1zM949+ZSyI5yjfsP0DsW4R6T1oCjhBIM50nriVks3E2TiNTH
+	 S9m1h8vO+qxxJ7t4pzTYadBUln5t8vaGIXxmcrGaq5iBn0yQiXfbw6yHSMCKDUSEG8
+	 sAdltXpvBqJuHdUtm+PegrAGj97SvlIeTEKN0AltXJqRF1FwfLCw0B+XrWz/skAojF
+	 Ifn+6OI6uNVwQ==
+Date: Thu, 9 Jul 2026 11:10:12 +0100
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jyoti Bhayana <jbhayana@google.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Ulf Hansson <ulfh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+	imx@lists.linux.dev, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] firmware: arm_scmi: Ensure automatic module
+ loading
+Message-ID: <20260709-spicy-fiery-squid-6eec1d@sudeepholla>
+References: <20260618-scmi-modalias-v2-0-8c7547c1be21@oss.qualcomm.com>
+ <8c2a4ae3-95cc-489a-a7a4-90a3ee2597e9@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c2a4ae3-95cc-489a-a7a4-90a3ee2597e9@oss.qualcomm.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:wens@kernel.org,m:junhui.liu@pigmoral.tech,m:alexandre.belloni@bootlin.com,m:robh@kernel.org,m:krzk+dt@kernel.org,m:conor+dt@kernel.org,m:jernej.skrabec@gmail.com,m:samuel@sholland.org,m:mturquette@baylibre.com,m:sboyd@kernel.org,m:mripard@kernel.org,m:linux-rtc@vger.kernel.org,m:devicetree@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-sunxi@lists.linux.dev,m:linux-kernel@vger.kernel.org,m:linux-clk@vger.kernel.org,m:krzk@kernel.org,m:conor@kernel.org,m:jernejskrabec@gmail.com,s:lists@lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER(0.00)[jbrunet@baylibre.com,linux-rtc@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-6951-lists,linux-rtc=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[38];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[baylibre.com:+];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jbrunet@baylibre.com,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[pigmoral.tech,bootlin.com,kernel.org,gmail.com,sholland.org,baylibre.com,vger.kernel.org,lists.infradead.org,lists.linux.dev];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc,dt];
+	FORGED_RECIPIENTS(0.00)[m:johannes.goede@oss.qualcomm.com,m:bjorn.andersson@oss.qualcomm.com,m:sudeep.holla@kernel.org,m:cristian.marussi@arm.com,m:nathan@kernel.org,m:nsc@kernel.org,m:mturquette@baylibre.com,m:arm-scmi@vger.kernel.org,m:linux-arm-kernel@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:linux-kbuild@vger.kernel.org,m:sboyd@kernel.org,m:bmasney@redhat.com,m:rafael@kernel.org,m:viresh.kumar@linaro.org,m:Frank.Li@nxp.com,m:s.hauer@pengutronix.de,m:kernel@pengutronix.de,m:festevam@gmail.com,m:linux@roeck-us.net,m:jbhayana@google.com,m:jic23@kernel.org,m:dlechner@baylibre.com,m:nuno.sa@analog.com,m:andy@kernel.org,m:dmitry.torokhov@gmail.com,m:ulfh@kernel.org,m:lgirdwood@gmail.com,m:broonie@kernel.org,m:p.zabel@pengutronix.de,m:alexandre.belloni@bootlin.com,m:linux-clk@vger.kernel.org,m:linux-pm@vger.kernel.org,m:imx@lists.linux.dev,m:linux-hwmon@vger.kernel.org,m:linux-iio@vger.kernel.org,m:linux-input@vger.kernel.org,m:linux-rtc@vger.kernel.org,m:dmitrytorokhov@gmai
+ l.com,s:lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6952-lists,linux-rtc=lfdr.de];
+	FORGED_SENDER(0.00)[sudeep.holla@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sudeep.holla@kernel.org,linux-rtc@vger.kernel.org];
+	FREEMAIL_CC(0.00)[oss.qualcomm.com,kernel.org,arm.com,baylibre.com,vger.kernel.org,lists.infradead.org,redhat.com,linaro.org,nxp.com,pengutronix.de,gmail.com,roeck-us.net,google.com,analog.com,bootlin.com,lists.linux.dev];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	MISSING_XM_UA(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FROM_HAS_DN(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sudeepholla:mid,qualcomm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9B09E7266C1
+X-Rspamd-Queue-Id: EAEDE72F9A4
 
-On mar. 07 juil. 2026 at 00:47, Chen-Yu Tsai <wens@kernel.org> wrote:
+On Thu, Jun 18, 2026 at 10:31:12PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 18-Jun-26 17:56, Bjorn Andersson wrote:
+> > SCMI drivers such as the Arm SCMI CPUfreq driver are allowed to built as
+> > modules, but they are then not automatically loaded. Rework the SCMI
+> > device table alias support to make modpost consume the information from
+> > MODULE_DEVICE_TABLE(scmi, ...) and allow drivers to be loaded based on
+> > this information, if known. Also add a protocol-based alias to also
+> > trigger driver loading when only the SCMI protocol id is known.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+> 
+> So I just gave this a test spin and unfortunately it does not work.
+> 
+> The problem with Fedora's kernel-config / setup is that the
+> request_module() from patch 2/2 runs from the initramfs, but
+> the scmi_cpufreq module is only available in the rootfs.
+> 
+> It does work if I explictly add the scmi_cpufreq module to
+> the initramfs, then it does get autoloaded.
+> 
+> We really need some place to put a uevent sysfs attr which then
+> gets replayed when udev is restarted from the rootfs and then
+> re-reads all the uevent files as part of its coldplug
+> enumeration.
+> 
 
->> +
->> +static struct ccu_div osc24M_32k_div_a733_clk = {
->> +       .enable = BIT(1),
->> +       .div    = _SUNXI_CCU_DIV_TABLE(14, 2, osc24M_32k_div_a733_table),
->> +       .common = {
->> +               .reg            = DCXO_CTRL_REG,
->> +               .hw.init        = CLK_HW_INIT_PARENTS_DATA("osc24M-32k-div",
->> +                                                          osc24M,
->> +                                                          &ccu_rodiv_ops,
->> +                                                          0),
->> +       },
->> +};
->> +
->> +static SUNXI_CCU_GATE(osc24M_32k_clk, "osc24M-32k", "osc24M-32k-div",
->
-> I'm not a big fan of using global clock parent names, especially when we
-> can have proper struct clk_hw pointer references. However in this case
-> it seems unavoidable without making a huge mess.
->
-
-Indeed there is no way around it to support different SoC path with
-static data.
-
->> +                     LOSC_OUT_GATING_REG, BIT(16), 0);
->>
->>  static const struct clk_hw *rtc_32k_parents[] = {
->>         &osc32k_clk.common.hw,
->> @@ -267,6 +296,15 @@ static struct ccu_mux osc32k_fanout_clk = {
->>         },
->>  };
-
-[...]
-
->>  };
->>  MODULE_DEVICE_TABLE(of, sun6i_rtc_ccu_match);
->> @@ -375,6 +435,13 @@ int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
->>         osc32k_fanout_init_data.parent_data = data->osc32k_fanout_parents;
->>         osc32k_fanout_init_data.num_parents = data->osc32k_fanout_nparents;
->>
->> +       if (data->have_dcxo_status)
->> +               sun6i_rtc_ccu_hw_clks.hws[CLK_OSC24M_32K_DIV] =
->> +                       &osc24M_32k_div_a733_clk.common.hw;
->> +
->> +       if (!data->have_phy_ref_gates)
->> +               sun6i_rtc_ccu_hw_clks.num = CLK_OSC24M_32K_DIV + 1;
->
-> Maybe keep the old CLK_NUMBER macro and call the new one CLK_NUMBER_A733?
-> The point is to not directly use a random macro + 1 here.
-
-Are you sure you about this ? You are going to end up with this
-CLK_NUMBER_A733 in the table which is going to be odd (unless I put an
-explanation next it) then this CLK_NUMBER without any suffix put next to
-clock gate things
-
-The choice I made initially was meant to keep thing as clear as possible
-* CLK_NUMBER remains the number of clock in the table
-* CLK_OSC24M_32K_DIV + 1 (while not very nice) clearly show which is the
-  last clock in that case. It is not random IMO.
-
-If you still prefer the suggestion above, I'll submit v5 with it but it
-look odd to me.
-
->
-> Otherwise,
->
-> Reviewed-by: Chen-Yu Tsai <wens@kernel.org>
->
->> +
->>         return devm_sunxi_ccu_probe(dev, reg, &sun6i_rtc_ccu_desc);
->>  }
->>
->> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
->> index ab7b92b47f59..4f4f4cb00f1d 100644
->> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
->> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
->> @@ -11,6 +11,6 @@
->>  #define CLK_RTC_32K            6
->>  #define CLK_OSC24M_32K_DIV     7
->>
->> -#define CLK_NUMBER             (CLK_OSC24M_32K_DIV + 1)
->> +#define CLK_NUMBER             (CLK_HOSC_SERDES1 + 1)
->>
->>  #endif /* _CCU_SUN6I_RTC_H */
->>
->> --
->> 2.47.3
->>
+I don't have much knowledge on uevent to provide any suggestions/help.
+But isn't this a generic requirement ? I mean you could have modules
+install on the rootfs and not all of them are packed in initramfs ?
+Just wondering if that works for other modules, we can examine how
+do they work and what are we missing ?
 
 -- 
-Jerome
+Regards,
+Sudeep
 
