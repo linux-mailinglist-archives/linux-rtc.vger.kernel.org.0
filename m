@@ -1,155 +1,123 @@
-Return-Path: <linux-rtc+bounces-6970-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6971-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id shKJNNjtVGqXhQAAu9opvQ
-	(envelope-from <linux-rtc+bounces-6970-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2026 15:53:28 +0200
+	id fOG+FWbtVGp3hQAAu9opvQ
+	(envelope-from <linux-rtc+bounces-6971-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2026 15:51:34 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D71B674BEAD
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2026 15:53:27 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7F8874BE3B
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2026 15:51:33 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=thingy.jp header.s=google header.b=bD9fOSUb;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6970-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6970-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=none;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b="DPU9gPQ/";
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6971-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6971-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 07F783010D0A
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2026 13:39:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D7E93303FFEC
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2026 13:42:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84B5242B321;
-	Mon, 13 Jul 2026 13:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF714189C7;
+	Mon, 13 Jul 2026 13:42:58 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0457A4189C7
-	for <linux-rtc@vger.kernel.org>; Mon, 13 Jul 2026 13:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DFC33A033
+	for <linux-rtc@vger.kernel.org>; Mon, 13 Jul 2026 13:42:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783949969; cv=none; b=NWUPQb8Xh1CRO7oiftxfuqKIsoK3vjKdaOvJfb3/C6m9ZY1U76IqvCL8hUrEjtf7KDQ4LgXBg4teKKnGcS2SGHkCah4LglmlixHhtKQZISJP10V/PLhLCuUTBIQzIWIRX6Lca6TyiQLtLXzils526NdbQB/7F1fP0+IpRfWB7YY=
+	t=1783950178; cv=none; b=cCbyEfFenWKbrWKNm4sK3X9tjFcjPFMO4UTyvjILfZ/0IP2IoxlG8Qwy2NfVzH0H17Hz/jGrl+xHnIEKG6wb0k3F4M4uZecyHxYRlAks2CXGXTXoLyFr2tGkebKnLdW5xk9pEKsM5LGq9pKj98ICeZ3dzwXsOWqHoGP2s9yYN7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783949969; c=relaxed/simple;
-	bh=6VfC3Bd3u4s81nbbmnLTfCZkpdzpQKlQNIrAtglTmrw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JlwLRc27Lr5S5k8+EIWJKCdDxHDkS6chQWZpAiK05MZqOq3DZBv49DAuzqelsnV1um1PP0pUh7AlKVQIxv+/w720lD0D6f4fXW/EnfJYZCiu3Xlv62JHvHTI8H+Mjg6G3PPuJdKimFqDZlifVBS4gFjgA3rGbalJ58mU8C9FFRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=thingy.jp; spf=pass smtp.mailfrom=0x0f.com; dkim=pass (1024-bit key) header.d=thingy.jp header.i=@thingy.jp header.b=bD9fOSUb; arc=none smtp.client-ip=209.85.210.171
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8453427d3f4so2644244b3a.3
-        for <linux-rtc@vger.kernel.org>; Mon, 13 Jul 2026 06:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=thingy.jp; s=google; t=1783949966; x=1784554766; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AAWIsDu7vxZvkzxf1pzr7gM19TosbWAhVAzlL/5zYJA=;
-        b=bD9fOSUbSCjTHwRpMZNlmuVlKr2Vi9BvkK6KOGOF8LcxadiZ6kYjVCMv2omgL5IlLE
-         Mzyw7sZ+3CBPAUXHAElFThlcqJ/2FafUVvVSVKQ2gQygot47KffuHhrCUjKXgISJqmYJ
-         3roGxBhCzBotqSk7A+KsGW6RFqcOgICIhONTY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783949966; x=1784554766;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AAWIsDu7vxZvkzxf1pzr7gM19TosbWAhVAzlL/5zYJA=;
-        b=cgeJjWFVywtZp9nSuKxHSrs0nUZar7EMPGJso9I5OH1k1HPOJhVKhIcYJGuGpV0/Bg
-         sZG5EcvSORfGDWkbZGEILabDUyrb81fn1JXpdpMs7y76iABQB9gzRmI7NruykTUSxUxt
-         Sx6GIPFR/mpmgRrKbXH75qcqQLGE8A1YDsC+upnh40OzktZQ4YixBf0HiJV3xBpqzrI1
-         I7VMLGM8lCKvXg6DhtIUNPMMseU3gB1hT4IJ1602stRoRme9jj9SXz8w0bfHodm1qGZD
-         6AhUdPrQ6ZhSrg3pxCtBLhgkpBh0DRmCMObA+RSrbEFyiBfCa57Nia7Sp9xHokJwjvWq
-         I2Bw==
-X-Gm-Message-State: AOJu0YzkmsxN1GyHGhONZJvbgI97uHqdW7eHuyIpi2ml2/LBiSvJWhl1
-	LgUWkQB1veTWEngBtqqsLYkbMvJhFY2u5OIWNosft0zqD7WSUXTx2RA049gyb1L8cwY=
-X-Gm-Gg: AfdE7cmNReULJOxwiSdBqeeyuBRQZVVj7imYxz4OIYYz4umD/bqQVL9f3MY9a7m+fWS
-	Q980Pq3WlGloMUy0J3NW/rFUreKlT9zv0/Y1f30mJQVV3rob8xGcaSot9MXFCbHJwhUnF5MTDgW
-	478QLwe+jeBHsk3E7FmrPwmiy8nhjxdaR4npCwTLOl2BrwnrXzovw/nQ/lAsegWkbt8ePr4pHvn
-	rsT6N0dxNvzJaehhpLoX0SWNkUMtJwqLd57BjNGArBA4tzeryRx2x9rHbIfakjFU7VEuXPnqYSx
-	wOFIUy7LtHleH+A+5Q0m2XillH4uaqjTS6GnumWU0WTzFTYvrGd9s8dx+/3FTo3W7asDCZLNDvr
-	hf9XsxrLvpsws2/XDYiSvDvcJJkMaXrWYEf8wsVgBrOKJzKnkD/RKSMfi3IyWNyTm/uZHrb3cJp
-	aKkMklh4Ug+U0Xd1TVu+GB3O+78QQWwcYGLyht
-X-Received: by 2002:a05:6a00:a04:b0:848:7552:3d86 with SMTP id d2e1a72fcca58-8488961c15fmr8351143b3a.23.1783949966166;
-        Mon, 13 Jul 2026 06:39:26 -0700 (PDT)
-Received: from kinako.work.home.arpa ([2400:4162:2428:2ffe:a973:53e4:1a28:8545])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-84856d5d661sm6734790b3a.35.2026.07.13.06.39.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 06:39:25 -0700 (PDT)
-From: Daniel Palmer <daniel@thingy.jp>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH] rtc: msc313: Select by default on MSTARV7
-Date: Mon, 13 Jul 2026 22:39:19 +0900
-Message-ID: <20260713133919.1356748-1-daniel@thingy.jp>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1783950178; c=relaxed/simple;
+	bh=+gBtcuN46PIx3ua/BFmlX6uY4S5iwuZioy+C6XPDr9A=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=P5d3i7L/4rcg3EEAQwz8HYl1XcTmjiZ4oXg4FPVXxpTlBAq/c+UCwGaN3iMJdyjjGagODWLbCM3fYXIpn2CxExIgYdbpfrW0dTeJcxdMvStJOdwB0zMoI53x/aw8sm4h975x/PJ+pKN1f2msss8J8xyVY+t/71k6JkA0sWYdFuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPU9gPQ/; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0871C1F000E9;
+	Mon, 13 Jul 2026 13:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783950177;
+	bh=+gBtcuN46PIx3ua/BFmlX6uY4S5iwuZioy+C6XPDr9A=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DPU9gPQ/fUAKxbQsbJl4yV2wpAOuomxyjfp/Qk1Ru7q0xEsXQ1X7UrkM3RoiDZ6Wn
+	 CU7CY1i31k/wSkmw6To1WNDN3mo9y0oDbv5p8hKtnVtxAtYMg7uwj1okkMi4+ItwI3
+	 SCAa+xsSc5Sz4KcAJo76m5yA/FgOtCKvZXs0NyvjFlRbwuCktYLLuLSuQSttiZ12D9
+	 7JLgDkY/ItZ6TbNqX0ER9r8T1FRP2XifcPdNjTcUI9U9aB9cSzay8hfZEsiDE6UpvH
+	 mL2/FRUk8ASnCTyFK+GaE5/hxRctuKsShi/tXpU+wlsZ2apIJ/lJmV9Jxc1+IyPwZW
+	 Q1LMYLYXFqX0w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] rtc: msc313: Select by default on MSTARV7
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Palmer" <daniel@thingy.jp>
+Cc: linux-rtc@vger.kernel.org, "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+In-Reply-To: <20260713133919.1356748-1-daniel@thingy.jp>
+References: <20260713133919.1356748-1-daniel@thingy.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 13 Jul 2026 13:42:55 +0000
+Message-Id: <20260713134256.0871C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[thingy.jp:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6970-lists,linux-rtc=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:alexandre.belloni@bootlin.com,m:linux-rtc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:daniel@0x0f.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[daniel@thingy.jp,linux-rtc@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_NA(0.00)[thingy.jp];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[thingy.jp:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TO_DN_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6971-lists,linux-rtc=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:daniel@thingy.jp,m:linux-rtc@vger.kernel.org,m:alexandre.belloni@bootlin.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-rtc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-rtc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel@thingy.jp,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,0x0f.com:email]
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,smtp.kernel.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lists.linux.dev:replyto,0x0f.com:email,sashiko.dev:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: D71B674BEAD
+X-Rspamd-Queue-Id: C7F8874BE3B
 
-From: Daniel Palmer <daniel@0x0f.com>
+> From: Daniel Palmer <daniel@0x0f.com>
+>=20
+> All of the ARCH_MSTARV7 chips have this RTC so it's more likely
+> ARCH_MSTARV7 wants it than doesn't.
+>=20
+> At the same time fix up the indent on the depends on line that looks
+> like it got converted from a tab to spaces at some point.
+>=20
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
 
-All of the ARCH_MSTARV7 chips have this RTC so it's more likely
-ARCH_MSTARV7 wants it than doesn't.
+Sashiko has reviewed this patch and found no issues. It looks great!
 
-At the same time fix up the indent on the depends on line that looks
-like it got converted from a tab to spaces at some point.
-
-Signed-off-by: Daniel Palmer <daniel@0x0f.com>
----
- drivers/rtc/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 01def8231873..de7f86cd8e6e 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -2106,7 +2106,8 @@ config RTC_DRV_MACSMC
- 
- config RTC_DRV_MSC313
- 	tristate "MStar MSC313 RTC"
--        depends on ARCH_MSTARV7 || COMPILE_TEST
-+	depends on ARCH_MSTARV7 || COMPILE_TEST
-+	default ARCH_MSTARV7
- 	help
- 	  If you say yes here you get support for the Mstar MSC313e On-Chip
- 	  Real Time Clock.
--- 
-2.53.0
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260713133919.1356=
+748-1-daniel@thingy.jp?part=3D1
 
 
