@@ -1,204 +1,196 @@
-Return-Path: <linux-rtc+bounces-6976-lists+linux-rtc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-rtc+bounces-6977-lists+linux-rtc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id WCS8GzzuVmpwDAEAu9opvQ
-	(envelope-from <linux-rtc+bounces-6976-lists+linux-rtc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jul 2026 04:19:40 +0200
+	id RZYlN43wVmoHDQEAu9opvQ
+	(envelope-from <linux-rtc+bounces-6977-lists+linux-rtc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jul 2026 04:29:33 +0200
 X-Original-To: lists+linux-rtc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF56775A087
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jul 2026 04:19:39 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E50675A0E5
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jul 2026 04:29:33 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=sl4sF5uA;
-	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6976-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6976-lists+linux-rtc=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=gmail.com;
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=iVNVJ0Do;
+	spf=pass (mail.lfdr.de: domain of "linux-rtc+bounces-6977-lists+linux-rtc=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-rtc+bounces-6977-lists+linux-rtc=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5576F300D768
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jul 2026 02:19:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C016E3053E9D
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jul 2026 02:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8F73655EA;
-	Wed, 15 Jul 2026 02:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060103A783B;
+	Wed, 15 Jul 2026 02:29:25 +0000 (UTC)
 X-Original-To: linux-rtc@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E6686341
-	for <linux-rtc@vger.kernel.org>; Wed, 15 Jul 2026 02:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B62390231
+	for <linux-rtc@vger.kernel.org>; Wed, 15 Jul 2026 02:29:23 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784081978; cv=none; b=deYdL6g9Z2By6qnqvPVpHsVR80+ovKH4+k8WEKrRygMFHK0LO1i8crCp2tLVwzXWUM9H01FJBktsBiVe0W2SXnkdHtf6UnnO25PX0dXhqRNci2eVgvnE/5W202Mb+zF97z3MZgdgb9qP23Dyuv+8KSiTL3YxuVljkLQYQc0+l8s=
+	t=1784082564; cv=none; b=lQQN/0sVw50gPDROlxC2FUHe5NtGRnp3O7ygTS0YSy/L+YtZyDgig5MP4eMYxOwD2I64yew0d0yhYPsFbV+gOZixBhkSgXRN/vLZDT/6b5amFOAN5GB6Jy7EyVl53LLxOS/VUpZwTfegpcE+2jNLNg+kygHfd1JqkuBpateIkhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784081978; c=relaxed/simple;
-	bh=9hNvJLwHoOEou8LLYeKhtdn5GPgGf0qbTrk5z2xNAq0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OQyKN/JyLEJ5i0STonDq5cFaolTlDnEx0V0ag3IS2w8ohtlcnPEII8i3tIsTnx2itJqDAgGBI7jRQ1aKyBx0iuwBWRTcm/YyBh5Mc3nmJVV+qTLmmQDCK73aV2W33TepFlsfpqrWC6RFhdPWhqTo6pW5wsn/66PBaPgAaasYkaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sl4sF5uA; arc=none smtp.client-ip=209.85.214.182
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cae1a3a744so36312265ad.3
-        for <linux-rtc@vger.kernel.org>; Tue, 14 Jul 2026 19:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784081976; x=1784686776; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3+A/CsOvZ5kwNPw68MEUIBx9OhApXOPeGcI1WPKSM0g=;
-        b=sl4sF5uALUtSIQeKm52rsSwsCMcxl6TVWslB5xdwtMYw73CTiXFfE4uZJAtAvKuzAL
-         4L5TwCJE5D/JAqks0MyrHQk23056tEUjKxAu6f5fYtuDHdk8sgi/Mu0YRe99xBpnr102
-         +RK8Rf0p6Opz9fpvQK0s1u9m862jaz1A97liPOdkzNESRXn87VH9DhjanwDpfCa95E+N
-         W74xAv9F83WYlySInF+aIcKujY6TL8J/L7OWdJjDl6T1SI2gHPto9JBr4glP6CAJTWrx
-         s5Wq6BlFNzBo8EPfQpSo+A6o8YqhA6BS615cvsmRhrvUaXY2RQGB0hnc9dBc35/6LZ4A
-         fZ1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784081976; x=1784686776;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3+A/CsOvZ5kwNPw68MEUIBx9OhApXOPeGcI1WPKSM0g=;
-        b=HR8ViX/7uy9ud6KIzflIjIJqA3bM+e+JInzk4xRZI3GMoBVu381Bhf3KMlCFieuRNY
-         9bLow/8EtncF/euPyW74XVaM4EnGpVxuVHSP+KSXTET7ZWYsxQ7o6TL1YvJGd2cB/t9Z
-         UGhJQPzLK8kBauKp3VLSy56ARaplSfutNIPvXghtXvkCcmXkqABwZKO7MEkBS5Wrca5R
-         RKH0WrNccnLQAy8/I2Bj95omRGvOyBALPhHFVd5SV7eOqJ4s+B8i0mEgDTZqWoWprQ6O
-         UsVTvjLdZaXDQtPwd8V1qZY9kZOR9feflxZwqMmpYOn144mJpcOxzvGpWycosVB1VXXq
-         PBgQ==
-X-Gm-Message-State: AOJu0Yyzo6tG3+7eFX57c+K4jfuVdoSZUJ9C97C9WUQCtQPZJKqBYOEV
-	IGLfJHzbnrDfvd5X5jf1LMyjerKPhA7GIGVW1RB1OrVPp4FuMMiPVYa68FgjxZAq
-X-Gm-Gg: AfdE7ckQnAZpQsBuEeAvBc28aDdHJaXOWBNeoFtLGh03W+VHztzjbQlXQQTv3LrrcyF
-	E6DjS/IUdKbYHoHLg7axXe4O0N9NZbYj6ShGKUjYsr1XtQNvz4IvQWnswMa4GjKZ6POwVV1w9ud
-	wjJ15DMpC54VMGRYDlzIt/wZNDY0VQiDjEC5RwSCYCWzUm5YwoMrcKztXJKs/YAMQHW9dtn4MgC
-	oAtFlKPYAqp62IWA5AfmRZzfQIT5otnAJVeeQsSUA+52+rTMiJtVwIUKhlUT0XOZ6a/pXU3NpGK
-	5G0HC0zyh1hY37rPeRc8F6tHBgWXJM1D0kGdIrkWyuHcVd0BajoqWJReH4OJU1rOf20GeA9MynN
-	TaY/G3DdWIsfpVZM53qEI2WR6dy/soxJ8Klyf/bi0015rEmT8aCh0HNbiCmYeAqBrPPkqdtrhDL
-	ndwrinxpGrXsyA/qOe1bPgSSb9ipjVdIxBqGfXcsVkbFVvbJQiEXs/f52pTpjO92X8MXRqC/B/G
-	2umscaqQ0cGb91G32JHZY0DwRX2iivzhTyU8uU/9+CO4Mj7M+b/mR0fV48p+Ox+3A==
-X-Received: by 2002:a05:6a20:3d92:b0:3c0:9c1a:893e with SMTP id adf61e73a8af0-3c34d8c599fmr6957139637.70.1784081976192;
-        Tue, 14 Jul 2026 19:19:36 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca7f626fb78sm8653754a12.13.2026.07.14.19.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 19:19:35 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-rtc@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32 ARCHITECTURE),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32 ARCHITECTURE),
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] rtc: stmp3xxx: use devm_platform_ioremap_resource()
-Date: Tue, 14 Jul 2026 19:19:33 -0700
-Message-ID: <20260715021933.1551663-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	s=arc-20240116; t=1784082564; c=relaxed/simple;
+	bh=yTeuFGFVBZGYk5/ZRgVlpkcwyL2uMGxdjRMxnnTFmP4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=VHwn81bDUx75Gf7sl96+LDEHAtVUwh5vlb0V9CwKMqxYTWMKCXtr2f/dXILPxr3hB+BHruGjpO0XFwN7YIf6Ire53KN8eBQPXIdoaQ3WC/GKMPWlknXAfslhQfV+RdR/SUBv6trwEea3bO0o/f8vnwUQIgMobIoKKMMy/kgnwXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iVNVJ0Do; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843FB1F000E9;
+	Wed, 15 Jul 2026 02:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784082563;
+	bh=2AOsIv6yry7gh9KfxDUue3Xt8TLJGyAlByGbXbwaOjs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iVNVJ0DoEO8zGS/wlfJQK1EGiHMjRwtntuJVj5/VjFokc7SRpo1gJTF804cD+UrU6
+	 cynd3h1ehi4qNTGo+GQZID+ZuMVbAfl7/hD5amdKo4mATQrfZSqp0nyzdDPTKqJEZ6
+	 Vvvxe6SGOek83V7bSSENTDLyoz50+C3o9vwq8yMEaFvu9Teuxly/tkMwEvLUSlwiQ5
+	 znhSlg22VSWR21Wk50Bo7d2DAFYoVQITrkJOTWjp0zGplepPLKARk42nHGr0xM91Z7
+	 EDBqVcebRl/HtXHUjslhXjVTFWM3qBv1loKpUdzzDtF+UNZhv8aW3KN6ZAaimTJeBO
+	 6p6su81fYIpew==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] rtc: stmp3xxx: use devm_platform_ioremap_resource()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Rosen Penev" <rosenp@gmail.com>
+Cc: linux-rtc@vger.kernel.org, "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+In-Reply-To: <20260715021933.1551663-1-rosenp@gmail.com>
+References: <20260715021933.1551663-1-rosenp@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 15 Jul 2026 02:29:23 +0000
+Message-Id: <20260715022923.843FB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-rtc@vger.kernel.org
 List-Id: <linux-rtc.vger.kernel.org>
 List-Subscribe: <mailto:linux-rtc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-rtc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-3.16 / 15.00];
+	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	MISSING_MIME_VERSION(2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6976-lists,linux-rtc=lfdr.de];
-	FORGED_SENDER(0.00)[rosenp@gmail.com,linux-rtc@vger.kernel.org];
-	FREEMAIL_CC(0.00)[bootlin.com,gmail.com,foss.st.com,kernel.org,google.com,st-md-mailman.stormreply.com,lists.infradead.org,vger.kernel.org,lists.linux.dev];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:linux-rtc@vger.kernel.org,m:alexandre.belloni@bootlin.com,m:mcoquelin.stm32@gmail.com,m:alexandre.torgue@foss.st.com,m:nathan@kernel.org,m:ndesaulniers@google.com,m:morbo@google.com,m:justinstitt@google.com,m:linux-stm32@st-md-mailman.stormreply.com,m:linux-arm-kernel@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:llvm@lists.linux.dev,m:mcoquelinstm32@gmail.com,s:lists@lfdr.de];
+	TO_DN_SOME(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6977-lists,linux-rtc=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:rosenp@gmail.com,m:linux-rtc@vger.kernel.org,m:alexandre.belloni@bootlin.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[sashiko-bot@kernel.org,linux-rtc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashiko-bot@kernel.org,linux-rtc@vger.kernel.org];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-rtc];
+	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rosenp@gmail.com,linux-rtc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	ALIAS_RESOLVED(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-rtc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	FROM_NO_DN(0.00)[];
+	HAS_REPLYTO(0.00)[sashiko-reviews@lists.linux.dev];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sashiko.dev:url,lists.linux.dev:replyto,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: EF56775A087
+X-Rspamd-Queue-Id: 2E50675A0E5
 
-Replace the open-coded platform_get_resource() plus devm_ioremap()
-sequence with a single devm_platform_ioremap_resource() call, which folds
-the resource lookup and mapping into one step and returns an ERR_PTR on
-failure, checked with IS_ERR() and propagated via PTR_ERR().
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Move the mapping ahead of the devm_kzalloc() so that an error or deferred
-probe is handled before the rtc_data allocation, avoiding needless work.
+Pre-existing issues:
+- [High] The return value of `platform_get_irq()` is not checked for errors=
+, breaking deferred probing and unnecessarily disrupting hardware state.
+- [High] The child watchdog platform device is never unregistered when the =
+RTC driver is unbound, leading to a leaked device and potential Use-After-F=
+ree.
+--
 
-The fsl,stmp3xxx-rtc nodes in imx23.dtsi (reg = <0x8005c000 0x2000>) and
-imx28.dtsi (reg = <0x80056000 0x2000>) each provide a single
-non-overlapping IORESOURCE_MEM window, so the region reservation now
-performed by devm_platform_ioremap_resource() introduces no conflict.
-
-Built for ARM (mxs_defconfig + CONFIG_RTC_DRV_STMP) with LLVM=1;
-drivers/rtc/rtc-stmp3xxx.o compiles cleanly.
-
-Assisted-by: opencode:hy3-free
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+--- Patch [1]: [PATCH] rtc: stmp3xxx: use devm_platform_ioremap_resource() =
 ---
- drivers/rtc/rtc-stmp3xxx.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+commit eb7d944b8c0d01b4294ccf13b092d4f30d47bb4e
+Author: Rosen Penev <rosenp@gmail.com>
 
-diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
-index 7afcd14aeee5..05f128ccf827 100644
---- a/drivers/rtc/rtc-stmp3xxx.c
-+++ b/drivers/rtc/rtc-stmp3xxx.c
-@@ -245,28 +245,21 @@ static void stmp3xxx_rtc_remove(struct platform_device *pdev)
- static int stmp3xxx_rtc_probe(struct platform_device *pdev)
- {
- 	struct stmp3xxx_rtc_data *rtc_data;
--	struct resource *r;
-+	void __iomem *io;
- 	u32 rtc_stat;
- 	u32 pers0_set, pers0_clr;
- 	u32 crystalfreq = 0;
- 	int err;
- 
-+	io = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(io))
-+		return PTR_ERR(io);
-+
- 	rtc_data = devm_kzalloc(&pdev->dev, sizeof(*rtc_data), GFP_KERNEL);
- 	if (!rtc_data)
- 		return -ENOMEM;
- 
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "failed to get resource\n");
--		return -ENXIO;
--	}
--
--	rtc_data->io = devm_ioremap(&pdev->dev, r->start, resource_size(r));
--	if (!rtc_data->io) {
--		dev_err(&pdev->dev, "ioremap failed\n");
--		return -EIO;
--	}
--
-+	rtc_data->io = io;
- 	rtc_data->irq_alarm = platform_get_irq(pdev, 0);
- 
- 	rtc_stat = readl(rtc_data->io + STMP3XXX_RTC_STAT);
--- 
-2.55.0
+    rtc: stmp3xxx: use devm_platform_ioremap_resource()
+   =20
+    Replace the open-coded platform_get_resource() plus devm_ioremap()
+    sequence with a single devm_platform_ioremap_resource() call, which fol=
+ds
+    the resource lookup and mapping into one step and returns an ERR_PTR on
+    failure, checked with IS_ERR() and propagated via PTR_ERR().
 
+> diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
+> index 7afcd14aeee56..05f128ccf8277 100644
+> --- a/drivers/rtc/rtc-stmp3xxx.c
+> +++ b/drivers/rtc/rtc-stmp3xxx.c
+> @@ -245,28 +245,21 @@ static void stmp3xxx_rtc_remove(struct platform_dev=
+ice *pdev)
+
+[Severity: High]
+This is a pre-existing issue, but I noticed that stmp3xxx_rtc_remove() does=
+n't
+unregister the dynamically added child platform device created by
+stmp3xxx_wdt_register() during probe.
+
+If the RTC driver is unbound, the child watchdog device remains registered.
+A subsequent watchdog operation like stmp3xxx_wdt_set_timeout() will call
+dev_get_drvdata(dev->parent), which returns NULL because the parent's drvda=
+ta
+is cleared during unbind. This leads to a NULL pointer dereference when
+accessing rtc_data->io.
+
+Could this be fixed by saving the child device pointer and unregistering it
+in the remove function?
+
+>  static int stmp3xxx_rtc_probe(struct platform_device *pdev)
+>  {
+>  	struct stmp3xxx_rtc_data *rtc_data;
+
+[ ... ]
+
+> -	rtc_data->io =3D devm_ioremap(&pdev->dev, r->start, resource_size(r));
+> -	if (!rtc_data->io) {
+> -		dev_err(&pdev->dev, "ioremap failed\n");
+> -		return -EIO;
+> -	}
+> -
+> +	rtc_data->io =3D io;
+>  	rtc_data->irq_alarm =3D platform_get_irq(pdev, 0);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this lack of error chec=
+king
+break deferred probing?
+
+If platform_get_irq() returns -EPROBE_DEFER, it is assigned directly to
+rtc_data->irq_alarm. Later, this negative error code is passed to
+devm_request_irq() in stmp3xxx_rtc_probe():
+
+    err =3D devm_request_irq(&pdev->dev, rtc_data->irq_alarm,
+            stmp3xxx_rtc_interrupt, 0, "RTC alarm", &pdev->dev);
+
+Since devm_request_irq() expects an unsigned int for the IRQ number, the
+negative value is cast and fails with -EINVAL. The driver then returns
+-EINVAL instead of -EPROBE_DEFER, which permanently prevents the RTC and
+watchdog from probing on systems that require deferred probing for the
+interrupt controller.
+
+Should we add a check for negative error codes from platform_get_irq() here?
+
+> =20
+>  	rtc_stat =3D readl(rtc_data->io + STMP3XXX_RTC_STAT);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260715021933.1551=
+663-1-rosenp@gmail.com?part=3D1
 
